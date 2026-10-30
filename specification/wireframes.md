@@ -342,3 +342,47 @@ Gallery cards navigate to dedicated gallery pages. Artwork cards navigate to ind
 ```
 
 Featured Works and Featured Galleries are distinct sections. The former promotes individual paintings; the latter promotes curated collections. Neither is an autoplay carousel.
+
+## 13. Journal landing, homepage preview, and detail wireframes
+
+The complete interaction and content contract is in [journal-and-events.md](./journal-and-events.md). These compact wireframes establish the page relationships.
+
+### Homepage — Latest from the Journal
+
+```text
+LATEST FROM THE JOURNAL                         View all journal entries →
+[Featured upcoming event — only when eligible]
+[Event image]  Event or exhibition title
+               Confirmed date · venue
+               Short summary · View event →
+
+[Recent entry]                         [Recent entry]
+Title · type · publication date        Title · type · publication date
+Excerpt · Read more                    Excerpt · Read more
+```
+
+The section follows Featured Works and Featured Galleries. If no upcoming event exists, show recent published entries; if no eligible entries exist, omit the section.
+
+### Journal index
+
+```text
+JOURNAL
+Artist-approved introduction
+[All] [Exhibitions] [Events] [Studio Updates] [Stories]
+[Featured upcoming event — optional]
+[Entry cards in reverse chronological publication order]
+[Pagination / Load more — only when needed]
+```
+
+### Journal detail
+
+```text
+← Journal
+TYPE LABEL · TITLE · SUMMARY · PUBLICATION DATE
+[Optional approved cover image]
+[Article rich text OR event details panel and event content]
+[Related artworks / galleries — optional]
+[More from Journal]
+```
+
+Journal is a primary navigation destination on desktop and mobile. Persian and English use the same semantic order with locale-appropriate direction and labels.
