@@ -6,8 +6,8 @@ const DropdownMenuTrigger = DropdownMenuPrimitive.Trigger;
 const DropdownMenuGroup = DropdownMenuPrimitive.Group;
 const DropdownMenuRadioGroup = DropdownMenuPrimitive.RadioGroup;
 const DropdownMenuRadioItem = DropdownMenuPrimitive.RadioItem;
-const DropdownMenuContent = React.forwardRef<React.ElementRef<typeof DropdownMenuPrimitive.Content>, React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Content>>(({ className = "", sideOffset = 6, ...props }, ref) => (
-  <DropdownMenuPrimitive.Portal><DropdownMenuPrimitive.Content ref={ref} sideOffset={sideOffset} className={`dropdown-content ${className}`} {...props} /></DropdownMenuPrimitive.Portal>
+const DropdownMenuContent = React.forwardRef<React.ElementRef<typeof DropdownMenuPrimitive.Content>, React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Content> & { dir?: "ltr" | "rtl" }>(({ className = "", sideOffset = 6, dir, ...props }, ref) => (
+  <DropdownMenuPrimitive.Portal><DropdownMenuPrimitive.Content ref={ref} sideOffset={sideOffset} dir={dir} className={`dropdown-content ${className}`} {...props} /></DropdownMenuPrimitive.Portal>
 ));
 DropdownMenuContent.displayName = "DropdownMenuContent";
 const DropdownMenuItem = React.forwardRef<React.ElementRef<typeof DropdownMenuPrimitive.Item>, React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Item>>(({ className = "", ...props }, ref) => <DropdownMenuPrimitive.Item ref={ref} className={`dropdown-item ${className}`} {...props} />);
