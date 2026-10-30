@@ -405,3 +405,27 @@ The recommendations above synthesize current artist-portfolio guidance with the 
 - Exhibo, [Artist Portfolio Guide: Structure, Order and Specs](https://exhibo.art/blog/artist-portfolio) — clear navigation, project/series pages, and practical online portfolio structure.
 
 These are secondary practice guides, not binding standards. Validate implementation against primary accessibility, web platform, and search-engine documentation during development.
+
+
+## 19. Cross-cutting implementation contracts
+
+The following specialist documents are normative companions to this proposal:
+
+- [Artwork imaging and asset pipeline](./artwork-imaging-and-asset-pipeline.md) governs source capture, rights/provenance, derivatives, image fidelity, and alt text.
+- [SEO and discovery](./seo-and-discovery.md) governs indexability, metadata, canonical URLs, locale alternates, structured data, sitemap, and search measurement.
+- [Accessibility, performance, privacy, and security](./accessibility-performance-security.md) defines non-functional requirements and measurable quality goals.
+- [Localization and editorial governance](./localization-and-editorial-governance.md) governs translation approval, RTL/LTR behavior, editorial states, and content review.
+- [Testing, visual QA, and release acceptance](./testing-qa-and-release.md) defines verification evidence and release gates.
+- [Studio hero implementation prompt](./hero-implementation-prompt.md) is a scoped brief for the layered studio scene; it does not replace the full site specification.
+
+### 19.1 Resolve the hero and artwork-first requirement
+
+The homepage hero may use the approved studio/process scene as the artist's signature identity moment, but that scene is not a substitute for finished paintings. The first viewport must communicate the artist's identity and provide an immediate, visible path to actual selected works. At least one approved finished artwork should be visible in the initial homepage composition or immediately adjacent selected-work section without requiring a visitor to wait for animation or dismiss an overlay. The hero animation is optional enhancement; the static composition is the baseline.
+
+### 19.2 Asset and content publication gate
+
+An asset's presence in the repository does not establish ownership, public-use permission, final image quality, or artist approval. Each public artwork requires a confirmed source/rights basis, approved image/crop/caption, and truthful metadata. Unknown fields are omitted. Studio/process images remain separate from artwork records.
+
+### 19.3 Release authority
+
+Passing CI and visual QA does not itself authorize deployment, public release, or branch merge. Those actions require separate explicit owner authorization.
