@@ -188,10 +188,10 @@ At every breakpoint:
 The navigation shell mirrors its **physical placement** with the active locale. Persian is a complete RTL layout, not an LTR layout with right-aligned labels.
 
 - English (`en`): desktop sidebar is fixed to the physical left; mobile drawer enters from the physical left; desktop language utility is positioned at the upper-right of the content area.
-- Persian (`fa`): the entire desktop sidebar is fixed to the physical right, including its surface, border, wordmark, navigation rows, and footer; the main content reserves space on the right. The mobile drawer enters from the physical right. The desktop language utility moves to the physical left of the content area.
+- Persian (`fa`): the entire desktop sidebar is fixed to the physical right, including its surface, border, wordmark, navigation rows, and footer; the main content reserves space on the right. The mobile drawer enters from the physical right. The desktop language utility remains on the physical right of the content area, immediately before the right-hand sidebar.
 - The desktop language utility remains at the physical right side of the content region for both locales. English uses natural LTR order; Persian uses RTL order, with the listbox physically left of the «زبان» label.
 - The mobile header contains no language label or selector in either locale; language switching remains available in the opened drawer.
-- On desktop, the language utility is a fixed, fully opaque bar with the same `--paper` surface and bottom divider treatment as the mobile header. It spans only the content area (excluding the fixed sidebar), mirrors to the opposite side in Persian, and reserves matching top space in the page content so headings and body text never scroll underneath it.
+- On desktop, the language utility is a fixed, fully opaque bar with the same `--paper` surface and bottom divider treatment as the mobile header. It spans only the content area (excluding the fixed sidebar), stays aligned to that region's physical right edge in both locales, and reserves matching top space in the page content so headings and body text never scroll underneath it. Keep the utility visually minimal and borderless.
 - Set the mobile Sheet side from the locale (`right` for Persian, `left` for English). Keep panel placement and closed-state translation paired so the panel enters from the correct physical edge.
 - Set the desktop sidebar's `dir` from the locale. Persian labels, wordmark role, footer, and navigation have explicit RTL direction and right text alignment at the container, navigation, and link levels; navigation rows begin at the right edge. English aligns to the left. The artist's Latin-script name remains isolated LTR while the Persian discipline label remains RTL.
 - Keep drawer text direction locale-aware independently of its physical side. The closed panel must be removed from keyboard interaction and the accessibility tree.
@@ -248,7 +248,7 @@ Automated tests must cover:
 1. Sidebar renders on all applicable desktop routes.
 2. Desktop language and theme selectors are visible in the top bar.
 3. Mobile header exposes the menu trigger and does not expose duplicate language/theme controls outside the menu.
-4. Opening the mobile menu reveals navigation links and places language/theme controls at the bottom of the panel.
+4. Opening the mobile menu reveals navigation links and keeps language switching available at the bottom of the panel; the closed mobile header contains no language selector.
 5. Menu closes through close control, Escape, backdrop, and route selection.
 6. Focus enters the menu, remains contained when modal, and returns to the trigger after close.
 7. Language switching updates locale route, document title, `lang`, and `dir`; equivalent route is preserved when available.
