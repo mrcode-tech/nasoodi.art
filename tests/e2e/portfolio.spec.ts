@@ -12,7 +12,7 @@ test("Persian homepage renders the artist identity and localized shell", async (
   await page.goto("/fa");
   await expect(page.getByRole("heading", { name: "غزاله عبداله زاده نسودی" })).toBeVisible();
   await expect(page.getByRole("navigation", { name: "راهبری اصلی" })).toBeVisible();
-  await expect(page.getByRole("link", { name: "آثار" })).toBeVisible();
+  await expect(page.getByRole("link", { name: "آثار", exact: true })).toBeVisible();
   await page.screenshot({ path: test.info().outputPath("fa-home-desktop.png"), fullPage: true });
 });
 
