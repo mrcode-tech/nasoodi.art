@@ -30,7 +30,8 @@ test("English homepage renders LTR and falls back to the translated home when Wo
   await expect(page.locator("html")).toHaveAttribute("lang", "en");
   await expect(page.locator("html")).toHaveAttribute("dir", "ltr");
   await expect(page.getByRole("heading", { name: "Works" })).toBeVisible();
-  await page.getByRole("link", { name: "فارسی" }).click();
+  await page.getByRole("button", { name: "Language" }).click();
+  await page.getByRole("menuitem", { name: /فارسی/ }).click();
   await expect(page).toHaveURL(/\/fa$/);
   await expect(page.locator("html")).toHaveAttribute("dir", "rtl");
 });

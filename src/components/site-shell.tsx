@@ -1,8 +1,8 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
-import { alternatePathFor, copyFor, cvEntries, getPublicCvEntries, pagePath, type Locale } from "@/lib/site";
+import { useRef, useState } from "react";
+import { alternatePathFor, copyFor, cvEntries, getPublicCvEntries, otherLocale, pagePath, type Locale } from "@/lib/site";
 import { Button } from "@/components/ui/button";
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar";
 import { Sheet, SheetClose, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
@@ -24,6 +24,7 @@ export function SiteShell({ locale, children }: { locale: Locale; children: Reac
   const labels = copyFor(locale);
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const drawerHomeRef = useRef<HTMLAnchorElement>(null);
   const alternate = alternatePathFor(pathname, locale);
   const links: [string, string, string][] = [
     ["home", labels.home, pagePath(locale)],
@@ -51,18 +52,18 @@ export function SiteShell({ locale, children }: { locale: Locale; children: Reac
         <span className="wordmark-name" dir="ltr">Ghazaleh</span><span className="wordmark-surname" dir="ltr">Abdolahzade Nasoodi</span><span className="wordmark-role" dir="auto">{labels.discipline}</span>
       </Link></SidebarHeader>
       <SidebarContent>{navigation()}</SidebarContent>
-      <SidebarFooter className="sidebar-bottom"><span>nasoodi.art</span><span>© {new Date().getFullYear()}</span><LanguageSelector locale={locale} alternate={alternate} pathname={pathname} label={labels.language}/></SidebarFooter>
+      <SidebarFooter className="sidebar-bottom"><span>nasoodi.art</span><span>© {new Date().getFullYear()}</span></SidebarFooter>
     </Sidebar>
 
     <header className="mobile-header">
       <Link className="mobile-wordmark" dir="ltr" href={pagePath(locale)}>Nasoodi<span>.</span></Link>
       <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
         <SheetTrigger asChild><Button className="menu-trigger" variant="outline" size="sm" aria-label={labels.menu} aria-controls="mobile-navigation" aria-expanded={mobileOpen}><span className="menu-trigger-lines" aria-hidden="true"><span/><span/></span></Button></SheetTrigger>
-        <SheetContent id="mobile-navigation" side="left" className="mobile-drawer" dir={locale === "fa" ? "rtl" : "ltr"} aria-describedby={undefined}>
+        <SheetContent id="mobile-navigation" side="left" className="mobile-drawer" dir={locale === "fa" ? "rtl" : "ltr"} aria-describedby={undefined} forceMount aria-hidden={!mobileOpen} inert={!mobileOpen} onOpenAutoFocus={(event) => { event.preventDefault(); drawerHomeRef.current?.focus(); }}>
           <SheetTitle className="sr-only">{labels.menu}</SheetTitle>
-          <div className="drawer-heading"><Link className="mobile-wordmark" dir="ltr" href={pagePath(locale)}>Nasoodi<span>.</span></Link><SheetClose asChild><Button className="drawer-close" variant="ghost" size="sm" aria-label={labels.close}>×</Button></SheetClose></div>
+          <div className="drawer-heading"><Link ref={drawerHomeRef} className="mobile-wordmark" dir="ltr" href={pagePath(locale)}>Nasoodi<span>.</span></Link><SheetClose asChild><Button className="drawer-close" variant="ghost" size="sm" aria-label={labels.close}>×</Button></SheetClose></div>
           {navigation(true)}
-          <div className="drawer-settings"><span>{labels.language}</span><LanguageSelector locale={locale} alternate={alternate} pathname={pathname} label={labels.language} onNavigate={() => setMobileOpen(false)}/></div>
+          <div className="drawer-settings"><span>{labels.language}</span><Link className="language-switch" href={alternate} hrefLang={otherLocale(locale)} onClick={() => setMobileOpen(false)}>{otherLocale(locale) === "fa" ? "فارسی" : "English"}</Link></div>
         </SheetContent>
       </Sheet>
     </header>

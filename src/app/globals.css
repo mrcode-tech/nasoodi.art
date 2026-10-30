@@ -259,3 +259,7 @@ html[dir=rtl] .sidebar-menu-button{direction:rtl}
 
 .dropdown-content[data-direction="rtl"]{direction:rtl;text-align:start}
 .dropdown-content[data-direction="ltr"]{direction:ltr;text-align:start}
+
+.sheet-content[data-state=closed]{visibility:hidden;pointer-events:none;transform:translateX(-100%)}
+.sheet-content[data-state=open]{visibility:visible;pointer-events:auto;transform:translateX(0)}
+.language-switch{border-bottom:1px solid var(--mauve);color:var(--ink);font-weight:700}
