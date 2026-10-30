@@ -3,7 +3,7 @@
 **Status:** Proposed implementation contract  
 **Scope:** Global navigation shell across all public routes  
 **Working branch:** `feature`  
-**Related documents:** `proposal.md`, `wireframes.md`, `site-wide-design-system-and-section-specification.md`, `localization-and-editorial-governance.md`, `accessibility-performance-security.md`, `testing-qa-and-release.md`
+**Related documents:** `proposal.md`, `wireframes.md`, `journal-and-events.md`, `site-wide-design-system-and-section-specification.md`, `localization-and-editorial-governance.md`, `accessibility-performance-security.md`, `testing-qa-and-release.md`
 
 ## 1. Purpose and design intent
 
@@ -30,7 +30,7 @@ Initial navigation destinations:
 
 Do not render dead links, empty destinations, or placeholder pages as if they were complete. The artist wordmark/name may link to Home and must have an accessible name.
 
-The navigation labels must be localized in Persian and English. Use the approved translations from the localization source; do not invent awkward literal translations.
+The Journal destination is part of the primary navigation on desktop and mobile. It remains active on Journal detail routes. Do not add a separate Events item; events are content types within Journal. The homepage also links to Journal as specified in `journal-and-events.md`.\n\nThe navigation labels must be localized in Persian and English. Use the approved translations from the localization source; do not invent awkward literal translations.
 
 ## 3. Desktop layout
 
