@@ -47,3 +47,12 @@ After launch authorization, verify the canonical property in search webmaster to
 - [ ] Draft/placeholder content excluded.
 - [ ] Correct 404 and redirect behavior.
 - [ ] Open Graph images and crops approved.
+## Design and content alignment
+
+SEO presentation must follow design-engineering-skills.md and design-direction-and-system-refinement.md without compromising editorial quality.
+
+- Page titles and descriptions must be human-readable and artist-approved, not keyword-stuffed.
+- Artwork, gallery, and Journal titles must remain clear and semantically meaningful in page headings.
+- Structured data must describe verified content only.
+- Do not create visually hidden keyword blocks or duplicate thin filter pages to increase indexable URLs.
+- Social preview imagery must use approved assets and reviewed crops; artwork color and composition must remain intact.
