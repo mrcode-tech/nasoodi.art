@@ -438,11 +438,11 @@ html[lang="fa"] .mobile-drawer[dir="rtl"] .nav-link {
 
 /* Owner refinement: keep the shared shell quiet and remove duplicate page chrome. */
 .site-main > main { min-height: 100vh; }
-.site-footer { display: none; }
 .desktop-sidebar .nav-link,
 .mobile-drawer .nav-link {
   width: fit-content;
   max-width: 100%;
+  padding-inline: 0;
   border-bottom: 1px solid transparent;
 }
 .desktop-sidebar .sidebar-menu-button > a,
