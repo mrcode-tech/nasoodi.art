@@ -1,8 +1,9 @@
 name: Nasoodi.art CI
+# Run once for each pushed commit. Push-triggered checks are attached to the
+# commit and remain visible from any pull request that contains it. Avoid a
+# second run for the same commit from the pull_request event.
 on:
   push:
-    branches: [feature, stage, main]
-  pull_request:
     branches: [feature, stage, main]
   workflow_dispatch:
 permissions:
