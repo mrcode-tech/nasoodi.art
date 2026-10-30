@@ -43,3 +43,9 @@ Provide desktop/tablet/mobile/short-height screenshots, both locales, reduced-mo
 The current homepage primary hero is an **approved finished painting**, not a multi-layer studio scene. Follow [homepage-artwork-hero-and-featured-works.md](./homepage-artwork-hero-and-featured-works.md) for the normative composition and content contract. The initial candidate is `specification/assets/artwork.JPG`; inspect the actual file and confirm role, rights, and artist approval before use. Do not assume that the filename establishes its content.
 
 The layered studio scene described above is optional supporting content and must not replace, obscure, delay, or visually compete with the hero painting. Do not automatically animate the artist, brush, or painting. Keep the painting static and fully visible unless a separately approved image treatment is supplied. The hero must include artist identity and a clear route to Works/Galleries, with a complete reduced-motion/static presentation.
+
+## 6. Design-engineering quality bar
+
+Before implementation, read design-engineering-skills.md and design-direction-and-system-refinement.md. The hero must express “the artist's quiet gallery”: restrained editorial typography, deliberate asymmetry, generous warm-paper space, and a finished approved painting as the dominant focal point.
+
+Do not default to a centered marketing banner, text overlay on the painting, generic gradient, decorative blobs, glass panels, oversized rounded cards, or an animated image reveal. The hero must be compelling when completely static. Any entrance effect must pass the motion decision gate, remain brief, and have a reduced-motion equivalent. Verify image fidelity, focal point, crop, and hierarchy at desktop, tablet, mobile, and short-height sizes in both locales.
