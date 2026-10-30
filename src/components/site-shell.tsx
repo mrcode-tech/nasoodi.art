@@ -16,11 +16,11 @@ import {
 export function SiteShell({ locale, children }: { locale: Locale; children: React.ReactNode }) {
   const labels = copyFor(locale);
   const pathname = usePathname();
-  const [open, setOpen] = useState(false);
+  const [openPath, setOpenPath] = useState<string | null>(null);
+  const open = openPath === pathname;
   const drawer = useRef<HTMLElement>(null);
   const trigger = useRef<HTMLButtonElement>(null);
   const wasOpen = useRef(false);
-  const previousPathname = useRef(pathname);
   const alternate = alternatePathFor(pathname, locale);
 
   const links: [string, string, string][] = [
@@ -35,13 +35,6 @@ export function SiteShell({ locale, children }: { locale: Locale; children: Reac
   if (getPublicCvEntries(cvEntries, locale).length > 0) {
     links.splice(5, 0, ["cv", labels.cv, pagePath(locale, "cv")]);
   }
-
-  useEffect(() => {
-    if (previousPathname.current !== pathname) {
-      previousPathname.current = pathname;
-      setOpen(false);
-    }
-  }, [pathname]);
 
   useEffect(() => {
     if (!open) {
@@ -60,7 +53,7 @@ export function SiteShell({ locale, children }: { locale: Locale; children: Reac
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
         event.preventDefault();
-        setOpen(false);
+        setOpenPath(null);
         return;
       }
 
@@ -143,7 +136,7 @@ export function SiteShell({ locale, children }: { locale: Locale; children: Reac
           aria-controls="mobile-navigation"
           aria-expanded={open}
           aria-label={open ? labels.close : labels.menu}
-          onClick={() => setOpen(true)}
+          onClick={() => setOpenPath(pathname)}
         >
           <span />
           <span />
