@@ -236,3 +236,8 @@ At the conceptual level, Journal supports exhibition announcements, events, stud
 Do not duplicate artwork or gallery records inside Journal entries. Use stable references to canonical artwork/gallery records. Journal publication status is separate from an event's time-derived state: a past event may remain published as an archive entry.
 
 The Journal specification is authoritative for its detailed schema, validation, route, homepage, navigation, SEO, and acceptance requirements.
+## 8. Design-system implications
+
+The content model must support editorially composed pages without forcing every record into identical card geometry. Presentation components must derive image ratio, optional metadata, locale availability, and publication state from validated content rather than inserting placeholders.
+
+Use the shared design contract in design-engineering-skills.md and design-direction-and-system-refinement.md. Keep canonical content records separate from their visual presentation. Artwork, Gallery, Journal, and Event records may share reusable primitives, but their hierarchy and page composition must remain distinct.
