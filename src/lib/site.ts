@@ -62,7 +62,7 @@ export const journalEntries: JournalEntry[] = [];
 export const cvEntries: CvEntry[] = [];
 export const homepageSelection: HomepageSelection = { featuredArtworkIds: [], featuredGalleryIds: [] };
 export function serializeJsonLd(value: unknown): string {
-  return JSON.stringify(value).replace(/</g, "\\u003c");
+  return (JSON.stringify(value) ?? "null").replace(/</g, "\\u003c");
 }
 export function getArtworkStructuredData(work: Artwork, locale: Locale) {
   const image = primaryImageFor(work);

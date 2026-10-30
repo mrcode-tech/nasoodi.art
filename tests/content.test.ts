@@ -121,5 +121,5 @@ test("VisualArtwork JSON-LD contains only confirmed localized artwork facts",()=
  assert.equal("description" in sparse,false);
 });
 test("JSON-LD serialization escapes HTML-sensitive opening brackets",()=>{
- assert.equal(serializeJsonLd({name:"</script><script>alert(1)</script>"}),"{\\"name\\":\\"\\u003c/script>\\u003cscript>alert(1)\\u003c/script>\\"}");
+ assert.equal(serializeJsonLd({name:"</script><script>alert(1)</script>"}),'{"name":"\\u003c/script>\\u003cscript>alert(1)\\u003c/script>"}');
 });
