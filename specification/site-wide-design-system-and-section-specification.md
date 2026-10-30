@@ -556,3 +556,15 @@ The unified Journal experience is specified in [journal-and-events.md](./journal
 - Use one Journal archive with type filters and shared detail-page shell; event entries expose structured date/time, time-zone, attendance, and location information only when confirmed.
 - Keep event temporal status separate from editorial publication status; past events may remain in the archive.
 - Follow the Journal specification for localization, responsive wireframes, content validation, SEO, accessibility, and acceptance criteria.
+
+## 24. Design engineering and visual consistency contract
+
+All shared and page-level visual decisions must conform to [design-engineering-skills.md](./design-engineering-skills.md) and [design-direction-and-system-refinement.md](./design-direction-and-system-refinement.md).
+
+- Use one semantic token system for color, typography, spacing, borders, focus, and motion. Extend existing tokens; do not fork parallel values.
+- The overall aesthetic is “the artist's quiet gallery”: warm paper, warm ink, restrained mauve/taupe, editorial typography, generous but purposeful whitespace, and image-led compositions.
+- Do not use generic repeated card layouts, nested cards, decorative gradients/glassmorphism, unnecessary pills, heavy shadows, or default-centered layouts.
+- Components must document semantic role, states, responsive variants, RTL/LTR, keyboard behavior, and reduced-motion behavior.
+- Motion requires a purpose and must pass the decision gate in design-engineering-skills.md. Artwork itself is static and must not receive decorative movement.
+- Each route must be visually reviewed in Persian and English at desktop, tablet, mobile, and short-height sizes. Include reduced-motion and keyboard/touch checks.
+- The shared design system does not override factual, editorial, accessibility, or artwork-fidelity constraints in specialized specifications.
