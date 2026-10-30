@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { alternatePathFor, copyFor, cvEntries, getPublicCvEntries, otherLocale, pagePath, type Locale } from "@/lib/site";
 import { Button } from "@/components/ui/button";
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar";
@@ -24,6 +24,15 @@ export function SiteShell({ locale, children }: { locale: Locale; children: Reac
   const labels = copyFor(locale);
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
+  useEffect(() => {
+    const desktopQuery = window.matchMedia("(min-width: 901px)");
+    const closeMobileNavigation = (event: MediaQueryListEvent) => {
+      if (event.matches) setMobileOpen(false);
+    };
+    if (desktopQuery.matches) setMobileOpen(false);
+    desktopQuery.addEventListener("change", closeMobileNavigation);
+    return () => desktopQuery.removeEventListener("change", closeMobileNavigation);
+  }, []);
   const drawerHomeRef = useRef<HTMLAnchorElement>(null);
   const alternate = alternatePathFor(pathname, locale);
   const links: [string, string, string][] = [
