@@ -256,3 +256,6 @@ html[dir=rtl] .sidebar-menu-button{direction:rtl}
 
 /* Radix Sheet state is authoritative; override legacy drawer visibility rules. */
 .sheet-content[data-state=open]{visibility:visible;pointer-events:auto;transform:translateX(0)}
+
+.dropdown-content[data-direction="rtl"]{direction:rtl;text-align:start}
+.dropdown-content[data-direction="ltr"]{direction:ltr;text-align:start}
