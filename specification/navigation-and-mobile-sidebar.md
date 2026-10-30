@@ -301,3 +301,10 @@ Apply design-engineering-skills.md and design-direction-and-system-refinement.md
 - Keyboard-triggered navigation and frequent interactions must not be delayed by animation.
 - Hover treatment is only for hover-capable fine pointers; touch must not depend on hover.
 - Keep locale/theme utilities accessible and reachable, with visible focus and correct expanded/current semantics.
+
+
+## Shared component implementation standard
+
+Implement the desktop side navigation using the project's shadcn/ui Sidebar composition and the mobile off-canvas navigation using the shared Radix-backed shadcn Sheet. Use the shared Dropdown Menu for the desktop language selector and a clear, directly accessible locale link within the mobile drawer. Do not create parallel menu primitives.
+
+The component selection, RTL/LTR rules, keyboard and focus behavior, and new-component/dependency gate are defined by [Shadcn/ui Component Reuse and Bilingual Shared UI](./shadcn-component-reuse-and-bilingual-ui.md). That document is mandatory alongside this navigation contract.
