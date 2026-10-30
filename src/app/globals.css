@@ -348,7 +348,7 @@ html[lang="fa"] .mobile-drawer[dir="rtl"] .nav-link {
 }
 
 
-/* Keep the navigation chrome pinned to the viewport while page content scrolls. */
+/* Shared navigation shell: fixed geometry is explicit and locale-aware. */
 .desktop-sidebar {
   position: fixed;
   top: 0;
@@ -356,10 +356,61 @@ html[lang="fa"] .mobile-drawer[dir="rtl"] .nav-link {
   height: 100vh;
   height: 100dvh;
 }
-.desktop-utility {
-  position: fixed;
-  top: 2rem;
+
+/* Keep the language utility as a full-width opaque bar over the content column. */
+@media (min-width: 901px) {
+  .desktop-utility {
+    position: fixed;
+    z-index: 25;
+    top: 0;
+    left: var(--sidebar);
+    right: 0;
+    display: flex;
+    width: auto;
+    min-height: 4.75rem;
+    box-sizing: border-box;
+    align-items: center;
+    justify-content: flex-end;
+    gap: .65rem;
+    padding: 0 clamp(2rem, 5vw, 5rem);
+    background: var(--paper);
+    border: 0;
+    color: var(--muted);
+  }
+
+  .site-main {
+    padding-top: 4.75rem;
+  }
+
+  html[lang="fa"] .desktop-utility {
+    left: 0;
+    right: var(--sidebar);
+    direction: rtl;
+    justify-content: flex-end;
+  }
+
+  .desktop-utility .language-label {
+    white-space: nowrap;
+  }
+
+  .desktop-utility .ui-button {
+    min-height: 2.4rem;
+    min-width: 5.5rem;
+    justify-content: space-between;
+    padding: .35rem .65rem;
+    border: 0;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  .desktop-utility .ui-button:hover {
+    border: 0;
+    background: var(--muted-surface);
+    box-shadow: none;
+  }
 }
+
+/* The mobile header stays fixed; the modal Sheet and overlay sit above it. */
 @media (max-width: 900px) {
   .mobile-header {
     position: fixed;
@@ -368,49 +419,27 @@ html[lang="fa"] .mobile-drawer[dir="rtl"] .nav-link {
     width: 100%;
     min-height: 4.75rem;
     background: var(--paper);
+    direction: ltr;
   }
+
+  html[lang="en"] .mobile-header {
+    flex-direction: row-reverse;
+  }
+
+  html[lang="fa"] .mobile-header {
+    flex-direction: row;
+  }
+
   .site-main {
     padding-top: 4.75rem;
   }
-  .mobile-header {
-    direction: ltr;
-  }
-  html[lang="en"] .mobile-header { flex-direction: row-reverse; }
-  html[lang="fa"] .mobile-header { flex-direction: row; }
-}
 
-/* Desktop utility bar follows the same opaque surface treatment as the mobile header.
-   It occupies its own reserved row so fixed language controls never overlap page copy. */
-@media (min-width: 901px) {
-  .desktop-utility {
-    position: fixed;
-    top: 0;
-    left: var(--sidebar);
-    right: 0;
-    width: auto;
-    min-height: 4.75rem;
-    box-sizing: border-box;
-    justify-content: flex-end;
-    padding: 0 clamp(2rem, 5vw, 5rem);
-    background: var(--paper);
-    border-bottom: 1px solid var(--border);
-    color: var(--muted);
-    z-index: 25;
-  }
-  .site-main { padding-top: 4.75rem; }
-  html[lang="fa"] .desktop-utility {
-    left: 0; right: var(--sidebar); justify-content: flex-end; border-left: 0; border-right: 0;
-  }
-}
-
-/* Responsive navigation layering follows the shadcn Sheet/Dialog portal pattern.
-   The modal surface must cover the fixed mobile header, including its top row. */
-@media (max-width: 900px) {
   .sheet-overlay.menu-backdrop {
     position: fixed;
     z-index: 60;
     inset: 0;
   }
+
   .sheet-content.mobile-drawer {
     position: fixed;
     z-index: 61;
@@ -423,17 +452,165 @@ html[lang="fa"] .mobile-drawer[dir="rtl"] .nav-link {
     padding-top: max(1.25rem, env(safe-area-inset-top));
     overscroll-behavior: contain;
   }
-  .mobile-header { z-index: 50; }
-}
-@media (min-width: 901px) {
-  .mobile-header,
-  .sheet-overlay.menu-backdrop,
-  .sheet-content.mobile-drawer { display: none !important; }
+
+  .mobile-drawer .drawer-settings {
+    display: flex;
+    flex-direction: row;
+    direction: ltr;
+    align-items: center;
+    justify-content: space-between;
+    gap: .65rem;
+    margin-top: auto;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+    color: var(--muted);
+    font-size: .85rem;
+  }
+
+  html[lang="fa"] .mobile-drawer .drawer-settings {
+    flex-direction: row-reverse;
+  }
+
+  .drawer-settings > span {
+    flex: 0 0 auto;
+    white-space: nowrap;
+  }
+
+  .drawer-settings > *:last-child {
+    margin-inline-start: 0;
+  }
+
+  .drawer-settings .ui-button {
+    min-height: 2.4rem;
+    min-width: 5.5rem;
+    justify-content: space-between;
+    padding: .35rem .65rem;
+    border: 0;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  .drawer-settings .ui-button:hover {
+    border: 0;
+    background: var(--muted-surface);
+    box-shadow: none;
+  }
+
+  .menu-trigger,
+  .drawer-close {
+    border: 0 !important;
+    outline: 0;
+    box-shadow: none !important;
+    background: transparent;
+  }
+
+  .menu-trigger:hover,
+  .menu-trigger:active,
+  .drawer-close:hover,
+  .drawer-close:active {
+    border: 0 !important;
+    background: transparent;
+    box-shadow: none !important;
+  }
+
+  .drawer-copyright {
+    display: flex;
+    flex-direction: column;
+    gap: .3rem;
+    margin-top: 1.25rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border);
+    color: var(--muted);
+    font-size: .72rem;
+    line-height: 1.5;
+  }
 }
 
+/* Locale-specific physical placement of the desktop sidebar and content. */
+html[lang="en"] .desktop-sidebar {
+  left: 0;
+  right: auto;
+  direction: ltr;
+  border-right: 0;
+}
 
-/* Owner refinement: keep the shared shell quiet and remove duplicate page chrome. */
-.site-main > main { min-height: 100vh; }
+html[lang="en"] .site-main {
+  margin-left: var(--sidebar);
+  margin-right: 0;
+}
+
+html[lang="fa"] .desktop-sidebar {
+  left: auto;
+  right: 0;
+  direction: rtl;
+  border-right: 0;
+  border-left: 1px solid var(--border);
+}
+
+html[lang="fa"] .site-main {
+  margin-left: 0;
+  margin-right: var(--sidebar);
+}
+
+html[lang="fa"] .desktop-sidebar .artist-wordmark,
+html[lang="fa"] .desktop-sidebar .sidebar-header,
+html[lang="fa"] .desktop-sidebar .sidebar-footer {
+  align-items: flex-end;
+  text-align: right;
+}
+
+html[lang="fa"] .desktop-sidebar .wordmark-name,
+html[lang="fa"] .desktop-sidebar .wordmark-surname {
+  direction: ltr;
+  unicode-bidi: isolate;
+  text-align: left;
+}
+
+html[lang="fa"] .desktop-sidebar .wordmark-role,
+html[lang="fa"] .desktop-sidebar nav,
+html[lang="fa"] .desktop-sidebar .nav-list,
+html[lang="fa"] .desktop-sidebar .sidebar-menu-item,
+html[lang="fa"] .desktop-sidebar .sidebar-menu-button,
+html[lang="fa"] .desktop-sidebar .nav-link {
+  direction: rtl;
+  text-align: right;
+}
+
+html[lang="fa"] .desktop-sidebar .sidebar-menu-button,
+html[lang="fa"] .desktop-sidebar .nav-link {
+  justify-content: flex-start;
+}
+
+html[lang="fa"] .desktop-sidebar .sidebar-footer span {
+  direction: ltr;
+  unicode-bidi: isolate;
+}
+
+html[lang="fa"] .mobile-drawer {
+  left: auto;
+  right: 0;
+  border-right: 0;
+  border-left: 1px solid var(--border);
+  box-shadow: -12px 0 36px rgb(48 40 36 / 12%);
+  padding-left: 1.5rem;
+  padding-right: max(1.5rem, env(safe-area-inset-right));
+}
+
+html[lang="fa"] .mobile-drawer[data-state="closed"] {
+  transform: translateX(100%);
+}
+
+html[lang="fa"] .mobile-drawer[data-state="open"] {
+  transform: translateX(0);
+}
+
+html[lang="fa"] .mobile-drawer .nav-link {
+  direction: rtl;
+  justify-content: flex-start;
+  text-align: right;
+}
+
+/* Navigation indicators follow label width; controls remain visually quiet. */
 .desktop-sidebar .nav-link,
 .mobile-drawer .nav-link {
   width: fit-content;
@@ -441,141 +618,32 @@ html[lang="fa"] .mobile-drawer[dir="rtl"] .nav-link {
   padding-inline: 0;
   border-bottom: 1px solid transparent;
 }
+
 .desktop-sidebar .sidebar-menu-button > a,
 .mobile-drawer .sidebar-menu-button > a {
   width: fit-content;
   max-width: 100%;
 }
+
 .desktop-sidebar .nav-link:hover,
 .desktop-sidebar .nav-link[aria-current="page"],
 .mobile-drawer .nav-link:hover,
 .mobile-drawer .nav-link[aria-current="page"] {
   border-bottom-color: var(--mauve);
 }
-.menu-trigger {
-  border: 0;
-  background: transparent;
-  box-shadow: none;
-}
-.menu-trigger:hover,
-.menu-trigger:active {
-  border: 0;
-  background: var(--muted-surface);
-}
-.drawer-copyright {
-  display: flex;
-  flex-direction: column;
-  gap: .3rem;
-  margin-top: 1.25rem;
-  padding-top: 1rem;
-  border-top: 1px solid var(--border);
-  color: var(--muted);
-  font-size: .72rem;
-  line-height: 1.5;
-}
+
 @media (min-width: 901px) {
-  html[lang="fa"] .desktop-utility {
-    direction: rtl; justify-content: flex-end; left: 0; right: var(--sidebar);
-    padding-left: clamp(2rem, 5vw, 5rem); padding-right: clamp(2rem, 5vw, 5rem);
-    border-left: 0; border-right: 0;
+  .mobile-header,
+  .sheet-overlay.menu-backdrop,
+  .sheet-content.mobile-drawer {
+    display: none !important;
   }
 }
 
-
-/* Minimal navigation controls and consistent RTL language-control ordering. */
-.menu-trigger,
-.drawer-close {
-  border:  0 !important;
-  outline: 0;
-  box-shadow: none !important;
-  background: transparent;
-}
-.menu-trigger:hover,
-.menu-trigger:active,
-.drawer-close:hover,
-.drawer-close:active {
-  border: 0 !important;
-  background: transparent;
-  box-shadow: none !important;
-}
-.desktop-utility {
-  gap: .65rem;
-}
-.desktop-utility .language-label {
-  white-space: nowrap;
-}
-.desktop-utility .ui-button,
-.drawer-settings .ui-button {
-  min-width: 5.5rem;
-  justify-content: space-between;
-  border: 0;
-  background: transparent;
-  box-shadow: none;
-}
-.desktop-utility .ui-button:hover,
-.drawer-settings .ui-button:hover {
-  border: 0;
-  background: var(--muted-surface);
-  box-shadow: none;
-}
-.drawer-settings {
-  gap: .65rem;
-}
-.drawer-settings > span {
-  flex: 0 0 auto;
-  white-space: nowrap;
-}
-.drawer-settings > *:last-child {
-  margin-inline-start: auto;
-}
-@media (min-width: 901px) {
-  html[lang="fa"] .desktop-utility {
-    direction: rtl;
-    justify-content: flex-start;
+@media (prefers-reduced-motion: reduce) {
+  .mobile-drawer,
+  .mobile-drawer[data-open="true"],
+  .sheet-content {
+    transition: none;
   }
-}
-
-
-/* Minimal shared navbar chrome; locale controls live in desktop utility or mobile drawer. */
-.desktop-sidebar { border-right: 0; }
-.mobile-header,
-.desktop-utility { border: 0 !important; }
-.mobile-header { box-shadow: none; }
-@media (max-width: 900px) {
-  .mobile-header { border-bottom: 0 !important; }
-}
-@media (min-width: 901px) {
-  .desktop-utility { border-bottom: 0 !important; justify-content: flex-end; }
-  html[lang="fa"] .desktop-utility {
-    direction: rtl;
-    justify-content: flex-end;
-    left: 0;
-    right: var(--sidebar);
-    border-left: 0;
-    border-right: 0;
-  }
-}
-
-/* Final locale-specific utility placement: compact controls sit at the content edge. */
-@media (min-width: 901px) {
-  .desktop-utility {
-    position: fixed;
-    top: 2rem;
-    left: auto;
-    right: clamp(2rem, 5vw, 5rem);
-    width: max-content;
-    min-height: 2.75rem;
-    padding: 0;
-  }
-  html[lang="fa"] .desktop-utility {
-    left: auto;
-    right: var(--sidebar);
-    direction: rtl;
-    justify-content: flex-end;
-  }
-}
-
-/* Let the drawer's locale direction determine the physical order of its settings. */
-.mobile-drawer .drawer-settings {
-  flex-direction: row;
 }
