@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { getPublicArtworks,getPublicGalleries,getPublicJournal,getPublicCvEntries,getUpcomingJournalEvents,getArtworkStructuredData,serializeJsonLd,getHomepageFeaturedArtworks,getGalleryCoverArtwork,getJournalEntriesForCategory,isSafeJournalHref,portfolioStructuredData,type Artwork,type Gallery,type JournalEntry,type CvEntry, hasExplicitTimeZone } from "../src/lib/site";
+import { getPublicArtworks,getPublicGalleries,getPublicJournal,getPublicCvEntries,getPublicArtistProfile,getPublicContactDetails,getUpcomingJournalEvents,getArtworkStructuredData,serializeJsonLd,getHomepageFeaturedArtworks,getGalleryCoverArtwork,getJournalEntriesForCategory,isSafeJournalHref,portfolioStructuredData,type Artwork,type Gallery,type JournalEntry,type CvEntry,type ArtistProfile,type ContactDetails, hasExplicitTimeZone } from "../src/lib/site";
 const work:Artwork={id:"w1",slug:"work-one",title:{en:"Work",fa:"اثر"},images:[{src:"/art/work.jpg",alt:{en:"Painting",fa:"نقاشی"},role:"primary",width:1200,height:900}],rightsConfirmed:true,status:"published"};
 test("artwork stays private until published and rights-cleared",()=>{assert.equal(getPublicArtworks([{...work,status:"needs-review"}],"en").length,0);assert.equal(getPublicArtworks([{...work,rightsConfirmed:false}],"en").length,0);assert.equal(getPublicArtworks([work],"en").length,1);});
 test("artwork requires localized title and primary image alt",()=>{assert.equal(getPublicArtworks([{...work,title:{en:"Work"}}],"fa").length,0);assert.equal(getPublicArtworks([{...work,images:[{...work.images[0],alt:{en:""}}]}],"en").length,0);});
@@ -124,4 +124,26 @@ test("JSON-LD serialization escapes HTML-sensitive opening brackets",()=>{
  const serialized=serializeJsonLd({name:"</script><script>alert(1)</script>"});
  assert.equal(serialized.includes("</script>"),false);
  assert.equal(serialized.includes(String.fromCharCode(92)+"u003c/script>"),true);
+});
+
+test("artist profile requires published artist approval and complete localized statement and biography",()=>{
+ const profile:ArtistProfile={statement:{en:"Statement",fa:"بیانیه"},biography:{en:"Biography",fa:"زندگی‌نامه"},status:"published",approvedLocales:["en","fa"],artistApproved:true};
+ assert.equal(getPublicArtistProfile(profile,"en")?.statement.en,"Statement");
+ assert.equal(getPublicArtistProfile({...profile,artistApproved:false},"en"),undefined);
+ assert.equal(getPublicArtistProfile({...profile,biography:{en:"Biography"}},"fa"),undefined);
+ assert.equal(getPublicArtistProfile({...profile,status:"draft"},"en"),undefined);
+});
+test("artist portrait is omitted unless rights, dimensions, and localized alt are valid",()=>{
+ const profile:ArtistProfile={statement:{en:"Statement"},biography:{en:"Biography"},status:"published",approvedLocales:["en"],artistApproved:true,portrait:{src:"/artist.jpg",alt:{en:"Artist in studio"},width:800,height:1000,rightsConfirmed:true}};
+ assert.equal(getPublicArtistProfile(profile,"en")?.portrait?.src,"/artist.jpg");
+ assert.equal(getPublicArtistProfile({...profile,portrait:{...profile.portrait!,rightsConfirmed:false}},"en")?.portrait,undefined);
+ assert.equal(getPublicArtistProfile({...profile,portrait:{...profile.portrait!,width:0}},"en")?.portrait,undefined);
+});
+test("contact destinations require owner and locale approval and safe values",()=>{
+ const details:ContactDetails={email:"artist@example.org",instagramUrl:"https://www.instagram.com/ghazalenasoodi/",approvedLocales:["en","fa"],ownerApproved:true};
+ assert.equal(getPublicContactDetails(details,"en")?.email,"artist@example.org");
+ assert.equal(getPublicContactDetails({...details,ownerApproved:false},"en"),undefined);
+ assert.equal(getPublicContactDetails({...details,approvedLocales:["fa"]},"en"),undefined);
+ assert.equal(getPublicContactDetails({...details,instagramUrl:"javascript:alert(1)",email:undefined},"en"),undefined);
+ assert.equal(getPublicContactDetails({...details,instagramUrl:"https://example.org",email:undefined},"en"),undefined);
 });

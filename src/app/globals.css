@@ -91,3 +91,14 @@ html[lang=fa] .gallery-card-copy strong{font-family:Tahoma,Arial,sans-serif;line
 html[lang=fa] .journal-upcoming h3{font-family:Tahoma,Arial,sans-serif;line-height:1.65}
 .journal-upcoming time,.journal-upcoming>p:not(.eyebrow){display:block;margin:.4rem 0;color:var(--muted);font-size:.9rem;line-height:1.8}
 .journal-upcoming .text-link{margin-top:.6rem}
+
+/* Artist profile and contact remain editorial, text-led destinations. */
+.profile-content{display:grid;grid-template-columns:minmax(0,1fr);gap:2.5rem;max-width:54rem}
+.profile-content section{max-width:48rem}
+.profile-content h2{margin:0 0 .75rem;font:400 clamp(1.35rem,2.4vw,1.8rem)/1.3 Georgia,"Times New Roman",serif}
+html[lang=fa] .profile-content h2{font-family:Tahoma,Arial,sans-serif;line-height:1.65}
+.profile-content section p{margin:0;color:var(--muted);font-size:1rem;line-height:2}
+.artist-portrait{display:block;width:min(100%,34rem);height:auto;object-fit:contain}
+.contact-links{display:flex;flex-direction:column;align-items:flex-start;gap:1rem}
+.contact-links p{display:flex;flex-wrap:wrap;gap:.75rem;margin:0;color:var(--muted);line-height:1.8}
+.contact-links a{border-bottom:1px solid var(--mauve);color:var(--ink);font-weight:700}

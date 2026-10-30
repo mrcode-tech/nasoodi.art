@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 import {
-  artworks, galleries, journalEntries, cvEntries, locales,
-  getPublicArtworks, getPublicGalleries, getPublicJournal, getPublicCvEntries,
+  artworks, galleries, journalEntries, cvEntries, artistProfile, contactDetails, locales,
+  getPublicArtworks, getPublicGalleries, getPublicJournal, getPublicCvEntries, getPublicArtistProfile, getPublicContactDetails,
 } from "@/lib/site";
 
 const base = "https://nasoodi.art";
@@ -38,6 +38,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
     const otherJournal = new Set(getPublicJournal(journalEntries, other).map((item) => item.slug));
     if (journal.length) add("journal", otherJournal.size > 0);
     for (const item of journal) add(`journal/${item.slug}`, otherJournal.has(item.slug));
+
+    if (getPublicArtistProfile(artistProfile, locale)) {
+      add("about", Boolean(getPublicArtistProfile(artistProfile, other)));
+    }
+    if (getPublicContactDetails(contactDetails, locale)) {
+      add("contact", Boolean(getPublicContactDetails(contactDetails, other)));
+    }
 
     const cv = getPublicCvEntries(cvEntries, locale);
     if (cv.length) add("cv", getPublicCvEntries(cvEntries, other).length > 0);

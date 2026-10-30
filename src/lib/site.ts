@@ -29,6 +29,20 @@ export function journalCategoryFor(entry: JournalEntry): JournalCategory {
 export function getJournalEntriesForCategory(items: JournalEntry[], category?: JournalCategory) {
   return category ? items.filter((entry) => journalCategoryFor(entry) === category) : items;
 }
+export type ArtistProfile = {
+  statement: Localized;
+  biography: Localized;
+  portrait?: { src: string; alt: Localized; width: number; height: number; rightsConfirmed: boolean };
+  status: Status;
+  approvedLocales: Locale[];
+  artistApproved: boolean;
+};
+export type ContactDetails = {
+  email?: string;
+  instagramUrl?: string;
+  approvedLocales: Locale[];
+  ownerApproved: boolean;
+};
 export type CvEntry = { id: string; category: "education" | "solo-exhibition" | "group-exhibition" | "award" | "publication" | "collection" | "other"; title: Localized; organization?: Localized; location?: Localized; year: number; verified: boolean; status: Status; sortOrder?: number };
 export type HomepageSelection = { heroArtworkId?: string; featuredArtworkIds: string[]; featuredGalleryIds: string[] };
 
@@ -60,6 +74,8 @@ export const artworks: Artwork[] = [];
 export const galleries: Gallery[] = [];
 export const journalEntries: JournalEntry[] = [];
 export const cvEntries: CvEntry[] = [];
+export const artistProfile: ArtistProfile | undefined = undefined;
+export const contactDetails: ContactDetails | undefined = undefined;
 export const homepageSelection: HomepageSelection = { featuredArtworkIds: [], featuredGalleryIds: [] };
 export function serializeJsonLd(value: unknown): string {
   return (JSON.stringify(value) ?? "null").replace(/</g, "\\u003c");
@@ -125,6 +141,30 @@ export function getPublicCvEntries(items: CvEntry[], locale: Locale) {
     Boolean(entry.title[locale]?.trim()) && Number.isInteger(entry.year) && entry.year > 0)
     .sort((a,b) => b.year - a.year || (a.sortOrder ?? 0) - (b.sortOrder ?? 0));
 }
+export function getPublicArtistProfile(profile: ArtistProfile | undefined, locale: Locale) {
+  if (!profile || profile.status !== "published" || !profile.artistApproved ||
+      !profile.approvedLocales.includes(locale) || !profile.statement[locale]?.trim() ||
+      !profile.biography[locale]?.trim()) return undefined;
+  const portrait = profile.portrait;
+  const validPortrait = portrait && portrait.rightsConfirmed && portrait.width > 0 && portrait.height > 0 &&
+    Boolean(portrait.src.trim()) && Boolean(portrait.alt[locale]?.trim());
+  return { ...profile, portrait: validPortrait ? portrait : undefined };
+}
+export function getPublicContactDetails(details: ContactDetails | undefined, locale: Locale) {
+  if (!details || !details.ownerApproved || !details.approvedLocales.includes(locale)) return undefined;
+  const email = details.email?.trim();
+  const validEmail = email && /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(email) ? email : undefined;
+  let instagramUrl: string | undefined;
+  if (details.instagramUrl) {
+    try {
+      const url = new URL(details.instagramUrl);
+      if (url.protocol === "https:" && (url.hostname === "instagram.com" || url.hostname === "www.instagram.com")) {
+        instagramUrl = url.toString();
+      }
+    } catch { /* Invalid external destinations are omitted. */ }
+  }
+  return validEmail || instagramUrl ? { email: validEmail, instagramUrl } : undefined;
+}
 export function getHomepageHero(items: Artwork[], selection: HomepageSelection, locale: Locale) {
   if (!selection.heroArtworkId) return undefined;
   return getPublicArtworks(items, locale).find((work) => work.id === selection.heroArtworkId);
@@ -138,8 +178,8 @@ export function getHomepageFeaturedGalleries(items: Gallery[], works: Artwork[],
   return [...new Set(selection.featuredGalleryIds)].map((id) => available.get(id)).filter((gallery) => gallery !== undefined);
 }
 export const copy = {
- en: { home:"Home",works:"Works",galleries:"Galleries",journal:"Journal",about:"About",contact:"Contact",cv:"CV / Exhibitions",language:"Language",menu:"Open navigation",close:"Close navigation",skip:"Skip to content",portfolio:"Artist portfolio",discipline:"Oil painter",selected:"Selected works",selectedIntro:"A considered selection of paintings.",explore:"Explore works",discover:"Discover the galleries",latest:"From the journal",upcoming:"Upcoming event",venue:"Venue",emptyWorks:"Selected paintings will appear here once their images and details are approved for publication.",emptyGalleries:"Curated galleries will appear here when their titles, selections, and cover works are approved.",emptyJournal:"Journal stories and event announcements will appear here when they are ready to publish.",profilePending:"The artist statement and biography will be added after editorial review.",contactPending:"Public contact details have not yet been confirmed.",notFound:"This page could not be found.",returnHome:"Return home",rights:"All rights reserved.",journalAll:"All",journalExhibitions:"Exhibitions",journalEvents:"Events",journalStudio:"Studio updates",journalStories:"Stories",journalNoMatches:"There are no published entries in this category yet.",readMore:"Read more",published:"Published" },
- fa: { home:"خانه",works:"آثار",galleries:"گالری‌ها",journal:"یادداشت‌ها",about:"درباره",contact:"تماس",cv:"رزومه و نمایشگاه‌ها",language:"زبان",menu:"باز کردن راهبری",close:"بستن راهبری",skip:"رفتن به محتوای اصلی",portfolio:"پورتفولیوی هنرمند",discipline:"نقاش رنگ‌روغن",selected:"گزیده آثار",selectedIntro:"گزیده‌ای از نقاشی‌ها.",explore:"دیدن آثار",discover:"گشت‌وگذار در گالری‌ها",latest:"از یادداشت‌ها",upcoming:"رویداد پیشِ رو",venue:"محل برگزاری",emptyWorks:"آثار پس از تأیید تصاویر و اطلاعات برای انتشار، در این بخش نمایش داده می‌شوند.",emptyGalleries:"گالری‌های منتخب پس از تأیید عنوان، آثار و تصویر اصلی در این بخش قرار می‌گیرند.",emptyJournal:"یادداشت‌ها و اطلاعیه‌های رویداد پس از آماده‌شدن برای انتشار در این بخش نمایش داده می‌شوند.",profilePending:"بیانیه هنری و زندگی‌نامه پس از بررسی و تأیید منتشر خواهند شد.",contactPending:"اطلاعات تماس عمومی هنوز تأیید نشده است.",notFound:"این صفحه پیدا نشد.",returnHome:"بازگشت به خانه",rights:"تمامی حقوق محفوظ است.",journalAll:"همه",journalExhibitions:"نمایشگاه‌ها",journalEvents:"رویدادها",journalStudio:"اخبار آتلیه",journalStories:"روایت‌ها",journalNoMatches:"هنوز مطلب منتشرشده‌ای در این دسته وجود ندارد.",readMore:"ادامه مطلب",published:"انتشار" }
+ en: { home:"Home",works:"Works",galleries:"Galleries",journal:"Journal",about:"About",contact:"Contact",cv:"CV / Exhibitions",statement:"Artist statement",biography:"Biography",email:"Email",instagram:"Instagram",language:"Language",menu:"Open navigation",close:"Close navigation",skip:"Skip to content",portfolio:"Artist portfolio",discipline:"Oil painter",selected:"Selected works",selectedIntro:"A considered selection of paintings.",explore:"Explore works",discover:"Discover the galleries",latest:"From the journal",upcoming:"Upcoming event",venue:"Venue",emptyWorks:"Selected paintings will appear here once their images and details are approved for publication.",emptyGalleries:"Curated galleries will appear here when their titles, selections, and cover works are approved.",emptyJournal:"Journal stories and event announcements will appear here when they are ready to publish.",profilePending:"The artist statement and biography will be added after editorial review.",contactPending:"Public contact details have not yet been confirmed.",notFound:"This page could not be found.",returnHome:"Return home",rights:"All rights reserved.",journalAll:"All",journalExhibitions:"Exhibitions",journalEvents:"Events",journalStudio:"Studio updates",journalStories:"Stories",journalNoMatches:"There are no published entries in this category yet.",readMore:"Read more",published:"Published" },
+ fa: { home:"خانه",works:"آثار",galleries:"گالری‌ها",journal:"یادداشت‌ها",about:"درباره",contact:"تماس",cv:"رزومه و نمایشگاه‌ها",statement:"بیانیه هنری",biography:"زندگی‌نامه",email:"ایمیل",instagram:"اینستاگرام",language:"زبان",menu:"باز کردن راهبری",close:"بستن راهبری",skip:"رفتن به محتوای اصلی",portfolio:"پورتفولیوی هنرمند",discipline:"نقاش رنگ‌روغن",selected:"گزیده آثار",selectedIntro:"گزیده‌ای از نقاشی‌ها.",explore:"دیدن آثار",discover:"گشت‌وگذار در گالری‌ها",latest:"از یادداشت‌ها",upcoming:"رویداد پیشِ رو",venue:"محل برگزاری",emptyWorks:"آثار پس از تأیید تصاویر و اطلاعات برای انتشار، در این بخش نمایش داده می‌شوند.",emptyGalleries:"گالری‌های منتخب پس از تأیید عنوان، آثار و تصویر اصلی در این بخش قرار می‌گیرند.",emptyJournal:"یادداشت‌ها و اطلاعیه‌های رویداد پس از آماده‌شدن برای انتشار در این بخش نمایش داده می‌شوند.",profilePending:"بیانیه هنری و زندگی‌نامه پس از بررسی و تأیید منتشر خواهند شد.",contactPending:"اطلاعات تماس عمومی هنوز تأیید نشده است.",notFound:"این صفحه پیدا نشد.",returnHome:"بازگشت به خانه",rights:"تمامی حقوق محفوظ است.",journalAll:"همه",journalExhibitions:"نمایشگاه‌ها",journalEvents:"رویدادها",journalStudio:"اخبار آتلیه",journalStories:"روایت‌ها",journalNoMatches:"هنوز مطلب منتشرشده‌ای در این دسته وجود ندارد.",readMore:"ادامه مطلب",published:"انتشار" }
 } as const;
 export const copyFor = (l: Locale) => copy[l];
 
