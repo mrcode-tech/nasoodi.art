@@ -102,3 +102,108 @@ html[lang=fa] .profile-content h2{font-family:Tahoma,Arial,sans-serif;line-heigh
 .contact-links{display:flex;flex-direction:column;align-items:flex-start;gap:1rem}
 .contact-links p{display:flex;flex-wrap:wrap;gap:.75rem;margin:0;color:var(--muted);line-height:1.8}
 .contact-links a{border-bottom:1px solid var(--mauve);color:var(--ink);font-weight:700}
+
+
+/* Bilingual shell: physical placement is intentionally independent of document direction. */
+.desktop-sidebar {
+  inset: 0 auto 0 0;
+  direction: ltr;
+}
+.site-main {
+  margin-inline: 0 0;
+  margin-left: var(--sidebar);
+  margin-right: 0;
+  min-width: 0;
+}
+.mobile-drawer {
+  inset: 0 auto 0 0;
+  direction: inherit;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translate3d(-100%, 0, 0);
+  transition: transform 220ms ease, visibility 220ms step-end;
+}
+.mobile-drawer[data-open="true"] {
+  visibility: visible;
+  pointer-events: auto;
+  transform: translate3d(0, 0, 0);
+  transition: transform 220ms ease, visibility 0ms;
+}
+.mobile-drawer[aria-hidden="true"] {
+  user-select: none;
+}
+.mobile-drawer .nav-link {
+  justify-content: flex-start;
+  text-align: start;
+  unicode-bidi: plaintext;
+}
+.mobile-drawer .drawer-settings {
+  margin-top: auto;
+  direction: inherit;
+}
+.menu-backdrop {
+  opacity: 1;
+}
+.home-intro h1,
+.page-heading h1,
+.not-found-page h1 {
+  max-width: 18ch;
+  font-size: clamp(2.35rem, 4.8vw, 4.5rem);
+  line-height: 1.12;
+  letter-spacing: -0.045em;
+  text-wrap: balance;
+}
+html[lang="fa"] .home-intro h1,
+html[lang="fa"] .page-heading h1,
+html[lang="fa"] .not-found-page h1 {
+  max-width: 22ch;
+  font-size: clamp(2.05rem, 4.1vw, 3.7rem);
+  line-height: 1.55;
+  letter-spacing: 0;
+}
+.desktop-sidebar .wordmark-name {
+  font-size: 1.55rem;
+  line-height: 1.15;
+  letter-spacing: -0.04em;
+}
+.desktop-sidebar .wordmark-surname {
+  font-size: 0.76rem;
+  line-height: 1.5;
+  white-space: nowrap;
+}
+.desktop-sidebar .wordmark-role {
+  font-size: 0.78rem;
+  line-height: 1.7;
+}
+@media (max-width: 900px) {
+  .site-main {
+    margin-left: 0;
+    margin-right: 0;
+  }
+  .mobile-drawer {
+    width: min(88vw, 23rem);
+    max-width: calc(100vw - env(safe-area-inset-left) - env(safe-area-inset-right));
+    padding-left: max(1.5rem, env(safe-area-inset-left));
+    padding-right: 1.5rem;
+  }
+  .home-intro h1,
+  .page-heading h1,
+  .not-found-page h1 {
+    max-width: 16ch;
+    font-size: clamp(1.9rem, 8vw, 2.75rem);
+    line-height: 1.18;
+  }
+  html[lang="fa"] .home-intro h1,
+  html[lang="fa"] .page-heading h1,
+  html[lang="fa"] .not-found-page h1 {
+    max-width: 20ch;
+    font-size: clamp(1.9rem, 7.2vw, 2.55rem);
+    line-height: 1.6;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .mobile-drawer,
+  .mobile-drawer[data-open="true"] {
+    transition: none;
+  }
+}
