@@ -42,7 +42,7 @@ This directory is the product, design, content, and implementation source of tru
 - [SEO and discovery](./seo-and-discovery.md) — metadata, canonicals, hreflang, sitemap, robots, structured data, and measurement.
 - [Accessibility, performance, privacy, and security](./accessibility-performance-security.md) — WCAG 2.2 AA target, motion, Core Web Vitals, privacy, and security.
 - [Testing, visual QA, and release acceptance](./testing-qa-and-release.md) — test layers, screenshots, CI, artist approval, and release gates.
-- [Implementation roadmap](./implementation-roadmap.md) — phased delivery, dependencies, tests, and completion evidence.
+- [Implementation roadmap](./implementation-roadmap.md) — compatibility pointer to the canonical phased blueprint.
 
 ## Confirmed project context
 
