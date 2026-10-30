@@ -95,7 +95,7 @@ export function SiteShell({ locale, children }: { locale: Locale; children: Reac
                 dir="auto"
                 href={href}
                 aria-current={active ? "page" : undefined}
-                onClick={() => isDrawer && href === pathname && setOpen(false)}
+                onClick={() => isDrawer && href === pathname && setOpenPath(false)}
               >
                 {label}
               </Link>
@@ -155,7 +155,7 @@ export function SiteShell({ locale, children }: { locale: Locale; children: Reac
           className="menu-backdrop"
           type="button"
           aria-label={labels.close}
-          onClick={() => setOpen(false)}
+          onClick={() => setOpenPath(false)}
         />
       )}
 
@@ -178,7 +178,7 @@ export function SiteShell({ locale, children }: { locale: Locale; children: Reac
             className="drawer-close"
             type="button"
             aria-label={labels.close}
-            onClick={() => setOpen(false)}
+            onClick={() => setOpenPath(false)}
             tabIndex={open ? 0 : -1}
           >
             ×
