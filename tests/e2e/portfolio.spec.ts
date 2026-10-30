@@ -212,3 +212,38 @@ test("mobile drawer remains usable on a short-height viewport", async ({ page })
   await dialog.getByRole("link", { name: "تماس", exact: true }).scrollIntoViewIfNeeded();
   await expect(dialog.getByRole("link", { name: "تماس", exact: true })).toBeVisible();
 });
+
+test("mobile drawer Escape dismissal restores focus to its trigger", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/en");
+  const trigger = page.getByRole("button", { name: "Open navigation" });
+  await trigger.click();
+  const dialog = page.getByRole("dialog", { name: "Open navigation" });
+  await expect(dialog).toBeVisible();
+  await page.keyboard.press("Escape");
+  await expect(dialog).toBeHidden();
+  await expect(trigger).toBeFocused();
+});
+
+test("mobile drawer traps keyboard focus at both ends", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/en");
+  await page.getByRole("button", { name: "Open navigation" }).click();
+  const dialog = page.getByRole("dialog", { name: "Open navigation" });
+  const first = dialog.locator("a[href]").first();
+  const last = dialog.locator("a[href]").last();
+  await expect(first).toBeFocused();
+  await page.keyboard.press("Shift+Tab");
+  await expect(last).toBeFocused();
+  await page.keyboard.press("Tab");
+  await expect(first).toBeFocused();
+});
+
+test("empty CV remains unpublished, unlinked, and non-indexable", async ({ page, request }) => {
+  for (const locale of ["fa", "en"] as const) {
+    const response = await request.get(`/${locale}/cv`);
+    expect(response.status()).toBe(404);
+    await page.goto(`/${locale}`);
+    await expect(page.locator(".desktop-sidebar, .mobile-drawer").getByRole("link", { name: /CV|رزومه/ })).toHaveCount(0);
+  }
+});
