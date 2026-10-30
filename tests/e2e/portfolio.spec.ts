@@ -16,14 +16,14 @@ test("Persian homepage renders the artist identity and localized shell", async (
   await page.screenshot({ path: test.info().outputPath("fa-home-desktop.png"), fullPage: true });
 });
 
-test("English homepage renders LTR and can switch locale without losing the current section", async ({ page }) => {
+test("English homepage renders LTR and falls back to the translated home when Works is unpublished", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 960 });
   await page.goto("/en/works");
   await expect(page.locator("html")).toHaveAttribute("lang", "en");
   await expect(page.locator("html")).toHaveAttribute("dir", "ltr");
   await expect(page.getByRole("heading", { name: "Works" })).toBeVisible();
   await page.getByRole("link", { name: "فارسی" }).click();
-  await expect(page).toHaveURL(/\/fa\/works$/);
+  await expect(page).toHaveURL(/\/fa$/);
   await expect(page.locator("html")).toHaveAttribute("dir", "rtl");
 });
 
