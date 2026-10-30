@@ -1,4 +1,12 @@
-import { expect, test } from "@playwright/test";
+import { expect, test, type Locator } from "@playwright/test";
+
+/** Wait for the drawer's real CSS transition; geometry is meaningful only at rest. */
+async function waitForDrawerToSettle(drawer: Locator) {
+  await drawer.evaluate(async (element) => {
+    const transitions = element.getAnimations();
+    await Promise.all(transitions.map((transition) => transition.finished.catch(() => undefined)));
+  });
+}
 
 test("root route redirects to the Persian-first homepage", async ({ page }) => {
   await page.goto("/");
@@ -48,6 +56,7 @@ test("mobile Persian shell keeps the navigation drawer on the physical left", as
   await page.getByRole("button", { name: "باز کردن راهبری" }).click();
   const drawer = page.getByRole("dialog", { name: "باز کردن راهبری" });
   await expect(drawer).toBeVisible();
+  await waitForDrawerToSettle(drawer);
   const bounds = await drawer.boundingBox();
   expect(bounds?.x).toBe(0);
   await page.screenshot({ path: test.info().outputPath("fa-home-mobile-menu.png"), fullPage: true });
@@ -271,6 +280,7 @@ for (const locale of ["en", "fa"] as const) {
     await page.getByRole("button", { name: locale === "fa" ? "باز کردن راهبری" : "Open navigation" }).click();
     await expect(drawer).toBeVisible();
     await expect(drawer).toHaveAttribute("aria-hidden", "false");
+    await waitForDrawerToSettle(drawer);
     const geometry = await drawer.evaluate((element) => {
       const rect = element.getBoundingClientRect();
       return { left: rect.left, right: rect.right, width: rect.width, viewport: window.innerWidth };
