@@ -539,3 +539,38 @@ The Journal detail implementation now emits Article JSON-LD for editorial entrie
 Verified on commit b3ced67771b582362998f186be68920ceb5fb450: [GitHub Actions run 41071561284](https://github.com/mrcode-tech/nasoodi.art/actions/runs/41071561284) passed ESLint, TypeScript, 21 content tests, production build, 15 Chromium E2E tests, screenshot artifact upload, and production route smoke test. Visual QA artifact: nasoodi-visual-qa-b3ced67771b582362998f186be68920ceb5fb450 (artifact ID 12986285020).
 
 This validates the code paths and synthetic test records only. No real artwork, profile, CV, contact, Journal, or event content has been added or approved. Populated-page visual/SEO validation and all owner/artist publication gates remain outstanding.
+
+
+## Incremental implementation update — 2026-10-30 (gallery discovery, security, navigation, and asset-path hardening)
+
+This update supersedes earlier progress counts for the latest code state. It does not mark the site or release as complete.
+
+| Area / phase | Implementation | Verification | Remaining gate |
+|---|---|---|---|
+| Gallery SEO (Phase 6/10) | Gallery detail routes now emit `CollectionPage` JSON-LD with an ordered `ItemList` of only locale-approved, published artwork members. Gallery covers provide Open Graph and Twitter large-image previews; artwork detail pages also provide Twitter previews when an approved primary image exists. | Collection schema helper test verifies curated order and exclusion of unpublished works. | Validate rendered previews and structured data with real artist-approved gallery content. |
+| Browser security (Phase 10) | Added `nosniff`, `DENY` framing, strict-origin referrer policy, disabled unused camera/microphone/geolocation permissions, and one-year HSTS without subdomain inheritance. A CSP is intentionally deferred until Next.js runtime/inline JSON-LD can be covered by a correct nonce/hash strategy. | Playwright checks all five headers against a localized production route; full production smoke test passes. | Review hosting-level header behavior and implement an audited CSP; dependency advisory and privacy/security review remain. |
+| Mobile navigation (Phase 2/11) | Drawer now supports vertical scrolling on short screens. Added tests for close-button dismissal with focus restoration, backdrop dismissal, route-selection dismissal, and a 320×568 short-height mobile view. | Latest browser suite: 19 Chromium tests passed. The first backdrop test exposed an incorrect test click coordinate (inside the drawer); the test was corrected to click the exposed backdrop area and the corrected run passed. | Manual screen-reader, keyboard, touch-device, and broader browser testing remain. |
+| Artwork source validation (Phase 3/10) | Primary artwork images must use safe root-relative local paths. External/protocol-relative URLs, path traversal, encoded separators, backslashes, query strings, fragments, and control characters are rejected before an image can qualify for publication. | Unit test covers unsafe path variants and an encoded-space local path. | Source-to-derivative generation, asset provenance, rights, and image-fidelity review remain. |
+
+### Latest verified code state
+
+- Repository: `mrcode-tech/nasoodi.art`
+- Branch: `feature`
+- Latest verified code commit: `002c640e593840138ab4b780cc436a3130edae0f`
+- Successful GitHub Actions run: [41077207727](https://github.com/mrcode-tech/nasoodi.art/actions/runs/41077207727)
+- ESLint, TypeScript, production build, and production route smoke test: passed.
+- Content tests: **23 passed, 0 failed**.
+- Chromium E2E tests: **19 passed, 0 failed**.
+- Screenshot/diagnostics artifact: `nasoodi-visual-qa-002c640e593840138ab4b780cc436a3130edae0f` (artifact ID `12987313282`).
+
+The screenshot artifact confirms the configured browser suite ran and uploaded diagnostics; it has not been manually inspected in this increment, and it does not validate real artwork presentation because no artist-approved painting records are published.
+
+### Current outstanding decisions and publication gates
+
+1. Confirm the exact finished-painting hero and approve each source image, rights, title/untitled treatment, alt text, metadata, translations, and gallery membership.
+2. Supply and approve the artist statement, factual biography, public contact channel, verified CV records, and Journal/event content in each locale.
+3. Approve site-wide easel asset use before implementing the document-relative scroll composition.
+4. Resolve the navigation/theme specification conflict: one document requests Light/Dark/System controls while the refined design authority says dark mode is not mandatory without confirmation. Do not invent a dark palette or ship an unreviewed theme selector.
+5. Complete derivative-pipeline implementation, manual WCAG 2.2 AA/screen-reader review, Firefox/Safari and real-device checks, production-like Core Web Vitals, CSP/dependency/security review, and populated-content visual/SEO validation.
+
+No merge, deployment, Vercel dashboard change, or public publication was performed or authorized.
