@@ -206,3 +206,11 @@ test("published route records reject unsafe slugs and duplicate public identitie
  const cv:CvEntry={id:"cv1",category:"education",title:{en:"Education"},year:2020,verified:true,status:"published"};
  assert.equal(getPublicCvEntries([cv,cv],"en").length,0);
 });
+
+test("Journal links reject protocol-relative, backslash-normalized, control, and credential URLs",()=>{
+ assert.equal(isSafeJournalHref("/en/works/example"),true);
+ assert.equal(isSafeJournalHref("https://example.org/event"),true);
+ for(const href of ["//example.org","/\\\\example.org","/\\u0000bad","javascript:alert(1)","http://example.org","https://user:secret@example.org"]) {
+  assert.equal(isSafeJournalHref(href),false,JSON.stringify(href));
+ }
+});

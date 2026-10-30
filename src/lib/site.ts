@@ -19,8 +19,15 @@ export type JournalTextBlock =
 export type LocalizedRichText = Partial<Record<Locale, JournalTextBlock[]>>;
 export type JournalEntry = { id: string; slug: string; type: JournalCategory; title: Localized; summary: Localized; body?: LocalizedRichText; status: Status; publishedAt?: string; approvedLocales: Locale[]; artistApproved: boolean; event?: JournalEvent };
 export function isSafeJournalHref(href: string): boolean {
-  if (href.startsWith("/") && !href.startsWith("//")) return true;
-  try { return new URL(href).protocol === "https:"; } catch { return false; }
+  if (!href || /[\\\\\\u0000-\\u001f]/.test(href)) return false;
+  if (href.startsWith("/") && !href.startsWith("//")) {
+    try { return new URL(href, "https://nasoodi.art").origin === "https://nasoodi.art"; }
+    catch { return false; }
+  }
+  try {
+    const url = new URL(href);
+    return url.protocol === "https:" && !url.username && !url.password;
+  } catch { return false; }
 }
 export const journalCategories: JournalCategory[] = ["exhibition", "event", "studio-update", "story"];
 export function journalCategoryFor(entry: JournalEntry): JournalCategory {
