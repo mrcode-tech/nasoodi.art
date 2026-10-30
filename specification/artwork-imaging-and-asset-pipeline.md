@@ -97,3 +97,10 @@ The image pipeline must support the visual quality contract in design-engineerin
 ## Runtime source-path contract
 
 Published artwork image records must resolve to root-relative paths served by the Nasoodi.art application. Remote absolute/protocol-relative URLs, path traversal, encoded separators, backslashes, query strings, fragments, and control characters are not valid image sources. The runtime publication gate enforces this for the primary image; derivative generation and source-to-derivative comparison must continue to use the approved local master. This validation does not establish image rights or artist approval.
+
+
+## Automated source-asset inventory
+
+The repository now includes `scripts/audit-portfolio-assets.mjs`, exposed as `npm run audit:assets`. It inventories the candidate files listed in `specification/asset-review-register.md`, reads PNG/JPEG dimensions, records byte size and SHA-256, and writes a JSON manifest. The CI workflow uploads `asset-audit/manifest.json` with the visual-QA artifacts. Missing or unsupported/corrupt candidate files fail the audit.
+
+This is technical intake evidence only. Every manifest record remains `approval-required` with `publicationAllowed: false`; the audit does not infer artwork identity, rights, artist approval, color accuracy, EXIF orientation, or crop permission. It does not create derivatives or copy any candidate into public delivery paths. Derivative generation remains gated on confirmed master selection and written presentation/use approval.
