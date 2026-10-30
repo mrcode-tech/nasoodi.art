@@ -256,7 +256,7 @@ test("mobile drawer closes when switching locale", async ({ page }) => {
   const dialog = page.getByRole("dialog", { name: "Open navigation" });
   await expect(dialog).toBeVisible();
   await dialog.getByRole("link", { name: "فارسی" }).click();
-  await expect(page).toHaveURL(/\\/fa$/);
+  await expect(page).toHaveURL(/\/fa$/);
   await expect(page.locator("html")).toHaveAttribute("dir", "rtl");
   await expect(dialog).toBeHidden();
 });
