@@ -9,7 +9,7 @@
 | `specification/assets/canvase.png` | Filename suggests a canvas/painting layer; exact image role not verified | Pending | Inspect and reconcile with the hero composition specification; do not present as a finished work without confirmation |
 | `specification/assets/artist.png` | Inspected: transparent cutout showing a person from behind holding a brush; process/studio imagery, not a standalone painting | Pending | Confirm public use and approved placement; do not treat as a portrait or artwork |
 | `specification/assets/easel.png` | Inspected: transparent cutout of a wooden easel | Pending | Confirm site-wide decorative use; validate original dimensions, document-relative sizing, contrast, and reduced-motion behavior |
-| `specification/assets/oil-paint-brush.png` | File present; image pixels not inspected | Pending | Inspect role and approve any use |
+| `specification/assets/oil-paint-brush.png` | Inspected: isolated oil-paint brush cutout; it is a studio/process prop, not a finished artwork or artist portrait | Pending | Confirm public-use rights and intended placement before use |
 
 ## Publication rules
 
