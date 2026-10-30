@@ -72,3 +72,13 @@ Test current stable Chromium, Firefox, and Safari engines where available, plus 
 - [ ] No unapproved trackers/embeds.
 - [ ] Contact data handling documented if applicable.
 - [ ] No secrets or private metadata exposed.
+## Design-engineering quality requirements
+
+The interaction and visual quality bar is defined in design-engineering-skills.md. Accessibility and performance are part of design quality, not later cleanup.
+
+- Every motion pattern must have a reduced-motion behavior and must not block access to content.
+- Hover interactions must be gated to hover-capable fine pointers and have touch/keyboard equivalents.
+- Animate transform/opacity where possible; avoid layout-thrashing properties and unnecessary animation libraries.
+- Keep focus indicators visible, avoid clipped focus, and provide immediate feedback for frequent/keyboard actions.
+- Validate contrast for every actual token pairing, including muted metadata, active navigation, borders, and disabled states.
+- Test real device responsiveness and image-loading behavior; do not rely only on desktop emulation or source inspection.
