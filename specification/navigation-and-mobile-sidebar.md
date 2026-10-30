@@ -330,3 +330,12 @@ The component selection, RTL/LTR rules, keyboard and focus behavior, and new-com
 - The modal overlay and Sheet must have stacking levels above the mobile header. Do not solve this by moving the close control below or inside a clipped navbar.
 - At widths of 901px and above, hide mobile navigation chrome and show the persistent desktop sidebar. If the viewport crosses into desktop width while the Sheet is open, close/reset the mobile state. Returning to mobile must show the hamburger with the drawer closed.
 - Test the mobile-to-desktop-to-mobile transition while the drawer is open, for both locales. Verify drawer visibility, desktop sidebar visibility, focus/overlay cleanup, and that the close control is visible within the viewport.
+
+
+## Owner-approved shell refinements (2026-10-31)
+
+- Remove the footer from the main content column; the desktop copyright identity already appears in the persistent sidebar.
+- In the mobile drawer, place a compact site/copyright line below the navigation and language switcher so the copyright remains available without duplicating it in page content.
+- In Persian desktop layout, keep the language utility at the physical left edge of the content region (opposite the right-hand sidebar), with its control ordering anchored from that left edge.
+- Navigation item underline indicators must be limited to the rendered label width, not stretched across the full sidebar row.
+- The mobile navigation trigger uses a borderless, transparent ghost treatment. Its focus indicator remains visible for keyboard users; do not add a permanent outline or frame.
