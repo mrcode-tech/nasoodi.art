@@ -122,6 +122,7 @@ test("Persian mobile navigation drawer enters from physical left and preserves R
   await page.getByRole("button", { name: "باز کردن راهبری" }).click();
   const drawer = page.getByRole("dialog", { name: "باز کردن راهبری" });
   await expect(drawer).toBeVisible();
+  await waitForDrawerToSettle(drawer);
   const bounds = await drawer.boundingBox();
   expect(bounds?.x).toBe(0);
   const firstLink = drawer.locator(".nav-link").first();
