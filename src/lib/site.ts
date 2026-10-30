@@ -93,6 +93,43 @@ export function getArtworkStructuredData(work: Artwork, locale: Locale) {
     ...(work.description?.[locale]?.trim() ? { description: work.description[locale] } : {}),
   };
 }
+export function getJournalStructuredData(entry: JournalEntry, locale: Locale, canonicalUrl: string) {
+  const common = {
+    "@context": "https://schema.org",
+    name: entry.title[locale],
+    description: entry.summary[locale],
+    url: canonicalUrl,
+    inLanguage: locale,
+  };
+  if (entry.type === "event" && entry.event) {
+    const attendanceModes = {
+      "in-person": "https://schema.org/OfflineEventAttendanceMode",
+      online: "https://schema.org/OnlineEventAttendanceMode",
+      hybrid: "https://schema.org/MixedEventAttendanceMode",
+    } as const;
+    return {
+      ...common,
+      "@type": "Event",
+      startDate: entry.event.startsAt,
+      ...(entry.event.endsAt ? { endDate: entry.event.endsAt } : {}),
+      ...(entry.event.attendanceMode && entry.event.attendanceMode !== "unspecified"
+        ? { eventAttendanceMode: attendanceModes[entry.event.attendanceMode] }
+        : {}),
+      ...(entry.event.venue?.[locale]
+        ? { location: { "@type": "Place", name: entry.event.venue[locale] } }
+        : {}),
+    };
+  }
+  return {
+    ...common,
+    "@type": "Article",
+    headline: entry.title[locale],
+    author: { "@id": "https://nasoodi.art/#artist" },
+    ...(entry.publishedAt && Number.isFinite(Date.parse(entry.publishedAt))
+      ? { datePublished: entry.publishedAt }
+      : {}),
+  };
+}
 export function primaryImageFor(work: Artwork) {
   return work.images.find((image) => image.role === "primary" && image.src.trim() && image.width > 0 && image.height > 0);
 }

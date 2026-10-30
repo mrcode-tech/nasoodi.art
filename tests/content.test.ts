@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { getPublicArtworks,getPublicGalleries,getPublicJournal,getPublicCvEntries,getPublicArtistProfile,getPublicContactDetails,getUpcomingJournalEvents,getArtworkStructuredData,serializeJsonLd,getHomepageFeaturedArtworks,getGalleryCoverArtwork,getJournalEntriesForCategory,isSafeJournalHref,portfolioStructuredData,type Artwork,type Gallery,type JournalEntry,type CvEntry,type ArtistProfile,type ContactDetails, hasExplicitTimeZone } from "../src/lib/site";
+import { getPublicArtworks,getPublicGalleries,getPublicJournal,getPublicCvEntries,getPublicArtistProfile,getPublicContactDetails,getUpcomingJournalEvents,getArtworkStructuredData,getJournalStructuredData,serializeJsonLd,getHomepageFeaturedArtworks,getGalleryCoverArtwork,getJournalEntriesForCategory,isSafeJournalHref,portfolioStructuredData,type Artwork,type Gallery,type JournalEntry,type CvEntry,type ArtistProfile,type ContactDetails, hasExplicitTimeZone } from "../src/lib/site";
 const work:Artwork={id:"w1",slug:"work-one",title:{en:"Work",fa:"اثر"},images:[{src:"/art/work.jpg",alt:{en:"Painting",fa:"نقاشی"},role:"primary",width:1200,height:900}],rightsConfirmed:true,status:"published"};
 test("artwork stays private until published and rights-cleared",()=>{assert.equal(getPublicArtworks([{...work,status:"needs-review"}],"en").length,0);assert.equal(getPublicArtworks([{...work,rightsConfirmed:false}],"en").length,0);assert.equal(getPublicArtworks([work],"en").length,1);});
 test("artwork requires localized title and primary image alt",()=>{assert.equal(getPublicArtworks([{...work,title:{en:"Work"}}],"fa").length,0);assert.equal(getPublicArtworks([{...work,images:[{...work.images[0],alt:{en:""}}]}],"en").length,0);});
@@ -147,4 +147,24 @@ test("contact destinations require owner and locale approval and safe values",()
  assert.equal(getPublicContactDetails({...details,instagramUrl:"javascript:alert(1)",email:undefined},"en"),undefined);
  assert.equal(getPublicContactDetails({...details,instagramUrl:"https://example.org",email:undefined},"en"),undefined);
  assert.equal(getPublicContactDetails({...details,email:"not-an-email",instagramUrl:undefined},"en"),undefined);
+});
+
+test("Journal Article structured data uses only localized visible editorial fields",()=>{
+ const entry:JournalEntry={id:"story",slug:"story",type:"story",title:{en:"A story",fa:"روایت"},summary:{en:"A short summary",fa:"خلاصه"},status:"published",approvedLocales:["en","fa"],artistApproved:true,publishedAt:"2026-10-20T10:00:00Z"};
+ const schema=getJournalStructuredData(entry,"en","https://nasoodi.art/en/journal/story");
+ assert.equal(schema["@type"],"Article");
+ assert.equal(schema.headline,"A story");
+ assert.equal(schema.description,"A short summary");
+ assert.equal(schema.datePublished,"2026-10-20T10:00:00Z");
+ assert.deepEqual(schema.author,{"@id":"https://nasoodi.art/#artist"});
+});
+test("Journal Event structured data includes confirmed dates, attendance mode, and venue only",()=>{
+ const entry:JournalEntry={id:"event",slug:"event",type:"event",title:{en:"Opening",fa:"افتتاحیه"},summary:{en:"Opening night",fa:"شب افتتاحیه"},status:"published",approvedLocales:["en","fa"],artistApproved:true,event:{startsAt:"2026-11-12T18:00:00+01:00",endsAt:"2026-11-12T21:00:00+01:00",timeZone:"Europe/Berlin",venue:{en:"Studio",fa:"آتلیه"},attendanceMode:"hybrid"}};
+ const schema=getJournalStructuredData(entry,"en","https://nasoodi.art/en/journal/event");
+ assert.equal(schema["@type"],"Event");
+ assert.equal(schema.startDate,"2026-11-12T18:00:00+01:00");
+ assert.equal(schema.endDate,"2026-11-12T21:00:00+01:00");
+ assert.equal(schema.eventAttendanceMode,"https://schema.org/MixedEventAttendanceMode");
+ assert.deepEqual(schema.location,{"@type":"Place",name:"Studio"});
+ assert.equal("offers" in schema,false);
 });

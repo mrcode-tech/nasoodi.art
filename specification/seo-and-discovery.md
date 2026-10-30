@@ -56,3 +56,13 @@ SEO presentation must follow design-engineering-skills.md and design-direction-a
 - Structured data must describe verified content only.
 - Do not create visually hidden keyword blocks or duplicate thin filter pages to increase indexable URLs.
 - Social preview imagery must use approved assets and reviewed crops; artwork color and composition must remain intact.
+
+## Implemented structured-data coverage — 2026-10-30
+
+The application emits the global Person/WebSite graph and now adds page-level structured data only on eligible published detail routes:
+
+- Artwork detail: `VisualArtwork`, with the localized visible title and only present image, year, medium, and description fields.
+- Editorial Journal detail: `Article`, with visible localized title/summary, canonical URL, artist author reference, and a valid publication date when supplied.
+- Event Journal detail: `Event`, with confirmed start/end instants, declared attendance mode, and localized venue when present. No offers, prices, addresses, organizer, or other unprovided facts are synthesized.
+- JSON-LD serialization escapes HTML-sensitive opening brackets before insertion into the document.
+- Structured-data helpers are unit-tested; populated page output and rich-result eligibility still require approved real content and validation after publication.
