@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { getPublicArtworks,getPublicGalleries,getPublicJournal,getPublicCvEntries,getHomepageFeaturedArtworks,getGalleryCoverArtwork,getJournalEntriesForCategory,isSafeJournalHref,type Artwork,type Gallery,type JournalEntry,type CvEntry } from "../src/lib/site";
+import { getPublicArtworks,getPublicGalleries,getPublicJournal,getPublicCvEntries,getHomepageFeaturedArtworks,getGalleryCoverArtwork,getJournalEntriesForCategory,isSafeJournalHref,portfolioStructuredData,type Artwork,type Gallery,type JournalEntry,type CvEntry } from "../src/lib/site";
 const work:Artwork={id:"w1",slug:"work-one",title:{en:"Work",fa:"اثر"},images:[{src:"/art/work.jpg",alt:{en:"Painting",fa:"نقاشی"},role:"primary",width:1200,height:900}],rightsConfirmed:true,status:"published"};
 test("artwork stays private until published and rights-cleared",()=>{assert.equal(getPublicArtworks([{...work,status:"needs-review"}],"en").length,0);assert.equal(getPublicArtworks([{...work,rightsConfirmed:false}],"en").length,0);assert.equal(getPublicArtworks([work],"en").length,1);});
 test("artwork requires localized title and primary image alt",()=>{assert.equal(getPublicArtworks([{...work,title:{en:"Work"}}],"fa").length,0);assert.equal(getPublicArtworks([{...work,images:[{...work.images[0],alt:{en:""}}]}],"en").length,0);});
@@ -59,4 +59,19 @@ test("journal publication requires explicit artist approval and locale approval"
  assert.equal(getPublicJournal([approved],"fa").length,0);
  assert.equal(getPublicJournal([{...approved,artistApproved:false}],"en").length,0);
  assert.equal(getPublicJournal([{...approved,approvedLocales:[]}],"en").length,0);
+});
+
+test("portfolio JSON-LD describes only confirmed artist and website facts",()=>{
+ const graph=portfolioStructuredData["@graph"];
+ const person=graph[0] as Record<string,unknown>;
+ const website=graph[1] as Record<string,unknown>;
+ assert.equal(graph.length,2);
+ assert.equal(person["@type"],"Person");
+ assert.equal(person.name,"Ghazaleh Abdolahzade Nasoodi");
+ assert.equal(person.alternateName,"غزاله عبداله زاده نسودی");
+ assert.equal(person.jobTitle,"Oil painter");
+ assert.equal(website["@type"],"WebSite");
+ assert.deepEqual(website.inLanguage,["fa","en"]);
+ assert.deepEqual(website.publisher,{"@id":"https://nasoodi.art/#artist"});
+ assert.equal("sameAs" in person,false);
 });
