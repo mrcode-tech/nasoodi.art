@@ -33,6 +33,7 @@ npm test          # Content publication and governance tests
 npm run build     # Production build
 npm run start     # Production server
 npm run test:e2e  # Playwright browser and responsive tests
+npm run audit:assets # Inventory candidate image dimensions, sizes, and checksums
 ```
 
 ## Route structure
