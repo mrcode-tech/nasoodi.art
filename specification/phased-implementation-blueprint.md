@@ -471,3 +471,24 @@ This update records verified code and CI work after the earlier evidence snapsho
 The implementation intentionally does not invent paintings, artwork metadata, gallery memberships, artist biography/statement, CV entries, Journal copy, event facts, or public contact details. The approved homepage hero and public-use status of each painting remain owner decisions. The easel background remains unimplemented pending the specified asset-use approval and visual review. The Light/Dark/System selector remains unresolved against the conflicting design authorities.
 
 Keep all unapproved content unpublished and non-indexable. No merge, deployment, or public release is authorized by this progress update.
+
+
+## Incremental implementation update — 2026-10-30 (localization and event correctness)
+
+This update records code and CI evidence from the latest feature-branch work. It does not mark the full site or release as complete.
+
+| Area | Change | Evidence | Remaining gate |
+|---|---|---|---|
+| Localization | The locale switcher now checks whether the equivalent published Works, Gallery, Journal, or CV destination exists in the target locale. If not, it falls back to that locale's homepage. Static About and Contact routes retain their localized equivalents. | Unit coverage for the route resolver; updated Playwright test for the empty Works fallback. | Add translated records only after artist/editorial approval; verify reciprocal hreflang as content is approved. |
+| Journal events | Event start/end timestamps now require an explicit ISO 8601 UTC offset or `Z`, plus the validated IANA time zone. Time-zone-less values are rejected to avoid server/visitor interpretation drift. | Content publication tests cover explicit offsets, UTC timestamps, invalid time zones, and timezone-less rejection. | Owner-supplied event records, dates, venues, and approved translations remain absent. |
+| CI / regression | The full GitHub Actions pipeline passed after correcting the E2E expectation to match the specified locale-home fallback. | [Run 41065984109](https://github.com/mrcode-tech/nasoodi.art/actions/runs/41065984109): ESLint, TypeScript, content tests, production build, 11 Chromium E2E tests, screenshot artifact upload, and production route smoke test all passed. | Manual visual review, assistive-technology review, Firefox/Safari, and real-device QA remain. |
+
+### Recent commits
+
+- `b25b38a7b06fd3fa98fc4324d202060308de2238` — locale-aware equivalent-route fallback.
+- `896571020802e00e0318c41a280d28a6b8be29a1` — explicit event timestamp validation and Journal contract update.
+- `81dfab54d44a245645dc455311b1cd5ed251905a` — corrected locale fallback integration.
+- `a8ac64d672873b1bc26a3e360e2569fc7f8ffab6` — corrected event timestamp validator syntax after CI lint caught the issue.
+- `59c9cf042d126ea861999cec3f7945db4f2c6c1d` — E2E assertion aligned with the specified locale fallback.
+
+The latest verified application commit is `59c9cf042d126ea861999cec3f7945db4f2c6c1d`. This progress record must be kept separate from artist approval and publication readiness.
