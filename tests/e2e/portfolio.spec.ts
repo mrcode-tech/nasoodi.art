@@ -123,8 +123,16 @@ for (const locale of ["en", "fa"] as const) {
     const mainBounds = await main.boundingBox();
     expect(mainBounds?.x).toBe(locale === "fa" ? 0 : (bounds?.width ?? 0));
     expect(mainBounds?.width).toBeLessThanOrEqual(1440 - (bounds?.width ?? 0) + 1);
-    const utility = await page.locator(".desktop-utility").boundingBox();
+    const utilityLocator = page.locator(".desktop-utility");
+    const utility = await utilityLocator.boundingBox();
     expect(utility).not.toBeNull();
+    await expect(utilityLocator).toHaveCSS("position", "fixed");
+    const utilityStyle = await utilityLocator.evaluate((node) => getComputedStyle(node));
+    expect(utilityStyle.backgroundColor).not.toBe("rgba(0, 0, 0, 0)");
+    expect(utilityStyle.backgroundColor).not.toBe("transparent");
+    expect(utility?.y).toBe(0);
+    expect(utility?.height).toBeGreaterThanOrEqual(75);
+    expect(mainBounds?.y).toBeGreaterThanOrEqual((utility?.y ?? 0) + (utility?.height ?? 0));
     if (locale === "fa") expect((utility?.x ?? 0) + (utility?.width ?? 0)).toBeLessThan(1440 - (bounds?.width ?? 0));
     else expect((utility?.x ?? 0)).toBeGreaterThan(1440 - (bounds?.width ?? 0) - 220);
     await page.screenshot({ path: test.info().outputPath(`${locale}-desktop-sidebar.png`), fullPage: true });
