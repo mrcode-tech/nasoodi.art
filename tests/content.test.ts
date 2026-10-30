@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { getPublicArtworks,getPublicGalleries,getPublicJournal,getPublicCvEntries,getHomepageFeaturedArtworks,getGalleryCoverArtwork,getJournalEntriesForCategory,isSafeJournalHref,portfolioStructuredData,type Artwork,type Gallery,type JournalEntry,type CvEntry } from "../src/lib/site";
+import { getPublicArtworks,getPublicGalleries,getPublicJournal,getPublicCvEntries,getHomepageFeaturedArtworks,getGalleryCoverArtwork,getJournalEntriesForCategory,isSafeJournalHref,portfolioStructuredData,type Artwork,type Gallery,type JournalEntry,type CvEntry, hasExplicitTimeZone } from "../src/lib/site";
 const work:Artwork={id:"w1",slug:"work-one",title:{en:"Work",fa:"اثر"},images:[{src:"/art/work.jpg",alt:{en:"Painting",fa:"نقاشی"},role:"primary",width:1200,height:900}],rightsConfirmed:true,status:"published"};
 test("artwork stays private until published and rights-cleared",()=>{assert.equal(getPublicArtworks([{...work,status:"needs-review"}],"en").length,0);assert.equal(getPublicArtworks([{...work,rightsConfirmed:false}],"en").length,0);assert.equal(getPublicArtworks([work],"en").length,1);});
 test("artwork requires localized title and primary image alt",()=>{assert.equal(getPublicArtworks([{...work,title:{en:"Work"}}],"fa").length,0);assert.equal(getPublicArtworks([{...work,images:[{...work.images[0],alt:{en:""}}]}],"en").length,0);});
@@ -9,10 +9,10 @@ test("journal only exposes published entries with localized title and summary",(
 
 test("event entries require a valid time zone and occurrence time",()=>{
  const base:JournalEntry={id:"e1",slug:"event",type:"event",title:{en:"Opening",fa:"افتتاحیه"},summary:{en:"An opening",fa:"افتتاحیه"},status:"published",approvedLocales:["en","fa"],artistApproved:true};
- assert.equal(getPublicJournal([base],"en").length,0);
- const valid:JournalEntry={...base,event:{startsAt:"2026-11-12T18:00:00",timeZone:"Europe/Berlin",venue:{en:"Studio",fa:"آتلیه"}}};
+ assert.equal(getPublicJournal([base],"en").length,0);\n assert.equal(hasExplicitTimeZone("2026-11-12T18:00:00"),false);\n assert.equal(hasExplicitTimeZone("2026-11-12T18:00:00+01:00"),true);\n assert.equal(hasExplicitTimeZone("2026-11-12T17:00:00Z"),true);
+ const valid:JournalEntry={...base,event:{startsAt:"2026-11-12T18:00:00+01:00",timeZone:"Europe/Berlin",venue:{en:"Studio",fa:"آتلیه"}}};
  assert.equal(getPublicJournal([valid],"en").length,1);
- assert.equal(getPublicJournal([{...valid,event:{...valid.event!,timeZone:"Not/AZone"}}],"en").length,0);
+ assert.equal(getPublicJournal([{...valid,event:{...valid.event!,timeZone:"Not/AZone"}}],"en").length,0);\n assert.equal(getPublicJournal([{...valid,event:{...valid.event!,startsAt:"2026-11-12T18:00:00"}}],"en").length,0);
 });
 test("CV entries require explicit verification and localized titles",()=>{
  const entry:CvEntry={id:"cv1",category:"group-exhibition",title:{en:"Group exhibition",fa:"نمایشگاه گروهی"},year:2024,verified:true,status:"published"};

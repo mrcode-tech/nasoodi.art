@@ -167,7 +167,7 @@ Required for a public event:
 - Confirmed time zone or location context sufficient to interpret the time.
 - Publication state and artist approval.
 
-Recommended when applicable:
+Event `startsAt` and `endsAt` values must be unambiguous ISO 8601 instants with an explicit `Z` or numeric UTC offset, alongside the required IANA `timeZone`. Do not store a timezone-less local timestamp: server and visitor environments may interpret it differently.\n\nRecommended when applicable:
 - End date/time.
 - Venue name.
 - Venue address or public location description.

@@ -80,15 +80,15 @@ export function getGalleryCoverArtwork(gallery: Gallery, works: Artwork[], local
   const cover = getPublicArtworks(works, locale).find((work) => work.id === gallery.coverArtworkId);
   return cover ? primaryImageFor(cover) ? { artwork: cover, image: primaryImageFor(cover)! } : undefined : undefined;
 }
-export function getPublicJournal(items: JournalEntry[], locale: Locale) {
+export function hasExplicitTimeZone(value: string): boolean {\n  return /(?:Z|[+-]\\d{2}:\\d{2})$/i.test(value) && Number.isFinite(Date.parse(value));\n}\nexport function getPublicJournal(items: JournalEntry[], locale: Locale) {
   return items.filter((entry) => {
     if (entry.status !== "published" || !entry.artistApproved || !entry.approvedLocales.includes(locale) || !entry.title[locale]?.trim() || !entry.summary[locale]?.trim()) return false;
     if (entry.type !== "event") return true;
     const event = entry.event;
-    if (!event || !Number.isFinite(Date.parse(event.startsAt)) || !event.timeZone ||
+    if (!event || !hasExplicitTimeZone(event.startsAt) || !event.timeZone ||
       (!event.venue?.[locale]?.trim() && !event.attendanceMode)) return false;
     try { new Intl.DateTimeFormat(locale, { timeZone: event.timeZone }); } catch { return false; }
-    if (event.endsAt && (!Number.isFinite(Date.parse(event.endsAt)) || Date.parse(event.endsAt) < Date.parse(event.startsAt))) return false;
+    if (event.endsAt && (!hasExplicitTimeZone(event.endsAt) || Date.parse(event.endsAt) < Date.parse(event.startsAt))) return false;
     if (event.registrationUrl) {
       try { if (new URL(event.registrationUrl).protocol !== "https:") return false; } catch { return false; }
     }
