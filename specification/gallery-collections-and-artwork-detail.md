@@ -358,3 +358,15 @@ The repository currently contains these candidate assets under `specification/as
 - `oil-paint-brush.png`
 
 The filenames and presence of these files do not establish their visual contents, intended gallery membership, public-use rights, titles, or descriptions. Before implementation, inspect each image and create an asset manifest with dimensions, orientation, color profile, file size, intended role, source, rights/approval status, and proposed content mapping. Treat `gallery/1.jpg`–`5.jpg` as candidate artwork images only until the artist confirms their identity and groupings.
+
+## Design-engineering refinement
+
+Gallery and artwork surfaces must follow design-engineering-skills.md and design-direction-and-system-refinement.md.
+
+- The gallery index should feel like an edited exhibition program, with distinct collection identities and varied composition—not a uniform e-commerce product grid.
+- Artwork imagery must remain uncropped by default and retain its native aspect ratio. Use a varied editorial layout when the source dimensions demand it.
+- Gallery detail pages should prioritize the paintings; title and approved description introduce the collection but must not dominate it.
+- Artwork detail pages should provide generous image scale, minimal distractions, and known metadata only.
+- Do not add automatic carousels, hover-only artwork details, animated zoom, or motion on the artwork itself.
+- Filters, if required by catalogue size, must be immediate, accessible, and visually quiet.
+- Review sparse galleries, a single artwork, mixed aspect ratios, long Persian/English gallery names, and mobile reading order.
