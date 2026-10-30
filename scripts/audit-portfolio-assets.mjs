@@ -50,6 +50,7 @@ for (const relativePath of candidates) {
   try {
     const bytes = await readFile(resolve(root, relativePath));
     const info = pngInfo(bytes) ?? jpegInfo(bytes);
+    if (!info) invalid++;
     records.push({
       path: relativePath,
       bytes: bytes.length,
@@ -80,7 +81,7 @@ if (outputArg) {
 } else {
   process.stdout.write(output);
 }
-if (missing) {
-  console.error(`Asset audit found ${missing} missing candidate file(s).`);
+if (missing || invalid) {
+  console.error(`Asset audit found ${missing} missing and ${invalid} invalid or unsupported candidate file(s).`);
   process.exitCode = 1;
 }
