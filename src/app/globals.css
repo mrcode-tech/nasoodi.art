@@ -289,3 +289,60 @@ html[lang="fa"] .desktop-utility { right:auto; left:clamp(2rem,5vw,5rem); direct
  html[lang="fa"] .mobile-drawer[data-state="closed"] { transform:translateX(100%); }
  html[lang="fa"] .mobile-drawer[data-state="open"] { transform:translateX(0); }
 }
+
+
+/* Persian sidebar content has an explicit RTL flow at every structural level.
+   Brand lettering stays isolated LTR; Persian role, navigation and footer read RTL. */
+html[lang="fa"] .desktop-sidebar[dir="rtl"],
+html[lang="fa"] .desktop-sidebar[dir="rtl"] .sidebar-header,
+html[lang="fa"] .desktop-sidebar[dir="rtl"] .sidebar-content,
+html[lang="fa"] .desktop-sidebar[dir="rtl"] .sidebar-footer,
+html[lang="fa"] .desktop-sidebar[dir="rtl"] nav,
+html[lang="fa"] .desktop-sidebar[dir="rtl"] .nav-list,
+html[lang="fa"] .desktop-sidebar[dir="rtl"] .sidebar-menu-item,
+html[lang="fa"] .desktop-sidebar[dir="rtl"] .sidebar-menu-button,
+html[lang="fa"] .desktop-sidebar[dir="rtl"] .nav-link {
+  direction: rtl;
+  text-align: right;
+}
+html[lang="fa"] .desktop-sidebar[dir="rtl"] .sidebar-header,
+html[lang="fa"] .desktop-sidebar[dir="rtl"] .sidebar-footer {
+  align-items: flex-end;
+}
+html[lang="fa"] .desktop-sidebar[dir="rtl"] .artist-wordmark {
+  width: 100%;
+  align-items: flex-end;
+  direction: rtl;
+  text-align: right;
+}
+html[lang="fa"] .desktop-sidebar[dir="rtl"] .wordmark-name,
+html[lang="fa"] .desktop-sidebar[dir="rtl"] .wordmark-surname {
+  align-self: flex-start;
+  direction: ltr;
+  unicode-bidi: isolate;
+  text-align: left;
+}
+html[lang="fa"] .desktop-sidebar[dir="rtl"] .wordmark-role {
+  width: 100%;
+  direction: rtl;
+  text-align: right;
+  unicode-bidi: isolate;
+}
+html[lang="fa"] .desktop-sidebar[dir="rtl"] .sidebar-menu-button,
+html[lang="fa"] .desktop-sidebar[dir="rtl"] .nav-link {
+  justify-content: flex-start;
+  text-align: right;
+}
+html[lang="fa"] .desktop-sidebar[dir="rtl"] .sidebar-footer span {
+  direction: ltr;
+  unicode-bidi: isolate;
+  text-align: right;
+}
+html[lang="fa"] .mobile-drawer[dir="rtl"] nav,
+html[lang="fa"] .mobile-drawer[dir="rtl"] .nav-list,
+html[lang="fa"] .mobile-drawer[dir="rtl"] .sidebar-menu-button,
+html[lang="fa"] .mobile-drawer[dir="rtl"] .nav-link {
+  direction: rtl;
+  text-align: right;
+  justify-content: flex-start;
+}
