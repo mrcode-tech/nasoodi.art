@@ -97,7 +97,7 @@ The settings area must remain at the bottom of the menu panel, not immediately a
 - Keep keyboard focus within the open menu when it is modal; restore focus to the menu trigger when it closes.
 - Set and update `aria-expanded`, `aria-controls`, and an accessible label on the trigger.
 - Do not close the menu when the user interacts with the language or theme selector.
-- After a language change, keep the menu open so the visitor can see the selected locale and continue navigating. If a route transition requires closing it, do so only after the navigation has completed and preserve predictable focus behavior.
+- After a language change, close the drawer when the destination route has completed navigation. Do not dismiss it before the locale transition starts; restore focus to the mobile menu trigger after the destination is rendered.
 - Ensure the menu does not cover system status/navigation areas or device safe areas. Respect `env(safe-area-inset-top)` and `env(safe-area-inset-bottom)` where applicable.
 
 ### 4.4 Mobile panel dimensions and appearance
@@ -189,6 +189,8 @@ Persian is a right-to-left reading experience, but the user has explicitly reque
 
 - Keep the desktop sidebar on the physical left in both English and Persian.
 - Keep the mobile off-canvas menu entering from the physical left in both locales.
+- Express the panel shell's physical placement with left-edge positioning (`left: 0; right: auto`) and its closed-state motion with a negative X translation; do not use RTL-sensitive inline-start positioning or reverse the transform for Persian.
+- Keep the drawer's internal text direction locale-aware independently of its physical placement. The closed panel must be removed from keyboard interaction and the accessibility tree.
 - Do not automatically mirror the sidebar to the right in RTL.
 - Within the sidebar, localize text direction and alignment appropriately. Persian labels are RTL; English labels are LTR.
 - Use logical CSS properties for text/content alignment and spacing where possible, but use an explicit physical-left placement for the sidebar/menu shell.
