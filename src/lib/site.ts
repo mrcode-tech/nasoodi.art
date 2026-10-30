@@ -93,6 +93,37 @@ export function getArtworkStructuredData(work: Artwork, locale: Locale) {
     ...(work.description?.[locale]?.trim() ? { description: work.description[locale] } : {}),
   };
 }
+export function getGalleryStructuredData(gallery: Gallery, works: Artwork[], locale: Locale, canonicalUrl: string): Record<string, unknown> {
+  const publishedWorks = getPublicArtworks(works, locale);
+  const members = gallery.artworkIds
+    .map((id) => publishedWorks.find((work) => work.id === id))
+    .filter((work): work is Artwork => work !== undefined);
+  return {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name: gallery.title[locale],
+    description: gallery.description[locale],
+    url: canonicalUrl,
+    inLanguage: locale,
+    mainEntity: {
+      "@type": "ItemList",
+      numberOfItems: members.length,
+      itemListElement: members.map((work, index) => {
+        const image = primaryImageFor(work);
+        return {
+          "@type": "ListItem",
+          position: index + 1,
+          item: {
+            "@type": "VisualArtwork",
+            name: work.title[locale],
+            url: `https://nasoodi.art${pagePath(locale, `works/${work.slug}`)}`,
+            ...(image ? { image: new URL(image.src, "https://nasoodi.art").toString() } : {}),
+          },
+        };
+      }),
+    },
+  };
+}
 export function getJournalStructuredData(entry: JournalEntry, locale: Locale, canonicalUrl: string): Record<string, unknown> {
   const common = {
     "@context": "https://schema.org",

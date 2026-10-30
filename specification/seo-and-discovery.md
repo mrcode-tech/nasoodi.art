@@ -66,3 +66,10 @@ The application emits the global Person/WebSite graph and now adds page-level st
 - Event Journal detail: `Event`, with confirmed start/end instants, declared attendance mode, and localized venue when present. No offers, prices, addresses, organizer, or other unprovided facts are synthesized.
 - JSON-LD serialization escapes HTML-sensitive opening brackets before insertion into the document.
 - Structured-data helpers are unit-tested; populated page output and rich-result eligibility still require approved real content and validation after publication.
+
+
+## Gallery collection structured data — 2026-10-30
+
+Published gallery detail pages emit `CollectionPage` JSON-LD with a nested `ItemList`. The list follows the gallery's curated artwork membership order and includes only artwork records that pass the same publication, rights, primary-image, and locale gates as the visible page. Each list item links to its canonical localized artwork detail route and uses only the approved localized artwork title and primary image. Empty, draft, incomplete, or untranslated gallery records remain excluded by the existing route and sitemap gates.
+
+The helper is unit-tested with published and unpublished synthetic artwork records. Validate rendered structured data against populated artist-approved gallery content before launch.

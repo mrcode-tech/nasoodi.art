@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { getPublicArtworks,getPublicGalleries,getPublicJournal,getPublicCvEntries,getPublicArtistProfile,getPublicContactDetails,getUpcomingJournalEvents,getArtworkStructuredData,getJournalStructuredData,serializeJsonLd,getHomepageFeaturedArtworks,getGalleryCoverArtwork,getJournalEntriesForCategory,isSafeJournalHref,portfolioStructuredData,type Artwork,type Gallery,type JournalEntry,type CvEntry,type ArtistProfile,type ContactDetails, hasExplicitTimeZone } from "../src/lib/site";
+import { getPublicArtworks,getPublicGalleries,getPublicJournal,getPublicCvEntries,getPublicArtistProfile,getPublicContactDetails,getUpcomingJournalEvents,getArtworkStructuredData,getGalleryStructuredData,getJournalStructuredData,serializeJsonLd,getHomepageFeaturedArtworks,getGalleryCoverArtwork,getJournalEntriesForCategory,isSafeJournalHref,portfolioStructuredData,type Artwork,type Gallery,type JournalEntry,type CvEntry,type ArtistProfile,type ContactDetails, hasExplicitTimeZone } from "../src/lib/site";
 const work:Artwork={id:"w1",slug:"work-one",title:{en:"Work",fa:"اثر"},images:[{src:"/art/work.jpg",alt:{en:"Painting",fa:"نقاشی"},role:"primary",width:1200,height:900}],rightsConfirmed:true,status:"published"};
 test("artwork stays private until published and rights-cleared",()=>{assert.equal(getPublicArtworks([{...work,status:"needs-review"}],"en").length,0);assert.equal(getPublicArtworks([{...work,rightsConfirmed:false}],"en").length,0);assert.equal(getPublicArtworks([work],"en").length,1);});
 test("artwork requires localized title and primary image alt",()=>{assert.equal(getPublicArtworks([{...work,title:{en:"Work"}}],"fa").length,0);assert.equal(getPublicArtworks([{...work,images:[{...work.images[0],alt:{en:""}}]}],"en").length,0);});
@@ -167,4 +167,19 @@ test("Journal Event structured data includes confirmed dates, attendance mode, a
  assert.equal(schema.eventAttendanceMode,"https://schema.org/MixedEventAttendanceMode");
  assert.deepEqual(schema.location,{"@type":"Place",name:"Studio"});
  assert.equal("offers" in schema,false);
+});
+
+test("gallery structured data lists only its published localized artworks in editorial order",()=>{
+ const gallery:Gallery={id:"g1",slug:"gallery",title:{en:"A collection",fa:"مجموعه"},description:{en:"A curated collection",fa:"مجموعه منتخب"},coverArtworkId:"w1",artworkIds:["w1","w2"],status:"published",sortOrder:1};
+ const second:Artwork={...work,id:"w2",slug:"work-two",title:{en:"Second work",fa:"اثر دوم"},sortOrder:2};
+ const hidden:Artwork={...work,id:"w3",slug:"hidden-work",title:{en:"Hidden",fa:"پنهان"},status:"needs-review"};
+ const schema=getGalleryStructuredData(gallery,[work,second,hidden],"en","https://nasoodi.art/en/galleries/gallery");
+ assert.equal(schema["@type"],"CollectionPage");
+ assert.equal(schema.name,"A collection");
+ const list=schema.mainEntity as {numberOfItems:number;itemListElement:Array<{position:number;item:{name:string;url:string}}>};
+ assert.equal(list.numberOfItems,2);
+ assert.deepEqual(list.itemListElement.map(item=>({position:item.position,name:item.item.name,url:item.item.url})),[
+  {position:1,name:"Work",url:"https://nasoodi.art/en/works/work-one"},
+  {position:2,name:"Second work",url:"https://nasoodi.art/en/works/work-two"},
+ ]);
 });
