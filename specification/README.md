@@ -4,16 +4,15 @@ This directory is the product, design, content, and implementation source of tru
 
 ## How to use this specification
 
-1. Read design-engineering-skills.md and design-direction-and-system-refinement.md before any user-facing UI or interaction work.\n2. Read this index and the repository-level AGENTS.md before making changes.\n3. Read proposal.md for product scope and binding principles.\n4. Read visual-identity-and-photo-direction.md and site-wide-design-system-and-section-specification.md before UI implementation.\n5. Read easel-scroll-background.md before implementing the persistent easel background or any scroll-linked movement.\n6. Read gallery-collections-and-artwork-detail.md and homepage-artwork-hero-and-featured-works.md before implementing galleries, artwork detail routes, or homepage artwork sections.\n7. Read journal-and-events.md before implementing Journal navigation, homepage journal previews, articles, or event announcements.\n8. Read content-model.md, artwork-imaging-and-asset-pipeline.md, and localization-and-editorial-governance.md before adding content or images.\n9. Read the relevant technical contracts for SEO, accessibility, performance, privacy, security, and testing.\n10. Follow implementation-roadmap.md for sequencing and phase exit criteria.\n11. Treat artist/site-owner approval as a required content and visual gate; do not infer missing facts.\n\n1. Read this index and the repository-level AGENTS.md before making changes.
-2. Read proposal.md for product scope and binding principles.
-3. Read visual-identity-and-photo-direction.md and site-wide-design-system-and-section-specification.md before UI implementation.
-4. Read easel-scroll-background.md before implementing the persistent easel background or any scroll-linked movement.
-5. Read gallery-collections-and-artwork-detail.md and homepage-artwork-hero-and-featured-works.md before implementing galleries, artwork detail routes, or homepage artwork sections.
-6. Read journal-and-events.md before implementing Journal navigation, homepage journal previews, articles, or event announcements.
-7. Read content-model.md, artwork-imaging-and-asset-pipeline.md, and localization-and-editorial-governance.md before adding content or images.
-8. Read the relevant technical contracts for SEO, accessibility, performance, privacy, security, and testing.
-9. Follow implementation-roadmap.md for sequencing and phase exit criteria.
-10. Treat artist/site-owner approval as a required content and visual gate; do not infer missing facts.
+1. Read this index and repository-level AGENTS.md.
+2. Before any user-facing UI or interaction work, read design-engineering-skills.md and design-direction-and-system-refinement.md.
+3. Read proposal.md for product scope and binding principles.
+4. Read visual-identity-and-photo-direction.md and site-wide-design-system-and-section-specification.md before broad UI implementation.
+5. Read the relevant page-specific specification: easel-scroll-background.md, navigation-and-mobile-sidebar.md, gallery-collections-and-artwork-detail.md, homepage-artwork-hero-and-featured-works.md, or journal-and-events.md.
+6. Read content-model.md, artwork-imaging-and-asset-pipeline.md, and localization-and-editorial-governance.md before adding content or images.
+7. Read the relevant technical contracts for SEO, accessibility, performance, privacy, security, and testing.
+8. Follow implementation-roadmap.md for sequencing and phase exit criteria.
+9. Treat artist/site-owner approval as a required content and visual gate; do not infer missing facts.
 
 ## Document map
 
