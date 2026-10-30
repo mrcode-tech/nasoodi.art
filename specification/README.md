@@ -28,7 +28,12 @@ This directory is the product, design, content, and implementation source of tru
 - [Design engineering skills and operating contract](./design-engineering-skills.md) — Emil Kowalski and Impeccable-inspired project rules for design workflow, interaction, motion, component craft, and visual QA.\n- [Refined design direction and unified design system](./design-direction-and-system-refinement.md) — the artist's quiet gallery direction, semantic tokens, typography, layout, image composition, navigation, and page-level design contracts.\n- [Journal, articles, and events](./journal-and-events.md) — unified Journal archive, article/event content model, homepage latest entries, sidebar navigation, event lifecycle, SEO, and QA.
 - [Studio hero implementation prompt](./hero-implementation-prompt.md) — supporting studio-scene implementation brief; the artwork-led homepage hero specification takes precedence for the primary hero.
 
-### Content and assets
+#
+### Implementation execution
+- [Phased implementation blueprint](./phased-implementation-blueprint.md) — dependency-aware phases, deliverables, tests, exit gates, and evidence requirements; use as the execution sequence.
+- [Website implementation prompt](./website-implementation-prompt.md) — end-to-end coding-agent prompt that enforces the repository, content, design, testing, and release constraints.
+
+## Content and assets
 - [Content and artwork model](./content-model.md) — artist, artwork, series, galleries, homepage selections, CV, approval states, and localized fields.
 - [Artwork imaging and asset pipeline](./artwork-imaging-and-asset-pipeline.md) — capture, provenance, rights, derivatives, fidelity, alt text, and image delivery.
 - [Localization and editorial governance](./localization-and-editorial-governance.md) — Persian/English rules, translation parity, content approval, and writing standards.
