@@ -476,3 +476,14 @@ Before implementation/publication, confirm:
 - Whether any event should link to a gallery, artwork, or external official event page.
 
 This is a design/content contract, not evidence of implementation, populated content, artist approval, or publication. Do not invent entries or publish example wireframe text.
+## Design-engineering refinement
+
+Journal is an editorial reading experience within the artist's gallery identity. Apply design-engineering-skills.md and design-direction-and-system-refinement.md.
+
+- The Journal index should read like an artist's considered journal or exhibition notes, not a generic blog CMS or news portal.
+- Use typography, editorial image scale, whitespace, and chronology to distinguish content types. Do not place every entry in identical bordered cards.
+- The featured upcoming event is conditional and should be visually prominent only when it is a real, approved event.
+- Detail pages must prioritize readable text measure and a clear title/metadata/content hierarchy. Event facts should be scannable without decorative badges or color-only state.
+- Filters should be visually quiet, keyboard-operable, immediate, and free of unnecessary animated transitions.
+- Do not animate article text, event posters, or artwork. Avoid auto-rotating featured entries.
+- Test long Persian/English titles, no-cover entries, no upcoming events, past events, and long-form content at all supported breakpoints.
