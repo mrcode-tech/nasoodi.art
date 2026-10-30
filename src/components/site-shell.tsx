@@ -2,13 +2,14 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { copyFor, otherLocale, pagePath, type Locale } from "@/lib/site";
+import { copyFor, otherLocale, pagePath, getPublicCvEntries, cvEntries, type Locale } from "@/lib/site";
 
 export function SiteShell({ locale, children }: { locale: Locale; children: React.ReactNode }) {
  const labels=copyFor(locale), pathname=usePathname(), [open,setOpen]=useState(false);
  const drawer=useRef<HTMLElement>(null), trigger=useRef<HTMLButtonElement>(null), wasOpen=useRef(false);
  const alternate=pathname.replace(/^\/(fa|en)(?=\/|$)/,`/${otherLocale(locale)}`);
- const links=[["home",labels.home,pagePath(locale)],["works",labels.works,pagePath(locale,"works")],["galleries",labels.galleries,pagePath(locale,"galleries")],["journal",labels.journal,pagePath(locale,"journal")],["about",labels.about,pagePath(locale,"about")],["contact",labels.contact,pagePath(locale,"contact")]] as const;
+ const links: [string,string,string][] = [["home",labels.home,pagePath(locale)],["works",labels.works,pagePath(locale,"works")],["galleries",labels.galleries,pagePath(locale,"galleries")],["journal",labels.journal,pagePath(locale,"journal")],["about",labels.about,pagePath(locale,"about")],["contact",labels.contact,pagePath(locale,"contact")]];
+ if (getPublicCvEntries(cvEntries, locale).length > 0) links.splice(5, 0, ["cv", labels.cv, pagePath(locale,"cv")]);
  useEffect(()=>{
   if(!open){if(wasOpen.current){trigger.current?.focus();wasOpen.current=false;}return;}
   wasOpen.current=true;const old=document.body.style.overflow;document.body.style.overflow="hidden";

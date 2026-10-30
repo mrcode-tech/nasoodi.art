@@ -2,7 +2,7 @@ import Image from "next/image";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { artworks,galleries,journalEntries,getPublicArtworks,getPublicGalleries,getPublicJournal } from "@/lib/site";
+import { artworks,galleries,journalEntries,homepageSelection,getPublicJournal,getHomepageHero,getHomepageFeaturedArtworks,getHomepageFeaturedGalleries } from "@/lib/site";
 import { copyFor,isLocale,pagePath } from "@/lib/site";
 type Props={params:Promise<{locale:string}>};
 export async function generateMetadata({params}:Props):Promise<Metadata>{const {locale}=await params;if(!isLocale(locale))return {};
@@ -10,11 +10,19 @@ export async function generateMetadata({params}:Props):Promise<Metadata>{const {
  description:locale==="fa"?"پورتفولیوی غزاله عبداله زاده نسودی، نقاش رنگ‌روغن.":"The artist portfolio of Ghazaleh Abdolahzade Nasoodi, oil painter.",
  alternates:{canonical:pagePath(locale),languages:{fa:"/fa",en:"/en"}}};}
 export default async function Home({params}:Props){const {locale}=await params;if(!isLocale(locale))notFound();const t=copyFor(locale);
- const works=getPublicArtworks(artworks,locale),sets=getPublicGalleries(galleries,artworks,locale),journal=getPublicJournal(journalEntries,locale).slice(0,3);
+ const hero=getHomepageHero(artworks,homepageSelection,locale),heroImage=hero?.images.find((image)=>image.role==="primary");
+ const works=getHomepageFeaturedArtworks(artworks,homepageSelection,locale),sets=getHomepageFeaturedGalleries(galleries,artworks,homepageSelection,locale),journal=getPublicJournal(journalEntries,locale).slice(0,3);
  return <div className="page-content home-page">
-  <section className="home-intro" aria-labelledby="home-title"><p className="eyebrow">{t.portfolio}</p>
-   <h1 id="home-title">{locale==="fa"?"غزاله عبداله زاده نسودی":"Ghazaleh Abdolahzade Nasoodi"}</h1><p className="artist-discipline">{t.discipline}</p>
-   <div className="intro-rule"/><p className="intro-note">{t.selectedIntro}</p><Link className="text-link" href={pagePath(locale,"works")}>{t.explore} ↗</Link>
+  <section className={`home-intro${heroImage ? " has-hero" : ""}`} aria-labelledby="home-title">
+   <div className="home-intro-copy"><p className="eyebrow">{t.portfolio}</p>
+    <h1 id="home-title">{locale==="fa"?"غزاله عبداله زاده نسودی":"Ghazaleh Abdolahzade Nasoodi"}</h1>
+    <p className="artist-discipline">{t.discipline}</p><div className="intro-rule"/>
+    <p className="intro-note">{t.selectedIntro}</p><Link className="text-link" href={pagePath(locale,"works")}>{t.explore} ↗</Link>
+   </div>
+   {heroImage && <figure className="hero-artwork">
+    <Image sizes="(max-width: 900px) 100vw, 58vw" src={heroImage.src} alt={heroImage.alt[locale] ?? ""} width={heroImage.width} height={heroImage.height} priority />
+    {hero?.title[locale] && <figcaption>{hero.title[locale]}</figcaption>}
+   </figure>}
   </section>
   <section className="editorial-section" aria-labelledby="featured-works"><div className="section-heading"><div><p className="eyebrow">{t.portfolio}</p><h2 id="featured-works">{t.selected}</h2></div><Link className="text-link" href={pagePath(locale,"works")}>{t.explore} ↗</Link></div>
    {works.length===0?<p className="empty-note">{t.emptyWorks}</p>:<div className="artwork-grid">{works.slice(0,4).map(w=>{const img=w.images.find(x=>x.role==="primary");return img?<Link className="artwork-item" key={w.id} href={pagePath(locale,`works/${w.slug}`)}><Image sizes="(max-width: 600px) 100vw, (max-width: 900px) 90vw, 50vw" src={img.src} alt={img.alt[locale]??""} width={img.width} height={img.height}/><span>{w.title[locale]}</span></Link>:null;})}</div>}

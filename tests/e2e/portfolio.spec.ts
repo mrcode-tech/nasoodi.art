@@ -58,6 +58,8 @@ test("empty editorial destinations are safe and unknown unpublished details retu
     const response = await request.get(`/fa/${section}`);
     expect(response.status(), section).toBe(200);
   }
+  const hiddenCv = await request.get("/fa/cv");
+  expect(hiddenCv.status()).toBe(404);
   const unknownWork = await request.get("/fa/works/not-published");
   expect(unknownWork.status()).toBe(404);
   await page.goto("/en/galleries");
