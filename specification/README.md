@@ -7,10 +7,11 @@ This directory is the product, design, content, and implementation source of tru
 1. Read this index and the repository-level AGENTS.md before making changes.
 2. Read proposal.md for product scope and binding principles.
 3. Read visual-identity-and-photo-direction.md and site-wide-design-system-and-section-specification.md before UI implementation.
-4. Read content-model.md, artwork-imaging-and-asset-pipeline.md, and localization-and-editorial-governance.md before adding content or images.
-5. Read the relevant technical contracts for SEO, accessibility, performance, security, and testing.
-6. Follow implementation-roadmap.md for sequencing and phase exit criteria.
-7. Treat artist/site-owner approval as a required content and visual gate; do not infer missing facts.
+4. Read easel-scroll-background.md before implementing the persistent easel background or any scroll-linked movement.
+5. Read content-model.md, artwork-imaging-and-asset-pipeline.md, and localization-and-editorial-governance.md before adding content or images.
+6. Read the relevant technical contracts for SEO, accessibility, performance, privacy, security, and testing.
+7. Follow implementation-roadmap.md for sequencing and phase exit criteria.
+8. Treat artist/site-owner approval as a required content and visual gate; do not infer missing facts.
 
 ## Document map
 
@@ -19,6 +20,7 @@ This directory is the product, design, content, and implementation source of tru
 - [Wireframes and interaction design](./wireframes.md) — page structure, responsive behavior, gallery, lightbox, and RTL interaction.
 - [Site-wide design system and section specification](./site-wide-design-system-and-section-specification.md) — semantic tokens, typography, global shell, homepage, Works, artwork detail, About, CV, Contact, components, and responsive design.
 - [Visual identity and photo direction](./visual-identity-and-photo-direction.md) — reference-photo analysis, palette, studio-image use, crop rules, and visual QA.
+- [Full-page easel scroll background](./easel-scroll-background.md) — left-edge document-length easel composition, scroll-linked reveal, responsive rules, reduced motion, and acceptance criteria.
 - [Studio hero implementation prompt](./hero-implementation-prompt.md) — scoped implementation brief for the layered studio scene and static fallback.
 
 ### Content and assets
