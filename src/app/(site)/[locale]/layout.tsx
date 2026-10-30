@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { SiteShell } from "@/components/site-shell";
-import { isLocale, portfolioStructuredData, type Locale } from "@/lib/site";
+import { isLocale, portfolioStructuredData, serializeJsonLd, type Locale } from "@/lib/site";
 import "../../globals.css";
 
 export const metadata: Metadata = {
@@ -36,7 +36,7 @@ export default async function LocaleLayout({
       <body>
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(portfolioStructuredData) }}
+          dangerouslySetInnerHTML={{ __html: serializeJsonLd(portfolioStructuredData) }}
         />
         <SiteShell locale={locale}>{children}</SiteShell>
       </body>

@@ -61,6 +61,22 @@ export const galleries: Gallery[] = [];
 export const journalEntries: JournalEntry[] = [];
 export const cvEntries: CvEntry[] = [];
 export const homepageSelection: HomepageSelection = { featuredArtworkIds: [], featuredGalleryIds: [] };
+export function serializeJsonLd(value: unknown): string {
+  return JSON.stringify(value).replace(/</g, "\\u003c");
+}
+export function getArtworkStructuredData(work: Artwork, locale: Locale) {
+  const image = primaryImageFor(work);
+  return {
+    "@context": "https://schema.org",
+    "@type": "VisualArtwork",
+    name: work.title[locale],
+    creator: { "@id": "https://nasoodi.art/#artist" },
+    ...(image ? { image: new URL(image.src, "https://nasoodi.art").toString() } : {}),
+    ...(Number.isInteger(work.year) && work.year! > 0 ? { dateCreated: String(work.year) } : {}),
+    ...(work.medium?.[locale]?.trim() ? { artMedium: work.medium[locale] } : {}),
+    ...(work.description?.[locale]?.trim() ? { description: work.description[locale] } : {}),
+  };
+}
 export function primaryImageFor(work: Artwork) {
   return work.images.find((image) => image.role === "primary" && image.src.trim() && image.width > 0 && image.height > 0);
 }

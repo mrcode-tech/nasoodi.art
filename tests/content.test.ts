@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { getPublicArtworks,getPublicGalleries,getPublicJournal,getPublicCvEntries,getUpcomingJournalEvents,getHomepageFeaturedArtworks,getGalleryCoverArtwork,getJournalEntriesForCategory,isSafeJournalHref,portfolioStructuredData,type Artwork,type Gallery,type JournalEntry,type CvEntry, hasExplicitTimeZone } from "../src/lib/site";
+import { getPublicArtworks,getPublicGalleries,getPublicJournal,getPublicCvEntries,getUpcomingJournalEvents,getArtworkStructuredData,serializeJsonLd,getHomepageFeaturedArtworks,getGalleryCoverArtwork,getJournalEntriesForCategory,isSafeJournalHref,portfolioStructuredData,type Artwork,type Gallery,type JournalEntry,type CvEntry, hasExplicitTimeZone } from "../src/lib/site";
 const work:Artwork={id:"w1",slug:"work-one",title:{en:"Work",fa:"اثر"},images:[{src:"/art/work.jpg",alt:{en:"Painting",fa:"نقاشی"},role:"primary",width:1200,height:900}],rightsConfirmed:true,status:"published"};
 test("artwork stays private until published and rights-cleared",()=>{assert.equal(getPublicArtworks([{...work,status:"needs-review"}],"en").length,0);assert.equal(getPublicArtworks([{...work,rightsConfirmed:false}],"en").length,0);assert.equal(getPublicArtworks([work],"en").length,1);});
 test("artwork requires localized title and primary image alt",()=>{assert.equal(getPublicArtworks([{...work,title:{en:"Work"}}],"fa").length,0);assert.equal(getPublicArtworks([{...work,images:[{...work.images[0],alt:{en:""}}]}],"en").length,0);});
@@ -104,4 +104,22 @@ test("homepage upcoming events are future-dated, locale-approved, and ordered by
  ];
  assert.deepEqual(getUpcomingJournalEvents(items,"en",now).map(item=>item.id),["soon","later"]);
  assert.deepEqual(getUpcomingJournalEvents(items,"fa",now).map(item=>item.id),["unapproved","soon","later"]);
+});
+
+test("VisualArtwork JSON-LD contains only confirmed localized artwork facts",()=>{
+ const item:Artwork={...work,year:2022,medium:{en:"Oil on canvas",fa:"رنگ‌روغن روی بوم"},description:{en:"A quiet landscape",fa:"چشم‌اندازی آرام"}};
+ const schema=getArtworkStructuredData(item,"en");
+ assert.equal(schema["@type"],"VisualArtwork");
+ assert.equal(schema.name,"Work");
+ assert.equal(schema.artMedium,"Oil on canvas");
+ assert.equal(schema.dateCreated,"2022");
+ assert.equal(schema.image,"https://nasoodi.art/art/work.jpg");
+ const sparse=getArtworkStructuredData(work,"fa");
+ assert.equal(sparse.name,"اثر");
+ assert.equal("dateCreated" in sparse,false);
+ assert.equal("artMedium" in sparse,false);
+ assert.equal("description" in sparse,false);
+});
+test("JSON-LD serialization escapes HTML-sensitive opening brackets",()=>{
+ assert.equal(serializeJsonLd({name:"</script><script>alert(1)</script>"}),"{\\"name\\":\\"\\u003c/script>\\u003cscript>alert(1)\\u003c/script>\\"}");
 });
