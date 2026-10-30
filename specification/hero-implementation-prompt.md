@@ -1,6 +1,6 @@
-# Studio Hero Implementation Prompt
+# Supporting Studio Scene Implementation Prompt
 
-**Scope:** Homepage studio hero only, including responsive and reduced-motion variants. This prompt does not authorize fabricated artist content or unrelated route implementation.
+**Scope:** Optional supporting studio/process scene only. This is not the primary homepage hero specification. The primary homepage hero is an approved finished painting as defined in homepage-artwork-hero-and-featured-works.md. This prompt does not authorize fabricated artist content or unrelated route implementation.
 
 ## Discovery
 1. Read AGENTS.md, README.md, and all specification documents.
@@ -9,8 +9,8 @@
 4. Confirm public-use approval for every asset.
 5. Inspect current CSS, fonts, breakpoints, and dependencies; reuse conventions and avoid unnecessary libraries.
 
-## Creative direction
-A restrained layered studio scene:
+## Optional supporting-scene direction
+If a supporting studio/process scene is approved, use a restrained layered composition:
 1. Easel establishes the scene.
 2. Approved canvas/artwork layer is revealed.
 3. Artist cutout appears in foreground, preserving brush/hand/canvas relationships.
@@ -20,16 +20,17 @@ A restrained layered studio scene:
 This is not permission to generate missing pixels, distort the painting, or misrepresent a real process. If brush alignment looks artificial, omit movement and use a strong static composition.
 
 ## Layout
-- Desktop: balanced editorial composition with identity/copy and studio scene; no text over important art.
+- This supporting scene must remain secondary to the finished painting hero and may appear lower on the homepage or on About.
+- Desktop: balanced editorial composition with concise identity/copy and studio scene; no text over important art.
 - Tablet: simplify overlaps and retain hierarchy.
 - Mobile: prioritize name, role, Works link, and a legible static/simplified scene; do not shrink desktop composition into illegibility.
 - Preserve asset proportions; review any crop.
 - Never mirror artist/artwork in Persian RTL.
 - Navigation and Works remain available without waiting.
-- Hero must not consume the entire first viewport.
+- Supporting scene must not delay or obscure access to the primary hero, navigation, or Works.
 
 ## Accessibility and motion
-Respect prefers-reduced-motion with immediate static composition. No audio, scroll hijacking, forced waiting, repeated loops, flashing, or continuous motion after completion. Copy and links remain in document independently of animation. Decorative layers are hidden from assistive technology; provide one meaningful composite description if needed. Keep focus visible.
+Respect prefers-reduced-motion with immediate static composition. The default may be completely static; animation is not required. No audio, scroll hijacking, forced waiting, repeated loops, flashing, or continuous motion after completion. Copy and links remain in document independently of animation. Decorative layers are hidden from assistive technology; provide one meaningful composite description if needed. Keep focus visible.
 
 ## Performance
 Prefer CSS transforms/opacity; avoid layout-thrashing and per-frame React state. Load only necessary hero assets eagerly, defer non-critical code, set explicit dimensions, and preserve a complete static fallback if JavaScript is delayed or disabled.
