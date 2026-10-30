@@ -27,7 +27,9 @@ The approved design direction is **artwork-led, quiet, editorial, and bilingual 
 7. Do not repeat the hero action labels in the Featured Works heading. Its action is **View all works**.
 8. The hero painting is a single static image. No carousel, simulated brush movement, parallax, zoom-on-scroll, or text overlay.
 
-> **Owner-directed initial Hero asset clarification:** `specification/assets/artwork.JPG` is a studio/process photograph of the artist facing a canvas, not a standalone finished painting. Use it as the initial artist-at-work Hero visual on the feature branch, with factual alt text. Do not describe it as a finished artwork, create an artwork record for it, or use it to populate Works/Galleries. Production publication remains subject to the rights and artist-approval gate in `asset-review-register.md`. Replace it with an approved finished painting if/when one is selected for the artwork-led production Hero.\n\n### 1.2 Content-readiness decisions
+> **Owner-directed initial Hero asset clarification:** `specification/assets/artwork.JPG` is a studio/process photograph of the artist facing a canvas, not a standalone finished painting. Use it as the initial artist-at-work Hero visual on the feature branch, with factual alt text. Do not describe it as a finished artwork, create an artwork record for it, or use it to populate Works/Galleries. Production publication remains subject to the rights and artist-approval gate in `asset-review-register.md`. Replace it with an approved finished painting if/when one is selected for the artwork-led production Hero.
+
+### 1.2 Content-readiness decisions
 
 The repository currently has empty content arrays and no configured hero selection. The five gallery images are design/demo fixtures, not evidence of artist approval, publication rights, artwork metadata, or real Journal stories.
 
