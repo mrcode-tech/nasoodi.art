@@ -7,7 +7,9 @@ This directory is the product, design, content, and implementation source of tru
 1. Read this index and the repository-level AGENTS.md before making changes.
 2. Read proposal.md for product scope and binding principles.
 3. Read visual-identity-and-photo-direction.md and site-wide-design-system-and-section-specification.md before UI implementation.
-4. Read easel-scroll-background.md before implementing the persistent easel background or any scroll-linked movement.\n5. Read gallery-collections-and-artwork-detail.md and homepage-artwork-hero-and-featured-works.md before implementing galleries, artwork detail routes, or homepage artwork sections.
+4. Read easel-scroll-background.md before implementing the persistent easel background or any scroll-linked movement.
+5. Read gallery-collections-and-artwork-detail.md and homepage-artwork-hero-and-featured-works.md before implementing galleries, artwork detail routes, or homepage artwork sections.
+6. Read journal-and-events.md before implementing Journal navigation, homepage journal previews, articles, or event announcements.
 7. Read content-model.md, artwork-imaging-and-asset-pipeline.md, and localization-and-editorial-governance.md before adding content or images.
 8. Read the relevant technical contracts for SEO, accessibility, performance, privacy, security, and testing.
 9. Follow implementation-roadmap.md for sequencing and phase exit criteria.
@@ -21,7 +23,10 @@ This directory is the product, design, content, and implementation source of tru
 - [Site-wide design system and section specification](./site-wide-design-system-and-section-specification.md) — semantic tokens, typography, global shell, homepage, Works, artwork detail, About, CV, Contact, components, and responsive design.
 - [Visual identity and photo direction](./visual-identity-and-photo-direction.md) — reference-photo analysis, palette, studio-image use, crop rules, and visual QA.
 - [Full-page easel scroll background](./easel-scroll-background.md) — left-edge document-length easel composition, scroll-linked reveal, responsive rules, reduced motion, and acceptance criteria.
-- [Responsive sidebar navigation, language, and theme](./navigation-and-mobile-sidebar.md) — persistent desktop left sidebar, desktop top-bar settings, mobile off-canvas menu, bottom-of-menu selectors, RTL, accessibility, and responsive acceptance criteria.\n- [Gallery collections and artwork detail](./gallery-collections-and-artwork-detail.md) — multiple curated galleries, gallery index/detail pages, artwork membership, validation, editorial workflow, SEO, and testing.\n- [Homepage artwork hero and featured works](./homepage-artwork-hero-and-featured-works.md) — approved painting-led hero, middle-page selected works, featured gallery previews, responsive layout, and acceptance criteria.\n- [Journal, articles, and events](./journal-and-events.md) — unified Journal archive, article/event content model, homepage latest entries, sidebar navigation, event lifecycle, SEO, and QA.
+- [Responsive sidebar navigation, language, and theme](./navigation-and-mobile-sidebar.md) — persistent desktop left sidebar, desktop top-bar settings, mobile off-canvas menu, bottom-of-menu selectors, RTL, accessibility, and responsive acceptance criteria.
+- [Gallery collections and artwork detail](./gallery-collections-and-artwork-detail.md) — multiple curated galleries, gallery index/detail pages, artwork membership, validation, editorial workflow, SEO, and testing.
+- [Homepage artwork hero and featured works](./homepage-artwork-hero-and-featured-works.md) — approved painting-led hero, middle-page selected works, featured gallery previews, responsive layout, and acceptance criteria.
+- [Journal, articles, and events](./journal-and-events.md) — unified Journal archive, article/event content model, homepage latest entries, sidebar navigation, event lifecycle, SEO, and QA.
 - [Studio hero implementation prompt](./hero-implementation-prompt.md) — supporting studio-scene implementation brief; the artwork-led homepage hero specification takes precedence for the primary hero.
 
 ### Content and assets
