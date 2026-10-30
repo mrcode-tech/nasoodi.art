@@ -5,7 +5,7 @@ const work:Artwork={id:"w1",slug:"work-one",title:{en:"Work",fa:"اثر"},images
 test("artwork stays private until published and rights-cleared",()=>{assert.equal(getPublicArtworks([{...work,status:"needs-review"}],"en").length,0);assert.equal(getPublicArtworks([{...work,rightsConfirmed:false}],"en").length,0);assert.equal(getPublicArtworks([work],"en").length,1);});
 test("artwork requires localized title and primary image alt",()=>{assert.equal(getPublicArtworks([{...work,title:{en:"Work"}}],"fa").length,0);assert.equal(getPublicArtworks([{...work,images:[{...work.images[0],alt:{en:""}}]}],"en").length,0);});
 test("gallery requires unique published artwork members and member cover",()=>{const g:Gallery={id:"g1",slug:"gallery",title:{en:"Gallery",fa:"گالری"},description:{en:"Description",fa:"توضیح"},coverArtworkId:"w1",artworkIds:["w1"],status:"published",sortOrder:1};assert.equal(getPublicGalleries([g],[work],"en").length,1);assert.equal(getPublicGalleries([g],[],"en").length,0);assert.equal(getPublicGalleries([{...g,artworkIds:["w1","w1"]}],[work],"en").length,0);assert.equal(getPublicGalleries([{...g,coverArtworkId:"x"}],[work],"en").length,0);});
-test("journal only exposes published entries with localized title and summary",()=>{const j:JournalEntry={id:"j1",slug:"story",type:"article",title:{en:"Story",fa:"داستان"},summary:{en:"Summary",fa:"خلاصه"},status:"published"};assert.equal(getPublicJournal([j],"en").length,1);assert.equal(getPublicJournal([{...j,status:"draft"}],"en").length,0);assert.equal(getPublicJournal([j],"fa").length,1);});
+test("journal only exposes published entries with localized title and summary",()=>{const j:JournalEntry={id:"j1",slug:"story",type:"story",title:{en:"Story",fa:"داستان"},summary:{en:"Summary",fa:"خلاصه"},status:"published"};assert.equal(getPublicJournal([j],"en").length,1);assert.equal(getPublicJournal([{...j,status:"draft"}],"en").length,0);assert.equal(getPublicJournal([j],"fa").length,1);});
 
 test("event entries require a valid time zone and occurrence time",()=>{
  const base:JournalEntry={id:"e1",slug:"event",type:"event",title:{en:"Opening",fa:"افتتاحیه"},summary:{en:"An opening",fa:"افتتاحیه"},status:"published"};
@@ -27,8 +27,8 @@ test("homepage featured selection is explicit, ordered, unique, and publication-
 
 test("journal category defaults preserve legacy articles and event taxonomy",()=>{
  const story:JournalEntry={id:"story",slug:"story",type:"article",title:{en:"Story",fa:"روایت"},summary:{en:"Summary",fa:"خلاصه"},status:"published"};
- const exhibition:JournalEntry={...story,id:"exhibition",slug:"exhibition",category:"exhibition"};
- const studio:JournalEntry={...story,id:"studio",slug:"studio",category:"studio-update"};
+ const exhibition:JournalEntry={...story,id:"exhibition",slug:"exhibition",type:"exhibition"};
+ const studio:JournalEntry={...story,id:"studio",slug:"studio",type:"studio-update"};
  const event:JournalEntry={...story,id:"event",slug:"event",type:"event"};
  const all=[story,exhibition,studio,event];
  assert.deepEqual(getJournalEntriesForCategory(all,"story").map(x=>x.id),["story"]);

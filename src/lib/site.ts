@@ -4,16 +4,16 @@ export const isLocale = (v: string): v is Locale => locales.includes(v as Locale
 export const otherLocale = (l: Locale): Locale => l === "fa" ? "en" : "fa";
 export const pagePath = (l: Locale, p = "") => `/${l}${p ? `/${p.replace(/^\/+/, "")}` : ""}`;
 export type Localized = Partial<Record<Locale, string>>;
-export type Status = "draft" | "needs-review" | "approved" | "published" | "archived";
+export type Status = "draft" | "scheduled" | "needs-review" | "approved" | "published" | "archived";
 export type ImageRecord = { src: string; alt: Localized; role: "primary" | "detail" | "installation"; width: number; height: number };
 export type Artwork = { id: string; slug: string; title: Localized; images: ImageRecord[]; rightsConfirmed: boolean; status: Status; year?: number; medium?: Localized; description?: Localized; sortOrder?: number };
 export type Gallery = { id: string; slug: string; title: Localized; description: Localized; coverArtworkId: string; artworkIds: string[]; status: Status; sortOrder: number };
 export type JournalEvent = { startsAt: string; endsAt?: string; timeZone: string; venue?: Localized; attendanceMode?: "in-person" | "online" | "hybrid"; registrationUrl?: string };
 export type JournalCategory = "exhibition" | "event" | "studio-update" | "story";
-export type JournalEntry = { id: string; slug: string; type: "article" | "event"; category?: JournalCategory; title: Localized; summary: Localized; body?: Localized; status: Status; publishedAt?: string; event?: JournalEvent };
+export type JournalEntry = { id: string; slug: string; type: JournalCategory; title: Localized; summary: Localized; body?: Localized; status: Status; publishedAt?: string; event?: JournalEvent };
 export const journalCategories: JournalCategory[] = ["exhibition", "event", "studio-update", "story"];
 export function journalCategoryFor(entry: JournalEntry): JournalCategory {
-  return entry.type === "event" ? "event" : entry.category ?? "story";
+  return entry.type;
 }
 export function getJournalEntriesForCategory(items: JournalEntry[], category?: JournalCategory) {
   return category ? items.filter((entry) => journalCategoryFor(entry) === category) : items;
