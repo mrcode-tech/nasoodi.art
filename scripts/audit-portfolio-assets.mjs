@@ -45,7 +45,8 @@ function jpegInfo(buffer) {
 }
 
 const records = [];
-let missing = 0;\nlet invalid = 0;
+let missing = 0;
+let invalid = 0;
 for (const relativePath of candidates) {
   try {
     const bytes = await readFile(resolve(root, relativePath));
