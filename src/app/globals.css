@@ -543,3 +543,45 @@ html[lang="fa"] .mobile-drawer[dir="rtl"] .nav-link {
     justify-content: flex-start;
   }
 }
+
+
+/* Minimal shared navbar chrome and a left-anchored mobile language control. */
+.desktop-sidebar { border-right: 0; }
+.mobile-header,
+.desktop-utility { border: 0 !important; }
+.mobile-header { box-shadow: none; }
+.mobile-utility { display: none; }
+@media (max-width: 900px) {
+  .mobile-header { position: fixed; }
+  .mobile-utility {
+    position: absolute;
+    left: 1.25rem;
+    top: 50%;
+    display: flex;
+    align-items: center;
+    gap: .55rem;
+    transform: translateY(-50%);
+    color: var(--muted);
+    font-size: .8rem;
+  }
+  .mobile-utility .language-label { white-space: nowrap; }
+  .mobile-utility .ui-button {
+    min-width: 5.25rem;
+    justify-content: space-between;
+    border: 0;
+    background: transparent;
+    box-shadow: none;
+  }
+  .mobile-utility .ui-button:hover,
+  .mobile-utility .ui-button:active {
+    border: 0;
+    background: var(--muted-surface);
+    box-shadow: none;
+  }
+  html[lang="fa"] .mobile-utility { direction: rtl; }
+  html[lang="en"] .mobile-utility { direction: ltr; }
+  .mobile-header { border-bottom: 0 !important; }
+}
+@media (min-width: 901px) {
+  .desktop-utility { border-bottom: 0 !important; }
+}
