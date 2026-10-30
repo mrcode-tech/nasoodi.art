@@ -574,3 +574,23 @@ The screenshot artifact confirms the configured browser suite ran and uploaded d
 5. Complete derivative-pipeline implementation, manual WCAG 2.2 AA/screen-reader review, Firefox/Safari and real-device checks, production-like Core Web Vitals, CSP/dependency/security review, and populated-content visual/SEO validation.
 
 No merge, deployment, Vercel dashboard change, or public publication was performed or authorized.
+
+
+## Incremental implementation update — 2026-10-30 (public route and image integrity)
+
+The content-publication layer now validates route identity and consistently uses the validated image resolver:
+
+- Artwork, gallery, and Journal public records require non-empty IDs and safe single-segment Unicode letter/number slugs. Duplicate public IDs or slugs are excluded to prevent ambiguous detail routes.
+- CV entries require non-empty unique IDs.
+- The primary artwork image resolver accepts only safe root-relative local asset paths and positive intrinsic dimensions.
+- Homepage hero/featured artwork, Works catalogue, artwork detail, gallery detail, gallery covers, and artwork structured data now use the same primary-image resolver. This closes the mismatch where an artwork could pass publication validation but a page selected a different unvalidated primary image.
+- Optional artist portraits use the same local-path validation; invalid optional portraits are omitted.
+- Content-model documentation records these identity and source-path requirements.
+
+Verified code commit: `f3a294104114770674ec19fad97c596c5e2f2f07`.
+
+GitHub Actions [run 41077964688](https://github.com/mrcode-tech/nasoodi.art/actions/runs/41077964688) passed ESLint, TypeScript, **24 content tests**, production build, **19 Chromium E2E tests**, screenshot/diagnostic artifact upload, and production route smoke test. Artifact: `nasoodi-visual-qa-f3a294104114770674ec19fad97c596c5e2f2f07` (ID `12988072296`).
+
+An earlier attempt at the Unicode slug validator used an incorrectly escaped property expression and was caught by the publication tests; the expression was corrected to Unicode property escapes, and the complete passing run above verifies the corrected implementation.
+
+This is technical validation with synthetic fixtures. No artwork, biography, CV, contact, gallery, Journal, or event content has been approved or published by this change.
