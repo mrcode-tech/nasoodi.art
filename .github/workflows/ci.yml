@@ -34,6 +34,10 @@ jobs:
         run: npm test
       - name: Build production application
         run: npm run build
+      - name: Inventory candidate portfolio assets
+        run: |
+          mkdir -p asset-audit
+          npm run audit:assets -- --output=asset-audit/manifest.json
       - name: Install Playwright Chromium
         run: npx playwright install --with-deps chromium
       - name: Run browser and responsive tests
@@ -43,7 +47,9 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: nasoodi-visual-qa-${{ github.sha }}
-          path: test-results/
+          path: |
+            test-results/
+            asset-audit/manifest.json
           if-no-files-found: ignore
           retention-days: 14
       - name: Smoke test production server
