@@ -108,9 +108,17 @@ for (const locale of ["en", "fa"] as const) {
     expect(bounds?.x).toBe(locale === "fa" ? 1440 - (bounds?.width ?? 0) : 0);
     expect(bounds?.width).toBeGreaterThan(200);
     const firstLink = sidebar.locator(".nav-link").first();
-    await expect(firstLink).toHaveAttribute("dir", "auto");
+    await expect(firstLink).toHaveAttribute("dir", locale === "fa" ? "rtl" : "ltr");
     const direction = await firstLink.evaluate((node) => getComputedStyle(node).direction);
     expect(direction).toBe(locale === "fa" ? "rtl" : "ltr");
+    await expect(sidebar.locator("nav")).toHaveAttribute("dir", locale === "fa" ? "rtl" : "ltr");
+    await expect(sidebar.locator(".nav-link").first()).toHaveCSS("text-align", locale === "fa" ? "right" : "start");
+    await expect(sidebar.locator(".sidebar-footer")).toHaveCSS("direction", locale === "fa" ? "rtl" : "ltr");
+    if (locale === "fa") {
+      const navBox = await firstLink.boundingBox();
+      const sidebarBox = bounds!;
+      expect(navBox!.x + navBox!.width).toBeGreaterThan(sidebarBox.x + sidebarBox.width / 2);
+    }
     const main = page.locator(".site-main");
     const mainBounds = await main.boundingBox();
     expect(mainBounds?.x).toBe(locale === "fa" ? 0 : (bounds?.width ?? 0));
@@ -132,7 +140,7 @@ test("Persian mobile navigation drawer enters from physical right and preserves 
   const bounds = await drawer.boundingBox();
   expect(bounds?.x).toBe(390 - (bounds?.width ?? 0));
   const firstLink = drawer.locator(".nav-link").first();
-  await expect(firstLink).toHaveAttribute("dir", "auto");
+  await expect(firstLink).toHaveAttribute("dir", "rtl");
   await expect(firstLink).toHaveCSS("direction", "rtl");
 });
 
