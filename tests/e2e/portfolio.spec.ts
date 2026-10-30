@@ -309,6 +309,39 @@ for (const locale of ["en", "fa"] as const) {
 }
 
 for (const locale of ["en", "fa"] as const) {
+  test(`mobile ${locale} header stays fixed and places the hamburger on the correct physical edge`, async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto(`/${locale}`);
+    const header = page.locator(".mobile-header");
+    const trigger = page.locator(".mobile-header .menu-trigger");
+    await expect(header).toBeVisible();
+    await expect(header).toHaveCSS("position", "fixed");
+    const before = await header.boundingBox();
+    const triggerBefore = await trigger.boundingBox();
+    expect(before?.y).toBe(0);
+    expect(triggerBefore?.x).toBe(locale === "fa" ? 390 - (triggerBefore?.width ?? 0) - 20 : 20);
+    await page.evaluate(() => window.scrollTo(0, 600));
+    await expect.poll(async () => (await header.boundingBox())?.y).toBe(0);
+    const triggerAfter = await trigger.boundingBox();
+    expect(triggerAfter?.x).toBe(locale === "fa" ? 390 - (triggerAfter?.width ?? 0) - 20 : 20);
+  });
+}
+
+for (const locale of ["en", "fa"] as const) {
+  test(`desktop ${locale} navigation chrome remains fixed at the viewport top while scrolling`, async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.goto(`/${locale}`);
+    const sidebar = page.locator(".desktop-sidebar");
+    const utility = page.locator(".desktop-utility");
+    await expect(sidebar).toHaveCSS("position", "fixed");
+    await expect(utility).toHaveCSS("position", "fixed");
+    await page.evaluate(() => window.scrollTo(0, 700));
+    await expect.poll(async () => (await sidebar.boundingBox())?.y).toBe(0);
+    await expect.poll(async () => (await utility.boundingBox())?.y).toBe(32);
+  });
+}
+
+for (const locale of ["en", "fa"] as const) {
   test(`${locale} homepage artist title uses a restrained responsive display size`, async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 844 });
     await page.goto(`/${locale}`);
