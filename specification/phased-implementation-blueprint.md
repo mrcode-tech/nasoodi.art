@@ -398,6 +398,45 @@ These apply to every phase, not only the final QA phase:
 - Update the relevant specification when a durable design or behavior decision changes.
 - Never report a phase complete without its exit evidence.
 
-## Current status
+## Implementation progress — 2026-10-30
 
-All phases are **proposed / not verified as implemented** until the implementation agent inspects the repository and records evidence. This document is a plan, not a claim of completion.
+This is an evidence snapshot, not a declaration that every blueprint phase is complete.
+
+| Phase | Status | Evidence and remaining gates |
+|---|---|---|
+| 0. Repository and asset discovery | In progress | Repository structure, scripts, CI, route baseline, and supplied transparent artist/easel cutouts inspected. Finished-painting assets, rights, metadata, translations, and public-use approvals remain unverified. See [asset review register](./asset-review-register.md). |
+| 1. Application foundation and design system | Implemented; CI verified | Next.js route-group foundation, semantic warm-paper palette, strict TypeScript content contracts, root redirect, and responsive page frame. Exact Latin/Persian font pairing remains a licensing/rendering decision. |
+| 2. Shared shell and navigation | Implemented; browser QA verified | Physical-left desktop sidebar, locale utility, mobile off-canvas drawer, keyboard Escape/focus restoration, and Persian/English direction. Playwright checks cover drawer behavior and physical-left positioning. Theme selector remains unresolved because the navigation spec requests Light/Dark/System while the refined design authority says not to infer dark-mode scope without confirmation. |
+| 3. Content model and asset pipeline | Partial | Artwork, Gallery, Journal types and publication filters exist; collections are deliberately empty. Asset register, source/rights approval, derivative generation, and visual comparison remain outstanding. |
+| 4. Artwork-led homepage | Partial / content blocked | Localized homepage composition, featured Works/Galleries/Journal sections and honest empty states exist. The required approved finished-painting hero is not published because no specific hero asset approval is recorded. |
+| 5. Works and artwork detail | Partial | Localized catalogue/detail route templates, metadata omission, and 404 behavior exist. No artwork records are published. |
+| 6. Curated galleries | Partial | Gallery index/detail route templates and canonical artwork references exist. No gallery names, covers, descriptions, or memberships are published without approval. |
+| 7. About, CV, and Contact | Partial / content blocked | About and Contact routes disclose missing approved copy/contact details. CV is omitted because no verified entries are available. |
+| 8. Unified Journal and events | Partial | One Journal route supports article/event records; no entries are published. No separate Events navigation destination is added. |
+| 9. Easel scroll background | Not started | Source easel cutout inspected; full-page sizing, document-relative mapping, responsive/reduced-motion behavior, and explicit public-use approval gate remain. |
+| 10. SEO, accessibility, performance, privacy, and security | Partial | Locale metadata, canonical homepage alternates, robots, sitemap, semantic landmarks, focus styling, reduced-motion CSS, and route noindex rules for empty editorial destinations exist. Manual WCAG 2.2 AA, screen-reader, performance, security, and privacy audits remain. |
+| 11. Regression, CI, and release readiness | In progress | ESLint, TypeScript, four content-publication tests, production build, seven Playwright browser tests, screenshot artifact upload, and production route smoke tests passed on commit `5b1ad749cfff1b568cf24c5226aa47cfbcd5d508`. Visual screenshots were inspected at desktop and mobile sizes; artist/content approvals remain outstanding. |
+
+### Verified implementation evidence
+
+- Repository: `mrcode-tech/nasoodi.art`
+- Active branch: `feature`
+- Verified commit: `5b1ad749cfff1b568cf24c5226aa47cfbcd5d508`
+- Successful GitHub Actions run: [41057600503](https://github.com/mrcode-tech/nasoodi.art/actions/runs/41057600503)
+- Browser tests: 7 passed, 0 failed.
+- Content publication tests: 4 passed, 0 failed.
+- Visual QA artifact: `nasoodi-visual-qa-5b1ad749cfff1b568cf24c5226aa47cfbcd5d508` (artifact ID `12977058389`).
+- Inspected screenshots: Persian desktop homepage (1440 × 960), Persian mobile menu (390 × 844), and English mobile menu (390 × 844).
+
+The screenshots verify shell/layout and responsive menu behavior, not final artwork-led visual acceptance. The homepage remains intentionally sparse because approved painting records and hero image selection are not yet available.
+
+### Explicit publication blockers
+
+1. Confirm which supplied files are finished-painting masters and which are process/composite assets.
+2. Approve the exact homepage hero painting and public use of each image.
+3. Confirm artwork titles or approved untitled treatment, alt text, metadata, order, and gallery membership.
+4. Approve Persian and English artist statement, biography, translations, public contact channel, and any CV/Journal facts.
+5. Resolve whether the Light/Dark/System selector remains a product requirement.
+6. Approve the easel asset's site-wide decorative use and final scroll treatment.
+
+Until those decisions are recorded, keep the related content unpublished and non-indexable. Do not substitute invented or generated artwork.

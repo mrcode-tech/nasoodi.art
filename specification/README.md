@@ -82,3 +82,11 @@ The following documents are mandatory for all UI design and implementation work:
 - [Refined design direction and unified design system](./design-direction-and-system-refinement.md) — the artist's quiet gallery direction, semantic palette, typography roles, spacing, image composition, navigation, motion language, and page-specific composition contracts.
 
 Read these before changing any visual surface. Page-specific specifications remain authoritative for their unique content and behavior, but must conform to the shared design direction and quality contract. If a conflict exists, preserve factual/content constraints and artwork fidelity first, then reconcile the visual treatment in the relevant page specification.
+
+## Implementation execution and evidence
+
+- [Website implementation prompt](./website-implementation-prompt.md) — complete coding-agent execution instructions.
+- [Phased implementation blueprint](./phased-implementation-blueprint.md) — canonical phase order, dependencies, exit criteria, evidence, and current implementation progress.
+- [Asset review register](./asset-review-register.md) — source-asset classification, inspection, rights, and public-use approval gates.
+
+The blueprint's progress snapshot is the current status authority. Do not treat proposed specifications or empty content records as evidence of publication approval.
