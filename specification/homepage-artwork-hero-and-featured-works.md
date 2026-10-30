@@ -272,3 +272,14 @@ The homepage must provide a clear, direct path to the unified Journal archive. F
 - Use the shared Journal content records; do not duplicate editorial data in homepage configuration.
 - Keep the section responsive, localized, accessible, and visually subordinate to Featured Works and Featured Galleries.
 - Do not label an expired event as upcoming or display unapproved event facts.
+## Design-engineering refinement
+
+Apply design-engineering-skills.md and design-direction-and-system-refinement.md to the homepage.
+
+- The first viewport must establish artist identity and the approved finished painting as the primary visual focal point.
+- Compose the hero as an editorial/gallery introduction, not a conventional centered marketing banner.
+- Featured Works should use a curated composition responsive to actual artwork ratios; do not force identical card sizes.
+- Featured Galleries should feel like curated collection invitations, not a second artwork catalogue.
+- Latest from the Journal should be visually quieter than the artwork sections and should not become a generic news-card grid.
+- Do not animate painting images. Use motion only for meaningful UI transitions and only after the motion decision gate.
+- Review all homepage sections together for rhythm, section pacing, visual hierarchy, and content density.
