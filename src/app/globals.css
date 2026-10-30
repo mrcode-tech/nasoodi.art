@@ -346,3 +346,35 @@ html[lang="fa"] .mobile-drawer[dir="rtl"] .nav-link {
   text-align: right;
   justify-content: flex-start;
 }
+
+
+/* Keep the navigation chrome pinned to the viewport while page content scrolls. */
+.desktop-sidebar {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  height: 100vh;
+  height: 100dvh;
+}
+.desktop-utility {
+  position: fixed;
+  top: 2rem;
+}
+@media (max-width: 900px) {
+  .mobile-header {
+    position: fixed;
+    inset: 0 0 auto;
+    z-index: 50;
+    width: 100%;
+    min-height: 4.75rem;
+    background: var(--paper);
+  }
+  .site-main {
+    padding-top: 4.75rem;
+  }
+  .mobile-header {
+    direction: ltr;
+  }
+  html[lang="en"] .mobile-header { flex-direction: row-reverse; }
+  html[lang="fa"] .mobile-header { flex-direction: row; }
+}
