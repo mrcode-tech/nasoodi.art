@@ -9,10 +9,14 @@ test("journal only exposes published entries with localized title and summary",(
 
 test("event entries require a valid time zone and occurrence time",()=>{
  const base:JournalEntry={id:"e1",slug:"event",type:"event",title:{en:"Opening",fa:"افتتاحیه"},summary:{en:"An opening",fa:"افتتاحیه"},status:"published",approvedLocales:["en","fa"],artistApproved:true};
- assert.equal(getPublicJournal([base],"en").length,0);\n assert.equal(hasExplicitTimeZone("2026-11-12T18:00:00"),false);\n assert.equal(hasExplicitTimeZone("2026-11-12T18:00:00+01:00"),true);\n assert.equal(hasExplicitTimeZone("2026-11-12T17:00:00Z"),true);
+ assert.equal(getPublicJournal([base],"en").length,0);
+ assert.equal(hasExplicitTimeZone("2026-11-12T18:00:00"),false);
+ assert.equal(hasExplicitTimeZone("2026-11-12T18:00:00+01:00"),true);
+ assert.equal(hasExplicitTimeZone("2026-11-12T17:00:00Z"),true);
  const valid:JournalEntry={...base,event:{startsAt:"2026-11-12T18:00:00+01:00",timeZone:"Europe/Berlin",venue:{en:"Studio",fa:"آتلیه"}}};
  assert.equal(getPublicJournal([valid],"en").length,1);
- assert.equal(getPublicJournal([{...valid,event:{...valid.event!,timeZone:"Not/AZone"}}],"en").length,0);\n assert.equal(getPublicJournal([{...valid,event:{...valid.event!,startsAt:"2026-11-12T18:00:00"}}],"en").length,0);
+ assert.equal(getPublicJournal([{...valid,event:{...valid.event!,timeZone:"Not/AZone"}}],"en").length,0);
+ assert.equal(getPublicJournal([{...valid,event:{...valid.event!,startsAt:"2026-11-12T18:00:00"}}],"en").length,0);
 });
 test("CV entries require explicit verification and localized titles",()=>{
  const entry:CvEntry={id:"cv1",category:"group-exhibition",title:{en:"Group exhibition",fa:"نمایشگاه گروهی"},year:2024,verified:true,status:"published"};
