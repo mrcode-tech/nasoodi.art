@@ -23,3 +23,12 @@ npm run build
 - Use semantic HTML, visible focus states, and respect reduced-motion preferences.
 - Keep page metadata accurate and update canonical/Open Graph metadata when the public site identity changes.
 - Do not commit secrets. Keep environment-specific values in local environment files and document required variables in `.env.example`.
+
+## Design specification authority
+
+For any user-facing visual, responsive, or interaction change, read and follow:
+- specification/design-engineering-skills.md
+- specification/design-direction-and-system-refinement.md
+- The relevant page-specific specification under specification/
+
+Do not implement generic visual patterns or motion without a clear purpose. Inspect existing tokens/components and actual assets first. Record rendered visual evidence for desktop, tablet, mobile, short-height, Persian RTL, English LTR, and reduced-motion states where applicable. Do not claim visual verification without inspecting rendered output.
