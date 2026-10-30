@@ -594,3 +594,22 @@ GitHub Actions [run 41077964688](https://github.com/mrcode-tech/nasoodi.art/acti
 An earlier attempt at the Unicode slug validator used an incorrectly escaped property expression and was caught by the publication tests; the expression was corrected to Unicode property escapes, and the complete passing run above verifies the corrected implementation.
 
 This is technical validation with synthetic fixtures. No artwork, biography, CV, contact, gallery, Journal, or event content has been approved or published by this change.
+
+
+## Manual inspection of latest visual QA artifact — 2026-10-30
+
+Downloaded and inspected artifact `nasoodi-visual-qa-f3a294104114770674ec19fad97c596c5e2f2f07` (run 41077964688). Reviewed:
+- Persian desktop homepage, 1440 px wide.
+- English desktop sidebar/homepage, 1440 px wide.
+- Persian mobile navigation drawer, 390 px wide.
+- English mobile navigation drawer, 390 px wide.
+
+Findings:
+- The desktop sidebar remains physically left in both locales; content reading direction and alignment adapt to RTL/LTR.
+- The warm-paper, restrained mauve/taupe palette and editorial type hierarchy are coherent across the two locales.
+- The mobile drawer opens from the physical left in Persian and English; the close control, route list, and locale switch remain legible, with the locale utility at the bottom of the panel.
+- The tested screenshots show the expected pending-content states rather than fabricated artwork or biography.
+- The homepage is still visually sparse because no finished painting, featured works, approved gallery, or Journal entries are published. This is a content-approval blocker, not evidence that the painting-led hero acceptance criterion is complete.
+- No artwork-fidelity review was possible because no approved painting record is rendered. Font licensing and final Persian/Latin font pairing remain open.
+
+This is a limited manual review of the listed routes, locales, and viewport sizes. It does not replace short-height, tablet, zoom/reflow, screen-reader, Firefox/Safari, real-device, or populated-artwork visual review.
