@@ -308,3 +308,14 @@ Apply design-engineering-skills.md and design-direction-and-system-refinement.md
 Implement the desktop side navigation using the project's shadcn/ui Sidebar composition and the mobile off-canvas navigation using the shared Radix-backed shadcn Sheet. Use the shared Dropdown Menu for the desktop language selector and a clear, directly accessible locale link within the mobile drawer. Do not create parallel menu primitives.
 
 The component selection, RTL/LTR rules, keyboard and focus behavior, and new-component/dependency gate are defined by [Shadcn/ui Component Reuse and Bilingual Shared UI](./shadcn-component-reuse-and-bilingual-ui.md). That document is mandatory alongside this navigation contract.
+
+
+## 11. Fixed navigation and mobile menu trigger placement
+
+- Desktop navigation remains viewport-fixed while the document scrolls: the sidebar occupies the full viewport height and the language utility remains pinned near the top.
+- Mobile navigation header remains fixed to the top edge while the document scrolls. Main content must reserve the header's height so its first content is never obscured.
+- Mobile header uses a physical LTR flex coordinate system so locale-specific placement is unambiguous:
+  - English: hamburger at the physical left, brand at the physical right.
+  - Persian: hamburger at the physical right, brand at the physical left.
+- Verify fixed positioning and hamburger physical coordinates in Playwright for both locales after scrolling, at mobile and desktop breakpoints.
+- Respect the existing responsive breakpoint and reduced-motion behavior; the fixed header must not cover the skip link or drawer overlay.
