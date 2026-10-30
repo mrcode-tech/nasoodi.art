@@ -440,3 +440,34 @@ The screenshots verify shell/layout and responsive menu behavior, not final artw
 6. Approve the easel asset's site-wide decorative use and final scroll treatment.
 
 Until those decisions are recorded, keep the related content unpublished and non-indexable. Do not substitute invented or generated artwork.
+
+
+## Incremental implementation update — 2026-10-30
+
+This update records verified code and CI work after the earlier evidence snapshot. It does not mark the overall website or any phase as release-complete.
+
+| Phase | Updated status | New implementation evidence | Remaining gate |
+|---|---|---|---|
+| 3. Content model and artwork asset pipeline | Partial | Journal entries now use the specification's four discriminants (`exhibition`, `event`, `studio-update`, `story`), constrained rich-text blocks (paragraphs, headings, lists, quotes, safe links), explicit artist approval, per-locale approval, and scheduled publication state. Unsafe rich-text link schemes are rejected. | Approved content records, source-to-derivative pipeline, rights evidence, and painting fidelity review remain outstanding. |
+| 6. Multiple curated galleries | Partial | Homepage and Galleries index now resolve each gallery's canonical cover artwork through the public-artwork gate and display its approved image, localized title, and description. Cover imagery is rendered without cropping. | No gallery content is published until cover, title, description, membership, translations, and rights are approved. |
+| 8. Unified Journal and events | Partial | Added URL-addressable filters for Exhibitions, Events, Studio Updates, and Stories; localized labels; active filter semantics; empty-category feedback; publication/event dates; event time-zone validation; and constrained rich-text detail rendering. | No Journal or event records are published; actual event facts, copy, dates, and translations require approval. |
+| 10. SEO, accessibility, performance, privacy, and security | Partial | Added localized canonical/Open Graph metadata for artwork, gallery, and Journal details. Filtered Journal URLs canonicalize to the archive, and empty editorial destinations remain noindex. | Structured data qualification, manual WCAG 2.2 AA/screen-reader audit, production-like Core Web Vitals, and privacy/security review remain. |
+| 11. Regression, CI, and release readiness | In progress | GitHub Actions run [41060637606](https://github.com/mrcode-tech/nasoodi.art/actions/runs/41060637606) passed on commit `82a32f0c1d8968ddb029930546c5d0aee32bd7a3`: ESLint, TypeScript, 11 content tests, production build, 8 Chromium browser tests, screenshot artifact upload, and production route smoke test. Screenshot artifact: `nasoodi-visual-qa-82a32f0c1d8968ddb029930546c5d0aee32bd7a3` (artifact ID `12979170943`). | Existing screenshots validate the tested shell and empty-content states, not final artwork-led visual acceptance. Firefox/Safari, real-device, assistive-technology, and manual visual audits remain. |
+
+### Recent implementation commits
+
+- `9752da1fb78f9ab3e8d4ae8ea934c6391f97f255` — categorized and filterable Journal archive.
+- `d9e252d183088e810d1e0488185a540b793b3aa3` — canonical gallery cover artwork in discovery views.
+- `6be70e8b91e57f74f9b5fb97d65eca1a28d116ee` — category test import correction; the subsequent complete successful verification is recorded above.
+- `0c05ec094b93f790b9756329722bf41062291f47` — localized metadata for artwork, gallery, and Journal details.
+- `e17a00a1ad623c899d5bb958f13e765be1199f74` — Journal type union aligned with the four specification categories.
+- `373c2cc20065982954a213ed830f13180bb4fc8d` — constrained Journal rich-text rendering and safe link validation.
+- `adcb576e6ad4cb000578e257bc14d4c65a1772c5` — completed Journal type-union migration.
+- `85bcd3b3609dc817b392aa282933ef5f39d75989` — explicit Journal artist/locale publication approval gates.
+- `82a32f0c1d8968ddb029930546c5d0aee32bd7a3` — canonical archive metadata and browser regression test.
+
+### Publication and release blockers remain unchanged
+
+The implementation intentionally does not invent paintings, artwork metadata, gallery memberships, artist biography/statement, CV entries, Journal copy, event facts, or public contact details. The approved homepage hero and public-use status of each painting remain owner decisions. The easel background remains unimplemented pending the specified asset-use approval and visual review. The Light/Dark/System selector remains unresolved against the conflicting design authorities.
+
+Keep all unapproved content unpublished and non-indexable. No merge, deployment, or public release is authorized by this progress update.
