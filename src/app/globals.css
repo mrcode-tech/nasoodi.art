@@ -68,3 +68,18 @@ html[lang=fa] .journal-card h2{font-family:Tahoma,Arial,sans-serif;line-height:1
 html[lang=fa] .gallery-card-copy strong{font-family:Tahoma,Arial,sans-serif;line-height:1.65}
 .gallery-card-copy>span{color:var(--muted);font-size:.9rem;line-height:1.8}
 @media(max-width:700px){.gallery-cards{grid-template-columns:1fr}}
+
+/* Locale-aware navigation: physical placement stays left; text follows its language. */
+.desktop-sidebar{left:0;right:auto;direction:ltr}
+.desktop-sidebar .artist-wordmark{align-items:flex-start;direction:ltr;text-align:left}
+.desktop-sidebar .wordmark-name,.desktop-sidebar .wordmark-surname{direction:ltr;unicode-bidi:isolate;text-align:left}
+.desktop-sidebar .wordmark-role{display:block;width:100%;text-align:start;unicode-bidi:plaintext}
+.desktop-sidebar .nav-list{width:100%;direction:inherit}
+.desktop-sidebar .nav-link{width:100%;justify-content:flex-start;text-align:start;unicode-bidi:plaintext}
+.site-main{margin-left:var(--sidebar);margin-right:0;min-width:0}
+.mobile-drawer{left:0;right:auto;direction:inherit}
+.mobile-drawer .nav-link{width:100%;justify-content:flex-start;text-align:start;unicode-bidi:plaintext}
+.mobile-drawer .drawer-settings{direction:inherit}
+.mobile-header{direction:inherit}
+.mobile-header .mobile-wordmark,.drawer-heading .mobile-wordmark{direction:ltr;unicode-bidi:isolate}
+@media(max-width:900px){.site-main{margin-left:0;margin-right:0}}

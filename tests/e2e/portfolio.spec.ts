@@ -80,3 +80,37 @@ test("filtered Journal URLs canonicalize to the localized archive and empty arch
   await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", /\/en\/journal$/);
   await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", /noindex/);
 });
+
+for (const locale of ["en", "fa"] as const) {
+  test(`desktop ${locale} navigation keeps the sidebar physically left and follows locale reading direction`, async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 960 });
+    await page.goto(`/${locale}`);
+    const html = page.locator("html");
+    await expect(html).toHaveAttribute("dir", locale === "fa" ? "rtl" : "ltr");
+    const sidebar = page.locator(".desktop-sidebar");
+    await expect(sidebar).toBeVisible();
+    const bounds = await sidebar.boundingBox();
+    expect(bounds?.x).toBe(0);
+    expect(bounds?.width).toBeGreaterThan(200);
+    const firstLink = sidebar.locator(".nav-link").first();
+    await expect(firstLink).toHaveAttribute("dir", "auto");
+    const direction = await firstLink.evaluate((node) => getComputedStyle(node).direction);
+    expect(direction).toBe(locale === "fa" ? "rtl" : "ltr");
+    const main = page.locator(".site-main");
+    const mainBounds = await main.boundingBox();
+    expect(mainBounds?.x).toBeGreaterThanOrEqual((bounds?.width ?? 0) - 1);
+    await page.screenshot({ path: test.info().outputPath(`${locale}-desktop-sidebar.png`), fullPage: true });
+  });
+}
+test("Persian mobile navigation drawer enters from physical left and preserves RTL link direction", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/fa");
+  await page.getByRole("button", { name: "باز کردن راهبری" }).click();
+  const drawer = page.getByRole("dialog", { name: "باز کردن راهبری" });
+  await expect(drawer).toBeVisible();
+  const bounds = await drawer.boundingBox();
+  expect(bounds?.x).toBe(0);
+  const firstLink = drawer.locator(".nav-link").first();
+  await expect(firstLink).toHaveAttribute("dir", "auto");
+  await expect(firstLink).toHaveCSS("direction", "rtl");
+});

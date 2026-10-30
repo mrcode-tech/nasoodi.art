@@ -22,15 +22,15 @@ export function SiteShell({ locale, children }: { locale: Locale; children: Reac
  },[open]);
  const nav=(drawerNav=false)=><nav aria-label={locale==="fa"?"راهبری اصلی":"Primary navigation"}><ul className="nav-list">
   {links.map(([key,label,href])=>{const active=key==="home"?pathname===href:pathname===href||pathname.startsWith(href+"/");
-   return <li key={key}><Link className="nav-link" href={href} aria-current={active?"page":undefined} onClick={()=>drawerNav&&setOpen(false)}>{label}</Link></li>;})}
+   return <li key={key}><Link className="nav-link" dir="auto" href={href} aria-current={active?"page":undefined} onClick={()=>drawerNav&&setOpen(false)}>{label}</Link></li>;})}
  </ul></nav>;
  return <>
   <a className="skip-link" href="#main-content">{labels.skip}</a>
   <aside className="desktop-sidebar" aria-label="Nasoodi.art">
-   <Link className="artist-wordmark" href={pagePath(locale)}><span className="wordmark-name">Ghazaleh</span><span className="wordmark-surname">Abdolahzade Nasoodi</span><span className="wordmark-role">{labels.discipline}</span></Link>
+   <Link className="artist-wordmark" href={pagePath(locale)}><span className="wordmark-name" dir="ltr">Ghazaleh</span><span className="wordmark-surname" dir="ltr">Abdolahzade Nasoodi</span><span className="wordmark-role" dir="auto">{labels.discipline}</span></Link>
    {nav()}<div className="sidebar-bottom"><span>nasoodi.art</span><span>© {new Date().getFullYear()}</span></div>
   </aside>
-  <header className="mobile-header"><Link className="mobile-wordmark" href={pagePath(locale)}>Nasoodi<span>.</span></Link>
+  <header className="mobile-header"><Link className="mobile-wordmark" dir="ltr" href={pagePath(locale)}>Nasoodi<span>.</span></Link>
    <button ref={trigger} className="menu-trigger" type="button" aria-controls="mobile-navigation" aria-expanded={open} aria-label={open?labels.close:labels.menu} onClick={()=>setOpen(true)}><span/><span/></button>
   </header>
   <div className="desktop-utility"><span>{labels.language}</span><Link href={alternate} hrefLang={otherLocale(locale)}>{otherLocale(locale)==="fa"?"فارسی":"English"}</Link></div>
