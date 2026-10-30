@@ -26,13 +26,13 @@ export default async function SectionPage({params,searchParams}:Props){const [{l
  const filters:[string,string,JournalCategory|undefined][]=[
   ["all",t.journalAll,undefined],["exhibition",t.journalExhibitions,"exhibition"],["event",t.journalEvents,"event"],["studio-update",t.journalStudio,"studio-update"],["story",t.journalStories,"story"]
  ];
- const dateLabel=(value:string)=>new Intl.DateTimeFormat(locale,{dateStyle:"long",timeZone:"UTC"}).format(new Date(value));
+ const dateLabel=(value:string,timeZone="UTC",includeTime=false)=>new Intl.DateTimeFormat(locale,{dateStyle:"long",...(includeTime?{timeStyle:"short" as const}:{}),timeZone}).format(new Date(value));
  return <div className="page-content"><header className="page-heading"><p className="eyebrow">{t.portfolio}</p><h1>{t.journal}</h1></header>
   {entries.length>0&&<nav className="journal-filters" aria-label={locale==="fa"?"دسته‌بندی یادداشت‌ها":"Journal categories"}>{filters.map(([key,label,value])=><Link key={key} className="journal-filter" href={value?pagePath(locale,"journal")+ "?category="+value:pagePath(locale,"journal")} aria-current={(selectedCategory??"all")===key?"page":undefined}>{label}</Link>)}</nav>}
   {entries.length===0?<p className="empty-note">{t.emptyJournal}</p>:visibleEntries.length===0?<p className="empty-note" role="status">{t.journalNoMatches}</p>:<div className="journal-cards">{visibleEntries.map(entry=><article className="journal-card" key={entry.id}>
    <div className="journal-card-meta"><span>{filters.find(([, ,value])=>value===(entry.type))?.[1]}</span>{entry.publishedAt&&Number.isFinite(Date.parse(entry.publishedAt))&&<time dateTime={entry.publishedAt}>{t.published}: {dateLabel(entry.publishedAt)}</time>}</div>
    <h2><Link href={pagePath(locale,`journal/${entry.slug}`)}>{entry.title[locale]}</Link></h2><p>{entry.summary[locale]}</p>
-   {entry.type==="event"&&entry.event&&<p className="journal-event-date"><time dateTime={entry.event.startsAt}>{dateLabel(entry.event.startsAt)}</time></p>}
+   {entry.type==="event"&&entry.event&&<p className="journal-event-date"><time dateTime={entry.event.startsAt}>{dateLabel(entry.event.startsAt,entry.event.timeZone,true)}</time> <span dir="ltr">{entry.event.timeZone}</span></p>{entry.event.venue?.[locale]&&<p className="journal-event-date">{entry.event.venue[locale]}</p>}}
    <Link className="text-link" href={pagePath(locale,`journal/${entry.slug}`)}>{t.readMore} ↗</Link>
   </article>)}</div>}</div>;
 }
