@@ -38,7 +38,7 @@ The navigation labels must be localized in Persian and English. Use the approved
 
 ### 3.1 Left sidebar
 
-- Render a persistent vertical sidebar along the physical left edge of the desktop layout in both Persian and English.
+- Render a persistent vertical sidebar along the physical left edge in English and physical right edge in Persian.
 - The sidebar contains the artist identity/wordmark and the primary navigation links.
 - Keep its width restrained so it does not compete with the artwork or consume excessive horizontal space.
 - Use the existing semantic design tokens for paper surfaces, ink, muted text, fine borders, and focus/active states.
@@ -54,7 +54,7 @@ The top bar is a separate horizontal utility/navigation region aligned with the 
 1. Language selector.
 2. Theme selector.
 
-The artist identity and primary page links remain in the left sidebar; do not duplicate the full primary navigation in the top bar.
+The artist identity and primary page links remain in the locale-appropriate sidebar; do not duplicate the full primary navigation in the top bar.
 
 Language and theme controls:
 - Must be visible without opening a menu.
@@ -78,7 +78,7 @@ If the available horizontal space becomes insufficient, use the mobile/tablet re
 
 ### 4.2 Open state
 
-The mobile menu is an off-canvas panel that enters from the physical left edge, matching the requested left-side menu treatment. It contains, in this order:
+The mobile menu is an off-canvas panel that enters from the physical left edge in English and the physical right edge in Persian. It contains, in this order:
 
 1. Artist identity/wordmark.
 2. Primary navigation links.
@@ -172,7 +172,7 @@ The initial/default mode should be **Light**, unless an existing approved projec
 
 Use project breakpoints and existing responsive conventions rather than introducing arbitrary breakpoint values. Define and verify at least:
 
-- Wide desktop: persistent left sidebar and top-bar settings.
+- Wide desktop: persistent locale-mirrored sidebar (left in English, right in Persian) and top-bar settings.
 - Compact desktop/tablet: retain the sidebar only while the content and settings remain comfortable; otherwise switch to the compact menu pattern.
 - Mobile: compact header and off-canvas left menu; language and theme controls at the bottom of the open menu.
 
@@ -271,12 +271,12 @@ Visual QA screenshots are required for:
 
 This specification is implemented only when:
 
-- Desktop has a persistent left sidebar for primary navigation.
+- Desktop has a persistent locale-mirrored sidebar for primary navigation (left in English, right in Persian).
 - Desktop top bar visibly contains language and theme selectors.
-- Mobile uses a left-side off-canvas menu.
+- Mobile uses a locale-mirrored off-canvas menu (left in English, right in Persian).
 - Mobile menu places language and theme selectors at its bottom, below the navigation links.
 - The controls are accessible, functional, localized, and persistent.
-- Persian/English direction is correct without moving the sidebar from the physical left.
+- Persian uses a complete RTL shell with the sidebar on the physical right; English uses an LTR shell with the sidebar on the physical left.
 - Light/Dark/System appearances are coherent and preserve artwork fidelity.
 - Navigation works across all public routes without dead links.
 - No layout collision occurs with the easel background or page content.
