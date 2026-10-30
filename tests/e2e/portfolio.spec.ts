@@ -327,7 +327,7 @@ const homepageViewports = [
 
 for (const locale of ["en", "fa"] as const) {
   for (const viewport of homepageViewports) {
-    test(`homepage hero and both CTAs render without overflow: ${locale} ${viewport.name}`, async ({ page }) => {
+    test(`homepage hero and publication-aware CTAs render without overflow: ${locale} ${viewport.name}`, async ({ page }) => {
       await page.setViewportSize({ width: viewport.width, height: viewport.height });
       await page.goto(`/${locale}`);
       await expect(page.locator("html")).toHaveAttribute("lang", locale);
@@ -337,8 +337,12 @@ for (const locale of ["en", "fa"] as const) {
       await expect(heroImage).toBeVisible();
       await expect(heroImage).toHaveJSProperty("complete", true);
       await expect(heroImage).not.toHaveJSProperty("naturalWidth", 0);
-      await expect(page.getByRole("link", { name: locale === "fa" ? "گالری‌ها را ببینید" : "Explore galleries" })).toHaveAttribute("href", `/${locale}/galleries`);
-      await expect(page.getByRole("link", { name: locale === "fa" ? "گزیده آثار را ببینید" : "View selected works" })).toHaveAttribute("href", `/${locale}/works`);
+      const galleryCta = page.getByRole("link", { name: locale === "fa" ? "گالری‌ها را ببینید" : "Explore galleries" });
+      const worksCta = page.getByRole("link", { name: locale === "fa" ? "گزیده آثار را ببینید" : "View selected works" });
+      if (await page.locator(".gallery-cards .gallery-card").count() > 0) await expect(galleryCta).toHaveAttribute("href", `/${locale}/galleries`);
+      else await expect(galleryCta).toHaveCount(0);
+      if (await page.locator(".artwork-grid .artwork-item").count() > 0) await expect(worksCta).toHaveAttribute("href", `/${locale}/works`);
+      else await expect(worksCta).toHaveCount(0);
       const overflow = await page.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth);
       expect(overflow, `${locale} ${viewport.name} horizontal overflow`).toBe(false);
       await page.screenshot({ path: test.info().outputPath(`hero-${locale}-${viewport.name}.png`), fullPage: false });

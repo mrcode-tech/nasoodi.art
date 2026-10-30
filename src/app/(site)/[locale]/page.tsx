@@ -14,6 +14,8 @@ export default async function Home({params}:Props){const {locale}=await params;i
  const hero=getHomepageHero(artworks,homepageSelection,locale),heroImage=hero?primaryImageFor(hero):undefined;
  const heroAlt=heroImage?.alt[locale] ?? (locale==="fa" ? "اثر هنری غزاله عبداله زاده نسودی" : "Artwork by Ghazaleh Abdolahzade Nasoodi");
  const works=getHomepageFeaturedArtworks(artworks,homepageSelection,locale),sets=getHomepageFeaturedGalleries(galleries,artworks,homepageSelection,locale);
+ const hasSelectedWorks=works.some((work)=>Boolean(primaryImageFor(work)));
+ const hasFeaturedGalleries=sets.length>0;
  const upcomingEvent=getUpcomingJournalEvents(journalEntries,locale)[0];
  const journal=getPublicJournal(journalEntries,locale).filter(entry=>entry.id!==upcomingEvent?.id).slice(0,2);
  return <div className="page-content home-page">
@@ -23,10 +25,10 @@ export default async function Home({params}:Props){const {locale}=await params;i
     <h1 id="home-title">{locale==="fa"?"غزاله عبداله زاده نسودی":"Ghazaleh Abdolahzade Nasoodi"}</h1>
     <p className="artist-discipline">{t.discipline}</p>
     <div className="intro-rule" aria-hidden="true"/>
-    <div className="hero-actions">
-     <Button asChild variant="default" size="lg"><Link href={pagePath(locale,"galleries")}>{locale==="fa"?"گالری‌ها را ببینید":"Explore galleries"}</Link></Button>
-     <Button asChild variant="outline" size="lg"><Link href={pagePath(locale,"works")}>{locale==="fa"?"گزیده آثار را ببینید":"View selected works"}</Link></Button>
-    </div>
+    {(hasFeaturedGalleries || hasSelectedWorks) && <div className="hero-actions">
+     {hasFeaturedGalleries && <Button asChild variant="default" size="lg"><Link href={pagePath(locale,"galleries")}>{locale==="fa"?"گالری‌ها را ببینید":"Explore galleries"}</Link></Button>}
+     {hasSelectedWorks && <Button asChild variant="outline" size="lg"><Link href={pagePath(locale,"works")}>{locale==="fa"?"گزیده آثار را ببینید":"View selected works"}</Link></Button>}
+    </div>}
    </div>
    <figure className="hero-artwork">
     {heroImage ? <Image sizes="(max-width: 900px) 100vw, 58vw" src={heroImage.src} alt={heroAlt} width={heroImage.width} height={heroImage.height} priority /> : /* eslint-disable-next-line @next/next/no-img-element -- Preserve the supplied source image intrinsic ratio without inventing dimensions. */ <img src="/images/homepage-hero.jpg" alt={heroAlt} fetchPriority="high" /> }
