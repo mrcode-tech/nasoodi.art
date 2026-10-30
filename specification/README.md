@@ -69,3 +69,12 @@ These supplied facts do not confirm an artist statement, biography, education, e
 - Do not merge to main, deploy, or change branch strategy without separate explicit authorization.
 - Preserve existing work and inspect actual repository state before implementation.
 - No claim of test, visual review, asset inspection, artist approval, or deployment is valid without evidence.
+
+## Design quality authority
+
+The following documents are mandatory for all UI design and implementation work:
+
+- [Design engineering skills and operating contract](./design-engineering-skills.md) — project-specific Emil Kowalski and Impeccable-inspired workflow, motion decision gate, component craftsmanship, responsive behavior, and visual QA.
+- [Refined design direction and unified design system](./design-direction-and-system-refinement.md) — the artist's quiet gallery direction, semantic palette, typography roles, spacing, image composition, navigation, motion language, and page-specific composition contracts.
+
+Read these before changing any visual surface. Page-specific specifications remain authoritative for their unique content and behavior, but must conform to the shared design direction and quality contract. If a conflict exists, preserve factual/content constraints and artwork fidelity first, then reconcile the visual treatment in the relevant page specification.
