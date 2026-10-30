@@ -530,3 +530,12 @@ After the previous update, feature branch work added:
 Verification: GitHub Actions run 41070742829 passed 19 content tests and 15 Chromium E2E tests, plus lint, typecheck, production build, screenshot artifact upload, and production route smoke test on commit 98cef6e446d83688e42f6a5ec88bf49edac4a335. Commit 296d3ab56dba63c0408d287897037db7d19f6648 adds Journal Article/Event JSON-LD and tests; its CI run has not yet appeared in the branch workflow list at the time of this update.
 
 Owner/artist gates remain: approved painting hero and artwork metadata/rights, approved profile copy/portrait, public contact destination, verified CV facts, Journal/event content and translations, easel-use approval, and the Light/Dark/System decision. No merge, deployment, or publication is authorized.
+
+
+## Incremental implementation update — 2026-10-30 (Journal structured-data verification)
+
+The Journal detail implementation now emits Article JSON-LD for editorial entries and Event JSON-LD for event entries. Event schema includes only confirmed start/end instants, a known attendance mode, and a localized venue when supplied; it does not synthesize offers, prices, addresses, or organizer data. The helper uses the repository's actual JournalEvent attendance-mode union and the shared safe JSON-LD serializer.
+
+Verified on commit b3ced67771b582362998f186be68920ceb5fb450: [GitHub Actions run 41071561284](https://github.com/mrcode-tech/nasoodi.art/actions/runs/41071561284) passed ESLint, TypeScript, 21 content tests, production build, 15 Chromium E2E tests, screenshot artifact upload, and production route smoke test. Visual QA artifact: nasoodi-visual-qa-b3ced67771b582362998f186be68920ceb5fb450 (artifact ID 12986285020).
+
+This validates the code paths and synthetic test records only. No real artwork, profile, CV, contact, Journal, or event content has been added or approved. Populated-page visual/SEO validation and all owner/artist publication gates remain outstanding.
