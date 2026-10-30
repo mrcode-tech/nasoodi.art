@@ -264,3 +264,22 @@ html[dir=rtl] .sidebar-menu-button{direction:rtl}
 .sheet-content[data-state=open]{visibility:visible;pointer-events:auto;transform:translateX(0)}
 .language-switch{border-bottom:1px solid var(--mauve);color:var(--ink);font-weight:700}
 
+
+/* Persian mirrors the complete navigation shell, not only its text. */
+html[lang="fa"] .desktop-sidebar,
+html[lang="fa"] .sidebar-root.desktop-sidebar { left:auto; right:0; direction:rtl; border-right:0; border-left:1px solid var(--border); }
+html[lang="fa"] .desktop-sidebar .artist-wordmark,
+html[lang="fa"] .desktop-sidebar .sidebar-header { align-items:flex-end; text-align:right; }
+html[lang="fa"] .desktop-sidebar .wordmark-role,
+html[lang="fa"] .desktop-sidebar .nav-list,
+html[lang="fa"] .desktop-sidebar .nav-link { direction:rtl; text-align:right; }
+html[lang="fa"] .desktop-sidebar .nav-link { justify-content:flex-end; }
+html[lang="fa"] .site-main { margin-left:0; margin-right:var(--sidebar); }
+html[lang="fa"] .desktop-utility { right:auto; left:clamp(2rem,5vw,5rem); direction:rtl; }
+@media(max-width:900px) {
+ html[lang="fa"] .site-main { margin-left:0; margin-right:0; }
+ html[lang="fa"] .mobile-drawer { left:auto; right:0; border-right:0; border-left:1px solid var(--border); box-shadow:-12px 0 36px rgb(48 40 36 / 12%); padding-left:1.5rem; padding-right:max(1.5rem,env(safe-area-inset-right)); transform:translate3d(100%,0,0); }
+ html[lang="fa"] .mobile-drawer[data-open="true"] { transform:translate3d(0,0,0); }
+ html[lang="fa"] .mobile-drawer .nav-link { justify-content:flex-end; text-align:right; direction:rtl; }
+ html[lang="fa"] .mobile-drawer .drawer-settings { flex-direction:row-reverse; }
+}
