@@ -10,7 +10,18 @@ export type Artwork = { id: string; slug: string; title: Localized; images: Imag
 export type Gallery = { id: string; slug: string; title: Localized; description: Localized; coverArtworkId: string; artworkIds: string[]; status: Status; sortOrder: number };
 export type JournalEvent = { startsAt: string; endsAt?: string; timeZone: string; venue?: Localized; attendanceMode?: "in-person" | "online" | "hybrid"; registrationUrl?: string };
 export type JournalCategory = "exhibition" | "event" | "studio-update" | "story";
-export type JournalEntry = { id: string; slug: string; type: JournalCategory; title: Localized; summary: Localized; body?: Localized; status: Status; publishedAt?: string; event?: JournalEvent };
+export type JournalTextBlock =
+  | { type: "paragraph"; text: string }
+  | { type: "heading"; level: 2 | 3; text: string }
+  | { type: "list"; ordered?: boolean; items: string[] }
+  | { type: "quote"; text: string; attribution?: string }
+  | { type: "link"; text: string; href: string };
+export type LocalizedRichText = Partial<Record<Locale, JournalTextBlock[]>>;
+export type JournalEntry = { id: string; slug: string; type: JournalCategory; title: Localized; summary: Localized; body?: LocalizedRichText; status: Status; publishedAt?: string; event?: JournalEvent };
+export function isSafeJournalHref(href: string): boolean {
+  if (href.startsWith("/") && !href.startsWith("//")) return true;
+  try { return new URL(href).protocol === "https:"; } catch { return false; }
+}
 export const journalCategories: JournalCategory[] = ["exhibition", "event", "studio-update", "story"];
 export function journalCategoryFor(entry: JournalEntry): JournalCategory {
   return entry.type;

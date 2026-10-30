@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { getPublicArtworks,getPublicGalleries,getPublicJournal,getPublicCvEntries,getHomepageFeaturedArtworks,getGalleryCoverArtwork,getJournalEntriesForCategory,type Artwork,type Gallery,type JournalEntry,type CvEntry } from "../src/lib/site";
+import { getPublicArtworks,getPublicGalleries,getPublicJournal,getPublicCvEntries,getHomepageFeaturedArtworks,getGalleryCoverArtwork,getJournalEntriesForCategory,isSafeJournalHref,type Artwork,type Gallery,type JournalEntry,type CvEntry } from "../src/lib/site";
 const work:Artwork={id:"w1",slug:"work-one",title:{en:"Work",fa:"اثر"},images:[{src:"/art/work.jpg",alt:{en:"Painting",fa:"نقاشی"},role:"primary",width:1200,height:900}],rightsConfirmed:true,status:"published"};
 test("artwork stays private until published and rights-cleared",()=>{assert.equal(getPublicArtworks([{...work,status:"needs-review"}],"en").length,0);assert.equal(getPublicArtworks([{...work,rightsConfirmed:false}],"en").length,0);assert.equal(getPublicArtworks([work],"en").length,1);});
 test("artwork requires localized title and primary image alt",()=>{assert.equal(getPublicArtworks([{...work,title:{en:"Work"}}],"fa").length,0);assert.equal(getPublicArtworks([{...work,images:[{...work.images[0],alt:{en:""}}]}],"en").length,0);});
@@ -43,4 +43,12 @@ test("gallery cover resolves only to a public locale-ready canonical artwork",()
  assert.equal(getGalleryCoverArtwork(gallery,[work],"en")?.artwork.id,"w1");
  assert.equal(getGalleryCoverArtwork(gallery,[{...work,rightsConfirmed:false}],"en"),undefined);
  assert.equal(getGalleryCoverArtwork(gallery,[{...work,title:{en:"Work"}}],"fa"),undefined);
+});
+
+test("journal rich-text links allow only HTTPS or same-site root-relative destinations",()=>{
+ assert.equal(isSafeJournalHref("/fa/works"),true);
+ assert.equal(isSafeJournalHref("https://example.org/event"),true);
+ assert.equal(isSafeJournalHref("javascript:alert(1)"),false);
+ assert.equal(isSafeJournalHref("//example.org"),false);
+ assert.equal(isSafeJournalHref("http://example.org"),false);
 });
