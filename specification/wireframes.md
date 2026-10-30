@@ -215,3 +215,130 @@ Before approving the design:
 - Check text and artwork contrast without placing text over important painted areas.
 - Review both locales, all breakpoints, keyboard focus, and reduced-motion mode.
 - Review loading placeholders and failed-image states.
+
+
+## 11. Gallery index and gallery detail wireframes
+
+### Gallery index — desktop
+
+```text
+┌───────────────────────────────────────────────────────────────────┐
+│ GLOBAL SHELL / LEFT SIDEBAR                                       │
+├───────────────────────────────────────────────────────────────────┤
+│ GALLERIES                                                         │
+│ Short approved introduction                                       │
+│                                                                   │
+│ ┌──────────────────────┐  ┌──────────────────────┐               │
+│ │ [Gallery cover art]  │  │ [Gallery cover art]  │               │
+│ │ Gallery title        │  │ Gallery title        │               │
+│ │ Short description   │  │ Short description   │               │
+│ │ Explore gallery →    │  │ Explore gallery →    │               │
+│ └──────────────────────┘  └──────────────────────┘               │
+│                                                                   │
+│ [Additional gallery cards in curated order]                       │
+└───────────────────────────────────────────────────────────────────┘
+```
+
+### Gallery index — mobile
+
+```text
+┌───────────────────────────────┐
+│ GLOBAL MOBILE HEADER          │
+├───────────────────────────────┤
+│ GALLERIES                     │
+│ Approved introduction         │
+│                               │
+│ [Full gallery cover image]    │
+│ Gallery title                 │
+│ Short description             │
+│ Explore gallery →             │
+│                               │
+│ [Next gallery cover]          │
+│ Gallery title                 │
+│ Short description             │
+│ Explore gallery →             │
+└───────────────────────────────┘
+```
+
+### Gallery detail
+
+```text
+┌───────────────────────────────────────────────────────────────────┐
+│ GLOBAL SHELL                                                      │
+├───────────────────────────────────────────────────────────────────┤
+│ ← All galleries                                                   │
+│ Gallery title                                                     │
+│ Short artist-approved description                                 │
+│                                                                   │
+│ [Artwork A]                 [Artwork B]                            │
+│ Title / known metadata      Title / known metadata                │
+│                                                                   │
+│ [Artwork C — larger]        [Artwork D]                            │
+│ Title / known metadata      Title / known metadata                │
+│                                                                   │
+│ [More artworks in curated order]                                  │
+└───────────────────────────────────────────────────────────────────┘
+```
+
+Gallery cards navigate to dedicated gallery pages. Artwork cards navigate to individual artwork detail pages when available. Preserve curated DOM and keyboard order. Mobile defaults to a generous one-column layout.
+
+## 12. Homepage hero and featured content wireframe
+
+### Desktop
+
+```text
+┌───────────────────────────────────────────────────────────────────┐
+│ GLOBAL SHELL                                                      │
+├───────────────────────────────────────────────────────────────────┤
+│ ┌─────────────────────────────┐  ARTIST NAME                      │
+│ │                             │  Oil Painter                      │
+│ │      APPROVED HERO           │  Short approved introduction     │
+│ │      PAINTING IMAGE          │  Explore galleries →             │
+│ │                             │  View selected works →            │
+│ └─────────────────────────────┘                                   │
+├───────────────────────────────────────────────────────────────────┤
+│ FEATURED WORKS                                                    │
+│ [Painting]           [Painting]           [Painting]               │
+│ Title                Title                Title                    │
+│ View all works →                                                │
+├───────────────────────────────────────────────────────────────────┤
+│ FEATURED GALLERIES                                                │
+│ [Gallery cover + title + short description]                       │
+│ [Gallery cover + title + short description]                       │
+│ View all galleries →                                              │
+├───────────────────────────────────────────────────────────────────┤
+│ ABOUT PREVIEW · VERIFIED HIGHLIGHTS · CONTACT · FOOTER            │
+└───────────────────────────────────────────────────────────────────┘
+```
+
+### Mobile
+
+```text
+┌───────────────────────────────┐
+│ GLOBAL MOBILE HEADER          │
+├───────────────────────────────┤
+│ [Full hero painting]          │
+│ Artist name · Oil Painter     │
+│ Short approved intro          │
+│ Explore galleries →           │
+│ View selected works →         │
+├───────────────────────────────┤
+│ FEATURED WORKS                │
+│ [Painting]                    │
+│ Title / known metadata        │
+│ [Painting]                    │
+│ Title / known metadata        │
+│ View all works →              │
+├───────────────────────────────┤
+│ FEATURED GALLERIES            │
+│ [Gallery cover]               │
+│ Title + short description     │
+│ Explore gallery →             │
+│ [Next gallery]                │
+│ View all galleries →          │
+├───────────────────────────────┤
+│ ABOUT · CONTACT · FOOTER      │
+└───────────────────────────────┘
+```
+
+Featured Works and Featured Galleries are distinct sections. The former promotes individual paintings; the latter promotes curated collections. Neither is an autoplay carousel.
