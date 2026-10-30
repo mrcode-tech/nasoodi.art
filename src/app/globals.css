@@ -283,3 +283,9 @@ html[lang="fa"] .desktop-utility { right:auto; left:clamp(2rem,5vw,5rem); direct
  html[lang="fa"] .mobile-drawer .nav-link { justify-content:flex-end; text-align:right; direction:rtl; }
  html[lang="fa"] .mobile-drawer .drawer-settings { flex-direction:row-reverse; }
 }
+
+/* Radix Sheet uses data-state; keep Persian's right-edge motion on open and close. */
+@media(max-width:900px) {
+ html[lang="fa"] .mobile-drawer[data-state="closed"] { transform:translateX(100%); }
+ html[lang="fa"] .mobile-drawer[data-state="open"] { transform:translateX(0); }
+}
