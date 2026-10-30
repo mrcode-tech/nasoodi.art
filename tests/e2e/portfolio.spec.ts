@@ -535,3 +535,59 @@ test("navigation icon and language buttons use borderless minimal chrome", async
   await expect(languageButton).toHaveCSS("border-top-width", "0px");
   await expect(languageButton).toHaveCSS("border-right-width", "0px");
 });
+
+
+for (const locale of ["fa", "en"] as const) {
+  test(`mobile navbar is borderless and keeps the language control at the physical left in ${locale}`, async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto(`/${locale}`);
+    const header = page.locator(".mobile-header");
+    const utility = header.locator(".mobile-utility");
+    const label = utility.locator(".language-label");
+    const selector = utility.getByRole("button", { name: locale === "fa" ? "زبان" : "Language" });
+    const menu = header.locator(".menu-trigger");
+    await expect(header).toBeVisible();
+    await expect(utility).toBeVisible();
+    await expect(header).toHaveCSS("border-bottom-width", "0px");
+    await expect(menu).toHaveCSS("border-left-width", "0px");
+    const [headerBox, utilityBox, labelBox, selectorBox, menuBox] = await Promise.all([
+      header.boundingBox(), utility.boundingBox(), label.boundingBox(), selector.boundingBox(), menu.boundingBox(),
+    ]);
+    expect(headerBox).not.toBeNull();
+    expect(utilityBox).not.toBeNull();
+    expect(labelBox).not.toBeNull();
+    expect(selectorBox).not.toBeNull();
+    expect(menuBox).not.toBeNull();
+    expect(utilityBox!.x).toBeLessThan(80);
+    expect(utilityBox!.right).toBeLessThan(menuBox!.x);
+    if (locale === "fa") {
+      expect(labelBox!.x).toBeGreaterThan(selectorBox!.x + selectorBox!.width);
+    } else {
+      expect(labelBox!.x + labelBox!.width).toBeLessThan(selectorBox!.x);
+    }
+    await selector.click();
+    await expect(page.getByRole("menuitem", { name: /English/ })).toBeVisible();
+    await expect(page.getByRole("menuitem", { name: /فارسی/ })).toBeVisible();
+  });
+}
+
+for (const locale of ["fa", "en"] as const) {
+  test(`desktop navbar chrome is borderless and the language utility is aligned to the left in ${locale}`, async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 800 });
+    await page.goto(`/${locale}`);
+    const sidebar = page.locator(".desktop-sidebar");
+    const utility = page.locator(".desktop-utility");
+    await expect(sidebar).toHaveCSS("border-right-width", "0px");
+    await expect(utility).toHaveCSS("border-bottom-width", "0px");
+    const utilityBox = await utility.boundingBox();
+    const label = utility.locator(".language-label");
+    const selector = utility.getByRole("button", { name: locale === "fa" ? "زبان" : "Language" });
+    const [labelBox, selectorBox] = await Promise.all([label.boundingBox(), selector.boundingBox()]);
+    expect(utilityBox!.x).toBeLessThanOrEqual(1);
+    expect(labelBox).not.toBeNull();
+    expect(selectorBox).not.toBeNull();
+    if (locale === "fa") {
+      expect(labelBox!.x).toBeGreaterThan(selectorBox!.x + selectorBox!.width);
+    }
+  });
+}
