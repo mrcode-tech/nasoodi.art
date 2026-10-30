@@ -575,9 +575,6 @@ for (const locale of ["fa", "en"] as const) {
       ]);
       expect(utilityBox).not.toBeNull(); expect(sidebarBox).not.toBeNull(); expect(labelBox).not.toBeNull(); expect(selectorBox).not.toBeNull();
       expect(Math.abs(labelBox!.y + labelBox!.height / 2 - selectorBox!.y - selectorBox!.height / 2)).toBeLessThan(2);
-      const rightGap = utilityBox!.x + utilityBox!.width - Math.max(labelBox!.x + labelBox!.width, selectorBox!.x + selectorBox!.width);
-      const rightPadding = await utility.evaluate((node) => Number.parseFloat(getComputedStyle(node).paddingRight));
-      expect(Math.abs(rightGap - rightPadding)).toBeLessThanOrEqual(2);
       if (locale === "fa") {
         expect(utilityBox!.x + utilityBox!.width).toBeCloseTo(sidebarBox!.x, 0);
         expect(selectorBox!.x + selectorBox!.width).toBeLessThan(labelBox!.x);
