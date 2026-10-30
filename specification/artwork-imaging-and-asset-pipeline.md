@@ -80,3 +80,15 @@ Use stable IDs independent of artist-facing titles. Avoid ambiguous names such a
 - [ ] Responsive crop and loading behavior checked.
 - [ ] No private metadata or rights notes exposed.
 - [ ] Missing-image state tested.
+
+## Design-engineering and presentation refinement
+
+The image pipeline must support the visual quality contract in design-engineering-skills.md and design-direction-and-system-refinement.md.
+
+- Artworks are the dominant content; presentation must preserve source color, texture, orientation, signature, ratio, and approved crop.
+- The layout must adapt to portrait, landscape, square, and unusually long artwork without forcing a uniform crop or distorted thumbnail.
+- Use responsive derivatives with explicit dimensions and stable aspect-ratio reservation to prevent layout shift.
+- Do not animate, zoom, tilt, filter, blur, or parallax artwork for decoration.
+- Image loading priority must reflect actual visual prominence; do not eagerly load every gallery image.
+- Validate derivatives against the approved master at realistic display sizes and across high-density/mobile displays.
+- If a composition cannot preserve the complete artwork, use contain or an alternative editorial layout rather than cropping the work.
