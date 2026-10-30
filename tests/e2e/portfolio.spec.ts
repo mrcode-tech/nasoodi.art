@@ -163,3 +163,14 @@ test("empty About and Contact routes stay available but are not indexable", asyn
     }
   }
 });
+
+test("production routes include baseline browser security headers", async ({ request }) => {
+  const response = await request.get("/en");
+  expect(response.status()).toBe(200);
+  const headers = response.headers();
+  expect(headers["x-content-type-options"]).toBe("nosniff");
+  expect(headers["x-frame-options"]).toBe("DENY");
+  expect(headers["referrer-policy"]).toBe("strict-origin-when-cross-origin");
+  expect(headers["permissions-policy"]).toContain("camera=()");
+  expect(headers["strict-transport-security"]).toContain("max-age=31536000");
+});

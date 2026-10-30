@@ -82,3 +82,19 @@ The interaction and visual quality bar is defined in design-engineering-skills.m
 - Keep focus indicators visible, avoid clipped focus, and provide immediate feedback for frequent/keyboard actions.
 - Validate contrast for every actual token pairing, including muted metadata, active navigation, borders, and disabled states.
 - Test real device responsiveness and image-loading behavior; do not rely only on desktop emulation or source inspection.
+
+## Implemented baseline response headers — 2026-10-30
+
+The Next.js application now sets the following response headers on all routes:
+
+- `X-Content-Type-Options: nosniff`
+- `X-Frame-Options: DENY`
+- `Referrer-Policy: strict-origin-when-cross-origin`
+- `Permissions-Policy: camera=(), microphone=(), geolocation=()`
+- `Strict-Transport-Security: max-age=31536000`
+
+The site does not currently require camera, microphone, or geolocation access. HSTS is configured for HTTPS hosting without `includeSubDomains`, because subdomain ownership/policy has not been established.
+
+A Content Security Policy is intentionally not added by this change: Next.js runtime scripts and the site's JSON-LD currently include inline script content, and a correct nonce/hash policy requires a separate production-compatible audit rather than a permissive policy that appears secure but does not protect the application. CSP remains an explicit security review item.
+
+Playwright checks the baseline headers on the localized route. Re-run these checks against the production-like build and review hosting-level header overrides before release.
