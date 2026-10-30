@@ -30,7 +30,9 @@ Initial navigation destinations:
 
 Do not render dead links, empty destinations, or placeholder pages as if they were complete. The artist wordmark/name may link to Home and must have an accessible name.
 
-The Journal destination is part of the primary navigation on desktop and mobile. It remains active on Journal detail routes. Do not add a separate Events item; events are content types within Journal. The homepage also links to Journal as specified in `journal-and-events.md`.\n\nThe navigation labels must be localized in Persian and English. Use the approved translations from the localization source; do not invent awkward literal translations.
+The Journal destination is part of the primary navigation on desktop and mobile. It remains active on Journal detail routes. Do not add a separate Events item; events are content types within Journal. The homepage also links to Journal as specified in `journal-and-events.md`.
+
+The navigation labels must be localized in Persian and English. Use the approved translations from the localization source; do not invent awkward literal translations.
 
 ## 3. Desktop layout
 
