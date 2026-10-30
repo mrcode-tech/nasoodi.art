@@ -72,7 +72,12 @@ test("robots and sitemap endpoints are available", async ({ request }) => {
   expect(await robots.text()).toContain("sitemap.xml");
   const sitemap = await request.get("/sitemap.xml");
   expect(sitemap.status()).toBe(200);
-  expect(await sitemap.text()).toContain("https://nasoodi.art/fa");
+  const sitemapText = await sitemap.text();
+  expect(sitemapText).toContain("https://nasoodi.art/fa");
+  expect(sitemapText).not.toContain("https://nasoodi.art/fa/about");
+  expect(sitemapText).not.toContain("https://nasoodi.art/en/about");
+  expect(sitemapText).not.toContain("https://nasoodi.art/fa/contact");
+  expect(sitemapText).not.toContain("https://nasoodi.art/en/contact");
 });
 
 test("filtered Journal URLs canonicalize to the localized archive and empty archives stay noindex", async ({ page }) => {
@@ -145,6 +150,16 @@ test("homepage has no horizontal overflow at small mobile, tablet, or compact de
         document: document.documentElement.scrollWidth,
       }));
       expect(dimensions.document, `${locale} at ${width}px`).toBeLessThanOrEqual(dimensions.viewport);
+    }
+  }
+});
+
+test("empty About and Contact routes stay available but are not indexable", async ({ page }) => {
+  for (const locale of ["fa", "en"] as const) {
+    for (const section of ["about", "contact"]) {
+      await page.goto(`/${locale}/${section}`);
+      await expect(page.getByRole("main")).toBeVisible();
+      await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", /noindex/);
     }
   }
 });

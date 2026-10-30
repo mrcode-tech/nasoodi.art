@@ -147,7 +147,7 @@ export function getPublicArtistProfile(profile: ArtistProfile | undefined, local
       !profile.biography[locale]?.trim()) return undefined;
   const portrait = profile.portrait;
   const validPortrait = portrait && portrait.rightsConfirmed && portrait.width > 0 && portrait.height > 0 &&
-    Boolean(portrait.src.trim()) && Boolean(portrait.alt[locale]?.trim());
+    portrait.src.startsWith("/") && !portrait.src.startsWith("//") && Boolean(portrait.alt[locale]?.trim());
   return { ...profile, portrait: validPortrait ? portrait : undefined };
 }
 export function getPublicContactDetails(details: ContactDetails | undefined, locale: Locale) {
