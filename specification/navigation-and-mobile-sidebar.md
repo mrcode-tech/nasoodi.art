@@ -7,7 +7,7 @@
 
 ## 1. Purpose and design intent
 
-Define one consistent global navigation system for the Nasoodi.art portfolio. The primary navigation is a **left-side vertical sidebar on desktop**. On mobile, it becomes an off-canvas menu opened by a menu button.
+Define one consistent global navigation system for the Nasoodi.art portfolio. The primary navigation mirrors the active locale: a left-side vertical sidebar in English and a right-side vertical sidebar in Persian. On mobile, it becomes an off-canvas menu entering from that same physical side.
 
 Language and appearance controls must be easy to discover but must not compete with the artist's work:
 
@@ -72,7 +72,7 @@ If the available horizontal space becomes insufficient, use the mobile/tablet re
 ### 4.1 Closed state
 
 - Show a compact top header containing the artist identity/wordmark and an accessible menu trigger.
-- The menu trigger opens the left-side navigation panel.
+- The menu trigger opens the locale-appropriate navigation panel (left for English, right for Persian).
 - Do not show the language or theme controls in the closed mobile header; they belong at the bottom of the opened menu.
 - Preserve the content's full usable width when the menu is closed.
 
@@ -185,15 +185,15 @@ At every breakpoint:
 
 ## 8. RTL and physical positioning
 
-Persian is a right-to-left reading experience, but the user has explicitly requested a **physical left-side sidebar/menu**. Therefore:
+The navigation shell mirrors its **physical placement** with the active locale. Persian is a complete RTL layout, not an LTR layout with right-aligned labels.
 
-- Keep the desktop sidebar on the physical left in both English and Persian.
-- Keep the mobile off-canvas menu entering from the physical left in both locales.
-- Express the panel shell's physical placement with left-edge positioning (`left: 0; right: auto`) and its closed-state motion with a negative X translation; do not use RTL-sensitive inline-start positioning or reverse the transform for Persian.
-- Keep the drawer's internal text direction locale-aware independently of its physical placement. The closed panel must be removed from keyboard interaction and the accessibility tree.
-- Do not automatically mirror the sidebar to the right in RTL.
-- Within the sidebar, localize text direction and alignment appropriately. Persian labels are RTL; English labels are LTR.
-- Use logical CSS properties for text/content alignment and spacing where possible, but use an explicit physical-left placement for the sidebar/menu shell.
+- English (`en`): desktop sidebar is fixed to the physical left; mobile drawer enters from the physical left; desktop language utility is positioned at the upper-right of the content area.
+- Persian (`fa`): the entire desktop sidebar is fixed to the physical right, including its surface, border, wordmark, navigation rows, and footer; the main content reserves space on the right. The mobile drawer enters from the physical right. The desktop language utility moves to the physical left of the content area.
+- The language selector must mirror its position and internal ordering in Persian; it must not remain on the right while only its text direction changes.
+- Set the mobile Sheet side from the locale (`right` for Persian, `left` for English). Keep panel placement and closed-state translation paired so the panel enters from the correct physical edge.
+- Set the desktop sidebar's `dir` from the locale. Persian labels, wordmark role, footer, and navigation align to the right; English aligns to the left. Artist names and brand marks retain their intended LTR letter order and are not mirrored.
+- Keep drawer text direction locale-aware independently of its physical side. The closed panel must be removed from keyboard interaction and the accessibility tree.
+- Use logical CSS properties for content alignment and spacing where possible, but assert physical edge placement explicitly for the sidebar and drawer.
 - Directional icons inside navigation should be reviewed in context; do not mirror non-directional brand or artwork imagery.
 - The language and theme selectors must remain correctly aligned and readable in both locales.
 
