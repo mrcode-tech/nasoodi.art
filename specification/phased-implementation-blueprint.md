@@ -656,3 +656,19 @@ Changes:
 The GitHub Actions run for the resulting feature-branch commits has not been independently confirmed in the available run/status results. Do not mark this regression check CI-verified until the actual run is inspected. The repository configuration also cannot prove the Vercel project's dashboard-level Git settings; those remain a separate external verification.
 
 No deployment, merge, or publication was performed. Artist-approved paintings/content, derivative generation and fidelity checks, and the easel approval gate remain outstanding.
+
+
+## Incremental implementation update — 2026-10-30 (mobile locale-switch dismissal)
+
+The mobile drawer's locale-switch link previously navigated to the alternate locale without explicitly closing the open drawer. Updated the shared shell so selecting the locale switch closes the drawer before navigation, matching the behavior of route links and preventing the old overlay from remaining visible during a locale transition.
+
+Added a Chromium end-to-end regression test that opens the English mobile drawer, selects Persian, verifies the /fa route and RTL document direction, and confirms the drawer is hidden.
+
+Implementation commits:
+- ce2912fefbbc9a688e7bd3b35114e6b2fce124bc — close the drawer on locale switch.
+- e2d3e8d38480574991c3be29739be5d1e6c35b74 — add the regression test.
+- 18109f76be68b34656e13f6074e01d8eca16664a — correct the route assertion.
+
+The preceding CI run for 8f541e75f0d464f28e03cfd11f648faefd66cbac passed all configured steps, including ESLint, TypeScript, content tests (including the Vercel deployment policy guard), production build, Chromium E2E, artifact upload, and production route smoke test. The new locale-switch regression run for 18109f76be68b34656e13f6074e01d8eca16664a was queued and had not yet reported a conclusion at the time of this update.
+
+No new artwork, biography, CV facts, gallery memberships, or Journal content were invented or published.
