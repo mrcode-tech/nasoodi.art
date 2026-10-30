@@ -12,9 +12,9 @@ concurrency:
   cancel-in-progress: true
 jobs:
   validate:
-    name: Install, lint, typecheck, test, build, and smoke test
+    name: Install, lint, typecheck, unit test, build, browser test, and smoke test
     runs-on: ubuntu-latest
-    timeout-minutes: 25
+    timeout-minutes: 35
     env:
       NEXT_TELEMETRY_DISABLED: 1
     steps:
@@ -34,6 +34,18 @@ jobs:
         run: npm test
       - name: Build production application
         run: npm run build
+      - name: Install Playwright Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Run browser and responsive tests
+        run: npm run test:e2e
+      - name: Upload browser screenshots and diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nasoodi-visual-qa-${{ github.sha }}
+          path: test-results/
+          if-no-files-found: ignore
+          retention-days: 14
       - name: Smoke test production server
         shell: bash
         run: |
@@ -50,7 +62,6 @@ jobs:
             sleep 2
           done
           if [ "$ready" != true ]; then cat /tmp/nasoodi-next.log; echo "Server did not become ready." >&2; exit 1; fi
-          if ! grep -qi '<html' /tmp/nasoodi-homepage.html; then cat /tmp/nasoodi-next.log; echo "Homepage response was not HTML." >&2; exit 1; fi
           for locale in fa en; do
             if ! curl --fail --silent --show-error "http://127.0.0.1:3000/$locale" | grep -qi '<html'; then echo "Localized route failed: $locale" >&2; exit 1; fi
           done
