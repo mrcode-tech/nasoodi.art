@@ -406,3 +406,31 @@ html[lang="fa"] .mobile-drawer[dir="rtl"] .nav-link {
     border-right: 1px solid var(--border);
   }
 }
+
+/* Responsive navigation layering follows the shadcn Sheet/Dialog portal pattern.
+   The modal surface must cover the fixed mobile header, including its top row. */
+@media (max-width: 900px) {
+  .sheet-overlay.menu-backdrop {
+    position: fixed;
+    z-index: 60;
+    inset: 0;
+  }
+  .sheet-content.mobile-drawer {
+    position: fixed;
+    z-index: 61;
+    inset-block: 0;
+    top: 0;
+    height: 100vh;
+    height: 100dvh;
+    max-height: 100vh;
+    max-height: 100dvh;
+    padding-top: max(1.25rem, env(safe-area-inset-top));
+    overscroll-behavior: contain;
+  }
+  .mobile-header { z-index: 50; }
+}
+@media (min-width: 901px) {
+  .mobile-header,
+  .sheet-overlay.menu-backdrop,
+  .sheet-content.mobile-drawer { display: none !important; }
+}
