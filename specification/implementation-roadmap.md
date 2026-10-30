@@ -152,3 +152,12 @@ The existing phases above must include the following concrete scope; these requi
 - Validate localized metadata, sitemap inclusion, Article/Event structured data, accessibility, and responsive performance.
 
 **Phase exit evidence:** desktop/mobile sidebar screenshots, homepage Journal section, Journal archive and filter states, article and event detail pages, Persian/English screenshots, schema/publication test results, SEO validation, and artist approval of all published entries and event facts.
+## Cross-phase design quality gate
+
+Every phase that changes user-facing UI must apply design-engineering-skills.md and design-direction-and-system-refinement.md. The quality gate is continuous, not a final styling phase.
+
+Before implementation: read the relevant design context, inspect current components/tokens/assets, and shape the intended composition and states.
+
+Before phase completion: review rendered output at desktop, tablet, mobile, and short-height viewports; verify Persian RTL and English LTR; test reduced motion, keyboard, and touch; compare artwork against approved masters; and record screenshots/findings. Do not mark a phase complete based only on code or CI success.
+
+No generic card-template fallback, unnecessary animation, invented content, or unapproved image treatment is acceptable as a shortcut.
