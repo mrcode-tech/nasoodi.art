@@ -174,3 +174,55 @@ Recommended internal workflow states:
 - `archived` — removed from primary selection but retained if approved.
 
 Only approved content may be published. The first implementation may represent these states through repository review rather than a CMS workflow.
+
+
+## 10. Curated gallery record
+
+A Gallery is a named, localized collection of published artwork. It is distinct from an artist-defined series, exhibition, or venue. One artwork may belong to multiple galleries without duplicating its canonical record.
+
+```ts
+type GalleryStatus = "draft" | "needs-artist-review" | "approved" | "published" | "archived";
+
+type Gallery = {
+  id: string;
+  slug: string;
+  title: LocalizedText;
+  description: LocalizedText;
+  coverArtworkId: string;
+  artworkIds: string[]; // curated order; no duplicates
+  sortOrder: number;
+  featuredOnHome?: boolean;
+  status: GalleryStatus;
+  seo?: { title?: LocalizedText; description?: LocalizedText };
+};
+
+type HomepageSelection = {
+  heroArtworkId: string;
+  featuredArtworkIds: string[];
+  featuredGalleryIds: string[];
+};
+```
+
+This is a conceptual contract; reconcile field names with the repository's existing types before implementation. Use one source of truth for artwork-gallery membership and preserve per-gallery order. Do not embed duplicate artwork records in galleries.
+
+### Gallery publication validation
+
+- IDs and slugs are unique and stable.
+- A published gallery has approved localized title and short description for each exposed locale.
+- Its cover artwork belongs to the gallery and is itself published, approved, and rights-cleared.
+- It contains at least one valid published artwork.
+- Every artwork reference resolves; no duplicate IDs occur within one gallery.
+- The public page, sitemap, and metadata exclude draft, review, archived, and empty galleries.
+- A gallery's removal or archival never deletes its artworks or original assets.
+
+### Homepage selection validation
+
+- Hero artwork, featured artwork, and featured gallery selections use canonical IDs, never filenames or array indexes.
+- Every selected item must be published and rights-approved.
+- Featured order is explicit and deterministic.
+- A hero artwork should not repeat in Featured Works unless the editorial configuration explicitly permits it.
+- A featured gallery must have a valid cover and at least one published artwork.
+
+### Gallery editorial fields
+
+Gallery title and description are separate approved Persian and English values. The description should be concise (normally one to three sentences), accurate, and written or approved by the artist. Do not invent titles, descriptions, themes, chronology, or artwork groupings from filenames or visual guesses.
