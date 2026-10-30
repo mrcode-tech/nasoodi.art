@@ -13,7 +13,7 @@ export async function generateMetadata({params}:Props):Promise<Metadata>{const {
   section==="galleries" ? getPublicGalleries(galleries,artworks,locale).length>0 :
   section==="journal" ? getPublicJournal(journalEntries,locale).length>0 :
   section==="cv" ? getPublicCvEntries(cvEntries,locale).length>0 : false;
- return {title:copyFor(locale)[section],robots:{index:indexable,follow:true}};}
+ return {title:copyFor(locale)[section],alternates:{canonical:pagePath(locale,section)},robots:{index:indexable,follow:true}};}
 export default async function SectionPage({params,searchParams}:Props){const [{locale,section},{category:rawCategory}]=await Promise.all([params,searchParams]);if(!isLocale(locale)||!valid(section))notFound();const t=copyFor(locale);
  if(section==="about")return <div className="page-content"><header className="page-heading"><p className="eyebrow">{t.about}</p><h1>{locale==="fa"?"غزاله عبداله زاده نسودی":"Ghazaleh Abdolahzade Nasoodi"}</h1><p className="artist-discipline">{t.discipline}</p></header><p className="empty-note">{t.profilePending}</p></div>;
  if(section==="contact")return <div className="page-content"><header className="page-heading"><p className="eyebrow">{t.contact}</p><h1>{t.contact}</h1></header><p className="empty-note">{t.contactPending}</p></div>;

@@ -74,3 +74,9 @@ test("robots and sitemap endpoints are available", async ({ request }) => {
   expect(sitemap.status()).toBe(200);
   expect(await sitemap.text()).toContain("https://nasoodi.art/fa");
 });
+
+test("filtered Journal URLs canonicalize to the localized archive and empty archives stay noindex", async ({ page }) => {
+  await page.goto("/en/journal?category=event");
+  await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", /\/en\/journal$/);
+  await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", /noindex/);
+});
