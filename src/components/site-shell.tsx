@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { alternatePathFor, copyFor, cvEntries, getPublicCvEntries, otherLocale, pagePath, type Locale } from "@/lib/site";
+import { alternatePathFor, copyFor, cvEntries, getPublicCvEntries, pagePath, type Locale } from "@/lib/site";
 import { Button } from "@/components/ui/button";
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar";
 import { Sheet, SheetClose, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
@@ -72,13 +72,13 @@ export function SiteShell({ locale, children }: { locale: Locale; children: Reac
           <SheetTitle className="sr-only">{labels.menu}</SheetTitle>
           <div className="drawer-heading"><Link ref={drawerHomeRef} className="mobile-wordmark" dir="ltr" href={pagePath(locale)}>Nasoodi<span>.</span></Link><SheetClose asChild><Button className="drawer-close" variant="ghost" size="sm" aria-label={labels.close}>×</Button></SheetClose></div>
           {navigation(true)}
-          <div className="drawer-settings"><span>{labels.language}</span><Link className="language-switch" href={alternate} hrefLang={otherLocale(locale)} onClick={() => setMobileOpen(false)}>{otherLocale(locale) === "fa" ? "فارسی" : "English"}</Link></div>
+          <div className="drawer-settings" dir={locale === "fa" ? "rtl" : "ltr"}><span>{labels.language}</span><LanguageSelector locale={locale} alternate={alternate} pathname={pathname} label={labels.language} onNavigate={() => setMobileOpen(false)}/></div>
           <div className="drawer-copyright" dir="ltr"><span>nasoodi.art</span><span>© {new Date().getFullYear()}</span></div>
         </SheetContent>
       </Sheet>
     </header>
 
-    <div className="desktop-utility" dir="ltr"><span>{labels.language}</span><LanguageSelector locale={locale} alternate={alternate} pathname={pathname} label={labels.language}/></div>
+    <div className="desktop-utility" dir={locale === "fa" ? "rtl" : "ltr"}><span className="language-label">{labels.language}</span><LanguageSelector locale={locale} alternate={alternate} pathname={pathname} label={labels.language}/></div>
     <div className="site-main"><main id="main-content">{children}</main></div>
   </>;
 }
