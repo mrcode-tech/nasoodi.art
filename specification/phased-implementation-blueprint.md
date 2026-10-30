@@ -613,3 +613,16 @@ Findings:
 - No artwork-fidelity review was possible because no approved painting record is rendered. Font licensing and final Persian/Latin font pairing remain open.
 
 This is a limited manual review of the listed routes, locales, and viewport sizes. It does not replace short-height, tablet, zoom/reflow, screen-reader, Firefox/Safari, real-device, or populated-artwork visual review.
+
+
+## Incremental implementation update — 2026-10-30 (mobile navigation keyboard regression coverage)
+
+Extended the mobile navigation regression suite to verify:
+- Escape dismisses the drawer and restores focus to the menu trigger.
+- Keyboard focus is trapped at both ends of the open modal drawer.
+- The drawer remains scrollable and usable on a short 320×568 viewport (covered by the existing short-height test).
+- An empty CV remains unpublished: the route returns 404, is not exposed in either locale's navigation, and therefore cannot be mistaken for a published CV.
+
+Verified on commit `71749ae10e9de3f9a5161657450471b56c1d1ca8`: [GitHub Actions run 41084829442](https://github.com/mrcode-tech/nasoodi.art/actions/runs/41084829442) passed ESLint, TypeScript, **24 content tests**, production build, **22 Chromium E2E tests**, screenshot/diagnostic artifact upload, and production route smoke test. A second run for the same SHA was still in progress at the time of this update; the successful run above completed all steps.
+
+This remains automated Chromium verification. Screen-reader announcements, real touch-device behavior, Firefox/Safari, zoom/reflow, and artist-approved populated pages remain open QA tasks.

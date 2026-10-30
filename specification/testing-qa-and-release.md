@@ -59,3 +59,9 @@ Required visual evidence:
 - Long titles, sparse content, empty Journal/event states, and mixed artwork ratios.
 
 A build passing lint/typecheck/build does not establish visual quality. Record what was actually inspected, the viewport/locale, findings, and unresolved artist approvals. Do not claim visual verification without rendered evidence.
+
+## Mobile navigation regression coverage — 2026-10-30
+
+The automated Chromium suite now covers drawer dismissal by close control, backdrop, route selection, and Escape; focus restoration to the trigger; keyboard focus trapping at both ends; RTL physical-left placement; and usability at a 320×568 short-height viewport. The same suite checks that an empty CV route remains unpublished and is not linked from either locale's navigation.
+
+Passing evidence: [GitHub Actions run 41084829442](https://github.com/mrcode-tech/nasoodi.art/actions/runs/41084829442), commit `71749ae10e9de3f9a5161657450471b56c1d1ca8`, 22 Chromium E2E tests and 24 content tests. These tests do not replace manual assistive-technology or real-device review.
