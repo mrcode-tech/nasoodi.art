@@ -101,8 +101,8 @@ Treat the supplied image as a **signature process/studio photograph** and a seco
 
 ### Recommended placements
 
-1. **Homepage hero — preferred:** use the photograph as a large editorial studio image paired with the artist's name and the concise role “Oil Painter”. On wide screens, use an asymmetrical split composition: text on a calm paper field and the photograph as the dominant visual.
-2. **About page — strong:** place it beside a short artist-approved introduction or statement excerpt. It gives visitors a human sense of the artist's practice without requiring a staged portrait.
+1. **About page — preferred:** place it beside a short artist-approved introduction or statement excerpt. It gives visitors a human sense of the artist's practice without requiring a staged portrait.
+2. **Homepage supporting content — optional:** it may appear as a secondary studio/process image only when the approved finished painting remains the primary hero artwork. It must not displace or visually overpower that painting.
 3. **Studio/process section — optional:** if more process photographs are supplied and approved, create a small editorial section. Do not invent a process narrative from this single image.
 4. **Social preview — conditional:** it may be used as an Open Graph image if the artist approves it for public promotion and the crop remains recognizable.
 
@@ -118,7 +118,7 @@ Treat the supplied image as a **signature process/studio photograph** and a seco
 ### Crop and responsive guidance
 
 - Preserve the native 3:4 portrait ratio wherever possible.
-- For the hero, prefer the full image with contain when the layout allows. If cover cropping is required, review the focal point manually at each breakpoint.
+- For any supporting studio/process placement, prefer the full image with contain when the layout allows. If cover cropping is required, review the focal point manually at each breakpoint.
 - Keep the artist and a meaningful area of canvas visible.
 - Avoid cutting off the brush/brush hand or making the artist appear detached from the canvas.
 - Keep enough of the upper canvas visible to communicate scale.
@@ -141,27 +141,20 @@ Use a restrained editorial layout with generous outer margins and a clear distin
 
 ~~~text
 ┌──────────────────────────────────────────────────────────────────────┐
-│ GHAZALEH NASOODI       WORKS   ABOUT   CV   CONTACT     فارسی | EN   │
+│ GHAZALEH NASOODI       WORKS  GALLERIES  JOURNAL  ABOUT   فارسی | EN │
 ├──────────────────────────────────────────────────────────────────────┤
-│                                                                      │
 │ GHAZALEH ABDOLAHZADE NASOODI       ┌──────────────────────────────┐ │
 │ Oil Painter                        │                              │ │
-│                                    │     STUDIO PHOTOGRAPH        │ │
-│ [Artist-approved short intro]      │     artist + canvas          │ │
+│ [Approved short introduction]      │    FINISHED PAINTING         │ │
+│ Explore works →                    │    full composition          │ │
 │                                    │                              │ │
-│ Explore selected works →           └──────────────────────────────┘ │
-│                                                                      │
-│ SELECTED WORKS                                                       │
-│ [Painting 01]       [Painting 02]       [Painting 03]                │
-│ Title / known metadata only                                          │
-│                                                                      │
-│ ABOUT / approved statement excerpt                Instagram ↗       │
-├──────────────────────────────────────────────────────────────────────┤
-│ CONTACT · LANGUAGE · COPYRIGHT                                      │
+│                                    └──────────────────────────────┘ │
+│ [Optional studio/process image lower on page or About]              │
+│ SELECTED WORKS · FEATURED GALLERIES · LATEST FROM THE JOURNAL         │
 └──────────────────────────────────────────────────────────────────────┘
 ~~~
 
-The hero should feel composed, not like a standard marketing banner. Give the studio photograph substantial scale and a quiet frame or no frame. Keep the artist's name in a clear typographic hierarchy. Avoid placing text over the photograph.
+The primary homepage hero must feature an artist-approved finished painting, as specified in homepage-artwork-hero-and-featured-works.md. This studio photograph is supporting process imagery only. Keep the artist's name in a clear typographic hierarchy and avoid placing text over artwork.
 
 ### 5.2 Mobile direction
 
@@ -174,8 +167,8 @@ The hero should feel composed, not like a standard marketing banner. Give the st
 │ [Short approved introduction]  │
 │                                │
 │ ┌────────────────────────────┐ │
-│ │     STUDIO PHOTOGRAPH      │ │
-│ │     full portrait ratio    │ │
+│ │    FINISHED PAINTING       │ │
+│ │    full composition        │ │
 │ └────────────────────────────┘ │
 │ Explore selected works →       │
 ├────────────────────────────────┤
