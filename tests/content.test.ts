@@ -24,3 +24,16 @@ test("homepage featured selection is explicit, ordered, unique, and publication-
  const selection={featuredArtworkIds:["w1","w1","hidden"],featuredGalleryIds:[]};
  assert.deepEqual(getHomepageFeaturedArtworks([work,{...work,id:"hidden",status:"draft"}],selection,"en").map(item=>item.id),["w1"]);
 });
+
+test("journal category defaults preserve legacy articles and event taxonomy",()=>{
+ const story:JournalEntry={id:"story",slug:"story",type:"article",title:{en:"Story",fa:"روایت"},summary:{en:"Summary",fa:"خلاصه"},status:"published"};
+ const exhibition:JournalEntry={...story,id:"exhibition",slug:"exhibition",category:"exhibition"};
+ const studio:JournalEntry={...story,id:"studio",slug:"studio",category:"studio-update"};
+ const event:JournalEntry={...story,id:"event",slug:"event",type:"event"};
+ const all=[story,exhibition,studio,event];
+ assert.deepEqual(getJournalEntriesForCategory(all,"story").map(x=>x.id),["story"]);
+ assert.deepEqual(getJournalEntriesForCategory(all,"exhibition").map(x=>x.id),["exhibition"]);
+ assert.deepEqual(getJournalEntriesForCategory(all,"studio-update").map(x=>x.id),["studio"]);
+ assert.deepEqual(getJournalEntriesForCategory(all,"event").map(x=>x.id),["event"]);
+ assert.equal(getJournalEntriesForCategory(all).length,4);
+});

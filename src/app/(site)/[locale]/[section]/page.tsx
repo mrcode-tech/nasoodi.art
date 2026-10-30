@@ -2,9 +2,9 @@ import Image from "next/image";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { artworks,galleries,journalEntries,cvEntries,getPublicArtworks,getPublicGalleries,getPublicJournal,getPublicCvEntries } from "@/lib/site";
+import { artworks,galleries,journalEntries,cvEntries,getPublicArtworks,getPublicGalleries,getPublicJournal,getPublicCvEntries,getJournalEntriesForCategory,journalCategories,type JournalCategory } from "@/lib/site";
 import { copyFor,isLocale,pagePath } from "@/lib/site";
-type Props={params:Promise<{locale:string;section:string}>};
+type Props={params:Promise<{locale:string;section:string}>;searchParams:Promise<{category?:string}>};
 const names=["works","galleries","journal","about","contact","cv"] as const;
 type Section=typeof names[number];
 const valid=(s:string):s is Section=>names.includes(s as Section);
@@ -14,11 +14,25 @@ export async function generateMetadata({params}:Props):Promise<Metadata>{const {
   section==="journal" ? getPublicJournal(journalEntries,locale).length>0 :
   section==="cv" ? getPublicCvEntries(cvEntries,locale).length>0 : false;
  return {title:copyFor(locale)[section],robots:{index:indexable,follow:true}};}
-export default async function SectionPage({params}:Props){const {locale,section}=await params;if(!isLocale(locale)||!valid(section))notFound();const t=copyFor(locale);
+export default async function SectionPage({params,searchParams}:Props){const [{locale,section},{category:rawCategory}]=await Promise.all([params,searchParams]);if(!isLocale(locale)||!valid(section))notFound();const t=copyFor(locale);
  if(section==="about")return <div className="page-content"><header className="page-heading"><p className="eyebrow">{t.about}</p><h1>{locale==="fa"?"غزاله عبداله زاده نسودی":"Ghazaleh Abdolahzade Nasoodi"}</h1><p className="artist-discipline">{t.discipline}</p></header><p className="empty-note">{t.profilePending}</p></div>;
  if(section==="contact")return <div className="page-content"><header className="page-heading"><p className="eyebrow">{t.contact}</p><h1>{t.contact}</h1></header><p className="empty-note">{t.contactPending}</p></div>;
  if(section==="cv"){const entries=getPublicCvEntries(cvEntries,locale);if(entries.length===0)notFound();return <div className="page-content"><header className="page-heading"><p className="eyebrow">{t.about}</p><h1>{t.cv}</h1></header><ol className="cv-list">{entries.map(entry=><li key={entry.id}><time>{entry.year}</time><div><strong>{entry.title[locale]}</strong>{entry.organization?.[locale]&&<span>{entry.organization[locale]}</span>}{entry.location?.[locale]&&<span>{entry.location[locale]}</span>}</div></li>)}</ol></div>;}
  if(section==="works"){const items=getPublicArtworks(artworks,locale);return <div className="page-content"><header className="page-heading"><p className="eyebrow">{t.portfolio}</p><h1>{t.works}</h1><p>{t.selectedIntro}</p></header>{items.length===0?<p className="empty-note">{t.emptyWorks}</p>:<div className="artwork-grid">{items.map(w=>{const img=w.images.find(x=>x.role==="primary");return img?<Link className="artwork-item" key={w.id} href={pagePath(locale,`works/${w.slug}`)}><Image sizes="(max-width: 600px) 100vw, (max-width: 900px) 90vw, 50vw" src={img.src} alt={img.alt[locale]??""} width={img.width} height={img.height}/><span>{w.title[locale]}</span></Link>:null;})}</div>}</div>;}
  if(section==="galleries"){const items=getPublicGalleries(galleries,artworks,locale);return <div className="page-content"><header className="page-heading"><p className="eyebrow">{t.portfolio}</p><h1>{t.galleries}</h1><p>{t.discover}</p></header>{items.length===0?<p className="empty-note">{t.emptyGalleries}</p>:<div className="gallery-list">{items.map(g=><Link className="gallery-list-item" key={g.id} href={pagePath(locale,`galleries/${g.slug}`)}>{g.title[locale]} ↗</Link>)}</div>}</div>;}
- const entries=getPublicJournal(journalEntries,locale);return <div className="page-content"><header className="page-heading"><p className="eyebrow">{t.portfolio}</p><h1>{t.journal}</h1></header>{entries.length===0?<p className="empty-note">{t.emptyJournal}</p>:<div className="journal-list">{entries.map(e=><Link className="journal-list-item" key={e.id} href={pagePath(locale,`journal/${e.slug}`)}>{e.title[locale]}</Link>)}</div>}</div>;
+ const entries=getPublicJournal(journalEntries,locale);
+ const selectedCategory=journalCategories.includes(rawCategory as JournalCategory)?rawCategory as JournalCategory:undefined;
+ const visibleEntries=getJournalEntriesForCategory(entries,selectedCategory);
+ const filters:[string,string,JournalCategory|undefined][]=[
+  ["all",t.journalAll,undefined],["exhibition",t.journalExhibitions,"exhibition"],["event",t.journalEvents,"event"],["studio-update",t.journalStudio,"studio-update"],["story",t.journalStories,"story"]
+ ];
+ const dateLabel=(value:string)=>new Intl.DateTimeFormat(locale,{dateStyle:"long",timeZone:"UTC"}).format(new Date(value));
+ return <div className="page-content"><header className="page-heading"><p className="eyebrow">{t.portfolio}</p><h1>{t.journal}</h1></header>
+  {entries.length>0&&<nav className="journal-filters" aria-label={locale==="fa"?"دسته‌بندی یادداشت‌ها":"Journal categories"}>{filters.map(([key,label,value])=><Link key={key} className="journal-filter" href={value?pagePath(locale,"journal")+ "?category="+value:pagePath(locale,"journal")} aria-current={(selectedCategory??"all")===key?"page":undefined}>{label}</Link>)}</nav>}
+  {entries.length===0?<p className="empty-note">{t.emptyJournal}</p>:visibleEntries.length===0?<p className="empty-note" role="status">{t.journalNoMatches}</p>:<div className="journal-cards">{visibleEntries.map(entry=><article className="journal-card" key={entry.id}>
+   <div className="journal-card-meta"><span>{filters.find(([, ,value])=>value===(entry.type==="event"?"event":entry.category??"story"))?.[1]}</span>{entry.publishedAt&&Number.isFinite(Date.parse(entry.publishedAt))&&<time dateTime={entry.publishedAt}>{t.published}: {dateLabel(entry.publishedAt)}</time>}</div>
+   <h2><Link href={pagePath(locale,`journal/${entry.slug}`)}>{entry.title[locale]}</Link></h2><p>{entry.summary[locale]}</p>
+   {entry.type==="event"&&entry.event&&<p className="journal-event-date"><time dateTime={entry.event.startsAt}>{dateLabel(entry.event.startsAt)}</time></p>}
+   <Link className="text-link" href={pagePath(locale,`journal/${entry.slug}`)}>{t.readMore} ↗</Link>
+  </article>)}</div>}</div>;
 }
