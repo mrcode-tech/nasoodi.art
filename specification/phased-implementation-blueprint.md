@@ -492,3 +492,26 @@ This update records code and CI evidence from the latest feature-branch work. It
 - `59c9cf042d126ea861999cec3f7945db4f2c6c1d` — E2E assertion aligned with the specified locale fallback.
 
 The latest verified application commit is `59c9cf042d126ea861999cec3f7945db4f2c6c1d`. This progress record must be kept separate from artist approval and publication readiness.
+
+
+## Incremental implementation update — 2026-10-30 (homepage event selection and event-local time)
+
+This update records the next verified feature-branch increment. It does not mark the site or release as complete.
+
+| Area | Change | Verification | Remaining gate |
+|---|---|---|---|
+| Homepage / Journal | Added a publication-gated upcoming-event selector. It chooses the nearest future event by its occurrence instant, requires the existing published/artist-approved/locale-approved event contract, and presents it as the lead item before up to two recent Journal entries. Expired events are not presented as upcoming. | Unit test covers chronological selection, expired-event exclusion, and locale approval. | No approved Journal/event records exist yet, so populated event rendering and editorial acceptance remain unverified. |
+| Journal event dates | Archive event dates now format in the event's declared IANA time zone and show that zone; event details also show the zone and optional end time. Publication dates retain their separate UTC formatting. | ESLint, TypeScript, content tests, production build, 11 Chromium E2E tests, and production route smoke test passed together. | Verify populated event cards and detail pages in both locales when approved events are supplied. |
+| CI / visual evidence | Successful GitHub Actions run [41068529735](https://github.com/mrcode-tech/nasoodi.art/actions/runs/41068529735) on commit `6e3e2b0718ac35683dcb662a872c0c397ff32569`. | 14 content tests passed; 11 Chromium E2E tests passed; lint, typecheck, build, screenshot upload, and smoke test passed. Visual QA artifact: `nasoodi-visual-qa-77c4b67d940cef33581b1bfdf23f0b4d8aa8bf41` (artifact ID `12984895625`). | Existing screenshots exercise empty-content and shell states; they cannot visually validate an event card until real approved event content is present. |
+
+### Recent implementation commits
+
+- `23ab175c8f559311c4a884a4d9eadaa55c0b01df` — upcoming Journal event selection and homepage presentation.
+- `befa5415ad3635b99760b80148cacc825cf97f58` — Journal archive/detail event-local time-zone presentation.
+- `6e3e2b0718ac35683dcb662a872c0c397ff32569` — corrected Journal event-card JSX and verified the complete CI pipeline.
+
+The first CI attempt for the event-local time-zone presentation caught a JSX grouping error. That defect was corrected in the final commit above; the successful run is the evidence of the corrected state. The duplicate CI run triggered for the same commits is not needed to establish the passing result.
+
+### Publication and release blockers
+
+The approved homepage painting, published artwork/gallery records, CV facts, artist statement/biography, public contact destination, Journal entries/event facts, image rights, and easel-use approval remain owner/artist decisions. The Light/Dark/System selector remains unresolved against the conflicting design authorities. Do not fill these gaps with invented content or unapproved imagery. No merge, deployment, or publication is authorized by this progress update.
