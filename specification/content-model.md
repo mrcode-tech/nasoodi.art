@@ -281,3 +281,8 @@ Use the shared design contract in design-engineering-skills.md and design-direct
 ## Artwork image source-path validation
 
 Artwork image records reference same-origin public assets using root-relative paths. External absolute URLs, protocol-relative URLs, backslash paths, query/fragment-bearing sources, control characters, and encoded or literal traversal/separator segments are rejected before an image can qualify as the public primary artwork image. This keeps the portfolio's image pipeline tied to repository-controlled, approved masters/derivatives rather than arbitrary remote hosts. Rights and artist approval remain separate mandatory publication gates.
+
+
+## Public identity and route integrity
+
+Before publication, artwork, gallery, and Journal records must have a non-empty stable ID and a single-segment Unicode-letter/number slug (hyphen-separated). Public records with duplicate IDs or duplicate slugs in the same locale are excluded rather than allowing ambiguous routes or silently selecting one record. CV entries likewise require unique non-empty IDs. This validation runs after publication, rights, and locale-completeness checks, so drafts do not reserve public identities.

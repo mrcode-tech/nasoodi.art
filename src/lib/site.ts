@@ -170,17 +170,36 @@ export function primaryImageFor(work: Artwork) {
   return work.images.find((image) => image.role === "primary" && isSafeLocalImagePath(image.src) &&
     image.width > 0 && image.height > 0);
 }
+function keepUniqueBy<T>(items: T[], keyOf: (item: T) => string): T[] {
+  const counts = new Map<string, number>();
+  for (const item of items) {
+    const key = keyOf(item);
+    counts.set(key, (counts.get(key) ?? 0) + 1);
+  }
+  return items.filter((item) => {
+    const key = keyOf(item);
+    return Boolean(key.trim()) && counts.get(key) === 1;
+  });
+}
+export function isSafeContentSlug(slug: string): boolean {
+  return /^[\\p{L}\\p{N}]+(?:-[\\p{L}\\p{N}]+)*$/u.test(slug);
+}
 export function getPublicArtworks(items: Artwork[], locale: Locale) {
-  return items.filter((work) => work.status === "published" && work.rightsConfirmed &&
-    Boolean(work.title[locale]?.trim()) && Boolean(primaryImageFor(work)?.alt[locale]?.trim()))
+  const visible = items.filter((work) => work.status === "published" && work.rightsConfirmed &&
+    Boolean(work.id.trim()) && isSafeContentSlug(work.slug) &&
+    Boolean(work.title[locale]?.trim()) && Boolean(primaryImageFor(work)?.alt[locale]?.trim()));
+  return keepUniqueBy(keepUniqueBy(visible, (work) => work.id), (work) => work.slug)
     .sort((a,b) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0));
 }
 export function getPublicGalleries(items: Gallery[], works: Artwork[], locale: Locale) {
   const ids = new Set(getPublicArtworks(works, locale).map((work) => work.id));
-  return items.filter((g) => g.status === "published" && Boolean(g.title[locale]?.trim()) &&
+  const visible = items.filter((g) => g.status === "published" && Boolean(g.id.trim()) &&
+    isSafeContentSlug(g.slug) && Boolean(g.title[locale]?.trim()) &&
     Boolean(g.description[locale]?.trim()) && g.artworkIds.length > 0 &&
     new Set(g.artworkIds).size === g.artworkIds.length && g.artworkIds.includes(g.coverArtworkId) &&
-    g.artworkIds.every((id) => ids.has(id))).sort((a,b) => a.sortOrder-b.sortOrder);
+    g.artworkIds.every((id) => ids.has(id)));
+  return keepUniqueBy(keepUniqueBy(visible, (gallery) => gallery.id), (gallery) => gallery.slug)
+    .sort((a,b) => a.sortOrder-b.sortOrder);
 }
 export function getGalleryCoverArtwork(gallery: Gallery, works: Artwork[], locale: Locale) {
   const cover = getPublicArtworks(works, locale).find((work) => work.id === gallery.coverArtworkId);
@@ -190,8 +209,9 @@ export function hasExplicitTimeZone(value: string): boolean {
   return /(?:Z|[+-]\d{2}:\d{2})$/i.test(value) && Number.isFinite(Date.parse(value));
 }
 export function getPublicJournal(items: JournalEntry[], locale: Locale) {
-  return items.filter((entry) => {
-    if (entry.status !== "published" || !entry.artistApproved || !entry.approvedLocales.includes(locale) || !entry.title[locale]?.trim() || !entry.summary[locale]?.trim()) return false;
+  const visible = items.filter((entry) => {
+    if (entry.status !== "published" || !entry.artistApproved || !entry.approvedLocales.includes(locale) ||
+      !entry.id.trim() || !isSafeContentSlug(entry.slug) || !entry.title[locale]?.trim() || !entry.summary[locale]?.trim()) return false;
     if (entry.type !== "event") return true;
     const event = entry.event;
     if (!event || !hasExplicitTimeZone(event.startsAt) || !event.timeZone ||
@@ -202,7 +222,9 @@ export function getPublicJournal(items: JournalEntry[], locale: Locale) {
       try { if (new URL(event.registrationUrl).protocol !== "https:") return false; } catch { return false; }
     }
     return true;
-  }).sort((a,b) => (b.publishedAt ?? "").localeCompare(a.publishedAt ?? ""));
+  });
+  return keepUniqueBy(keepUniqueBy(visible, (entry) => entry.id), (entry) => entry.slug)
+    .sort((a,b) => (b.publishedAt ?? "").localeCompare(a.publishedAt ?? ""));
 }
 export function getUpcomingJournalEvents(items: JournalEntry[], locale: Locale, now: Date = new Date()) {
   const nowMs = now.getTime();
@@ -211,8 +233,10 @@ export function getUpcomingJournalEvents(items: JournalEntry[], locale: Locale, 
     .sort((a, b) => Date.parse(a.event!.startsAt) - Date.parse(b.event!.startsAt));
 }
 export function getPublicCvEntries(items: CvEntry[], locale: Locale) {
-  return items.filter((entry) => entry.status === "published" && entry.verified &&
-    Boolean(entry.title[locale]?.trim()) && Number.isInteger(entry.year) && entry.year > 0)
+  const visible = items.filter((entry) => entry.status === "published" && entry.verified &&
+    Boolean(entry.id.trim()) && Boolean(entry.title[locale]?.trim()) &&
+    Number.isInteger(entry.year) && entry.year > 0);
+  return keepUniqueBy(visible, (entry) => entry.id)
     .sort((a,b) => b.year - a.year || (a.sortOrder ?? 0) - (b.sortOrder ?? 0));
 }
 export function getPublicArtistProfile(profile: ArtistProfile | undefined, locale: Locale) {
@@ -221,7 +245,7 @@ export function getPublicArtistProfile(profile: ArtistProfile | undefined, local
       !profile.biography[locale]?.trim()) return undefined;
   const portrait = profile.portrait;
   const validPortrait = portrait && portrait.rightsConfirmed && portrait.width > 0 && portrait.height > 0 &&
-    portrait.src.startsWith("/") && !portrait.src.startsWith("//") && Boolean(portrait.alt[locale]?.trim());
+    isSafeLocalImagePath(portrait.src) && Boolean(portrait.alt[locale]?.trim());
   return { ...profile, portrait: validPortrait ? portrait : undefined };
 }
 export function getPublicContactDetails(details: ContactDetails | undefined, locale: Locale) {

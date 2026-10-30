@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { getPublicArtworks,getPublicGalleries,isSafeLocalImagePath,getPublicJournal,getPublicCvEntries,getPublicArtistProfile,getPublicContactDetails,getUpcomingJournalEvents,getArtworkStructuredData,getGalleryStructuredData,getJournalStructuredData,serializeJsonLd,getHomepageFeaturedArtworks,getGalleryCoverArtwork,getJournalEntriesForCategory,isSafeJournalHref,portfolioStructuredData,type Artwork,type Gallery,type JournalEntry,type CvEntry,type ArtistProfile,type ContactDetails, hasExplicitTimeZone } from "../src/lib/site";
+import { getPublicArtworks,getPublicGalleries,isSafeLocalImagePath,isSafeContentSlug,getPublicJournal,getPublicCvEntries,getPublicArtistProfile,getPublicContactDetails,getUpcomingJournalEvents,getArtworkStructuredData,getGalleryStructuredData,getJournalStructuredData,serializeJsonLd,getHomepageFeaturedArtworks,getGalleryCoverArtwork,getJournalEntriesForCategory,isSafeJournalHref,portfolioStructuredData,type Artwork,type Gallery,type JournalEntry,type CvEntry,type ArtistProfile,type ContactDetails, hasExplicitTimeZone } from "../src/lib/site";
 const work:Artwork={id:"w1",slug:"work-one",title:{en:"Work",fa:"اثر"},images:[{src:"/art/work.jpg",alt:{en:"Painting",fa:"نقاشی"},role:"primary",width:1200,height:900}],rightsConfirmed:true,status:"published"};
 test("artwork stays private until published and rights-cleared",()=>{assert.equal(getPublicArtworks([{...work,status:"needs-review"}],"en").length,0);assert.equal(getPublicArtworks([{...work,rightsConfirmed:false}],"en").length,0);assert.equal(getPublicArtworks([work],"en").length,1);});
 test("artwork requires localized title and primary image alt",()=>{assert.equal(getPublicArtworks([{...work,title:{en:"Work"}}],"fa").length,0);assert.equal(getPublicArtworks([{...work,images:[{...work.images[0],alt:{en:""}}]}],"en").length,0);});
@@ -189,4 +189,20 @@ test("artwork images must use safe same-origin public paths",()=>{
   assert.equal(isSafeLocalImagePath(path),false,path);
  }
  assert.equal(isSafeLocalImagePath("/artworks/painting%20one.jpg"),true);
+});
+
+test("published route records reject unsafe slugs and duplicate public identities",()=>{
+ assert.equal(isSafeContentSlug("work-one"),true);
+ assert.equal(isSafeContentSlug("اثر-اول"),true);
+ for(const slug of ["../private","two/segments","work?preview=1","work#fragment","work_name",""])assert.equal(isSafeContentSlug(slug),false,slug);
+ const duplicateSlug:Artwork={...work,id:"w2",slug:work.slug,title:{en:"Duplicate",fa:"تکراری"}};
+ const duplicateId:Artwork={...work,slug:"another-slug"};
+ assert.equal(getPublicArtworks([work,duplicateSlug],"en").length,0);
+ assert.equal(getPublicArtworks([work,duplicateId],"en").length,0);
+ const gallery:Gallery={id:"g1",slug:"gallery",title:{en:"Gallery",fa:"گالری"},description:{en:"Description",fa:"توضیح"},coverArtworkId:"w1",artworkIds:["w1"],status:"published",sortOrder:1};
+ assert.equal(getPublicGalleries([gallery,{...gallery,id:"g2"}],[work],"en").length,0);
+ const story:JournalEntry={id:"j1",slug:"story",type:"story",title:{en:"Story"},summary:{en:"Summary"},status:"published",approvedLocales:["en"],artistApproved:true};
+ assert.equal(getPublicJournal([story,{...story,id:"j2"}],"en").length,0);
+ const cv:CvEntry={id:"cv1",category:"education",title:{en:"Education"},year:2020,verified:true,status:"published"};
+ assert.equal(getPublicCvEntries([cv,cv],"en").length,0);
 });
