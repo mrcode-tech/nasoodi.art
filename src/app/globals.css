@@ -378,3 +378,31 @@ html[lang="fa"] .mobile-drawer[dir="rtl"] .nav-link {
   html[lang="en"] .mobile-header { flex-direction: row-reverse; }
   html[lang="fa"] .mobile-header { flex-direction: row; }
 }
+
+/* Desktop utility bar follows the same opaque surface treatment as the mobile header.
+   It occupies its own reserved row so fixed language controls never overlap page copy. */
+@media (min-width: 901px) {
+  .desktop-utility {
+    position: fixed;
+    top: 0;
+    left: var(--sidebar);
+    right: 0;
+    width: auto;
+    min-height: 4.75rem;
+    box-sizing: border-box;
+    justify-content: flex-end;
+    padding: 0 clamp(2rem, 5vw, 5rem);
+    background: var(--paper);
+    border-bottom: 1px solid var(--border);
+    color: var(--muted);
+    z-index: 25;
+  }
+  .site-main { padding-top: 4.75rem; }
+  html[lang="fa"] .desktop-utility {
+    left: 0;
+    right: var(--sidebar);
+    justify-content: flex-start;
+    border-left: 0;
+    border-right: 1px solid var(--border);
+  }
+}
