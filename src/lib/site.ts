@@ -41,6 +41,10 @@ export function getPublicGalleries(items: Gallery[], works: Artwork[], locale: L
     new Set(g.artworkIds).size === g.artworkIds.length && g.artworkIds.includes(g.coverArtworkId) &&
     g.artworkIds.every((id) => ids.has(id))).sort((a,b) => a.sortOrder-b.sortOrder);
 }
+export function getGalleryCoverArtwork(gallery: Gallery, works: Artwork[], locale: Locale) {
+  const cover = getPublicArtworks(works, locale).find((work) => work.id === gallery.coverArtworkId);
+  return cover ? primaryImageFor(cover) ? { artwork: cover, image: primaryImageFor(cover)! } : undefined : undefined;
+}
 export function getPublicJournal(items: JournalEntry[], locale: Locale) {
   return items.filter((entry) => {
     if (entry.status !== "published" || !entry.title[locale]?.trim() || !entry.summary[locale]?.trim()) return false;

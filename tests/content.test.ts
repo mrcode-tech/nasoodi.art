@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { getPublicArtworks,getPublicGalleries,getPublicJournal,getPublicCvEntries,getHomepageFeaturedArtworks,type Artwork,type Gallery,type JournalEntry,type CvEntry } from "../src/lib/site";
+import { getPublicArtworks,getPublicGalleries,getPublicJournal,getPublicCvEntries,getHomepageFeaturedArtworks,getGalleryCoverArtwork,type Artwork,type Gallery,type JournalEntry,type CvEntry } from "../src/lib/site";
 const work:Artwork={id:"w1",slug:"work-one",title:{en:"Work",fa:"اثر"},images:[{src:"/art/work.jpg",alt:{en:"Painting",fa:"نقاشی"},role:"primary",width:1200,height:900}],rightsConfirmed:true,status:"published"};
 test("artwork stays private until published and rights-cleared",()=>{assert.equal(getPublicArtworks([{...work,status:"needs-review"}],"en").length,0);assert.equal(getPublicArtworks([{...work,rightsConfirmed:false}],"en").length,0);assert.equal(getPublicArtworks([work],"en").length,1);});
 test("artwork requires localized title and primary image alt",()=>{assert.equal(getPublicArtworks([{...work,title:{en:"Work"}}],"fa").length,0);assert.equal(getPublicArtworks([{...work,images:[{...work.images[0],alt:{en:""}}]}],"en").length,0);});
@@ -36,4 +36,11 @@ test("journal category defaults preserve legacy articles and event taxonomy",()=
  assert.deepEqual(getJournalEntriesForCategory(all,"studio-update").map(x=>x.id),["studio"]);
  assert.deepEqual(getJournalEntriesForCategory(all,"event").map(x=>x.id),["event"]);
  assert.equal(getJournalEntriesForCategory(all).length,4);
+});
+
+test("gallery cover resolves only to a public locale-ready canonical artwork",()=>{
+ const gallery:Gallery={id:"g1",slug:"gallery",title:{en:"Gallery",fa:"گالری"},description:{en:"Description",fa:"توضیح"},coverArtworkId:"w1",artworkIds:["w1"],status:"published",sortOrder:1};
+ assert.equal(getGalleryCoverArtwork(gallery,[work],"en")?.artwork.id,"w1");
+ assert.equal(getGalleryCoverArtwork(gallery,[{...work,rightsConfirmed:false}],"en"),undefined);
+ assert.equal(getGalleryCoverArtwork(gallery,[{...work,title:{en:"Work"}}],"fa"),undefined);
 });

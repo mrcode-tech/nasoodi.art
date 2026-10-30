@@ -58,3 +58,13 @@ html[lang=fa] .journal-card h2{font-family:Tahoma,Arial,sans-serif;line-height:1
 .journal-event-date{font-size:.85rem}
 @media(max-width:700px){.journal-cards{grid-template-columns:1fr}.journal-filters{gap:.4rem}.journal-filter{min-height:2.5rem;padding:.45rem .75rem}}
 @media(prefers-reduced-motion:reduce){.journal-filter{transition:none}}
+
+/* Gallery discovery uses the canonical approved cover artwork record. */
+.gallery-cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(1.5rem,3vw,3rem)}
+.gallery-card{display:flex;min-width:0;flex-direction:column;gap:1rem}
+.gallery-card>img{display:block;width:100%;height:auto;max-height:34rem;object-fit:contain;background:var(--muted-surface)}
+.gallery-card-copy{display:flex;flex-direction:column;gap:.45rem}
+.gallery-card-copy strong{font:400 clamp(1.25rem,2.2vw,1.8rem)/1.35 Georgia,"Times New Roman",serif}
+html[lang=fa] .gallery-card-copy strong{font-family:Tahoma,Arial,sans-serif;line-height:1.65}
+.gallery-card-copy>span{color:var(--muted);font-size:.9rem;line-height:1.8}
+@media(max-width:700px){.gallery-cards{grid-template-columns:1fr}}

@@ -2,7 +2,7 @@ import Image from "next/image";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { artworks,galleries,journalEntries,homepageSelection,getPublicJournal,getHomepageHero,getHomepageFeaturedArtworks,getHomepageFeaturedGalleries } from "@/lib/site";
+import { artworks,galleries,journalEntries,homepageSelection,getPublicJournal,getHomepageHero,getHomepageFeaturedArtworks,getHomepageFeaturedGalleries,getGalleryCoverArtwork } from "@/lib/site";
 import { copyFor,isLocale,pagePath } from "@/lib/site";
 type Props={params:Promise<{locale:string}>};
 export async function generateMetadata({params}:Props):Promise<Metadata>{const {locale}=await params;if(!isLocale(locale))return {};
@@ -28,7 +28,7 @@ export default async function Home({params}:Props){const {locale}=await params;i
    {works.length===0?<p className="empty-note">{t.emptyWorks}</p>:<div className="artwork-grid">{works.slice(0,4).map(w=>{const img=w.images.find(x=>x.role==="primary");return img?<Link className="artwork-item" key={w.id} href={pagePath(locale,`works/${w.slug}`)}><Image sizes="(max-width: 600px) 100vw, (max-width: 900px) 90vw, 50vw" src={img.src} alt={img.alt[locale]??""} width={img.width} height={img.height}/><span>{w.title[locale]}</span></Link>:null;})}</div>}
   </section>
   <section className="editorial-section" aria-labelledby="featured-galleries"><div className="section-heading"><div><p className="eyebrow">{t.discover}</p><h2 id="featured-galleries">{t.galleries}</h2></div><Link className="text-link" href={pagePath(locale,"galleries")}>{t.discover} ↗</Link></div>
-   {sets.length===0?<p className="empty-note">{t.emptyGalleries}</p>:<div className="gallery-list">{sets.map(g=><Link className="gallery-list-item" key={g.id} href={pagePath(locale,`galleries/${g.slug}`)}>{g.title[locale]} ↗</Link>)}</div>}
+   {sets.length===0?<p className="empty-note">{t.emptyGalleries}</p>:<div className="gallery-cards">{sets.map(g=>{const cover=getGalleryCoverArtwork(g,artworks,locale);return <Link className="gallery-card" key={g.id} href={pagePath(locale,`galleries/${g.slug}`)}>{cover&&<Image sizes="(max-width: 700px) 100vw, 42vw" src={cover.image.src} alt={cover.image.alt[locale]??""} width={cover.image.width} height={cover.image.height}/>}<span className="gallery-card-copy"><strong>{g.title[locale]}</strong><span>{g.description[locale]}</span></span></Link>;})}</div>}
   </section>
   <section className="editorial-section" aria-labelledby="latest-journal"><div className="section-heading"><div><p className="eyebrow">{t.latest}</p><h2 id="latest-journal">{t.journal}</h2></div><Link className="text-link" href={pagePath(locale,"journal")}>{t.journal} ↗</Link></div>
    {journal.length===0?<p className="empty-note">{t.emptyJournal}</p>:<div className="journal-list">{journal.map(j=><Link className="journal-list-item" key={j.id} href={pagePath(locale,`journal/${j.slug}`)}>{j.title[locale]}</Link>)}</div>}
