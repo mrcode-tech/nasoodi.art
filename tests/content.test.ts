@@ -26,7 +26,7 @@ test("homepage featured selection is explicit, ordered, unique, and publication-
 });
 
 test("journal category defaults preserve legacy articles and event taxonomy",()=>{
- const story:JournalEntry={id:"story",slug:"story",type:"article",title:{en:"Story",fa:"روایت"},summary:{en:"Summary",fa:"خلاصه"},status:"published"};
+ const story:JournalEntry={id:"story",slug:"story",type:"story",title:{en:"Story",fa:"روایت"},summary:{en:"Summary",fa:"خلاصه"},status:"published"};
  const exhibition:JournalEntry={...story,id:"exhibition",slug:"exhibition",type:"exhibition"};
  const studio:JournalEntry={...story,id:"studio",slug:"studio",type:"studio-update"};
  const event:JournalEntry={...story,id:"event",slug:"event",type:"event"};
