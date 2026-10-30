@@ -491,3 +491,47 @@ test("navigation underlines fit their labels and the mobile trigger has no outli
   const trigger = page.locator(".menu-trigger");
   await expect(trigger).toHaveCSS("border-top-width", "0px");
 });
+
+
+test("Persian language label sits to the right of its selector in desktop utility and mobile drawer", async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await page.goto("/fa");
+  const desktopControl = page.locator(".desktop-utility");
+  const desktopLabel = desktopControl.locator(".language-label");
+  const desktopSelector = desktopControl.getByRole("button", { name: "زبان" });
+  const desktopGeometry = await Promise.all([desktopLabel.boundingBox(), desktopSelector.boundingBox()]);
+  expect(desktopGeometry[0]).not.toBeNull();
+  expect(desktopGeometry[1]).not.toBeNull();
+  expect(desktopGeometry[0]!.x).toBeGreaterThan(desktopGeometry[1]!.x + desktopGeometry[1]!.width);
+
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/fa");
+  await page.getByRole("button", { name: "باز کردن راهبری" }).click();
+  const drawer = page.getByRole("dialog", { name: "باز کردن راهبری" });
+  const drawerSettings = drawer.locator(".drawer-settings");
+  const drawerLabel = drawerSettings.locator("> span");
+  const drawerSelector = drawerSettings.getByRole("button", { name: "زبان" });
+  const drawerGeometry = await Promise.all([drawerLabel.boundingBox(), drawerSelector.boundingBox()]);
+  expect(drawerGeometry[0]).not.toBeNull();
+  expect(drawerGeometry[1]).not.toBeNull();
+  expect(drawerGeometry[0]!.x).toBeGreaterThan(drawerGeometry[1]!.x + drawerGeometry[1]!.width);
+  await drawerSelector.click();
+  await expect(drawer.getByRole("menuitem", { name: /English/ })).toBeVisible();
+  await expect(drawer.getByRole("menuitem", { name: /فارسی/ })).toBeVisible();
+});
+
+test("navigation icon and language buttons use borderless minimal chrome", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/fa");
+  const menuButton = page.locator(".menu-trigger");
+  await expect(menuButton).toHaveCSS("border-top-width", "0px");
+  await expect(menuButton).toHaveCSS("border-right-width", "0px");
+  await menuButton.click();
+  const drawer = page.getByRole("dialog", { name: "باز کردن راهبری" });
+  const closeButton = drawer.locator(".drawer-close");
+  await expect(closeButton).toHaveCSS("border-top-width", "0px");
+  await expect(closeButton).toHaveCSS("border-right-width", "0px");
+  const languageButton = drawer.getByRole("button", { name: "زبان" });
+  await expect(languageButton).toHaveCSS("border-top-width", "0px");
+  await expect(languageButton).toHaveCSS("border-right-width", "0px");
+});
