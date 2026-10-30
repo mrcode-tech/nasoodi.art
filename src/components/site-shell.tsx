@@ -36,11 +36,11 @@ export function SiteShell({ locale, children }: { locale: Locale; children: Reac
   ];
   if (getPublicCvEntries(cvEntries, locale).length > 0) links.splice(5, 0, ["cv", labels.cv, pagePath(locale, "cv")]);
 
-  const navigation = (insideSheet = false) => <nav aria-label={locale === "fa" ? "راهبری اصلی" : "Primary navigation"}>
+  const navigation = (insideSheet = false) => <nav dir={locale === "fa" ? "rtl" : "ltr"} aria-label={locale === "fa" ? "راهبری اصلی" : "Primary navigation"}>
     <SidebarMenu className="nav-list">
       {links.map(([key, label, href]) => {
         const active = key === "home" ? pathname === href : pathname === href || pathname.startsWith(href + "/");
-        return <SidebarMenuItem key={key}><SidebarMenuButton><Link className="nav-link" dir="auto" href={href} aria-current={active ? "page" : undefined} onClick={() => insideSheet && setMobileOpen(false)}>{label}</Link></SidebarMenuButton></SidebarMenuItem>;
+        return <SidebarMenuItem key={key}><SidebarMenuButton><Link className="nav-link" dir={locale === "fa" ? "rtl" : "ltr"} href={href} aria-current={active ? "page" : undefined} onClick={() => insideSheet && setMobileOpen(false)}>{label}</Link></SidebarMenuButton></SidebarMenuItem>;
       })}
     </SidebarMenu>
   </nav>;
