@@ -127,3 +127,28 @@ The existing phases above must include the following concrete scope; these requi
 - Add route, schema, SEO, sitemap, accessibility, and visual tests for galleries and artwork details.
 
 **Phase exit evidence:** screenshots of homepage, gallery index, at least two distinct gallery detail pages when two approved galleries exist, artwork detail, both locales, and responsive breakpoints; automated validation results; asset manifest and outstanding artist approvals.
+
+## Journal and events extension
+
+### Extend Phase 0 — Editorial and event content audit
+- Confirm the first artist-approved Journal entries, content types, Persian/English copy, cover-image rights, and related artwork/gallery references.
+- For events, verify date/time, time zone, venue/location, attendance mode, registration destination, and whether each fact is approved for public display.
+- Confirm the editorial publishing workflow and whether scheduled publication is needed.
+
+### Extend Phase 1 — Shared navigation and content contracts
+- Add Journal to the shared desktop sidebar and mobile off-canvas navigation.
+- Define validated localized Journal entry types and publication states.
+- Ensure Journal is active for both index and detail routes; do not add a separate Events navigation item.
+
+### Extend Phase 2 — Homepage
+- Add Latest from the Journal after Featured Works and Featured Galleries.
+- Feature an eligible upcoming event when available, then recent published entries.
+- Provide a direct View all journal entries link to the Journal index.
+- Omit the section when no approved published content exists.
+
+### Add Journal delivery phase after core content routes are stable
+- Implement the Journal archive, type filters, article/event detail templates, publication visibility rules, and related artwork/gallery links.
+- Add date/time-zone handling and event temporal states without changing editorial publication status.
+- Validate localized metadata, sitemap inclusion, Article/Event structured data, accessibility, and responsive performance.
+
+**Phase exit evidence:** desktop/mobile sidebar screenshots, homepage Journal section, Journal archive and filter states, article and event detail pages, Persian/English screenshots, schema/publication test results, SEO validation, and artist approval of all published entries and event facts.
