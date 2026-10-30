@@ -1,26 +1,35 @@
-name: CI
+name: Nasoodi.art CI
 
 on:
   push:
     branches:
+      - feature
+      - stage
       - main
   pull_request:
     branches:
+      - feature
+      - stage
       - main
+  workflow_dispatch:
 
 permissions:
   contents: read
 
+# Keep runs independent per branch/PR while cancelling obsolete runs for the same ref.
 concurrency:
   group: ci-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
   validate:
-    name: Lint, typecheck, and build
+    name: Install, lint, typecheck, build, and smoke test
     runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      NEXT_TELEMETRY_DISABLED: 1
     steps:
-      - name: Check out repository
+      - name: Check out source
         uses: actions/checkout@v4
 
       - name: Set up Node.js
@@ -28,14 +37,47 @@ jobs:
         with:
           node-version: 22
 
+      # The starter currently has no committed package-lock.json.
+      # npm install is used until a lockfile is added to the repository.
       - name: Install dependencies
         run: npm install --no-audit --no-fund
 
-      - name: Lint
+      - name: Run ESLint
         run: npm run lint
 
-      - name: Type check
+      - name: Check TypeScript
         run: npm run typecheck
 
-      - name: Production build
+      - name: Build production application
         run: npm run build
+
+      - name: Smoke test production server
+        shell: bash
+        run: |
+          set -euo pipefail
+          npm run start -- --hostname 127.0.0.1 > /tmp/nasoodi-next.log 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+
+          ready=false
+          for attempt in {1..30}; do
+            if curl --fail --silent --show-error http://127.0.0.1:3000/ --output /tmp/nasoodi-homepage.html 2>/dev/null; then
+              ready=true
+              break
+            fi
+            sleep 2
+          done
+
+          if [ "$ready" != true ]; then
+            cat /tmp/nasoodi-next.log
+            echo "Production server did not become ready within 60 seconds." >&2
+            exit 1
+          fi
+
+          if ! grep -qi '<html' /tmp/nasoodi-homepage.html; then
+            cat /tmp/nasoodi-next.log
+            echo "Homepage response did not contain an HTML document." >&2
+            exit 1
+          fi
+
+          echo "Production homepage returned HTTP 200 and an HTML document."
