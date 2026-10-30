@@ -13,7 +13,7 @@ function LanguageSelector({ locale, alternate, pathname, label, onNavigate }: { 
   const persianHref = locale === "fa" ? pathname : alternate;
   return <DropdownMenu>
     <DropdownMenuTrigger asChild><Button variant="ghost" size="sm" aria-label={label}><span>{locale === "fa" ? "فارسی" : "English"}</span><span className="language-chevron" aria-hidden="true">⌄</span></Button></DropdownMenuTrigger>
-    <DropdownMenuContent align="end" dir={locale === "fa" ? "rtl" : "ltr"} aria-label={label}>
+    <DropdownMenuContent align={locale === "fa" ? "start" : "end"} dir={locale === "fa" ? "rtl" : "ltr"} aria-label={label}>
       <DropdownMenuItem asChild><Link href={englishHref} hrefLang="en" lang="en" aria-current={locale === "en" ? "page" : undefined} onClick={onNavigate}>English{locale === "en" ? " · Current" : ""}</Link></DropdownMenuItem>
       <DropdownMenuItem asChild><Link href={persianHref} hrefLang="fa" lang="fa" aria-current={locale === "fa" ? "page" : undefined} onClick={onNavigate}>فارسی{locale === "fa" ? " · جاری" : ""}</Link></DropdownMenuItem>
     </DropdownMenuContent>
@@ -47,7 +47,7 @@ export function SiteShell({ locale, children }: { locale: Locale; children: Reac
 
   return <>
     <a className="skip-link" href="#main-content">{labels.skip}</a>
-    <Sidebar className="desktop-sidebar" aria-label="Nasoodi.art">
+    <Sidebar className="desktop-sidebar" dir={locale === "fa" ? "rtl" : "ltr"} aria-label="Nasoodi.art">
       <SidebarHeader><Link className="artist-wordmark" href={pagePath(locale)} aria-label="Ghazaleh Abdolahzade Nasoodi — Home">
         <span className="wordmark-name" dir="ltr">Ghazaleh</span><span className="wordmark-surname" dir="ltr">Abdolahzade Nasoodi</span><span className="wordmark-role" dir="auto">{labels.discipline}</span>
       </Link></SidebarHeader>
@@ -59,7 +59,7 @@ export function SiteShell({ locale, children }: { locale: Locale; children: Reac
       <Link className="mobile-wordmark" dir="ltr" href={pagePath(locale)}>Nasoodi<span>.</span></Link>
       <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
         <SheetTrigger asChild><Button className="menu-trigger" variant="outline" size="sm" aria-label={labels.menu} aria-controls="mobile-navigation" aria-expanded={mobileOpen}><span className="menu-trigger-lines" aria-hidden="true"><span/><span/></span></Button></SheetTrigger>
-        <SheetContent id="mobile-navigation" side="left" className="mobile-drawer" dir={locale === "fa" ? "rtl" : "ltr"} aria-describedby={undefined} onOpenAutoFocus={(event) => { event.preventDefault(); drawerHomeRef.current?.focus(); }}>
+        <SheetContent id="mobile-navigation" side={locale === "fa" ? "right" : "left"} className="mobile-drawer" dir={locale === "fa" ? "rtl" : "ltr"} aria-describedby={undefined} onOpenAutoFocus={(event) => { event.preventDefault(); drawerHomeRef.current?.focus(); }}>
           <SheetTitle className="sr-only">{labels.menu}</SheetTitle>
           <div className="drawer-heading"><Link ref={drawerHomeRef} className="mobile-wordmark" dir="ltr" href={pagePath(locale)}>Nasoodi<span>.</span></Link><SheetClose asChild><Button className="drawer-close" variant="ghost" size="sm" aria-label={labels.close}>×</Button></SheetClose></div>
           {navigation(true)}
