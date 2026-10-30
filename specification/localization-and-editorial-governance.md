@@ -43,3 +43,12 @@ Review artist facts/spelling, Persian grammar and punctuation, English grammar/t
 
 ## Decisions required
 Preferred public English name, primary locale at /, approved translations, statement and biography, artwork titles/metadata/order, public asset permissions, CV scope, contact method, form/sales/commission policy, and press-kit decision.
+## Design-engineering alignment
+
+Bilingual design is a first-class visual requirement under design-engineering-skills.md and design-direction-and-system-refinement.md.
+
+- Persian and English must share the same brand identity and hierarchy while allowing script-specific typography, line-height, wrapping, and spacing.
+- Never mechanically mirror artwork, photography, or the physical-left sidebar to simulate RTL.
+- Review mixed-script names, URLs, dates, numerals, punctuation, and long titles in rendered pages.
+- Do not force identical line breaks or component dimensions across locales when natural script metrics differ.
+- Translated labels and editorial content require approval; visual polish must not conceal missing or unapproved translations.
