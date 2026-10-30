@@ -215,3 +215,13 @@ The feature is complete only when:
 - Copying MotionSites assets, code, or a specific animation.
 - Adding a new animation dependency without evidence.
 - Changing the overall site palette or redesigning unrelated sections.
+
+## Design-engineering alignment
+
+This decorative layer is governed by design-engineering-skills.md and design-direction-and-system-refinement.md. Its motion is optional and must earn its existence: it should clarify the page's vertical relationship to the easel, not merely add movement.
+
+- The static layout must remain complete and visually balanced when scroll-linked animation is unavailable or reduced motion is enabled.
+- Prefer the simplest CSS-based implementation; do not introduce a JavaScript scroll loop or animation dependency for this effect.
+- Motion must be subtle, reversible, non-blocking, and must not cause layout or paint work on every frame.
+- Do not animate the artwork itself, change the image's color, mirror it for RTL, or let the easel compete with finished paintings.
+- Review on real mobile devices and short-height screens, including reduced-motion mode.
