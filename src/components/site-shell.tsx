@@ -66,6 +66,7 @@ export function SiteShell({ locale, children }: { locale: Locale; children: Reac
 
     <header className={`mobile-header mobile-header-${locale}`} data-locale={locale}>
       <Link className="mobile-wordmark" dir="ltr" href={pagePath(locale)}>Nasoodi<span>.</span></Link>
+      <div className="mobile-utility" dir={locale === "fa" ? "rtl" : "ltr"}><span className="language-label">{labels.language}</span><LanguageSelector locale={locale} alternate={alternate} pathname={pathname}/></div>
       <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
         <SheetTrigger asChild><Button className="menu-trigger" variant="ghost" size="sm" aria-label={labels.menu} aria-controls="mobile-navigation" aria-expanded={mobileOpen}><span className="menu-trigger-lines" aria-hidden="true"><span/><span/></span></Button></SheetTrigger>
         <SheetContent id="mobile-navigation" side={locale === "fa" ? "right" : "left"} className="mobile-drawer" dir={locale === "fa" ? "rtl" : "ltr"} aria-describedby={undefined} onOpenAutoFocus={(event) => { event.preventDefault(); drawerHomeRef.current?.focus(); }}>
