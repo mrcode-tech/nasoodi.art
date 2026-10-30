@@ -1,6 +1,5 @@
 import Image from "next/image";
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { artworks,galleries,journalEntries,getPublicArtworks,getPublicGalleries,getPublicJournal } from "@/lib/site";
