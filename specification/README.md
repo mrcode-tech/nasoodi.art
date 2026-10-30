@@ -1,36 +1,63 @@
-# Nasoodi.art — Artist Portfolio Specification
+# Nasoodi.art — Professional Oil Painter Portfolio Specification
 
-This folder is the product and implementation source of truth for transforming **nasoodi.art** into the professional portfolio website of **Ghazaleh Abdolahzade Nasoodi (غزاله عبداله زاده نسودی)**, an oil painter based in Iran.
+This directory is the product, design, content, and implementation source of truth for nasoodi.art. It defines a bilingual (Persian/English) professional portfolio for oil painter Ghazaleh Abdolahzade Nasoodi (غزاله عبداله زاده نسودی).
 
-## Documents
+## How to use this specification
 
-- [Product proposal](./proposal.md) — goals, audiences, information architecture, visual direction, functionality, non-functional requirements, SEO, accessibility, privacy, and acceptance criteria.
-- [Content and artwork model](./content-model.md) — editorial fields, artwork records, image handling, bilingual content, and content governance.
-- [Wireframes and interaction design](./wireframes.md) — page-level layouts, responsive behavior, gallery interactions, and design principles.
-- [Visual identity and photo direction](./visual-identity-and-photo-direction.md) — palette sampled from the supplied studio photograph, semantic color tokens, photo usage/cropping guidance, homepage composition, typography, components, and sign-off criteria.
-- [Site-wide design system and section specification](./site-wide-design-system-and-section-specification.md) — detailed design rules and implementation guidance for the header, footer, homepage, hero, Works index, artwork detail, About, CV/Exhibitions, and Contact pages.
-- [Animated hero implementation prompt](./hero-implementation-prompt.md) — comprehensive coding-agent prompt for the four-layer studio animation and homepage integration.
-- [Implementation roadmap](./implementation-roadmap.md) — phased delivery plan, dependencies, tests, and completion gates.
+1. Read this index and the repository-level AGENTS.md before making changes.
+2. Read proposal.md for product scope and binding principles.
+3. Read visual-identity-and-photo-direction.md and site-wide-design-system-and-section-specification.md before UI implementation.
+4. Read content-model.md, artwork-imaging-and-asset-pipeline.md, and localization-and-editorial-governance.md before adding content or images.
+5. Read the relevant technical contracts for SEO, accessibility, performance, security, and testing.
+6. Follow implementation-roadmap.md for sequencing and phase exit criteria.
+7. Treat artist/site-owner approval as a required content and visual gate; do not infer missing facts.
 
-## Current verified facts
+## Document map
 
-- Public site/domain: `nasoodi.art`.
-- Artist name supplied by the site owner: **Ghazaleh Abdolahzade Nasoodi**.
-- Persian name supplied by the site owner: **غزاله عبداله زاده نسودی**.
+### Product and experience
+- [Product proposal](./proposal.md) — goals, audiences, non-goals, routes, page content, functionality, and open decisions.
+- [Wireframes and interaction design](./wireframes.md) — page structure, responsive behavior, gallery, lightbox, and RTL interaction.
+- [Site-wide design system and section specification](./site-wide-design-system-and-section-specification.md) — semantic tokens, typography, global shell, homepage, Works, artwork detail, About, CV, Contact, components, and responsive design.
+- [Visual identity and photo direction](./visual-identity-and-photo-direction.md) — reference-photo analysis, palette, studio-image use, crop rules, and visual QA.
+- [Studio hero implementation prompt](./hero-implementation-prompt.md) — scoped implementation brief for the layered studio scene and static fallback.
+
+### Content and assets
+- [Content and artwork model](./content-model.md) — artist, artwork, series, CV, approval states, and localized fields.
+- [Artwork imaging and asset pipeline](./artwork-imaging-and-asset-pipeline.md) — capture, provenance, rights, derivatives, fidelity, alt text, and image delivery.
+- [Localization and editorial governance](./localization-and-editorial-governance.md) — Persian/English rules, translation parity, content approval, and writing standards.
+
+### Technical quality
+- [SEO and discovery](./seo-and-discovery.md) — metadata, canonicals, hreflang, sitemap, robots, structured data, and measurement.
+- [Accessibility, performance, privacy, and security](./accessibility-performance-security.md) — WCAG 2.2 AA target, motion, Core Web Vitals, privacy, and security.
+- [Testing, visual QA, and release acceptance](./testing-qa-and-release.md) — test layers, screenshots, CI, artist approval, and release gates.
+- [Implementation roadmap](./implementation-roadmap.md) — phased delivery, dependencies, tests, and completion evidence.
+
+## Confirmed project context
+
+- Domain: nasoodi.art.
+- Artist name supplied by the site owner: Ghazaleh Abdolahzade Nasoodi.
+- Persian name supplied by the site owner: غزاله عبداله زاده نسودی.
 - Practice: oil painting.
-- Location supplied by the site owner: Iran.
-- Instagram handle supplied by the site owner: [@ghazalenasoodi](https://www.instagram.com/ghazalenasoodi/).
+- Location supplied by the owner: Iran.
+- Instagram handle supplied by the owner: @ghazalenasoodi.
 
-These are the only artist-specific facts treated as confirmed in this proposal. The Instagram page could not be inspected in the research environment. No artwork titles, dates, dimensions, exhibition history, education, awards, artist statement, contact details, prices, or availability have been inferred.
+These supplied facts do not confirm an artist statement, biography, education, exhibitions, artwork titles, years, dimensions, exact medium/substrate per work, prices, availability, commissions, contact details, or image rights. Those require artist/owner confirmation.
 
-## Decision status
+## Source-of-truth and status rules
 
-This is a proposal, not an authorization to invent content or publish placeholder claims as facts. Implementation should follow the approved direction while treating missing artist-supplied content as an explicit dependency. See the roadmap and open decisions in the proposal.
+- This folder is the source of truth for portfolio product/design/content requirements.
+- The repository-level AGENTS.md governs engineering workflow and quality commands.
+- If two documents conflict, proposal.md defines product intent; site-wide-design-system-and-section-specification.md defines page/component design; specialized contracts define their named domains. Record and resolve conflicts rather than silently choosing.
+- The implementation roadmap is a plan, not evidence that a feature or CI check already exists.
+- Distinguish proposed, implemented, verified, artist-approved, and published states.
+- Never publish invented content, unapproved assets, fake testimonials, fake CV entries, or placeholder artwork.
+- The studio-process photograph and layered scene are not finished artwork reproductions. Actual paintings must be presented separately in Works.
+- The site is a portfolio, not an e-commerce store by default. Sales, pricing, availability, commissions, and enquiry forms require explicit decisions and real operational support.
 
 ## Working agreement
 
-- The active working branch for this proposal is `feature`.
-- `specification/` is the source of truth for this initiative.
-- Keep artist facts evidence-based; use clearly marked draft/placeholder content until approved.
-- Do not copy Instagram images or captions without permission and source verification.
-- Do not merge this branch into `stage` or `main`, deploy, or change branch strategy without explicit authorization.
+- Working branch: feature.
+- Keep changes on feature unless explicitly authorized otherwise.
+- Do not merge to main, deploy, or change branch strategy without separate explicit authorization.
+- Preserve existing work and inspect actual repository state before implementation.
+- No claim of test, visual review, asset inspection, artist approval, or deployment is valid without evidence.
