@@ -67,17 +67,18 @@ export function SiteShell({ locale, children }: { locale: Locale; children: Reac
     <header className={`mobile-header mobile-header-${locale}`} data-locale={locale}>
       <Link className="mobile-wordmark" dir="ltr" href={pagePath(locale)}>Nasoodi<span>.</span></Link>
       <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
-        <SheetTrigger asChild><Button className="menu-trigger" variant="outline" size="sm" aria-label={labels.menu} aria-controls="mobile-navigation" aria-expanded={mobileOpen}><span className="menu-trigger-lines" aria-hidden="true"><span/><span/></span></Button></SheetTrigger>
+        <SheetTrigger asChild><Button className="menu-trigger" variant="ghost" size="sm" aria-label={labels.menu} aria-controls="mobile-navigation" aria-expanded={mobileOpen}><span className="menu-trigger-lines" aria-hidden="true"><span/><span/></span></Button></SheetTrigger>
         <SheetContent id="mobile-navigation" side={locale === "fa" ? "right" : "left"} className="mobile-drawer" dir={locale === "fa" ? "rtl" : "ltr"} aria-describedby={undefined} onOpenAutoFocus={(event) => { event.preventDefault(); drawerHomeRef.current?.focus(); }}>
           <SheetTitle className="sr-only">{labels.menu}</SheetTitle>
           <div className="drawer-heading"><Link ref={drawerHomeRef} className="mobile-wordmark" dir="ltr" href={pagePath(locale)}>Nasoodi<span>.</span></Link><SheetClose asChild><Button className="drawer-close" variant="ghost" size="sm" aria-label={labels.close}>×</Button></SheetClose></div>
           {navigation(true)}
           <div className="drawer-settings"><span>{labels.language}</span><Link className="language-switch" href={alternate} hrefLang={otherLocale(locale)} onClick={() => setMobileOpen(false)}>{otherLocale(locale) === "fa" ? "فارسی" : "English"}</Link></div>
+          <div className="drawer-copyright" dir="ltr"><span>nasoodi.art</span><span>© {new Date().getFullYear()}</span></div>
         </SheetContent>
       </Sheet>
     </header>
 
-    <div className="desktop-utility"><span>{labels.language}</span><LanguageSelector locale={locale} alternate={alternate} pathname={pathname} label={labels.language}/></div>
-    <div className="site-main"><main id="main-content">{children}</main><footer className="site-footer"><span>Ghazaleh Abdolahzade Nasoodi</span><span>© {new Date().getFullYear()} · {labels.rights}</span></footer></div>
+    <div className="desktop-utility" dir="ltr"><span>{labels.language}</span><LanguageSelector locale={locale} alternate={alternate} pathname={pathname} label={labels.language}/></div>
+    <div className="site-main"><main id="main-content">{children}</main></div>
   </>;
 }
