@@ -1,0 +1,1 @@
+import type {MetadataRoute} from "next";const base="https://nasoodi.art";export default function sitemap():MetadataRoute.Sitemap{return [{url:`${base}/fa`,alternates:{languages:{fa:`${base}/fa`,en:`${base}/en`}}},{url:`${base}/en`,alternates:{languages:{fa:`${base}/fa`,en:`${base}/en`}}}];}
