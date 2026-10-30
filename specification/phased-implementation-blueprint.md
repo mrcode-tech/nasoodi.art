@@ -672,3 +672,16 @@ Implementation commits:
 The preceding CI run for 8f541e75f0d464f28e03cfd11f648faefd66cbac passed all configured steps, including ESLint, TypeScript, content tests (including the Vercel deployment policy guard), production build, Chromium E2E, artifact upload, and production route smoke test. The new locale-switch regression run for 18109f76be68b34656e13f6074e01d8eca16664a was queued and had not yet reported a conclusion at the time of this update.
 
 No new artwork, biography, CV facts, gallery memberships, or Journal content were invented or published.
+
+
+## Incremental implementation update — 2026-10-30 (portfolio asset intake audit)
+
+Added `scripts/audit-portfolio-assets.mjs` and `npm run audit:assets`. The script inventories the artwork, gallery, canvas, artist, easel, and brush candidates under `specification/assets`; detects PNG/JPEG dimensions, records file size and SHA-256, and emits a machine-readable manifest. It exits non-zero for missing or invalid/unsupported candidate images. The CI workflow runs this audit and uploads the manifest beside visual-QA artifacts.
+
+Commits:
+- `c372901ccd9947eff005f4eb93160ab1af089312` — add the source asset inventory script.
+- `81f5368c659df4917d3eff218b91969ecd4d65a9` — expose the audit command.
+- `11481dab5bcac6f3cf5bdf18afcf67a0dc93c268` — run the audit in CI and upload its manifest.
+- `f1f2b6bf3c39f9a3240405454f6a459cfe0d1217` — fail on invalid/unsupported images as well as missing files.
+
+All inventory entries are marked approval-required and non-publishable. The script intentionally does not make rights, identity, color-fidelity, or artist-approval claims and does not create public derivatives. CI verification for the new audit is pending a successful run on the final implementation commit.
