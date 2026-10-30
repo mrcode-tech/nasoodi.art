@@ -1,5 +1,5 @@
 import Image from "next/image";
-import heroArtwork from "../../../../specification/assets/artwork.JPG";
+import heroArtwork from "../../../../public/images/homepage-hero.jpg";
 import { Button } from "@/components/ui/button";
 import type { Metadata } from "next";
 import Link from "next/link";
