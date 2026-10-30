@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { copyFor, otherLocale, pagePath, getPublicCvEntries, cvEntries, type Locale } from "@/lib/site";
+import { copyFor, otherLocale, pagePath, alternatePathFor, getPublicCvEntries, cvEntries, type Locale } from "@/lib/site";
 
 export function SiteShell({ locale, children }: { locale: Locale; children: React.ReactNode }) {
  const labels=copyFor(locale), pathname=usePathname(), [open,setOpen]=useState(false);

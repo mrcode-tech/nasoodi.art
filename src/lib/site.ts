@@ -117,3 +117,35 @@ export const copy = {
  fa: { home:"خانه",works:"آثار",galleries:"گالری‌ها",journal:"یادداشت‌ها",about:"درباره",contact:"تماس",cv:"رزومه و نمایشگاه‌ها",language:"زبان",menu:"باز کردن راهبری",close:"بستن راهبری",skip:"رفتن به محتوای اصلی",portfolio:"پورتفولیوی هنرمند",discipline:"نقاش رنگ‌روغن",selected:"گزیده آثار",selectedIntro:"گزیده‌ای از نقاشی‌ها.",explore:"دیدن آثار",discover:"گشت‌وگذار در گالری‌ها",latest:"از یادداشت‌ها",emptyWorks:"آثار پس از تأیید تصاویر و اطلاعات برای انتشار، در این بخش نمایش داده می‌شوند.",emptyGalleries:"گالری‌های منتخب پس از تأیید عنوان، آثار و تصویر اصلی در این بخش قرار می‌گیرند.",emptyJournal:"یادداشت‌ها و اطلاعیه‌های رویداد پس از آماده‌شدن برای انتشار در این بخش نمایش داده می‌شوند.",profilePending:"بیانیه هنری و زندگی‌نامه پس از بررسی و تأیید منتشر خواهند شد.",contactPending:"اطلاعات تماس عمومی هنوز تأیید نشده است.",notFound:"این صفحه پیدا نشد.",returnHome:"بازگشت به خانه",rights:"تمامی حقوق محفوظ است.",journalAll:"همه",journalExhibitions:"نمایشگاه‌ها",journalEvents:"رویدادها",journalStudio:"اخبار آتلیه",journalStories:"روایت‌ها",journalNoMatches:"هنوز مطلب منتشرشده‌ای در این دسته وجود ندارد.",readMore:"ادامه مطلب",published:"انتشار" }
 } as const;
 export const copyFor = (l: Locale) => copy[l];
+
+/**
+ * Resolve a locale switch to the equivalent published destination when it exists.
+ * Static editorial routes have localized shells in both locales; content routes
+ * fall back to the target locale home rather than connecting unrelated records.
+ */
+export function alternatePathFor(pathname: string, locale: Locale): string {
+  const target = otherLocale(locale);
+  const segments = pathname.split("/").filter(Boolean).slice(1);
+  if (segments.length === 0) return pagePath(target);
+  const [section, slug] = segments;
+  if (section === "about" || section === "contact") return pagePath(target, section);
+  if (section === "cv") {
+    return getPublicCvEntries(cvEntries, target).length > 0 ? pagePath(target, "cv") : pagePath(target);
+  }
+  if (section === "works") {
+    const items = getPublicArtworks(artworks, target);
+    if (!slug) return items.length > 0 ? pagePath(target, "works") : pagePath(target);
+    return items.some((item) => item.slug === slug) ? pagePath(target, `works/${slug}`) : pagePath(target);
+  }
+  if (section === "galleries") {
+    const items = getPublicGalleries(galleries, artworks, target);
+    if (!slug) return items.length > 0 ? pagePath(target, "galleries") : pagePath(target);
+    return items.some((item) => item.slug === slug) ? pagePath(target, `galleries/${slug}`) : pagePath(target);
+  }
+  if (section === "journal") {
+    const items = getPublicJournal(journalEntries, target);
+    if (!slug) return items.length > 0 ? pagePath(target, "journal") : pagePath(target);
+    return items.some((item) => item.slug === slug) ? pagePath(target, `journal/${slug}`) : pagePath(target);
+  }
+  return pagePath(target);
+}
