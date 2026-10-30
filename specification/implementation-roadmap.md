@@ -101,3 +101,29 @@ The current package scripts documented in README are lint, typecheck, and build.
 
 ## Completion tracking
 For each phase record status (not started / in progress / blocked / complete), commit SHA and paths, actual commands/results, CI run URL/conclusion, screenshots/artifacts and viewports, artist approvals outstanding, known limitations, and next dependency. Code written is not sufficient evidence of completion.
+
+
+## Gallery and homepage extension — implementation requirements
+
+The existing phases above must include the following concrete scope; these requirements are part of the roadmap, not optional future enhancements.
+
+### Extend Phase 0 — Asset and collection audit
+- Inspect `specification/assets/artwork.JPG` as the candidate hero painting and inspect all files in `specification/assets/gallery/`.
+- Inspect every image's actual visual content, dimensions, orientation, color profile, file size, crop suitability, and source/rights/artist approval.
+- Build an asset manifest mapping approved source images to canonical artwork records, galleries, hero, and featured selections.
+- Ask the artist/site owner to confirm gallery groupings, gallery titles/descriptions in Persian and English, cover choices, artwork titles/metadata, and the hero painting.
+- Do not assume `gallery/1.jpg`–`5.jpg` are a single gallery or separate named galleries based on filenames.
+
+### Extend Phase 2 — Artwork-led homepage
+- Make the approved painting the dominant hero image; initial candidate is `specification/assets/artwork.JPG` pending inspection and approval.
+- Add the middle-of-homepage Featured Works section with deterministic 3–6 selected artwork IDs where available.
+- Add a separate Featured Galleries section with 2–4 published gallery previews where available.
+- Ensure all hero/featured items use canonical content records and link to valid destinations.
+
+### Extend Phase 3 — Multiple galleries and artwork detail
+- Implement a gallery data contract, gallery index, dedicated gallery detail routes, curated membership/order, and artwork detail pages.
+- Support an artwork appearing in multiple galleries without duplicate artwork records.
+- Validate gallery cover membership, translations, approval state, image rights, non-empty published content, and unique slugs.
+- Add route, schema, SEO, sitemap, accessibility, and visual tests for galleries and artwork details.
+
+**Phase exit evidence:** screenshots of homepage, gallery index, at least two distinct gallery detail pages when two approved galleries exist, artwork detail, both locales, and responsive breakpoints; automated validation results; asset manifest and outstanding artist approvals.
