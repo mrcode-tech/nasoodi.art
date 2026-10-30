@@ -11,8 +11,8 @@ Define one consistent global navigation system for the Nasoodi.art portfolio. Th
 
 Language and appearance controls must be easy to discover but must not compete with the artist's work:
 
-- **Desktop:** show the language selector and theme selector in the top navigation bar, as separate, clearly labelled controls.
-- **Mobile:** place both controls at the bottom of the opened sidebar, after the navigation links.
+- **Desktop:** show the language selector and theme selector in the top navigation bar, as separate, clearly labelled controls. Anchor the language utility to the physical right edge of the content region in both locales; its internal order follows the active locale.
+- **Mobile:** hide language and theme controls from the closed header. Keep language switching at the bottom of the opened drawer.
 - Do not show a second copy of these controls in another mobile header or footer location unless a later approved design explicitly requires it.
 
 The navigation should feel like part of a quiet, editorial artist portfolio: warm, restrained, legible, and visually subordinate to the paintings.
@@ -189,7 +189,8 @@ The navigation shell mirrors its **physical placement** with the active locale. 
 
 - English (`en`): desktop sidebar is fixed to the physical left; mobile drawer enters from the physical left; desktop language utility is positioned at the upper-right of the content area.
 - Persian (`fa`): the entire desktop sidebar is fixed to the physical right, including its surface, border, wordmark, navigation rows, and footer; the main content reserves space on the right. The mobile drawer enters from the physical right. The desktop language utility moves to the physical left of the content area.
-- The language selector must mirror its position and internal ordering in Persian; it must not remain on the right while only its text direction changes.
+- The desktop language utility remains at the physical right side of the content region for both locales. English uses natural LTR order; Persian uses RTL order, with the listbox physically left of the «زبان» label.
+- The mobile header contains no language label or selector in either locale; language switching remains available in the opened drawer.
 - On desktop, the language utility is a fixed, fully opaque bar with the same `--paper` surface and bottom divider treatment as the mobile header. It spans only the content area (excluding the fixed sidebar), mirrors to the opposite side in Persian, and reserves matching top space in the page content so headings and body text never scroll underneath it.
 - Set the mobile Sheet side from the locale (`right` for Persian, `left` for English). Keep panel placement and closed-state translation paired so the panel enters from the correct physical edge.
 - Set the desktop sidebar's `dir` from the locale. Persian labels, wordmark role, footer, and navigation have explicit RTL direction and right text alignment at the container, navigation, and link levels; navigation rows begin at the right edge. English aligns to the left. The artist's Latin-script name remains isolated LTR while the Persian discipline label remains RTL.
@@ -336,6 +337,6 @@ The component selection, RTL/LTR rules, keyboard and focus behavior, and new-com
 
 - Remove the footer from the main content column; the desktop copyright identity already appears in the persistent sidebar.
 - In the mobile drawer, place a compact site/copyright line below the navigation and language switcher so the copyright remains available without duplicating it in page content.
-- In Persian desktop layout, keep the language utility at the physical left edge of the content region (opposite the right-hand sidebar), with its control ordering anchored from that left edge.
+- In Persian desktop layout, keep the language utility at the physical right edge of the content region (immediately before the right-hand sidebar), with the selector physically left of the «زبان» label.
 - Navigation item underline indicators must be limited to the rendered label width, not stretched across the full sidebar row.
 - The mobile navigation trigger uses a borderless, transparent ghost treatment. Its focus indicator remains visible for keyboard users; do not add a permanent outline or frame.

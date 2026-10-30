@@ -135,8 +135,8 @@ for (const locale of ["en", "fa"] as const) {
     const contentBounds = await page.locator("main#main-content").boundingBox();
     expect(contentBounds?.y).toBeGreaterThanOrEqual((utility?.y ?? 0) + (utility?.height ?? 0));
     if (locale === "fa") {
-      expect((utility?.x ?? 0)).toBe(0);
-      await expect(utilityLocator).toHaveCSS("direction", "ltr");
+      expect((utility?.x ?? 0) + (utility?.width ?? 0)).toBeLessThanOrEqual(1440 - (bounds?.width ?? 0) + 1);
+      await expect(utilityLocator).toHaveCSS("direction", "rtl");
     } else {
       expect((utility?.x ?? 0)).toBeGreaterThan(1440 - (bounds?.width ?? 0) - 220);
     }
@@ -538,56 +538,59 @@ test("navigation icon and language buttons use borderless minimal chrome", async
 
 
 for (const locale of ["fa", "en"] as const) {
-  test(`mobile navbar is borderless and keeps the language control at the physical left in ${locale}`, async ({ page }) => {
-    await page.setViewportSize({ width: 390, height: 844 });
-    await page.goto(`/${locale}`);
-    const header = page.locator(".mobile-header");
-    const utility = header.locator(".mobile-utility");
-    const label = utility.locator(".language-label");
-    const selector = utility.getByRole("button", { name: locale === "fa" ? "زبان" : "Language" });
-    const menu = header.locator(".menu-trigger");
-    await expect(header).toBeVisible();
-    await expect(utility).toBeVisible();
-    await expect(header).toHaveCSS("border-bottom-width", "0px");
-    await expect(menu).toHaveCSS("border-left-width", "0px");
-    const [headerBox, utilityBox, labelBox, selectorBox, menuBox] = await Promise.all([
-      header.boundingBox(), utility.boundingBox(), label.boundingBox(), selector.boundingBox(), menu.boundingBox(),
-    ]);
-    expect(headerBox).not.toBeNull();
-    expect(utilityBox).not.toBeNull();
-    expect(labelBox).not.toBeNull();
-    expect(selectorBox).not.toBeNull();
-    expect(menuBox).not.toBeNull();
-    expect(utilityBox!.x).toBeLessThan(80);
-    expect(utilityBox!.x + utilityBox!.width).toBeLessThan(menuBox!.x);
-    if (locale === "fa") {
-      expect(labelBox!.x).toBeGreaterThan(selectorBox!.x + selectorBox!.width);
-    } else {
-      expect(labelBox!.x + labelBox!.width).toBeLessThan(selectorBox!.x);
+  test(`mobile navbar hides language controls while the drawer retains switching in ${locale}`, async ({ page }) => {
+    for (const viewport of [{ width: 375, height: 667 }, { width: 390, height: 844 }, { width: 430, height: 932 }]) {
+      await page.setViewportSize(viewport); await page.goto(`/${locale}`);
+      const header = page.locator(".mobile-header");
+      await expect(header).toBeVisible();
+      await expect(header.locator(".language-label")).toHaveCount(0);
+      await expect(header.locator(".mobile-utility")).toHaveCount(0);
+      await expect(header.getByRole("button", { name: locale === "fa" ? "زبان" : "Language" })).toHaveCount(0);
+      await expect(header.locator(".menu-trigger")).toBeVisible();
+      await expect(header).toHaveCSS("border-bottom-width", "0px");
     }
-    await selector.click();
-    await expect(page.getByRole("menuitem", { name: /English/ })).toBeVisible();
-    await expect(page.getByRole("menuitem", { name: /فارسی/ })).toBeVisible();
+    await page.getByRole("button", { name: locale === "fa" ? "باز کردن راهبری" : "Open navigation" }).click();
+    const drawer = page.getByRole("dialog", { name: locale === "fa" ? "باز کردن راهبری" : "Open navigation" });
+    await expect(drawer).toBeVisible();
+    const settings = drawer.locator(".drawer-settings");
+    const languageButton = settings.getByRole("button", { name: locale === "fa" ? "زبان" : "Language" });
+    await expect(settings.locator(".language-label")).toBeVisible();
+    await expect(languageButton).toBeVisible();
+    await languageButton.click();
+    await expect(drawer.getByRole("menuitem", { name: /English/ })).toBeVisible();
+    await expect(drawer.getByRole("menuitem", { name: /فارسی/ })).toBeVisible();
   });
 }
 
 for (const locale of ["fa", "en"] as const) {
-  test(`desktop navbar chrome is borderless and the language utility is aligned to the left in ${locale}`, async ({ page }) => {
-    await page.setViewportSize({ width: 1280, height: 800 });
-    await page.goto(`/${locale}`);
-    const sidebar = page.locator(".desktop-sidebar");
-    const utility = page.locator(".desktop-utility");
-    await expect(sidebar).toHaveCSS("border-right-width", "0px");
-    await expect(utility).toHaveCSS("border-bottom-width", "0px");
-    const utilityBox = await utility.boundingBox();
-    const label = utility.locator(".language-label");
-    const selector = utility.getByRole("button", { name: locale === "fa" ? "زبان" : "Language" });
-    const [labelBox, selectorBox] = await Promise.all([label.boundingBox(), selector.boundingBox()]);
-    if (locale === "fa") expect(utilityBox!.x).toBeLessThanOrEqual(1);
-    expect(labelBox).not.toBeNull();
-    expect(selectorBox).not.toBeNull();
-    if (locale === "fa") {
-      expect(labelBox!.x).toBeGreaterThan(selectorBox!.x + selectorBox!.width);
+  test(`desktop language utility is right-aligned with locale-correct order in ${locale}`, async ({ page }) => {
+    for (const viewport of [{ width: 1024, height: 768 }, { width: 1280, height: 800 }, { width: 1440, height: 900 }]) {
+      await page.setViewportSize(viewport); await page.goto(`/${locale}`);
+      const sidebar = page.locator(".desktop-sidebar"), utility = page.locator(".desktop-utility");
+      await expect(sidebar).toBeVisible(); await expect(utility).toBeVisible(); await expect(page.locator(".mobile-header")).toBeHidden();
+      await expect(sidebar).toHaveCSS("border-right-width", "0px"); await expect(utility).toHaveCSS("border-bottom-width", "0px");
+      const [utilityBox, sidebarBox, labelBox, selectorBox] = await Promise.all([
+        utility.boundingBox(), sidebar.boundingBox(), utility.locator(".language-label").boundingBox(),
+        utility.getByRole("button", { name: locale === "fa" ? "زبان" : "Language" }).boundingBox(),
+      ]);
+      expect(utilityBox).not.toBeNull(); expect(sidebarBox).not.toBeNull(); expect(labelBox).not.toBeNull(); expect(selectorBox).not.toBeNull();
+      expect(Math.abs(labelBox!.y + labelBox!.height / 2 - selectorBox!.y - selectorBox!.height / 2)).toBeLessThan(2);
+      if (locale === "fa") {
+        expect(utilityBox!.x + utilityBox!.width).toBeCloseTo(sidebarBox!.x, 0);
+        expect(selectorBox!.x + selectorBox!.width).toBeLessThan(labelBox!.x);
+        await expect(utility).toHaveCSS("direction", "rtl");
+      } else {
+        expect(utilityBox!.x + utilityBox!.width).toBeCloseTo(viewport.width, 0);
+        expect(labelBox!.x + labelBox!.width).toBeLessThan(selectorBox!.x);
+        await expect(utility).toHaveCSS("direction", "ltr");
+      }
+      const button = utility.getByRole("button", { name: locale === "fa" ? "زبان" : "Language" });
+      await button.click(); await expect(page.getByRole("menuitem", { name: /فارسی/ })).toBeVisible();
+      await expect(page.getByRole("menuitem", { name: /English/ })).toBeVisible();
+      await page.getByRole("menuitem", { name: locale === "fa" ? /English/ : /فارسی/ }).click();
+      await expect(page.locator("html")).toHaveAttribute("lang", locale === "fa" ? "en" : "fa");
+      await page.goto(`/${locale}`);
+      await page.screenshot({ path: test.info().outputPath(`${locale}-desktop-language-${viewport.width}.png`), fullPage: true });
     }
   });
 }
