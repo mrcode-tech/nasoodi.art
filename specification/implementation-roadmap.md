@@ -1,156 +1,103 @@
 # Nasoodi.art — Implementation Roadmap
 
-**Status:** Proposed  
-**Branch:** `feature`  
-**Source of truth:** `specification/artist-portfolio/`
+**Status:** Proposed plan  
+**Working branch:** feature  
+**Specification source:** specification/README.md and linked contracts
 
 ## Delivery principles
-
-- Work in small phases with visible evidence.
 - Keep the current Next.js App Router, React, TypeScript, and Tailwind baseline unless repository evidence justifies a change.
-- Implement the proposal, not unverified artist facts.
-- Use real artist-approved artwork assets before final visual approval.
-- Keep the site usable when optional data or third-party services are unavailable.
-- Run the repository CI workflow on every relevant change.
-- Do not merge into `stage` or `main`, deploy, or alter branch structure without explicit authorization.
+- Implement approved content and design, not invented artist facts.
+- Keep the public site useful without optional services, animation, or third-party embeds.
+- Preserve original artwork masters and verify every public derivative.
+- Work in small phases with evidence and explicit exit criteria.
+- Run actual repository CI; never claim a workflow check exists or passes without logs.
+- Do not merge to main or deploy without separate explicit authorization.
 
-## Phase 0 — Content discovery and approval
-
+## Phase 0 — Repository, content, and asset audit
 **Deliverables**
-- Confirm public English spelling and Persian display name.
-- Confirm primary language and translation expectations.
-- Collect original artwork images and rights approvals.
-- Create an initial artwork inventory with title, date, medium, dimensions, series, and availability where known.
-- Collect approved artist statement, biography, portrait/studio image, CV, and contact method.
-- Decide whether sales/commission enquiries and a downloadable PDF are in scope.
+- Inspect current routes, components, dependencies, workflow files, and image references.
+- Inventory all assets, dimensions, transparency, source, rights, and intended class.
+- Confirm artist name spelling, primary locale, translations, artwork selection, metadata, public image rights, biography/statement, contact method, and CV.
+- Decide whether commissions, sale enquiries, a contact form, or press kit are in scope.
 
 **Exit criteria**
-- At least an initial curated set of approved artwork images exists.
-- Every selected work has a confirmed publication right and an accurate caption or a deliberate decision to omit unknown metadata.
-- No invented biography, exhibition, price, or contact details remain.
-- Artist approves the initial visual references and content direction.
+- Initial approved artwork set and source masters exist.
+- Every selected asset has a documented usage basis.
+- Missing metadata is intentionally omitted rather than fabricated.
+- Open decisions and blocked content are recorded.
 
-**Dependency:** Artist/site owner supplies and approves content.
+**Dependency:** Artist/site-owner input.
 
 ## Phase 1 — Foundation and design system
-
 **Deliverables**
-- Replace starter identity, copy, and violet-gradient visual language with the approved artist identity.
-- Define typography, palette, spacing, layout widths, image ratios, caption styles, and interaction states.
-- Implement global navigation, footer, locale switcher, and page-level metadata.
-- Establish locale-aware routing and correct `lang` / `dir` behavior.
-- Define structured types and validation for artworks, series, and artist profile.
+- Replace starter identity and generic copy with artist identity.
+- Establish palette, typography, spacing, containers, image rules, and interaction states.
+- Implement shared header/footer, navigation, locale switcher, and page metadata.
+- Establish Persian RTL and English LTR routing and document attributes.
+- Define validated artist, artwork, series, asset, and CV data contracts.
 
-**Tests**
-- Lint and TypeScript.
-- Unit tests for content schema and required publication fields.
-- Route and locale metadata tests.
-- Responsive layout smoke checks.
+**Tests:** lint, typecheck, schema/unit tests, locale and metadata tests, responsive shell smoke tests.
+
+**Exit criteria:** shared shell works by keyboard and touch; locale direction is correct; invalid/unapproved records cannot publish.
+
+## Phase 2 — Studio hero and homepage
+**Deliverables**
+- Implement the signature studio/process composition using approved assets.
+- Provide static/reduced-motion fallback and responsive desktop/tablet/mobile layouts.
+- Keep the artist identity, Works action, and access to real finished paintings immediately visible.
+- Build selected works, approved intro, optional verified highlights, contact invitation, and footer.
+
+**Tests:** viewport screenshots, reduced motion, keyboard/screen-reader checks, image fidelity, layout shift, no overflow.
+
+**Exit criteria:** artist approves the hero and homepage; the studio image is not misrepresented as a finished artwork.
+
+## Phase 3 — Artwork catalogue and detail
+**Deliverables**
+- Build Works index, stable artwork routes, optional meaningful series grouping, metadata, and optional accessible viewer.
+- Generate responsive derivatives from approved masters.
+- Display only approved records and known metadata.
+
+**Tests:** schema/publication gate, route/404 tests, image alt/dimensions, keyboard order, derivative comparison, visual review in both locales.
+
+**Exit criteria:** artist reviews every published image/caption; all images preserve color, texture, ratio, and crop integrity.
+
+## Phase 4 — About, CV, and contact
+**Deliverables**
+- About page with distinct artist statement and factual biography.
+- CV/Exhibitions only where verified entries exist.
+- Contact page with approved channel; form only if real delivery, validation, spam protection, and privacy handling are configured.
+- Artwork-specific enquiry context only if approved.
+
+**Tests:** content approval, locale review, contact destination/delivery, form failure/success states if applicable, privacy/security review.
+
+**Exit criteria:** all copy and contact behavior approved; no private address/phone or unverified CV claims.
+
+## Phase 5 — SEO, accessibility, performance, and security
+**Deliverables**
+- Unique metadata, canonical URLs, valid locale alternates, sitemap, robots, Open Graph, and supported structured data.
+- Responsive image delivery and loading priorities.
+- WCAG 2.2 AA review, Core Web Vitals measurement, privacy and security review.
+
+**Tests:** metadata/sitemap/robots/canonical checks, JSON-LD validation, automated and manual accessibility, production-like performance, image fidelity.
+
+**Exit criteria:** no critical accessibility/security issues; metadata reflects real content; performance and image quality are acceptable on mobile.
+
+## Phase 6 — Final QA and release readiness
+**Deliverables**
+- Review all public routes, locales, devices, and content.
+- Capture desktop/tablet/mobile and short-height screenshots with manifests.
+- Verify external links, social links, 404s, and optional contact delivery.
+- Record release and rollback notes.
 
 **Exit criteria**
-- Both locales render correct direction and navigation.
-- Shared shell is keyboard accessible and responsive.
-- Content validation rejects invalid or unapproved records.
-
-## Phase 2 — Portfolio gallery and artwork details
-
-**Deliverables**
-- Selected Works homepage section.
-- Works index organized by artist-approved series.
-- Artwork detail route or detail panel.
-- Responsive image derivatives and accurate artwork captions.
-- Optional lightbox only if it passes accessibility and mobile checks.
-
-**Tests**
-- Gallery renders only published/approved work.
-- Artwork detail metadata hides unknown values.
-- Image alt text and dimensions are present.
-- Gallery order and keyboard behavior are stable.
-- Broken/missing images show a graceful fallback.
-
-**Exit criteria**
-- Artist can review every published image and caption.
-- Image fidelity is checked against original files.
-- Desktop, tablet, mobile, LTR, and RTL reviews pass.
-
-## Phase 3 — Artist profile, CV, and contact
-
-**Deliverables**
-- About page with separate artist statement and biography.
-- CV/exhibitions page using verified records; hide empty sections.
-- Contact page with approved email or configured form.
-- Artwork-specific enquiry links if approved.
-- Instagram link to the supplied account.
-
-**Tests**
-- No unapproved facts appear in public output.
-- Contact links are valid and accessible.
-- Form validation, spam controls, and failure states are tested if a form exists.
-- External social links have appropriate labels and safe behavior.
-
-**Exit criteria**
-- Artist approves all published text and contact methods.
-- No private address or phone is exposed without explicit approval.
-
-## Phase 4 — SEO, accessibility, performance, and security
-
-**Deliverables**
-- Per-page title/description, canonical URLs, Open Graph metadata.
-- Sitemap, robots.txt, structured data, and language alternates.
-- Optimized image delivery and loading priorities.
-- Accessibility review against WCAG 2.2 AA baseline.
-- Privacy/security review for forms, scripts, and external services.
-
-**Tests**
-- Metadata, sitemap, robots, canonical, and hreflang checks.
-- Structured data validation using only supported facts.
-- Automated accessibility checks plus manual keyboard/screen-reader review.
-- Core Web Vitals and mobile performance review.
-- Image visual regression/fidelity spot checks.
-
-**Exit criteria**
-- No critical accessibility defects.
-- No unapproved data or image assets.
-- Performance is acceptable on representative mobile conditions.
-- Search-engine metadata reflects the actual artist identity and content.
-
-## Phase 5 — Final content QA and release readiness
-
-**Deliverables**
-- Artist review across all pages, languages, and responsive sizes.
-- Final copy proofread by the artist or an approved editor.
-- Verified contact/social links.
-- Optional press-kit PDF if approved.
-- Release checklist and rollback notes.
-
-**Exit criteria**
-- `npm run lint`, `npm run typecheck`, and `npm run build` pass.
-- Automated unit/component/integration/E2E checks relevant to implemented behavior pass.
-- GitHub Actions CI passes on the feature branch.
-- Artist gives explicit approval of content and visual presentation.
-- Deployment and branch merge are separately authorized.
+- npm run lint, npm run typecheck, npm run build pass.
+- Relevant unit/component/integration/E2E checks pass.
+- GitHub Actions CI passes on feature, confirmed from logs.
+- Artist/site owner approves public content and visual presentation.
+- Deployment and merge are separately authorized.
 
 ## CI expectations
-
-The current repository CI validates dependency installation, ESLint, TypeScript, production build, and a production homepage smoke test on pushes to `feature`, `stage`, and `main`, plus pull requests targeting those branches.
-
-As portfolio features are implemented, extend CI to include:
-- Unit tests for artwork/series data validation.
-- Component tests for gallery, artwork metadata, navigation, and language controls.
-- Route tests for locale, canonical metadata, and not-found states.
-- E2E tests for navigation, RTL/LTR, keyboard gallery use, and contact flows.
-- Automated accessibility checks for core routes.
-- Responsive visual snapshots using only approved test artwork assets.
-
-Do not claim a check exists or passes until the workflow actually runs and its logs confirm the result.
+The current package scripts documented in README are lint, typecheck, and build. Inspect workflow configuration before stating additional checks exist. Extend CI to run relevant tests as they are implemented: schema tests, component tests, locale/routes, accessibility smoke checks, E2E, production build/smoke, and upload screenshots/reports where supported. Use synthetic fixtures, not real private artist data.
 
 ## Completion tracking
-
-Update this roadmap with evidence after each phase:
-- Status: not started / in progress / blocked / complete.
-- Commit(s) and changed paths.
-- Tests run and actual results.
-- Screenshots or artifacts for responsive visual review.
-- Open issues and decisions still needed from the artist.
-
-A phase is not complete merely because code has been written.
+For each phase record status (not started / in progress / blocked / complete), commit SHA and paths, actual commands/results, CI run URL/conclusion, screenshots/artifacts and viewports, artist approvals outstanding, known limitations, and next dependency. Code written is not sufficient evidence of completion.
