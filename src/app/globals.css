@@ -555,3 +555,27 @@ html[lang="fa"] .mobile-drawer[dir="rtl"] .nav-link {
     border-right: 0;
   }
 }
+
+/* Final locale-specific utility placement: compact controls sit at the content edge. */
+@media (min-width: 901px) {
+  .desktop-utility {
+    position: fixed;
+    top: 2rem;
+    left: auto;
+    right: clamp(2rem, 5vw, 5rem);
+    width: max-content;
+    min-height: 2.75rem;
+    padding: 0;
+  }
+  html[lang="fa"] .desktop-utility {
+    left: auto;
+    right: var(--sidebar);
+    direction: rtl;
+    justify-content: flex-end;
+  }
+}
+
+/* Let the drawer's locale direction determine the physical order of its settings. */
+.mobile-drawer .drawer-settings {
+  flex-direction: row;
+}
