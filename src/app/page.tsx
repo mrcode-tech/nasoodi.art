@@ -1,15 +1,17 @@
+import Link from "next/link";
+
 const currentYear = new Date().getFullYear();
 
 export default function Home() {
   return (
     <main>
       <header className="shell site-header">
-        <a aria-label="nasoodi.art home" className="brand" href="/">
+        <Link aria-label="nasoodi.art home" className="brand" href="/">
           <span aria-hidden="true" className="brand-mark">
             n.
           </span>
           <span>nasoodi.art</span>
-        </a>
+        </Link>
         <span className="header-note">An independent digital space</span>
       </header>
 
