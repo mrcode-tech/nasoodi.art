@@ -77,3 +77,8 @@ Added `scripts/verify-vercel-deployment-policy.mjs` and wired it into `npm test`
 - the only branches explicitly enabled are `stage` and `main`.
 
 The GitHub Actions workflow continues to validate `feature`, `stage`, and `main`; this check protects the separate Vercel deployment allowlist. It does not claim to inspect or change Vercel dashboard settings. CI verification for the new guard must be recorded against the resulting feature-branch commit before treating this regression coverage as verified.
+
+
+## Portfolio asset audit CI artifact — 2026-10-30
+
+CI now runs `npm run audit:assets` after the production build and uploads `asset-audit/manifest.json` alongside browser screenshots and diagnostics. The manifest records candidate path, detected PNG/JPEG format, pixel dimensions, aspect ratio, byte size, SHA-256, and explicit approval-required/non-publishable status. Missing or invalid image candidates fail CI. The audit is not a rights or artist-approval check and does not generate public derivatives.
