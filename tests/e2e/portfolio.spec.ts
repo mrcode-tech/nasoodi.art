@@ -260,3 +260,44 @@ test("mobile drawer closes when switching locale", async ({ page }) => {
   await expect(page.locator("html")).toHaveAttribute("dir", "rtl");
   await expect(dialog).toBeHidden();
 });
+
+
+for (const locale of ["en", "fa"] as const) {
+  test(`mobile ${locale} drawer is physically left-aligned and enters from the left`, async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto(`/${locale}`);
+    const drawer = page.locator("#mobile-navigation");
+    await expect(drawer).toHaveAttribute("aria-hidden", "true");
+    await page.getByRole("button", { name: locale === "fa" ? "باز کردن راهبری" : "Open navigation" }).click();
+    await expect(drawer).toBeVisible();
+    await expect(drawer).toHaveAttribute("aria-hidden", "false");
+    const geometry = await drawer.evaluate((element) => {
+      const rect = element.getBoundingClientRect();
+      return { left: rect.left, right: rect.right, width: rect.width, viewport: window.innerWidth };
+    });
+    expect(geometry.left).toBe(0);
+    expect(geometry.right).toBeLessThanOrEqual(geometry.viewport);
+    expect(geometry.width).toBeLessThanOrEqual(geometry.viewport);
+    await expect(drawer.locator(".nav-link").first()).toHaveCSS("direction", locale === "fa" ? "rtl" : "ltr");
+  });
+}
+
+for (const locale of ["en", "fa"] as const) {
+  test(`${locale} homepage artist title uses a restrained responsive display size`, async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto(`/${locale}`);
+    const title = page.locator("#home-title");
+    await expect(title).toBeVisible();
+    const metrics = await title.evaluate((element) => {
+      const style = getComputedStyle(element);
+      const rect = element.getBoundingClientRect();
+      const range = document.createRange();
+      range.selectNodeContents(element);
+      const lineRects = Array.from(range.getClientRects()).filter((item) => item.width > 0 && item.height > 0);
+      return { fontSize: parseFloat(style.fontSize), height: rect.height, lineHeight: parseFloat(style.lineHeight), lineCount: lineRects.length };
+    });
+    expect(metrics.fontSize).toBeLessThanOrEqual(44);
+    expect(metrics.height).toBeLessThanOrEqual(metrics.lineHeight * 3.2);
+    expect(metrics.lineCount).toBeGreaterThan(0);
+  });
+}
