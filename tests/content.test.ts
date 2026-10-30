@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { getPublicArtworks,getPublicGalleries,getPublicJournal,getPublicCvEntries,getPublicArtistProfile,getPublicContactDetails,getUpcomingJournalEvents,getArtworkStructuredData,getGalleryStructuredData,getJournalStructuredData,serializeJsonLd,getHomepageFeaturedArtworks,getGalleryCoverArtwork,getJournalEntriesForCategory,isSafeJournalHref,portfolioStructuredData,type Artwork,type Gallery,type JournalEntry,type CvEntry,type ArtistProfile,type ContactDetails, hasExplicitTimeZone } from "../src/lib/site";
+import { getPublicArtworks,getPublicGalleries,isSafeLocalImagePath,getPublicJournal,getPublicCvEntries,getPublicArtistProfile,getPublicContactDetails,getUpcomingJournalEvents,getArtworkStructuredData,getGalleryStructuredData,getJournalStructuredData,serializeJsonLd,getHomepageFeaturedArtworks,getGalleryCoverArtwork,getJournalEntriesForCategory,isSafeJournalHref,portfolioStructuredData,type Artwork,type Gallery,type JournalEntry,type CvEntry,type ArtistProfile,type ContactDetails, hasExplicitTimeZone } from "../src/lib/site";
 const work:Artwork={id:"w1",slug:"work-one",title:{en:"Work",fa:"اثر"},images:[{src:"/art/work.jpg",alt:{en:"Painting",fa:"نقاشی"},role:"primary",width:1200,height:900}],rightsConfirmed:true,status:"published"};
 test("artwork stays private until published and rights-cleared",()=>{assert.equal(getPublicArtworks([{...work,status:"needs-review"}],"en").length,0);assert.equal(getPublicArtworks([{...work,rightsConfirmed:false}],"en").length,0);assert.equal(getPublicArtworks([work],"en").length,1);});
 test("artwork requires localized title and primary image alt",()=>{assert.equal(getPublicArtworks([{...work,title:{en:"Work"}}],"fa").length,0);assert.equal(getPublicArtworks([{...work,images:[{...work.images[0],alt:{en:""}}]}],"en").length,0);});
@@ -182,4 +182,11 @@ test("gallery structured data lists only its published localized artworks in edi
   {position:1,name:"Work",url:"https://nasoodi.art/en/works/work-one"},
   {position:2,name:"Second work",url:"https://nasoodi.art/en/works/work-two"},
  ]);
+});
+
+test("artwork images must use safe same-origin public paths",()=>{
+ for(const path of ["https://example.org/image.jpg","//example.org/image.jpg","/../private.jpg","/%2e%2e/private.jpg","/images\\\\private.jpg","/image.jpg?redirect=https://example.org","/image.jpg#fragment","/images/%2f%2fexample.org/image.jpg"]){
+  assert.equal(isSafeLocalImagePath(path),false,path);
+ }
+ assert.equal(isSafeLocalImagePath("/artworks/painting%20one.jpg"),true);
 });

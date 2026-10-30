@@ -161,8 +161,14 @@ export function getJournalStructuredData(entry: JournalEntry, locale: Locale, ca
       : {}),
   };
 }
+export function isSafeLocalImagePath(src: string): boolean {
+  if (!src.startsWith("/") || src.startsWith("//") || src.includes("\\") ||
+    /[?#\u0000-\u001f]/.test(src) || /%(?:2e|2f|5c)/i.test(src)) return false;
+  return src.split("/").every((segment) => segment !== "." && segment !== "..");
+}
 export function primaryImageFor(work: Artwork) {
-  return work.images.find((image) => image.role === "primary" && image.src.trim() && image.width > 0 && image.height > 0);
+  return work.images.find((image) => image.role === "primary" && isSafeLocalImagePath(image.src) &&
+    image.width > 0 && image.height > 0);
 }
 export function getPublicArtworks(items: Artwork[], locale: Locale) {
   return items.filter((work) => work.status === "published" && work.rightsConfirmed &&

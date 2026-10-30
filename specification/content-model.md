@@ -277,3 +277,7 @@ The Journal specification is authoritative for its detailed schema, validation, 
 The content model must support editorially composed pages without forcing every record into identical card geometry. Presentation components must derive image ratio, optional metadata, locale availability, and publication state from validated content rather than inserting placeholders.
 
 Use the shared design contract in design-engineering-skills.md and design-direction-and-system-refinement.md. Keep canonical content records separate from their visual presentation. Artwork, Gallery, Journal, and Event records may share reusable primitives, but their hierarchy and page composition must remain distinct.
+
+## Artwork image source-path validation
+
+Artwork image records reference same-origin public assets using root-relative paths. External absolute URLs, protocol-relative URLs, backslash paths, query/fragment-bearing sources, control characters, and encoded or literal traversal/separator segments are rejected before an image can qualify as the public primary artwork image. This keeps the portfolio's image pipeline tied to repository-controlled, approved masters/derivatives rather than arbitrary remote hosts. Rights and artist approval remain separate mandatory publication gates.

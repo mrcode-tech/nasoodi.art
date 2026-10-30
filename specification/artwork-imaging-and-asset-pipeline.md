@@ -92,3 +92,8 @@ The image pipeline must support the visual quality contract in design-engineerin
 - Image loading priority must reflect actual visual prominence; do not eagerly load every gallery image.
 - Validate derivatives against the approved master at realistic display sizes and across high-density/mobile displays.
 - If a composition cannot preserve the complete artwork, use contain or an alternative editorial layout rather than cropping the work.
+
+
+## Runtime source-path contract
+
+Published artwork image records must resolve to root-relative paths served by the Nasoodi.art application. Remote absolute/protocol-relative URLs, path traversal, encoded separators, backslashes, query strings, fragments, and control characters are not valid image sources. The runtime publication gate enforces this for the primary image; derivative generation and source-to-derivative comparison must continue to use the approved local master. This validation does not establish image rights or artist approval.
