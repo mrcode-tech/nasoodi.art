@@ -509,3 +509,40 @@ Key design rules:
 - The easel is decorative to assistive technology and cannot intercept pointer or keyboard interaction.
 
 Do not implement the effect until the exact `specification/assets/easel.png` has been inspected for intrinsic dimensions, transparency, visible bounds, and suitability. Follow the specialist document rather than guessing its crop or stretching it to page height.
+
+
+## 22. Multiple galleries and artwork-led homepage
+
+The portfolio supports multiple curated galleries, each with a title, short artist-approved description, cover artwork, curated artwork order, and its own detail page. The complete implementation contract is [gallery-collections-and-artwork-detail.md](./gallery-collections-and-artwork-detail.md). Homepage hero, Featured Works, and Featured Galleries are defined in [homepage-artwork-hero-and-featured-works.md](./homepage-artwork-hero-and-featured-works.md).
+
+### 22.1 Homepage hero painting
+
+- The homepage hero must prominently show one approved finished painting, not only a studio scene or decorative canvas layer.
+- Initial candidate source: `specification/assets/artwork.JPG`. Inspect the actual image and confirm its intended role and public-use approval before implementation; do not infer suitability or title from its filename.
+- Preserve full image ratio, orientation, color, texture, and canvas edges. No unapproved crop, filter, mirroring, or simulated brush movement.
+- Place artist identity and clear Works/Galleries actions beside or below the image; avoid obscuring the painting with copy.
+- Use a static image by default. Any subtle entrance effect must be optional and respect reduced motion.
+
+### 22.2 Featured Works
+
+- Place a substantial selected-paintings section in the middle of the homepage, normally 3–6 approved artworks where available.
+- Each item shows its painting and approved title, with year/medium only when verified.
+- Each item links to its artwork detail page when published; include a clear all-works link.
+- Use canonical artwork records and explicit editorial order. Do not pad the section with placeholders.
+
+### 22.3 Featured Galleries
+
+- Include a distinct gallery-discovery section, normally 2–4 published galleries where available.
+- Each preview includes cover artwork, gallery title, concise description, and a link to the gallery's own page.
+- Include a link to the complete gallery index.
+- Gallery cover and artwork records are reused, not duplicated.
+
+### 22.4 Galleries index and detail
+
+- The index presents all published galleries as editorial cards.
+- Selecting a gallery title, cover, or Explore link opens its dedicated localized route.
+- The gallery detail page shows its title, short description, and artwork collection in curated order.
+- Artwork cards lead to individual detail pages when available.
+- Route patterns must follow the existing App Router and locale convention; the dedicated contract describes conceptual patterns and fallback behavior.
+
+The former studio-scene hero concept remains an optional studio/process feature only if separately approved and placed without displacing the hero painting. The artwork-led hero contract takes precedence for the homepage's primary visual.
