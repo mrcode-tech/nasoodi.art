@@ -29,6 +29,42 @@ This document defines the minimum structured content required to publish a trust
 | Contact email | Required only if email contact is offered | Must be confirmed |
 | CV/exhibitions | Optional | Publish only verified entries |
 
+## 2.1 Runtime artist profile and contact publication contracts
+
+The current application models the artist profile and public contact destinations separately from artwork and Journal records. These records remain absent until the artist/site owner supplies and approves the real values.
+
+- An artist profile requires a published state, explicit artist approval, approved locale, and non-empty localized statement and factual biography before the About page becomes indexable.
+- An optional portrait is displayed only when its rights are confirmed, its dimensions are positive, and localized alternative text is supplied for the current locale. An invalid optional portrait is omitted without suppressing otherwise valid profile text.
+- Contact destinations require explicit owner approval and locale approval. Email is validated before creating a `mailto:` link. External social destinations must use HTTPS and the approved Instagram host; arbitrary external URLs are not accepted.
+- About and Contact routes remain available with truthful pending-content messages while their content is absent, but they remain noindex and are excluded from the sitemap.
+- A locale alternate is emitted only when the corresponding profile/contact content is approved in the other locale. Never copy or machine-translate the source-language statement, biography, or contact text.
+
+The implementation contract uses these fields:
+
+```ts
+type ArtistProfile = {
+  statement: LocalizedText;
+  biography: LocalizedText;
+  portrait?: {
+    src: string;
+    alt: LocalizedText;
+    width: number;
+    height: number;
+    rightsConfirmed: boolean;
+  };
+  status: PublicationStatus;
+  approvedLocales: Array<"fa" | "en">;
+  artistApproved: boolean;
+};
+
+type ContactDetails = {
+  email?: string;
+  instagramUrl?: string;
+  approvedLocales: Array<"fa" | "en">;
+  ownerApproved: boolean;
+};
+```
+
 ## 3. Artwork record
 
 A work may be published with only the fields that are known and approved. Suggested conceptual shape:

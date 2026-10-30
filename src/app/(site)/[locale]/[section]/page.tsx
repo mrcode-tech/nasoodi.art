@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { artworks,galleries,journalEntries,cvEntries,artistProfile,contactDetails,getPublicArtistProfile,getPublicContactDetails,getPublicArtworks,getPublicGalleries,getPublicJournal,getPublicCvEntries,getJournalEntriesForCategory,journalCategories,getGalleryCoverArtwork,type JournalCategory } from "@/lib/site";
-import { copyFor,isLocale,pagePath } from "@/lib/site";
+import { copyFor,isLocale,pagePath,otherLocale } from "@/lib/site";
 type Props={params:Promise<{locale:string;section:string}>;searchParams:Promise<{category?:string}>};
 const names=["works","galleries","journal","about","contact","cv"] as const;
 type Section=typeof names[number];
@@ -15,7 +15,15 @@ export async function generateMetadata({params}:Props):Promise<Metadata>{const {
   section==="cv" ? getPublicCvEntries(cvEntries,locale).length>0 :
   section==="about" ? Boolean(getPublicArtistProfile(artistProfile,locale)) :
   section==="contact" ? Boolean(getPublicContactDetails(contactDetails,locale)) : false;
- return {title:copyFor(locale)[section],alternates:{canonical:pagePath(locale,section)},robots:{index:indexable,follow:true}};}
+ const other=otherLocale(locale);
+ const translated = section==="works" ? getPublicArtworks(artworks,other).length>0 :
+  section==="galleries" ? getPublicGalleries(galleries,artworks,other).length>0 :
+  section==="journal" ? getPublicJournal(journalEntries,other).length>0 :
+  section==="cv" ? getPublicCvEntries(cvEntries,other).length>0 :
+  section==="about" ? Boolean(getPublicArtistProfile(artistProfile,other)) :
+  section==="contact" ? Boolean(getPublicContactDetails(contactDetails,other)) : false;
+ const profile=section==="about"?getPublicArtistProfile(artistProfile,locale):undefined;
+ return {title:copyFor(locale)[section],...(profile?{description:profile.statement[locale]}:{}),alternates:{canonical:pagePath(locale,section),...(translated?{languages:{[locale]:pagePath(locale,section),[other]:pagePath(other,section)}}:{})},robots:{index:indexable,follow:true}};}
 export default async function SectionPage({params,searchParams}:Props){const [{locale,section},{category:rawCategory}]=await Promise.all([params,searchParams]);if(!isLocale(locale)||!valid(section))notFound();const t=copyFor(locale);
  if(section==="about"){const profile=getPublicArtistProfile(artistProfile,locale);return <div className="page-content"><header className="page-heading"><p className="eyebrow">{t.about}</p><h1>{locale==="fa"?"غزاله عبداله زاده نسودی":"Ghazaleh Abdolahzade Nasoodi"}</h1><p className="artist-discipline">{t.discipline}</p></header>{profile?<div className="profile-content">{profile.portrait&&<Image className="artist-portrait" src={profile.portrait.src} alt={profile.portrait.alt[locale]??""} width={profile.portrait.width} height={profile.portrait.height} sizes="(max-width: 700px) 100vw, 34rem"/>}<section><h2>{t.statement}</h2><p>{profile.statement[locale]}</p></section><section><h2>{t.biography}</h2><p>{profile.biography[locale]}</p></section></div>:<p className="empty-note">{t.profilePending}</p>}</div>;}
  if(section==="contact"){const details=getPublicContactDetails(contactDetails,locale);return <div className="page-content"><header className="page-heading"><p className="eyebrow">{t.contact}</p><h1>{t.contact}</h1></header>{details?<div className="contact-links">{details.email&&<p><span>{t.email}</span> <a href={`mailto:${details.email}`} dir="ltr">{details.email}</a></p>}{details.instagramUrl&&<p><span>{t.instagram}</span> <a href={details.instagramUrl} target="_blank" rel="noopener noreferrer" dir="ltr">{t.instagram} ↗</a></p>}</div>:<p className="empty-note">{t.contactPending}</p>}</div>;}
