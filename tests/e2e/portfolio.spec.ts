@@ -247,3 +247,16 @@ test("empty CV remains unpublished, unlinked, and non-indexable", async ({ page,
     await expect(page.locator(".desktop-sidebar, .mobile-drawer").getByRole("link", { name: /CV|رزومه/ })).toHaveCount(0);
   }
 });
+
+
+test("mobile drawer closes when switching locale", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/en");
+  await page.getByRole("button", { name: "Open navigation" }).click();
+  const dialog = page.getByRole("dialog", { name: "Open navigation" });
+  await expect(dialog).toBeVisible();
+  await dialog.getByRole("link", { name: "فارسی" }).click();
+  await expect(page).toHaveURL(/\\/fa$/);
+  await expect(page.locator("html")).toHaveAttribute("dir", "rtl");
+  await expect(dialog).toBeHidden();
+});
