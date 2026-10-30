@@ -2,7 +2,7 @@ import Image from "next/image";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { artworks,galleries,journalEntries,getPublicArtworks,getPublicGalleries,getPublicJournal,copyFor,isLocale,pagePath,otherLocale,primaryImageFor,isSafeJournalHref,getArtworkStructuredData,getGalleryStructuredData,getJournalStructuredData,serializeJsonLd } from "@/lib/site";
+import { artworks,galleries,journalEntries,getPublicArtworks,getPublicGalleries,getPublicJournal,getGalleryCoverArtwork,copyFor,isLocale,pagePath,otherLocale,primaryImageFor,isSafeJournalHref,getArtworkStructuredData,getGalleryStructuredData,getJournalStructuredData,serializeJsonLd } from "@/lib/site";
 type DetailProps={params:Promise<{locale:string;section:string;slug:string}>};
 export async function generateMetadata({params}:DetailProps):Promise<Metadata>{
  const {locale,section,slug}=await params;
@@ -14,13 +14,14 @@ export async function generateMetadata({params}:DetailProps):Promise<Metadata>{
   const image=primaryImageFor(work);
   const description=work.description?.[locale]??work.title[locale];
   const translated=getPublicArtworks(artworks,otherLocale(locale)).some(item=>item.slug===slug);
-  return {title:work.title[locale],description,alternates:{canonical,...(translated?{languages:{[locale]:canonical,[otherLocale(locale)]:pagePath(otherLocale(locale),`works/${slug}`)}}:{})},openGraph:{type:"article",title:work.title[locale],description,...(image?{images:[image.src]}:{})}};
+  return {title:work.title[locale],description,alternates:{canonical,...(translated?{languages:{[locale]:canonical,[otherLocale(locale)]:pagePath(otherLocale(locale),`works/${slug}`)}}:{})},openGraph:{type:"article",title:work.title[locale],description,...(image?{images:[image.src]}:{})},...(image?{twitter:{card:"summary_large_image",images:[image.src],title:work.title[locale],description}}:{})};
  }
  if(section==="galleries"){
   const gallery=getPublicGalleries(galleries,artworks,locale).find(item=>item.slug===slug);
   if(!gallery)return {robots:{index:false,follow:true}};
   const translated=getPublicGalleries(galleries,artworks,otherLocale(locale)).some(item=>item.slug===slug);
-  return {title:gallery.title[locale],description:gallery.description[locale],alternates:{canonical,...(translated?{languages:{[locale]:canonical,[otherLocale(locale)]:pagePath(otherLocale(locale),`galleries/${slug}`)}}:{})},openGraph:{type:"website",title:gallery.title[locale],description:gallery.description[locale]}};
+  const cover=getGalleryCoverArtwork(gallery,artworks,locale)?.image;
+  return {title:gallery.title[locale],description:gallery.description[locale],alternates:{canonical,...(translated?{languages:{[locale]:canonical,[otherLocale(locale)]:pagePath(otherLocale(locale),`galleries/${slug}`)}}:{})},openGraph:{type:"website",title:gallery.title[locale],description:gallery.description[locale],...(cover?{images:[cover.src]}:{})},...(cover?{twitter:{card:"summary_large_image",images:[cover.src],title:gallery.title[locale],description:gallery.description[locale]}}:{})};
  }
  if(section==="journal"){
   const entry=getPublicJournal(journalEntries,locale).find(item=>item.slug===slug);
