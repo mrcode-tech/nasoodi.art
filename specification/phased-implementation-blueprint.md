@@ -626,3 +626,17 @@ Extended the mobile navigation regression suite to verify:
 Verified on commit `71749ae10e9de3f9a5161657450471b56c1d1ca8`: [GitHub Actions run 41084829442](https://github.com/mrcode-tech/nasoodi.art/actions/runs/41084829442) passed ESLint, TypeScript, **24 content tests**, production build, **22 Chromium E2E tests**, screenshot/diagnostic artifact upload, and production route smoke test. A second run for the same SHA was still in progress at the time of this update; the successful run above completed all steps.
 
 This remains automated Chromium verification. Screen-reader announcements, real touch-device behavior, Firefox/Safari, zoom/reflow, and artist-approved populated pages remain open QA tasks.
+
+
+## Incremental implementation update — 2026-10-30 (Journal rich-link validation)
+
+Hardened the Journal rich-text link allowlist:
+- Same-origin root-relative paths remain allowed.
+- Protocol-relative URLs, backslash-normalized paths, control characters, non-HTTPS external destinations, and external URLs containing username/password credentials are rejected.
+- External HTTPS destinations remain supported and are rendered with the existing new-window safety attributes.
+
+The first test run exposed an over-escaped character-class guard. The implementation was corrected to explicit single-backslash detection plus a control-character range; the regression tests were retained.
+
+Verified on commit `f40ce0b758c9b7d595c520c7d98f5518981b3bf2`: [GitHub Actions run 41085668848](https://github.com/mrcode-tech/nasoodi.art/actions/runs/41085668848) passed ESLint, TypeScript, **25 content tests**, production build, **22 Chromium E2E tests**, screenshot/diagnostic artifact upload, and production route smoke test. Artifact: `nasoodi-visual-qa-f40ce0b758c9b7d595c520c7d98f5518981b3bf2` (ID `12991846059`).
+
+No public content, artwork, or owner approvals were changed by this implementation.
