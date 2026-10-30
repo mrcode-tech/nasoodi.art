@@ -259,3 +259,16 @@ Validation:
 ## 12. Implementation boundary
 
 This document defines intended design and behavior. It does not establish that the candidate hero image or gallery assets have been visually inspected, rights-cleared, or approved. The implementation agent must inspect the files and obtain/confirm approval before publication. Do not generate replacement paintings or invent gallery titles/descriptions.
+
+## 13. Latest from the Journal
+
+The homepage must provide a clear, direct path to the unified Journal archive. Follow the complete content and interaction contract in [journal-and-events.md](./journal-and-events.md).
+
+- Place a restrained “Latest from the Journal” section after Featured Works and Featured Galleries, before the final contact/footer region unless the approved composition establishes a better order.
+- Show one eligible upcoming event prominently when one exists, followed by up to two recent published Journal entries.
+- If no eligible upcoming event exists, use the most recent published entries. If there are no approved published entries, omit the section rather than showing placeholders.
+- Each card links to its canonical Journal detail route.
+- The section heading or explicit “View all journal entries” link must navigate to the Journal index.
+- Use the shared Journal content records; do not duplicate editorial data in homepage configuration.
+- Keep the section responsive, localized, accessible, and visually subordinate to Featured Works and Featured Galleries.
+- Do not label an expired event as upcoming or display unapproved event facts.
