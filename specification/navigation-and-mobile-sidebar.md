@@ -288,3 +288,14 @@ This specification is implemented only when:
 - Do not invent additional navigation destinations or expose routes that are not ready.
 - Confirm the final visual treatment of the dark theme during design review before publication.
 - If repository inspection reveals an existing locale/theme implementation, extend and reconcile it rather than replacing it without evidence.
+
+## Design-engineering refinement
+
+Apply design-engineering-skills.md and design-direction-and-system-refinement.md to the navigation implementation.
+
+- Navigation should feel like a quiet gallery wayfinding system, not a dashboard menu. Prefer clear typography, restrained active indication, and purposeful whitespace over icon-heavy rows, pills, or decorative containers.
+- The desktop sidebar remains physically left in Persian and English; only reading direction and text alignment change.
+- The mobile drawer must provide immediate, reliable feedback, preserve focus, close predictably, and avoid unnecessary animation. Any spatial transition must be interruptible and reduced-motion aware.
+- Keyboard-triggered navigation and frequent interactions must not be delayed by animation.
+- Hover treatment is only for hover-capable fine pointers; touch must not depend on hover.
+- Keep locale/theme utilities accessible and reachable, with visible focus and correct expanded/current semantics.
