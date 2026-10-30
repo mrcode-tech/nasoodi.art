@@ -11,7 +11,7 @@ Nasoodi.art should feel like a contemporary artist's studio curated as a small i
 
 **Core rule:** artwork is the content; the interface is its frame.
 
-The animated studio hero is the signature opening moment. The rest of the site should continue the same visual language in a calmer, more navigable way. Do not repeat the hero animation on every page or turn every section into a dramatic visual effect.
+The approved finished painting is the primary homepage hero focal point. A studio/process photograph may support the artist identity in a secondary placement. The hero should be compelling as a static composition; any motion is optional, restrained, and must pass the shared motion decision gate. Do not make the studio scene or animation the signature at the expense of the painting.
 
 ## 2. Design principles
 
@@ -20,7 +20,7 @@ The animated studio hero is the signature opening moment. The rest of the site s
 3. **Editorial hierarchy:** strong page titles, small section eyebrows, readable body copy, quiet metadata.
 4. **Consistent rhythm:** predictable page gutters, section spacing, content widths, and grid gaps.
 5. **Human authenticity:** use only artist-approved photographs and facts; no fictional biography or generated artwork.
-6. **Motion with purpose:** reserve the main entrance sequence for the homepage hero; elsewhere use subtle, optional transitions.
+6. **Motion with purpose:** keep the artwork-led homepage hero visually strong when static; use only subtle, optional UI transitions elsewhere.
 7. **Bilingual by design:** Persian RTL and English LTR must both feel native, not mirrored afterthoughts.
 8. **Accessible by default:** keyboard, focus, contrast, reduced motion, semantic structure, readable image descriptions.
 9. **Responsive composition:** re-compose each page at breakpoints rather than simply shrinking desktop layouts.
