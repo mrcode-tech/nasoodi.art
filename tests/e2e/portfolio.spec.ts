@@ -278,10 +278,11 @@ for (const locale of ["en", "fa"] as const) {
     await page.setViewportSize({ width: 390, height: 844 });
     await page.goto(`/${locale}`);
     const drawer = page.locator("#mobile-navigation");
-    await expect(drawer).toHaveAttribute("aria-hidden", "true");
+    await expect(drawer).toHaveCount(0);
+    await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
     await page.getByRole("button", { name: locale === "fa" ? "باز کردن راهبری" : "Open navigation" }).click();
     await expect(drawer).toBeVisible();
-    await expect(drawer).toHaveAttribute("aria-hidden", "false");
+    await expect(drawer).not.toHaveAttribute("aria-hidden", "true");
     await waitForDrawerToSettle(drawer);
     const geometry = await drawer.evaluate((element) => {
       const rect = element.getBoundingClientRect();
