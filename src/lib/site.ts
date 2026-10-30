@@ -19,7 +19,7 @@ export type JournalTextBlock =
 export type LocalizedRichText = Partial<Record<Locale, JournalTextBlock[]>>;
 export type JournalEntry = { id: string; slug: string; type: JournalCategory; title: Localized; summary: Localized; body?: LocalizedRichText; status: Status; publishedAt?: string; approvedLocales: Locale[]; artistApproved: boolean; event?: JournalEvent };
 export function isSafeJournalHref(href: string): boolean {
-  if (!href || href.includes("\\\\") || /[\\u0000-\\u001f]/.test(href)) return false;
+  if (!href || href.includes("\\") || /[\u0000-\u001f]/.test(href)) return false;
   if (href.startsWith("/") && !href.startsWith("//")) {
     try { return new URL(href, "https://nasoodi.art").origin === "https://nasoodi.art"; }
     catch { return false; }
