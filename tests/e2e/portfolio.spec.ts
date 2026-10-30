@@ -132,7 +132,8 @@ for (const locale of ["en", "fa"] as const) {
     expect(utilityStyle.backgroundColor).not.toBe("transparent");
     expect(utility?.y).toBe(0);
     expect(utility?.height).toBeGreaterThanOrEqual(75);
-    expect(mainBounds?.y).toBeGreaterThanOrEqual((utility?.y ?? 0) + (utility?.height ?? 0));
+    const contentBounds = await page.locator("main#main-content").boundingBox();
+    expect(contentBounds?.y).toBeGreaterThanOrEqual((utility?.y ?? 0) + (utility?.height ?? 0));
     if (locale === "fa") expect((utility?.x ?? 0) + (utility?.width ?? 0)).toBeLessThan(1440 - (bounds?.width ?? 0));
     else expect((utility?.x ?? 0)).toBeGreaterThan(1440 - (bounds?.width ?? 0) - 220);
     await page.screenshot({ path: test.info().outputPath(`${locale}-desktop-sidebar.png`), fullPage: true });
