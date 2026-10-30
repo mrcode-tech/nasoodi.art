@@ -386,3 +386,15 @@ TYPE LABEL · TITLE · SUMMARY · PUBLICATION DATE
 ```
 
 Journal is a primary navigation destination on desktop and mobile. Persian and English use the same semantic order with locale-appropriate direction and labels.
+
+## 14. Visual composition and interaction quality
+
+All wireframes in this document are structural, not permission to implement generic card grids or placeholder imagery. Apply [design-direction-and-system-refinement.md](./design-direction-and-system-refinement.md) for the visual composition and [design-engineering-skills.md](./design-engineering-skills.md) for component states and motion.
+
+For each wireframe:
+- Establish one clear focal point and meaningful reading order.
+- Use open editorial compositions and varied image/text proportions where appropriate; do not force all content into equal cards.
+- Preserve artwork's natural ratio and full composition.
+- Specify desktop, tablet, mobile, and short-height behavior, not only a desktop sketch.
+- Include Persian RTL and English LTR, long titles, sparse content, and reduced-motion states.
+- Use motion only when it communicates a state or spatial relationship; wireframes must remain understandable as static layouts.
