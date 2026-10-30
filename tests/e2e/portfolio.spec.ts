@@ -174,3 +174,41 @@ test("production routes include baseline browser security headers", async ({ req
   expect(headers["permissions-policy"]).toContain("camera=()");
   expect(headers["strict-transport-security"]).toContain("max-age=31536000");
 });
+
+test("mobile drawer closes through its close control and restores focus", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/en");
+  const trigger = page.getByRole("button", { name: "Open navigation" });
+  await trigger.click();
+  const dialog = page.getByRole("dialog", { name: "Open navigation" });
+  await expect(dialog).toBeVisible();
+  await dialog.getByRole("button", { name: "Close navigation" }).click();
+  await expect(dialog).toBeHidden();
+  await expect(trigger).toBeFocused();
+});
+
+test("mobile drawer closes through backdrop and route selection", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/en");
+  const trigger = page.getByRole("button", { name: "Open navigation" });
+  await trigger.click();
+  const dialog = page.getByRole("dialog", { name: "Open navigation" });
+  await expect(dialog).toBeVisible();
+  await page.locator(".menu-backdrop").click({ position: { x: 10, y: 10 } });
+  await expect(dialog).toBeHidden();
+  await trigger.click();
+  await dialog.getByRole("link", { name: "Works", exact: true }).click();
+  await expect(page).toHaveURL(/\/en\/works$/);
+  await expect(dialog).toBeHidden();
+});
+
+test("mobile drawer remains usable on a short-height viewport", async ({ page }) => {
+  await page.setViewportSize({ width: 320, height: 568 });
+  await page.goto("/fa");
+  await page.getByRole("button", { name: "باز کردن راهبری" }).click();
+  const dialog = page.getByRole("dialog", { name: "باز کردن راهبری" });
+  await expect(dialog).toBeVisible();
+  await expect(dialog.getByRole("button", { name: "بستن راهبری" })).toBeInViewport();
+  await dialog.getByRole("link", { name: "تماس", exact: true }).scrollIntoViewIfNeeded();
+  await expect(dialog.getByRole("link", { name: "تماس", exact: true })).toBeVisible();
+});
