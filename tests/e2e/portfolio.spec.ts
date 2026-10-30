@@ -134,8 +134,12 @@ for (const locale of ["en", "fa"] as const) {
     expect(utility?.height).toBeGreaterThanOrEqual(75);
     const contentBounds = await page.locator("main#main-content").boundingBox();
     expect(contentBounds?.y).toBeGreaterThanOrEqual((utility?.y ?? 0) + (utility?.height ?? 0));
-    if (locale === "fa") expect((utility?.x ?? 0) + (utility?.width ?? 0)).toBeLessThan(1440 - (bounds?.width ?? 0));
-    else expect((utility?.x ?? 0)).toBeGreaterThan(1440 - (bounds?.width ?? 0) - 220);
+    if (locale === "fa") {
+      expect((utility?.x ?? 0)).toBe(0);
+      await expect(utilityLocator).toHaveCSS("direction", "ltr");
+    } else {
+      expect((utility?.x ?? 0)).toBeGreaterThan(1440 - (bounds?.width ?? 0) - 220);
+    }
     await page.screenshot({ path: test.info().outputPath(`${locale}-desktop-sidebar.png`), fullPage: true });
   });
 }
@@ -454,3 +458,36 @@ for (const locale of ["en", "fa"] as const) {
     await expect(page.getByRole("menuitem", { name: /فارسی/ })).toBeVisible();
   });
 }
+
+
+test("main content has no duplicate footer and the mobile drawer ends with copyright", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/en");
+  await expect(page.locator(".site-main > .site-footer")).toHaveCount(0);
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/fa");
+  await page.getByRole("button", { name: "باز کردن راهبری" }).click();
+  const drawer = page.getByRole("dialog", { name: "باز کردن راهبری" });
+  await expect(drawer.locator(".drawer-copyright")).toContainText("nasoodi.art");
+  await expect(drawer.locator(".drawer-copyright")).toContainText(/©\s*\d{4}/);
+  const copyright = await drawer.locator(".drawer-copyright").boundingBox();
+  const settings = await drawer.locator(".drawer-settings").boundingBox();
+  expect(copyright!.y).toBeGreaterThan(settings!.y);
+});
+
+test("navigation underlines fit their labels and the mobile trigger has no outline border", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/en");
+  const link = page.locator(".desktop-sidebar .nav-link").first();
+  const linkBox = await link.boundingBox();
+  const textWidth = await link.evaluate((element) => {
+    const range = document.createRange();
+    range.selectNodeContents(element);
+    return range.getBoundingClientRect().width;
+  });
+  expect(Math.abs(linkBox!.width - textWidth)).toBeLessThan(3);
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/en");
+  const trigger = page.locator(".menu-trigger");
+  await expect(trigger).toHaveCSS("border-top-width", "0px");
+});
