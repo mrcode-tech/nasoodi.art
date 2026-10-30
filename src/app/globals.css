@@ -253,3 +253,6 @@ html[dir=rtl] .sidebar-menu-button{direction:rtl}
 @media(max-width:900px){.sidebar-root,.desktop-utility{display:none}.mobile-header{position:relative;z-index:15}.sheet-content{padding-left:max(1.5rem,env(safe-area-inset-left));padding-right:1.5rem}.site-main{margin-left:0;margin-right:0}}
 @media(max-width:600px){.hero-actions{align-items:stretch;flex-direction:column}.hero-actions .ui-button{width:100%}}
 @media(prefers-reduced-motion:reduce){.ui-button,.sheet-content{transition:none}}
+
+/* Radix Sheet state is authoritative; override legacy drawer visibility rules. */
+.sheet-content[data-state=open]{visibility:visible;pointer-events:auto;transform:translateX(0)}
