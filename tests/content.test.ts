@@ -146,4 +146,5 @@ test("contact destinations require owner and locale approval and safe values",()
  assert.equal(getPublicContactDetails({...details,approvedLocales:["fa"]},"en"),undefined);
  assert.equal(getPublicContactDetails({...details,instagramUrl:"javascript:alert(1)",email:undefined},"en"),undefined);
  assert.equal(getPublicContactDetails({...details,instagramUrl:"https://example.org",email:undefined},"en"),undefined);
+ assert.equal(getPublicContactDetails({...details,email:"not-an-email",instagramUrl:undefined},"en"),undefined);
 });

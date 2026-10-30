@@ -153,7 +153,7 @@ export function getPublicArtistProfile(profile: ArtistProfile | undefined, local
 export function getPublicContactDetails(details: ContactDetails | undefined, locale: Locale) {
   if (!details || !details.ownerApproved || !details.approvedLocales.includes(locale)) return undefined;
   const email = details.email?.trim();
-  const validEmail = email && /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(email) ? email : undefined;
+  const validEmail = email && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) ? email : undefined;
   let instagramUrl: string | undefined;
   if (details.instagramUrl) {
     try {
