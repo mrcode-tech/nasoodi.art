@@ -5,10 +5,10 @@ const work:Artwork={id:"w1",slug:"work-one",title:{en:"Work",fa:"اثر"},images
 test("artwork stays private until published and rights-cleared",()=>{assert.equal(getPublicArtworks([{...work,status:"needs-review"}],"en").length,0);assert.equal(getPublicArtworks([{...work,rightsConfirmed:false}],"en").length,0);assert.equal(getPublicArtworks([work],"en").length,1);});
 test("artwork requires localized title and primary image alt",()=>{assert.equal(getPublicArtworks([{...work,title:{en:"Work"}}],"fa").length,0);assert.equal(getPublicArtworks([{...work,images:[{...work.images[0],alt:{en:""}}]}],"en").length,0);});
 test("gallery requires unique published artwork members and member cover",()=>{const g:Gallery={id:"g1",slug:"gallery",title:{en:"Gallery",fa:"گالری"},description:{en:"Description",fa:"توضیح"},coverArtworkId:"w1",artworkIds:["w1"],status:"published",sortOrder:1};assert.equal(getPublicGalleries([g],[work],"en").length,1);assert.equal(getPublicGalleries([g],[],"en").length,0);assert.equal(getPublicGalleries([{...g,artworkIds:["w1","w1"]}],[work],"en").length,0);assert.equal(getPublicGalleries([{...g,coverArtworkId:"x"}],[work],"en").length,0);});
-test("journal only exposes published entries with localized title and summary",()=>{const j:JournalEntry={id:"j1",slug:"story",type:"story",title:{en:"Story",fa:"داستان"},summary:{en:"Summary",fa:"خلاصه"},status:"published"};assert.equal(getPublicJournal([j],"en").length,1);assert.equal(getPublicJournal([{...j,status:"draft"}],"en").length,0);assert.equal(getPublicJournal([j],"fa").length,1);});
+test("journal only exposes published entries with localized title and summary",()=>{const j:JournalEntry={id:"j1",slug:"story",type:"story",title:{en:"Story",fa:"داستان"},summary:{en:"Summary",fa:"خلاصه"},status:"published",approvedLocales:["en","fa"],artistApproved:true};assert.equal(getPublicJournal([j],"en").length,1);assert.equal(getPublicJournal([{...j,status:"draft"}],"en").length,0);assert.equal(getPublicJournal([j],"fa").length,1);});
 
 test("event entries require a valid time zone and occurrence time",()=>{
- const base:JournalEntry={id:"e1",slug:"event",type:"event",title:{en:"Opening",fa:"افتتاحیه"},summary:{en:"An opening",fa:"افتتاحیه"},status:"published"};
+ const base:JournalEntry={id:"e1",slug:"event",type:"event",title:{en:"Opening",fa:"افتتاحیه"},summary:{en:"An opening",fa:"افتتاحیه"},status:"published",approvedLocales:["en","fa"],artistApproved:true};
  assert.equal(getPublicJournal([base],"en").length,0);
  const valid:JournalEntry={...base,event:{startsAt:"2026-11-12T18:00:00",timeZone:"Europe/Berlin",venue:{en:"Studio",fa:"آتلیه"}}};
  assert.equal(getPublicJournal([valid],"en").length,1);
@@ -26,7 +26,7 @@ test("homepage featured selection is explicit, ordered, unique, and publication-
 });
 
 test("journal category defaults preserve legacy articles and event taxonomy",()=>{
- const story:JournalEntry={id:"story",slug:"story",type:"story",title:{en:"Story",fa:"روایت"},summary:{en:"Summary",fa:"خلاصه"},status:"published"};
+ const story:JournalEntry={id:"story",slug:"story",type:"story",title:{en:"Story",fa:"روایت"},summary:{en:"Summary",fa:"خلاصه"},status:"published",approvedLocales:["en","fa"],artistApproved:true};
  const exhibition:JournalEntry={...story,id:"exhibition",slug:"exhibition",type:"exhibition"};
  const studio:JournalEntry={...story,id:"studio",slug:"studio",type:"studio-update"};
  const event:JournalEntry={...story,id:"event",slug:"event",type:"event"};
@@ -51,4 +51,12 @@ test("journal rich-text links allow only HTTPS or same-site root-relative destin
  assert.equal(isSafeJournalHref("javascript:alert(1)"),false);
  assert.equal(isSafeJournalHref("//example.org"),false);
  assert.equal(isSafeJournalHref("http://example.org"),false);
+});
+
+test("journal publication requires explicit artist approval and locale approval",()=>{
+ const approved:JournalEntry={id:"approved",slug:"approved",type:"story",title:{en:"Story",fa:"روایت"},summary:{en:"Summary",fa:"خلاصه"},status:"published",approvedLocales:["en"],artistApproved:true};
+ assert.equal(getPublicJournal([approved],"en").length,1);
+ assert.equal(getPublicJournal([approved],"fa").length,0);
+ assert.equal(getPublicJournal([{...approved,artistApproved:false}],"en").length,0);
+ assert.equal(getPublicJournal([{...approved,approvedLocales:[]}],"en").length,0);
 });

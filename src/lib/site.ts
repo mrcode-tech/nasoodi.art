@@ -17,7 +17,7 @@ export type JournalTextBlock =
   | { type: "quote"; text: string; attribution?: string }
   | { type: "link"; text: string; href: string };
 export type LocalizedRichText = Partial<Record<Locale, JournalTextBlock[]>>;
-export type JournalEntry = { id: string; slug: string; type: JournalCategory; title: Localized; summary: Localized; body?: LocalizedRichText; status: Status; publishedAt?: string; event?: JournalEvent };
+export type JournalEntry = { id: string; slug: string; type: JournalCategory; title: Localized; summary: Localized; body?: LocalizedRichText; status: Status; publishedAt?: string; approvedLocales: Locale[]; artistApproved: boolean; event?: JournalEvent };
 export function isSafeJournalHref(href: string): boolean {
   if (href.startsWith("/") && !href.startsWith("//")) return true;
   try { return new URL(href).protocol === "https:"; } catch { return false; }
@@ -58,7 +58,7 @@ export function getGalleryCoverArtwork(gallery: Gallery, works: Artwork[], local
 }
 export function getPublicJournal(items: JournalEntry[], locale: Locale) {
   return items.filter((entry) => {
-    if (entry.status !== "published" || !entry.title[locale]?.trim() || !entry.summary[locale]?.trim()) return false;
+    if (entry.status !== "published" || !entry.artistApproved || !entry.approvedLocales.includes(locale) || !entry.title[locale]?.trim() || !entry.summary[locale]?.trim()) return false;
     if (entry.type !== "event") return true;
     const event = entry.event;
     if (!event || !Number.isFinite(Date.parse(event.startsAt)) || !event.timeZone ||
