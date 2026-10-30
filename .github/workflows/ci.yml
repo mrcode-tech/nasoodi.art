@@ -1,7 +1,7 @@
 name: Nasoodi.art CI
-# Run once for each pushed commit. Push-triggered checks are attached to the
-# commit and remain visible from any pull request that contains it. Avoid a
-# second run for the same commit from the pull_request event.
+# Run once for every pushed commit on feature, stage, and main. Push-triggered
+# checks are attached to the commit and remain visible from any pull request
+# that contains it. Avoid duplicate pull_request runs for the same commit.
 on:
   push:
     branches: [feature, stage, main]
