@@ -194,7 +194,7 @@ test("mobile drawer closes through backdrop and route selection", async ({ page 
   await trigger.click();
   const dialog = page.getByRole("dialog", { name: "Open navigation" });
   await expect(dialog).toBeVisible();
-  await page.locator(".menu-backdrop").click({ position: { x: 10, y: 10 } });
+  await page.locator(".menu-backdrop").click({ position: { x: 380, y: 10 } });
   await expect(dialog).toBeHidden();
   await trigger.click();
   await dialog.getByRole("link", { name: "Works", exact: true }).click();
