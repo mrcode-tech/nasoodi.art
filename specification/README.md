@@ -30,6 +30,8 @@ This directory is the product, design, content, and implementation source of tru
 - [Studio hero implementation prompt](./hero-implementation-prompt.md) — supporting studio-scene implementation brief; the artwork-led homepage hero specification takes precedence for the primary hero.
 
 #
+- [Shadcn/ui component reuse and bilingual shared UI](./shadcn-component-reuse-and-bilingual-ui.md) — component discovery, reuse, Sidebar/Sheet/Dropdown composition, RTL/LTR behavior, and new-component policy.
+
 ### Implementation execution
 - [Phased implementation blueprint](./phased-implementation-blueprint.md) — dependency-aware phases, deliverables, tests, exit gates, and evidence requirements; use as the execution sequence.
 - [Website implementation prompt](./website-implementation-prompt.md) — end-to-end coding-agent prompt that enforces the repository, content, design, testing, and release constraints.

@@ -1,4 +1,6 @@
 import Image from "next/image";
+import heroArtwork from "../../../../specification/assets/artwork.JPG";
+import { Button } from "@/components/ui/button";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -11,22 +13,31 @@ export async function generateMetadata({params}:Props):Promise<Metadata>{const {
  alternates:{canonical:pagePath(locale),languages:{fa:"/fa",en:"/en"}}};}
 export default async function Home({params}:Props){const {locale}=await params;if(!isLocale(locale))notFound();const t=copyFor(locale);
  const hero=getHomepageHero(artworks,homepageSelection,locale),heroImage=hero?primaryImageFor(hero):undefined;
+ const heroSrc=heroImage?.src ?? heroArtwork;
+ const heroAlt=heroImage?.alt[locale] ?? (locale==="fa" ? "اثر هنری غزاله عبداله زاده نسودی" : "Artwork by Ghazaleh Abdolahzade Nasoodi");
+ const heroWidth=heroImage?.width ?? heroArtwork.width;
+ const heroHeight=heroImage?.height ?? heroArtwork.height;
  const works=getHomepageFeaturedArtworks(artworks,homepageSelection,locale),sets=getHomepageFeaturedGalleries(galleries,artworks,homepageSelection,locale);
  const upcomingEvent=getUpcomingJournalEvents(journalEntries,locale)[0];
  const journal=getPublicJournal(journalEntries,locale).filter(entry=>entry.id!==upcomingEvent?.id).slice(0,2);
  return <div className="page-content home-page">
-  <section className={`home-intro${heroImage ? " has-hero" : ""}`} aria-labelledby="home-title">
-   <div className="home-intro-copy"><p className="eyebrow">{t.portfolio}</p>
+  <section className="home-intro has-hero" aria-labelledby="home-title">
+   <div className="home-intro-copy">
+    <p className="eyebrow">{t.portfolio}</p>
     <h1 id="home-title">{locale==="fa"?"غزاله عبداله زاده نسودی":"Ghazaleh Abdolahzade Nasoodi"}</h1>
-    <p className="artist-discipline">{t.discipline}</p><div className="intro-rule"/>
-    <p className="intro-note">{t.selectedIntro}</p><Link className="text-link" href={pagePath(locale,"works")}>{t.explore} ↗</Link>
+    <p className="artist-discipline">{t.discipline}</p>
+    <div className="intro-rule" aria-hidden="true"/>
+    <div className="hero-actions">
+     <Button asChild variant="default" size="lg"><Link href={pagePath(locale,"galleries")}>{locale==="fa"?"گالری‌ها را ببینید":"Explore galleries"}</Link></Button>
+     <Button asChild variant="outline" size="lg"><Link href={pagePath(locale,"works")}>{locale==="fa"?"گزیده آثار را ببینید":"View selected works"}</Link></Button>
+    </div>
    </div>
-   {heroImage && <figure className="hero-artwork">
-    <Image sizes="(max-width: 900px) 100vw, 58vw" src={heroImage.src} alt={heroImage.alt[locale] ?? ""} width={heroImage.width} height={heroImage.height} priority />
+   <figure className="hero-artwork">
+    <Image sizes="(max-width: 900px) 100vw, 58vw" src={heroSrc} alt={heroAlt} width={heroWidth} height={heroHeight} priority />
     {hero?.title[locale] && <figcaption>{hero.title[locale]}</figcaption>}
-   </figure>}
+   </figure>
   </section>
-  <section className="editorial-section" aria-labelledby="featured-works"><div className="section-heading"><div><p className="eyebrow">{t.portfolio}</p><h2 id="featured-works">{t.selected}</h2></div><Link className="text-link" href={pagePath(locale,"works")}>{t.explore} ↗</Link></div>
+  <section className="editorial-section" aria-labelledby="featured-works"><div className="section-heading"><div><p className="eyebrow">{t.portfolio}</p><h2 id="featured-works">{t.selected}</h2></div><Link className="text-link" href={pagePath(locale,"works")}>{locale==="fa"?"مشاهده همه آثار":"View all works"} ↗</Link></div>
    {works.length===0?<p className="empty-note">{t.emptyWorks}</p>:<div className="artwork-grid">{works.slice(0,4).map(w=>{const img=primaryImageFor(w);return img?<Link className="artwork-item" key={w.id} href={pagePath(locale,`works/${w.slug}`)}><Image sizes="(max-width: 600px) 100vw, (max-width: 900px) 90vw, 50vw" src={img.src} alt={img.alt[locale]??""} width={img.width} height={img.height}/><span>{w.title[locale]}</span></Link>:null;})}</div>}
   </section>
   <section className="editorial-section" aria-labelledby="featured-galleries"><div className="section-heading"><div><p className="eyebrow">{t.discover}</p><h2 id="featured-galleries">{t.galleries}</h2></div><Link className="text-link" href={pagePath(locale,"galleries")}>{t.discover} ↗</Link></div>

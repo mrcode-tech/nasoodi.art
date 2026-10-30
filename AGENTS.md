@@ -106,3 +106,16 @@ npm run build
 Also run relevant unit, component, integration, accessibility, localization, and end-to-end tests for the changed behavior. Run the actual GitHub Actions workflow when authorized and available; inspect its conclusion and logs. Report exact commands, results, CI run evidence, visual artifacts, unresolved issues, and approvals still needed.
 
 A task is not complete merely because code was written or the build passes. Completion requires the applicable automated checks, rendered visual review, responsive/locale/accessibility checks, and required artist/site-owner approval as defined by the roadmap and release specification.
+
+
+## Mandatory shadcn/ui component reuse standard
+
+- Treat shadcn/ui as the preferred component foundation for shared application controls. Before implementing a control, inspect `components.json`, `src/components/ui/`, installed Radix primitives, and existing shared components.
+- Prefer composing existing shadcn/ui components over bespoke menus, dialogs, drawers, buttons, selects, tabs, tooltips, or navigation controls.
+- Use the shadcn Sidebar pattern for persistent desktop navigation when it fits the page contract. Use the shared Sheet/Dialog primitive for modal mobile navigation and Dropdown Menu for compact language selection.
+- Preserve Nasoodi's visual tokens and editorial art direction. shadcn is a component architecture and accessibility foundation, not a reason to apply default dashboard styling.
+- Do not duplicate primitive implementations. Extend through variants, composition, and shared wrappers.
+- Before adding a component or dependency, record why the installed component inventory cannot satisfy the requirement. Keep wrappers thin and reusable.
+- Shared controls must support Persian RTL and English LTR, keyboard interaction, visible focus, reduced motion, and relevant WCAG 2.2 AA requirements.
+- Update the component reuse specification and inventory whenever shared UI architecture changes. Add component and Playwright coverage for meaningful interaction changes.
+- Configuration is `components.json`; shared primitives live under `src/components/ui/`; class utilities live under `src/lib/utils.ts`.

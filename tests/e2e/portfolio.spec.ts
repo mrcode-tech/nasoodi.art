@@ -312,3 +312,45 @@ for (const locale of ["en", "fa"] as const) {
     expect(metrics.lineCount).toBeGreaterThan(0);
   });
 }
+
+
+const homepageViewports = [
+  { name: "desktop-large", width: 1440, height: 900 },
+  { name: "desktop-standard", width: 1280, height: 800 },
+  { name: "tablet-landscape", width: 1024, height: 768 },
+  { name: "tablet-portrait", width: 768, height: 1024 },
+  { name: "mobile-large", width: 430, height: 932 },
+  { name: "mobile-standard", width: 390, height: 844 },
+  { name: "mobile-compact", width: 375, height: 667 },
+] as const;
+
+for (const locale of ["en", "fa"] as const) {
+  for (const viewport of homepageViewports) {
+    test(`homepage hero and both CTAs render without overflow: ${locale} ${viewport.name}`, async ({ page }) => {
+      await page.setViewportSize({ width: viewport.width, height: viewport.height });
+      await page.goto(`/${locale}`);
+      await expect(page.locator("html")).toHaveAttribute("lang", locale);
+      await expect(page.locator("html")).toHaveAttribute("dir", locale === "fa" ? "rtl" : "ltr");
+      await expect(page.getByRole("heading", { level: 1, name: locale === "fa" ? "غزاله عبداله زاده نسودی" : "Ghazaleh Abdolahzade Nasoodi" })).toBeVisible();
+      const heroImage = page.locator(".hero-artwork img");
+      await expect(heroImage).toBeVisible();
+      await expect(heroImage).toHaveJSProperty("complete", true);
+      await expect(heroImage).not.toHaveJSProperty("naturalWidth", 0);
+      await expect(page.getByRole("link", { name: locale === "fa" ? "گالری‌ها را ببینید" : "Explore galleries" })).toHaveAttribute("href", `/${locale}/galleries`);
+      await expect(page.getByRole("link", { name: locale === "fa" ? "گزیده آثار را ببینید" : "View selected works" })).toHaveAttribute("href", `/${locale}/works`);
+      const overflow = await page.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth);
+      expect(overflow, `${locale} ${viewport.name} horizontal overflow`).toBe(false);
+      await page.screenshot({ path: test.info().outputPath(`hero-${locale}-${viewport.name}.png`), fullPage: false });
+    });
+  }
+}
+
+for (const locale of ["en", "fa"] as const) {
+  test(`language selector exposes both native language names in ${locale}`, async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 800 });
+    await page.goto(`/${locale}`);
+    await page.getByRole("button", { name: locale === "fa" ? "زبان" : "Language" }).click();
+    await expect(page.getByRole("menuitem", { name: /English/ })).toBeVisible();
+    await expect(page.getByRole("menuitem", { name: /فارسی/ })).toBeVisible();
+  });
+}

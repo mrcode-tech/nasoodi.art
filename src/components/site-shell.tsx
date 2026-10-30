@@ -1,28 +1,30 @@
 "use client";
-
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
-import {
-  alternatePathFor,
-  copyFor,
-  cvEntries,
-  getPublicCvEntries,
-  otherLocale,
-  pagePath,
-  type Locale,
-} from "@/lib/site";
+import { useEffect, useState } from "react";
+import { alternatePathFor, copyFor, cvEntries, getPublicCvEntries, otherLocale, pagePath, type Locale } from "@/lib/site";
+import { Button } from "@/components/ui/button";
+import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar";
+import { Sheet, SheetClose, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+
+function LanguageSelector({ locale, alternate, pathname, label }: { locale: Locale; alternate: string; pathname: string; label: string }) {
+  const englishHref = locale === "en" ? pathname : alternate;
+  const persianHref = locale === "fa" ? pathname : alternate;
+  return <DropdownMenu>
+    <DropdownMenuTrigger asChild><Button variant="ghost" size="sm" aria-label={label}><span>{locale === "fa" ? "فارسی" : "English"}</span><span className="language-chevron" aria-hidden="true">⌄</span></Button></DropdownMenuTrigger>
+    <DropdownMenuContent align="end" dir={locale === "fa" ? "rtl" : "ltr"} aria-label={label}>
+      <DropdownMenuItem asChild><Link href={englishHref} hrefLang="en" lang="en" aria-current={locale === "en" ? "page" : undefined}>English{locale === "en" ? " · Current" : ""}</Link></DropdownMenuItem>
+      <DropdownMenuItem asChild><Link href={persianHref} hrefLang="fa" lang="fa" aria-current={locale === "fa" ? "page" : undefined}>فارسی{locale === "fa" ? " · جاری" : ""}</Link></DropdownMenuItem>
+    </DropdownMenuContent>
+  </DropdownMenu>;
+}
 
 export function SiteShell({ locale, children }: { locale: Locale; children: React.ReactNode }) {
   const labels = copyFor(locale);
   const pathname = usePathname();
-  const [openPath, setOpenPath] = useState<string | null>(null);
-  const open = openPath === pathname;
-  const drawer = useRef<HTMLElement>(null);
-  const trigger = useRef<HTMLButtonElement>(null);
-  const wasOpen = useRef(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
   const alternate = alternatePathFor(pathname, locale);
-
   const links: [string, string, string][] = [
     ["home", labels.home, pagePath(locale)],
     ["works", labels.works, pagePath(locale, "works")],
@@ -31,175 +33,42 @@ export function SiteShell({ locale, children }: { locale: Locale; children: Reac
     ["about", labels.about, pagePath(locale, "about")],
     ["contact", labels.contact, pagePath(locale, "contact")],
   ];
+  if (getPublicCvEntries(cvEntries, locale).length > 0) links.splice(5, 0, ["cv", labels.cv, pagePath(locale, "cv")]);
+  useEffect(() => setMobileOpen(false), [pathname]);
 
-  if (getPublicCvEntries(cvEntries, locale).length > 0) {
-    links.splice(5, 0, ["cv", labels.cv, pagePath(locale, "cv")]);
-  }
+  const navigation = (insideSheet = false) => <nav aria-label={locale === "fa" ? "راهبری اصلی" : "Primary navigation"}>
+    <SidebarMenu className="nav-list">
+      {links.map(([key, label, href]) => {
+        const active = key === "home" ? pathname === href : pathname === href || pathname.startsWith(href + "/");
+        return <SidebarMenuItem key={key}><SidebarMenuButton><Link className="nav-link" dir="auto" href={href} aria-current={active ? "page" : undefined} onClick={() => insideSheet && setMobileOpen(false)}>{label}</Link></SidebarMenuButton></SidebarMenuItem>;
+      })}
+    </SidebarMenu>
+  </nav>;
 
-  useEffect(() => {
-    if (!open) {
-      if (wasOpen.current) {
-        trigger.current?.focus();
-        wasOpen.current = false;
-      }
-      return;
-    }
+  return <>
+    <a className="skip-link" href="#main-content">{labels.skip}</a>
+    <Sidebar className="desktop-sidebar" aria-label="Nasoodi.art">
+      <SidebarHeader><Link className="artist-wordmark" href={pagePath(locale)} aria-label="Ghazaleh Abdolahzade Nasoodi — Home">
+        <span className="wordmark-name" dir="ltr">Ghazaleh</span><span className="wordmark-surname" dir="ltr">Abdolahzade Nasoodi</span><span className="wordmark-role" dir="auto">{labels.discipline}</span>
+      </Link></SidebarHeader>
+      <SidebarContent>{navigation()}</SidebarContent>
+      <SidebarFooter className="sidebar-bottom"><span>nasoodi.art</span><span>© {new Date().getFullYear()}</span><LanguageSelector locale={locale} alternate={alternate} pathname={pathname} label={labels.language}/></SidebarFooter>
+    </Sidebar>
 
-    wasOpen.current = true;
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    drawer.current?.querySelector<HTMLElement>("a, button")?.focus();
+    <header className="mobile-header">
+      <Link className="mobile-wordmark" dir="ltr" href={pagePath(locale)}>Nasoodi<span>.</span></Link>
+      <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
+        <SheetTrigger asChild><Button className="menu-trigger" variant="outline" size="sm" aria-label={labels.menu} aria-controls="mobile-navigation" aria-expanded={mobileOpen}><span className="menu-trigger-lines" aria-hidden="true"><span/><span/></span></Button></SheetTrigger>
+        <SheetContent id="mobile-navigation" side="left" className="mobile-drawer" dir={locale === "fa" ? "rtl" : "ltr"} aria-describedby={undefined}>
+          <SheetTitle className="sr-only">{labels.menu}</SheetTitle>
+          <div className="drawer-heading"><Link className="mobile-wordmark" dir="ltr" href={pagePath(locale)}>Nasoodi<span>.</span></Link><SheetClose asChild><Button className="drawer-close" variant="ghost" size="sm" aria-label={labels.close}>×</Button></SheetClose></div>
+          {navigation(true)}
+          <div className="drawer-settings"><span>{labels.language}</span><LanguageSelector locale={locale} alternate={alternate} pathname={pathname} label={labels.language}/></div>
+        </SheetContent>
+      </Sheet>
+    </header>
 
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
-        event.preventDefault();
-        setOpenPath(null);
-        return;
-      }
-
-      if (event.key !== "Tab" || !drawer.current) return;
-      const focusable = Array.from(
-        drawer.current.querySelectorAll<HTMLElement>('a[href], button:not([disabled])'),
-      ).filter((element) => element.offsetParent !== null);
-
-      if (!focusable.length) return;
-      if (event.shiftKey && document.activeElement === focusable[0]) {
-        event.preventDefault();
-        focusable[focusable.length - 1].focus();
-      } else if (!event.shiftKey && document.activeElement === focusable[focusable.length - 1]) {
-        event.preventDefault();
-        focusable[0].focus();
-      }
-    };
-
-    document.addEventListener("keydown", handleKeyDown);
-    return () => {
-      document.body.style.overflow = previousOverflow;
-      document.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [open]);
-
-  const navigation = (isDrawer = false) => (
-    <nav aria-label={locale === "fa" ? "راهبری اصلی" : "Primary navigation"}>
-      <ul className="nav-list">
-        {links.map(([key, label, href]) => {
-          const active =
-            key === "home"
-              ? pathname === href
-              : pathname === href || pathname.startsWith(href + "/");
-
-          return (
-            <li key={key}>
-              <Link
-                className="nav-link"
-                dir="auto"
-                href={href}
-                aria-current={active ? "page" : undefined}
-                onClick={() => isDrawer && href === pathname && setOpenPath(null)}
-              >
-                {label}
-              </Link>
-            </li>
-          );
-        })}
-      </ul>
-    </nav>
-  );
-
-  return (
-    <>
-      <a className="skip-link" href="#main-content">
-        {labels.skip}
-      </a>
-
-      <aside className="desktop-sidebar" aria-label="Nasoodi.art">
-        <Link className="artist-wordmark" href={pagePath(locale)}>
-          <span className="wordmark-name" dir="ltr">Ghazaleh</span>
-          <span className="wordmark-surname" dir="ltr">Abdolahzade Nasoodi</span>
-          <span className="wordmark-role" dir="auto">{labels.discipline}</span>
-        </Link>
-        {navigation()}
-        <div className="sidebar-bottom">
-          <span>nasoodi.art</span>
-          <span>© {new Date().getFullYear()}</span>
-        </div>
-      </aside>
-
-      <header className="mobile-header">
-        <Link className="mobile-wordmark" dir="ltr" href={pagePath(locale)}>
-          Nasoodi<span>.</span>
-        </Link>
-        <button
-          ref={trigger}
-          className="menu-trigger"
-          type="button"
-          aria-controls="mobile-navigation"
-          aria-expanded={open}
-          aria-label={open ? labels.close : labels.menu}
-          onClick={() => setOpenPath(pathname)}
-        >
-          <span />
-          <span />
-        </button>
-      </header>
-
-      <div className="desktop-utility">
-        <span>{labels.language}</span>
-        <Link href={alternate} hrefLang={otherLocale(locale)}>
-          {otherLocale(locale) === "fa" ? "فارسی" : "English"}
-        </Link>
-      </div>
-
-      {open && (
-        <button
-          className="menu-backdrop"
-          type="button"
-          aria-label={labels.close}
-          onClick={() => setOpenPath(null)}
-        />
-      )}
-
-      <section
-        ref={drawer}
-        id="mobile-navigation"
-        className="mobile-drawer"
-        data-open={open}
-        aria-hidden={!open}
-        inert={!open}
-        role="dialog"
-        aria-modal={open || undefined}
-        aria-label={labels.menu}
-      >
-        <div className="drawer-heading">
-          <Link className="mobile-wordmark" dir="ltr" href={pagePath(locale)}>
-            Nasoodi<span>.</span>
-          </Link>
-          <button
-            className="drawer-close"
-            type="button"
-            aria-label={labels.close}
-            onClick={() => setOpenPath(null)}
-            tabIndex={open ? 0 : -1}
-          >
-            ×
-          </button>
-        </div>
-        {navigation(true)}
-        <div className="drawer-settings">
-          <span>{labels.language}</span>
-          <Link href={alternate} hrefLang={otherLocale(locale)}>
-            {otherLocale(locale) === "fa" ? "فارسی" : "English"}
-          </Link>
-        </div>
-      </section>
-
-      <div className="site-main">
-        <main id="main-content">{children}</main>
-        <footer className="site-footer">
-          <span>Ghazaleh Abdolahzade Nasoodi</span>
-          <span>© {new Date().getFullYear()} · {labels.rights}</span>
-        </footer>
-      </div>
-    </>
-  );
+    <div className="desktop-utility"><span>{labels.language}</span><LanguageSelector locale={locale} alternate={alternate} pathname={pathname} label={labels.language}/></div>
+    <div className="site-main"><main id="main-content">{children}</main><footer className="site-footer"><span>Ghazaleh Abdolahzade Nasoodi</span><span>© {new Date().getFullYear()} · {labels.rights}</span></footer></div>
+  </>;
 }
