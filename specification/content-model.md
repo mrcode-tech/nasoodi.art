@@ -226,3 +226,13 @@ This is a conceptual contract; reconcile field names with the repository's exist
 ### Gallery editorial fields
 
 Gallery title and description are separate approved Persian and English values. The description should be concise (normally one to three sentences), accurate, and written or approved by the artist. Do not invent titles, descriptions, themes, chronology, or artwork groupings from filenames or visual guesses.
+
+## 7. Journal entries and events
+
+The unified Journal content model is specified in [journal-and-events.md](./journal-and-events.md). It defines shared editorial fields, localized article content, publication states, and structured event details.
+
+At the conceptual level, Journal supports exhibition announcements, events, studio updates, and stories. Event records include confirmed date/time and time-zone context, attendance mode, optional venue/location and registration details. Publication approval and locale completeness are required before public visibility.
+
+Do not duplicate artwork or gallery records inside Journal entries. Use stable references to canonical artwork/gallery records. Journal publication status is separate from an event's time-derived state: a past event may remain published as an archive entry.
+
+The Journal specification is authoritative for its detailed schema, validation, route, homepage, navigation, SEO, and acceptance requirements.
