@@ -47,8 +47,8 @@ test("mobile navigation opens, traps focus, closes with Escape, and restores foc
   const languageButton = dialog.getByRole("button", { name: "Language" });
   await expect(languageButton).toBeVisible();
   await languageButton.click();
-  await expect(dialog.getByRole("menuitem", { name: /English/ })).toBeVisible();
-  await expect(dialog.getByRole("menuitem", { name: /فارسی/ })).toBeVisible();
+  await expect(page.getByRole("menuitem", { name: /English/ })).toBeVisible();
+  await expect(page.getByRole("menuitem", { name: /فارسی/ })).toBeVisible();
   await page.screenshot({ path: test.info().outputPath("en-home-mobile-menu.png"), fullPage: true });
   await page.keyboard.press("Escape");
   await page.keyboard.press("Escape");
@@ -334,7 +334,7 @@ test("mobile drawer closes when switching locale", async ({ page }) => {
   const dialog = page.getByRole("dialog", { name: "Open navigation" });
   await expect(dialog).toBeVisible();
   await dialog.getByRole("button", { name: "Language" }).click();
-  await dialog.getByRole("menuitem", { name: /فارسی/ }).click();
+  await page.getByRole("menuitem", { name: /فارسی/ }).click();
   await expect(page).toHaveURL(/\/fa$/);
   await expect(page.locator("html")).toHaveAttribute("dir", "rtl");
   await expect(dialog).toBeHidden();
@@ -522,8 +522,8 @@ test("Persian language label sits to the right of its selector in desktop utilit
   expect(drawerGeometry[1]).not.toBeNull();
   expect(drawerGeometry[0]!.x).toBeGreaterThan(drawerGeometry[1]!.x + drawerGeometry[1]!.width);
   await drawerSelector.click();
-  await expect(drawer.getByRole("menuitem", { name: /English/ })).toBeVisible();
-  await expect(drawer.getByRole("menuitem", { name: /فارسی/ })).toBeVisible();
+  await expect(page.getByRole("menuitem", { name: /English/ })).toBeVisible();
+  await expect(page.getByRole("menuitem", { name: /فارسی/ })).toBeVisible();
 });
 
 test("navigation icon and language buttons use borderless minimal chrome", async ({ page }) => {
@@ -563,8 +563,8 @@ for (const locale of ["fa", "en"] as const) {
     await expect(settings.locator(".language-label")).toBeVisible();
     await expect(languageButton).toBeVisible();
     await languageButton.click();
-    await expect(drawer.getByRole("menuitem", { name: /English/ })).toBeVisible();
-    await expect(drawer.getByRole("menuitem", { name: /فارسی/ })).toBeVisible();
+    await expect(page.getByRole("menuitem", { name: /English/ })).toBeVisible();
+    await expect(page.getByRole("menuitem", { name: /فارسی/ })).toBeVisible();
   });
 }
 
