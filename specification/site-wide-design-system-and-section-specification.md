@@ -546,3 +546,13 @@ The portfolio supports multiple curated galleries, each with a title, short arti
 - Route patterns must follow the existing App Router and locale convention; the dedicated contract describes conceptual patterns and fallback behavior.
 
 The former studio-scene hero concept remains an optional studio/process feature only if separately approved and placed without displacing the hero painting. The artwork-led hero contract takes precedence for the homepage's primary visual.
+
+## 23. Journal and events integration
+
+The unified Journal experience is specified in [journal-and-events.md](./journal-and-events.md). It is one primary destination for editorial articles, exhibition announcements, studio updates, stories, and structured event entries; do not split Blog and Events into separate primary navigation items in the initial release.
+
+- Add Journal to the shared primary sidebar on desktop and mobile.
+- Add a Latest from the Journal section to the homepage after Featured Works and Featured Galleries, with a direct link to the Journal index.
+- Use one Journal archive with type filters and shared detail-page shell; event entries expose structured date/time, time-zone, attendance, and location information only when confirmed.
+- Keep event temporal status separate from editorial publication status; past events may remain in the archive.
+- Follow the Journal specification for localization, responsive wireframes, content validation, SEO, accessibility, and acceptance criteria.
