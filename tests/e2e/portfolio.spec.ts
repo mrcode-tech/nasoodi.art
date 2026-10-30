@@ -15,7 +15,7 @@ test("root route redirects to the Persian-first homepage", async ({ page }) => {
   await expect(page.locator("html")).toHaveAttribute("dir", "rtl");
 });
 
-test("Persian homepage renders the artist identity and localized shell", async ({ page }) => {
+test("Persian homepage renders the artist identity and right-anchored RTL shell", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 960 });
   await page.goto("/fa");
   await expect(page.getByRole("heading", { name: "غزاله عبداله زاده نسودی" })).toBeVisible();
@@ -51,7 +51,7 @@ test("mobile navigation opens, traps focus, closes with Escape, and restores foc
   await expect(trigger).toBeFocused();
 });
 
-test("mobile Persian shell keeps the navigation drawer on the physical left", async ({ page }) => {
+test("mobile Persian shell keeps the navigation drawer on the physical right", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto("/fa");
   await page.getByRole("button", { name: "باز کردن راهبری" }).click();
@@ -59,7 +59,7 @@ test("mobile Persian shell keeps the navigation drawer on the physical left", as
   await expect(drawer).toBeVisible();
   await waitForDrawerToSettle(drawer);
   const bounds = await drawer.boundingBox();
-  expect(bounds?.x).toBe(0);
+  expect(bounds?.x).toBe(390 - (bounds?.width ?? 0));
   await page.screenshot({ path: test.info().outputPath("fa-home-mobile-menu.png"), fullPage: true });
 });
 
@@ -97,7 +97,7 @@ test("filtered Journal URLs canonicalize to the localized archive and empty arch
 });
 
 for (const locale of ["en", "fa"] as const) {
-  test(`desktop ${locale} navigation keeps the sidebar physically left and follows locale reading direction`, async ({ page }) => {
+  test(`desktop ${locale} navigation mirrors sidebar placement and follows locale reading direction`, async ({ page }) => {
     await page.setViewportSize({ width: 1440, height: 960 });
     await page.goto(`/${locale}`);
     const html = page.locator("html");
@@ -105,7 +105,7 @@ for (const locale of ["en", "fa"] as const) {
     const sidebar = page.locator(".desktop-sidebar");
     await expect(sidebar).toBeVisible();
     const bounds = await sidebar.boundingBox();
-    expect(bounds?.x).toBe(0);
+    expect(bounds?.x).toBe(locale === "fa" ? 1440 - (bounds?.width ?? 0) : 0);
     expect(bounds?.width).toBeGreaterThan(200);
     const firstLink = sidebar.locator(".nav-link").first();
     await expect(firstLink).toHaveAttribute("dir", "auto");
@@ -113,11 +113,12 @@ for (const locale of ["en", "fa"] as const) {
     expect(direction).toBe(locale === "fa" ? "rtl" : "ltr");
     const main = page.locator(".site-main");
     const mainBounds = await main.boundingBox();
-    expect(mainBounds?.x).toBeGreaterThanOrEqual((bounds?.width ?? 0) - 1);
+    expect(mainBounds?.x).toBe(locale === "fa" ? 0 : (bounds?.width ?? 0));
+    expect(mainBounds?.width).toBeLessThanOrEqual(1440 - (bounds?.width ?? 0) + 1);
     await page.screenshot({ path: test.info().outputPath(`${locale}-desktop-sidebar.png`), fullPage: true });
   });
 }
-test("Persian mobile navigation drawer enters from physical left and preserves RTL link direction", async ({ page }) => {
+test("Persian mobile navigation drawer enters from physical right and preserves RTL link direction", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto("/fa");
   await page.getByRole("button", { name: "باز کردن راهبری" }).click();
@@ -125,7 +126,7 @@ test("Persian mobile navigation drawer enters from physical left and preserves R
   await expect(drawer).toBeVisible();
   await waitForDrawerToSettle(drawer);
   const bounds = await drawer.boundingBox();
-  expect(bounds?.x).toBe(0);
+  expect(bounds?.x).toBe(390 - (bounds?.width ?? 0));
   const firstLink = drawer.locator(".nav-link").first();
   await expect(firstLink).toHaveAttribute("dir", "auto");
   await expect(firstLink).toHaveCSS("direction", "rtl");
@@ -274,7 +275,7 @@ test("mobile drawer closes when switching locale", async ({ page }) => {
 
 
 for (const locale of ["en", "fa"] as const) {
-  test(`mobile ${locale} drawer is physically left-aligned and enters from the left`, async ({ page }) => {
+  test(`mobile ${locale} drawer is anchored to the locale-appropriate physical edge`, async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 844 });
     await page.goto(`/${locale}`);
     const drawer = page.locator("#mobile-navigation");
@@ -288,8 +289,8 @@ for (const locale of ["en", "fa"] as const) {
       const rect = element.getBoundingClientRect();
       return { left: rect.left, right: rect.right, width: rect.width, viewport: window.innerWidth };
     });
-    expect(geometry.left).toBe(0);
-    expect(geometry.right).toBeLessThanOrEqual(geometry.viewport);
+    expect(geometry.left).toBe(locale === "fa" ? geometry.viewport - geometry.width : 0);
+    expect(geometry.right).toBe(locale === "fa" ? geometry.viewport : geometry.width);
     expect(geometry.width).toBeLessThanOrEqual(geometry.viewport);
     await expect(drawer.locator(".nav-link").first()).toHaveCSS("direction", locale === "fa" ? "rtl" : "ltr");
   });
