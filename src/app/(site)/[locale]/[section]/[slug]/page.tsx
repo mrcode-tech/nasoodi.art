@@ -1,7 +1,35 @@
 import Image from "next/image";
+import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { artworks,galleries,journalEntries,getPublicArtworks,getPublicGalleries,getPublicJournal,copyFor,isLocale,pagePath } from "@/lib/site";
+import { artworks,galleries,journalEntries,getPublicArtworks,getPublicGalleries,getPublicJournal,copyFor,isLocale,pagePath,otherLocale,primaryImageFor } from "@/lib/site";
+type DetailProps={params:Promise<{locale:string;section:string;slug:string}>};
+export async function generateMetadata({params}:DetailProps):Promise<Metadata>{
+ const {locale,section,slug}=await params;
+ if(!isLocale(locale))return {};
+ const canonical=pagePath(locale,`${section}/${slug}`);
+ if(section==="works"){
+  const work=getPublicArtworks(artworks,locale).find(item=>item.slug===slug);
+  if(!work)return {robots:{index:false,follow:true}};
+  const image=primaryImageFor(work);
+  const description=work.description?.[locale]??work.title[locale];
+  const translated=getPublicArtworks(artworks,otherLocale(locale)).some(item=>item.slug===slug);
+  return {title:work.title[locale],description,alternates:{canonical,...(translated?{languages:{[locale]:canonical,[otherLocale(locale)]:pagePath(otherLocale(locale),`works/${slug}`)}}:{})},openGraph:{type:"article",title:work.title[locale],description,...(image?{images:[image.src]}:{})}};
+ }
+ if(section==="galleries"){
+  const gallery=getPublicGalleries(galleries,artworks,locale).find(item=>item.slug===slug);
+  if(!gallery)return {robots:{index:false,follow:true}};
+  const translated=getPublicGalleries(galleries,artworks,otherLocale(locale)).some(item=>item.slug===slug);
+  return {title:gallery.title[locale],description:gallery.description[locale],alternates:{canonical,...(translated?{languages:{[locale]:canonical,[otherLocale(locale)]:pagePath(otherLocale(locale),`galleries/${slug}`)}}:{})},openGraph:{type:"website",title:gallery.title[locale],description:gallery.description[locale]}};
+ }
+ if(section==="journal"){
+  const entry=getPublicJournal(journalEntries,locale).find(item=>item.slug===slug);
+  if(!entry)return {robots:{index:false,follow:true}};
+  const translated=getPublicJournal(journalEntries,otherLocale(locale)).some(item=>item.slug===slug);
+  return {title:entry.title[locale],description:entry.summary[locale],alternates:{canonical,...(translated?{languages:{[locale]:canonical,[otherLocale(locale)]:pagePath(otherLocale(locale),`journal/${slug}`)}}:{})},openGraph:{type:"article",title:entry.title[locale],description:entry.summary[locale],...(entry.publishedAt?{publishedTime:entry.publishedAt}:{})}};
+ }
+ return {robots:{index:false,follow:true}};
+}
 export default async function Detail({params}:{params:Promise<{locale:string;section:string;slug:string}>}){
  const {locale,section,slug}=await params;if(!isLocale(locale))notFound();const t=copyFor(locale);
  if(section==="works"){const w=getPublicArtworks(artworks,locale).find(x=>x.slug===slug);if(!w)notFound();const img=w.images.find(x=>x.role==="primary");if(!img)notFound();
