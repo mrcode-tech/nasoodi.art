@@ -36,6 +36,10 @@ export function SiteShell({ locale, children }: { locale: Locale; children: Reac
   }
 
   useEffect(() => {
+    if (open) setOpen(false);
+  }, [pathname]);
+
+  useEffect(() => {
     if (!open) {
       if (wasOpen.current) {
         trigger.current?.focus();
@@ -94,7 +98,7 @@ export function SiteShell({ locale, children }: { locale: Locale; children: Reac
                 dir="auto"
                 href={href}
                 aria-current={active ? "page" : undefined}
-                onClick={() => isDrawer && setOpen(false)}
+                onClick={() => isDrawer && href === pathname && setOpen(false)}
               >
                 {label}
               </Link>
@@ -186,7 +190,7 @@ export function SiteShell({ locale, children }: { locale: Locale; children: Reac
         {navigation(true)}
         <div className="drawer-settings">
           <span>{labels.language}</span>
-          <Link href={alternate} hrefLang={otherLocale(locale)} onClick={() => setOpen(false)}>
+          <Link href={alternate} hrefLang={otherLocale(locale)}>
             {otherLocale(locale) === "fa" ? "فارسی" : "English"}
           </Link>
         </div>
