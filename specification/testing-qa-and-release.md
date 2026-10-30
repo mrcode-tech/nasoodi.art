@@ -46,3 +46,16 @@ Authorization: artist/site owner explicitly approves public content; deployment 
 
 ## Completion report
 Record status, commit SHA/paths, commands and actual results, CI run URL/conclusion, screenshots/artifacts, outstanding approvals, known limitations, and next dependency.
+## Visual design-engineering verification
+
+In addition to functional checks, release QA must follow design-engineering-skills.md and design-direction-and-system-refinement.md.
+
+Required visual evidence:
+- Desktop, tablet, mobile, and short-height screenshots.
+- Persian RTL and English LTR captures.
+- Normal and reduced-motion behavior.
+- Navigation, gallery filters, Journal filters, drawers, focus, and touch states.
+- Artwork fidelity comparison against approved source files.
+- Long titles, sparse content, empty Journal/event states, and mixed artwork ratios.
+
+A build passing lint/typecheck/build does not establish visual quality. Record what was actually inspected, the viewport/locale, findings, and unresolved artist approvals. Do not claim visual verification without rendered evidence.
