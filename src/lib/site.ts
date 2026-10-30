@@ -182,7 +182,7 @@ function keepUniqueBy<T>(items: T[], keyOf: (item: T) => string): T[] {
   });
 }
 export function isSafeContentSlug(slug: string): boolean {
-  return /^[\\p{L}\\p{N}]+(?:-[\\p{L}\\p{N}]+)*$/u.test(slug);
+  return /^[\p{L}\p{N}]+(?:-[\p{L}\p{N}]+)*$/u.test(slug);
 }
 export function getPublicArtworks(items: Artwork[], locale: Locale) {
   const visible = items.filter((work) => work.status === "published" && work.rightsConfirmed &&
