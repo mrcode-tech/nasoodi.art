@@ -114,3 +114,37 @@ test("Persian mobile navigation drawer enters from physical left and preserves R
   await expect(firstLink).toHaveAttribute("dir", "auto");
   await expect(firstLink).toHaveCSS("direction", "rtl");
 });
+
+
+test("localized public routes expose one main landmark and one page heading", async ({ page }) => {
+  for (const locale of ["fa", "en"] as const) {
+    for (const section of ["", "works", "galleries", "journal", "about", "contact"]) {
+      await page.goto(section ? `/${locale}/${section}` : `/${locale}`);
+      await expect(page.locator("html")).toHaveAttribute("lang", locale);
+      await expect(page.getByRole("main")).toBeVisible();
+      await expect(page.locator("main h1")).toHaveCount(1);
+    }
+  }
+});
+
+test("skip link is the first keyboard destination and becomes visible on focus", async ({ page }) => {
+  await page.goto("/en");
+  await page.keyboard.press("Tab");
+  const skip = page.getByRole("link", { name: "Skip to content" });
+  await expect(skip).toBeFocused();
+  await expect(skip).toBeInViewport();
+});
+
+test("homepage has no horizontal overflow at small mobile, tablet, or compact desktop widths", async ({ page }) => {
+  for (const locale of ["fa", "en"] as const) {
+    for (const width of [320, 360, 390, 768, 1024]) {
+      await page.setViewportSize({ width, height: 800 });
+      await page.goto(`/${locale}`);
+      const dimensions = await page.evaluate(() => ({
+        viewport: document.documentElement.clientWidth,
+        document: document.documentElement.scrollWidth,
+      }));
+      expect(dimensions.document, `${locale} at ${width}px`).toBeLessThanOrEqual(dimensions.viewport);
+    }
+  }
+});
