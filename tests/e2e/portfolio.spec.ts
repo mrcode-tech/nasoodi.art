@@ -44,8 +44,13 @@ test("mobile navigation opens, traps focus, closes with Escape, and restores foc
   const dialog = page.getByRole("dialog", { name: "Open navigation" });
   await expect(dialog).toBeVisible();
   await expect(dialog.getByRole("link", { name: "Galleries" })).toBeVisible();
-  await expect(dialog.getByRole("link", { name: "فارسی" })).toBeVisible();
+  const languageButton = dialog.getByRole("button", { name: "Language" });
+  await expect(languageButton).toBeVisible();
+  await languageButton.click();
+  await expect(dialog.getByRole("menuitem", { name: /English/ })).toBeVisible();
+  await expect(dialog.getByRole("menuitem", { name: /فارسی/ })).toBeVisible();
   await page.screenshot({ path: test.info().outputPath("en-home-mobile-menu.png"), fullPage: true });
+  await page.keyboard.press("Escape");
   await page.keyboard.press("Escape");
   await expect(dialog).toBeHidden();
   await expect(trigger).toBeFocused();
@@ -303,8 +308,8 @@ test("mobile drawer traps keyboard focus at both ends", async ({ page }) => {
   await page.goto("/en");
   await page.getByRole("button", { name: "Open navigation" }).click();
   const dialog = page.getByRole("dialog", { name: "Open navigation" });
-  const first = dialog.locator("a[href]").first();
-  const last = dialog.locator("a[href]").last();
+  const first = dialog.locator(".drawer-heading a").first();
+  const last = dialog.locator(".drawer-settings button").last();
   await expect(first).toBeFocused();
   await page.keyboard.press("Shift+Tab");
   await expect(last).toBeFocused();
@@ -328,7 +333,8 @@ test("mobile drawer closes when switching locale", async ({ page }) => {
   await page.getByRole("button", { name: "Open navigation" }).click();
   const dialog = page.getByRole("dialog", { name: "Open navigation" });
   await expect(dialog).toBeVisible();
-  await dialog.getByRole("link", { name: "فارسی" }).click();
+  await dialog.getByRole("button", { name: "Language" }).click();
+  await dialog.getByRole("menuitem", { name: /فارسی/ }).click();
   await expect(page).toHaveURL(/\/fa$/);
   await expect(page.locator("html")).toHaveAttribute("dir", "rtl");
   await expect(dialog).toBeHidden();
