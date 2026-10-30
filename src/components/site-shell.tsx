@@ -38,7 +38,7 @@ export function SiteShell({ locale, children }: { locale: Locale; children: Reac
   <section ref={drawer} id="mobile-navigation" className="mobile-drawer" hidden={!open} role="dialog" aria-modal="true" aria-label={labels.menu}>
    <div className="drawer-heading"><Link className="mobile-wordmark" href={pagePath(locale)}>Nasoodi<span>.</span></Link>
     <button className="drawer-close" type="button" aria-label={labels.close} onClick={()=>setOpen(false)}>×</button></div>
-   {nav(true)}<div className="drawer-settings"><span>{labels.language}</span><Link href={alternate} hrefLang={otherLocale(locale)}>{otherLocale(locale)==="fa"?"فارسی":"English"}</Link></div>
+   {nav(true)}<div className="drawer-settings"><span>{labels.language}</span><Link href={alternate} hrefLang={otherLocale(locale)} onClick={()=>setOpen(false)}>{otherLocale(locale)==="fa"?"فارسی":"English"}</Link></div>
   </section>
   <div className="site-main"><main id="main-content">{children}</main><footer className="site-footer"><span>Ghazaleh Abdolahzade Nasoodi</span><span>© {new Date().getFullYear()} · {labels.rights}</span></footer></div>
  </>;
