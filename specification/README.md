@@ -7,11 +7,11 @@ This directory is the product, design, content, and implementation source of tru
 1. Read this index and the repository-level AGENTS.md before making changes.
 2. Read proposal.md for product scope and binding principles.
 3. Read visual-identity-and-photo-direction.md and site-wide-design-system-and-section-specification.md before UI implementation.
-4. Read easel-scroll-background.md before implementing the persistent easel background or any scroll-linked movement.
-5. Read content-model.md, artwork-imaging-and-asset-pipeline.md, and localization-and-editorial-governance.md before adding content or images.
-6. Read the relevant technical contracts for SEO, accessibility, performance, privacy, security, and testing.
-7. Follow implementation-roadmap.md for sequencing and phase exit criteria.
-8. Treat artist/site-owner approval as a required content and visual gate; do not infer missing facts.
+4. Read easel-scroll-background.md before implementing the persistent easel background or any scroll-linked movement.\n5. Read gallery-collections-and-artwork-detail.md and homepage-artwork-hero-and-featured-works.md before implementing galleries, artwork detail routes, or homepage artwork sections.
+6. Read content-model.md, artwork-imaging-and-asset-pipeline.md, and localization-and-editorial-governance.md before adding content or images.
+7. Read the relevant technical contracts for SEO, accessibility, performance, privacy, security, and testing.
+8. Follow implementation-roadmap.md for sequencing and phase exit criteria.
+9. Treat artist/site-owner approval as a required content and visual gate; do not infer missing facts.
 
 ## Document map
 
@@ -21,11 +21,11 @@ This directory is the product, design, content, and implementation source of tru
 - [Site-wide design system and section specification](./site-wide-design-system-and-section-specification.md) — semantic tokens, typography, global shell, homepage, Works, artwork detail, About, CV, Contact, components, and responsive design.
 - [Visual identity and photo direction](./visual-identity-and-photo-direction.md) — reference-photo analysis, palette, studio-image use, crop rules, and visual QA.
 - [Full-page easel scroll background](./easel-scroll-background.md) — left-edge document-length easel composition, scroll-linked reveal, responsive rules, reduced motion, and acceptance criteria.
-- [Responsive sidebar navigation, language, and theme](./navigation-and-mobile-sidebar.md) — persistent desktop left sidebar, desktop top-bar settings, mobile off-canvas menu, bottom-of-menu selectors, RTL, accessibility, and responsive acceptance criteria.
-- [Studio hero implementation prompt](./hero-implementation-prompt.md) — scoped implementation brief for the layered studio scene and static fallback.
+- [Responsive sidebar navigation, language, and theme](./navigation-and-mobile-sidebar.md) — persistent desktop left sidebar, desktop top-bar settings, mobile off-canvas menu, bottom-of-menu selectors, RTL, accessibility, and responsive acceptance criteria.\n- [Gallery collections and artwork detail](./gallery-collections-and-artwork-detail.md) — multiple curated galleries, gallery index/detail pages, artwork membership, validation, editorial workflow, SEO, and testing.\n- [Homepage artwork hero and featured works](./homepage-artwork-hero-and-featured-works.md) — approved painting-led hero, middle-page selected works, featured gallery previews, responsive layout, and acceptance criteria.
+- [Studio hero implementation prompt](./hero-implementation-prompt.md) — supporting studio-scene implementation brief; the artwork-led homepage hero specification takes precedence for the primary hero.
 
 ### Content and assets
-- [Content and artwork model](./content-model.md) — artist, artwork, series, CV, approval states, and localized fields.
+- [Content and artwork model](./content-model.md) — artist, artwork, series, galleries, homepage selections, CV, approval states, and localized fields.
 - [Artwork imaging and asset pipeline](./artwork-imaging-and-asset-pipeline.md) — capture, provenance, rights, derivatives, fidelity, alt text, and image delivery.
 - [Localization and editorial governance](./localization-and-editorial-governance.md) — Persian/English rules, translation parity, content approval, and writing standards.
 
