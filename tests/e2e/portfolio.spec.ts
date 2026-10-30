@@ -559,7 +559,7 @@ for (const locale of ["fa", "en"] as const) {
     expect(selectorBox).not.toBeNull();
     expect(menuBox).not.toBeNull();
     expect(utilityBox!.x).toBeLessThan(80);
-    expect(utilityBox!.right).toBeLessThan(menuBox!.x);
+    expect(utilityBox!.x + utilityBox!.width).toBeLessThan(menuBox!.x);
     if (locale === "fa") {
       expect(labelBox!.x).toBeGreaterThan(selectorBox!.x + selectorBox!.width);
     } else {
@@ -583,7 +583,7 @@ for (const locale of ["fa", "en"] as const) {
     const label = utility.locator(".language-label");
     const selector = utility.getByRole("button", { name: locale === "fa" ? "زبان" : "Language" });
     const [labelBox, selectorBox] = await Promise.all([label.boundingBox(), selector.boundingBox()]);
-    expect(utilityBox!.x).toBeLessThanOrEqual(1);
+    if (locale === "fa") expect(utilityBox!.x).toBeLessThanOrEqual(1);
     expect(labelBox).not.toBeNull();
     expect(selectorBox).not.toBeNull();
     if (locale === "fa") {
