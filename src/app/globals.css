@@ -489,3 +489,57 @@ html[lang="fa"] .mobile-drawer[dir="rtl"] .nav-link {
     border-right: 1px solid var(--border);
   }
 }
+
+
+/* Minimal navigation controls and consistent RTL language-control ordering. */
+.menu-trigger,
+.drawer-close {
+  border:  0 !important;
+  outline: 0;
+  box-shadow: none !important;
+  background: transparent;
+}
+.menu-trigger:hover,
+.menu-trigger:active,
+.drawer-close:hover,
+.drawer-close:active {
+  border: 0 !important;
+  background: transparent;
+  box-shadow: none !important;
+}
+.desktop-utility {
+  gap: .65rem;
+}
+.desktop-utility .language-label {
+  white-space: nowrap;
+}
+.desktop-utility .ui-button,
+.drawer-settings .ui-button {
+  min-width: 5.5rem;
+  justify-content: space-between;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+.desktop-utility .ui-button:hover,
+.drawer-settings .ui-button:hover {
+  border: 0;
+  background: var(--muted-surface);
+  box-shadow: none;
+}
+.drawer-settings {
+  gap: .65rem;
+}
+.drawer-settings > span {
+  flex: 0 0 auto;
+  white-space: nowrap;
+}
+.drawer-settings > *:last-child {
+  margin-inline-start: auto;
+}
+@media (min-width: 901px) {
+  html[lang="fa"] .desktop-utility {
+    direction: rtl;
+    justify-content: flex-start;
+  }
+}
