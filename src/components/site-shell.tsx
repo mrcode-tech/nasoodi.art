@@ -20,6 +20,7 @@ export function SiteShell({ locale, children }: { locale: Locale; children: Reac
   const drawer = useRef<HTMLElement>(null);
   const trigger = useRef<HTMLButtonElement>(null);
   const wasOpen = useRef(false);
+  const previousPathname = useRef(pathname);
   const alternate = alternatePathFor(pathname, locale);
 
   const links: [string, string, string][] = [
@@ -36,7 +37,10 @@ export function SiteShell({ locale, children }: { locale: Locale; children: Reac
   }
 
   useEffect(() => {
-    if (open) setOpen(false);
+    if (previousPathname.current !== pathname) {
+      previousPathname.current = pathname;
+      setOpen(false);
+    }
   }, [pathname]);
 
   useEffect(() => {
