@@ -490,3 +490,22 @@ Do not build later sections on invented content just to fill the layout. The con
 - Approval of the proposed homepage headline and intro.
 
 **Final design intent:** every page should feel like another carefully arranged room in the same gallery. The homepage introduces the studio; Works lets the paintings speak; About introduces the person and practice; CV records verified professional history; Contact opens a clear professional conversation. Consistency comes from shared tokens, typography, spacing, image treatment, and interaction quality—not from forcing every page into the same layout.
+
+
+## 21. Persistent full-page easel background
+
+The shared portfolio shell may include the existing easel image as a quiet decorative background running along the physical left edge of the complete page. This is distinct from the homepage's animated studio hero.
+
+The dedicated implementation contract is [easel-scroll-background.md](./easel-scroll-background.md). It is normative for asset verification, document-relative positioning, scroll-linked reveal, responsive behavior, RTL, reduced motion, performance, and QA.
+
+Key design rules:
+- The easel's top begins near the top-left of the document and its lower feet align near the bottom-left of the page composition.
+- The middle structure is progressively revealed as the visitor scrolls; the effect reverses smoothly when scrolling upward.
+- Use one shared decorative layer in the global shell, not duplicated per section.
+- Keep it physically left in both English and Persian; never mirror the easel for RTL.
+- Reserve a content safe zone and suppress or subdue the image on small screens when it harms reading or artwork presentation.
+- The background never overlaps or visually competes with paintings, navigation, text, or controls.
+- Reduced-motion and no-JavaScript modes use a stable static fallback.
+- The easel is decorative to assistive technology and cannot intercept pointer or keyboard interaction.
+
+Do not implement the effect until the exact `specification/assets/easel.png` has been inspected for intrinsic dimensions, transparency, visible bounds, and suitability. Follow the specialist document rather than guessing its crop or stretching it to page height.
