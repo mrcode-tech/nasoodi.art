@@ -515,3 +515,18 @@ The first CI attempt for the event-local time-zone presentation caught a JSX gro
 ### Publication and release blockers
 
 The approved homepage painting, published artwork/gallery records, CV facts, artist statement/biography, public contact destination, Journal entries/event facts, image rights, and easel-use approval remain owner/artist decisions. The Light/Dark/System selector remains unresolved against the conflicting design authorities. Do not fill these gaps with invented content or unapproved imagery. No merge, deployment, or publication is authorized by this progress update.
+
+
+## Incremental implementation update — 2026-10-30 (latest feature work)
+
+After the previous update, feature branch work added:
+- A nearest-future, publication-gated Journal event preview on the homepage; expired events are excluded.
+- Event date/time presentation in the declared IANA time zone on Journal archive and detail pages.
+- Approval-gated artist profile and contact content models, About/Contact templates, localized metadata, sitemap gates, and noindex behavior while content is absent.
+- VisualArtwork JSON-LD for artwork details and safe JSON-LD serialization.
+- Journal Article/Event structured-data helpers with only confirmed localized facts, canonical URLs, explicit event instants, known attendance mode, and known venue.
+- Additional Playwright coverage for accessibility landmarks, skip-link keyboard behavior, 320–1024 px overflow checks in both locales, and empty About/Contact sitemap/indexing rules.
+
+Verification: GitHub Actions run 41070742829 passed 19 content tests and 15 Chromium E2E tests, plus lint, typecheck, production build, screenshot artifact upload, and production route smoke test on commit 98cef6e446d83688e42f6a5ec88bf49edac4a335. Commit 296d3ab56dba63c0408d287897037db7d19f6648 adds Journal Article/Event JSON-LD and tests; its CI run has not yet appeared in the branch workflow list at the time of this update.
+
+Owner/artist gates remain: approved painting hero and artwork metadata/rights, approved profile copy/portrait, public contact destination, verified CV facts, Journal/event content and translations, easel-use approval, and the Light/Dark/System decision. No merge, deployment, or publication is authorized.
