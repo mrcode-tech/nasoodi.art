@@ -83,3 +83,11 @@ html[lang=fa] .gallery-card-copy strong{font-family:Tahoma,Arial,sans-serif;line
 .mobile-header{direction:inherit}
 .mobile-header .mobile-wordmark,.drawer-heading .mobile-wordmark{direction:ltr;unicode-bidi:isolate}
 @media(max-width:900px){.site-main{margin-left:0;margin-right:0}}
+
+/* The next confirmed event leads the Journal preview without turning it into a news-card grid. */
+.journal-upcoming{max-width:48rem;margin:0 0 2rem;padding:1.5rem 0 1.75rem;border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.journal-upcoming .eyebrow{margin-bottom:.6rem}
+.journal-upcoming h3{margin:0 0 .75rem;font:400 clamp(1.45rem,2.6vw,2.1rem)/1.3 Georgia,"Times New Roman",serif}
+html[lang=fa] .journal-upcoming h3{font-family:Tahoma,Arial,sans-serif;line-height:1.65}
+.journal-upcoming time,.journal-upcoming>p:not(.eyebrow){display:block;margin:.4rem 0;color:var(--muted);font-size:.9rem;line-height:1.8}
+.journal-upcoming .text-link{margin-top:.6rem}

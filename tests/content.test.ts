@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { getPublicArtworks,getPublicGalleries,getPublicJournal,getPublicCvEntries,getHomepageFeaturedArtworks,getGalleryCoverArtwork,getJournalEntriesForCategory,isSafeJournalHref,portfolioStructuredData,type Artwork,type Gallery,type JournalEntry,type CvEntry, hasExplicitTimeZone } from "../src/lib/site";
+import { getPublicArtworks,getPublicGalleries,getPublicJournal,getPublicCvEntries,getUpcomingJournalEvents,getHomepageFeaturedArtworks,getGalleryCoverArtwork,getJournalEntriesForCategory,isSafeJournalHref,portfolioStructuredData,type Artwork,type Gallery,type JournalEntry,type CvEntry, hasExplicitTimeZone } from "../src/lib/site";
 const work:Artwork={id:"w1",slug:"work-one",title:{en:"Work",fa:"اثر"},images:[{src:"/art/work.jpg",alt:{en:"Painting",fa:"نقاشی"},role:"primary",width:1200,height:900}],rightsConfirmed:true,status:"published"};
 test("artwork stays private until published and rights-cleared",()=>{assert.equal(getPublicArtworks([{...work,status:"needs-review"}],"en").length,0);assert.equal(getPublicArtworks([{...work,rightsConfirmed:false}],"en").length,0);assert.equal(getPublicArtworks([work],"en").length,1);});
 test("artwork requires localized title and primary image alt",()=>{assert.equal(getPublicArtworks([{...work,title:{en:"Work"}}],"fa").length,0);assert.equal(getPublicArtworks([{...work,images:[{...work.images[0],alt:{en:""}}]}],"en").length,0);});
@@ -87,4 +87,21 @@ test("locale switching falls back home when an equivalent published content item
  assert.equal(alternatePathFor("/fa/works", "fa"), "/en");
  assert.equal(alternatePathFor("/fa/works/not-published", "fa"), "/en");
  assert.equal(alternatePathFor("/fa/journal/not-published", "fa"), "/en");
+});
+
+test("homepage upcoming events are future-dated, locale-approved, and ordered by occurrence",()=>{
+ const event=(id:string,startsAt:string):JournalEntry=>({
+  id,slug:id,type:"event",title:{en:id,fa:id},summary:{en:"Summary",fa:"خلاصه"},
+  status:"published",approvedLocales:["en","fa"],artistApproved:true,
+  event:{startsAt,timeZone:"Europe/Berlin",venue:{en:"Studio",fa:"آتلیه"}}
+ });
+ const now=new Date("2026-10-30T12:00:00Z");
+ const items=[
+  event("later","2026-11-20T18:00:00+01:00"),
+  event("expired","2026-10-29T18:00:00+01:00"),
+  event("soon","2026-11-02T18:00:00+01:00"),
+  {...event("unapproved","2026-11-01T18:00:00+01:00"),approvedLocales:["fa"] as ("fa"|"en")[]}
+ ];
+ assert.deepEqual(getUpcomingJournalEvents(items,"en",now).map(item=>item.id),["soon","later"]);
+ assert.deepEqual(getUpcomingJournalEvents(items,"fa",now).map(item=>item.id),["unapproved","soon","later"]);
 });
