@@ -8,11 +8,10 @@ on:
   workflow_dispatch:
 permissions:
   contents: read
-# Release branches stay serialized. Feature runs are keyed by head commit so a
-# stale cancelled run cannot block verification of a newer feature commit.
-# Push and pull-request events for the same feature commit still share one slot.
+# Keep release-branch runs serialized. Key feature runs by commit so a
+# cancelled stale run cannot block verification of a newer feature commit.
 concurrency:
-  group: ci-${{ github.workflow }}-${{ github.event.pull_request.head.repo.full_name || github.repository }}-${{ github.event.pull_request.head.ref || github.ref_name }}-${{ (github.event.pull_request.head.ref || github.ref_name) == 'feature' && (github.event.pull_request.head.sha || github.sha) || 'branch' }}
+  group: ci-${{ github.workflow }}-${{ github.repository }}-${{ github.ref_name }}-${{ github.ref_name == 'feature' && github.sha || 'branch' }}
   cancel-in-progress: true
 jobs:
   validate:
