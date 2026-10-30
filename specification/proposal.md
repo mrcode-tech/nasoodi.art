@@ -429,3 +429,11 @@ An asset's presence in the repository does not establish ownership, public-use p
 ### 19.3 Release authority
 
 Passing CI and visual QA does not itself authorize deployment, public release, or branch merge. Those actions require separate explicit owner authorization.
+
+## Project-wide design quality and visual direction
+
+All visual and interaction implementation must follow [design-engineering-skills.md](./design-engineering-skills.md) and [design-direction-and-system-refinement.md](./design-direction-and-system-refinement.md).
+
+The site direction is “the artist's quiet gallery”: warm, thoughtful, contemporary, intimate, editorial, and restrained. Finished paintings remain the primary visual content. Avoid generic SaaS/AI patterns, repetitive card grids, decorative gradients/glassmorphism, unnecessary motion, and visual effects that compete with the art. Use the existing warm-paper, warm-ink, mauve, and taupe palette as semantic tokens; do not invent a new palette per page. Typography, spacing, navigation, component states, responsive behavior, and motion must be consistent across routes and both locales.
+
+A feature is not visually complete because it compiles. It requires rendered review at desktop, tablet, mobile, and short-height viewports, in Persian RTL and English LTR, with reduced motion and keyboard/touch interaction checked. Record evidence; never claim checks that were not performed.
