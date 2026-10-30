@@ -313,3 +313,18 @@ The visual direction can serve as the design baseline, but final sign-off needs:
 ## 12. Final recommendation
 
 Adopt the **warm paper + smoky mauve + deep umber** identity. Use the supplied photograph as the signature studio/process image in the homepage hero and About page, with a carefully reviewed portrait crop and no color filters. Let actual finished paintings occupy the Works gallery in their original proportions and colors. This creates a coherent relationship between the artist's working environment and the portfolio while keeping the artwork itself at the center of the experience.
+
+## 11. Unified design-engineering refinement
+
+This visual identity is the source of truth for the site's creative direction and must be interpreted through [design-direction-and-system-refinement.md](./design-direction-and-system-refinement.md) and [design-engineering-skills.md](./design-engineering-skills.md).
+
+Refinement rules:
+- Preserve the warm contemporary studio / independent-gallery identity; do not replace it with a generic luxury-commerce, SaaS, or AI aesthetic.
+- Treat the proposed palette as semantic roles, not a requirement to use every color on every page. Verify all foreground/background combinations against WCAG 2.2 AA.
+- Establish a licensed Persian/Latin type pairing and test actual glyph shaping, line wrapping, and optical hierarchy before finalizing font tokens.
+- Use editorial asymmetry and varied whitespace intentionally; avoid repeating identical card grids or wrapping every section in a card.
+- Keep finished paintings dominant and unaltered. The studio photograph remains process context and is not a finished artwork.
+- The easel, studio image, and any motion are subordinate layers. They must never obscure or compete with artwork.
+- Any theme selector or dark theme must be reconciled with the product/navigation decision. Do not invent a dark palette by simply inverting light tokens.
+
+The exact font families, dark-theme scope, final contrast-safe accent variants, and final image crop approvals remain open until inspected and approved.
