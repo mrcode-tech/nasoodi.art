@@ -208,6 +208,42 @@ test("production routes include baseline browser security headers", async ({ req
   expect(headers["strict-transport-security"]).toContain("max-age=31536000");
 });
 
+test("mobile navigation is above the fixed header and closes when crossing into desktop layout", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/fa");
+  const header = page.locator(".mobile-header");
+  const trigger = header.getByRole("button", { name: "باز کردن راهبری" });
+  await expect(header).toBeVisible();
+  await trigger.click();
+  const drawer = page.getByRole("dialog", { name: "باز کردن راهبری" });
+  await expect(drawer).toBeVisible();
+  await expect(drawer.getByRole("button", { name: "بستن راهبری" })).toBeVisible();
+  await expect(drawer.getByRole("button", { name: "بستن راهبری" })).toBeInViewport();
+  const layering = await page.evaluate(() => {
+    const headerElement = document.querySelector(".mobile-header")!;
+    const drawerElement = document.querySelector("#mobile-navigation")!;
+    const closeElement = drawerElement.querySelector(".drawer-close")!;
+    return {
+      headerZ: Number.parseInt(getComputedStyle(headerElement).zIndex, 10),
+      drawerZ: Number.parseInt(getComputedStyle(drawerElement).zIndex, 10),
+      closeTop: closeElement.getBoundingClientRect().top,
+      drawerTop: drawerElement.getBoundingClientRect().top,
+    };
+  });
+  expect(layering.drawerZ).toBeGreaterThan(layering.headerZ);
+  expect(layering.closeTop).toBeGreaterThanOrEqual(layering.drawerTop);
+
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await expect(page.locator(".desktop-sidebar")).toBeVisible();
+  await expect(page.locator(".mobile-header")).toBeHidden();
+  await expect(page.locator("#mobile-navigation")).toBeHidden();
+
+  await page.setViewportSize({ width: 390, height: 844 });
+  await expect(page.locator(".mobile-header")).toBeVisible();
+  await expect(page.locator(".desktop-sidebar")).toBeHidden();
+  await expect(page.locator("#mobile-navigation")).toHaveCount(0);
+});
+
 test("mobile drawer closes through its close control and restores focus", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto("/en");
