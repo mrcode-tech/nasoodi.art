@@ -60,3 +60,7 @@ GitHub Actions runs ESLint, TypeScript, content tests, a production build, Playw
 ## Deployment
 
 No deployment is performed by the implementation workflow. Publishing requires a separate explicit authorization and completed content/visual approval gates.
+
+## Continuous integration
+
+GitHub Actions verifies every push to `feature`, `stage`, and `main` with dependency installation, linting, TypeScript checks, content tests, a production build, responsive browser tests, asset inventory, and localized-route smoke tests.
