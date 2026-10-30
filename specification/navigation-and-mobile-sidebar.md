@@ -320,3 +320,13 @@ The component selection, RTL/LTR rules, keyboard and focus behavior, and new-com
   - Persian: hamburger at the physical right, brand at the physical left.
 - Verify fixed positioning and hamburger physical coordinates in Playwright for both locales after scrolling, at mobile and desktop breakpoints.
 - Respect the existing responsive breakpoint and reduced-motion behavior; the fixed header must not cover the skip link or drawer overlay.
+
+
+### Responsive breakpoint and overlay behavior
+
+- Use the shared shadcn-style responsive sidebar/dialog primitives; do not build a second custom drawer implementation.
+- At widths of 900px and below, show the mobile menu trigger and hide the persistent desktop sidebar.
+- The open mobile Sheet is rendered in a portal and layers above the fixed mobile header/navbar. Its top edge is the viewport top, not the bottom edge of the navbar. The close control must be visible and keyboard reachable immediately after opening, including short-height viewports and safe-area insets.
+- The modal overlay and Sheet must have stacking levels above the mobile header. Do not solve this by moving the close control below or inside a clipped navbar.
+- At widths of 901px and above, hide mobile navigation chrome and show the persistent desktop sidebar. If the viewport crosses into desktop width while the Sheet is open, close/reset the mobile state. Returning to mobile must show the hamburger with the drawer closed.
+- Test the mobile-to-desktop-to-mobile transition while the drawer is open, for both locales. Verify drawer visibility, desktop sidebar visibility, focus/overlay cleanup, and that the close control is visible within the viewport.
