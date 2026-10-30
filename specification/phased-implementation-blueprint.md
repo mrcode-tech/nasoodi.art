@@ -640,3 +640,19 @@ The first test run exposed an over-escaped character-class guard. The implementa
 Verified on commit `f40ce0b758c9b7d595c520c7d98f5518981b3bf2`: [GitHub Actions run 41085668848](https://github.com/mrcode-tech/nasoodi.art/actions/runs/41085668848) passed ESLint, TypeScript, **25 content tests**, production build, **22 Chromium E2E tests**, screenshot/diagnostic artifact upload, and production route smoke test. Artifact: `nasoodi-visual-qa-f40ce0b758c9b7d595c520c7d98f5518981b3bf2` (ID `12991846059`).
 
 No public content, artwork, or owner approvals were changed by this implementation.
+
+
+## Incremental implementation update — 2026-10-30 (Vercel deployment policy regression guard)
+
+The existing `vercel.json` was inspected and already implements the requested branch allowlist: wildcard deployments are disabled and only `stage` and `main` are enabled. The GitHub Actions workflow intentionally continues to validate pushes and pull requests for `feature`, `stage`, and `main`; it contains no deployment step.
+
+Added `scripts/verify-vercel-deployment-policy.mjs` and wired it into `npm test`. The guard fails if the wildcard is enabled, either permitted branch is disabled, `feature` becomes enabled, or any additional branch is explicitly enabled. The new script was executed independently against the committed branch policy and passed.
+
+Changes:
+- `72d8efb90ab2b1c07553d6d106c344929c58a767` — add Vercel deployment policy guard.
+- `b351d2a211159cfa9207621a75d931b6cbe9a020` — include the guard in the standard test command.
+- `c6c4d94f5279982398aa7f2de06751aede9b2260` — document the deployment/CI distinction and regression contract.
+
+The GitHub Actions run for the resulting feature-branch commits has not been independently confirmed in the available run/status results. Do not mark this regression check CI-verified until the actual run is inspected. The repository configuration also cannot prove the Vercel project's dashboard-level Git settings; those remain a separate external verification.
+
+No deployment, merge, or publication was performed. Artist-approved paintings/content, derivative generation and fidelity checks, and the easel approval gate remain outstanding.
