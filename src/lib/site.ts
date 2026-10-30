@@ -93,7 +93,7 @@ export function getArtworkStructuredData(work: Artwork, locale: Locale) {
     ...(work.description?.[locale]?.trim() ? { description: work.description[locale] } : {}),
   };
 }
-export function getJournalStructuredData(entry: JournalEntry, locale: Locale, canonicalUrl: string) {
+export function getJournalStructuredData(entry: JournalEntry, locale: Locale, canonicalUrl: string): Record<string, unknown> {
   const common = {
     "@context": "https://schema.org",
     name: entry.title[locale],
@@ -112,7 +112,7 @@ export function getJournalStructuredData(entry: JournalEntry, locale: Locale, ca
       "@type": "Event",
       startDate: entry.event.startsAt,
       ...(entry.event.endsAt ? { endDate: entry.event.endsAt } : {}),
-      ...(entry.event.attendanceMode && entry.event.attendanceMode !== "unspecified"
+      ...(entry.event.attendanceMode
         ? { eventAttendanceMode: attendanceModes[entry.event.attendanceMode] }
         : {}),
       ...(entry.event.venue?.[locale]
