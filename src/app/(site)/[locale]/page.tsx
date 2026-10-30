@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { artworks,galleries,journalEntries,homepageSelection,getPublicJournal,getHomepageHero,getHomepageFeaturedArtworks,getHomepageFeaturedGalleries,getGalleryCoverArtwork,getUpcomingJournalEvents,primaryImageFor } from "@/lib/site";
+import { artworks,galleries,journalEntries,homepageSelection,getPublicJournal,getPublicArtworks,getPublicGalleries,getHomepageHero,getHomepageFeaturedArtworks,getHomepageFeaturedGalleries,getGalleryCoverArtwork,getUpcomingJournalEvents,primaryImageFor } from "@/lib/site";
 import { copyFor,isLocale,pagePath } from "@/lib/site";
 type Props={params:Promise<{locale:string}>};
 export async function generateMetadata({params}:Props):Promise<Metadata>{const {locale}=await params;if(!isLocale(locale))return {};
@@ -12,10 +12,10 @@ export async function generateMetadata({params}:Props):Promise<Metadata>{const {
  alternates:{canonical:pagePath(locale),languages:{fa:"/fa",en:"/en"}}};}
 export default async function Home({params}:Props){const {locale}=await params;if(!isLocale(locale))notFound();const t=copyFor(locale);
  const hero=getHomepageHero(artworks,homepageSelection,locale),heroImage=hero?primaryImageFor(hero):undefined;
- const heroAlt=heroImage?.alt[locale] ?? (locale==="fa" ? "اثر هنری غزاله عبداله زاده نسودی" : "Artwork by Ghazaleh Abdolahzade Nasoodi");
+ const heroAlt=heroImage?.alt[locale] ?? (locale==="fa" ? "هنرمند در آتلیه، روبه‌روی بوم نقاشی ایستاده است." : "The artist standing before a canvas in her studio.");
  const works=getHomepageFeaturedArtworks(artworks,homepageSelection,locale),sets=getHomepageFeaturedGalleries(galleries,artworks,homepageSelection,locale);
- const hasSelectedWorks=works.some((work)=>Boolean(primaryImageFor(work)));
- const hasFeaturedGalleries=sets.length>0;
+ const hasSelectedWorks=getPublicArtworks(artworks,locale).length>0;
+ const hasFeaturedGalleries=getPublicGalleries(galleries,artworks,locale).length>0;
  const upcomingEvent=getUpcomingJournalEvents(journalEntries,locale)[0];
  const journal=getPublicJournal(journalEntries,locale).filter(entry=>entry.id!==upcomingEvent?.id).slice(0,2);
  return <div className="page-content home-page">
@@ -31,7 +31,7 @@ export default async function Home({params}:Props){const {locale}=await params;i
     </div>}
    </div>
    <figure className="hero-artwork">
-    {heroImage ? <Image sizes="(max-width: 900px) 100vw, 58vw" src={heroImage.src} alt={heroAlt} width={heroImage.width} height={heroImage.height} priority /> : /* eslint-disable-next-line @next/next/no-img-element -- Preserve the supplied source image intrinsic ratio without inventing dimensions. */ <img src="/images/homepage-hero.jpg" alt={heroAlt} fetchPriority="high" /> }
+    {heroImage ? <Image sizes="(max-width: 900px) 100vw, 58vw" src={heroImage.src} alt={heroAlt} width={heroImage.width} height={heroImage.height} priority /> : <Image sizes="(max-width: 900px) 100vw, 58vw" src="/images/homepage-hero.jpg" alt={heroAlt} width={4032} height={3024} priority /> }
     {hero?.title[locale] && <figcaption>{hero.title[locale]}</figcaption>}
    </figure>
   </section>
