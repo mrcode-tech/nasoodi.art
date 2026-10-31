@@ -95,3 +95,18 @@ Read these before changing any visual surface. Page-specific specifications rema
 - [Asset review register](./asset-review-register.md) — source-asset classification, inspection, rights, and public-use approval gates.
 
 The blueprint's progress snapshot is the current status authority. Do not treat proposed specifications or empty content records as evidence of publication approval.
+
+
+## Artwork discovery and editorial presentation refinement — 2026-10-31
+
+The current authoritative contract for responsive artwork carousels and homepage Journal preview is [Artwork discovery, responsive carousels, and editorial Journal experience](./artwork-discovery-carousel-and-editorial-experience.md).
+
+Read it together with:
+- [Homepage artwork hero and featured works](./homepage-artwork-hero-and-featured-works.md)
+- [Selected Works three-level experience](./selected-works-three-level-experience.md)
+- [Gallery collections and artwork detail](./gallery-collections-and-artwork-detail.md)
+- [Journal, articles, and events](./journal-and-events.md)
+- [Wireframes and interaction design](./wireframes.md)
+- [shadcn/ui component reuse](./shadcn-component-reuse-and-bilingual-ui.md)
+
+**Conflict resolution:** the new contract supersedes earlier grid-first artwork presentation guidance for the homepage Selected Works section and collection-detail primary browsing surface. It does not replace the static artwork-led Hero, the gallery-index editorial collection-preview role, the canonical artwork viewer, content/approval rules, or the Journal editorial layout. The Journal homepage preview is limited to the two newest eligible published entries. Existing routes and the unified Journal information architecture remain unchanged.
