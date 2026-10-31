@@ -46,7 +46,7 @@ export default async function SectionPage({params,searchParams}:Props){const [{l
     <section className="about-statement"><h2>{t.statement}</h2><p>{statement}</p></section>
     <section className="about-biography"><h2>{t.biography}</h2><p className="about-biography-copy">{biography}</p></section>
     <section className="about-cv-section"><h2>{t.cv}</h2>
-     {groups.map(group=>{const rows=aboutPreviewFixture.cv.filter(entry=>entry.category===group.id);return rows.length?<section className="cv-category" key={group.id}><h3>{group.label}</h3><ol className="cv-list">{rows.map(entry=><li key={entry.id}><time>{entry.year}</time><div><strong>{entry.title[locale]}</strong><span>{entry.organization[locale]}</span>{entry.location?.[locale]&&<span>{entry.location[locale]}</span>}</div></li>)}</ol></section>:null;})}
+     {groups.map(group=>{const rows=aboutPreviewFixture.cv.filter(entry=>entry.category===group.id);return rows.length?<section className="cv-category" key={group.id}><h3>{group.label}</h3><ol className="cv-list">{rows.map(entry=><li key={entry.id}><time>{entry.year}</time><div><strong>{entry.title[locale]}</strong><span>{entry.organization[locale]}</span>{"location" in entry&&entry.location?.[locale]&&<span>{entry.location[locale]}</span>}</div></li>)}</ol></section>:null;})}
      <p className="sample-content-notice">{locale==="fa"?"این رزومه صرفاً نمونه‌ای ساختگی برای بررسی طراحی است.":"This is a fictional sample CV for design review only."} <a className="text-link" href="/api/sample-cv" download="ghazaleh-abdolahzade-nasoodi-sample-cv.pdf">{t.downloadCvPdf}</a></p>
     </section>
    </div>
