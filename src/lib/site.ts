@@ -79,7 +79,7 @@ export const portfolioStructuredData = {
 
 // The five source photographs were explicitly approved by the site owner for public portfolio use.
 // Public derivatives are copied from specification/assets/gallery by scripts/copy-approved-gallery-assets.mjs.
-// Dimensions use the source set's documented landscape ratio; the asset audit records exact source dimensions.
+// Intrinsic dimensions are generated from each source JPEG before dev/build, preserving its exact aspect ratio.
 const approvedArtworkImages = [
   { src: "/images/approved-artwork-1.jpg", alt: { en: "Painting titled A Quiet Place Between Seasons", fa: "تابلوی نقاشی با عنوان «آرامش میان فصل‌ها»" }, role: "primary" as const, width: approvedArtworkImageDimensions[0].width, height: approvedArtworkImageDimensions[0].height },
   { src: "/images/approved-artwork-2.jpg", alt: { en: "Painting titled The Shape of Remembering", fa: "تابلوی نقاشی با عنوان «شکلِ خاطره»" }, role: "primary" as const, width: approvedArtworkImageDimensions[1].width, height: approvedArtworkImageDimensions[1].height },
