@@ -621,8 +621,8 @@ test("collection discovery displays the four published curated collections in bo
     await page.goto(`/${locale}/galleries`);
     await expect(page.getByRole("main")).toBeVisible();
     await expect(page.locator("main h1")).toHaveCount(1);
-    await expect(page.locator(".gallery-card")).toHaveCount(0);
-    await expect(page.locator(".empty-note")).toBeVisible();
+    await expect(page.locator(".gallery-card")).toHaveCount(4);
+    await expect(page.locator(".empty-note")).toHaveCount(0);
   }
 });
 
