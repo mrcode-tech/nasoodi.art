@@ -960,5 +960,19 @@ test("mobile hero uses image then artist text then biography and both actions", 
     const landscapeOverflow = await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth);
     expect(landscapeOverflow, `${locale} mobile landscape`).toBe(true);
     await page.screenshot({ path: test.info().outputPath(`${locale}-mobile-landscape-hero.png`), fullPage: true });
+
+    await page.setViewportSize({ width: 1024, height: 768 });
+    await page.goto(`/${locale}?preview=sample`);
+    await expect(page.locator(".home-biography")).toBeVisible();
+    const tabletOverflow = await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth);
+    expect(tabletOverflow, `${locale} tablet`).toBe(true);
+    await page.screenshot({ path: test.info().outputPath(`${locale}-tablet-biography.png`), fullPage: true });
+
+    await page.setViewportSize({ width: 1280, height: 600 });
+    await page.goto(`/${locale}?preview=sample`);
+    await expect(page.locator(".home-biography")).toBeVisible();
+    const shortDesktopOverflow = await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth);
+    expect(shortDesktopOverflow, `${locale} short-height desktop`).toBe(true);
+    await page.screenshot({ path: test.info().outputPath(`${locale}-desktop-short-height-biography.png`), fullPage: true });
   }
 });
