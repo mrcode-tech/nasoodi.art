@@ -261,5 +261,5 @@ test("homepage Journal preview selects the two newest published entries across a
  const entry=(id:string,type:JournalEntry["type"],publishedAt:string):JournalEntry=>({id,slug:id,type,title:{en:id,fa:id},summary:{en:"Summary",fa:"خلاصه"},status:"published",approvedLocales:["en","fa"],artistApproved:true,publishedAt,...(type==="event"?{event:{startsAt:"2026-11-12T18:00:00+01:00",timeZone:"Europe/Berlin",venue:{en:"Studio",fa:"آتلیه"}}}:{})});
  const items=[entry("old-story","story","2026-10-01T10:00:00Z"),entry("new-event","event","2026-10-29T10:00:00Z"),entry("middle-exhibition","exhibition","2026-10-15T10:00:00Z"),entry("newest-story","story","2026-10-30T10:00:00Z"),entry("local-later-date","story","2026-10-30T00:30:00+02:00"),entry("later-instant","exhibition","2026-10-29T23:00:00Z"),{...entry("draft","story","2026-10-31T10:00:00Z"),status:"draft" as const}];
  assert.deepEqual(getHomepageJournalPreview(items,"en").map(item=>item.id),["newest-story","later-instant"]);
- assert.deepEqual(getHomepageJournalPreview(items,"fa").map(item=>item.id),["newest-story","new-event"]);
+ assert.deepEqual(getHomepageJournalPreview(items,"fa").map(item=>item.id),["newest-story","later-instant"]);
 });
