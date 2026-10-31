@@ -897,7 +897,7 @@ test("homepage biography preview expands and collapses in place in both locales"
   }
 });
 
-test("About sample preview shows long biography and sample CV without inventing a PDF", async ({ page }) => {
+test("About sample preview shows the fictional biography, CV, and preview-only PDF", async ({ page }) => {
   for (const locale of ["en", "fa"] as const) {
     await page.setViewportSize({ width: 1440, height: 960 });
     await page.goto(`/${locale}/about?preview=sample`);
@@ -915,7 +915,7 @@ test("About sample preview shows long biography and sample CV without inventing 
     await expect(page.locator(".about-biography-copy")).toBeVisible();
     await expect(page.locator(".about-cv-section")).toBeVisible();
     await expect(page.locator(".about-cv-section .cv-list li")).toHaveCount(5);
-    await expect(page.getByRole("link", { name: /Download CV|دریافت رزومه/ })).toHaveCount(0);
+    await expect(page.getByRole("link", { name: /Download CV|دریافت رزومه/ })).toHaveAttribute("href", "/api/sample-cv?preview=sample");
     await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", /noindex/);
     await page.screenshot({ path: test.info().outputPath(`${locale}-about-sample-mobile.png`), fullPage: true });
   }
