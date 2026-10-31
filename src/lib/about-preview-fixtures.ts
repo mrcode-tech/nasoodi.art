@@ -1,8 +1,8 @@
 import type { Locale } from "./site";
 
 /**
- * Fictional QA-only copy. Never use this fixture as public artist content.
- * The preview route is enabled only in development and visibly labels this data.
+ * Temporary fictional design-review content for the existing About page.
+ * Replace with artist-approved copy and verified CV records before publication.
  */
 export const aboutPreviewFixture = {
   biography: {
