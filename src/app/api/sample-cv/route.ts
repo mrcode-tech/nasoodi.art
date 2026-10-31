@@ -1,5 +1,4 @@
 import { aboutPreviewFixture } from "@/lib/about-preview-fixtures";
-import { aboutSampleContentEnabled } from "@/lib/site";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -64,7 +63,6 @@ function createSamplePdf() {
 }
 
 export async function GET() {
-  if (!aboutSampleContentEnabled) return new Response("Not found", { status: 404, headers: { "X-Robots-Tag": "noindex, nofollow" } });
   const pdf = createSamplePdf();
   return new Response(new Uint8Array(pdf), {
     status: 200,
