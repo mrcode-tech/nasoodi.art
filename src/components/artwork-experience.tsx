@@ -25,7 +25,7 @@ const getServerLocationSearch = () => "";
 
 export function ArtworkExperience({ artworks, locale, context }: Props) {
   const locationSearch = useSyncExternalStore(subscribeToLocation, getLocationSearch, getServerLocationSearch);
-  const activeSlug = useMemo(() => new URLSearchParams(locationSearch).get("artwork"), [locationSearch]);
+  const activeSlug = useMemo(() => { const params = new URLSearchParams(locationSearch); return params.get("viewerContext") === context ? params.get("artwork") : null; }, [locationSearch, context]);
   const [failedImages, setFailedImages] = useState<string[]>([]);
   const labels = locale === "fa"
     ? { close: "بستن نمایشگر", previous: "اثر قبلی", next: "اثر بعدی", unavailable: "نمایش تصویر ممکن نیست", position: "از", detail: "مشاهده صفحه اثر" }
