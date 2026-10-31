@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { alternatePathFor, copyFor, cvEntries, getPublicCvEntries, pagePath, type Locale } from "@/lib/site";
+import { alternatePathFor, copyFor, pagePath, type Locale } from "@/lib/site";
 import { Button } from "@/components/ui/button";
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar";
 import { Sheet, SheetClose, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
@@ -58,7 +58,6 @@ export function SiteShell({ locale, children }: { locale: Locale; children: Reac
     ["about", labels.about, pagePath(locale, "about")],
     ["contact", labels.contact, pagePath(locale, "contact")],
   ];
-  if (getPublicCvEntries(cvEntries, locale).length > 0) links.splice(5, 0, ["cv", labels.cv, pagePath(locale, "cv")]);
 
   const navigation = (insideSheet = false) => <nav dir={locale === "fa" ? "rtl" : "ltr"} aria-label={locale === "fa" ? "راهبری اصلی" : "Primary navigation"}>
     <SidebarMenu className="nav-list">

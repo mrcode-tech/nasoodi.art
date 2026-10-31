@@ -52,6 +52,7 @@ export type ContactDetails = {
   ownerApproved: boolean;
 };
 export type CvEntry = { id: string; category: "education" | "solo-exhibition" | "group-exhibition" | "award" | "publication" | "collection" | "other"; title: Localized; organization?: Localized; location?: Localized; year: number; verified: boolean; status: Status; sortOrder?: number };
+export type CvDocument = { src: string; fileName: string; artistApproved: boolean; status: Status };
 export type HomepageSelection = { heroArtworkId?: string; featuredArtworkIds: string[]; featuredGalleryIds: string[] };
 
 // JSON-LD contains only owner-supplied identity facts that are also visible on the homepage.
@@ -104,6 +105,8 @@ export const galleries: Gallery[] = [
 ];
 export const journalEntries: JournalEntry[] = [];
 export const cvEntries: CvEntry[] = [];
+// No artist-approved public CV PDF has been supplied yet.
+export const cvDocument: CvDocument | undefined = undefined;
 export const artistProfile: ArtistProfile | undefined = undefined;
 export const contactDetails: ContactDetails | undefined = undefined;
 export const homepageSelection: HomepageSelection = { featuredArtworkIds: ["artwork-quiet-place", "artwork-shape-of-remembering", "artwork-where-light-rests", "artwork-garden-small-moments", "artwork-blue-hour-within"], featuredGalleryIds: ["gallery-quiet-intervals", "gallery-color-conversation", "gallery-fragments-memory", "gallery-selected-works"] };
@@ -274,6 +277,12 @@ export function getPublicCvEntries(items: CvEntry[], locale: Locale) {
     Number.isInteger(entry.year) && entry.year > 0);
   return keepUniqueBy(visible, (entry) => entry.id)
     .sort((a,b) => b.year - a.year || (a.sortOrder ?? 0) - (b.sortOrder ?? 0));
+}
+export function getPublicCvDocument(document: CvDocument | undefined) {
+  if (!document || document.status !== "published" || !document.artistApproved ||
+      !isSafeLocalImagePath(document.src) || !/\\.pdf$/i.test(document.src) ||
+      !/^[A-Za-z0-9][A-Za-z0-9._-]*\\.pdf$/i.test(document.fileName)) return undefined;
+  return document;
 }
 export function getPublicArtistProfile(profile: ArtistProfile | undefined, locale: Locale) {
   if (!profile || profile.status !== "published" || !profile.artistApproved ||

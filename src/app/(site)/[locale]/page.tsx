@@ -1,18 +1,20 @@
 import Image from "next/image";
 import { ArtworkExperience } from "@/components/artwork-experience";
 import { CollectionCarousel } from "@/components/collection-carousel";
+import { BiographyDisclosure } from "@/components/biography-disclosure";
+import { aboutPreviewFixture } from "@/lib/about-preview-fixtures";
 import { Button } from "@/components/ui/button";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { artworks,galleries,journalEntries,homepageSelection,getPublicArtworks,getPublicGalleries,getHomepageHero,getHomepageFeaturedArtworks,getHomepageFeaturedGalleries,getHomepageJournalPreview,primaryImageFor } from "@/lib/site";
+import { artworks,galleries,journalEntries,homepageSelection,getPublicArtworks,getPublicGalleries,getHomepageHero,getHomepageFeaturedArtworks,getHomepageFeaturedGalleries,getHomepageJournalPreview,primaryImageFor,artistProfile,getPublicArtistProfile } from "@/lib/site";
 import { copyFor,isLocale,pagePath } from "@/lib/site";
-type Props={params:Promise<{locale:string}>};
-export async function generateMetadata({params}:Props):Promise<Metadata>{const {locale}=await params;if(!isLocale(locale))return {};
+type Props={params:Promise<{locale:string}>;searchParams:Promise<{preview?:string}>};
+export async function generateMetadata({params,searchParams}:Props):Promise<Metadata>{const [{locale},{preview}]=await Promise.all([params,searchParams]);if(!isLocale(locale))return {};
  return {title:locale==="fa"?"غزاله عبداله زاده نسودی":"Ghazaleh Abdolahzade Nasoodi",
  description:locale==="fa"?"پورتفولیوی غزاله عبداله زاده نسودی، نقاش رنگ‌روغن.":"The artist portfolio of Ghazaleh Abdolahzade Nasoodi, oil painter.",
- alternates:{canonical:pagePath(locale),languages:{fa:"/fa",en:"/en"}}};}
-export default async function Home({params}:Props){const {locale}=await params;if(!isLocale(locale))notFound();const t=copyFor(locale);
+ alternates:{canonical:pagePath(locale),languages:{fa:"/fa",en:"/en"}},...((process.env.NODE_ENV!=="production"||process.env.GITHUB_ACTIONS==="true")&&preview==="sample"?{robots:{index:false,follow:false}}:{})};}
+export default async function Home({params,searchParams}:Props){const [{locale},{preview}]=await Promise.all([params,searchParams]);if(!isLocale(locale))notFound();const t=copyFor(locale);const samplePreview=(process.env.NODE_ENV!=="production"||process.env.GITHUB_ACTIONS==="true")&&preview==="sample";const profile=getPublicArtistProfile(artistProfile,locale);const biography=samplePreview?aboutPreviewFixture.biography[locale]:profile?.biography[locale];
  const hero=getHomepageHero(artworks,homepageSelection,locale),heroImage=hero?primaryImageFor(hero):undefined;
  const heroAlt=heroImage?.alt[locale] ?? (locale==="fa" ? "هنرمند در آتلیه، روبه‌روی بوم نقاشی ایستاده است." : "The artist standing before a canvas in her studio.");
  const works=getHomepageFeaturedArtworks(artworks,homepageSelection,locale),sets=getHomepageFeaturedGalleries(galleries,artworks,homepageSelection,locale);
@@ -21,20 +23,26 @@ export default async function Home({params}:Props){const {locale}=await params;i
  const journal=getHomepageJournalPreview(journalEntries,locale);
  return <div className="page-content home-page">
   <section className="home-intro has-hero" aria-labelledby="home-title">
+   <figure className="hero-artwork">
+    {heroImage ? <Image sizes="(max-width: 900px) 100vw, 58vw" src={heroImage.src} alt={heroAlt} width={heroImage.width} height={heroImage.height} priority /> : <Image sizes="(max-width: 900px) 100vw, 58vw" src="/images/homepage-hero.jpg" alt={heroAlt} width={4032} height={3024} priority /> }
+    {hero?.title[locale] && <figcaption>{hero.title[locale]}</figcaption>}
+   </figure>
    <div className="home-intro-copy">
     <p className="eyebrow">{t.portfolio}</p>
     <h1 id="home-title">{locale==="fa"?"غزاله عبداله زاده نسودی":"Ghazaleh Abdolahzade Nasoodi"}</h1>
     <p className="artist-discipline">{t.discipline}</p>
     <div className="intro-rule" aria-hidden="true"/>
+    {biography && <section className="home-biography" aria-labelledby="home-biography-title">
+      <h2 id="home-biography-title">{locale==="fa"?"درباره هنرمند":"About the artist"}</h2>
+      {samplePreview && <p className="sample-content-notice">{locale==="fa"?"متن نمونه برای بررسی طراحی؛ تأییدنشده و غیرقابل انتشار":"Sample content for design review — not artist-approved or publishable."}</p>}
+      <BiographyDisclosure biography={biography} readMoreLabel={t.readMore} showLessLabel={locale==="fa"?"نمایش کمتر":"Show less"} lines={4}/>
+    </section>}
     {(hasFeaturedGalleries || hasSelectedWorks) && <div className="hero-actions">
      {hasFeaturedGalleries && <Button asChild variant="default" size="lg"><Link href={pagePath(locale,"galleries")}>{locale==="fa"?"گالری‌ها را ببینید":"Explore galleries"}</Link></Button>}
      {hasSelectedWorks && <Button asChild variant="outline" size="lg"><Link href={pagePath(locale,"works")}>{locale==="fa"?"گزیده آثار را ببینید":"View selected works"}</Link></Button>}
     </div>}
    </div>
-   <figure className="hero-artwork">
-    {heroImage ? <Image sizes="(max-width: 900px) 100vw, 58vw" src={heroImage.src} alt={heroAlt} width={heroImage.width} height={heroImage.height} priority /> : <Image sizes="(max-width: 900px) 100vw, 58vw" src="/images/homepage-hero.jpg" alt={heroAlt} width={4032} height={3024} priority /> }
-    {hero?.title[locale] && <figcaption>{hero.title[locale]}</figcaption>}
-   </figure>
+
   </section>
   <section className="editorial-section" aria-labelledby="featured-works"><div className="section-heading"><div><p className="eyebrow">{t.portfolio}</p><h2 id="featured-works">{t.selected}</h2></div><Link className="text-link" href={pagePath(locale,"galleries")}>{locale==="fa"?"گشت‌وگذار در مجموعه‌ها":"Explore collections"} ↗</Link></div>
    {works.length===0?<p className="empty-note">{t.emptyWorks}</p>:<ArtworkExperience artworks={works.slice(0,6)} locale={locale} context="home" />}

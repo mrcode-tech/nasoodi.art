@@ -1,0 +1,19 @@
+import type { Locale } from "@/lib/site";
+
+/**
+ * Fictional QA-only copy. Never use this fixture as public artist content.
+ * The preview route is enabled only in development and visibly labels this data.
+ */
+export const aboutPreviewFixture = {
+  biography: { en: "Ghazaleh’s studio practice is presented here as a long-form editorial sample so the About page can be reviewed with realistic reading length. This text is fictional placeholder copy and does not describe the artist’s actual history, training, influences, exhibitions, or intentions.\n\nThe sample follows a deliberately measured rhythm: a short opening paragraph, a longer passage, and a final reflection. It gives the layout enough content to demonstrate line length, paragraph spacing, and how a reader moves through a complete biography on both wide and narrow screens. The language is intentionally restrained, avoiding claims that would need factual verification or artist approval.\n\nIn a real biography, this space should explain the artist’s own account of her practice in language she has written or explicitly approved. It may include confirmed details about materials, process, subjects, development, and the contexts in which the work is made, but only when those details are supplied by the artist. The final text should sound like the artist rather than a generic description of contemporary art.\n\nThis final sample paragraph ensures that the expanded state is meaningfully longer than the collapsed preview. It also makes it possible to check that both existing homepage actions remain after the complete text, that the About page maintains a comfortable reading measure, and that Persian and English content can grow naturally without clipping or awkward forced heights.", fa: "این متن بلند صرفاً نمونه‌ای ساختگی برای بررسی چیدمان صفحه‌ی معرفی هنرمند است و زندگی‌نامه‌ی واقعی، سوابق، آموزش، نمایشگاه‌ها یا دیدگاه‌های غزاله را توصیف نمی‌کند.\n\nدر این نمونه، متن با ریتمی آرام در چند بند تنظیم شده است تا اندازه‌ی سطرها، فاصله‌ی میان پاراگراف‌ها و خوانایی متن در صفحه‌های عریض و باریک قابل ارزیابی باشد. این نوشته عمداً از ادعاهای واقعی‌نما و اطلاعاتی که به تأیید هنرمند نیاز دارند پرهیز می‌کند.\n\nدر نسخه‌ی نهایی، این بخش باید روایت کامل و تأییدشده‌ی هنرمند از مسیر و شیوه‌ی کار او را دربر بگیرد. هرگونه اشاره به مواد و تکنیک، موضوع آثار، روند شکل‌گیری مجموعه‌ها یا تجربه‌های حرفه‌ای باید بر اساس اطلاعاتی باشد که خود هنرمند ارائه کرده یا به‌طور روشن تأیید کرده است.\n\nبند پایانی برای آزمایش حالت بازشده‌ی متن در نظر گرفته شده است؛ به‌ویژه برای بررسی اینکه متن فارسی بدون بریدگی و آشفتگی نمایش داده شود، دکمه‌های اصلی صفحه پس از زندگی‌نامه قرار بگیرند و ارتفاع صفحه با محتوای کامل به‌صورت طبیعی افزایش یابد." } satisfies Record<Locale, string>,
+  statement: {
+    en: "Sample artist statement — layout preview only. Replace with a statement written or approved by the artist.",
+    fa: "نمونه‌ی بیانیه‌ی هنری — فقط برای پیش‌نمایش چیدمان. این متن باید با نوشته‌ی تأییدشده‌ی هنرمند جایگزین شود.",
+  } satisfies Record<Locale, string>,
+  cv: [
+    { id: "sample-1", year: "20XX", title: { en: "Sample group exhibition", fa: "نمونه‌ی نمایشگاه گروهی" }, organization: { en: "Sample venue — fictional", fa: "محل برگزاری نمونه — ساختگی" } },
+    { id: "sample-2", year: "20XX", title: { en: "Sample artist residency", fa: "نمونه‌ی اقامت هنری" }, organization: { en: "Sample programme — fictional", fa: "برنامه‌ی نمونه — ساختگی" } },
+    { id: "sample-3", year: "20XX", title: { en: "Sample publication", fa: "نمونه‌ی انتشار اثر" }, organization: { en: "Sample publication — fictional", fa: "نشریه‌ی نمونه — ساختگی" } },
+    { id: "sample-4", year: "20XX", title: { en: "Sample education entry", fa: "نمونه‌ی سابقه‌ی آموزشی" }, organization: { en: "Sample institution — fictional", fa: "مؤسسه‌ی نمونه — ساختگی" } },
+  ],
+} as const;

@@ -522,3 +522,16 @@ The homepage hero becomes a concise, expandable artist introduction: artist name
 The sidebar's About item opens a dedicated localized page with the approved artist image, full biography, and a CV section at the bottom. A direct PDF download is shown only when the real artist-approved CV is available.
 
 On mobile, the hero is one continuous vertical story: image, artist identity, biography, and finally the two existing actions. The image and text are never separated by those buttons.
+
+
+## 17. Development-only layout preview fixtures
+
+The implementation may expose the About layout's long-copy and CV-list states through the explicit query parameter `?preview=sample` while running the local development server. This fixture is fictional, bilingual QA material; it is not the artist's biography, statement, education, exhibition history, or CV.
+
+- The preview must display a visible warning that all sample content is fictional and not approved.
+- It must be disabled in production builds, even when the query parameter is supplied.
+- Preview responses must be noindex and must never enter the sitemap or public content model.
+- Sample CV entries use obviously fictional labels and must not link to a fabricated PDF.
+- Replace the fixture only with artist-authored or artist-approved localized content. Do not copy fixture text into the production profile.
+
+The preview is a design/QA aid only; it does not satisfy the artist approval gate or make the About page publishable/indexable.
