@@ -1,6 +1,6 @@
 # Nasoodi.art — Galleries Index: Editorial Cards and Pagination Specification
 
-**Status:** Owner-approved implementation contract; implementation in progress (2026-10-31)  
+**Status:** Owner-approved implementation contract; implemented, automated-test verified, CI verified, and visually spot-checked (2026-10-31). Artist/site-owner visual approval remains outstanding.  
 **Scope:** The localized main Galleries index at `/[locale]/galleries`  
 **Locales:** Persian (`fa`, RTL) and English (`en`, LTR)  
 **Reference supplied by site owner:** `https://nasoodi-art-git-stage-mrcode-techs-projects.vercel.app/fa/galleries`  
@@ -437,3 +437,39 @@ Before coding:
 - Repository inspection confirmed the localized route is composed through `src/app/(site)/[locale]/[section]/page.tsx`, gallery publication/order are provided by `getPublicGalleries`, and the canonical dataset currently contains four published collections in both locales.
 - The homepage Selected Works carousel is rendered separately through `ArtworkExperience` on the homepage. The Galleries index implementation must not change `src/components/ui/carousel.tsx`, `src/components/artwork-experience.tsx`, or homepage composition.
 - Implementation and CI evidence will be recorded only after the final feature commit has been tested. The current four-gallery dataset means the approved behavior is a four-card static grid with no page controls; pagination utilities are tested with synthetic fixtures so the 5/10/20 behavior is covered without inventing production galleries.
+
+
+## Implementation and verification evidence — 2026-10-31
+
+**Implementation commit:** `dfcdf9536620432d1a90798832d2e91adcf02b3a`  
+**Repository / branch:** `mrcode-tech/nasoodi.art` / `feature`
+
+### Implemented
+
+- Replaced the main Galleries index's `CollectionCarousel` usage with a page-specific `GalleryIndex` static poster grid. The homepage continues to use the existing `CollectionCarousel` and `ArtworkExperience` compositions.
+- Added URL-derived pagination helpers for page sizes 5, 10, and 20, defensive parsing, last-page clamping, deterministic slicing, compact page-number windows, and query-preserving URL serialization.
+- Added localized English/Persian labels, locale-switch preservation of gallery `page` and `pageSize`, responsive card styling, accessible page controls, and polite result-range status.
+- Added unit tests for empty/boundary counts, supported sizes, invalid query values, clamping, ordered slicing, query preservation, and compact pagination.
+- Updated browser tests to assert that the main Galleries index has no collection carousel, that the homepage Selected Works carousel remains present and interactive, and that the static grid reflows in both locales.
+
+### Automated and CI verification
+
+GitHub Actions: [Run 41219572380](https://github.com/mrcode-tech/nasoodi.art/actions/runs/41219572380)  
+- Workflow status: `completed`; conclusion: `success`.
+- Verified head: `dfcdf9536620432d1a90798832d2e91adcf02b3a`.
+- ESLint: passed.
+- TypeScript: passed.
+- Unit/content tests: passed (35 tests total, including the new pagination suite).
+- Production build: passed.
+- Portfolio asset audit: passed.
+- Playwright Chromium browser suite: passed (70 tests).
+- Production server smoke test: passed for the root redirect and both locale routes.
+- CI visual QA artifact: [nasoodi-visual-qa-dfcdf9536620432d1a90798832d2e91adcf02b3a](https://github.com/mrcode-tech/nasoodi.art/actions/runs/41219572380/artifacts/13049661430).
+
+### Visual review and remaining gates
+
+- Captured and visually spot-checked the English and Persian Galleries index at desktop (1440×900) and mobile (390×844); the grid is static, images retain their source proportions, card captions remain readable, and the tested pages have no horizontal overflow.
+- Browser coverage also exercises 320×568, 768×1024, 1024×768, 1920×1080, and mobile landscape (844×390) for both locales.
+- Homepage carousel regression assertions passed, including its five artwork items, navigation controls, viewer integration, keyboard navigation, locale direction, and responsive behavior.
+- The canonical published dataset currently contains **four** galleries in each locale. Therefore the live page shows four cards and correctly hides pagination and the page-size selector under the approved one-page rule. The 5/10/20 pagination calculations and slices are covered by synthetic unit fixtures; real multi-page interaction cannot be demonstrated until more than five approved galleries are published.
+- Artist/site-owner approval is not inferred from CI or this engineering review and remains a separate visual/content release gate.
