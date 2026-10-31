@@ -370,3 +370,49 @@ Gallery and artwork surfaces must follow design-engineering-skills.md and design
 - Do not add automatic carousels, hover-only artwork details, animated zoom, or motion on the artwork itself.
 - Filters, if required by catalogue size, must be immediate, accessible, and visually quiet.
 - Review sparse galleries, a single artwork, mixed aspect ratios, long Persian/English gallery names, and mobile reading order.
+
+
+## Three-level Selected Works experience alignment
+
+The complete cross-page experience contract is [selected-works-three-level-experience.md](./selected-works-three-level-experience.md), with responsive wireframes in [wireframes.md](./wireframes.md), Section 15.
+
+Apply this visitor journey:
+
+1. Homepage Selected Works shows a curated selection of individual artworks. Selecting one opens the shared Artwork Viewer with image, approved title, description when available, and verified metadata.
+2. The homepage Explore Works/Explore Collections link navigates to the collection index. The index is a discovery page for collections, not an all-artworks grid.
+3. Selecting a collection navigates to its dedicated collection detail page. That page presents the approved collection introduction and every published artwork in its curated order. Selecting an artwork opens the same shared Artwork Viewer.
+
+### Collection index presentation
+
+- The collection index should use editorial collection previews with an approved cover artwork, title, short description, and optional count/year range only when verified.
+- Prefer an asymmetric editorial layout; use a consistent grid only when the number of collections and actual cover ratios make it clearer.
+- A collection card is one coherent accessible link to its dedicated page; avoid nested links and hover-only information.
+- The page must not look like a duplicate of the homepage Selected Works section.
+
+### Collection detail viewer context
+
+- Reuse the same Artwork Viewer component as the homepage.
+- Supply the current collection's ordered, published artwork sequence to the viewer.
+- Previous/Next stays inside the current collection and updates the complete artwork information, not just the image.
+- Closing returns to the exact artwork card, scroll position, and focus target.
+- A direct artwork detail route remains available as the canonical fallback for sharing, refresh, and navigation without an originating collection context.
+
+### Route compatibility
+
+The existing repository route documentation distinguishes:
+- Collection index: localized `/[locale]/galleries`.
+- Collection detail: localized `/[locale]/galleries/[gallerySlug]`.
+- Artwork detail: localized `/[locale]/works/[artworkSlug]`.
+
+Keep these established route roles unless a separate, explicit route migration is approved. The visible navigation label may be “Works” or “Explore Works” while the collection index remains on the established gallery route. Do not repurpose `/[locale]/works/[slug]` as a collection route without migrating the artwork detail route, redirects, canonicals, sitemap, and tests together.
+
+### Artwork viewer presentation
+
+- Desktop: large Dialog composition with artwork image and information column side by side when space permits.
+- Tablet: side-by-side only while the image remains large; otherwise stack information below.
+- Mobile: near/full-screen Dialog, image first, title immediately below, metadata and description following in normal scroll flow.
+- Do not place the description in a nested Sheet/Drawer. Do not use a small bottom Drawer as the primary painting viewer.
+- Previous/Next and Close remain visible, keyboard reachable, and touch accessible.
+- Full implementation, history, accessibility, motion, image fidelity, and acceptance requirements are defined in the dedicated three-level experience specification.
+
+This addendum refines the collection and artwork presentation model without changing publication, rights, localization, or artist-approval gates elsewhere in this document.
