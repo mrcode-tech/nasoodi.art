@@ -30,7 +30,6 @@ export default async function Home({params}:Props){const {locale}=await params;i
    <div className="home-intro-copy">
     <p className="eyebrow">{t.portfolio}</p>
     <h1 id="home-title">{locale==="fa"?"غزاله عبداله زاده نسودی":"Ghazaleh Abdolahzade Nasoodi"}</h1>
-    <div className="intro-rule" aria-hidden="true"/>
     <section className="home-biography" aria-label={locale==="fa"?"زندگی‌نامه":"Biography"}>
       <BiographyDisclosure biography={biography} readMoreLabel={t.readMore} showLessLabel={t.showLess} lines={4}/>
     </section>

@@ -793,3 +793,9 @@ html[lang=fa] .home-biography h2,html[lang=fa] .profile-content h2{font-family:T
  .hero-actions .ui-button{width:100%;justify-content:center}
 }
 @media(prefers-reduced-motion:reduce){.biography-copy,.biography-toggle{transition:none!important}}
+
+/* Keep the Persian desktop sidebar visually consistent with the borderless English sidebar.
+   Match the Sidebar primitive's combined class selector so this wins over its RTL border rule. */
+html[lang="fa"] .sidebar-root.desktop-sidebar {
+  border-left: 0;
+}
