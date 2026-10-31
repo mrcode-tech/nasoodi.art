@@ -282,6 +282,6 @@ test("long About preview fixtures are bilingual, clearly sample-only, and includ
  assert.ok(aboutPreviewFixture.biography.fa.length>500);
  assert.equal(aboutPreviewFixture.cv.length,5);
  assert.notEqual(aboutPreviewFixture.statement.en,aboutPreviewFixture.biography.en);
- assert.ok(aboutPreviewFixture.statement.en.includes("fictional statement"));
+ assert.ok(aboutPreviewFixture.statement.en.includes("invented editorial sample"));
  assert.ok(aboutPreviewFixture.cv.every(entry=>entry.organization.en.includes("fictional")||entry.organization.fa.includes("ساختگی")));
 });
