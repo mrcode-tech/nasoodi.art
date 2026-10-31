@@ -143,7 +143,11 @@ for (const locale of ["en", "fa"] as const) {
       expect((utility?.x ?? 0) + (utility?.width ?? 0)).toBeLessThanOrEqual(1440 - (bounds?.width ?? 0) + 1);
       await expect(utilityLocator).toHaveCSS("direction", "rtl");
     } else {
-      expect((utility?.x ?? 0)).toBeGreaterThan(1440 - (bounds?.width ?? 0) - 220);
+      // The utility is a full-width fixed bar; assert the language control is
+      // anchored to its right edge rather than treating the bar as the control.
+      const languageControl = await utilityLocator.locator(".ui-button").boundingBox();
+      expect(languageControl?.x).toBeGreaterThan(1440 - 220);
+      expect((languageControl?.x ?? 0) + (languageControl?.width ?? 0)).toBeLessThanOrEqual(1440);
     }
     await page.screenshot({ path: test.info().outputPath(`${locale}-desktop-sidebar.png`), fullPage: true });
   });
@@ -392,7 +396,7 @@ for (const locale of ["en", "fa"] as const) {
     await expect(utility).toHaveCSS("position", "fixed");
     await page.evaluate(() => window.scrollTo(0, 700));
     await expect.poll(async () => (await sidebar.boundingBox())?.y).toBe(0);
-    await expect.poll(async () => (await utility.boundingBox())?.y).toBe(32);
+    await expect.poll(async () => (await utility.boundingBox())?.y).toBe(0);
   });
 }
 
