@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useId, useRef, useState } from "react";
+import { useEffect, useId, useLayoutEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 
 type BiographyDisclosureProps = {
@@ -15,6 +15,13 @@ export function BiographyDisclosure({ biography, readMoreLabel, showLessLabel, l
   const contentRef = useRef<HTMLParagraphElement>(null);
   const [isLong, setIsLong] = useState(false);
   const [expanded, setExpanded] = useState(false);
+  const pendingScrollRestore = useRef<number | null>(null);
+
+  useLayoutEffect(() => {
+    if (pendingScrollRestore.current === null) return;
+    window.scrollTo(0, pendingScrollRestore.current);
+    pendingScrollRestore.current = null;
+  }, [expanded]);
 
   useEffect(() => {
     const element = contentRef.current;
@@ -41,7 +48,7 @@ export function BiographyDisclosure({ biography, readMoreLabel, showLessLabel, l
       </p>
       {isLong && <Button type="button" variant="ghost" className="biography-toggle"
         aria-expanded={expanded} aria-controls={contentId}
-        onClick={() => setExpanded((value) => !value)}>
+        onClick={() => { pendingScrollRestore.current = window.scrollY; setExpanded((value) => !value); }}>
         {expanded ? showLessLabel : readMoreLabel}
       </Button>}
     </div>

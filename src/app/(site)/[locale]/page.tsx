@@ -33,9 +33,9 @@ export default async function Home({params,searchParams}:Props){const [{locale},
     <p className="artist-discipline">{t.discipline}</p>
     <div className="intro-rule" aria-hidden="true"/>
     {biography && <section className="home-biography" aria-labelledby="home-biography-title">
-      <h2 id="home-biography-title">{locale==="fa"?"درباره هنرمند":"About the artist"}</h2>
+      <h2 id="home-biography-title">{t.aboutArtist}</h2>
       {samplePreview && <p className="sample-content-notice">{locale==="fa"?"متن نمونه برای بررسی طراحی؛ تأییدنشده و غیرقابل انتشار":"Sample content for design review — not artist-approved or publishable."}</p>}
-      <BiographyDisclosure biography={biography} readMoreLabel={t.readMore} showLessLabel={locale==="fa"?"نمایش کمتر":"Show less"} lines={4}/>
+      <BiographyDisclosure biography={biography} readMoreLabel={t.readMore} showLessLabel={t.showLess} lines={4}/>
     </section>}
     {(hasFeaturedGalleries || hasSelectedWorks) && <div className="hero-actions">
      {hasFeaturedGalleries && <Button asChild variant="default" size="lg"><Link href={pagePath(locale,"galleries")}>{locale==="fa"?"گالری‌ها را ببینید":"Explore galleries"}</Link></Button>}
