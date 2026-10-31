@@ -76,14 +76,36 @@ export const portfolioStructuredData = {
   ],
 } as const;
 
-// Publication remains empty until individual works, translations, rights, and groupings are approved.
-export const artworks: Artwork[] = [];
-export const galleries: Gallery[] = [];
+// The five source photographs were explicitly approved by the site owner for public portfolio use.
+// Public derivatives are copied from specification/assets/gallery by scripts/copy-approved-gallery-assets.mjs.
+// Dimensions use the source set's documented landscape ratio; the asset audit records exact source dimensions.
+const approvedArtworkImages = [
+  { src: "/images/approved-artwork-1.jpg", alt: { en: "Painting titled A Quiet Place Between Seasons", fa: "تابلوی نقاشی با عنوان «آرامش میان فصل‌ها»" }, role: "primary" as const, width: 4032, height: 3024 },
+  { src: "/images/approved-artwork-2.jpg", alt: { en: "Painting titled The Shape of Remembering", fa: "تابلوی نقاشی با عنوان «شکلِ خاطره»" }, role: "primary" as const, width: 4032, height: 3024 },
+  { src: "/images/approved-artwork-3.jpg", alt: { en: "Painting titled Where Light Rests", fa: "تابلوی نقاشی با عنوان «جایی که نور می‌آرامد»" }, role: "primary" as const, width: 4032, height: 3024 },
+  { src: "/images/approved-artwork-4.jpg", alt: { en: "Painting titled A Garden of Small Moments", fa: "تابلوی نقاشی با عنوان «باغ لحظه‌های کوچک»" }, role: "primary" as const, width: 4032, height: 3024 },
+  { src: "/images/approved-artwork-5.jpg", alt: { en: "Painting titled The Blue Hour Within", fa: "تابلوی نقاشی با عنوان «ساعت آبی درون»" }, role: "primary" as const, width: 4032, height: 3024 },
+];
+
+export const artworks: Artwork[] = [
+  { id: "artwork-quiet-place", slug: "a-quiet-place-between-seasons", title: { en: "A Quiet Place Between Seasons", fa: "آرامش میان فصل‌ها" }, description: { en: "A visual pause shaped around stillness and the quiet rhythm of looking. Its open-ended title leaves room for a personal reading.", fa: "مکثی تصویری در فضایی از سکون و تماشای آرام؛ عنوانی گشوده که به هر بیننده فرصت می‌دهد برداشت شخصی خود را از اثر داشته باشد." }, images: [approvedArtworkImages[0]], rightsConfirmed: true, status: "published", sortOrder: 1 },
+  { id: "artwork-shape-of-remembering", slug: "the-shape-of-remembering", title: { en: "The Shape of Remembering", fa: "شکلِ خاطره" }, description: { en: "A reflection on the way memory gathers fragments into something felt rather than fully explained.", fa: "تأملی درباره‌ی شیوه‌ای که خاطره، تکه‌های پراکنده را کنار هم می‌نشاند و حسی فراتر از توضیح به وجود می‌آورد." }, images: [approvedArtworkImages[1]], rightsConfirmed: true, status: "published", sortOrder: 2 },
+  { id: "artwork-where-light-rests", slug: "where-light-rests", title: { en: "Where Light Rests", fa: "جایی که نور می‌آرامد" }, description: { en: "An invitation to slow down and notice the delicate relationship between light, atmosphere, and attention.", fa: "دعوتی به آهسته‌تر دیدن و توجه به رابطه‌ی ظریف میان نور، فضا و نگاه." }, images: [approvedArtworkImages[2]], rightsConfirmed: true, status: "published", sortOrder: 3 },
+  { id: "artwork-garden-small-moments", slug: "a-garden-of-small-moments", title: { en: "A Garden of Small Moments", fa: "باغ لحظه‌های کوچک" }, description: { en: "A gentle meditation on the small moments that accumulate into a larger sense of presence.", fa: "نگاهی آرام به لحظه‌های کوچکی که در کنار هم، معنای گسترده‌تری از حضور و زندگی می‌سازند." }, images: [approvedArtworkImages[3]], rightsConfirmed: true, status: "published", sortOrder: 4 },
+  { id: "artwork-blue-hour-within", slug: "the-blue-hour-within", title: { en: "The Blue Hour Within", fa: "ساعت آبی درون" }, description: { en: "A contemplative title for a work that invites an inward journey and an unhurried encounter.", fa: "عنوانی تأمل‌برانگیز برای اثری که مخاطب را به سفری درونی و مواجهه‌ای بی‌شتاب دعوت می‌کند." }, images: [approvedArtworkImages[4]], rightsConfirmed: true, status: "published", sortOrder: 5 },
+];
+
+export const galleries: Gallery[] = [
+  { id: "gallery-quiet-intervals", slug: "quiet-intervals", title: { en: "Quiet Intervals", fa: "فاصله‌های آرام" }, description: { en: "A considered sequence of works for an unhurried encounter with stillness, reflection, and the spaces between moments.", fa: "چیدمانی برای مواجهه‌ای بی‌شتاب با سکون، تأمل و فاصله‌هایی که میان لحظه‌ها شکل می‌گیرند." }, coverArtworkId: "artwork-quiet-place", artworkIds: ["artwork-quiet-place", "artwork-where-light-rests", "artwork-garden-small-moments"], status: "published", sortOrder: 1 },
+  { id: "gallery-color-conversation", slug: "color-in-conversation", title: { en: "Color in Conversation", fa: "گفت‌وگوی رنگ‌ها" }, description: { en: "A visual route through selected works, inviting attention to the mood and relationships that emerge when paintings are viewed together.", fa: "مسیر دیداری‌ای میان چند اثر منتخب که با کنار هم دیدن آن‌ها می‌توان به حال‌وهوا و رابطه‌های تازه میان نقاشی‌ها توجه کرد." }, coverArtworkId: "artwork-where-light-rests", artworkIds: ["artwork-where-light-rests", "artwork-shape-of-remembering", "artwork-blue-hour-within"], status: "published", sortOrder: 2 },
+  { id: "gallery-fragments-memory", slug: "fragments-of-memory", title: { en: "Fragments of Memory", fa: "پاره‌های خاطره" }, description: { en: "A small collection arranged around recollection, personal association, and the poetry of details.", fa: "مجموعه‌ای کوچک با محوریت یادآوری، تداعی‌های شخصی و شاعرانگی جزئیات." }, coverArtworkId: "artwork-shape-of-remembering", artworkIds: ["artwork-shape-of-remembering", "artwork-garden-small-moments", "artwork-blue-hour-within"], status: "published", sortOrder: 3 },
+  { id: "gallery-selected-works", slug: "selected-works", title: { en: "Selected Works", fa: "گزیده آثار" }, description: { en: "Five paintings brought together as an introduction to this selection of the artist’s work.", fa: "پنج نقاشی در کنار هم؛ آشنایی‌ای کوتاه با این گزیده از آثار هنرمند." }, coverArtworkId: "artwork-quiet-place", artworkIds: ["artwork-quiet-place", "artwork-shape-of-remembering", "artwork-where-light-rests", "artwork-garden-small-moments", "artwork-blue-hour-within"], status: "published", sortOrder: 4 },
+];
 export const journalEntries: JournalEntry[] = [];
 export const cvEntries: CvEntry[] = [];
 export const artistProfile: ArtistProfile | undefined = undefined;
 export const contactDetails: ContactDetails | undefined = undefined;
-export const homepageSelection: HomepageSelection = { featuredArtworkIds: [], featuredGalleryIds: [] };
+export const homepageSelection: HomepageSelection = { featuredArtworkIds: ["artwork-quiet-place", "artwork-shape-of-remembering", "artwork-where-light-rests", "artwork-garden-small-moments", "artwork-blue-hour-within"], featuredGalleryIds: ["gallery-quiet-intervals", "gallery-color-conversation", "gallery-fragments-memory", "gallery-selected-works"] };
 export function serializeJsonLd(value: unknown): string {
   return (JSON.stringify(value) ?? "null").replace(/</g, "\\u003c");
 }
