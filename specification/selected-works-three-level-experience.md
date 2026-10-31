@@ -628,3 +628,17 @@ Before implementing this experience, read:
 16. `specification/phased-implementation-blueprint.md`.
 
 This document is the detailed experience contract for the three-level Selected Works/Collections journey. If it conflicts with shared design, content, accessibility, or publication authorities, record and resolve the conflict; do not silently override them.
+
+
+## 20. Responsive carousel presentation refinement — 2026-10-31
+
+The presentation rules in [artwork-discovery-carousel-and-editorial-experience.md](./artwork-discovery-carousel-and-editorial-experience.md) supersede the earlier grid-first composition guidance for the homepage Selected Works section and the primary collection-detail browsing surface.
+
+- Homepage Selected Works becomes a user-controlled responsive shadcn Artwork Carousel; the single static homepage Hero is unchanged.
+- The collection index introduces curated collections through editorial previews and may use a responsive collection rail when appropriate.
+- Collection detail uses a responsive artwork carousel as its primary browsing surface. Every artwork remains reachable by visible controls and keyboard; provide an ordered, readable complete-collection index when needed rather than another dense generic image grid.
+- Continue to use the one shared Artwork Viewer, with navigation scoped to the originating homepage selection or collection.
+- The carousel must never autoplay, force-crop paintings, or rely on swipe alone.
+- The new contract supplies viewport/container targets, RTL behavior, shadcn composition, accessibility, wireframe, and test requirements.
+
+Content identity, viewer history, route compatibility, publication gates, and artwork approval requirements in this document remain in force.

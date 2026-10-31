@@ -1,10 +1,11 @@
 import Image from "next/image";
 import { ArtworkExperience } from "@/components/artwork-experience";
+import { CollectionCarousel } from "@/components/collection-carousel";
 import { Button } from "@/components/ui/button";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { artworks,galleries,journalEntries,homepageSelection,getPublicJournal,getPublicArtworks,getPublicGalleries,getHomepageHero,getHomepageFeaturedArtworks,getHomepageFeaturedGalleries,getGalleryCoverArtwork,getUpcomingJournalEvents,primaryImageFor } from "@/lib/site";
+import { artworks,galleries,journalEntries,homepageSelection,getPublicArtworks,getPublicGalleries,getHomepageHero,getHomepageFeaturedArtworks,getHomepageFeaturedGalleries,getHomepageJournalPreview,primaryImageFor } from "@/lib/site";
 import { copyFor,isLocale,pagePath } from "@/lib/site";
 type Props={params:Promise<{locale:string}>};
 export async function generateMetadata({params}:Props):Promise<Metadata>{const {locale}=await params;if(!isLocale(locale))return {};
@@ -17,8 +18,7 @@ export default async function Home({params}:Props){const {locale}=await params;i
  const works=getHomepageFeaturedArtworks(artworks,homepageSelection,locale),sets=getHomepageFeaturedGalleries(galleries,artworks,homepageSelection,locale);
  const hasSelectedWorks=getPublicArtworks(artworks,locale).length>0;
  const hasFeaturedGalleries=getPublicGalleries(galleries,artworks,locale).length>0;
- const upcomingEvent=getUpcomingJournalEvents(journalEntries,locale)[0];
- const journal=getPublicJournal(journalEntries,locale).filter(entry=>entry.id!==upcomingEvent?.id).slice(0,2);
+ const journal=getHomepageJournalPreview(journalEntries,locale);
  return <div className="page-content home-page">
   <section className="home-intro has-hero" aria-labelledby="home-title">
    <div className="home-intro-copy">
@@ -40,18 +40,16 @@ export default async function Home({params}:Props){const {locale}=await params;i
    {works.length===0?<p className="empty-note">{t.emptyWorks}</p>:<ArtworkExperience artworks={works.slice(0,6)} locale={locale} context="home" />}
   </section>
   <section className="editorial-section" aria-labelledby="featured-galleries"><div className="section-heading"><div><p className="eyebrow">{t.discover}</p><h2 id="featured-galleries">{t.galleries}</h2></div><Link className="text-link" href={pagePath(locale,"galleries")}>{t.discover} ↗</Link></div>
-   {sets.length===0?<p className="empty-note">{t.emptyGalleries}</p>:<div className="gallery-cards">{sets.map(g=>{const cover=getGalleryCoverArtwork(g,artworks,locale);return <Link className="gallery-card" key={g.id} href={pagePath(locale,`galleries/${g.slug}`)}>{cover&&<Image sizes="(max-width: 700px) 100vw, 42vw" src={cover.image.src} alt={cover.image.alt[locale]??""} width={cover.image.width} height={cover.image.height}/>}<span className="gallery-card-copy"><strong>{g.title[locale]}</strong><span>{g.description[locale]}</span><span className="gallery-card-action">{locale==="fa"?"مشاهده مجموعه":"Explore collection"} ↗</span></span></Link>;})}</div>}
+   {sets.length===0?<p className="empty-note">{t.emptyGalleries}</p>:<CollectionCarousel galleries={sets} artworks={artworks} locale={locale} label={locale==="fa"?"مجموعه‌های هنری":"Featured collections"} />}
   </section>
-  <section className="editorial-section" aria-labelledby="latest-journal"><div className="section-heading"><div><p className="eyebrow">{t.latest}</p><h2 id="latest-journal">{t.journal}</h2></div><Link className="text-link" href={pagePath(locale,"journal")}>{t.journal} ↗</Link></div>
-   {upcomingEvent?.event&&<article className="journal-upcoming">
-    <p className="eyebrow">{t.upcoming}</p>
-    <h3><Link href={pagePath(locale,`journal/${upcomingEvent.slug}`)}>{upcomingEvent.title[locale]}</Link></h3>
-    <time dateTime={upcomingEvent.event.startsAt}>{new Intl.DateTimeFormat(locale,{dateStyle:"long",timeStyle:"short",timeZone:upcomingEvent.event.timeZone}).format(new Date(upcomingEvent.event.startsAt))}</time>
-    {upcomingEvent.event.venue?.[locale]&&<p>{t.venue}: {upcomingEvent.event.venue[locale]}</p>}
-    <p>{upcomingEvent.summary[locale]}</p>
-    <Link className="text-link" href={pagePath(locale,`journal/${upcomingEvent.slug}`)}>{t.readMore} ↗</Link>
-   </article>}
-   {journal.length===0&&!upcomingEvent?<p className="empty-note">{t.emptyJournal}</p>:journal.length>0&&<div className="journal-list">{journal.map(j=><Link className="journal-list-item" key={j.id} href={pagePath(locale,`journal/${j.slug}`)}>{j.title[locale]}</Link>)}</div>}
-  </section>
+  {journal.length > 0 && <section className="editorial-section" aria-labelledby="latest-journal">
+   <div className="section-heading"><div><p className="eyebrow">{t.latest}</p><h2 id="latest-journal">{t.journal}</h2></div><Link className="text-link" href={pagePath(locale,"journal")}>{locale==="fa"?"مشاهده همه یادداشت‌ها":"Explore Journal"} ↗</Link></div>
+   <div className="journal-preview-list">{journal.map(entry=><article className="journal-preview-item" key={entry.id}>
+    {entry.publishedAt && Number.isFinite(Date.parse(entry.publishedAt)) && <time dateTime={entry.publishedAt}>{new Intl.DateTimeFormat(locale,{dateStyle:"long"}).format(new Date(entry.publishedAt))}</time>}
+    <h3><Link href={pagePath(locale,`journal/${entry.slug}`)}>{entry.title[locale]}</Link></h3>
+    <p>{entry.summary[locale]}</p>
+    <Link className="text-link" href={pagePath(locale,`journal/${entry.slug}`)}>{t.readMore} ↗</Link>
+   </article>)}</div>
+  </section>}
  </div>;
 }

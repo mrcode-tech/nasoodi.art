@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { alternatePathFor, copyFor, cvEntries, getPublicCvEntries, pagePath, type Locale } from "@/lib/site";
 import { Button } from "@/components/ui/button";
@@ -11,11 +11,27 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 function LanguageSelector({ locale, alternate, pathname, label, onNavigate }: { locale: Locale; alternate: string; pathname: string; label: string; onNavigate?: () => void }) {
   const englishHref = locale === "en" ? pathname : alternate;
   const persianHref = locale === "fa" ? pathname : alternate;
+  const router = useRouter();
+  const preserveGalleryState = (event: React.MouseEvent<HTMLAnchorElement>) => {
+    if (!/^\/(fa|en)\/galleries$/.test(pathname)) return;
+    const current = new URLSearchParams(window.location.search);
+    const query = new URLSearchParams();
+    for (const key of ["page", "pageSize"]) {
+      const value = current.get(key);
+      if (value) query.set(key, value);
+    }
+    const suffix = query.toString();
+    if (suffix) {
+      event.preventDefault();
+      router.push(alternate + "?" + suffix);
+      onNavigate?.();
+    }
+  };
   return <DropdownMenu>
     <DropdownMenuTrigger asChild><Button variant="ghost" size="sm" aria-label={label}><span>{locale === "fa" ? "فارسی" : "English"}</span><span className="language-chevron" aria-hidden="true">⌄</span></Button></DropdownMenuTrigger>
     <DropdownMenuContent align={locale === "fa" ? "start" : "end"} dir={locale === "fa" ? "rtl" : "ltr"} aria-label={label}>
-      <DropdownMenuItem asChild><Link href={englishHref} hrefLang="en" lang="en" aria-current={locale === "en" ? "page" : undefined} onClick={onNavigate}>English{locale === "en" ? " · Current" : ""}</Link></DropdownMenuItem>
-      <DropdownMenuItem asChild><Link href={persianHref} hrefLang="fa" lang="fa" aria-current={locale === "fa" ? "page" : undefined} onClick={onNavigate}>فارسی{locale === "fa" ? " · جاری" : ""}</Link></DropdownMenuItem>
+      <DropdownMenuItem asChild><Link href={englishHref} hrefLang="en" lang="en" aria-current={locale === "en" ? "page" : undefined} onClick={(event) => { preserveGalleryState(event); onNavigate?.(); }}>English{locale === "en" ? " · Current" : ""}</Link></DropdownMenuItem>
+      <DropdownMenuItem asChild><Link href={persianHref} hrefLang="fa" lang="fa" aria-current={locale === "fa" ? "page" : undefined} onClick={(event) => { preserveGalleryState(event); onNavigate?.(); }}>فارسی{locale === "fa" ? " · جاری" : ""}</Link></DropdownMenuItem>
     </DropdownMenuContent>
   </DropdownMenu>;
 }

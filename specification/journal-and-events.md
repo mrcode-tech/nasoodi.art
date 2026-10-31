@@ -487,3 +487,16 @@ Journal is an editorial reading experience within the artist's gallery identity.
 - Filters should be visually quiet, keyboard-operable, immediate, and free of unnecessary animated transitions.
 - Do not animate article text, event posters, or artwork. Avoid auto-rotating featured entries.
 - Test long Persian/English titles, no-cover entries, no upcoming events, past events, and long-form content at all supported breakpoints.
+
+## Homepage Journal preview and presentation preservation — 2026-10-31
+
+The existing Journal design remains the approved editorial/post-style experience. The artwork-carousel redesign does not apply to Journal entries, article detail pages, or event detail pages.
+
+- The homepage displays at most the two newest eligible published Journal entries across all entry types (articles and events together), ordered by publication timestamp, newest first.
+- When at least two eligible entries exist, show the two latest. If one exists, show one; if none exist, use the existing intentional omission/empty-state rule. Never invent or duplicate entries to fill the preview.
+- Preserve the existing editorial preview structure: approved representative image where available, title, publication date, excerpt, and article/event link.
+- Add one clear **Explore Journal** link to the complete `/[locale]/journal` archive.
+- Do not place Journal entries in an artwork carousel, convert them to artwork cards, add a separate Events top-level route, or redesign the Journal index/detail as an image gallery.
+- This homepage limit does not change archive pagination, filtering, event lifecycle, publication states, or canonical Journal routes.
+
+The authoritative cross-surface layout and acceptance rules are in [artwork-discovery-carousel-and-editorial-experience.md](./artwork-discovery-carousel-and-editorial-experience.md).

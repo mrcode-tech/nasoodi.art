@@ -20,3 +20,10 @@
 - Keep rights/approval notes private; do not expose them in public HTML or structured data.
 - A public artwork requires confirmed rights, approved presentation, a primary image, localized title/alt text for each exposed locale, and verified metadata.
 - A gallery requires artist-approved title, description, cover, and ordered membership.
+
+
+## Artwork approval reconciliation — 2026-10-31
+
+The earlier pending classification for `specification/assets/gallery/1.jpg`–`5.jpg` is superseded by the later, explicit owner-approval record in [approved-artwork-content-inventory.md](./approved-artwork-content-inventory.md). That inventory records the five canonical artwork IDs, public image paths, localized titles/descriptions/alt text, and the site owner's approval basis. Use that inventory as the current artwork-content authority.
+
+The remaining review requirement is visual QA of the rendered responsive presentation and final owner review of the composition; do not misstate that carousel UI implementation or its visual approval is already complete. Other assets (studio/process photographs, easel, canvas, and brush props) retain their separate classifications and must not be treated as finished artwork.

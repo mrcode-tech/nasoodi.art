@@ -448,9 +448,9 @@ for (const locale of ["en", "fa"] as const) {
       }
       const galleryCta = page.getByRole("link", { name: locale === "fa" ? "گالری‌ها را ببینید" : "Explore galleries" });
       const worksCta = page.getByRole("link", { name: locale === "fa" ? "گزیده آثار را ببینید" : "View selected works" });
-      if (await page.locator(".gallery-cards .gallery-card").count() > 0) await expect(galleryCta).toHaveAttribute("href", `/${locale}/galleries`);
+      if (await page.locator(".gallery-card").count() > 0) await expect(galleryCta).toHaveAttribute("href", `/${locale}/galleries`);
       else await expect(galleryCta).toHaveCount(0);
-      if (await page.locator(".artwork-experience-grid .artwork-item").count() > 0) await expect(worksCta).toHaveAttribute("href", `/${locale}/works`);
+      if (await page.locator(".artwork-carousel .artwork-item").count() > 0) await expect(worksCta).toHaveAttribute("href", `/${locale}/works`);
       else await expect(worksCta).toHaveCount(0);
       const overflow = await page.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth);
       expect(overflow, `${locale} ${viewport.name} horizontal overflow`).toBe(false);
@@ -621,7 +621,9 @@ test("collection discovery displays the four published curated collections in bo
     await page.goto(`/${locale}/galleries`);
     await expect(page.getByRole("main")).toBeVisible();
     await expect(page.locator("main h1")).toHaveCount(1);
-    await expect(page.locator(".gallery-card")).toHaveCount(4);
+    await expect(page.locator(".gallery-index-card")).toHaveCount(4);
+    await expect(page.locator(".collection-carousel")).toHaveCount(0);
+    await expect(page.locator(".gallery-index-grid")).toBeVisible();
     await expect(page.locator(".empty-note")).toHaveCount(0);
   }
 });
@@ -641,7 +643,7 @@ for (const locale of ["en", "fa"] as const) {
   test(`populated artwork viewer and collection journeys work in ${locale}`, async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 800 });
     await page.goto(`/${locale}`);
-    const cards = page.locator(".artwork-experience-grid .artwork-item");
+    const cards = page.locator(".artwork-carousel .artwork-item");
     await expect(cards).toHaveCount(5);
     for (let index = 0; index < 5; index++) {
       const image = cards.nth(index).locator("img");
@@ -667,10 +669,10 @@ for (const locale of ["en", "fa"] as const) {
     await expect(page.getByRole("dialog")).toHaveCount(0);
     await page.getByRole("link", { name: locale === "fa" ? "گشت‌وگذار در مجموعه‌ها" : "Explore collections" }).first().click();
     await expect(page).toHaveURL(new RegExp(`/${locale}/galleries$`));
-    await expect(page.locator(".gallery-card")).toHaveCount(4);
-    await page.locator(".gallery-card").first().click();
+    await expect(page.locator(".gallery-index-card")).toHaveCount(4);
+    await page.locator(".gallery-index-card-link").first().click();
     await expect(page).toHaveURL(new RegExp(`/${locale}/galleries/quiet-intervals$`));
-    const collectionCards = page.locator(".artwork-experience-grid .artwork-item");
+    const collectionCards = page.locator(".artwork-carousel .artwork-item");
     await expect(collectionCards).toHaveCount(3);
     await collectionCards.first().click();
     const collectionViewer = page.getByRole("dialog");
@@ -695,7 +697,7 @@ test("artwork viewer remains within the viewport on mobile and short-height desk
   for (const viewport of [{ width: 390, height: 844 }, { width: 1024, height: 600 }, { width: 1280, height: 720 }]) {
     await page.setViewportSize(viewport);
     await page.goto("/en");
-    await page.locator(".artwork-experience-grid .artwork-item").first().click();
+    await page.locator(".artwork-carousel .artwork-item").first().click();
     const dialog = page.getByRole("dialog");
     await expect(dialog).toBeVisible();
     await expect(dialog.getByRole("button", { name: "Close artwork viewer" })).toBeInViewport();
@@ -703,4 +705,142 @@ test("artwork viewer remains within the viewport on mobile and short-height desk
     expect(overflow).toBe(false);
     await page.keyboard.press("Escape");
   }
+});
+
+
+test("homepage artwork carousel exposes all approved works and opens the shared viewer", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/en");
+  const carousel = page.locator(".artwork-carousel");
+  await expect(carousel).toBeVisible();
+  await expect(carousel.locator(".carousel-item")).toHaveCount(5);
+  await expect(carousel.getByRole("button", { name: "Previous artwork" })).toBeDisabled();
+  await expect(carousel.getByRole("button", { name: "Next artwork" })).toBeEnabled();
+  await carousel.getByRole("button", { name: "A Quiet Place Between Seasons" }).click();
+  const viewer = page.getByRole("dialog");
+  await expect(viewer).toBeVisible();
+  await expect(viewer.getByRole("heading", { name: "A Quiet Place Between Seasons" })).toBeVisible();
+  await viewer.getByRole("button", { name: "Next artwork" }).click();
+  await expect(viewer.getByRole("heading", { name: "The Shape of Remembering" })).toBeVisible();
+  await page.keyboard.press("Escape");
+  await expect(viewer).toBeHidden();
+  await carousel.getByRole("button", { name: "Next artwork" }).click();
+  await expect(carousel.locator(".carousel-status")).toHaveText("2 / 5");
+});
+
+test("collection artwork carousel preserves ordered, collection-scoped viewer navigation", async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await page.goto("/en/galleries/quiet-intervals");
+  const carousel = page.locator(".artwork-carousel");
+  await expect(carousel.locator(".carousel-item")).toHaveCount(3);
+  await expect(carousel.getByRole("button", { name: "Previous artwork" })).toBeDisabled();
+  await carousel.getByRole("button", { name: "Where Light Rests" }).click();
+  const viewer = page.getByRole("dialog");
+  await expect(viewer.getByRole("heading", { name: "Where Light Rests" })).toBeVisible();
+  await viewer.getByRole("button", { name: "Next artwork" }).click();
+  await expect(viewer.getByRole("heading", { name: "A Garden of Small Moments" })).toBeVisible();
+  await expect(viewer.getByRole("button", { name: "Next artwork" })).toBeDisabled();
+});
+
+test("main Galleries index is a static editorial poster grid and leaves the homepage carousel intact", async ({ page }) => {
+  for (const locale of ["fa", "en"] as const) {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.goto(`/${locale}/galleries`);
+    const grid = page.locator(".gallery-index-grid");
+    await expect(grid).toBeVisible();
+    await expect(grid.locator(".gallery-index-card")).toHaveCount(4);
+    await expect(page.locator(".collection-carousel")).toHaveCount(0);
+    await expect(grid.locator(".gallery-index-card-link").first()).toHaveAttribute("href", new RegExp(`/${locale}/galleries/`));
+    await expect(page.locator("html")).toHaveAttribute("dir", locale === "fa" ? "rtl" : "ltr");
+    await expect(page.locator(".gallery-pagination")).toHaveCount(0);
+  }
+  await page.goto("/en");
+  const homeCarousel = page.locator(".artwork-carousel");
+  await expect(homeCarousel).toBeVisible();
+  await expect(homeCarousel.locator(".carousel-item")).toHaveCount(5);
+  await expect(homeCarousel.getByRole("button", { name: "Next artwork" })).toBeEnabled();
+});
+
+test("artwork and collection carousels retain locale direction and avoid horizontal overflow", async ({ page }) => {
+  const viewports = [
+    { width: 320, height: 700 },
+    { width: 390, height: 844 },
+    { width: 430, height: 932 },
+    { width: 768, height: 1024 },
+    { width: 1024, height: 768 },
+    { width: 1440, height: 900 },
+    { width: 1920, height: 1080 },
+  ];
+  for (const locale of ["en", "fa"] as const) {
+    for (const viewport of viewports) {
+      await page.setViewportSize(viewport);
+      await page.goto(`/${locale}`);
+      const carousel = page.locator(".artwork-carousel");
+      await expect(carousel).toBeVisible();
+      await expect(carousel).toHaveAttribute("dir", locale === "fa" ? "rtl" : "ltr");
+      await expect(carousel.locator(".carousel-item")).toHaveCount(5);
+      await expect(carousel.locator(".carousel-item")).toHaveText(locale === "fa"
+        ? ["آرامش میان فصل‌ها", "شکلِ خاطره", "جایی که نور می‌آرامد", "باغ لحظه‌های کوچک", "ساعت آبی درون"]
+        : ["A Quiet Place Between Seasons", "The Shape of Remembering", "Where Light Rests", "A Garden of Small Moments", "The Blue Hour Within"]);
+      const next = carousel.getByRole("button", { name: locale === "fa" ? "اثر بعدی" : "Next artwork" });
+      await expect(next).toBeEnabled();
+      await next.click();
+      await expect(carousel.locator(".carousel-status")).toHaveText("2 / 5");
+      const dimensions = await page.evaluate(() => ({ viewport: document.documentElement.clientWidth, document: document.documentElement.scrollWidth }));
+      expect(dimensions.document, `${locale} at ${viewport.width}px`).toBeLessThanOrEqual(dimensions.viewport);
+      await page.screenshot({ path: test.info().outputPath(`carousel-${locale}-${viewport.width}x${viewport.height}.png`), fullPage: true });
+    }
+  }
+  await page.setViewportSize({ width: 1440, height: 560 });
+  await page.goto("/en");
+  await expect(page.locator(".artwork-carousel")).toBeVisible();
+  await page.screenshot({ path: test.info().outputPath("carousel-en-desktop-short-height.png"), fullPage: true });
+});
+
+test("artwork carousel supports keyboard navigation and reduced motion", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto("/en");
+  const carousel = page.locator(".artwork-carousel");
+  await carousel.getByRole("button", { name: "A Quiet Place Between Seasons" }).focus();
+  await page.keyboard.press("ArrowRight");
+  await expect(carousel.locator(".carousel-status")).toHaveText("2 / 5");
+  await expect(carousel.getByRole("button", { name: "Next artwork" })).toBeEnabled();
+});
+
+
+test("static Galleries poster grid reflows without overflow in both locales", async ({ page }) => {
+  const viewports = [
+    { width: 320, height: 568 },
+    { width: 390, height: 844 },
+    { width: 768, height: 1024 },
+    { width: 1024, height: 768 },
+    { width: 1440, height: 900 },
+    { width: 1920, height: 1080 },
+    { width: 844, height: 390 },
+  ];
+  for (const locale of ["fa", "en"] as const) {
+    for (const viewport of viewports) {
+      await page.setViewportSize(viewport);
+      await page.goto(`/${locale}/galleries`);
+      const grid = page.locator(".gallery-index-grid");
+      await expect(grid.locator(".gallery-index-card")).toHaveCount(4);
+      const columns = await grid.evaluate((element) => getComputedStyle(element).gridTemplateColumns.split(" ").length);
+      expect(columns).toBe(viewport.width <= 600 ? 1 : viewport.width <= 1000 ? 2 : 3);
+      const overflow = await page.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth);
+      expect(overflow, `${locale} at ${viewport.width}x${viewport.height}`).toBe(false);
+      if (viewport.width === 390 || viewport.width === 1440) {
+        await page.screenshot({ path: test.info().outputPath(`gallery-index-${locale}-${viewport.width}x${viewport.height}.png`), fullPage: true });
+      }
+    }
+  }
+});
+
+
+test("locale switching preserves the Galleries page-size query state", async ({ page }) => {
+  await page.goto("/en/galleries?pageSize=10");
+  await page.getByRole("button", { name: "Language" }).click();
+  await page.getByRole("menuitem", { name: /فارسی/ }).click();
+  await expect(page).toHaveURL(/\/fa\/galleries\?pageSize=10$/);
+  await expect(page.locator("html")).toHaveAttribute("dir", "rtl");
 });

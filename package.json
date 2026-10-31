@@ -9,7 +9,7 @@
     "start": "next start",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
-    "test": "tsc --module commonjs --target es2022 --moduleResolution node --strict --esModuleInterop --skipLibCheck --outDir .test-build tests/content.test.ts src/lib/site.ts && node --test .test-build/tests/content.test.js && node scripts/verify-vercel-deployment-policy.mjs",
+    "test": "tsc --module commonjs --target es2022 --moduleResolution node --strict --esModuleInterop --skipLibCheck --outDir .test-build tests/content.test.ts tests/gallery-pagination.test.ts src/lib/site.ts src/lib/gallery-pagination.ts && node --test .test-build/tests/content.test.js .test-build/tests/gallery-pagination.test.js && node scripts/verify-vercel-deployment-policy.mjs",
     "test:e2e": "playwright test",
     "audit:assets": "node scripts/audit-portfolio-assets.mjs",
     "prebuild": "node scripts/copy-approved-gallery-assets.mjs"
@@ -19,6 +19,7 @@
     "@radix-ui/react-dropdown-menu": "^2.1.16",
     "@radix-ui/react-slot": "^1.2.3",
     "class-variance-authority": "^0.7.1",
+    "embla-carousel-react": "^8.6.0",
     "clsx": "^2.1.1",
     "next": "16.4.3",
     "react": "^19.2.4",

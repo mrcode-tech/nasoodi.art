@@ -775,3 +775,141 @@ HOME
 ~~~
 
 All wireframes must be reviewed in Persian RTL and English LTR. Preserve the same semantic order, artwork fidelity, and responsive behavior in both locales.
+
+
+## 16. Responsive artwork carousel and Journal preview wireframes — 2026-10-31
+
+The new cross-page layout contract is [artwork-discovery-carousel-and-editorial-experience.md](./artwork-discovery-carousel-and-editorial-experience.md). These structural wireframes supersede earlier grid-first Selected Works and collection-detail layouts where they conflict. The homepage Hero remains static. Artwork imagery must come from the approved canonical inventory.
+
+### 16.1 Homepage — desktop
+
+```text
+┌────────────────────────────────────────────────────────────────────────────┐
+│ PERSISTENT LEFT SIDEBAR │                 ARTIST / NAV                      │
+├─────────────────────────┴──────────────────────────────────────────────────┤
+│                    STATIC APPROVED ARTWORK HERO                            │
+│                  Artist identity / approved introduction                   │
+├────────────────────────────────────────────────────────────────────────────┤
+│ SELECTED WORKS                                      [‹]             [›]    │
+│  [ LARGE ARTWORK A ]    [ LARGE ARTWORK B ]    [ LARGE ARTWORK C ]          │
+│  Approved title        Approved title         Approved title               │
+│  (carousel rail; 3 substantial items at this width)                        │
+├────────────────────────────────────────────────────────────────────────────┤
+│ FEATURED COLLECTIONS                                                       │
+│ [Collection cover + title + description]  [Collection cover + details]     │
+│                                      View all galleries →                  │
+├────────────────────────────────────────────────────────────────────────────┤
+│ JOURNAL                                                                    │
+│ [Latest published entry]                   [Second latest entry]          │
+│ title / date / excerpt                    title / date / excerpt           │
+│                                      Explore Journal →                     │
+└────────────────────────────────────────────────────────────────────────────┘
+```
+
+### 16.2 Homepage — tablet
+
+```text
+┌──────────────────────────────────────────────────────────────┐
+│ NAV / ARTIST                                                  │
+│ STATIC ARTWORK HERO                                           │
+├──────────────────────────────────────────────────────────────┤
+│ SELECTED WORKS                                  [‹]     [›]   │
+│ [ ARTWORK A ]                  [ ARTWORK B ]                  │
+│ title/caption                  title/caption                  │
+├──────────────────────────────────────────────────────────────┤
+│ FEATURED COLLECTIONS                                          │
+│ [Collection preview]          [Collection preview]            │
+├──────────────────────────────────────────────────────────────┤
+│ JOURNAL                                                       │
+│ [Latest post]                 [Second latest post]             │
+│ Explore Journal →                                             │
+└──────────────────────────────────────────────────────────────┘
+```
+
+### 16.3 Homepage — mobile
+
+```text
+┌──────────────────────────────┐
+│ MOBILE NAV / ARTIST          │
+│ STATIC ARTWORK HERO          │
+├──────────────────────────────┤
+│ SELECTED WORKS        [‹] [›] │
+│ ┌──────────────────────────┐ │
+│ │      ARTWORK A           │ │
+│ └──────────────────────────┘ │
+│ Approved title               │
+│       next item peek →       │
+├──────────────────────────────┤
+│ FEATURED COLLECTIONS         │
+│ [Collection cover]           │
+│ Title / short description    │
+│ Explore collection →         │
+├──────────────────────────────┤
+│ JOURNAL                      │
+│ [Latest entry]               │
+│ Title / date / excerpt       │
+│ [Second latest entry]        │
+│ Title / date / excerpt       │
+│ Explore Journal →            │
+└──────────────────────────────┘
+```
+
+### 16.4 Gallery index — responsive collection discovery
+
+Desktop/tablet show two or more substantial collection previews according to available width; mobile shows one prominent collection preview with an optional next-preview cue. Each preview includes an approved cover, localized title, concise description, and one coherent Explore Collection link. Avoid tiny thumbnails and nested links.
+
+### 16.5 Collection detail — desktop/tablet
+
+```text
+┌────────────────────────────────────────────────────────────────────────────┐
+│ BREADCRUMB / COLLECTION TITLE                                               │
+│ Approved collection introduction                                           │
+├────────────────────────────────────────────────────────────────────────────┤
+│ COLLECTION WORKS                                      [‹]          [›]      │
+│ [ LARGE ARTWORK A ]       [ LARGE ARTWORK B ]       [ LARGE ARTWORK C ]     │
+│ title / verified data    title / verified data    title / verified data   │
+│ Position / total (only if useful)              View all works →            │
+├────────────────────────────────────────────────────────────────────────────┤
+│ ORDERED COMPLETE-COLLECTION INDEX (only when needed)                       │
+│ 01  thumbnail + approved title                                             │
+│ 02  thumbnail + approved title                                             │
+│ 03  thumbnail + approved title                                             │
+└────────────────────────────────────────────────────────────────────────────┘
+```
+
+### 16.6 Collection detail — mobile
+
+```text
+┌──────────────────────────────┐
+│ COLLECTION TITLE             │
+│ Approved introduction        │
+├──────────────────────────────┤
+│ COLLECTION WORKS      [‹] [›]│
+│ ┌──────────────────────────┐ │
+│ │      ARTWORK A           │ │
+│ └──────────────────────────┘ │
+│ Approved title               │
+│ next artwork peek →          │
+│ Position / total             │
+│ View all works →             │
+├──────────────────────────────┤
+│ ORDERED WORKS INDEX          │
+│ Thumbnail + title            │
+│ Thumbnail + title            │
+└──────────────────────────────┘
+```
+
+### 16.7 Journal — homepage, index, and detail
+
+Homepage: two editorial post previews only, ordered by publication date, followed by Explore Journal. The previews retain their current image/title/date/excerpt post hierarchy and are not placed in an artwork carousel.
+
+Journal index: preserve the existing chronological editorial archive and filters. Journal detail: preserve the existing title/date/body/event-facts hierarchy and readable text measure. Use approved images only; when no cover exists, use the specified typographic treatment.
+
+### 16.8 Responsive and RTL annotations
+
+- Desktop targets approximately 3 substantial artwork items in the main content container; wide desktop may fit 4 only when each remains legible.
+- Tablet targets approximately 2 items.
+- Mobile targets 1–1.2 items; a next-item peek is optional and must not clip artwork, captions, focus, or touch targets.
+- These are content-width targets, not fixed breakpoints. Validate with the persistent sidebar and at intermediate widths.
+- In Persian, carousel visual direction and control icons follow RTL; content order and artwork imagery are not mirrored.
+- No wireframe implies autoplay or automatic movement.

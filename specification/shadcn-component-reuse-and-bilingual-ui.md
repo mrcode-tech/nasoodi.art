@@ -106,6 +106,20 @@ For every materially changed shared control:
 | Sheet | `src/components/ui/sheet.tsx` | Implemented |
 | Dropdown Menu | `src/components/ui/dropdown-menu.tsx` | Implemented |
 | Class utility | `src/lib/utils.ts` | Implemented |
+| Carousel | `src/components/ui/carousel.tsx` | Implemented with Embla; CI verification pending |
 | Site navigation | `src/components/site-shell.tsx` | Composes shared primitives |
 
 Update this inventory when components are added, removed, or replaced.
+
+
+## 9. Responsive artwork carousel component — 2026-10-31
+
+The new artwork discovery contract uses the official [shadcn Carousel](https://ui.shadcn.com/docs/components/base/carousel) composition: `Carousel`, `CarouselContent`, `CarouselItem`, `CarouselPrevious`, and `CarouselNext`.
+
+The feature branch previously had Button, Dialog, Dropdown Menu, Sheet, and Sidebar primitives but no Carousel primitive or Embla dependency. The project uses Radix-backed shadcn components, and the implementation preserves that foundation.
+
+The responsive carousel is now implemented as the project-owned `src/components/ui/carousel.tsx` primitive using `embla-carousel-react` (`^8.6.0`). It provides the standard Carousel/Content/Item/Previous/Next composition, direction-aware keyboard handling, disabled boundaries, and live snap position. The primitive is implemented; CI verification and rendered visual approval remain pending. No autoplay plugin or second carousel library is installed.
+
+Implementation and QA must cover responsive item basis, content-container sizing, spacing, snap/alignment, disabled boundaries, keyboard navigation, touch/trackpad drag, accessible naming/position feedback, reduced motion, and clipping/focus behavior. For Persian set both `dir="rtl"` and Embla `direction: "rtl"`; for English use LTR. Directional controls must have correct localized movement meaning. Preserve the editorial artwork design; do not use default dashboard card styling.
+
+See [artwork-discovery-carousel-and-editorial-experience.md](./artwork-discovery-carousel-and-editorial-experience.md) for the complete component and behavior contract.

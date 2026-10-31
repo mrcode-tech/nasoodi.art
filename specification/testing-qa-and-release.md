@@ -82,3 +82,18 @@ The GitHub Actions workflow continues to validate `feature`, `stage`, and `main`
 ## Portfolio asset audit CI artifact — 2026-10-30
 
 CI now runs `npm run audit:assets` after the production build and uploads `asset-audit/manifest.json` alongside browser screenshots and diagnostics. The manifest records candidate path, detected PNG/JPEG format, pixel dimensions, aspect ratio, byte size, SHA-256, and explicit approval-required/non-publishable status. Missing or invalid image candidates fail CI. The audit is not a rights or artist-approval check and does not generate public derivatives.
+
+
+## Artwork carousel and homepage Journal preview QA contract — 2026-10-31
+
+For the responsive artwork discovery experience, add/verify tests for:
+- Homepage Selected Works responsive item sizing and controls at wide desktop, desktop with sidebar, tablet, 390px mobile, 320px narrow mobile, landscape, and short-height viewports.
+- Collection carousel with one, two, and multiple artworks; disabled boundaries; canonical curated order; and no autoplay.
+- Keyboard-only navigation, visible focus not clipped by overflow, accessible carousel/slide names, and position announcements.
+- Persian RTL and English LTR direction, icon orientation, movement meaning, keyboard sequence, and unchanged artwork order.
+- Shared Artwork Viewer activation, context-scoped previous/next, browser history, close behavior, and focus restoration.
+- Artwork images retaining intrinsic proportions without crop/filter/mirroring; layout stability and lazy loading.
+- Homepage Journal preview selecting no more than two newest eligible published entries across article/event types, correct publication-date ordering, and Explore Journal destination.
+- Journal archive/detail preserving their existing editorial structure.
+
+Do not mark the carousel component or visual design as implemented/verified merely because the specification and wireframes exist. Record actual CI run, viewport/locale screenshots, manual review, and owner approval separately.

@@ -196,3 +196,16 @@ Do not build a component solely to wrap one heading or image unless it encapsula
 A page is not ready when it merely compiles. It must pass clear hierarchy in the first viewport; coherent shared type/color/spacing/image tokens; no repetitive card/template composition without content reason; artwork fidelity and no accidental crop; no decorative motion competing with the work; responsive desktop/tablet/mobile/short-height behavior; Persian RTL and English LTR; keyboard focus, touch targets, reduced motion; empty and long-title states; WCAG 2.2 AA contrast and semantics; and visual screenshot review.
 
 Record unresolved choices as open decisions; do not convert proposals into facts without owner approval.
+
+
+## 14. Artwork discovery and editorial rhythm refinement — 2026-10-31
+
+The detailed cross-page presentation contract is [artwork-discovery-carousel-and-editorial-experience.md](./artwork-discovery-carousel-and-editorial-experience.md).
+
+- Use responsive, user-controlled artwork carousels for homepage Selected Works and collection-detail primary browsing; use collection rails on the gallery index only when they improve collection discovery.
+- Carousel item sizing must respond to available content width, including the desktop sidebar. Prefer a few large, legible works over a dense row of thumbnails.
+- A carousel is an editorial browsing rail, not an auto-rotating slideshow. Keep controls quiet, movement purposeful, and all works accessible without swipe.
+- Preserve natural painting proportions and do not crop to create identical cards.
+- Keep the homepage Hero static and distinct from the Selected Works carousel.
+- Keep Journal as a text-led editorial/post experience. The homepage shows at most the two newest eligible published Journal entries and links to the complete archive; do not apply artwork-carousel styling to Journal.
+- Maintain the existing warm-paper palette, typography, whitespace, and quiet gallery identity. Avoid generic repeated cards or decorative carousel chrome.
