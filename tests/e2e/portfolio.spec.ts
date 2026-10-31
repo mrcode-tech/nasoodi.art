@@ -909,7 +909,7 @@ test("normal About routes render bilingual fictional sample content and the comp
     await expect(page.locator(".about-statement")).toBeVisible();
     await expect(page.locator(".about-biography-copy")).toBeVisible();
     await expect(page.locator(".cv-category")).toHaveCount(5);
-    await expect(page.locator(".cv-list li")).toHaveCount(15);
+    await expect(page.locator(".cv-list li")).toHaveCount(16);
     await expect(page.getByRole("link", { name: /Download CV|دریافت رزومه/ })).toHaveAttribute("href", "/api/sample-cv");
     const overflow = await page.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth);
     expect(overflow).toBe(false);
@@ -925,6 +925,9 @@ test("sample CV endpoint returns a valid non-indexable PDF without a preview que
   expect(body.subarray(0, 8).toString("ascii")).toBe("%PDF-1.4");
   expect(body.toString("ascii")).toContain("GHAZALEH ABDOLAHZADE NASOODI");
   expect(body.toString("ascii")).toContain("FICTIONAL SAMPLE");
+  expect(body.toString("ascii")).toContain("Quiet Arrangements");
+  expect(body.toString("ascii")).toContain("A Small Atlas of Looking");
+  expect(body.toString("ascii")).toContain("ARTISTIC PRACTICE");
 });
 
 test("Persian About page keeps RTL and populated content at mobile width", async ({ page }) => {

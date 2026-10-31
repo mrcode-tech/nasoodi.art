@@ -281,7 +281,8 @@ test("long About preview fixtures are bilingual, clearly sample-only, and includ
  assert.ok(aboutPreviewFixture.biography.en.length>700);
  assert.ok(aboutPreviewFixture.biography.fa.length>500);
  assert.equal(aboutPreviewFixture.cv.length,16);
- assert.notEqual(aboutPreviewFixture.statement.en,aboutPreviewFixture.biography.en);\n assert.ok(aboutPreviewFixture.statement.en.split(/\\s+/).length>=150);
+ assert.notEqual(aboutPreviewFixture.statement.en,aboutPreviewFixture.biography.en);
+ assert.ok(aboutPreviewFixture.statement.en.split(/\s+/).length>=150);
  assert.ok(aboutPreviewFixture.statement.en.includes("invented editorial sample"));
  assert.deepEqual(new Set(aboutPreviewFixture.cv.map(entry=>entry.category)),new Set(["education","exhibition","publication","award","practice"]));
 });
