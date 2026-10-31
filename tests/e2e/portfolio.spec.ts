@@ -863,7 +863,7 @@ test("About is a localized primary navigation destination on desktop and mobile"
   const about = drawer.getByRole("link", { name: "درباره", exact: true });
   await expect(about).toHaveAttribute("href", "/fa/about");
   await about.click();
-  await expect(page).toHaveURL(/\\/fa\\/about$/);
+  await expect(page).toHaveURL(/\/fa\/about$/);
   await expect(drawer).toBeHidden();
   await expect(page.locator(".desktop-sidebar")).toBeHidden();
 });
