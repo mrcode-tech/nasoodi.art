@@ -869,7 +869,7 @@ test("About is a localized primary navigation destination on desktop and mobile"
   await expect(page.locator(".desktop-sidebar")).toBeHidden();
 });
 
-test("homepage hero shows the fictional artist introduction before its actions at every breakpoint", async ({ page }) => {
+test("homepage hero layout is responsive and renders the bilingual biography", async ({ page }) => {
   for (const locale of ["en", "fa"] as const) {
     for (const viewport of [
       { width: 390, height: 844, label: "mobile" },
@@ -884,10 +884,11 @@ test("homepage hero shows the fictional artist introduction before its actions a
       const copy = intro.locator(":scope > .home-intro-copy");
       await expect(image).toBeVisible();
       await expect(copy).toBeVisible();
-      const biography = copy.locator(".home-biography");
-      await expect(biography).toBeVisible();
-      await expect(biography.locator(".sample-content-notice")).toBeVisible();
-      await expect(biography.locator(".biography-copy")).toBeVisible();
+      await expect(copy.locator(".biography-copy")).toBeVisible();
+      await expect(copy.locator(".artist-discipline")).toHaveCount(0);
+      await expect(copy.locator(".home-biography h2")).toHaveCount(0);
+      await expect(copy.locator(".sample-content-notice")).toHaveCount(0);
+      const biography = copy.locator(".biography-disclosure");
       const readMore = biography.getByRole("button", { name: locale === "fa" ? "ادامه مطلب" : "Read more" });
       await expect(readMore).toBeVisible();
       await readMore.click();
@@ -905,6 +906,26 @@ test("homepage hero shows the fictional artist introduction before its actions a
       const overflow = await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth);
       expect(overflow, `${locale} ${viewport.label}: no horizontal overflow`).toBe(true);
     }
+  }
+});
+
+test("homepage biography expands in place without replacing the hero image or moving the viewport", async ({ page }) => {
+  for (const locale of ["en", "fa"] as const) {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto(`/${locale}`);
+    const image = page.locator(".hero-artwork img");
+    const imageSource = await image.getAttribute("src");
+    const imageCurrentSource = await image.evaluate((element: HTMLImageElement) => element.currentSrc);
+    const readMore = page.getByRole("button", { name: locale === "fa" ? "ادامه مطلب" : "Read more" });
+    await expect(readMore).toBeVisible();
+    await readMore.scrollIntoViewIfNeeded();
+    const scrollBefore = await page.evaluate(() => window.scrollY);
+    await readMore.click();
+    await expect(page.getByRole("button", { name: locale === "fa" ? "نمایش کمتر" : "Show less" })).toHaveAttribute("aria-expanded", "true");
+    await expect(image).toHaveAttribute("src", imageSource!);
+    expect(await image.evaluate((element: HTMLImageElement) => element.currentSrc)).toBe(imageCurrentSource);
+    const scrollAfter = await page.evaluate(() => window.scrollY);
+    expect(Math.abs(scrollAfter - scrollBefore)).toBeLessThanOrEqual(2);
   }
 });
 
