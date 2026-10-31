@@ -15,7 +15,7 @@ The source masters remain unchanged in the specification folder. `scripts/copy-a
 | `specification/assets/gallery/4.jpg` | `artwork-garden-small-moments` | `/images/approved-artwork-4.jpg` | Homepage, viewer, galleries |
 | `specification/assets/gallery/5.jpg` | `artwork-blue-hour-within` | `/images/approved-artwork-5.jpg` | Homepage, viewer, galleries |
 
-The copy command checks that all five source files exist, are non-empty, and that copied byte counts match. The CI asset audit records source dimensions, aspect ratio, and SHA-256. No medium, year, dimensions, provenance, exhibition history, or other unprovided artwork metadata is asserted in the content records.
+The copy command checks that all five source files exist, are non-empty, and that copied byte counts match. It reads each JPEG's intrinsic dimensions and generates `src/lib/approved-artwork-image-dimensions.ts` before dev/build; the artwork records consume those measured dimensions so Next.js uses each image's actual aspect ratio. The CI asset audit independently records source dimensions, aspect ratio, and SHA-256. No medium, year, dimensions, provenance, exhibition history, or other unprovided artwork metadata is asserted in the content records.
 
 ## Canonical artwork records
 
