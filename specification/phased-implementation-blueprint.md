@@ -758,3 +758,31 @@ The added browser tests cover the homepage Explore collections route, collection
 | Phase 11 — Full QA/release readiness | **Blocked / not complete** | Automated CI passes, but manual accessibility, populated-content visual QA, asset fidelity, and artist/site-owner publication gates remain. |
 
 No merge, deployment, or public content publication was performed.
+
+
+## Incremental implementation update — 2026-10-31 (Owner-approved artwork population)
+
+**Implementation status:** five owner-approved source photographs are now represented by five canonical artwork records and four published overlapping editorial collections on `feature`. The existing shared artwork viewer is reused; no parallel viewer or alternative content model was introduced.
+
+### Content and asset delivery
+- Populated `artworks` with five unique stable IDs/slugs, English and Persian titles/descriptions/alt text, local primary-image paths, publication status, and rights confirmation based on the owner's explicit approval.
+- Populated `galleries` with four localized collections and ordered memberships referencing the same canonical artwork IDs. Homepage selection references all five works and all four collections.
+- Added `scripts/copy-approved-gallery-assets.mjs`; `predev` and `prebuild` copy the five source JPEGs from `specification/assets/gallery/` into `public/images/approved-artwork-1.jpg` through `approved-artwork-5.jpg`. The source masters remain untouched and copies are byte-for-byte.
+- Added `specification/approved-artwork-content-inventory.md` with source-to-public mappings, IDs, slugs, localized titles, collection names, membership order, and verification boundaries.
+- No unprovided medium, year, dimensions, provenance, or exhibition history is claimed. Editorial titles/descriptions are portfolio copy and should receive the owner's final visual/editorial review.
+
+### Automated coverage added
+- Content tests assert exactly five unique published artworks, localized fields, image paths, four published galleries, unique IDs/slugs, valid member covers, overlapping canonical memberships, and homepage selection.
+- Playwright tests cover populated bilingual gallery indexes, homepage viewer open/next/Back/Forward/Escape behavior, collection-scoped navigation, all canonical artwork detail routes, and mobile/short-height viewer visibility.
+- The existing CI workflow runs the asset copy automatically before the production build and uploads Playwright screenshots and diagnostics as an artifact.
+
+### Phase status
+| Phase | Status | Evidence / remaining gate |
+|---|---|---|
+| Phase 3 — Content and artwork asset pipeline | **Implemented; CI verification pending** | Five source-to-public mappings and repeatable copy script added; CI asset manifest will provide exact byte sizes, hashes, dimensions, and aspect ratios. |
+| Phase 4 — Artwork-led homepage | **Populated; verification pending** | Five selected works and four featured collections configured; existing artist/studio hero preserved. |
+| Phase 5 — Works and artwork detail | **Populated; verification pending** | Five canonical artwork records and existing detail route/viewer fallback retained. |
+| Phase 6 — Curated galleries | **Populated; verification pending** | Four localized collections with overlapping ordered memberships and member covers. |
+| Phase 11 — Full QA/release readiness | **Pending CI and owner review** | Run full CI, inspect populated screenshots, and obtain site-owner acceptance. |
+
+No merge or deployment is authorized or performed by this update.
