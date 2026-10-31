@@ -854,7 +854,8 @@ test("About is a localized primary navigation destination on desktop and mobile"
   await expect(desktopAbout).toHaveAttribute("aria-current", "page");
   await expect(page.getByRole("heading", { name: "Ghazaleh Abdolahzade Nasoodi" })).toBeVisible();
   await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", /noindex/);
-  await expect(page.getByText("The artist statement and biography will be added after editorial review.")).toBeVisible();
+  await expect(page.locator(".about-statement")).toBeVisible();
+  await expect(page.locator(".about-biography-copy")).toBeVisible();
 
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto("/fa");
@@ -898,29 +899,40 @@ test("homepage hero layout is responsive without sample preview content", async 
   }
 });
 
-test("About page remains unpublished pending artist-approved content", async ({ page }) => {
+test("normal About routes render bilingual fictional sample content and the complete CV", async ({ page }) => {
   for (const locale of ["en", "fa"] as const) {
     await page.setViewportSize({ width: 1280, height: 900 });
     await page.goto(`/${locale}/about`);
     await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", /noindex/);
-    await expect(page.locator(".empty-note")).toBeVisible();
-    await expect(page.locator(".about-biography-copy")).toHaveCount(0);
-    await expect(page.locator(".about-cv-section")).toHaveCount(0);
-    await expect(page.getByRole("link", { name: /Download CV|دریافت رزومه/ })).toHaveCount(0);
+    await expect(page.locator(".sample-content-notice")).toBeVisible();
+    await expect(page.locator(".artist-portrait")).toHaveAttribute("src", /homepage-hero/);
+    await expect(page.locator(".about-statement")).toBeVisible();
+    await expect(page.locator(".about-biography-copy")).toBeVisible();
+    await expect(page.locator(".cv-category")).toHaveCount(5);
+    await expect(page.locator(".cv-list li")).toHaveCount(15);
+    await expect(page.getByRole("link", { name: /Download CV|دریافت رزومه/ })).toHaveAttribute("href", "/api/sample-cv");
+    const overflow = await page.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth);
+    expect(overflow).toBe(false);
   }
 });
 
-test("sample CV endpoint is unavailable without the explicit preview flag", async ({ request }) => {
+test("sample CV endpoint returns a valid non-indexable PDF without a preview query", async ({ request }) => {
   const response = await request.get("/api/sample-cv");
-  expect(response.status()).toBe(404);
+  expect(response.status()).toBe(200);
+  expect(response.headers()["content-type"]).toContain("application/pdf");
   expect(response.headers()["x-robots-tag"]).toContain("noindex");
+  const body = await response.body();
+  expect(body.subarray(0, 8).toString("ascii")).toBe("%PDF-1.4");
+  expect(body.toString("ascii")).toContain("GHAZALEH ABDOLAHZADE NASOODI");
+  expect(body.toString("ascii")).toContain("FICTIONAL SAMPLE");
 });
 
-test("Persian About page retains RTL direction without loading sample preview content", async ({ page }) => {
+test("Persian About page keeps RTL and populated content at mobile width", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto("/fa/about");
   await expect(page.locator("html")).toHaveAttribute("dir", "rtl");
-  await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", /noindex/);
-  await expect(page.locator(".about-biography-copy")).toHaveCount(0);
-  await expect(page.locator(".about-cv-section")).toHaveCount(0);
+  await expect(page.locator(".about-biography-copy")).toBeVisible();
+  await expect(page.locator(".about-cv-section")).toBeVisible();
+  const overflow = await page.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth);
+  expect(overflow).toBe(false);
 });
