@@ -11,7 +11,7 @@ export type GalleryPaginationState = {
 };
 
 function parsePositiveInteger(value: string | undefined): number | undefined {
-  if (!value || !/^[1-9]\\d*$/.test(value)) return undefined;
+  if (!value || !/^[1-9]\d*$/.test(value)) return undefined;
   const parsed = Number(value);
   return Number.isSafeInteger(parsed) ? parsed : undefined;
 }
