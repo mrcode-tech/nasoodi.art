@@ -976,3 +976,36 @@ test("mobile hero uses image then artist text then biography and both actions", 
     await page.screenshot({ path: test.info().outputPath(`${locale}-desktop-short-height-biography.png`), fullPage: true });
   }
 });
+
+
+test("About sample preview uses the homepage hero image and serves a fictional noindex PDF", async ({ page, request }) => {
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await page.goto("/en/about?preview=sample");
+  await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", /noindex/);
+  await expect(page.getByRole("heading", { name: "Ghazaleh Abdolahzade Nasoodi" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Artist statement" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Biography" })).toBeVisible();
+  await expect(page.locator(".artist-portrait")).toHaveAttribute("src", "/images/homepage-hero.jpg");
+  await expect(page.getByRole("heading", { name: "CV / Exhibitions" })).toBeVisible();
+  await expect(page.getByText(/fictional PDF is available for preview testing only/i)).toBeVisible();
+  const pdfLink = page.getByRole("link", { name: "Download CV (PDF)" });
+  await expect(pdfLink).toHaveAttribute("href", "/api/sample-cv?preview=sample");
+  const pdf = await request.get("/api/sample-cv?preview=sample");
+  expect(pdf.status()).toBe(200);
+  expect(pdf.headers()["content-type"]).toContain("application/pdf");
+  expect(pdf.headers()["x-robots-tag"]).toContain("noindex");
+  expect((await pdf.body()).subarray(0, 8).toString("ascii")).toBe("%PDF-1.4");
+  const blocked = await request.get("/api/sample-cv");
+  expect(blocked.status()).toBe(404);
+});
+
+test("Persian About sample preview keeps RTL copy and the same homepage hero asset", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/fa/about?preview=sample");
+  await expect(page.locator("html")).toHaveAttribute("dir", "rtl");
+  await expect(page.locator(".artist-portrait")).toHaveAttribute("src", "/images/homepage-hero.jpg");
+  await expect(page.getByRole("heading", { name: "بیانیه هنری" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "زندگی‌نامه" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "رزومه و نمایشگاه‌ها" })).toBeVisible();
+  await expect(page.getByRole("link", { name: "دریافت رزومه (PDF)" })).toBeVisible();
+});
