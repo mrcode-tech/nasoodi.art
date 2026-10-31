@@ -1,5 +1,3 @@
-import type { Locale } from "./site";
-
 /**
  * Temporary fictional design-review content for the existing About page.
  * Replace with artist-approved copy and verified CV records before publication.
