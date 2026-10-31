@@ -983,3 +983,46 @@ test("About pages preserve mobile and tablet layouts in both locales", async ({ 
     }
   }
 });
+
+
+test("desktop homepage biography expands around a fixed locale-aligned hero image", async ({ page }) => {
+  for (const locale of ["en", "fa"] as const) {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.goto(`/${locale}`);
+    const figure = page.locator(".home-intro > .hero-artwork");
+    const image = figure.locator("img");
+    const biography = page.locator(".home-biography .biography-copy");
+    const readMore = page.getByRole("button", { name: locale === "fa" ? "ادامه مطلب" : "Read more" });
+    await expect(image).toBeVisible();
+    await expect(readMore).toBeVisible();
+
+    const before = await figure.boundingBox();
+    expect(before).not.toBeNull();
+    const floatBefore = await figure.evaluate((element) => getComputedStyle(element).float);
+    expect(floatBefore).toBe(locale === "fa" ? "left" : "right");
+
+    await readMore.click();
+    await expect(biography).toHaveClass(/is-expanded/);
+    const after = await figure.boundingBox();
+    expect(after).not.toBeNull();
+    expect(Math.abs(after!.x - before!.x)).toBeLessThanOrEqual(1);
+    expect(Math.abs(after!.y - before!.y)).toBeLessThanOrEqual(1);
+    expect(Math.abs(after!.width - before!.width)).toBeLessThanOrEqual(1);
+    expect(Math.abs(after!.height - before!.height)).toBeLessThanOrEqual(1);
+
+    const flow = await biography.evaluate((element) => {
+      const range = document.createRange();
+      range.selectNodeContents(element);
+      const rects = Array.from(range.getClientRects());
+      const photo = element.closest(".home-intro")?.querySelector(".hero-artwork")?.getBoundingClientRect();
+      return {
+        textAlign: getComputedStyle(element).textAlign,
+        hasLinesBesidePhoto: Boolean(photo && rects.some((rect) => rect.top < photo.bottom - 2)),
+        hasLinesBelowPhoto: Boolean(photo && rects.some((rect) => rect.top >= photo.bottom - 1)),
+      };
+    });
+    expect(flow.textAlign).toBe("justify");
+    expect(flow.hasLinesBesidePhoto, `${locale}: biography begins beside the portrait`).toBe(true);
+    expect(flow.hasLinesBelowPhoto, `${locale}: biography continues below the portrait`).toBe(true);
+  }
+});
