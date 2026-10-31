@@ -1,3 +1,4 @@
+import { approvedArtworkImageDimensions } from "@/lib/approved-artwork-image-dimensions";
 export const locales = ["fa", "en"] as const;
 export type Locale = (typeof locales)[number];
 export const isLocale = (v: string): v is Locale => locales.includes(v as Locale);
@@ -80,11 +81,11 @@ export const portfolioStructuredData = {
 // Public derivatives are copied from specification/assets/gallery by scripts/copy-approved-gallery-assets.mjs.
 // Dimensions use the source set's documented landscape ratio; the asset audit records exact source dimensions.
 const approvedArtworkImages = [
-  { src: "/images/approved-artwork-1.jpg", alt: { en: "Painting titled A Quiet Place Between Seasons", fa: "تابلوی نقاشی با عنوان «آرامش میان فصل‌ها»" }, role: "primary" as const, width: 4032, height: 3024 },
-  { src: "/images/approved-artwork-2.jpg", alt: { en: "Painting titled The Shape of Remembering", fa: "تابلوی نقاشی با عنوان «شکلِ خاطره»" }, role: "primary" as const, width: 4032, height: 3024 },
-  { src: "/images/approved-artwork-3.jpg", alt: { en: "Painting titled Where Light Rests", fa: "تابلوی نقاشی با عنوان «جایی که نور می‌آرامد»" }, role: "primary" as const, width: 4032, height: 3024 },
-  { src: "/images/approved-artwork-4.jpg", alt: { en: "Painting titled A Garden of Small Moments", fa: "تابلوی نقاشی با عنوان «باغ لحظه‌های کوچک»" }, role: "primary" as const, width: 4032, height: 3024 },
-  { src: "/images/approved-artwork-5.jpg", alt: { en: "Painting titled The Blue Hour Within", fa: "تابلوی نقاشی با عنوان «ساعت آبی درون»" }, role: "primary" as const, width: 4032, height: 3024 },
+  { src: "/images/approved-artwork-1.jpg", alt: { en: "Painting titled A Quiet Place Between Seasons", fa: "تابلوی نقاشی با عنوان «آرامش میان فصل‌ها»" }, role: "primary" as const, width: approvedArtworkImageDimensions[0].width, height: approvedArtworkImageDimensions[0].height },
+  { src: "/images/approved-artwork-2.jpg", alt: { en: "Painting titled The Shape of Remembering", fa: "تابلوی نقاشی با عنوان «شکلِ خاطره»" }, role: "primary" as const, width: approvedArtworkImageDimensions[1].width, height: approvedArtworkImageDimensions[1].height },
+  { src: "/images/approved-artwork-3.jpg", alt: { en: "Painting titled Where Light Rests", fa: "تابلوی نقاشی با عنوان «جایی که نور می‌آرامد»" }, role: "primary" as const, width: approvedArtworkImageDimensions[2].width, height: approvedArtworkImageDimensions[2].height },
+  { src: "/images/approved-artwork-4.jpg", alt: { en: "Painting titled A Garden of Small Moments", fa: "تابلوی نقاشی با عنوان «باغ لحظه‌های کوچک»" }, role: "primary" as const, width: approvedArtworkImageDimensions[3].width, height: approvedArtworkImageDimensions[3].height },
+  { src: "/images/approved-artwork-5.jpg", alt: { en: "Painting titled The Blue Hour Within", fa: "تابلوی نقاشی با عنوان «ساعت آبی درون»" }, role: "primary" as const, width: approvedArtworkImageDimensions[4].width, height: approvedArtworkImageDimensions[4].height },
 ];
 
 export const artworks: Artwork[] = [
