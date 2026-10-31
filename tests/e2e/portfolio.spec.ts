@@ -669,7 +669,7 @@ for (const locale of ["en", "fa"] as const) {
     await expect(page.getByRole("dialog")).toHaveCount(0);
     await page.getByRole("link", { name: locale === "fa" ? "گشت‌وگذار در مجموعه‌ها" : "Explore collections" }).first().click();
     await expect(page).toHaveURL(new RegExp(`/${locale}/galleries$`));
-    await expect(page.locator(".gallery-index-card")).toHaveCount(4);
+    await expect(page.locator(".gallery-index-card")).toHaveCount(5);
     await page.locator(".gallery-index-card-link").first().click();
     await expect(page).toHaveURL(new RegExp(`/${locale}/galleries/quiet-intervals$`));
     const collectionCards = page.locator(".artwork-carousel .artwork-item");
@@ -748,7 +748,7 @@ test("main Galleries index is a static editorial poster grid and leaves the home
     await page.goto(`/${locale}/galleries`);
     const grid = page.locator(".gallery-index-grid");
     await expect(grid).toBeVisible();
-    await expect(grid.locator(".gallery-index-card")).toHaveCount(4);
+    await expect(grid.locator(".gallery-index-card")).toHaveCount(5);
     await expect(page.locator(".collection-carousel")).toHaveCount(0);
     await expect(grid.locator(".gallery-index-card-link").first()).toHaveAttribute("href", new RegExp(`/${locale}/galleries/`));
     await expect(page.locator("html")).toHaveAttribute("dir", locale === "fa" ? "rtl" : "ltr");
@@ -824,7 +824,7 @@ test("static Galleries poster grid reflows without overflow in both locales", as
       await page.setViewportSize(viewport);
       await page.goto(`/${locale}/galleries`);
       const grid = page.locator(".gallery-index-grid");
-      await expect(grid.locator(".gallery-index-card")).toHaveCount(4);
+      await expect(grid.locator(".gallery-index-card")).toHaveCount(5);
       const columns = await grid.evaluate((element) => getComputedStyle(element).gridTemplateColumns.split(" ").length);
       expect(columns).toBe(viewport.width <= 600 ? 1 : viewport.width <= 1000 ? 2 : 3);
       const overflow = await page.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth);
@@ -904,7 +904,7 @@ test("About sample preview shows the fictional biography, CV, and preview-only P
     await expect(page.locator(".sample-content-notice").first()).toBeVisible();
     await expect(page.locator(".about-biography-copy")).toBeVisible();
     await expect(page.locator(".about-cv-section")).toBeVisible();
-    await expect(page.locator(".about-cv-section .cv-list li")).toHaveCount(4);
+    await expect(page.locator(".about-cv-section .cv-list li")).toHaveCount(5);
     await expect(page.getByRole("link", { name: /Download CV|دریافت رزومه/ })).toHaveAttribute("href", "/api/sample-cv?preview=sample");
     await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", /noindex/);
     await page.screenshot({ path: test.info().outputPath(`${locale}-about-sample-desktop.png`), fullPage: true });
@@ -914,8 +914,8 @@ test("About sample preview shows the fictional biography, CV, and preview-only P
     await expect(page.locator(".sample-content-notice").first()).toBeVisible();
     await expect(page.locator(".about-biography-copy")).toBeVisible();
     await expect(page.locator(".about-cv-section")).toBeVisible();
-    await expect(page.locator(".about-cv-section .cv-list li")).toHaveCount(4);
-    await expect(page.getByRole("link", { name: /Download CV|دریافت رزومه/ })).toHaveCount(0);
+    await expect(page.locator(".about-cv-section .cv-list li")).toHaveCount(5);
+    await expect(page.getByRole("link", { name: /Download CV|دریافت رزومه/ })).toHaveAttribute("href", "/api/sample-cv?preview=sample");
     await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", /noindex/);
     await page.screenshot({ path: test.info().outputPath(`${locale}-about-sample-mobile.png`), fullPage: true });
   }
