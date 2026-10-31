@@ -32,7 +32,7 @@ test("English Works index is populated and locale switching keeps the equivalent
   await expect(page.getByRole("heading", { name: "Works" })).toBeVisible();
   await page.getByRole("button", { name: "Language" }).click();
   await page.getByRole("menuitem", { name: /فارسی/ }).click();
-  await expect(page).toHaveURL(/\/fa$/);
+  await expect(page).toHaveURL(/\/fa\/works$/);
   await expect(page.locator("html")).toHaveAttribute("dir", "rtl");
 });
 
