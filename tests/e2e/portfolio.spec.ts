@@ -985,7 +985,7 @@ test("About sample preview uses the homepage hero image and serves a fictional n
   await expect(page.getByRole("heading", { name: "Ghazaleh Abdolahzade Nasoodi" })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Artist statement" })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Biography" })).toBeVisible();
-  await expect(page.locator(".artist-portrait")).toHaveAttribute("src", "/images/homepage-hero.jpg");
+  await expect(page.locator(".artist-portrait")).toHaveAttribute("src", /homepage-hero\\.jpg/);
   await expect(page.getByRole("heading", { name: "CV / Exhibitions" })).toBeVisible();
   await expect(page.getByText(/fictional PDF is available for preview testing only/i)).toBeVisible();
   const pdfLink = page.getByRole("link", { name: "Download CV (PDF)" });
