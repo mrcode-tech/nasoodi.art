@@ -644,7 +644,7 @@ for (const locale of ["en", "fa"] as const) {
     for (let index = 0; index < 5; index++) {
       const image = cards.nth(index).locator("img");
       await expect(image).toBeVisible();
-      await expect.poll(() => image.evaluate((element: HTMLImageElement) => element.naturalWidth)).toBeGreaterThan(0);
+      await expect.poll(() => image.evaluate((element) => (element as HTMLImageElement).naturalWidth)).toBeGreaterThan(0);
       await expect(image).toHaveAttribute("alt", /.+/);
     }
     await cards.first().click();
