@@ -80,11 +80,11 @@ test("portfolio JSON-LD describes only confirmed artist and website facts",()=>{
  assert.equal("sameAs" in person,false);
 });
 
-test("locale switching falls back home when an equivalent published content item is unavailable", async () => {
+test("locale switching preserves available localized sections and falls back for unavailable content", async () => {
  const { alternatePathFor } = await import("../src/lib/site");
  assert.equal(alternatePathFor("/fa", "fa"), "/en");
  assert.equal(alternatePathFor("/fa/about", "fa"), "/en/about");
- assert.equal(alternatePathFor("/fa/works", "fa"), "/en");
+ assert.equal(alternatePathFor("/fa/works", "fa"), "/en/works");
  assert.equal(alternatePathFor("/fa/works/not-published", "fa"), "/en");
  assert.equal(alternatePathFor("/fa/journal/not-published", "fa"), "/en");
 });
