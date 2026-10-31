@@ -1,4 +1,4 @@
-import type { Locale } from "@/lib/site";
+import type { Locale } from "./site";
 
 /**
  * Fictional QA-only copy. Never use this fixture as public artist content.
