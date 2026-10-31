@@ -4,9 +4,9 @@ import { aboutPreviewFixture } from "@/lib/about-preview-fixtures";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { artworks,galleries,journalEntries,cvEntries,artistProfile,contactDetails,getPublicArtistProfile,getPublicContactDetails,getPublicArtworks,getPublicGalleries,getPublicJournal,getPublicCvEntries,getJournalEntriesForCategory,journalCategories,primaryImageFor,type JournalCategory } from "@/lib/site";
+import { artworks,galleries,journalEntries,cvEntries,artistProfile,contactDetails,getPublicArtistProfile,getPublicContactDetails,aboutSampleContentEnabled,getPublicArtworks,getPublicGalleries,getPublicJournal,getPublicCvEntries,getJournalEntriesForCategory,journalCategories,primaryImageFor,type JournalCategory } from "@/lib/site";
 import { copyFor,isLocale,pagePath,otherLocale } from "@/lib/site";
-type Props={params:Promise<{locale:string;section:string}>;searchParams:Promise<{category?:string;page?:string;pageSize?:string;preview?:string}>};
+type Props={params:Promise<{locale:string;section:string}>;searchParams:Promise<{category?:string;page?:string;pageSize?:string}>};
 const names=["works","galleries","journal","about","contact","cv"] as const;
 type Section=typeof names[number];
 const valid=(s:string):s is Section=>names.includes(s as Section);
@@ -28,6 +28,7 @@ export async function generateMetadata({params}:Props):Promise<Metadata>{const {
  return {title:copyFor(locale)[section],...(profile?{description:profile.statement[locale]}:{}),alternates:{canonical:pagePath(locale,section),...(indexable&&translated?{languages:{[locale]:pagePath(locale,section),[other]:pagePath(other,section)}}:{})},robots:{index:section==="about"?false:indexable,follow:true}};}
 export default async function SectionPage({params,searchParams}:Props){const [{locale,section},{category:rawCategory}]=await Promise.all([params,searchParams]);if(!isLocale(locale)||!valid(section))notFound();const t=copyFor(locale);
  if(section==="about"){
+  if(!aboutSampleContentEnabled)return <div className="page-content"><header className="page-heading"><p className="eyebrow">{t.about}</p><h1>{locale==="fa"?"غزاله عبداله زاده نسودی":"Ghazaleh Abdolahzade Nasoodi"}</h1></header><p className="empty-note">{t.profilePending}</p></div>;
   const biography=aboutPreviewFixture.biography[locale];
   const statement=aboutPreviewFixture.statement[locale];
   const portraitAlt=locale==="fa"?"غزاله عبداله زاده نسودی در آتلیه، روبه‌روی بوم نقاشی":"Ghazaleh Abdolahzade Nasoodi standing before a canvas in the studio";
@@ -53,7 +54,7 @@ export default async function SectionPage({params,searchParams}:Props){const [{l
   </div>;
  }
  if(section==="contact"){const details=getPublicContactDetails(contactDetails,locale);return <div className="page-content"><header className="page-heading"><p className="eyebrow">{t.contact}</p><h1>{t.contact}</h1></header>{details?<div className="contact-links">{details.email&&<p><span>{t.email}</span> <a href={`mailto:${details.email}`} dir="ltr">{details.email}</a></p>}{details.instagramUrl&&<p><span>{t.instagram}</span> <a href={details.instagramUrl} target="_blank" rel="noopener noreferrer" dir="ltr">{t.instagram} ↗</a></p>}</div>:<p className="empty-note">{t.contactPending}</p>}</div>;}
- if(section==="cv"){const entries=getPublicCvEntries(cvEntries,locale);if(entries.length===0)notFound();return <div className="page-content"><header className="page-heading"><p className="eyebrow">{t.about}</p><h1>{t.cv}</h1></header><ol className="cv-list">{entries.map(entry=><li key={entry.id}><time>{entry.year}</time><div><strong>{entry.title[locale]}</strong>{entry.organization?.[locale]&&<span>{entry.organization[locale]}</span>}{entry.location?.[locale]&&<span>{entry.location[locale]}</span>}</div></li>)}</ol></div>;}
+ if(section==="cv"){const entries=getPublicCvEntries(cvEntries,locale);if(entries.length===0)notFound();return <div className="page-content"><header className="page-heading"><p className="eyebrow">{t.about}</p><h1>{t.cv}</h1></header><ol className="cv-list">{entries.map(entry=><li key={entry.id}><time>{entry.year}</time><div><strong>{entry.title[locale]}</strong>{entry.organization?.[locale]&&<span>{entry.organization[locale]}</span>}{"location" in entry && entry.location?.[locale]&&<span>{entry.location[locale]}</span>}</div></li>)}</ol></div>;}
  if(section==="works"){const items=getPublicArtworks(artworks,locale);return <div className="page-content"><header className="page-heading"><p className="eyebrow">{t.portfolio}</p><h1>{t.works}</h1><p>{t.selectedIntro}</p></header>{items.length===0?<p className="empty-note">{t.emptyWorks}</p>:<div className="artwork-grid">{items.map(w=>{const img=primaryImageFor(w);return img?<Link className="artwork-item" key={w.id} href={pagePath(locale,`works/${w.slug}`)}><Image sizes="(max-width: 600px) 100vw, (max-width: 900px) 90vw, 50vw" src={img.src} alt={img.alt[locale]??""} width={img.width} height={img.height}/><span>{w.title[locale]}</span></Link>:null;})}</div>}</div>;}
  if(section==="galleries"){const items=getPublicGalleries(galleries,artworks,locale);return <div className="page-content"><header className="page-heading"><p className="eyebrow">{t.portfolio}</p><h1>{t.galleries}</h1><p>{t.discover}</p></header>{items.length===0?<p className="empty-note">{t.emptyGalleries}</p>:<GalleryIndex galleries={items} artworks={artworks} locale={locale} labels={{itemsPerPage:t.itemsPerPage,previous:t.previousPage,next:t.nextPage,page:t.galleryPage,showing:t.showingGalleries}} />}</div>;}
  const entries=getPublicJournal(journalEntries,locale);

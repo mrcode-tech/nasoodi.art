@@ -90,8 +90,9 @@ If the actual code conflicts with the specification, inspect the source and rele
 
 ## 5. Content and asset integrity — hard gate
 
-- Use only artist/site-owner-approved biography, translations, portrait/studio imagery, CV facts, and PDF files.
-- Never invent or embellish biography, artist statement, education, exhibitions, awards, residencies, publications, dates, venues, locations, contact details, or qualifications.
+- Use only artist/site-owner-approved material for public production content.
+- Explicit owner-authorized exception for this feature-branch design task: use clearly labelled fictional bilingual biography, artist statement, and CV data to populate the existing About page for visual review. Keep it non-approved, noindex, and disabled in production runtime; replace it before any release merge. Do not create a preview route or query parameter.
+- Never present fictional biography, education, exhibitions, awards, publications, dates, venues, or qualifications as verified or artist-approved facts.
 - Do not machine-translate and publish unreviewed biography or interface copy as approved Persian/English content.
 - Do not create a synthetic, placeholder, empty, or inferred CV PDF.
 - Verify the exact PDF file, public-download permission, readability, and metadata before exposing its link.

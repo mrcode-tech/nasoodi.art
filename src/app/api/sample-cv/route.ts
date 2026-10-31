@@ -1,4 +1,5 @@
 import { aboutPreviewFixture } from "@/lib/about-preview-fixtures";
+import { aboutSampleContentEnabled } from "@/lib/site";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -19,19 +20,19 @@ function createSamplePdf() {
   let y = 790;
   const line = (value: string, size = 9, indent = 54) => {
     commands.push(`BT /F1 ${size} Tf 1 0 0 1 ${indent} ${y} Tm (${pdfEscape(value)}) Tj ET`);
-    y -= size + 7;
+    y -= size + 2;
   };
   line("GHAZALEH ABDOLAHZADE NASOODI", 18);
   line("FICTIONAL SAMPLE — FOR DESIGN REVIEW ONLY — NOT AN AUTHENTIC ARTIST CV", 8);
-  y -= 14;
+  y -= 3;
   line("All biographical and professional details in this document are invented placeholders.", 8);
-  y -= 12;
+  y -= 6;
   const categories = ["education", "exhibition", "publication", "award", "practice"];
   for (const category of categories) {
     const entries = aboutPreviewFixture.cv.filter((entry) => entry.category === category);
     if (!entries.length) continue;
     line(labels[category], 11);
-    y -= 2;
+    y -= 1;
     for (const entry of entries) {
       line(`${entry.year}  ${entry.title.en}`, 8, 62);
       line(entry.organization.en, 7, 76);
@@ -63,6 +64,7 @@ function createSamplePdf() {
 }
 
 export async function GET() {
+  if (!aboutSampleContentEnabled) return new Response("Not found", { status: 404, headers: { "X-Robots-Tag": "noindex, nofollow" } });
   const pdf = createSamplePdf();
   return new Response(new Uint8Array(pdf), {
     status: 200,
