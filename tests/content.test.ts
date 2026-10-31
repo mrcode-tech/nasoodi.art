@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { artworks,galleries,homepageSelection,getPublicArtworks,getPublicGalleries,isSafeLocalImagePath,isSafeContentSlug,getPublicJournal,getPublicCvEntries,getPublicArtistProfile,getPublicContactDetails,getUpcomingJournalEvents,getArtworkStructuredData,getGalleryStructuredData,getJournalStructuredData,serializeJsonLd,getHomepageFeaturedArtworks,getGalleryCoverArtwork,getJournalEntriesForCategory,getHomepageJournalPreview,isSafeJournalHref,portfolioStructuredData,type Artwork,type Gallery,type JournalEntry,type CvEntry,type ArtistProfile,type ContactDetails, hasExplicitTimeZone } from "../src/lib/site";
+import { aboutPreviewFixture } from "../src/lib/about-preview-fixtures";
+import { artworks,galleries,homepageSelection,getPublicArtworks,getPublicGalleries,isSafeLocalImagePath,isSafeContentSlug,getPublicJournal,getPublicCvEntries,getPublicCvDocument,getPublicArtistProfile,getPublicContactDetails,getUpcomingJournalEvents,getArtworkStructuredData,getGalleryStructuredData,getJournalStructuredData,serializeJsonLd,getHomepageFeaturedArtworks,getGalleryCoverArtwork,getJournalEntriesForCategory,getHomepageJournalPreview,isSafeJournalHref,portfolioStructuredData,type Artwork,type Gallery,type JournalEntry,type CvEntry,type CvDocument,type ArtistProfile,type ContactDetails, hasExplicitTimeZone } from "../src/lib/site";
 const work:Artwork={id:"w1",slug:"work-one",title:{en:"Work",fa:"اثر"},images:[{src:"/art/work.jpg",alt:{en:"Painting",fa:"نقاشی"},role:"primary",width:1200,height:900}],rightsConfirmed:true,status:"published"};
 test("artwork stays private until published and rights-cleared",()=>{assert.equal(getPublicArtworks([{...work,status:"needs-review"}],"en").length,0);assert.equal(getPublicArtworks([{...work,rightsConfirmed:false}],"en").length,0);assert.equal(getPublicArtworks([work],"en").length,1);});
 test("artwork requires localized title and primary image alt",()=>{assert.equal(getPublicArtworks([{...work,title:{en:"Work"}}],"fa").length,0);assert.equal(getPublicArtworks([{...work,images:[{...work.images[0],alt:{en:""}}]}],"en").length,0);});
@@ -262,4 +263,23 @@ test("homepage Journal preview selects the two newest published entries across a
  const items=[entry("old-story","story","2026-10-01T10:00:00Z"),entry("new-event","event","2026-10-29T10:00:00Z"),entry("middle-exhibition","exhibition","2026-10-15T10:00:00Z"),entry("newest-story","story","2026-10-30T10:00:00Z"),entry("local-later-date","story","2026-10-30T00:30:00+02:00"),entry("later-instant","exhibition","2026-10-29T23:00:00Z"),{...entry("draft","story","2026-10-31T10:00:00Z"),status:"draft" as const}];
  assert.deepEqual(getHomepageJournalPreview(items,"en").map(item=>item.id),["newest-story","later-instant"]);
  assert.deepEqual(getHomepageJournalPreview(items,"fa").map(item=>item.id),["newest-story","later-instant"]);
+});
+
+
+test("CV PDF publication requires an approved published same-origin PDF and safe filename",()=>{
+ const document:CvDocument={src:"/documents/artist-cv.pdf",fileName:"artist-cv.pdf",artistApproved:true,status:"published"};
+ assert.equal(getPublicCvDocument(document)?.src,"/documents/artist-cv.pdf");
+ assert.equal(getPublicCvDocument({...document,artistApproved:false}),undefined);
+ assert.equal(getPublicCvDocument({...document,status:"draft"}),undefined);
+ assert.equal(getPublicCvDocument({...document,src:"https://example.org/cv.pdf"}),undefined);
+ assert.equal(getPublicCvDocument({...document,src:"/documents/cv.txt"}),undefined);
+ assert.equal(getPublicCvDocument({...document,fileName:"../cv.pdf"}),undefined);
+ assert.equal(getPublicCvDocument(undefined),undefined);
+});
+
+test("long About preview fixtures are bilingual, clearly sample-only, and include CV layout rows",()=>{
+ assert.ok(aboutPreviewFixture.biography.en.length>700);
+ assert.ok(aboutPreviewFixture.biography.fa.length>500);
+ assert.equal(aboutPreviewFixture.cv.length,4);
+ assert.ok(aboutPreviewFixture.cv.every(entry=>entry.organization.en.includes("fictional")||entry.organization.fa.includes("ساختگی")));
 });

@@ -17,6 +17,7 @@ Before planning, designing, implementing, or refactoring any user-facing page, c
 3. Read `specification/proposal.md`, `specification/visual-identity-and-photo-direction.md`, and `specification/site-wide-design-system-and-section-specification.md` when work affects the overall visual language, shared shell, or multiple pages.
 4. Read every relevant specialized specification before changing its surface or behavior. This includes, as applicable:
    - `specification/homepage-artwork-hero-and-featured-works.md`
+   - `specification/artist-about-page-and-mobile-hero.md`
    - `specification/selected-works-three-level-experience.md`
    - `specification/gallery-collections-and-artwork-detail.md`
    - `specification/journal-and-events.md`
@@ -32,6 +33,8 @@ Before planning, designing, implementing, or refactoring any user-facing page, c
    - `specification/implementation-roadmap.md`
 5. Inspect the actual implementation, existing design tokens, shared components, route conventions, dependencies, and relevant image assets before deciding whether to reuse, extend, replace, or add anything.
 6. If a requirement is ambiguous, contradictory, unsupported by repository evidence, or depends on artist approval, record the issue and ask for clarification rather than inventing a decision.
+
+For the artist About/CV and homepage hero biography/mobile-order task, also read the task-specific execution prompt in root `agent.md` and the full `specification/artist-about-page-and-mobile-hero.md` contract.
 
 Do not start implementation based only on a prompt summary or this file. Read the source specifications relevant to the task.
 
