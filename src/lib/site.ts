@@ -3,8 +3,6 @@ export const locales = ["fa", "en"] as const;
 export type Locale = (typeof locales)[number];
 export const isLocale = (v: string): v is Locale => locales.includes(v as Locale);
 
-// Temporary layout fixtures are enabled only in development and GitHub Actions.
-export const aboutSampleContentEnabled = process.env.NODE_ENV !== "production" || process.env.GITHUB_ACTIONS === "true";
 export const otherLocale = (l: Locale): Locale => l === "fa" ? "en" : "fa";
 export const pagePath = (l: Locale, p = "") => `/${l}${p ? `/${p.replace(/^\/+/, "")}` : ""}`;
 export type Localized = Partial<Record<Locale, string>>;
