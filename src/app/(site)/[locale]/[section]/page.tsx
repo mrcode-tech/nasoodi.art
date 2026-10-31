@@ -4,7 +4,7 @@ import { aboutPreviewFixture } from "@/lib/about-preview-fixtures";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { artworks,galleries,journalEntries,cvEntries,artistProfile,contactDetails,getPublicArtistProfile,getPublicContactDetails,aboutSampleContentEnabled,getPublicArtworks,getPublicGalleries,getPublicJournal,getPublicCvEntries,getJournalEntriesForCategory,journalCategories,primaryImageFor,type JournalCategory } from "@/lib/site";
+import { artworks,galleries,journalEntries,cvEntries,artistProfile,contactDetails,getPublicArtistProfile,getPublicContactDetails,getPublicArtworks,getPublicGalleries,getPublicJournal,getPublicCvEntries,getJournalEntriesForCategory,journalCategories,primaryImageFor,type JournalCategory } from "@/lib/site";
 import { copyFor,isLocale,pagePath,otherLocale } from "@/lib/site";
 type Props={params:Promise<{locale:string;section:string}>;searchParams:Promise<{category?:string;page?:string;pageSize?:string}>};
 const names=["works","galleries","journal","about","contact","cv"] as const;
@@ -28,7 +28,6 @@ export async function generateMetadata({params}:Props):Promise<Metadata>{const {
  return {title:copyFor(locale)[section],...(profile?{description:profile.statement[locale]}:{}),alternates:{canonical:pagePath(locale,section),...(indexable&&translated?{languages:{[locale]:pagePath(locale,section),[other]:pagePath(other,section)}}:{})},robots:{index:section==="about"?false:indexable,follow:true}};}
 export default async function SectionPage({params,searchParams}:Props){const [{locale,section},{category:rawCategory}]=await Promise.all([params,searchParams]);if(!isLocale(locale)||!valid(section))notFound();const t=copyFor(locale);
  if(section==="about"){
-  if(!aboutSampleContentEnabled)return <div className="page-content"><header className="page-heading"><p className="eyebrow">{t.about}</p><h1>{locale==="fa"?"غزاله عبداله زاده نسودی":"Ghazaleh Abdolahzade Nasoodi"}</h1></header><p className="empty-note">{t.profilePending}</p></div>;
   const biography=aboutPreviewFixture.biography[locale];
   const statement=aboutPreviewFixture.statement[locale];
   const portraitAlt=locale==="fa"?"غزاله عبداله زاده نسودی در آتلیه، روبه‌روی بوم نقاشی":"Ghazaleh Abdolahzade Nasoodi standing before a canvas in the studio";
