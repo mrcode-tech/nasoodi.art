@@ -869,7 +869,7 @@ test("About is a localized primary navigation destination on desktop and mobile"
   await expect(page.locator(".desktop-sidebar")).toBeHidden();
 });
 
-test("homepage hero layout is responsive without sample preview content", async ({ page }) => {
+test("homepage hero shows the fictional artist introduction before its actions at every breakpoint", async ({ page }) => {
   for (const locale of ["en", "fa"] as const) {
     for (const viewport of [
       { width: 390, height: 844, label: "mobile" },
@@ -884,6 +884,11 @@ test("homepage hero layout is responsive without sample preview content", async 
       const copy = intro.locator(":scope > .home-intro-copy");
       await expect(image).toBeVisible();
       await expect(copy).toBeVisible();
+      const biography = copy.locator(".home-biography");
+      await expect(biography).toBeVisible();
+      await expect(biography.locator(".sample-content-notice")).toBeVisible();
+      await expect(biography.locator(".biography-copy")).toBeVisible();
+      await expect(biography.getByRole("button", { name: locale === "fa" ? "ادامه مطلب" : "Read more" })).toBeVisible();
       const imageBeforeCopy = await image.evaluate((element) => {
         const text = element.parentElement?.querySelector(".home-intro-copy");
         return Boolean(text && (element.compareDocumentPosition(text) & Node.DOCUMENT_POSITION_FOLLOWING));
