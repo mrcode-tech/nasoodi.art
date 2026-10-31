@@ -695,3 +695,43 @@ html[lang=fa] .artwork-viewer-info h2{font-family:Tahoma,Arial,sans-serif;line-h
 @media(prefers-reduced-motion:reduce){.artwork-experience-card{transition:none}}
 
 .gallery-card-action{display:inline-flex;align-items:center;gap:.45rem;width:max-content;max-width:100%;margin-top:.35rem;padding-bottom:.2rem;border-bottom:1px solid var(--mauve);color:var(--ink);font-size:.84rem;font-weight:700}
+
+
+/* Responsive editorial carousel system — sized from each content container, not viewport width. */
+.carousel{position:relative;min-width:0;width:100%;container-type:inline-size;container-name:portfolio-carousel}
+.carousel-viewport{overflow:hidden;margin:-.5rem;padding:.5rem}
+.carousel-track{display:flex;align-items:stretch;gap:clamp(1rem,2cqw,2rem);touch-action:pan-y pinch-zoom;cursor:grab}
+.carousel-track:active{cursor:grabbing}
+.carousel-item{position:relative;flex:0 0 31%;min-width:0}
+.carousel-footer{display:flex;align-items:center;justify-content:space-between;gap:1rem;margin-top:1.1rem;padding-top:.8rem;border-top:1px solid var(--border)}
+.carousel-status{color:var(--muted);font-size:.78rem;font-variant-numeric:tabular-nums}
+.carousel-controls{display:flex;align-items:center;gap:.5rem}
+.carousel-control{min-width:2.75rem;min-height:2.75rem;padding:.5rem .8rem;font-size:1.05rem}
+.carousel-control:disabled{opacity:.35;cursor:not-allowed}
+.artwork-carousel .carousel-item,.collection-carousel .carousel-item{flex-basis:31%}
+.artwork-experience-card{display:flex;flex-direction:column;width:100%;height:100%;gap:.7rem;padding:0;border:0;background:transparent;color:inherit;text-align:start;cursor:pointer}
+.artwork-experience-card:focus-visible{outline:2px solid var(--mauve-deep);outline-offset:5px}
+.artwork-media{display:flex;width:100%;height:clamp(18rem,34cqw,34rem);align-items:center;justify-content:center;background:transparent}
+.artwork-media img{display:block;width:100%;height:100%;object-fit:contain;object-position:center}
+.artwork-experience-caption{display:block;max-width:100%;padding:.1rem .1rem .3rem;font-size:.95rem;line-height:1.55}
+.artwork-experience-static{max-width:48rem}
+.artwork-experience-static .artwork-media{height:clamp(20rem,48vw,42rem)}
+.collection-carousel .gallery-card{display:flex;height:100%;flex-direction:column}
+.collection-carousel .gallery-card img,.gallery-cards .gallery-card img{display:block;width:100%;height:auto;max-height:32rem;object-fit:contain;object-position:center}
+.collection-carousel .gallery-card-copy{display:flex;flex:1;flex-direction:column;align-items:flex-start;gap:.6rem;padding-top:1rem}
+.gallery-cards-sparse{grid-template-columns:repeat(auto-fit,minmax(min(100%,20rem),1fr))}
+.gallery-detail-cover{display:flex;max-width:58rem;max-height:36rem;align-items:center;justify-content:flex-start;margin:2rem 0 2.5rem;background:transparent}
+.gallery-detail-cover img{display:block;width:auto;height:auto;max-width:100%;max-height:36rem;object-fit:contain}
+.journal-preview-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(1.5rem,3vw,3rem)}
+.journal-preview-item{min-width:0;padding-top:1rem;border-top:1px solid var(--border)}
+.journal-preview-item time{color:var(--muted);font-size:.8rem}
+.journal-preview-item h3{margin:.7rem 0;font:400 clamp(1.25rem,2vw,1.7rem)/1.4 Georgia,"Times New Roman",serif}
+html[lang=fa] .journal-preview-item h3{font-family:Tahoma,Arial,sans-serif;line-height:1.7}
+.journal-preview-item p{max-width:42rem;color:var(--muted);line-height:1.8}
+.journal-preview-item a{color:inherit;text-decoration:none}
+.journal-preview-item a:hover{text-decoration:underline;text-decoration-color:var(--mauve)}
+@container portfolio-carousel (min-width:1200px){.artwork-carousel .carousel-item,.collection-carousel .carousel-item{flex-basis:24%}}
+@container portfolio-carousel (max-width:900px) and (min-width:601px){.artwork-carousel .carousel-item,.collection-carousel .carousel-item{flex-basis:48%}}
+@container portfolio-carousel (max-width:600px){.artwork-carousel .carousel-item,.collection-carousel .carousel-item{flex-basis:84%}.artwork-media{height:clamp(17rem,58cqw,25rem)}}
+@media(max-width:600px){.journal-preview-list{grid-template-columns:minmax(0,1fr);gap:1.5rem}.gallery-detail-cover{margin-block:1.5rem}}
+@media(prefers-reduced-motion:reduce){.carousel-track{scroll-behavior:auto}.carousel-control{transition:none}}

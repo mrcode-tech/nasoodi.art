@@ -704,3 +704,95 @@ test("artwork viewer remains within the viewport on mobile and short-height desk
     await page.keyboard.press("Escape");
   }
 });
+
+
+test("homepage artwork carousel exposes all approved works and opens the shared viewer", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/en");
+  const carousel = page.locator(".artwork-carousel");
+  await expect(carousel).toBeVisible();
+  await expect(carousel.locator(".carousel-item")).toHaveCount(5);
+  await expect(carousel.getByRole("button", { name: "Previous artwork" })).toBeDisabled();
+  await expect(carousel.getByRole("button", { name: "Next artwork" })).toBeEnabled();
+  await carousel.getByRole("button", { name: "A Quiet Place Between Seasons" }).click();
+  const viewer = page.getByRole("dialog");
+  await expect(viewer).toBeVisible();
+  await expect(viewer.getByRole("heading", { name: "A Quiet Place Between Seasons" })).toBeVisible();
+  await viewer.getByRole("button", { name: "Next artwork" }).click();
+  await expect(viewer.getByRole("heading", { name: "The Shape of Remembering" })).toBeVisible();
+  await page.keyboard.press("Escape");
+  await expect(viewer).toBeHidden();
+  await carousel.getByRole("button", { name: "Next artwork" }).click();
+  await expect(carousel.locator(".carousel-status")).toHaveText("2 / 5");
+});
+
+test("collection artwork carousel preserves ordered, collection-scoped viewer navigation", async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await page.goto("/en/galleries/quiet-intervals");
+  const carousel = page.locator(".artwork-carousel");
+  await expect(carousel.locator(".carousel-item")).toHaveCount(3);
+  await expect(carousel.getByRole("button", { name: "Previous artwork" })).toBeDisabled();
+  await carousel.getByRole("button", { name: "Where Light Rests" }).click();
+  const viewer = page.getByRole("dialog");
+  await expect(viewer.getByRole("heading", { name: "Where Light Rests" })).toBeVisible();
+  await viewer.getByRole("button", { name: "Next artwork" }).click();
+  await expect(viewer.getByRole("heading", { name: "A Garden of Small Moments" })).toBeVisible();
+  await expect(viewer.getByRole("button", { name: "Next artwork" })).toBeDisabled();
+});
+
+test("collection index uses a responsive collection rail and keeps all collection links available", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/fa/galleries");
+  const carousel = page.locator(".collection-carousel");
+  await expect(carousel).toBeVisible();
+  await expect(carousel.locator(".carousel-item")).toHaveCount(4);
+  await expect(carousel.getByRole("link", { name: /فاصله‌های آرام/ })).toBeVisible();
+  await expect(carousel.getByRole("button", { name: "مجموعه بعدی" })).toBeEnabled();
+});
+
+test("artwork and collection carousels retain locale direction and avoid horizontal overflow", async ({ page }) => {
+  const viewports = [
+    { width: 320, height: 700 },
+    { width: 390, height: 844 },
+    { width: 430, height: 932 },
+    { width: 768, height: 1024 },
+    { width: 1024, height: 768 },
+    { width: 1440, height: 900 },
+    { width: 1920, height: 1080 },
+  ];
+  for (const locale of ["en", "fa"] as const) {
+    for (const viewport of viewports) {
+      await page.setViewportSize(viewport);
+      await page.goto(`/${locale}`);
+      const carousel = page.locator(".artwork-carousel");
+      await expect(carousel).toBeVisible();
+      await expect(carousel).toHaveAttribute("dir", locale === "fa" ? "rtl" : "ltr");
+      await expect(carousel.locator(".carousel-item")).toHaveCount(5);
+      await expect(carousel.locator(".carousel-item")).toHaveText(locale === "fa"
+        ? ["آرامش میان فصل‌ها", "شکلِ خاطره", "جایی که نور می‌آرامد", "باغ لحظه‌های کوچک", "ساعت آبی درون"]
+        : ["A Quiet Place Between Seasons", "The Shape of Remembering", "Where Light Rests", "A Garden of Small Moments", "The Blue Hour Within"]);
+      const next = carousel.getByRole("button", { name: locale === "fa" ? "اثر بعدی" : "Next artwork" });
+      await expect(next).toBeEnabled();
+      await next.click();
+      await expect(carousel.locator(".carousel-status")).toHaveText("2 / 5");
+      const dimensions = await page.evaluate(() => ({ viewport: document.documentElement.clientWidth, document: document.documentElement.scrollWidth }));
+      expect(dimensions.document, `${locale} at ${viewport.width}px`).toBeLessThanOrEqual(dimensions.viewport);
+      await page.screenshot({ path: test.info().outputPath(`carousel-${locale}-${viewport.width}x${viewport.height}.png`), fullPage: true });
+    }
+  }
+  await page.setViewportSize({ width: 1440, height: 560 });
+  await page.goto("/en");
+  await expect(page.locator(".artwork-carousel")).toBeVisible();
+  await page.screenshot({ path: test.info().outputPath("carousel-en-desktop-short-height.png"), fullPage: true });
+});
+
+test("artwork carousel supports keyboard navigation and reduced motion", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto("/en");
+  const carousel = page.locator(".artwork-carousel");
+  await carousel.getByRole("button", { name: "A Quiet Place Between Seasons" }).focus();
+  await page.keyboard.press("ArrowRight");
+  await expect(carousel.locator(".carousel-status")).toHaveText("2 / 5");
+  await expect(carousel.getByRole("button", { name: "Next artwork" })).toBeEnabled();
+});

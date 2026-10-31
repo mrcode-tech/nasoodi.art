@@ -1,6 +1,6 @@
 # Artwork Discovery, Responsive Carousels, and Editorial Journal Experience
 
-**Status:** Approved direction for specification and future implementation planning; implementation and final visual approval remain pending  
+**Status:** Approved design contract; carousel and page integration implemented on `feature`; automated and visual verification pending  
 **Revision date:** 2026-10-31  
 **Applies to:** Homepage Selected Works, gallery index, collection detail, shared artwork presentation, and homepage Journal preview  
 **Locales:** Persian (`fa`, RTL) and English (`en`, LTR)  
@@ -307,3 +307,10 @@ This document establishes the design direction and implementation contract. It d
 The approved artwork inventory remains the source of truth for artwork records and image mappings. The Journal content model remains the source of truth for publication state and timestamps. Shared design-system and accessibility specifications remain authoritative for tokens, interaction, motion, and quality gates.
 
 Any unresolved artwork identity, rights, metadata, translation, or editorial grouping must be recorded as an approval dependency; do not invent an answer to make a wireframe appear complete.
+
+
+## Implementation progress — feature branch
+
+The first implementation pass adds the shared Radix-compatible shadcn Carousel primitive backed by `embla-carousel-react`, responsive artwork and collection rails, collection-detail cover presentation, and the two-entry mixed-type homepage Journal selector. The existing shared Artwork Viewer and canonical artwork/collection records remain in use.
+
+**Verification status:** automated CI and browser evidence are pending for this implementation commit. This status does not imply visual approval or final artist acceptance.

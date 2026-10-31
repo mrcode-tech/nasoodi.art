@@ -106,6 +106,7 @@ For every materially changed shared control:
 | Sheet | `src/components/ui/sheet.tsx` | Implemented |
 | Dropdown Menu | `src/components/ui/dropdown-menu.tsx` | Implemented |
 | Class utility | `src/lib/utils.ts` | Implemented |
+| Carousel | `src/components/ui/carousel.tsx` | Implemented with Embla; CI verification pending |
 | Site navigation | `src/components/site-shell.tsx` | Composes shared primitives |
 
 Update this inventory when components are added, removed, or replaced.
@@ -115,9 +116,9 @@ Update this inventory when components are added, removed, or replaced.
 
 The new artwork discovery contract uses the official [shadcn Carousel](https://ui.shadcn.com/docs/components/base/carousel) composition: `Carousel`, `CarouselContent`, `CarouselItem`, `CarouselPrevious`, and `CarouselNext`.
 
-Repository inspection on the feature branch found Button, Dialog, Dropdown Menu, Sheet, and Sidebar primitives, but no Carousel primitive and no Embla dependency. The project currently uses Radix-backed shadcn components. Future implementation must choose the shadcn Carousel variant compatible with that existing primitive foundation; do not migrate the project to Base UI or mix primitive families just to add a carousel.
+The feature branch previously had Button, Dialog, Dropdown Menu, Sheet, and Sidebar primitives but no Carousel primitive or Embla dependency. The project uses Radix-backed shadcn components, and the implementation preserves that foundation.
 
-The official shadcn Carousel is built with Embla. Add the generated project-owned carousel primitive and the minimum compatible Embla React dependency only when implementing this feature. Do not install an autoplay plugin. The carousel component is **specified, not yet installed or implemented** as of this documentation revision.
+The responsive carousel is now implemented as the project-owned `src/components/ui/carousel.tsx` primitive using `embla-carousel-react` (`^8.6.0`). It provides the standard Carousel/Content/Item/Previous/Next composition, direction-aware keyboard handling, disabled boundaries, and live snap position. The primitive is implemented; CI verification and rendered visual approval remain pending. No autoplay plugin or second carousel library is installed.
 
 Implementation and QA must cover responsive item basis, content-container sizing, spacing, snap/alignment, disabled boundaries, keyboard navigation, touch/trackpad drag, accessible naming/position feedback, reduced motion, and clipping/focus behavior. For Persian set both `dir="rtl"` and Embla `direction: "rtl"`; for English use LTR. Directional controls must have correct localized movement meaning. Preserve the editorial artwork design; do not use default dashboard card styling.
 

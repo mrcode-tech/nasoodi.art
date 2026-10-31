@@ -254,7 +254,13 @@ export function getPublicJournal(items: JournalEntry[], locale: Locale) {
     return true;
   });
   return keepUniqueBy(keepUniqueBy(visible, (entry) => entry.id), (entry) => entry.slug)
-    .sort((a,b) => (b.publishedAt ?? "").localeCompare(a.publishedAt ?? ""));
+    .sort((a,b) => {
+      const timestamp = (entry: JournalEntry) => entry.publishedAt && Number.isFinite(Date.parse(entry.publishedAt)) ? Date.parse(entry.publishedAt) : Number.NEGATIVE_INFINITY;
+      return timestamp(b) - timestamp(a);
+    });
+}
+export function getHomepageJournalPreview(items: JournalEntry[], locale: Locale): JournalEntry[] {
+  return getPublicJournal(items, locale).slice(0, 2);
 }
 export function getUpcomingJournalEvents(items: JournalEntry[], locale: Locale, now: Date = new Date()) {
   const nowMs = now.getTime();
