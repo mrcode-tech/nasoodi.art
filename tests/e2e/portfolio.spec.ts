@@ -669,7 +669,7 @@ for (const locale of ["en", "fa"] as const) {
     await expect(page.getByRole("dialog")).toHaveCount(0);
     await page.getByRole("link", { name: locale === "fa" ? "گشت‌وگذار در مجموعه‌ها" : "Explore collections" }).first().click();
     await expect(page).toHaveURL(new RegExp(`/${locale}/galleries$`));
-    await expect(page.locator(".gallery-card")).toHaveCount(4);
+    await expect(page.locator(".gallery-index-card")).toHaveCount(4);
     await page.locator(".gallery-index-card-link").first().click();
     await expect(page).toHaveURL(new RegExp(`/${locale}/galleries/quiet-intervals$`));
     const collectionCards = page.locator(".artwork-carousel .artwork-item");
