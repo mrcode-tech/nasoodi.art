@@ -1,6 +1,6 @@
 # Nasoodi.art — Galleries Index: Editorial Cards and Pagination Specification
 
-**Status:** Approved direction from site owner; specification only (implementation not yet changed)  
+**Status:** Owner-approved implementation contract; implementation in progress (2026-10-31)  
 **Scope:** The localized main Galleries index at `/[locale]/galleries`  
 **Locales:** Persian (`fa`, RTL) and English (`en`, LTR)  
 **Reference supplied by site owner:** `https://nasoodi-art-git-stage-mrcode-techs-projects.vercel.app/fa/galleries`  
@@ -430,3 +430,10 @@ Before coding:
 - Do not merge, deploy, or modify `main` unless separately authorized.
 - Do not alter the homepage carousel under any circumstances as part of this task.
 - Record implementation evidence, test results, screenshots, CI run, and outstanding content/artist approvals in the existing project progress documentation.
+
+
+## Implementation progress — 2026-10-31
+
+- Repository inspection confirmed the localized route is composed through `src/app/(site)/[locale]/[section]/page.tsx`, gallery publication/order are provided by `getPublicGalleries`, and the canonical dataset currently contains four published collections in both locales.
+- The homepage Selected Works carousel is rendered separately through `ArtworkExperience` on the homepage. The Galleries index implementation must not change `src/components/ui/carousel.tsx`, `src/components/artwork-experience.tsx`, or homepage composition.
+- Implementation and CI evidence will be recorded only after the final feature commit has been tested. The current four-gallery dataset means the approved behavior is a four-card static grid with no page controls; pagination utilities are tested with synthetic fixtures so the 5/10/20 behavior is covered without inventing production galleries.

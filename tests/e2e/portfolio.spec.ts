@@ -621,7 +621,9 @@ test("collection discovery displays the four published curated collections in bo
     await page.goto(`/${locale}/galleries`);
     await expect(page.getByRole("main")).toBeVisible();
     await expect(page.locator("main h1")).toHaveCount(1);
-    await expect(page.locator(".gallery-card")).toHaveCount(4);
+    await expect(page.locator(".gallery-index-card")).toHaveCount(4);
+    await expect(page.locator(".collection-carousel")).toHaveCount(0);
+    await expect(page.locator(".gallery-index-grid")).toBeVisible();
     await expect(page.locator(".empty-note")).toHaveCount(0);
   }
 });
@@ -668,7 +670,7 @@ for (const locale of ["en", "fa"] as const) {
     await page.getByRole("link", { name: locale === "fa" ? "گشت‌وگذار در مجموعه‌ها" : "Explore collections" }).first().click();
     await expect(page).toHaveURL(new RegExp(`/${locale}/galleries$`));
     await expect(page.locator(".gallery-card")).toHaveCount(4);
-    await page.locator(".gallery-card").first().click();
+    await page.locator(".gallery-index-card-link").first().click();
     await expect(page).toHaveURL(new RegExp(`/${locale}/galleries/quiet-intervals$`));
     const collectionCards = page.locator(".artwork-carousel .artwork-item");
     await expect(collectionCards).toHaveCount(3);
@@ -740,14 +742,23 @@ test("collection artwork carousel preserves ordered, collection-scoped viewer na
   await expect(viewer.getByRole("button", { name: "Next artwork" })).toBeDisabled();
 });
 
-test("collection index uses a responsive collection rail and keeps all collection links available", async ({ page }) => {
-  await page.setViewportSize({ width: 1440, height: 900 });
-  await page.goto("/fa/galleries");
-  const carousel = page.locator(".collection-carousel");
-  await expect(carousel).toBeVisible();
-  await expect(carousel.locator(".carousel-item")).toHaveCount(4);
-  await expect(carousel.getByRole("link", { name: /فاصله‌های آرام/ })).toBeVisible();
-  await expect(carousel.getByRole("button", { name: "مجموعه بعدی" })).toBeEnabled();
+test("main Galleries index is a static editorial poster grid and leaves the homepage carousel intact", async ({ page }) => {
+  for (const locale of ["fa", "en"] as const) {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.goto(`/${locale}/galleries`);
+    const grid = page.locator(".gallery-index-grid");
+    await expect(grid).toBeVisible();
+    await expect(grid.locator(".gallery-index-card")).toHaveCount(4);
+    await expect(page.locator(".collection-carousel")).toHaveCount(0);
+    await expect(grid.locator(".gallery-index-card-link").first()).toHaveAttribute("href", new RegExp(`/${locale}/galleries/`));
+    await expect(page.locator("html")).toHaveAttribute("dir", locale === "fa" ? "rtl" : "ltr");
+    await expect(page.locator(".gallery-pagination")).toHaveCount(0);
+  }
+  await page.goto("/en");
+  const homeCarousel = page.locator(".artwork-carousel");
+  await expect(homeCarousel).toBeVisible();
+  await expect(homeCarousel.locator(".carousel-item")).toHaveCount(5);
+  await expect(homeCarousel.getByRole("button", { name: "Next artwork" })).toBeEnabled();
 });
 
 test("artwork and collection carousels retain locale direction and avoid horizontal overflow", async ({ page }) => {
@@ -795,4 +806,41 @@ test("artwork carousel supports keyboard navigation and reduced motion", async (
   await page.keyboard.press("ArrowRight");
   await expect(carousel.locator(".carousel-status")).toHaveText("2 / 5");
   await expect(carousel.getByRole("button", { name: "Next artwork" })).toBeEnabled();
+});
+
+
+test("static Galleries poster grid reflows without overflow in both locales", async ({ page }) => {
+  const viewports = [
+    { width: 320, height: 568 },
+    { width: 390, height: 844 },
+    { width: 768, height: 1024 },
+    { width: 1024, height: 768 },
+    { width: 1440, height: 900 },
+    { width: 1920, height: 1080 },
+    { width: 844, height: 390 },
+  ];
+  for (const locale of ["fa", "en"] as const) {
+    for (const viewport of viewports) {
+      await page.setViewportSize(viewport);
+      await page.goto(`/${locale}/galleries`);
+      const grid = page.locator(".gallery-index-grid");
+      await expect(grid.locator(".gallery-index-card")).toHaveCount(4);
+      const columns = await grid.evaluate((element) => getComputedStyle(element).gridTemplateColumns.split(" ").length);
+      expect(columns).toBe(viewport.width <= 600 ? 1 : viewport.width <= 1000 ? 2 : 3);
+      const overflow = await page.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth);
+      expect(overflow, `${locale} at ${viewport.width}x${viewport.height}`).toBe(false);
+      if (viewport.width === 390 || viewport.width === 1440) {
+        await page.screenshot({ path: test.info().outputPath(`gallery-index-${locale}-${viewport.width}x${viewport.height}.png`), fullPage: true });
+      }
+    }
+  }
+});
+
+
+test("locale switching preserves the Galleries page-size query state", async ({ page }) => {
+  await page.goto("/en/galleries?pageSize=10");
+  await page.getByRole("button", { name: "Language" }).click();
+  await page.getByRole("menuitem", { name: /فارسی/ }).click();
+  await expect(page).toHaveURL(/\/fa\/galleries\?pageSize=10$/);
+  await expect(page.locator("html")).toHaveAttribute("dir", "rtl");
 });
