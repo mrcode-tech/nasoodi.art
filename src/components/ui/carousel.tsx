@@ -31,7 +31,7 @@ export function Carousel({ dir = "ltr", label, roleDescription = "carousel", opt
     return () => { api.off("select", onStoreChange); api.off("reInit", onStoreChange); };
   }, [api]);
   const getSnapshot = React.useCallback(() => api
-    ? `${api.canScrollPrev() ? 1 : 0}:${api.canScrollNext() ? 1 : 0}:${api.slidesInView()[0] ?? api.selectedScrollSnap()}:${api.slideNodes().length}`
+    ? `${api.canScrollPrev() ? 1 : 0}:${api.canScrollNext() ? 1 : 0}:${api.selectedScrollSnap()}:${api.slideNodes().length}`
     : "0:0:0:0", [api]);
   const snapshot = React.useSyncExternalStore(subscribe, getSnapshot, () => "0:0:0:0");
   const [previousValue, nextValue, selectedSlide, slideCount] = snapshot.split(":").map(Number);
