@@ -283,3 +283,21 @@ Apply design-engineering-skills.md and design-direction-and-system-refinement.md
 - Latest from the Journal should be visually quieter than the artwork sections and should not become a generic news-card grid.
 - Do not animate painting images. Use motion only for meaningful UI transitions and only after the motion decision gate.
 - Review all homepage sections together for rhythm, section pacing, visual hierarchy, and content density.
+
+## Selected Works three-level experience alignment
+
+The detailed cross-page contract is [selected-works-three-level-experience.md](./selected-works-three-level-experience.md); responsive structural layouts are in [wireframes.md](./wireframes.md), Section 15.
+
+For the homepage, apply these specific rules:
+
+- The Selected Works section is a curated preview of individual artworks, not the complete catalogue and not a collection index.
+- Selecting an artwork opens the shared Artwork Viewer. The viewer must visibly present the artwork image, approved title, artist-approved description when available, and only verified optional metadata.
+- The viewer supports previous/next navigation within the homepage's explicitly configured selected-artwork sequence. It must update image, title, description, metadata, alt text, and position together.
+- Closing the viewer returns to the exact homepage context, scroll position, and invoking artwork control.
+- The Explore Works/Explore Collections action navigates to the canonical collection index. It is a normal link/navigation action, not another artwork popup.
+- The homepage selected-artwork sequence and collection membership are derived from canonical artwork/collection records; do not duplicate artwork records or image files.
+- Do not invent titles, descriptions, collection identities, grouping, dates, dimensions, medium, or translations. Missing optional fields are omitted.
+- A separate Featured Galleries/Featured Collections preview is optional only when it has a distinct editorial role and does not duplicate the Works index or overwhelm Selected Works. If retained, it must use approved collection records and link to their dedicated pages.
+- The homepage and collection pages reuse the same Artwork Viewer component. Only the navigation context changes.
+
+These rules refine the homepage popup and discovery behavior; the existing artwork-led hero, visual identity, and approval gates remain unchanged.
