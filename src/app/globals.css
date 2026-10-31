@@ -418,6 +418,7 @@ html[lang="fa"] .mobile-drawer[dir="rtl"] .nav-link {
     z-index: 50;
     width: 100%;
     min-height: 4.75rem;
+    border-bottom: 0;
     background: var(--paper);
     direction: ltr;
   }
@@ -550,6 +551,15 @@ html[lang="fa"] .desktop-sidebar {
 html[lang="fa"] .site-main {
   margin-left: 0;
   margin-right: var(--sidebar);
+}
+
+/* The desktop sidebar is removed below 901px, so neither locale may reserve its width. */
+@media (max-width: 900px) {
+  html[lang="en"] .site-main,
+  html[lang="fa"] .site-main {
+    margin-left: 0;
+    margin-right: 0;
+  }
 }
 
 html[lang="fa"] .desktop-sidebar .artist-wordmark,
