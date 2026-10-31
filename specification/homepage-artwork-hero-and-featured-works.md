@@ -301,3 +301,17 @@ For the homepage, apply these specific rules:
 - The homepage and collection pages reuse the same Artwork Viewer component. Only the navigation context changes.
 
 These rules refine the homepage popup and discovery behavior; the existing artwork-led hero, visual identity, and approval gates remain unchanged.
+
+
+## 10. Responsive artwork discovery refinement — 2026-10-31
+
+The detailed and current presentation contract is [artwork-discovery-carousel-and-editorial-experience.md](./artwork-discovery-carousel-and-editorial-experience.md).
+
+- **Hero exception:** the hero remains the single static, artwork-led composition defined above. Do not convert it into a rotating carousel.
+- **Selected Works:** the earlier grid/staggered layout is superseded as the default presentation. Use the shared responsive shadcn Artwork Carousel when at least two eligible canonical artworks exist. Display multiple substantial items according to actual content width, preserve each image's natural ratio, and retain the existing shared Artwork Viewer interaction.
+- Use approved artwork IDs and explicit editorial order from the content inventory. Do not repeat the hero immediately without an explicit editorial reason. If there are too few eligible items, use a deliberate static composition rather than disabled carousel controls or placeholders.
+- **Featured galleries:** retain their distinct collection-preview role. Use a responsive collection rail only when the published collection count and available width justify it; a single featured collection should use an editorial feature, not empty carousel chrome.
+- The homepage Journal section follows the unified Journal contract and shows at most the two newest eligible published entries across articles and events. Keep the existing post-style presentation and a single Explore Journal link.
+- Do not use stock, generic, generated, or unapproved sample images. The canonical approved artwork inventory remains authoritative.
+
+See the new contract for responsive item targets, RTL, accessibility, complete collection access, wireframes, and acceptance tests.
