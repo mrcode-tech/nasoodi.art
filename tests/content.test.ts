@@ -280,8 +280,8 @@ test("CV PDF publication requires an approved published same-origin PDF and safe
 test("long About preview fixtures are bilingual, clearly sample-only, and include CV layout rows",()=>{
  assert.ok(aboutPreviewFixture.biography.en.length>700);
  assert.ok(aboutPreviewFixture.biography.fa.length>500);
- assert.equal(aboutPreviewFixture.cv.length,5);
+ assert.equal(aboutPreviewFixture.cv.length,15);
  assert.notEqual(aboutPreviewFixture.statement.en,aboutPreviewFixture.biography.en);
  assert.ok(aboutPreviewFixture.statement.en.includes("invented editorial sample"));
- assert.ok(aboutPreviewFixture.cv.every(entry=>entry.organization.en.includes("fictional")||entry.organization.fa.includes("ساختگی")));
+ assert.deepEqual(new Set(aboutPreviewFixture.cv.map(entry=>entry.category)),new Set(["education","exhibition","publication","award","practice"]));
 });
