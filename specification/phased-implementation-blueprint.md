@@ -685,3 +685,21 @@ Commits:
 - `f1f2b6bf3c39f9a3240405454f6a459cfe0d1217` — fail on invalid/unsupported images as well as missing files.
 
 All inventory entries are marked approval-required and non-publishable. The script intentionally does not make rights, identity, color-fidelity, or artist-approval claims and does not create public derivatives. CI verification for the new audit is pending a successful run on the final implementation commit.
+
+
+## Incremental specification update — 2026-10-31 (Selected Works three-level experience)
+
+**Status:** Design/specification added; implementation is not claimed complete by this update.
+
+The detailed contract is now maintained in [selected-works-three-level-experience.md](./selected-works-three-level-experience.md), with responsive wireframes and repository sample-image references in [wireframes.md](./wireframes.md), Section 15. The homepage and gallery specifications link back to this shared contract.
+
+Apply the following requirements within the existing phase sequence; do not create a parallel roadmap:
+
+- **Phase 4 — Artwork-led homepage:** Selected Works is a curated set of individual artworks. Artwork selection opens the shared Artwork Viewer with visible title and approved description. The Explore Works/Collections action navigates to the collection index. Viewer close restores homepage scroll and focus.
+- **Phase 5 — Works catalogue and artwork detail:** preserve the canonical artwork detail route as a real, directly addressable fallback. Implement the shared Artwork Viewer, route/history behavior, metadata/description presentation, keyboard/touch navigation, focus restoration, loading/error states, and viewer accessibility.
+- **Phase 6 — Multiple curated galleries:** the collection index is the discovery page; each collection has a dedicated detail page with its complete approved artwork set in curated order. The shared viewer's Previous/Next sequence is scoped to the originating collection. Collection cards, cover membership, localized copy, rights, and publication validation remain mandatory.
+- **Cross-phase design QA:** inspect the actual candidate images in specification/assets/gallery/1.jpg through 5.jpg before mapping them to a card, cover, or collection. They may be used in specification wireframes as visual samples, but are not approved public content. Complete the asset review register and obtain artist/site-owner approval before publication.
+- **Route compatibility:** the currently documented canonical routes are localized /[locale]/galleries and /[locale]/galleries/[gallerySlug] for collection discovery/detail, and /[locale]/works/[artworkSlug] for artwork detail. Do not repurpose the artwork route for collection detail. Any route migration requires an explicit mapping, redirects, canonical/sitemap updates, and regression tests.
+- **Exit evidence:** unit/component tests for collection ordering and viewer context; browser tests for homepage → viewer, homepage → collection index → collection detail → viewer; Back/Forward and direct route tests; Persian RTL/English LTR; desktop/tablet/mobile/short-height screenshots that are actually inspected; accessibility and reduced-motion checks; image-fidelity review; full CI evidence; and recorded artist/site-owner approval before publication.
+
+This update changes the implementation requirements for Phases 4–6 but does not mark any phase complete or alter the existing publication, deployment, or release authorization gates.
