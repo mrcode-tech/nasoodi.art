@@ -17,6 +17,7 @@ Before planning, designing, implementing, or refactoring any user-facing page, c
 3. Read `specification/proposal.md`, `specification/visual-identity-and-photo-direction.md`, and `specification/site-wide-design-system-and-section-specification.md` when work affects the overall visual language, shared shell, or multiple pages.
 4. Read every relevant specialized specification before changing its surface or behavior. This includes, as applicable:
    - `specification/homepage-artwork-hero-and-featured-works.md`
+   - `specification/selected-works-three-level-experience.md`
    - `specification/gallery-collections-and-artwork-detail.md`
    - `specification/journal-and-events.md`
    - `specification/navigation-and-mobile-sidebar.md`
