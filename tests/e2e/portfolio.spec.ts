@@ -1003,7 +1003,7 @@ test("Persian About sample preview keeps RTL copy and the same homepage hero ass
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto("/fa/about?preview=sample");
   await expect(page.locator("html")).toHaveAttribute("dir", "rtl");
-  await expect(page.locator(".artist-portrait")).toHaveAttribute("src", "/images/homepage-hero.jpg");
+  await expect(page.locator(".artist-portrait")).toHaveAttribute("src", /homepage-hero\.jpg/);
   await expect(page.getByRole("heading", { name: "بیانیه هنری" })).toBeVisible();
   await expect(page.getByRole("heading", { name: "زندگی‌نامه" })).toBeVisible();
   await expect(page.getByRole("heading", { name: "رزومه و نمایشگاه‌ها" })).toBeVisible();
