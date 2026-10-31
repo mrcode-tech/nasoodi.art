@@ -884,6 +884,7 @@ test("homepage biography preview expands and collapses in place in both locales"
     expect(await page.evaluate(() => window.scrollY)).toBe(initialScroll);
     const showLess = biography.getByRole("button", { name: locale === "fa" ? "نمایش کمتر" : "Show less" });
     await expect(showLess).toHaveAttribute("aria-expanded", "true");
+    await expect(showLess).toBeFocused();
     await expect(copy).toHaveClass(/is-expanded/);
     await page.screenshot({ path: test.info().outputPath(`${locale}-home-biography-expanded.png`), fullPage: true });
     const actionOrder = await biography.evaluate((element) => {
@@ -937,6 +938,7 @@ test("mobile hero uses image then artist text then biography and both actions", 
     const initialScroll = await page.evaluate(() => window.scrollY);
     await readMore.click();
     expect(await page.evaluate(() => window.scrollY)).toBe(initialScroll);
+    await expect(copy.locator(".biography-toggle")).toBeFocused();
     const actions = copy.locator(".hero-actions a");
     await expect(actions).toHaveCount(2);
     await expect(actions.nth(0)).toHaveAttribute("href", `/${locale}/galleries`);
