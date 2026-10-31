@@ -280,8 +280,8 @@ export function getPublicCvEntries(items: CvEntry[], locale: Locale) {
 }
 export function getPublicCvDocument(document: CvDocument | undefined) {
   if (!document || document.status !== "published" || !document.artistApproved ||
-      !isSafeLocalImagePath(document.src) || !/\\.pdf$/i.test(document.src) ||
-      !/^[A-Za-z0-9][A-Za-z0-9._-]*\\.pdf$/i.test(document.fileName)) return undefined;
+      !isSafeLocalImagePath(document.src) || !/\.pdf$/i.test(document.src) ||
+      !/^[A-Za-z0-9][A-Za-z0-9._-]*\.pdf$/i.test(document.fileName)) return undefined;
   return document;
 }
 export function getPublicArtistProfile(profile: ArtistProfile | undefined, locale: Locale) {
