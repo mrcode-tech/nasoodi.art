@@ -888,6 +888,12 @@ test("homepage hero layout is responsive and renders the bilingual biography", a
       await expect(copy.locator(".artist-discipline")).toHaveCount(0);
       await expect(copy.locator(".home-biography h2")).toHaveCount(0);
       await expect(copy.locator(".sample-content-notice")).toHaveCount(0);
+      const biography = copy.locator(".biography-disclosure");
+      const readMore = biography.getByRole("button", { name: locale === "fa" ? "ادامه مطلب" : "Read more" });
+      await expect(readMore).toBeVisible();
+      await readMore.click();
+      await expect(biography.locator(".biography-copy")).toHaveClass(/is-expanded/);
+      await expect(biography.getByRole("button", { name: locale === "fa" ? "نمایش کمتر" : "Show less" })).toBeVisible();
       const imageBeforeCopy = await image.evaluate((element) => {
         const text = element.parentElement?.querySelector(".home-intro-copy");
         return Boolean(text && (element.compareDocumentPosition(text) & Node.DOCUMENT_POSITION_FOLLOWING));
