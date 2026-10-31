@@ -641,6 +641,12 @@ for (const locale of ["en", "fa"] as const) {
     await page.goto(`/${locale}`);
     const cards = page.locator(".artwork-experience-grid .artwork-item");
     await expect(cards).toHaveCount(5);
+    for (let index = 0; index < 5; index++) {
+      const image = cards.nth(index).locator("img");
+      await expect(image).toBeVisible();
+      await expect.poll(() => image.evaluate((element: HTMLImageElement) => element.naturalWidth)).toBeGreaterThan(0);
+      await expect(image).toHaveAttribute("alt", /.+/);
+    }
     await cards.first().click();
     const viewer = page.getByRole("dialog");
     await expect(viewer).toBeVisible();
