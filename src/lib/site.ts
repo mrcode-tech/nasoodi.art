@@ -1,4 +1,4 @@
-import { approvedArtworkImageDimensions } from "@/lib/approved-artwork-image-dimensions";
+import { approvedArtworkImageDimensions } from "./approved-artwork-image-dimensions";
 export const locales = ["fa", "en"] as const;
 export type Locale = (typeof locales)[number];
 export const isLocale = (v: string): v is Locale => locales.includes(v as Locale);
