@@ -621,7 +621,7 @@ test("collection discovery displays the four published curated collections in bo
     await page.goto(`/${locale}/galleries`);
     await expect(page.getByRole("main")).toBeVisible();
     await expect(page.locator("main h1")).toHaveCount(1);
-    await expect(page.locator(".gallery-index-card")).toHaveCount(4);
+    await expect(page.locator(".gallery-index-card")).toHaveCount(5);
     await expect(page.locator(".collection-carousel")).toHaveCount(0);
     await expect(page.locator(".gallery-index-grid")).toBeVisible();
     await expect(page.locator(".empty-note")).toHaveCount(0);
@@ -897,7 +897,7 @@ test("homepage biography preview expands and collapses in place in both locales"
   }
 });
 
-test("About sample preview shows long biography and sample CV without inventing a PDF", async ({ page }) => {
+test("About sample preview shows the fictional biography, CV, and preview-only PDF", async ({ page }) => {
   for (const locale of ["en", "fa"] as const) {
     await page.setViewportSize({ width: 1440, height: 960 });
     await page.goto(`/${locale}/about?preview=sample`);
@@ -905,7 +905,7 @@ test("About sample preview shows long biography and sample CV without inventing 
     await expect(page.locator(".about-biography-copy")).toBeVisible();
     await expect(page.locator(".about-cv-section")).toBeVisible();
     await expect(page.locator(".about-cv-section .cv-list li")).toHaveCount(4);
-    await expect(page.getByRole("link", { name: /Download CV|دریافت رزومه/ })).toHaveCount(0);
+    await expect(page.getByRole("link", { name: /Download CV|دریافت رزومه/ })).toHaveAttribute("href", "/api/sample-cv?preview=sample");
     await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", /noindex/);
     await page.screenshot({ path: test.info().outputPath(`${locale}-about-sample-desktop.png`), fullPage: true });
 
@@ -985,7 +985,7 @@ test("About sample preview uses the homepage hero image and serves a fictional n
   await expect(page.getByRole("heading", { name: "Ghazaleh Abdolahzade Nasoodi" })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Artist statement" })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Biography" })).toBeVisible();
-  await expect(page.locator(".artist-portrait")).toHaveAttribute("src", /homepage-hero\\.jpg/);
+  await expect(page.locator(".artist-portrait")).toHaveAttribute("src", /homepage-hero\.jpg/);
   await expect(page.getByRole("heading", { name: "CV / Exhibitions" })).toBeVisible();
   await expect(page.getByText(/fictional PDF is available for preview testing only/i)).toBeVisible();
   const pdfLink = page.getByRole("link", { name: "Download CV (PDF)" });
