@@ -398,3 +398,380 @@ For each wireframe:
 - Specify desktop, tablet, mobile, and short-height behavior, not only a desktop sketch.
 - Include Persian RTL and English LTR, long titles, sparse content, and reduced-motion states.
 - Use motion only when it communicates a state or spatial relationship; wireframes must remain understandable as static layouts.
+
+---
+
+# 15. Selected Works — three-level experience wireframes
+
+The authoritative interaction and implementation contract is [Selected Works: Three-Level Experience](./selected-works-three-level-experience.md). These wireframes make the requested homepage → collection index → collection detail journey concrete. They are structural design references, not permission to publish candidate artwork or invent collection content.
+
+**Image-reference rule:** the five images below are existing candidate samples from specification/assets/gallery/. They are embedded to help evaluate image scale, ratio, and editorial composition. Their identity, rights, title, collection membership, metadata, and artist approval remain unverified. Do not use them as public artwork records until the asset review and artist approval gates are complete.
+
+## 15.1 Repository artwork samples for layout evaluation
+
+The candidate images are intentionally shown at their natural proportions. The wireframe must not crop, recolor, mirror, filter, or otherwise alter them.
+
+| Candidate sample | Repository asset | Wireframe use |
+|---|---|---|
+| ![Candidate artwork sample 1](./assets/gallery/1.jpg) | assets/gallery/1.jpg | Homepage card / viewer scale check |
+| ![Candidate artwork sample 2](./assets/gallery/2.jpg) | assets/gallery/2.jpg | Portrait/landscape ratio check |
+| ![Candidate artwork sample 3](./assets/gallery/3.jpg) | assets/gallery/3.jpg | Collection cover preview |
+| ![Candidate artwork sample 4](./assets/gallery/4.jpg) | assets/gallery/4.jpg | Collection gallery rhythm |
+| ![Candidate artwork sample 5](./assets/gallery/5.jpg) | assets/gallery/5.jpg | Mixed-image sequence and viewer navigation |
+
+The sample table is a visual reference only. Do not infer that these five files form one collection or assign them titles based on appearance.
+
+## 15.2 Level 1 — Homepage Selected Works (desktop)
+
+~~~text
+┌──────────────────────────────────────────────────────────────────────────────┐
+│ GLOBAL SHELL / ARTIST WORDMARK / WORKS / JOURNAL / ABOUT / LOCALE            │
+├──────────────────────────────────────────────────────────────────────────────┤
+│ SELECTED WORKS                                      Explore all works  →     │
+│ [Optional approved introductory sentence]                                   │
+│                                                                              │
+│ ┌──────────────────────────────────────────┐  ┌──────────────────────────┐  │
+│ │                                          │  │                          │  │
+│ │          ARTWORK 1                       │  │    ARTWORK 2             │  │
+│ │          native aspect ratio             │  │    native aspect ratio   │  │
+│ │                                          │  │                          │  │
+│ └──────────────────────────────────────────┘  └──────────────────────────┘  │
+│ Approved artwork title · optional year          Approved artwork title      │
+│                                                                              │
+│ ┌──────────────────────────┐  ┌──────────────────────────────────────────┐  │
+│ │                          │  │                                          │  │
+│ │    ARTWORK 3             │  │          ARTWORK 4                       │  │
+│ │                          │  │          native aspect ratio             │  │
+│ └──────────────────────────┘  └──────────────────────────────────────────┘  │
+│ Approved title                Approved title · optional verified metadata   │
+└──────────────────────────────────────────────────────────────────────────────┘
+~~~
+
+- The example uses varied spans to show editorial rhythm, not fixed required positions.
+- Actual grid spans respond to real source image ratios and curated order.
+- Each card has a visible title/caption and a single accessible activation target.
+- Explore all works is a normal route link to the collection index, not a modal.
+- Do not display sample file names, sample numbers, or invented titles to visitors.
+
+## 15.3 Level 1 — Homepage Selected Works (tablet)
+
+~~~text
+┌──────────────────────────────────────────────────────────────┐
+│ GLOBAL TABLET SHELL                                          │
+├──────────────────────────────────────────────────────────────┤
+│ SELECTED WORKS                    Explore all works  →       │
+│ [Approved introduction]                                      │
+│                                                              │
+│ ┌─────────────────────────────┐ ┌──────────────────────────┐ │
+│ │       ARTWORK 1             │ │       ARTWORK 2           │ │
+│ └─────────────────────────────┘ └──────────────────────────┘ │
+│ Title / known metadata          Title / known metadata       │
+│                                                              │
+│ ┌──────────────────────────────────────────────────────────┐ │
+│ │                    ARTWORK 3                              │ │
+│ └──────────────────────────────────────────────────────────┘ │
+│ Title / known metadata                                       │
+└──────────────────────────────────────────────────────────────┘
+~~~
+
+Use two columns only while images and captions remain comfortable. A feature image may span the content width. Do not reduce captions to tiny overlays to preserve a two-column layout.
+
+## 15.4 Level 1 — Homepage Selected Works (mobile)
+
+~~~text
+┌────────────────────────────────┐
+│ MOBILE GLOBAL HEADER / MENU    │
+├────────────────────────────────┤
+│ SELECTED WORKS                 │
+│ Approved short introduction    │
+│                                │
+│ ┌────────────────────────────┐ │
+│ │       ARTWORK 1            │ │
+│ │       full composition     │ │
+│ └────────────────────────────┘ │
+│ Approved title · optional year │
+│                                │
+│ ┌────────────────────────────┐ │
+│ │       ARTWORK 2            │ │
+│ │       full composition     │ │
+│ └────────────────────────────┘ │
+│ Approved title                 │
+│                                │
+│ Explore all works  →           │
+└────────────────────────────────┘
+~~~
+
+One column is the default. Use native image ratios; titles are visible without hover. Keep Explore all works clearly available.
+
+## 15.5 Level 1 — Artwork Viewer (desktop)
+
+~~~text
+┌──────────────────────────────────────────────────────────────────────────────┐
+│ SELECTED WORKS                                      03 / 06           [ X ]  │
+├──────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│  [ PREVIOUS ]     ┌────────────────────────────────┐     [ NEXT ]            │
+│                   │                                │                         │
+│                   │        FULL ARTWORK IMAGE      │                         │
+│                   │        object-fit: contain     │                         │
+│                   │                                │                         │
+│                   └────────────────────────────────┘                         │
+│                                       ┌────────────────────────────────────┐ │
+│                                       │ APPROVED ARTWORK TITLE             │ │
+│                                       │ Year · Medium · Dimensions         │ │
+│                                       │                                    │ │
+│                                       │ Artist-approved description       │ │
+│                                       │                                    │ │
+│                                       │ Collection: optional approved link│ │
+│                                       └────────────────────────────────────┘ │
+└──────────────────────────────────────────────────────────────────────────────┘
+~~~
+
+The image and information form one Dialog composition. Title and description are visible beside the image at desktop widths. Unknown metadata is omitted. A long description may scroll independently without shrinking the painting excessively.
+
+## 15.6 Level 1 — Artwork Viewer (tablet)
+
+~~~text
+┌────────────────────────────────────────────────────────────┐
+│ SELECTED WORKS                                  03 / 06 [X] │
+├────────────────────────────────────────────────────────────┤
+│                                                            │
+│ [PREV]        ┌──────────────────────────┐        [NEXT]   │
+│               │                          │                 │
+│               │      FULL ARTWORK        │                 │
+│               │      CONTAIN             │                 │
+│               │                          │                 │
+│               └──────────────────────────┘                 │
+│                                                            │
+│ APPROVED ARTWORK TITLE                                     │
+│ Verified metadata                                          │
+│ Artist-approved description                                │
+└────────────────────────────────────────────────────────────┘
+~~~
+
+Prefer a vertically stacked image and information layout once a side column would make the image too small. Keep navigation and Close visible and reachable.
+
+## 15.7 Level 1 — Artwork Viewer (mobile)
+
+~~~text
+┌────────────────────────────────┐
+│ SELECTED WORKS       03 / 06 [X]│
+├────────────────────────────────┤
+│ ┌────────────────────────────┐ │
+│ │       FULL ARTWORK         │ │
+│ │       CONTAIN              │ │
+│ └────────────────────────────┘ │
+│                                │
+│ [ ← Previous ] [ Next → ]      │
+│                                │
+│ APPROVED ARTWORK TITLE         │
+│ Verified year / medium / size │
+│                                │
+│ Artist-approved description   │
+│ may continue below the fold   │
+└────────────────────────────────┘
+~~~
+
+Use a near/full-screen Dialog with safe-area padding. The title is immediately below the image; it must not be hidden in a separate drawer. Content scrolls naturally for long descriptions. Swipe may supplement, never replace, visible navigation buttons. On short-height mobile landscape, allow vertical scrolling and keep Close reachable.
+
+## 15.8 Level 2 — Works / collection index (desktop)
+
+~~~text
+┌──────────────────────────────────────────────────────────────────────────────┐
+│ GLOBAL SHELL / LEFT SIDEBAR                                                  │
+├──────────────────────────────────────────────────────────────────────────────┤
+│ WORKS / COLLECTIONS                                                          │
+│ Approved introductory sentence                                               │
+│                                                                              │
+│ ┌────────────────────────────────────────┐  ┌─────────────────────────────┐ │
+│ │                                        │  │                             │ │
+│ │         COLLECTION COVER A             │  │      COLLECTION COVER B     │ │
+│ │         full artwork / approved crop   │  │      full artwork           │ │
+│ └────────────────────────────────────────┘  └─────────────────────────────┘ │
+│ COLLECTION TITLE A                         COLLECTION TITLE B                │
+│ Approved short description                 Approved short description        │
+│ Optional valid count                       Explore collection →              │
+│ Explore collection →                                                         │
+│                                                                              │
+│ ┌────────────────────────────────────────────────────────────────────────┐  │
+│ │                         COLLECTION COVER C                             │  │
+│ └────────────────────────────────────────────────────────────────────────┘  │
+│ COLLECTION TITLE C · approved description · Explore collection →            │
+└──────────────────────────────────────────────────────────────────────────────┘
+~~~
+
+Each collection is a destination, not a modal. Use one coherent link per card; do not nest separate links. The cover must belong to the collection. Counts derive from published membership only. A featured wide collection is optional, not mandatory.
+
+## 15.9 Level 2 — Works / collection index (tablet)
+
+~~~text
+┌──────────────────────────────────────────────────────────────┐
+│ GLOBAL TABLET SHELL                                          │
+├──────────────────────────────────────────────────────────────┤
+│ WORKS / COLLECTIONS                                          │
+│ Approved introduction                                        │
+│                                                              │
+│ ┌─────────────────────────────┐ ┌──────────────────────────┐ │
+│ │ COLLECTION COVER A          │ │ COLLECTION COVER B       │ │
+│ └─────────────────────────────┘ └──────────────────────────┘ │
+│ Title + description             Title + description         │
+│ Explore collection →            Explore collection →        │
+│                                                              │
+│ ┌──────────────────────────────────────────────────────────┐ │
+│ │ COLLECTION COVER C                                        │ │
+│ └──────────────────────────────────────────────────────────┘ │
+│ Title + description · Explore collection →                  │
+└──────────────────────────────────────────────────────────────┘
+~~~
+
+## 15.10 Level 2 — Works / collection index (mobile)
+
+~~~text
+┌────────────────────────────────┐
+│ MOBILE GLOBAL HEADER           │
+├────────────────────────────────┤
+│ WORKS / COLLECTIONS            │
+│ Approved introduction          │
+│                                │
+│ ┌────────────────────────────┐ │
+│ │ COLLECTION COVER A         │ │
+│ │ full image                 │ │
+│ └────────────────────────────┘ │
+│ COLLECTION TITLE A             │
+│ Approved short description     │
+│ Optional valid artwork count   │
+│ Explore collection →           │
+│                                │
+│ ┌────────────────────────────┐ │
+│ │ COLLECTION COVER B         │ │
+│ └────────────────────────────┘ │
+│ COLLECTION TITLE B             │
+│ Approved short description     │
+│ Explore collection →           │
+└────────────────────────────────┘
+~~~
+
+One collection per row is the default. Do not put long descriptions in image overlays. Keep title and Explore action visible without hover.
+
+## 15.11 Level 3 — Collection detail (desktop)
+
+~~~text
+┌──────────────────────────────────────────────────────────────────────────────┐
+│ GLOBAL SHELL                                                                  │
+├──────────────────────────────────────────────────────────────────────────────┤
+│ ← ALL WORKS / COLLECTIONS                                                     │
+│                                                                              │
+│ COLLECTION TITLE                                                             │
+│ Artist-approved collection description                                      │
+│ Optional verified year range · valid artwork count                          │
+│                                                                              │
+│ ┌────────────────────────────────────────────────────────────────────────┐  │
+│ │ OPTIONAL FEATURED COLLECTION ARTWORK (only if it adds value)            │  │
+│ └────────────────────────────────────────────────────────────────────────┘  │
+│                                                                              │
+│ THE COLLECTION                                                               │
+│ ┌──────────────────────────────┐   ┌─────────────────────────────────────┐ │
+│ │ ARTWORK A                    │   │ ARTWORK B                           │ │
+│ └──────────────────────────────┘   └─────────────────────────────────────┘ │
+│ Approved title                       Approved title                         │
+│ ┌─────────────────────────────────────┐  ┌───────────────────────────────┐  │
+│ │ ARTWORK C                           │  │ ARTWORK D                     │  │
+│ └─────────────────────────────────────┘  └───────────────────────────────┘  │
+│ Approved title                          Approved title                      │
+│                                                                              │
+│ ← PREVIOUS COLLECTION       ALL COLLECTIONS       NEXT COLLECTION →         │
+└──────────────────────────────────────────────────────────────────────────────┘
+~~~
+
+Show every published artwork in the configured order. Do not repeat the optional featured image as the first grid item unless the editorial composition explicitly calls for it. Viewer navigation follows the collection list.
+
+## 15.12 Level 3 — Collection detail (tablet)
+
+~~~text
+┌──────────────────────────────────────────────────────────────┐
+│ GLOBAL TABLET SHELL                                          │
+├──────────────────────────────────────────────────────────────┤
+│ ← ALL COLLECTIONS                                             │
+│ COLLECTION TITLE                                              │
+│ Approved description · optional verified metadata            │
+│                                                              │
+│ [OPTIONAL FEATURED ARTWORK]                                   │
+│                                                              │
+│ ┌─────────────────────────────┐ ┌──────────────────────────┐ │
+│ │ ARTWORK A                   │ │ ARTWORK B                │ │
+│ └─────────────────────────────┘ └──────────────────────────┘ │
+│ Title                          Title                         │
+│ ┌─────────────────────────────┐ ┌──────────────────────────┐ │
+│ │ ARTWORK C                   │ │ ARTWORK D                │ │
+│ └─────────────────────────────┘ └──────────────────────────┘ │
+│ Title                          Title                         │
+│ ← Previous collection     All collections    Next collection →│
+└──────────────────────────────────────────────────────────────┘
+~~~
+
+## 15.13 Level 3 — Collection detail (mobile)
+
+~~~text
+┌────────────────────────────────┐
+│ MOBILE GLOBAL HEADER           │
+├────────────────────────────────┤
+│ ← ALL COLLECTIONS              │
+│ COLLECTION TITLE               │
+│ Approved description           │
+│ Optional verified year/count   │
+│                                │
+│ ┌────────────────────────────┐ │
+│ │ OPTIONAL FEATURED IMAGE    │ │
+│ └────────────────────────────┘ │
+│                                │
+│ ┌────────────────────────────┐ │
+│ │ ARTWORK A                  │ │
+│ └────────────────────────────┘ │
+│ Approved title                 │
+│                                │
+│ ┌────────────────────────────┐ │
+│ │ ARTWORK B                  │ │
+│ └────────────────────────────┘ │
+│ Approved title                 │
+│                                │
+│ [Further works in curated order]│
+│ Previous / All / Next          │
+└────────────────────────────────┘
+~~~
+
+One-column gallery is the default. Keep the collection intro concise and near the top. Avoid a very tall hero. Preserve image ratios and readable captions.
+
+## 15.14 Short-height and landscape behavior
+
+For short-height desktop and mobile landscape:
+- The viewer must not use a fixed height that clips its close button, artwork title, or description.
+- Constrain the image to available viewport height using contain; allow the viewer content region to scroll.
+- Keep Close visible and reachable.
+- On desktop, the information column may scroll independently if needed.
+- On mobile, prefer one natural vertical scroll container.
+- Do not hide description/title merely to force the image to fit.
+- Verify at 320×568, 390×667, 667×375, 1024×600, and 1280×720 in addition to standard viewports.
+
+## 15.15 State and transition map
+
+~~~text
+HOME
+ ├─ Select artwork ───────────────> HOME ARTWORK VIEWER
+ │                                  ├─ Previous / Next: homepage selection only
+ │                                  ├─ Close / Escape / Back: HOME, same scroll
+ │                                  └─ Share/direct route: canonical artwork page
+ │
+ └─ Explore Works ────────────────> COLLECTION INDEX
+                                    ├─ Select collection ─> COLLECTION DETAIL
+                                    │                        ├─ Select artwork
+                                    │                        │   └─ COLLECTION ARTWORK VIEWER
+                                    │                        │       ├─ Previous / Next:
+                                    │                        │       │  current collection only
+                                    │                        │       └─ Close / Back:
+                                    │                        │          same card and scroll
+                                    │                        ├─ Previous / Next collection
+                                    │                        └─ All collections
+                                    └─ Browser Back ────────> HOME
+~~~
+
+All wireframes must be reviewed in Persian RTL and English LTR. Preserve the same semantic order, artwork fidelity, and responsive behavior in both locales.
