@@ -47,18 +47,18 @@ function createSamplePdf() {
     "<< /Type /Pages /Kids [3 0 R] /Count 1 >>",
     "<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 4 0 R >> >> /Contents 5 0 R >>",
     "<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>",
-    `<< /Length ${Buffer.byteLength(stream, "ascii")} >>\\nstream\\n${stream}\\nendstream`,
+    `<< /Length ${Buffer.byteLength(stream, "ascii")} >>\nstream\n${stream}\nendstream`,
   ];
-  let output = "%PDF-1.4\\n";
+  let output = "%PDF-1.4\n";
   const offsets = [0];
   for (let index = 0; index < objects.length; index++) {
     offsets.push(Buffer.byteLength(output, "ascii"));
-    output += `${index + 1} 0 obj\\n${objects[index]}\\nendobj\\n`;
+    output += `${index + 1} 0 obj\n${objects[index]}\nendobj\n`;
   }
   const xrefOffset = Buffer.byteLength(output, "ascii");
-  output += `xref\\n0 ${objects.length + 1}\\n0000000000 65535 f \\n`;
-  for (const offset of offsets.slice(1)) output += `${String(offset).padStart(10, "0")} 00000 n \\n`;
-  output += `trailer\\n<< /Size ${objects.length + 1} /Root 1 0 R /Info << /Title (Fictional Sample CV - Design Review Only) /Author (Nasoodi.art sample content) >> >>\\nstartxref\\n${xrefOffset}\\n%%EOF\\n`;
+  output += `xref\n0 ${objects.length + 1}\n0000000000 65535 f \n`;
+  for (const offset of offsets.slice(1)) output += `${String(offset).padStart(10, "0")} 00000 n \n`;
+  output += `trailer\n<< /Size ${objects.length + 1} /Root 1 0 R /Info << /Title (Fictional Sample CV - Design Review Only) /Author (Nasoodi.art sample content) >> >>\nstartxref\n${xrefOffset}\n%%EOF\n`;
   return Buffer.from(output, "ascii");
 }
 
