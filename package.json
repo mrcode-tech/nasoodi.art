@@ -3,18 +3,30 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "predev": "node scripts/copy-approved-gallery-assets.mjs",
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "test": "tsc --module commonjs --target es2022 --moduleResolution node --strict --esModuleInterop --skipLibCheck --outDir .test-build tests/content.test.ts src/lib/site.ts && node --test .test-build/tests/content.test.js && node scripts/verify-vercel-deployment-policy.mjs",
+    "test:e2e": "playwright test",
+    "audit:assets": "node scripts/audit-portfolio-assets.mjs",
+    "prebuild": "node scripts/copy-approved-gallery-assets.mjs"
   },
   "dependencies": {
+    "@radix-ui/react-dialog": "^1.1.15",
+    "@radix-ui/react-dropdown-menu": "^2.1.16",
+    "@radix-ui/react-slot": "^1.2.3",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
     "next": "16.4.3",
     "react": "^19.2.4",
-    "react-dom": "^19.2.4"
+    "react-dom": "^19.2.4",
+    "tailwind-merge": "^3.3.1"
   },
   "devDependencies": {
+    "@playwright/test": "^1.55.0",
     "@tailwindcss/postcss": "^4.1.18",
     "@types/node": "^22.19.1",
     "@types/react": "^19.2.7",
@@ -23,5 +35,8 @@
     "eslint-config-next": "16.4.3",
     "tailwindcss": "^4.1.18",
     "typescript": "^5.9.3"
+  },
+  "overrides": {
+    "tslib": "2.8.1"
   }
 }

@@ -1,34 +1,8 @@
-# dependencies
-/node_modules
-/.pnp
-.pnp.*
-
-# tests
-/coverage
-
-# Next.js
-/.next/
-/out/
-
-# production
-/build
-
-# misc
-.DS_Store
-*.pem
-
-# debug
-npm-debug.log*
-yarn-debug.log*
-pnpm-debug.log*
-
-# local env files
+.next/
+out/
+node_modules/
 .env*
 !.env.example
-
-# deployment
-.vercel
-
-# TypeScript
+.vercel/
 *.tsbuildinfo
-next-env.d.ts
+.test-build/

@@ -1,56 +1,61 @@
 name: Nasoodi.art CI
-
+# Run once for every pushed commit on feature, stage, and main. Push-triggered
+# checks are attached to the commit and remain visible from any pull request
+# that contains it. Browser coverage includes responsive navigation and its
+# portaled language menu. Avoid duplicate pull_request runs for the same commit.
 on:
   push:
-    branches:
-      - feature
-      - stage
-      - main
-  pull_request:
-    branches:
-      - feature
-      - stage
-      - main
+    branches: [feature, stage, main]
   workflow_dispatch:
-
 permissions:
   contents: read
-
-# Keep runs independent per branch/PR while cancelling obsolete runs for the same ref.
+# Keep release-branch runs serialized. Key feature runs by commit so a
+# cancelled stale run cannot block verification of a newer feature commit.
 concurrency:
-  group: ci-${{ github.workflow }}-${{ github.ref }}
+  group: ci-${{ github.workflow }}-${{ github.repository }}-${{ github.ref_name }}-${{ github.ref_name == 'feature' && github.sha || 'branch' }}
   cancel-in-progress: true
-
 jobs:
   validate:
-    name: Install, lint, typecheck, build, and smoke test
+    name: Install, lint, typecheck, unit test, build, browser test, and smoke test
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 35
     env:
       NEXT_TELEMETRY_DISABLED: 1
     steps:
       - name: Check out source
         uses: actions/checkout@v4
-
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 22
-
-      # The starter currently has no committed package-lock.json.
-      # npm install is used until a lockfile is added to the repository.
       - name: Install dependencies
         run: npm install --no-audit --no-fund
-
       - name: Run ESLint
         run: npm run lint
-
       - name: Check TypeScript
         run: npm run typecheck
-
+      - name: Run content publication tests
+        run: npm test
       - name: Build production application
         run: npm run build
-
+      - name: Inventory candidate portfolio assets
+        run: |
+          mkdir -p asset-audit
+          npm run audit:assets -- --output=asset-audit/manifest.json
+      - name: Install Playwright Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Run browser and responsive tests
+        run: npm run test:e2e
+      - name: Upload browser screenshots and diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nasoodi-visual-qa-${{ github.sha }}
+          path: |
+            test-results/
+            asset-audit/manifest.json
+          if-no-files-found: ignore
+          retention-days: 14
       - name: Smoke test production server
         shell: bash
         run: |
@@ -58,26 +63,16 @@ jobs:
           npm run start -- --hostname 127.0.0.1 > /tmp/nasoodi-next.log 2>&1 &
           server_pid=$!
           trap 'kill "$server_pid" 2>/dev/null || true' EXIT
-
           ready=false
           for attempt in {1..30}; do
-            if curl --fail --silent --show-error http://127.0.0.1:3000/ --output /tmp/nasoodi-homepage.html 2>/dev/null; then
+            if curl --location --fail --silent --show-error http://127.0.0.1:3000/ --output /tmp/nasoodi-homepage.html 2>/dev/null; then
               ready=true
               break
             fi
             sleep 2
           done
-
-          if [ "$ready" != true ]; then
-            cat /tmp/nasoodi-next.log
-            echo "Production server did not become ready within 60 seconds." >&2
-            exit 1
-          fi
-
-          if ! grep -qi '<html' /tmp/nasoodi-homepage.html; then
-            cat /tmp/nasoodi-next.log
-            echo "Homepage response did not contain an HTML document." >&2
-            exit 1
-          fi
-
-          echo "Production homepage returned HTTP 200 and an HTML document."
+          if [ "$ready" != true ]; then cat /tmp/nasoodi-next.log; echo "Server did not become ready." >&2; exit 1; fi
+          for locale in fa en; do
+            if ! curl --fail --silent --show-error "http://127.0.0.1:3000/$locale" | grep -qi '<html'; then echo "Localized route failed: $locale" >&2; exit 1; fi
+          done
+          echo "Root redirect and both locale routes returned HTML."
