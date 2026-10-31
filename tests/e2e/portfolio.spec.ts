@@ -903,7 +903,7 @@ test("About page remains unpublished pending artist-approved content", async ({ 
     await page.setViewportSize({ width: 1280, height: 900 });
     await page.goto(`/${locale}/about`);
     await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", /noindex/);
-    await expect(page.locator(".about-pending-notice, .editorial-pending-notice, [data-testid='about-pending']")).toBeVisible();
+    await expect(page.locator(".empty-note")).toBeVisible();
     await expect(page.locator(".about-biography-copy")).toHaveCount(0);
     await expect(page.locator(".about-cv-section")).toHaveCount(0);
     await expect(page.getByRole("link", { name: /Download CV|دریافت رزومه/ })).toHaveCount(0);
