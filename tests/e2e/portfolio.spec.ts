@@ -24,7 +24,7 @@ test("Persian homepage renders the artist identity and right-anchored RTL shell"
   await page.screenshot({ path: test.info().outputPath("fa-home-desktop.png"), fullPage: true });
 });
 
-test("English homepage renders LTR and falls back to the translated home when Works is unpublished", async ({ page }) => {
+test("English Works index is populated and locale switching keeps the equivalent published route", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 960 });
   await page.goto("/en/works");
   await expect(page.locator("html")).toHaveAttribute("lang", "en");
@@ -68,7 +68,7 @@ test("mobile Persian shell keeps the navigation drawer on the physical right", a
   await page.screenshot({ path: test.info().outputPath("fa-home-mobile-menu.png"), fullPage: true });
 });
 
-test("empty editorial destinations are safe and unknown unpublished details return 404", async ({ page, request }) => {
+test("editorial destinations render safely and unknown unpublished details return 404", async ({ page, request }) => {
   for (const section of ["works", "galleries", "journal", "about", "contact"]) {
     const response = await request.get(`/fa/${section}`);
     expect(response.status(), section).toBe(200);
@@ -450,7 +450,7 @@ for (const locale of ["en", "fa"] as const) {
       const worksCta = page.getByRole("link", { name: locale === "fa" ? "گزیده آثار را ببینید" : "View selected works" });
       if (await page.locator(".gallery-cards .gallery-card").count() > 0) await expect(galleryCta).toHaveAttribute("href", `/${locale}/galleries`);
       else await expect(galleryCta).toHaveCount(0);
-      if (await page.locator(".artwork-grid .artwork-item").count() > 0) await expect(worksCta).toHaveAttribute("href", `/${locale}/works`);
+      if (await page.locator(".artwork-experience-grid .artwork-item").count() > 0) await expect(worksCta).toHaveAttribute("href", `/${locale}/works`);
       else await expect(worksCta).toHaveCount(0);
       const overflow = await page.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth);
       expect(overflow, `${locale} ${viewport.name} horizontal overflow`).toBe(false);
@@ -616,7 +616,7 @@ test("homepage Explore collections action opens the canonical collection discove
   await expect(page.getByRole("heading", { name: "Galleries" })).toBeVisible();
 });
 
-test("collection discovery keeps unpublished collections out of the public catalogue", async ({ page }) => {
+test("collection discovery displays the four published curated collections in both locales", async ({ page }) => {
   for (const locale of ["en", "fa"] as const) {
     await page.goto(`/${locale}/galleries`);
     await expect(page.getByRole("main")).toBeVisible();
@@ -633,4 +633,66 @@ test("unpublished artwork viewer query state cannot expose an unpublished artwor
   await expect(page.getByRole("heading", { name: "Ghazaleh Abdolahzade Nasoodi" })).toBeVisible();
   const response = await page.request.get("/en/works/not-published");
   expect(response.status()).toBe(404);
+});
+
+for (const locale of ["en", "fa"] as const) {
+  test(`populated artwork viewer and collection journeys work in ${locale}`, async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 800 });
+    await page.goto(`/${locale}`);
+    const cards = page.locator(".artwork-experience-grid .artwork-item");
+    await expect(cards).toHaveCount(5);
+    await cards.first().click();
+    const viewer = page.getByRole("dialog");
+    await expect(viewer).toBeVisible();
+    await expect(viewer.locator("img")).toBeVisible();
+    await expect(viewer.getByRole("heading", { level: 2 })).toBeVisible();
+    const firstTitle = await viewer.getByRole("heading", { level: 2 }).textContent();
+    await expect(viewer.locator(".artwork-viewer-description")).toBeVisible();
+    await viewer.getByRole("button", { name: locale === "fa" ? "اثر بعدی" : "Next artwork" }).click();
+    await expect(viewer.getByRole("heading", { level: 2 })).not.toHaveText(firstTitle ?? "");
+    await page.goBack();
+    await expect(page.getByRole("dialog")).toHaveCount(0);
+    await page.goForward();
+    await expect(page.getByRole("dialog")).toBeVisible();
+
+    await page.keyboard.press("Escape");
+    await expect(page.getByRole("dialog")).toHaveCount(0);
+    await page.getByRole("link", { name: locale === "fa" ? "گشت‌وگذار در مجموعه‌ها" : "Explore collections" }).first().click();
+    await expect(page).toHaveURL(new RegExp(`/${locale}/galleries$`));
+    await expect(page.locator(".gallery-card")).toHaveCount(4);
+    await page.locator(".gallery-card").first().click();
+    await expect(page).toHaveURL(new RegExp(`/${locale}/galleries/quiet-intervals$`));
+    const collectionCards = page.locator(".artwork-experience-grid .artwork-item");
+    await expect(collectionCards).toHaveCount(3);
+    await collectionCards.first().click();
+    const collectionViewer = page.getByRole("dialog");
+    await expect(collectionViewer).toBeVisible();
+    await expect(collectionViewer.getByRole("button", { name: locale === "fa" ? "اثر بعدی" : "Next artwork" })).toBeEnabled();
+    await collectionViewer.getByRole("button", { name: locale === "fa" ? "اثر بعدی" : "Next artwork" }).click();
+    await expect(collectionViewer.locator(".artwork-viewer-status")).toContainText("2");
+    await page.keyboard.press("Escape");
+    await expect(page.getByRole("dialog")).toHaveCount(0);
+    await page.screenshot({ path: test.info().outputPath(`populated-gallery-${locale}.png`), fullPage: true });
+  });
+}
+
+test("published canonical artwork detail routes remain accessible", async ({ request }) => {
+  for (const slug of ["a-quiet-place-between-seasons", "the-shape-of-remembering", "where-light-rests", "a-garden-of-small-moments", "the-blue-hour-within"]) {
+    expect((await request.get(`/en/works/${slug}`)).status()).toBe(200);
+    expect((await request.get(`/fa/works/${slug}`)).status()).toBe(200);
+  }
+});
+
+test("artwork viewer remains within the viewport on mobile and short-height desktop", async ({ page }) => {
+  for (const viewport of [{ width: 390, height: 844 }, { width: 1024, height: 600 }, { width: 1280, height: 720 }]) {
+    await page.setViewportSize(viewport);
+    await page.goto("/en");
+    await page.locator(".artwork-experience-grid .artwork-item").first().click();
+    const dialog = page.getByRole("dialog");
+    await expect(dialog).toBeVisible();
+    await expect(dialog.getByRole("button", { name: "Close artwork viewer" })).toBeInViewport();
+    const overflow = await page.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth);
+    expect(overflow).toBe(false);
+    await page.keyboard.press("Escape");
+  }
 });
