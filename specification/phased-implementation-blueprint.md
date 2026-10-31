@@ -703,3 +703,58 @@ Apply the following requirements within the existing phase sequence; do not crea
 - **Exit evidence:** unit/component tests for collection ordering and viewer context; browser tests for homepage → viewer, homepage → collection index → collection detail → viewer; Back/Forward and direct route tests; Persian RTL/English LTR; desktop/tablet/mobile/short-height screenshots that are actually inspected; accessibility and reduced-motion checks; image-fidelity review; full CI evidence; and recorded artist/site-owner approval before publication.
 
 This update changes the implementation requirements for Phases 4–6 but does not mark any phase complete or alter the existing publication, deployment, or release authorization gates.
+
+
+## Incremental implementation update — 2026-10-31 (Selected Works shared viewer and collection journey)
+
+**Implementation status:** the shared interaction layer and route integrations are implemented on `feature`. The feature is not marked fully accepted or publishable: there are currently no published artwork or collection records, so populated-content interaction and visual approval remain blocked.
+
+### Implemented code
+
+Verified implementation commit: `347c566a183ceeacf3e2627e0f144c29b8773415`.
+
+- Added `src/components/artwork-experience.tsx`, a single reusable artwork-card and viewer experience used by the homepage Selected Works and gallery detail page.
+- Added a shadcn-style Radix Dialog wrapper at `src/components/ui/dialog.tsx`, built on the already-installed `@radix-ui/react-dialog` primitive.
+- The viewer displays the full artwork image with `contain`, localized title, approved localized description when present, known year/medium metadata, position, close, Previous/Next, and a link to the canonical artwork detail route.
+- Previous/Next follows the exact array supplied by the calling context: homepage selection order or the collection's ordered membership. It is non-looping and supports localized physical-arrow keyboard behavior.
+- Viewer state is represented in the current page URL through `artwork` and `viewerContext` query parameters. Browser Back closes an opened viewer; Forward restores it; item navigation replaces the active viewer URL without creating one history entry per artwork. Direct artwork routes remain full-page resources.
+- Radix Dialog provides modal focus handling, Escape dismissal, and focus restoration to the invoking artwork control. The page stays mounted while the viewer is open, preserving scroll position.
+- Added a stable accessible fallback when an artwork image fails to load. The viewer title and position are announced as the selected item changes.
+- Homepage Selected Works now opens the shared viewer and exposes an explicit Explore collections link to the canonical localized `/galleries` index.
+- Collection cards now expose a visible Explore collection action while remaining one coherent link target.
+- Gallery detail pages now use the same viewer, with navigation scoped to that collection's ordered published members.
+- Added responsive viewer styles for desktop/tablet, narrow mobile, and short-height desktop; the full image is not cropped or filtered.
+
+### Automated verification
+
+GitHub Actions [run 41202980499](https://github.com/mrcode-tech/nasoodi.art/actions/runs/41202980499) passed on commit `347c566a183ceeacf3e2627e0f144c29b8773415`:
+
+- ESLint: passed.
+- TypeScript: passed.
+- Content/publication tests: **25 passed, 0 failed**.
+- Production build: passed.
+- Candidate asset audit: passed; candidates remain approval-required and non-publishable.
+- Chromium end-to-end suite: **59 passed, 0 failed**.
+- Production route smoke test: passed.
+- Visual-QA artifact: `nasoodi-visual-qa-347c566a183ceeacf3e2627e0f144c29b8773415`, artifact ID `13042964324`.
+
+The added browser tests cover the homepage Explore collections route, collection-index empty/publication state in both locales, and rejection of an unpublished artwork viewer query. Existing suite coverage also exercises the bilingual shell and responsive homepage.
+
+### Visual review and remaining gates
+
+- Inspected the CI screenshots for the English desktop homepage and Persian mobile homepage. The shell, type hierarchy, and responsive layout render without visible horizontal overflow in those captures.
+- The current content arrays for `artworks` and `galleries` are empty. Consequently, CI cannot render or exercise a real artwork card, an open viewer, a populated collection index, or a populated collection detail page. Those states must be verified with artist-approved records before marking the three-level journey visually accepted.
+- No candidate image under `specification/assets/gallery/` was mapped to public content. No titles, descriptions, collection identities, translations, memberships, rights, or approval claims were invented.
+- The current homepage still uses its separately documented studio/process-photo exception; it is not represented as a finished artwork.
+- Manual keyboard/screen-reader review, real touch-device review, populated-content screenshots at desktop/tablet/mobile/short-height, artwork-fidelity comparison, and artist/site-owner approval remain outstanding.
+
+### Phase status
+
+| Phase | Status | Evidence / remaining gate |
+|---|---|---|
+| Phase 4 — Artwork-led homepage | **Partial** | Selected Works viewer integration and Explore collections route implemented; no approved selected artwork or final hero approval to render. |
+| Phase 5 — Works and artwork detail | **Partial** | Existing canonical artwork detail fallback retained; shared viewer and URL/history behavior implemented; populated artwork sequence cannot yet be exercised with approved records. |
+| Phase 6 — Curated galleries | **Partial** | Collection discovery cards and contextual collection-detail viewer integrated; no approved collection records exist for populated-page visual/interaction verification. |
+| Phase 11 — Full QA/release readiness | **Blocked / not complete** | Automated CI passes, but manual accessibility, populated-content visual QA, asset fidelity, and artist/site-owner publication gates remain. |
+
+No merge, deployment, or public content publication was performed.

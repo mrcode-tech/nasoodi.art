@@ -151,7 +151,7 @@ export function ArtworkExperience({ artworks, locale, context }: Props) {
                     />}
               </figure>
               <section className="artwork-viewer-info" aria-label={activeArtwork.title[locale]}>
-                <DialogTitle>{activeArtwork.title[locale]}</DialogTitle>
+                <DialogTitle aria-live="polite" aria-atomic="true">{activeArtwork.title[locale]}</DialogTitle>
                 {activeArtwork.description?.[locale]?.trim() && (
                   <DialogDescription className="artwork-viewer-description">
                     {activeArtwork.description[locale]}
