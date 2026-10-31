@@ -915,7 +915,7 @@ test("mobile hero uses image then artist text then biography and both actions", 
     const intro = page.locator(".home-intro");
     const image = intro.locator(":scope > .hero-artwork");
     const copy = intro.locator(":scope > .home-intro-copy");
-    const imageBeforeCopy = await image.evaluate((element) => Boolean(element.compareDocumentPosition(element.parentElement!.querySelector(".home-intro-copy")) & Node.DOCUMENT_POSITION_FOLLOWING));
+    const imageBeforeCopy = await image.evaluate((element) => { const text = element.parentElement?.querySelector(".home-intro-copy"); return Boolean(text && (element.compareDocumentPosition(text) & Node.DOCUMENT_POSITION_FOLLOWING)); });
     expect(imageBeforeCopy).toBe(true);
     await expect(copy.locator(".home-biography")).toBeVisible();
     const readMore = copy.locator(".biography-toggle");
