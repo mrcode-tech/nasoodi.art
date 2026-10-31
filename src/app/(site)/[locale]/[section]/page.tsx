@@ -4,7 +4,7 @@ import { aboutPreviewFixture } from "@/lib/about-preview-fixtures";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { artworks,galleries,journalEntries,cvEntries,cvDocument,artistProfile,contactDetails,getPublicCvDocument,getPublicArtistProfile,getPublicContactDetails,getPublicArtworks,getPublicGalleries,getPublicJournal,getPublicCvEntries,getJournalEntriesForCategory,journalCategories,primaryImageFor,type JournalCategory } from "@/lib/site";
+import { artworks,galleries,journalEntries,cvEntries,artistProfile,contactDetails,getPublicArtistProfile,getPublicContactDetails,getPublicArtworks,getPublicGalleries,getPublicJournal,getPublicCvEntries,getJournalEntriesForCategory,journalCategories,primaryImageFor,type JournalCategory } from "@/lib/site";
 import { copyFor,isLocale,pagePath,otherLocale } from "@/lib/site";
 type Props={params:Promise<{locale:string;section:string}>;searchParams:Promise<{category?:string;page?:string;pageSize?:string;preview?:string}>};
 const names=["works","galleries","journal","about","contact","cv"] as const;
