@@ -10,7 +10,7 @@ async function waitForDrawerToSettle(drawer: Locator) {
 
 test("root route redirects to the Persian-first homepage", async ({ page }) => {
   await page.goto("/");
-  await expect(page).toHaveURL(/\/fa\/works$/);
+  await expect(page).toHaveURL(/\/fa$/);
   await expect(page.locator("html")).toHaveAttribute("lang", "fa");
   await expect(page.locator("html")).toHaveAttribute("dir", "rtl");
 });
