@@ -625,3 +625,12 @@ test("collection discovery keeps unpublished collections out of the public catal
     await expect(page.locator(".empty-note")).toBeVisible();
   }
 });
+
+
+test("unpublished artwork viewer query state cannot expose an unpublished artwork", async ({ page }) => {
+  await page.goto("/en?artwork=not-published&viewerContext=home");
+  await expect(page.getByRole("dialog")).toHaveCount(0);
+  await expect(page.getByRole("heading", { name: "Ghazaleh Abdolahzade Nasoodi" })).toBeVisible();
+  const response = await page.request.get("/en/works/not-published");
+  expect(response.status()).toBe(404);
+});

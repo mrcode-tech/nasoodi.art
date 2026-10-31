@@ -26,7 +26,6 @@ const getServerLocationSearch = () => "";
 export function ArtworkExperience({ artworks, locale, context }: Props) {
   const locationSearch = useSyncExternalStore(subscribeToLocation, getLocationSearch, getServerLocationSearch);
   const activeSlug = useMemo(() => new URLSearchParams(locationSearch).get("artwork"), [locationSearch]);
-  const [hasViewerHistoryEntry, setHasViewerHistoryEntry] = useState(false);
   const [failedImages, setFailedImages] = useState<string[]>([]);
   const labels = locale === "fa"
     ? { close: "بستن نمایشگر", previous: "اثر قبلی", next: "اثر بعدی", unavailable: "نمایش تصویر ممکن نیست", position: "از", detail: "مشاهده صفحه اثر" }
@@ -46,7 +45,6 @@ export function ArtworkExperience({ artworks, locale, context }: Props) {
     url.searchParams.set("viewerContext", context);
     if (mode === "push") {
       window.history.pushState({ ...window.history.state, nasoodiArtworkViewer: true }, "", url);
-      setHasViewerHistoryEntry(true);
     } else {
       window.history.replaceState({ ...window.history.state, nasoodiArtworkViewer: true }, "", url);
     }
@@ -58,8 +56,7 @@ export function ArtworkExperience({ artworks, locale, context }: Props) {
   };
 
   const closeViewer = useCallback(() => {
-    if (hasViewerHistoryEntry) {
-      setHasViewerHistoryEntry(false);
+    if (window.history.state?.nasoodiArtworkViewer) {
       window.history.back();
       return;
     }
@@ -68,7 +65,7 @@ export function ArtworkExperience({ artworks, locale, context }: Props) {
     url.searchParams.delete("viewerContext");
     window.history.replaceState(window.history.state, "", url);
     window.dispatchEvent(new Event("nasoodi:locationchange"));
-  }, [hasViewerHistoryEntry]);
+  }, []);
 
   const move = useCallback((offset: number) => {
     const next = sequence[activeIndex + offset];
