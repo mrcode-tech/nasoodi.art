@@ -24,24 +24,19 @@ type CarouselProps = React.HTMLAttributes<HTMLDivElement> & { dir?: "ltr" | "rtl
 
 export function Carousel({ dir = "ltr", label, roleDescription = "carousel", opts, className, children, onKeyDown, onFocusCapture, ...props }: CarouselProps) {
   const [carouselRef, api] = useEmblaCarousel({ align: "start", containScroll: "trimSnaps", loop: false, ...opts, direction: dir });
-  const [canScrollPrev, setCanScrollPrev] = React.useState(false);
-  const [canScrollNext, setCanScrollNext] = React.useState(false);
-  const [selectedSnap, setSelectedSnap] = React.useState(0);
-  const [snapCount, setSnapCount] = React.useState(0);
-  const update = React.useCallback(() => {
-    if (!api) return;
-    setCanScrollPrev(api.canScrollPrev());
-    setCanScrollNext(api.canScrollNext());
-    setSelectedSnap(api.selectedScrollSnap());
-    setSnapCount(api.scrollSnapList().length);
+  const subscribe = React.useCallback((onStoreChange: () => void) => {
+    if (!api) return () => undefined;
+    api.on("select", onStoreChange);
+    api.on("reInit", onStoreChange);
+    return () => { api.off("select", onStoreChange); api.off("reInit", onStoreChange); };
   }, [api]);
-  React.useEffect(() => {
-    if (!api) return;
-    update();
-    api.on("select", update);
-    api.on("reInit", update);
-    return () => { api.off("select", update); api.off("reInit", update); };
-  }, [api, update]);
+  const getSnapshot = React.useCallback(() => api
+    ? `${api.canScrollPrev() ? 1 : 0}:${api.canScrollNext() ? 1 : 0}:${api.selectedScrollSnap()}:${api.scrollSnapList().length}`
+    : "0:0:0:0", [api]);
+  const snapshot = React.useSyncExternalStore(subscribe, getSnapshot, () => "0:0:0:0");
+  const [previousValue, nextValue, selectedSnap, snapCount] = snapshot.split(":").map(Number);
+  const canScrollPrev = previousValue === 1;
+  const canScrollNext = nextValue === 1;
   const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
     onKeyDown?.(event);
     if (event.defaultPrevented || !api) return;
