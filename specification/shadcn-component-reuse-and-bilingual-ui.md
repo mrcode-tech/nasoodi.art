@@ -109,3 +109,16 @@ For every materially changed shared control:
 | Site navigation | `src/components/site-shell.tsx` | Composes shared primitives |
 
 Update this inventory when components are added, removed, or replaced.
+
+
+## 9. Responsive artwork carousel component — 2026-10-31
+
+The new artwork discovery contract uses the official [shadcn Carousel](https://ui.shadcn.com/docs/components/base/carousel) composition: `Carousel`, `CarouselContent`, `CarouselItem`, `CarouselPrevious`, and `CarouselNext`.
+
+Repository inspection on the feature branch found Button, Dialog, Dropdown Menu, Sheet, and Sidebar primitives, but no Carousel primitive and no Embla dependency. The project currently uses Radix-backed shadcn components. Future implementation must choose the shadcn Carousel variant compatible with that existing primitive foundation; do not migrate the project to Base UI or mix primitive families just to add a carousel.
+
+The official shadcn Carousel is built with Embla. Add the generated project-owned carousel primitive and the minimum compatible Embla React dependency only when implementing this feature. Do not install an autoplay plugin. The carousel component is **specified, not yet installed or implemented** as of this documentation revision.
+
+Implementation and QA must cover responsive item basis, content-container sizing, spacing, snap/alignment, disabled boundaries, keyboard navigation, touch/trackpad drag, accessible naming/position feedback, reduced motion, and clipping/focus behavior. For Persian set both `dir="rtl"` and Embla `direction: "rtl"`; for English use LTR. Directional controls must have correct localized movement meaning. Preserve the editorial artwork design; do not use default dashboard card styling.
+
+See [artwork-discovery-carousel-and-editorial-experience.md](./artwork-discovery-carousel-and-editorial-experience.md) for the complete component and behavior contract.
