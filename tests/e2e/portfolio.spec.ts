@@ -896,6 +896,16 @@ test("homepage biography preview expands and collapses in place in both locales"
 
 test("About sample preview shows long biography and sample CV without inventing a PDF", async ({ page }) => {
   for (const locale of ["en", "fa"] as const) {
+    await page.setViewportSize({ width: 1440, height: 960 });
+    await page.goto(`/${locale}/about?preview=sample`);
+    await expect(page.locator(".sample-content-notice").first()).toBeVisible();
+    await expect(page.locator(".about-biography-copy")).toBeVisible();
+    await expect(page.locator(".about-cv-section")).toBeVisible();
+    await expect(page.locator(".about-cv-section .cv-list li")).toHaveCount(4);
+    await expect(page.getByRole("link", { name: /Download CV|دریافت رزومه/ })).toHaveCount(0);
+    await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", /noindex/);
+    await page.screenshot({ path: test.info().outputPath(`${locale}-about-sample-desktop.png`), fullPage: true });
+
     await page.setViewportSize({ width: 390, height: 844 });
     await page.goto(`/${locale}/about?preview=sample`);
     await expect(page.locator(".sample-content-notice").first()).toBeVisible();
@@ -920,6 +930,7 @@ test("mobile hero uses image then artist text then biography and both actions", 
     await expect(copy.locator(".home-biography")).toBeVisible();
     const readMore = copy.locator(".biography-toggle");
     await expect(readMore).toBeVisible();
+    await page.screenshot({ path: test.info().outputPath(`${locale}-mobile-biography-collapsed.png`), fullPage: true });
     await readMore.click();
     const actions = copy.locator(".hero-actions a");
     await expect(actions).toHaveCount(2);
@@ -935,5 +946,12 @@ test("mobile hero uses image then artist text then biography and both actions", 
     const overflow = await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth);
     expect(overflow, locale).toBe(true);
     await page.screenshot({ path: test.info().outputPath(`${locale}-mobile-biography-expanded.png`), fullPage: true });
+
+    await page.setViewportSize({ width: 844, height: 390 });
+    await page.goto(`/${locale}?preview=sample`);
+    await expect(page.locator(".home-biography")).toBeVisible();
+    const landscapeOverflow = await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth);
+    expect(landscapeOverflow, `${locale} mobile landscape`).toBe(true);
+    await page.screenshot({ path: test.info().outputPath(`${locale}-mobile-landscape-hero.png`), fullPage: true });
   }
 });
