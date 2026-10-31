@@ -888,7 +888,11 @@ test("homepage hero shows the fictional artist introduction before its actions a
       await expect(biography).toBeVisible();
       await expect(biography.locator(".sample-content-notice")).toBeVisible();
       await expect(biography.locator(".biography-copy")).toBeVisible();
-      await expect(biography.getByRole("button", { name: locale === "fa" ? "ادامه مطلب" : "Read more" })).toBeVisible();
+      const readMore = biography.getByRole("button", { name: locale === "fa" ? "ادامه مطلب" : "Read more" });
+      await expect(readMore).toBeVisible();
+      await readMore.click();
+      await expect(biography.locator(".biography-copy")).toHaveClass(/is-expanded/);
+      await expect(biography.getByRole("button", { name: locale === "fa" ? "نمایش کمتر" : "Show less" })).toBeVisible();
       const imageBeforeCopy = await image.evaluate((element) => {
         const text = element.parentElement?.querySelector(".home-intro-copy");
         return Boolean(text && (element.compareDocumentPosition(text) & Node.DOCUMENT_POSITION_FOLLOWING));
