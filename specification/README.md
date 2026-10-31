@@ -35,6 +35,8 @@ This directory is the product, design, content, and implementation source of tru
 #
 - [Shadcn/ui component reuse and bilingual shared UI](./shadcn-component-reuse-and-bilingual-ui.md) — component discovery, reuse, Sidebar/Sheet/Dropdown composition, RTL/LTR behavior, and new-component policy.
 
+- [Artist About experience, CV, and mobile hero](./artist-about-page-and-mobile-hero.md) — homepage biography preview/expansion, About navigation and page, approved CV PDF, responsive hero order, localization, accessibility, and acceptance criteria.
+
 ### Implementation execution
 - [Phased implementation blueprint](./phased-implementation-blueprint.md) — dependency-aware phases, deliverables, tests, exit gates, and evidence requirements; use as the execution sequence.
 - [Website implementation prompt](./website-implementation-prompt.md) — end-to-end coding-agent prompt that enforces the repository, content, design, testing, and release constraints.
