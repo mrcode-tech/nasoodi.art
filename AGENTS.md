@@ -121,3 +121,14 @@ A task is not complete merely because code was written or the build passes. Comp
 - Shared controls must support Persian RTL and English LTR, keyboard interaction, visible focus, reduced motion, and relevant WCAG 2.2 AA requirements.
 - Update the component reuse specification and inventory whenever shared UI architecture changes. Add component and Playwright coverage for meaningful interaction changes.
 - Configuration is `components.json`; shared primitives live under `src/components/ui/`; class utilities live under `src/lib/utils.ts`.
+
+
+## Artwork discovery and Journal presentation contract (2026-10-31)
+
+- Before changing the homepage Selected Works, gallery index, collection detail, artwork carousel, or homepage Journal preview, read `specification/artwork-discovery-carousel-and-editorial-experience.md` in addition to the existing mandatory design authorities and specialized specifications.
+- The single artwork-led homepage Hero remains static; do not convert it into a carousel. The responsive carousel redesign applies to Selected Works and collection discovery/presentation.
+- Use the shadcn Carousel composition documented by the new experience contract. Preserve the repository's existing Radix-backed shadcn component foundation; do not migrate to Base UI or introduce a second primitive family solely for this component. Inspect current package versions and install only the minimum Embla dependency required by the official shadcn implementation.
+- Artwork carousels are user-controlled, never autoplay, never crop artwork, and must remain fully keyboard/touch accessible. Responsive item count is based on the actual content container (including sidebar width), not a fixed slide count or raw viewport width alone.
+- Preserve the unified Journal's existing editorial/post-style design. The homepage preview shows at most the two newest published Journal entries across article and event types; Explore Journal links to the full archive. Do not place Journal entries in artwork carousels or add a separate Events top-level route.
+- Use the canonical artwork and collection records in `approved-artwork-content-inventory.md`; never use sample/stock/generated artwork or duplicate artwork records.
+- A documentation-only task must not modify application source, dependencies, routes, or CI. A later implementation task must follow the component, responsive, RTL, accessibility, visual QA, and test requirements in the new experience specification.
