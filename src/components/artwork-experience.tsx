@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
 import { pagePath, primaryImageFor, type Artwork, type Locale } from "@/lib/site";
@@ -16,7 +16,6 @@ export function ArtworkExperience({ artworks, locale, context }: Props) {
   const [activeSlug, setActiveSlug] = useState<string | null>(null);
   const [hasViewerHistoryEntry, setHasViewerHistoryEntry] = useState(false);
   const [failedImages, setFailedImages] = useState<string[]>([]);
-  const triggerRefs = useRef(new Map<string, HTMLButtonElement>());
   const labels = locale === "fa"
     ? { close: "بستن نمایشگر", previous: "اثر قبلی", next: "اثر بعدی", unavailable: "نمایش تصویر ممکن نیست", position: "از", detail: "مشاهده صفحه اثر" }
     : { close: "Close artwork viewer", previous: "Previous artwork", next: "Next artwork", unavailable: "The artwork image is unavailable", position: "of", detail: "View artwork page" };
@@ -110,10 +109,6 @@ export function ArtworkExperience({ artworks, locale, context }: Props) {
             <button
               className="artwork-item artwork-experience-card"
               key={work.id}
-              ref={(node) => {
-                if (node) triggerRefs.current.set(work.slug, node);
-                else triggerRefs.current.delete(work.slug);
-              }}
               type="button"
               aria-haspopup="dialog"
               aria-label={work.title[locale]}
@@ -137,7 +132,7 @@ export function ArtworkExperience({ artworks, locale, context }: Props) {
 
       <Dialog open={Boolean(activeArtwork)} onOpenChange={(open) => { if (!open && activeArtwork) closeViewer(); }}>
         {activeArtwork && activeImage && (
-          <DialogContent className="artwork-viewer-content" aria-describedby={activeArtwork.description?.[locale] ? undefined : undefined}>
+          <DialogContent className="artwork-viewer-content" {...(activeArtwork.description?.[locale]?.trim() ? {} : { "aria-describedby": undefined })}>
             <div className="artwork-viewer-topbar">
               <span className="artwork-viewer-status" aria-live="polite">
                 {activeIndex + 1} {labels.position} {sequence.length}
@@ -174,8 +169,8 @@ export function ArtworkExperience({ artworks, locale, context }: Props) {
                   </p>
                 )}
                 <div className="artwork-viewer-controls">
-                  <Button variant="outline" size="sm" onClick={() => move(-1)} disabled={activeIndex <= 0} aria-label={labels.previous}>←</Button>
-                  <Button variant="outline" size="sm" onClick={() => move(1)} disabled={activeIndex >= sequence.length - 1} aria-label={labels.next}>→</Button>
+                  <Button variant="outline" size="sm" onClick={() => move(-1)} disabled={activeIndex <= 0} aria-label={labels.previous}>{locale === "fa" ? "→" : "←"}</Button>
+                  <Button variant="outline" size="sm" onClick={() => move(1)} disabled={activeIndex >= sequence.length - 1} aria-label={labels.next}>{locale === "fa" ? "←" : "→"}</Button>
                   <Button asChild variant="ghost" size="sm">
                     <a href={pagePath(locale, `works/${activeArtwork.slug}`)}>{labels.detail}</a>
                   </Button>

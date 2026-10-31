@@ -693,3 +693,5 @@ html[lang=fa] .artwork-viewer-info h2{font-family:Tahoma,Arial,sans-serif;line-h
  .artwork-viewer-layout{grid-template-columns:minmax(0,1.5fr) minmax(14rem,.8fr);gap:1rem}
 }
 @media(prefers-reduced-motion:reduce){.artwork-experience-card{transition:none}}
+
+.gallery-card-action{display:inline-flex;align-items:center;gap:.45rem;width:max-content;max-width:100%;margin-top:.35rem;padding-bottom:.2rem;border-bottom:1px solid var(--mauve);color:var(--ink);font-size:.84rem;font-weight:700}

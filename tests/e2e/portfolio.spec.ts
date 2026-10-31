@@ -604,3 +604,24 @@ for (const locale of ["fa", "en"] as const) {
     }
   });
 }
+
+
+test("homepage Explore collections action opens the canonical collection discovery page", async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await page.goto("/en");
+  const explore = page.getByRole("link", { name: "Explore collections" }).first();
+  await expect(explore).toHaveAttribute("href", "/en/galleries");
+  await explore.click();
+  await expect(page).toHaveURL(/\/en\/galleries$/);
+  await expect(page.getByRole("heading", { name: "Galleries" })).toBeVisible();
+});
+
+test("collection discovery keeps unpublished collections out of the public catalogue", async ({ page }) => {
+  for (const locale of ["en", "fa"] as const) {
+    await page.goto(`/${locale}/galleries`);
+    await expect(page.getByRole("main")).toBeVisible();
+    await expect(page.locator("main h1")).toHaveCount(1);
+    await expect(page.locator(".gallery-card")).toHaveCount(0);
+    await expect(page.locator(".empty-note")).toBeVisible();
+  }
+});
