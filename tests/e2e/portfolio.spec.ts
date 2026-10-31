@@ -448,9 +448,9 @@ for (const locale of ["en", "fa"] as const) {
       }
       const galleryCta = page.getByRole("link", { name: locale === "fa" ? "گالری‌ها را ببینید" : "Explore galleries" });
       const worksCta = page.getByRole("link", { name: locale === "fa" ? "گزیده آثار را ببینید" : "View selected works" });
-      if (await page.locator(".gallery-cards .gallery-card").count() > 0) await expect(galleryCta).toHaveAttribute("href", `/${locale}/galleries`);
+      if (await page.locator(".gallery-card").count() > 0) await expect(galleryCta).toHaveAttribute("href", `/${locale}/galleries`);
       else await expect(galleryCta).toHaveCount(0);
-      if (await page.locator(".artwork-experience-grid .artwork-item").count() > 0) await expect(worksCta).toHaveAttribute("href", `/${locale}/works`);
+      if (await page.locator(".artwork-carousel .artwork-item").count() > 0) await expect(worksCta).toHaveAttribute("href", `/${locale}/works`);
       else await expect(worksCta).toHaveCount(0);
       const overflow = await page.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth);
       expect(overflow, `${locale} ${viewport.name} horizontal overflow`).toBe(false);
@@ -641,7 +641,7 @@ for (const locale of ["en", "fa"] as const) {
   test(`populated artwork viewer and collection journeys work in ${locale}`, async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 800 });
     await page.goto(`/${locale}`);
-    const cards = page.locator(".artwork-experience-grid .artwork-item");
+    const cards = page.locator(".artwork-carousel .artwork-item");
     await expect(cards).toHaveCount(5);
     for (let index = 0; index < 5; index++) {
       const image = cards.nth(index).locator("img");
@@ -670,7 +670,7 @@ for (const locale of ["en", "fa"] as const) {
     await expect(page.locator(".gallery-card")).toHaveCount(4);
     await page.locator(".gallery-card").first().click();
     await expect(page).toHaveURL(new RegExp(`/${locale}/galleries/quiet-intervals$`));
-    const collectionCards = page.locator(".artwork-experience-grid .artwork-item");
+    const collectionCards = page.locator(".artwork-carousel .artwork-item");
     await expect(collectionCards).toHaveCount(3);
     await collectionCards.first().click();
     const collectionViewer = page.getByRole("dialog");
@@ -695,7 +695,7 @@ test("artwork viewer remains within the viewport on mobile and short-height desk
   for (const viewport of [{ width: 390, height: 844 }, { width: 1024, height: 600 }, { width: 1280, height: 720 }]) {
     await page.setViewportSize(viewport);
     await page.goto("/en");
-    await page.locator(".artwork-experience-grid .artwork-item").first().click();
+    await page.locator(".artwork-carousel .artwork-item").first().click();
     const dialog = page.getByRole("dialog");
     await expect(dialog).toBeVisible();
     await expect(dialog.getByRole("button", { name: "Close artwork viewer" })).toBeInViewport();

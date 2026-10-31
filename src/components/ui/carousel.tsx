@@ -10,8 +10,8 @@ type CarouselContextValue = {
   api: EmblaCarouselType | undefined;
   canScrollPrev: boolean;
   canScrollNext: boolean;
-  selectedSnap: number;
-  snapCount: number;
+  selectedSlide: number;
+  slideCount: number;
   dir: "ltr" | "rtl";
 };
 const CarouselContext = React.createContext<CarouselContextValue | null>(null);
@@ -31,10 +31,10 @@ export function Carousel({ dir = "ltr", label, roleDescription = "carousel", opt
     return () => { api.off("select", onStoreChange); api.off("reInit", onStoreChange); };
   }, [api]);
   const getSnapshot = React.useCallback(() => api
-    ? `${api.canScrollPrev() ? 1 : 0}:${api.canScrollNext() ? 1 : 0}:${api.selectedScrollSnap()}:${api.scrollSnapList().length}`
+    ? `${api.canScrollPrev() ? 1 : 0}:${api.canScrollNext() ? 1 : 0}:${api.slidesInView()[0] ?? api.selectedScrollSnap()}:${api.slideNodes().length}`
     : "0:0:0:0", [api]);
   const snapshot = React.useSyncExternalStore(subscribe, getSnapshot, () => "0:0:0:0");
-  const [previousValue, nextValue, selectedSnap, snapCount] = snapshot.split(":").map(Number);
+  const [previousValue, nextValue, selectedSlide, slideCount] = snapshot.split(":").map(Number);
   const canScrollPrev = previousValue === 1;
   const canScrollNext = nextValue === 1;
   const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
@@ -56,7 +56,7 @@ export function Carousel({ dir = "ltr", label, roleDescription = "carousel", opt
     if (index >= 0 && !api.slidesInView().includes(index)) api.scrollTo(index);
   };
   return (
-    <CarouselContext.Provider value={{ carouselRef, api, canScrollPrev, canScrollNext, selectedSnap, snapCount, dir }}>
+    <CarouselContext.Provider value={{ carouselRef, api, canScrollPrev, canScrollNext, selectedSlide, slideCount, dir }}>
       <div {...props} dir={dir} role="region" aria-roledescription={roleDescription} aria-label={label}
         className={["carousel", className].filter(Boolean).join(" ")} onKeyDown={handleKeyDown} onFocusCapture={handleFocusCapture}>
         {children}
@@ -81,6 +81,6 @@ export function CarouselNext({ label, className }: ControlProps) {
   return <Button type="button" variant="outline" size="sm" className={["carousel-control", className].filter(Boolean).join(" ")} aria-label={label} disabled={!canScrollNext} onClick={() => api?.scrollNext()}><span aria-hidden="true">{dir === "rtl" ? "←" : "→"}</span></Button>;
 }
 export function CarouselStatus({ label }: { label: string }) {
-  const { selectedSnap, snapCount } = useCarousel();
-  return <span className="carousel-status" aria-live="polite" aria-atomic="true" aria-label={label}>{snapCount ? `${selectedSnap + 1} / ${snapCount}` : "0 / 0"}</span>;
+  const { selectedSlide, slideCount } = useCarousel();
+  return <span className="carousel-status" aria-live="polite" aria-atomic="true" aria-label={label}>{slideCount ? `${selectedSlide + 1} / ${slideCount}` : "0 / 0"}</span>;
 }
