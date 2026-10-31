@@ -416,3 +416,15 @@ Keep these established route roles unless a separate, explicit route migration i
 - Full implementation, history, accessibility, motion, image fidelity, and acceptance requirements are defined in the dedicated three-level experience specification.
 
 This addendum refines the collection and artwork presentation model without changing publication, rights, localization, or artist-approval gates elsewhere in this document.
+
+
+## Responsive collection discovery and browsing refinement — 2026-10-31
+
+See [artwork-discovery-carousel-and-editorial-experience.md](./artwork-discovery-carousel-and-editorial-experience.md) for the current presentation contract.
+
+- The gallery index remains a curated collection-discovery page, not a raw artwork catalogue. Use collection previews with approved cover, title, and description; use a responsive collection rail only when multiple collections and available width make it useful.
+- The collection detail page's primary artwork-browsing surface is now a responsive shadcn Carousel, superseding earlier one-column/static-grid-first presentation guidance.
+- Show multiple substantial works when the content container allows it; adapt item sizing to the actual container including the desktop sidebar. On mobile show one prominent work and only a restrained next-item peek when useful.
+- All published collection artworks remain reachable through previous/next controls and keyboard navigation. Where a separate complete index is needed, use a readable ordered editorial list rather than another dense, uniform image wall.
+- Selecting an artwork continues to open the shared Artwork Viewer with navigation scoped to the current collection. Existing route roles, artwork records, publication rules, and rights gates are unchanged.
+- No autoplay, forced cropping, generic sample images, or swipe-only interaction.
