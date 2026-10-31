@@ -631,6 +631,8 @@ test("unpublished artwork viewer query state cannot expose an unpublished artwor
   await page.goto("/en?artwork=not-published&viewerContext=home");
   await expect(page.getByRole("dialog")).toHaveCount(0);
   await expect(page.getByRole("heading", { name: "Ghazaleh Abdolahzade Nasoodi" })).toBeVisible();
+  await page.goto("/en?artwork=a-quiet-place-between-seasons&viewerContext=gallery:quiet-intervals");
+  await expect(page.getByRole("dialog")).toHaveCount(0);
   const response = await page.request.get("/en/works/not-published");
   expect(response.status()).toBe(404);
 });
