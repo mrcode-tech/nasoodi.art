@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { ArtworkExperience } from "@/components/artwork-experience";
 import { Button } from "@/components/ui/button";
 import type { Metadata } from "next";
 import Link from "next/link";
@@ -35,8 +36,8 @@ export default async function Home({params}:Props){const {locale}=await params;i
     {hero?.title[locale] && <figcaption>{hero.title[locale]}</figcaption>}
    </figure>
   </section>
-  <section className="editorial-section" aria-labelledby="featured-works"><div className="section-heading"><div><p className="eyebrow">{t.portfolio}</p><h2 id="featured-works">{t.selected}</h2></div><Link className="text-link" href={pagePath(locale,"works")}>{locale==="fa"?"مشاهده همه آثار":"View all works"} ↗</Link></div>
-   {works.length===0?<p className="empty-note">{t.emptyWorks}</p>:<div className="artwork-grid">{works.slice(0,4).map(w=>{const img=primaryImageFor(w);return img?<Link className="artwork-item" key={w.id} href={pagePath(locale,`works/${w.slug}`)}><Image sizes="(max-width: 600px) 100vw, (max-width: 900px) 90vw, 50vw" src={img.src} alt={img.alt[locale]??""} width={img.width} height={img.height}/><span>{w.title[locale]}</span></Link>:null;})}</div>}
+  <section className="editorial-section" aria-labelledby="featured-works"><div className="section-heading"><div><p className="eyebrow">{t.portfolio}</p><h2 id="featured-works">{t.selected}</h2></div><Link className="text-link" href={pagePath(locale,"galleries")}>{locale==="fa"?"گشت‌وگذار در مجموعه‌ها":"Explore collections"} ↗</Link></div>
+   {works.length===0?<p className="empty-note">{t.emptyWorks}</p>:<ArtworkExperience artworks={works.slice(0,6)} locale={locale} context="home" />}
   </section>
   <section className="editorial-section" aria-labelledby="featured-galleries"><div className="section-heading"><div><p className="eyebrow">{t.discover}</p><h2 id="featured-galleries">{t.galleries}</h2></div><Link className="text-link" href={pagePath(locale,"galleries")}>{t.discover} ↗</Link></div>
    {sets.length===0?<p className="empty-note">{t.emptyGalleries}</p>:<div className="gallery-cards">{sets.map(g=>{const cover=getGalleryCoverArtwork(g,artworks,locale);return <Link className="gallery-card" key={g.id} href={pagePath(locale,`galleries/${g.slug}`)}>{cover&&<Image sizes="(max-width: 700px) 100vw, 42vw" src={cover.image.src} alt={cover.image.alt[locale]??""} width={cover.image.width} height={cover.image.height}/>}<span className="gallery-card-copy"><strong>{g.title[locale]}</strong><span>{g.description[locale]}</span></span></Link>;})}</div>}
