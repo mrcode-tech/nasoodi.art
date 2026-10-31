@@ -884,6 +884,12 @@ test("homepage hero layout is responsive and renders the bilingual biography", a
       const copy = intro.locator(":scope > .home-intro-copy");
       await expect(image).toBeVisible();
       await expect(copy).toBeVisible();
+      await expect(intro.locator(".intro-rule")).toHaveCount(0);
+      if (viewport.width > 900) {
+        const sidebar = page.locator(".desktop-sidebar");
+        await expect(sidebar).toBeVisible();
+        expect(await sidebar.evaluate((element) => getComputedStyle(element).borderLeftWidth)).toBe("0px");
+      }
       await expect(copy.locator(".biography-copy")).toBeVisible();
       await expect(copy.locator(".artist-discipline")).toHaveCount(0);
       await expect(copy.locator(".home-biography h2")).toHaveCount(0);

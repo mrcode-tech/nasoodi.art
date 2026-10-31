@@ -793,3 +793,8 @@ html[lang=fa] .home-biography h2,html[lang=fa] .profile-content h2{font-family:T
  .hero-actions .ui-button{width:100%;justify-content:center}
 }
 @media(prefers-reduced-motion:reduce){.biography-copy,.biography-toggle{transition:none!important}}
+
+/* Keep the Persian desktop sidebar visually consistent with the borderless English sidebar. */
+html[lang="fa"] .desktop-sidebar {
+  border-left: 0;
+}
