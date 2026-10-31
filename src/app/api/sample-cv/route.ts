@@ -35,7 +35,7 @@ function createSamplePdf() {
     for (const entry of entries) {
       line(`${entry.year}  ${entry.title.en}`, 8, 62);
       line(entry.organization.en, 7, 76);
-      if (entry.location?.en) line(entry.location.en, 7, 76);
+      if ("location" in entry && entry.location?.en) line(entry.location.en, 7, 76);
       y -= 2;
     }
     y -= 8;
