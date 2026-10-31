@@ -904,7 +904,7 @@ test("normal About routes render bilingual fictional sample content and the comp
     await page.setViewportSize({ width: 1280, height: 900 });
     await page.goto(`/${locale}/about`);
     await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", /noindex/);
-    await expect(page.locator(".sample-content-notice")).toBeVisible();
+    await expect(page.locator(".sample-content-notice").first()).toBeVisible();
     await expect(page.locator(".artist-portrait")).toHaveAttribute("src", /homepage-hero/);
     await expect(page.locator(".about-statement")).toBeVisible();
     await expect(page.locator(".about-biography-copy")).toBeVisible();
@@ -925,6 +925,9 @@ test("sample CV endpoint returns a valid non-indexable PDF without a preview que
   expect(body.subarray(0, 8).toString("ascii")).toBe("%PDF-1.4");
   expect(body.toString("ascii")).toContain("GHAZALEH ABDOLAHZADE NASOODI");
   expect(body.toString("ascii")).toContain("FICTIONAL SAMPLE");
+  expect(body.toString("ascii")).toContain("Quiet Arrangements");
+  expect(body.toString("ascii")).toContain("A Small Atlas of Looking");
+  expect(body.toString("ascii")).toContain("ARTISTIC PRACTICE");
   expect(body.toString("ascii")).toContain("Quiet Arrangements");
   expect(body.toString("ascii")).toContain("A Small Atlas of Looking");
   expect(body.toString("ascii")).toContain("ARTISTIC PRACTICE");
