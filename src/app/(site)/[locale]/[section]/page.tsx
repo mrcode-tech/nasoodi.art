@@ -26,7 +26,7 @@ export async function generateMetadata({params}:Props):Promise<Metadata>{const {
   section==="contact" ? Boolean(getPublicContactDetails(contactDetails,other)) : false;
  const profile=section==="about"?getPublicArtistProfile(artistProfile,locale):undefined;
  return {title:copyFor(locale)[section],...(profile?{description:profile.statement[locale]}:{}),alternates:{canonical:pagePath(locale,section),...(indexable&&translated?{languages:{[locale]:pagePath(locale,section),[other]:pagePath(other,section)}}:{})},robots:{index:section==="about"?false:indexable,follow:true}};}
-export default async function SectionPage({params,searchParams}:Props){const [{locale,section},{category:rawCategory}]=await Promise.all([params,searchParams]);if(!isLocale(locale)||!valid(section))notFound();const t=copyFor(locale);const samplePreview=(process.env.NODE_ENV!=="production"||process.env.GITHUB_ACTIONS==="true")&&preview==="sample";
+export default async function SectionPage({params,searchParams}:Props){const [{locale,section},{category:rawCategory}]=await Promise.all([params,searchParams]);if(!isLocale(locale)||!valid(section))notFound();const t=copyFor(locale);
  if(section==="about"){
   const biography=aboutPreviewFixture.biography[locale];
   const statement=aboutPreviewFixture.statement[locale];
