@@ -854,7 +854,8 @@ test("About is a localized primary navigation destination on desktop and mobile"
   await expect(desktopAbout).toHaveAttribute("aria-current", "page");
   await expect(page.getByRole("heading", { name: "Ghazaleh Abdolahzade Nasoodi" })).toBeVisible();
   await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", /noindex/);
-  await expect(page.getByText("The artist statement and biography will be added after editorial review.")).toBeVisible();
+  await expect(page.locator(".about-statement")).toBeVisible();
+  await expect(page.locator(".about-biography-copy")).toBeVisible();
 
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto("/fa");
@@ -868,111 +869,111 @@ test("About is a localized primary navigation destination on desktop and mobile"
   await expect(page.locator(".desktop-sidebar")).toBeHidden();
 });
 
-test("homepage biography preview expands and collapses in place in both locales", async ({ page }) => {
+test("homepage hero layout is responsive and renders the bilingual biography", async ({ page }) => {
   for (const locale of ["en", "fa"] as const) {
-    await page.setViewportSize({ width: 1440, height: 960 });
-    await page.goto(`/${locale}?preview=sample`);
-    const biography = page.locator(".home-biography");
-    const copy = biography.locator(".biography-copy");
-    const readMore = biography.getByRole("button", { name: locale === "fa" ? "ادامه مطلب" : "Read more" });
-    await expect(copy).toBeVisible();
-    await expect(readMore).toBeVisible();
-    await expect(readMore).toHaveAttribute("aria-expanded", "false");
-    await page.screenshot({ path: test.info().outputPath(`${locale}-home-biography-collapsed.png`), fullPage: true });
-    const initialScroll = await page.evaluate(() => window.scrollY);
-    await readMore.click();
-    expect(await page.evaluate(() => window.scrollY)).toBe(initialScroll);
-    const showLess = biography.getByRole("button", { name: locale === "fa" ? "نمایش کمتر" : "Show less" });
-    await expect(showLess).toHaveAttribute("aria-expanded", "true");
-    await expect(showLess).toBeFocused();
-    await expect(copy).toHaveClass(/is-expanded/);
-    await page.screenshot({ path: test.info().outputPath(`${locale}-home-biography-expanded.png`), fullPage: true });
-    const actionOrder = await biography.evaluate((element) => {
-      const actions = document.querySelector(".hero-actions");
-      return Boolean(actions && element.compareDocumentPosition(actions) & Node.DOCUMENT_POSITION_FOLLOWING);
-    });
-    expect(actionOrder).toBe(true);
-    await showLess.click();
-    await expect(biography.getByRole("button", { name: locale === "fa" ? "ادامه مطلب" : "Read more" })).toHaveAttribute("aria-expanded", "false");
+    for (const viewport of [
+      { width: 390, height: 844, label: "mobile" },
+      { width: 844, height: 390, label: "mobile-landscape" },
+      { width: 1024, height: 768, label: "tablet" },
+      { width: 1280, height: 600, label: "desktop-short-height" },
+    ]) {
+      await page.setViewportSize({ width: viewport.width, height: viewport.height });
+      await page.goto(`/${locale}`);
+      const intro = page.locator(".home-intro");
+      const image = intro.locator(":scope > .hero-artwork");
+      const copy = intro.locator(":scope > .home-intro-copy");
+      await expect(image).toBeVisible();
+      await expect(copy).toBeVisible();
+      await expect(copy.locator(".biography-copy")).toBeVisible();
+      await expect(copy.locator(".artist-discipline")).toHaveCount(0);
+      await expect(copy.locator(".home-biography h2")).toHaveCount(0);
+      await expect(copy.locator(".sample-content-notice")).toHaveCount(0);
+      const biography = copy.locator(".biography-disclosure");
+      const readMore = biography.getByRole("button", { name: locale === "fa" ? "ادامه مطلب" : "Read more" });
+      await expect(readMore).toBeVisible();
+      await readMore.click();
+      await expect(biography.locator(".biography-copy")).toHaveClass(/is-expanded/);
+      await expect(biography.getByRole("button", { name: locale === "fa" ? "نمایش کمتر" : "Show less" })).toBeVisible();
+      const imageBeforeCopy = await image.evaluate((element) => {
+        const text = element.parentElement?.querySelector(".home-intro-copy");
+        return Boolean(text && (element.compareDocumentPosition(text) & Node.DOCUMENT_POSITION_FOLLOWING));
+      });
+      expect(imageBeforeCopy, `${locale} ${viewport.label}: hero image precedes intro copy`).toBe(true);
+      const actions = copy.locator(".hero-actions a");
+      await expect(actions).toHaveCount(2);
+      await expect(actions.nth(0)).toHaveAttribute("href", `/${locale}/galleries`);
+      await expect(actions.nth(1)).toHaveAttribute("href", `/${locale}/works`);
+      const overflow = await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth);
+      expect(overflow, `${locale} ${viewport.label}: no horizontal overflow`).toBe(true);
+    }
   }
 });
 
-test("About sample preview shows long biography and sample CV without inventing a PDF", async ({ page }) => {
-  for (const locale of ["en", "fa"] as const) {
-    await page.setViewportSize({ width: 1440, height: 960 });
-    await page.goto(`/${locale}/about?preview=sample`);
-    await expect(page.locator(".sample-content-notice").first()).toBeVisible();
-    await expect(page.locator(".about-biography-copy")).toBeVisible();
-    await expect(page.locator(".about-cv-section")).toBeVisible();
-    await expect(page.locator(".about-cv-section .cv-list li")).toHaveCount(4);
-    await expect(page.getByRole("link", { name: /Download CV|دریافت رزومه/ })).toHaveCount(0);
-    await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", /noindex/);
-    await page.screenshot({ path: test.info().outputPath(`${locale}-about-sample-desktop.png`), fullPage: true });
-
-    await page.setViewportSize({ width: 390, height: 844 });
-    await page.goto(`/${locale}/about?preview=sample`);
-    await expect(page.locator(".sample-content-notice").first()).toBeVisible();
-    await expect(page.locator(".about-biography-copy")).toBeVisible();
-    await expect(page.locator(".about-cv-section")).toBeVisible();
-    await expect(page.locator(".about-cv-section .cv-list li")).toHaveCount(4);
-    await expect(page.getByRole("link", { name: /Download CV|دریافت رزومه/ })).toHaveCount(0);
-    await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", /noindex/);
-    await page.screenshot({ path: test.info().outputPath(`${locale}-about-sample-mobile.png`), fullPage: true });
-  }
-});
-
-test("mobile hero uses image then artist text then biography and both actions", async ({ page }) => {
+test("homepage biography expands in place without replacing the hero image or moving the viewport", async ({ page }) => {
   for (const locale of ["en", "fa"] as const) {
     await page.setViewportSize({ width: 390, height: 844 });
-    await page.goto(`/${locale}?preview=sample`);
-    const intro = page.locator(".home-intro");
-    const image = intro.locator(":scope > .hero-artwork");
-    const copy = intro.locator(":scope > .home-intro-copy");
-    const imageBeforeCopy = await image.evaluate((element) => { const text = element.parentElement?.querySelector(".home-intro-copy"); return Boolean(text && (element.compareDocumentPosition(text) & Node.DOCUMENT_POSITION_FOLLOWING)); });
-    expect(imageBeforeCopy).toBe(true);
-    await expect(copy.locator(".home-biography")).toBeVisible();
-    const readMore = copy.locator(".biography-toggle");
+    await page.goto(`/${locale}`);
+    const image = page.locator(".hero-artwork img");
+    const imageSource = await image.getAttribute("src");
+    const imageCurrentSource = await image.evaluate((element: HTMLImageElement) => element.currentSrc);
+    const readMore = page.getByRole("button", { name: locale === "fa" ? "ادامه مطلب" : "Read more" });
     await expect(readMore).toBeVisible();
-    await page.screenshot({ path: test.info().outputPath(`${locale}-mobile-biography-collapsed.png`), fullPage: true });
     await readMore.scrollIntoViewIfNeeded();
-    const initialScroll = await page.evaluate(() => window.scrollY);
+    const scrollBefore = await page.evaluate(() => window.scrollY);
     await readMore.click();
-    expect(await page.evaluate(() => window.scrollY)).toBe(initialScroll);
-    await expect(copy.locator(".biography-toggle")).toBeFocused();
-    const actions = copy.locator(".hero-actions a");
-    await expect(actions).toHaveCount(2);
-    await expect(actions.nth(0)).toHaveAttribute("href", `/${locale}/galleries`);
-    await expect(actions.nth(1)).toHaveAttribute("href", `/${locale}/works`);
-    const actionsAfterBiography = await copy.locator(".home-biography").evaluate((element) => {
-      const actions = element.parentElement?.querySelector(".hero-actions");
-      return Boolean(actions && element.compareDocumentPosition(actions) & Node.DOCUMENT_POSITION_FOLLOWING);
-    });
-    expect(actionsAfterBiography).toBe(true);
-    await expect(actions.nth(0)).toBeVisible();
-    await expect(actions.nth(1)).toBeVisible();
-    const overflow = await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth);
-    expect(overflow, locale).toBe(true);
-    await page.screenshot({ path: test.info().outputPath(`${locale}-mobile-biography-expanded.png`), fullPage: true });
+    await expect(page.getByRole("button", { name: locale === "fa" ? "نمایش کمتر" : "Show less" })).toHaveAttribute("aria-expanded", "true");
+    await expect(image).toHaveAttribute("src", imageSource!);
+    expect(await image.evaluate((element: HTMLImageElement) => element.currentSrc)).toBe(imageCurrentSource);
+    const scrollAfter = await page.evaluate(() => window.scrollY);
+    expect(Math.abs(scrollAfter - scrollBefore)).toBeLessThanOrEqual(2);
+  }
+});
 
-    await page.setViewportSize({ width: 844, height: 390 });
-    await page.goto(`/${locale}?preview=sample`);
-    await expect(page.locator(".home-biography")).toBeVisible();
-    const landscapeOverflow = await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth);
-    expect(landscapeOverflow, `${locale} mobile landscape`).toBe(true);
-    await page.screenshot({ path: test.info().outputPath(`${locale}-mobile-landscape-hero.png`), fullPage: true });
+test("normal About routes render bilingual fictional sample content and the complete CV", async ({ page }) => {
+  for (const locale of ["en", "fa"] as const) {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await page.goto(`/${locale}/about`);
+    await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", /noindex/);
+    await expect(page.locator(".sample-content-notice").first()).toBeVisible();
+    await expect(page.locator(".artist-portrait")).toHaveAttribute("src", /homepage-hero/);
+    await expect(page.locator(".about-statement")).toBeVisible();
+    await expect(page.locator(".about-biography-copy")).toBeVisible();
+    await expect(page.locator(".cv-category")).toHaveCount(5);
+    await expect(page.locator(".cv-list li")).toHaveCount(16);
+    await expect(page.getByRole("link", { name: /Download CV|دریافت رزومه/ })).toHaveAttribute("href", "/api/sample-cv");
+    const overflow = await page.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth);
+    expect(overflow).toBe(false);
+    await page.screenshot({ path: test.info().outputPath("about-" + locale + "-desktop.png"), fullPage: true });
+  }
+});
 
-    await page.setViewportSize({ width: 1024, height: 768 });
-    await page.goto(`/${locale}?preview=sample`);
-    await expect(page.locator(".home-biography")).toBeVisible();
-    const tabletOverflow = await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth);
-    expect(tabletOverflow, `${locale} tablet`).toBe(true);
-    await page.screenshot({ path: test.info().outputPath(`${locale}-tablet-biography.png`), fullPage: true });
+test("sample CV endpoint returns a valid non-indexable PDF without a preview query", async ({ request }) => {
+  const response = await request.get("/api/sample-cv");
+  expect(response.status()).toBe(200);
+  expect(response.headers()["content-type"]).toContain("application/pdf");
+  expect(response.headers()["x-robots-tag"]).toContain("noindex");
+  const body = await response.body();
+  expect(body.subarray(0, 8).toString("ascii")).toBe("%PDF-1.4");
+  expect(body.toString("ascii")).toContain("GHAZALEH ABDOLAHZADE NASOODI");
+  expect(body.toString("ascii")).toContain("FICTIONAL SAMPLE");
+  expect(body.toString("ascii")).toContain("Quiet Arrangements");
+  expect(body.toString("ascii")).toContain("A Small Atlas of Looking");
+  expect(body.toString("ascii")).toContain("ARTISTIC PRACTICE");
+  expect(body.toString("ascii").trimEnd()).toContain("%%EOF");
+});
 
-    await page.setViewportSize({ width: 1280, height: 600 });
-    await page.goto(`/${locale}?preview=sample`);
-    await expect(page.locator(".home-biography")).toBeVisible();
-    const shortDesktopOverflow = await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth);
-    expect(shortDesktopOverflow, `${locale} short-height desktop`).toBe(true);
-    await page.screenshot({ path: test.info().outputPath(`${locale}-desktop-short-height-biography.png`), fullPage: true });
+test("About pages preserve mobile and tablet layouts in both locales", async ({ page }) => {
+  for (const locale of ["en", "fa"] as const) {
+    for (const viewport of [{ width: 390, height: 844 }, { width: 768, height: 1024 }]) {
+      await page.setViewportSize(viewport);
+      await page.goto("/" + locale + "/about");
+      await expect(page.locator("html")).toHaveAttribute("dir", locale === "fa" ? "rtl" : "ltr");
+      await expect(page.locator(".artist-portrait")).toBeVisible();
+      await expect(page.locator(".about-biography-copy")).toBeVisible();
+      await expect(page.locator(".about-cv-section")).toBeVisible();
+      const overflow = await page.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth);
+      expect(overflow, locale + " at " + viewport.width + "px").toBe(false);
+      if (viewport.width === 390) await page.screenshot({ path: test.info().outputPath("about-" + locale + "-mobile.png"), fullPage: true });
+    }
   }
 });

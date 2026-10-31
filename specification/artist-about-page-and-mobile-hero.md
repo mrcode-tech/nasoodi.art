@@ -519,19 +519,21 @@ Do not block implementation of the structural experience on unavailable content 
 
 The homepage hero becomes a concise, expandable artist introduction: artist name, About, biography preview, Read more, then the two existing actions. Read more reveals the complete biography in place.
 
-The sidebar's About item opens a dedicated localized page with the approved artist image, full biography, and a CV section at the bottom. A direct PDF download is shown only when the real artist-approved CV is available.
+The sidebar's About item opens the single existing localized About page. On the feature branch in development and CI, that page is filled with clearly labelled bilingual sample biography, statement, image, and CV content so its real layout can be evaluated; the sample CV download is generated from the same fixture. The page and download are noindex and the fixture is disabled in production runtime. Replace all sample data with artist-authored, approved content before any release merge.
 
 On mobile, the hero is one continuous vertical story: image, artist identity, biography, and finally the two existing actions. The image and text are never separated by those buttons.
 
 
-## 17. Development-only layout preview fixtures
+## 17. Feature-branch sample content for layout verification
 
-The implementation may expose the About layout's long-copy and CV-list states through the explicit query parameter `?preview=sample` while running the local development server. This fixture is fictional, bilingual QA material; it is not the artist's biography, statement, education, exhibition history, or CV.
+The site owner explicitly authorized temporary fictional About-page content on the existing localized About routes of the feature branch, so the complete page can be evaluated with realistic text and CV density.
 
-- The preview must display a visible warning that all sample content is fictional and not approved.
-- It must be disabled in production builds, even when the query parameter is supplied.
-- Preview responses must be noindex and must never enter the sitemap or public content model.
-- Sample CV entries use obviously fictional labels and must not link to a fabricated PDF.
-- Replace the fixture only with artist-authored or artist-approved localized content. Do not copy fixture text into the production profile.
+- Render sample content directly through the existing `/[locale]/about` route and existing About components. Do not add a preview route, query parameter, alternative page, or parallel rendering pipeline.
+- Keep the fixture clearly labelled as fictional and not artist-approved.
+- The sample CV must contain multiple entries across education, exhibitions, publications, awards, and artistic practice.
+- Reuse the existing homepage hero image at `/images/homepage-hero.jpg`; do not generate, duplicate, or modify the asset.
+- Keep the About page noindex while sample content is present and exclude sample facts from structured data and sitemap publication.
+- The sample CV download must be derived from the same fixture records displayed on the page and must carry a visible fictional-sample notice.
+- Replace the fixture with artist-authored and artist-approved material before any release merge or deployment.
 
-The preview is a design/QA aid only; it does not satisfy the artist approval gate or make the About page publishable/indexable.
+This owner-authorized feature-branch fixture is a design/QA aid only; it does not satisfy artist approval or make the profile publishable.
