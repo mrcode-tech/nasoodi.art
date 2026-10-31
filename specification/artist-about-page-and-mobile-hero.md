@@ -519,7 +519,7 @@ Do not block implementation of the structural experience on unavailable content 
 
 The homepage hero becomes a concise, expandable artist introduction: artist name, About, biography preview, Read more, then the two existing actions. Read more reveals the complete biography in place.
 
-The sidebar's About item opens a dedicated localized page with the approved artist image, full biography, and a CV section at the bottom. A direct PDF download is shown only when the real artist-approved CV is available.
+The sidebar's About item opens the single existing localized About page. On the feature branch in development and CI, that page is filled with clearly labelled bilingual sample biography, statement, image, and CV content so its real layout can be evaluated; the sample CV download is generated from the same fixture. The page and download are noindex and the fixture is disabled in production runtime. Replace all sample data with artist-authored, approved content before any release merge.
 
 On mobile, the hero is one continuous vertical story: image, artist identity, biography, and finally the two existing actions. The image and text are never separated by those buttons.
 

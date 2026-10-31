@@ -913,6 +913,7 @@ test("normal About routes render bilingual fictional sample content and the comp
     await expect(page.getByRole("link", { name: /Download CV|دریافت رزومه/ })).toHaveAttribute("href", "/api/sample-cv");
     const overflow = await page.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth);
     expect(overflow).toBe(false);
+    await page.screenshot({ path: test.info().outputPath("about-" + locale + "-desktop.png"), fullPage: true });
   }
 });
 
@@ -928,17 +929,21 @@ test("sample CV endpoint returns a valid non-indexable PDF without a preview que
   expect(body.toString("ascii")).toContain("Quiet Arrangements");
   expect(body.toString("ascii")).toContain("A Small Atlas of Looking");
   expect(body.toString("ascii")).toContain("ARTISTIC PRACTICE");
-  expect(body.toString("ascii")).toContain("Quiet Arrangements");
-  expect(body.toString("ascii")).toContain("A Small Atlas of Looking");
-  expect(body.toString("ascii")).toContain("ARTISTIC PRACTICE");
+  expect(body.toString("ascii").trimEnd()).toContain("%%EOF");
 });
 
-test("Persian About page keeps RTL and populated content at mobile width", async ({ page }) => {
-  await page.setViewportSize({ width: 390, height: 844 });
-  await page.goto("/fa/about");
-  await expect(page.locator("html")).toHaveAttribute("dir", "rtl");
-  await expect(page.locator(".about-biography-copy")).toBeVisible();
-  await expect(page.locator(".about-cv-section")).toBeVisible();
-  const overflow = await page.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth);
-  expect(overflow).toBe(false);
+test("About pages preserve mobile and tablet layouts in both locales", async ({ page }) => {
+  for (const locale of ["en", "fa"] as const) {
+    for (const viewport of [{ width: 390, height: 844 }, { width: 768, height: 1024 }]) {
+      await page.setViewportSize(viewport);
+      await page.goto("/" + locale + "/about");
+      await expect(page.locator("html")).toHaveAttribute("dir", locale === "fa" ? "rtl" : "ltr");
+      await expect(page.locator(".artist-portrait")).toBeVisible();
+      await expect(page.locator(".about-biography-copy")).toBeVisible();
+      await expect(page.locator(".about-cv-section")).toBeVisible();
+      const overflow = await page.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth);
+      expect(overflow, locale + " at " + viewport.width + "px").toBe(false);
+      if (viewport.width === 390) await page.screenshot({ path: test.info().outputPath("about-" + locale + "-mobile.png"), fullPage: true });
+    }
+  }
 });
