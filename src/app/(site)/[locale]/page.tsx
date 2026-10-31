@@ -2,18 +2,19 @@ import Image from "next/image";
 import { ArtworkExperience } from "@/components/artwork-experience";
 import { CollectionCarousel } from "@/components/collection-carousel";
 import { BiographyDisclosure } from "@/components/biography-disclosure";
+import { aboutPreviewFixture } from "@/lib/about-preview-fixtures";
 import { Button } from "@/components/ui/button";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { artworks,galleries,journalEntries,homepageSelection,getPublicArtworks,getPublicGalleries,getHomepageHero,getHomepageFeaturedArtworks,getHomepageFeaturedGalleries,getHomepageJournalPreview,primaryImageFor,artistProfile,getPublicArtistProfile } from "@/lib/site";
+import { artworks,galleries,journalEntries,homepageSelection,getPublicArtworks,getPublicGalleries,getHomepageHero,getHomepageFeaturedArtworks,getHomepageFeaturedGalleries,getHomepageJournalPreview,primaryImageFor } from "@/lib/site";
 import { copyFor,isLocale,pagePath } from "@/lib/site";
 type Props={params:Promise<{locale:string}>};
 export async function generateMetadata({params}:Props):Promise<Metadata>{const {locale}=await params;if(!isLocale(locale))return {};
  return {title:locale==="fa"?"غزاله عبداله زاده نسودی":"Ghazaleh Abdolahzade Nasoodi",
- description:locale==="fa"?"پورتفولیوی غزاله عبداله زاده نسودی، نقاش رنگ‌روغن.":"The artist portfolio of Ghazaleh Abdolahzade Nasoodi, oil painter.",
+ description:locale==="fa"?"پورتفولیوی هنری غزاله عبداله زاده نسودی.":"The artist portfolio of Ghazaleh Abdolahzade Nasoodi.",
  alternates:{canonical:pagePath(locale),languages:{fa:"/fa",en:"/en"}}};}
-export default async function Home({params}:Props){const {locale}=await params;if(!isLocale(locale))notFound();const t=copyFor(locale);const samplePreview=false;const profile=getPublicArtistProfile(artistProfile,locale);const biography=profile?.biography[locale];
+export default async function Home({params}:Props){const {locale}=await params;if(!isLocale(locale))notFound();const t=copyFor(locale);const biography=aboutPreviewFixture.biography[locale];
  const hero=getHomepageHero(artworks,homepageSelection,locale),heroImage=hero?primaryImageFor(hero):undefined;
  const heroAlt=heroImage?.alt[locale] ?? (locale==="fa" ? "هنرمند در آتلیه، روبه‌روی بوم نقاشی ایستاده است." : "The artist standing before a canvas in her studio.");
  const works=getHomepageFeaturedArtworks(artworks,homepageSelection,locale),sets=getHomepageFeaturedGalleries(galleries,artworks,homepageSelection,locale);
@@ -29,13 +30,10 @@ export default async function Home({params}:Props){const {locale}=await params;i
    <div className="home-intro-copy">
     <p className="eyebrow">{t.portfolio}</p>
     <h1 id="home-title">{locale==="fa"?"غزاله عبداله زاده نسودی":"Ghazaleh Abdolahzade Nasoodi"}</h1>
-    <p className="artist-discipline">{t.discipline}</p>
     <div className="intro-rule" aria-hidden="true"/>
-    {biography && <section className="home-biography" aria-labelledby="home-biography-title">
-      <h2 id="home-biography-title">{t.aboutArtist}</h2>
-      {samplePreview && <p className="sample-content-notice">{locale==="fa"?"متن نمونه برای بررسی طراحی؛ تأییدنشده و غیرقابل انتشار":"Sample content for design review — not artist-approved or publishable."}</p>}
+    <section className="home-biography" aria-label={locale==="fa"?"زندگی‌نامه":"Biography"}>
       <BiographyDisclosure biography={biography} readMoreLabel={t.readMore} showLessLabel={t.showLess} lines={4}/>
-    </section>}
+    </section>
     {(hasFeaturedGalleries || hasSelectedWorks) && <div className="hero-actions">
      {hasFeaturedGalleries && <Button asChild variant="default" size="lg"><Link href={pagePath(locale,"galleries")}>{locale==="fa"?"گالری‌ها را ببینید":"Explore galleries"}</Link></Button>}
      {hasSelectedWorks && <Button asChild variant="outline" size="lg"><Link href={pagePath(locale,"works")}>{locale==="fa"?"گزیده آثار را ببینید":"View selected works"}</Link></Button>}
