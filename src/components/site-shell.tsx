@@ -52,10 +52,10 @@ export function SiteShell({ locale, children }: { locale: Locale; children: Reac
   const alternate = alternatePathFor(pathname, locale);
   const links: [string, string, string][] = [
     ["home", labels.home, pagePath(locale)],
+    ["about", labels.about, pagePath(locale, "about")],
     ["works", labels.works, pagePath(locale, "works")],
     ["galleries", labels.galleries, pagePath(locale, "galleries")],
     ["journal", labels.journal, pagePath(locale, "journal")],
-    ["about", labels.about, pagePath(locale, "about")],
     ["contact", labels.contact, pagePath(locale, "contact")],
   ];
 
