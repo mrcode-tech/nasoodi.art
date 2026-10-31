@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { getPublicArtworks,getPublicGalleries,isSafeLocalImagePath,isSafeContentSlug,getPublicJournal,getPublicCvEntries,getPublicArtistProfile,getPublicContactDetails,getUpcomingJournalEvents,getArtworkStructuredData,getGalleryStructuredData,getJournalStructuredData,serializeJsonLd,getHomepageFeaturedArtworks,getGalleryCoverArtwork,getJournalEntriesForCategory,isSafeJournalHref,portfolioStructuredData,type Artwork,type Gallery,type JournalEntry,type CvEntry,type ArtistProfile,type ContactDetails, hasExplicitTimeZone } from "../src/lib/site";
+import { artworks,galleries,homepageSelection,getPublicArtworks,getPublicGalleries,isSafeLocalImagePath,isSafeContentSlug,getPublicJournal,getPublicCvEntries,getPublicArtistProfile,getPublicContactDetails,getUpcomingJournalEvents,getArtworkStructuredData,getGalleryStructuredData,getJournalStructuredData,serializeJsonLd,getHomepageFeaturedArtworks,getGalleryCoverArtwork,getJournalEntriesForCategory,isSafeJournalHref,portfolioStructuredData,type Artwork,type Gallery,type JournalEntry,type CvEntry,type ArtistProfile,type ContactDetails, hasExplicitTimeZone } from "../src/lib/site";
 const work:Artwork={id:"w1",slug:"work-one",title:{en:"Work",fa:"اثر"},images:[{src:"/art/work.jpg",alt:{en:"Painting",fa:"نقاشی"},role:"primary",width:1200,height:900}],rightsConfirmed:true,status:"published"};
 test("artwork stays private until published and rights-cleared",()=>{assert.equal(getPublicArtworks([{...work,status:"needs-review"}],"en").length,0);assert.equal(getPublicArtworks([{...work,rightsConfirmed:false}],"en").length,0);assert.equal(getPublicArtworks([work],"en").length,1);});
 test("artwork requires localized title and primary image alt",()=>{assert.equal(getPublicArtworks([{...work,title:{en:"Work"}}],"fa").length,0);assert.equal(getPublicArtworks([{...work,images:[{...work.images[0],alt:{en:""}}]}],"en").length,0);});
@@ -213,4 +213,46 @@ test("Journal links reject protocol-relative, backslash-normalized, control, and
  for(const href of ["//example.org","/\\\\example.org","/\\u0000bad","javascript:alert(1)","http://example.org","https://user:secret@example.org"]) {
   assert.equal(isSafeJournalHref(href),false,JSON.stringify(href));
  }
+});
+
+test("the five owner-approved gallery assets are represented by five unique published artwork records", () => {
+ assert.equal(artworks.length,5);
+ assert.equal(new Set(artworks.map(item=>item.id)).size,5);
+ assert.equal(new Set(artworks.map(item=>item.slug)).size,5);
+ for (const [index,item] of artworks.entries()) {
+  assert.equal(item.status,"published");
+  assert.equal(item.rightsConfirmed,true);
+  assert.equal(item.images.length,1);
+  assert.equal(item.images[0].src,`/images/approved-artwork-${index+1}.jpg`);
+  assert.equal(item.images[0].role,"primary");
+  assert.ok(item.images[0].width>0 && item.images[0].height>0);
+  for (const locale of ["en","fa"] as const) {
+   assert.ok(item.title[locale]?.trim());
+   assert.ok(item.description?.[locale]?.trim());
+   assert.ok(item.images[0].alt[locale]?.trim());
+  }
+ }
+ assert.deepEqual(getPublicArtworks(artworks,"en").map(item=>item.id),artworks.map(item=>item.id));
+ assert.deepEqual(getPublicArtworks(artworks,"fa").map(item=>item.id),artworks.map(item=>item.id));
+});
+
+test("four curated collections publish valid ordered memberships with shared artwork identities", () => {
+ assert.equal(galleries.length,4);
+ assert.equal(new Set(galleries.map(item=>item.id)).size,4);
+ assert.equal(new Set(galleries.map(item=>item.slug)).size,4);
+ for (const gallery of galleries) {
+  assert.equal(gallery.status,"published");
+  assert.ok(gallery.title.en?.trim() && gallery.title.fa?.trim());
+  assert.ok(gallery.description.en?.trim() && gallery.description.fa?.trim());
+  assert.ok(gallery.artworkIds.length>=3);
+  assert.ok(gallery.artworkIds.includes(gallery.coverArtworkId));
+  assert.ok(gallery.artworkIds.every(id=>artworks.some(item=>item.id===id)));
+  assert.equal(new Set(gallery.artworkIds).size,gallery.artworkIds.length);
+ }
+ const memberships=artworks.map(item=>galleries.filter(gallery=>gallery.artworkIds.includes(item.id)).length);
+ assert.ok(memberships.every(count=>count>=2),"each canonical artwork should be reused across multiple collections");
+ assert.equal(getPublicGalleries(galleries,artworks,"en").length,4);
+ assert.equal(getPublicGalleries(galleries,artworks,"fa").length,4);
+ assert.deepEqual(homepageSelection.featuredArtworkIds,artworks.map(item=>item.id));
+ assert.equal(homepageSelection.featuredGalleryIds.length,4);
 });
