@@ -933,6 +933,7 @@ test("mobile hero uses image then artist text then biography and both actions", 
     const readMore = copy.locator(".biography-toggle");
     await expect(readMore).toBeVisible();
     await page.screenshot({ path: test.info().outputPath(`${locale}-mobile-biography-collapsed.png`), fullPage: true });
+    await readMore.scrollIntoViewIfNeeded();
     const initialScroll = await page.evaluate(() => window.scrollY);
     await readMore.click();
     expect(await page.evaluate(() => window.scrollY)).toBe(initialScroll);
