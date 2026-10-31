@@ -910,7 +910,7 @@ test("homepage biography expands in place without replacing the hero image or mo
     const image = page.locator(".hero-artwork img");
     const imageSource = await image.getAttribute("src");
     const imageCurrentSource = await image.evaluate((element: HTMLImageElement) => element.currentSrc);
-    const readMore = page.getByRole("button", { name: locale === "fa" ? "بیشتر بخوانید" : "Read more" });
+    const readMore = page.getByRole("button", { name: locale === "fa" ? "ادامه مطلب" : "Read more" });
     await expect(readMore).toBeVisible();
     await readMore.scrollIntoViewIfNeeded();
     const scrollBefore = await page.evaluate(() => window.scrollY);
