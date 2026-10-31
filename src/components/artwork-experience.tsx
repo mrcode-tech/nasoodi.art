@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState, useSyncExternalStore } from "react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
 import { pagePath, primaryImageFor, type Artwork, type Locale } from "@/lib/site";
@@ -12,8 +12,20 @@ type Props = {
   context: "home" | `gallery:${string}`;
 };
 
+const subscribeToLocation = (onChange: () => void) => {
+  window.addEventListener("popstate", onChange);
+  window.addEventListener("nasoodi:locationchange", onChange);
+  return () => {
+    window.removeEventListener("popstate", onChange);
+    window.removeEventListener("nasoodi:locationchange", onChange);
+  };
+};
+const getLocationSearch = () => window.location.search;
+const getServerLocationSearch = () => "";
+
 export function ArtworkExperience({ artworks, locale, context }: Props) {
-  const [activeSlug, setActiveSlug] = useState<string | null>(null);
+  const locationSearch = useSyncExternalStore(subscribeToLocation, getLocationSearch, getServerLocationSearch);
+  const activeSlug = useMemo(() => new URLSearchParams(locationSearch).get("artwork"), [locationSearch]);
   const [hasViewerHistoryEntry, setHasViewerHistoryEntry] = useState(false);
   const [failedImages, setFailedImages] = useState<string[]>([]);
   const labels = locale === "fa"
@@ -28,19 +40,6 @@ export function ArtworkExperience({ artworks, locale, context }: Props) {
   const activeArtwork = activeIndex >= 0 ? sequence[activeIndex] : undefined;
   const activeImage = activeArtwork ? primaryImageFor(activeArtwork) : undefined;
 
-  const syncFromLocation = useCallback(() => {
-    const params = new URLSearchParams(window.location.search);
-    const slug = params.get("artwork");
-    setActiveSlug(slug && sequence.some((work) => work.slug === slug) ? slug : null);
-    setHasViewerHistoryEntry(false);
-  }, [sequence]);
-
-  useEffect(() => {
-    syncFromLocation();
-    window.addEventListener("popstate", syncFromLocation);
-    return () => window.removeEventListener("popstate", syncFromLocation);
-  }, [syncFromLocation]);
-
   const writeViewerUrl = useCallback((slug: string, mode: "push" | "replace") => {
     const url = new URL(window.location.href);
     url.searchParams.set("artwork", slug);
@@ -51,11 +50,11 @@ export function ArtworkExperience({ artworks, locale, context }: Props) {
     } else {
       window.history.replaceState({ ...window.history.state, nasoodiArtworkViewer: true }, "", url);
     }
+    window.dispatchEvent(new Event("nasoodi:locationchange"));
   }, [context]);
 
   const openArtwork = (slug: string) => {
     writeViewerUrl(slug, "push");
-    setActiveSlug(slug);
   };
 
   const closeViewer = useCallback(() => {
@@ -68,14 +67,13 @@ export function ArtworkExperience({ artworks, locale, context }: Props) {
     url.searchParams.delete("artwork");
     url.searchParams.delete("viewerContext");
     window.history.replaceState(window.history.state, "", url);
-    setActiveSlug(null);
+    window.dispatchEvent(new Event("nasoodi:locationchange"));
   }, [hasViewerHistoryEntry]);
 
   const move = useCallback((offset: number) => {
     const next = sequence[activeIndex + offset];
     if (!next) return;
     writeViewerUrl(next.slug, "replace");
-    setActiveSlug(next.slug);
   }, [activeIndex, sequence, writeViewerUrl]);
 
   useEffect(() => {
