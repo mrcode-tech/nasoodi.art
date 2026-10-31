@@ -793,3 +793,61 @@ html[lang=fa] .home-biography h2,html[lang=fa] .profile-content h2{font-family:T
  .hero-actions .ui-button{width:100%;justify-content:center}
 }
 @media(prefers-reduced-motion:reduce){.biography-copy,.biography-toggle{transition:none!important}}
+
+/* Keep the Persian desktop sidebar visually consistent with the borderless English sidebar.
+   Match the Sidebar primitive's combined class selector so this wins over its RTL border rule. */
+html[lang="fa"] .sidebar-root.desktop-sidebar {
+  border-left: 0;
+}
+
+
+/* Keep the homepage portrait anchored while the biography expands and flows around it. */
+.home-intro.has-hero {
+  display: block;
+  min-height: 0;
+  padding-block: 2rem 2.5rem;
+}
+.home-intro.has-hero::after {
+  display: table;
+  clear: both;
+  content: "";
+}
+.home-intro.has-hero > .hero-artwork {
+  float: right;
+  width: min(42%, 32rem);
+  margin: 0 0 1.25rem clamp(2rem, 4vw, 4rem);
+}
+html[dir="rtl"] .home-intro.has-hero > .hero-artwork {
+  float: left;
+  margin: 0 clamp(2rem, 4vw, 4rem) 1.25rem 0;
+}
+.home-intro.has-hero > .home-intro-copy {
+  display: block;
+  min-width: 0;
+}
+.home-intro.has-hero .home-intro-copy h1 {
+  max-width: none;
+  text-align: start;
+}
+.home-intro.has-hero .home-biography {
+  max-width: none;
+}
+.home-intro.has-hero .biography-copy {
+  text-align: justify;
+  text-justify: inter-word;
+  hyphens: auto;
+}
+.page-content p:not(.eyebrow) {
+  text-align: justify;
+  text-justify: inter-word;
+}
+@media (max-width: 900px) {
+  .home-intro.has-hero > .hero-artwork {
+    float: none;
+    width: 100%;
+    margin: 0 0 1.25rem;
+  }
+  .home-intro.has-hero > .home-intro-copy {
+    width: 100%;
+  }
+}

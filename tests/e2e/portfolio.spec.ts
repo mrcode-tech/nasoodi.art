@@ -884,6 +884,12 @@ test("homepage hero layout is responsive and renders the bilingual biography", a
       const copy = intro.locator(":scope > .home-intro-copy");
       await expect(image).toBeVisible();
       await expect(copy).toBeVisible();
+      await expect(intro.locator(".intro-rule")).toHaveCount(0);
+      if (viewport.width > 900) {
+        const sidebar = page.locator(".desktop-sidebar");
+        await expect(sidebar).toBeVisible();
+        expect(await sidebar.evaluate((element) => getComputedStyle(element).borderLeftWidth)).toBe("0px");
+      }
       await expect(copy.locator(".biography-copy")).toBeVisible();
       await expect(copy.locator(".artist-discipline")).toHaveCount(0);
       await expect(copy.locator(".home-biography h2")).toHaveCount(0);
@@ -975,5 +981,48 @@ test("About pages preserve mobile and tablet layouts in both locales", async ({ 
       expect(overflow, locale + " at " + viewport.width + "px").toBe(false);
       if (viewport.width === 390) await page.screenshot({ path: test.info().outputPath("about-" + locale + "-mobile.png"), fullPage: true });
     }
+  }
+});
+
+
+test("desktop homepage biography expands around a fixed locale-aligned hero image", async ({ page }) => {
+  for (const locale of ["en", "fa"] as const) {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.goto(`/${locale}`);
+    const figure = page.locator(".home-intro > .hero-artwork");
+    const image = figure.locator("img");
+    const biography = page.locator(".home-biography .biography-copy");
+    const readMore = page.getByRole("button", { name: locale === "fa" ? "ادامه مطلب" : "Read more" });
+    await expect(image).toBeVisible();
+    await expect(readMore).toBeVisible();
+
+    const before = await figure.boundingBox();
+    expect(before).not.toBeNull();
+    const floatBefore = await figure.evaluate((element) => getComputedStyle(element).float);
+    expect(floatBefore).toBe(locale === "fa" ? "left" : "right");
+
+    await readMore.click();
+    await expect(biography).toHaveClass(/is-expanded/);
+    const after = await figure.boundingBox();
+    expect(after).not.toBeNull();
+    expect(Math.abs(after!.x - before!.x)).toBeLessThanOrEqual(1);
+    expect(Math.abs(after!.y - before!.y)).toBeLessThanOrEqual(1);
+    expect(Math.abs(after!.width - before!.width)).toBeLessThanOrEqual(1);
+    expect(Math.abs(after!.height - before!.height)).toBeLessThanOrEqual(1);
+
+    const flow = await biography.evaluate((element) => {
+      const range = document.createRange();
+      range.selectNodeContents(element);
+      const rects = Array.from(range.getClientRects());
+      const photo = element.closest(".home-intro")?.querySelector(".hero-artwork")?.getBoundingClientRect();
+      return {
+        textAlign: getComputedStyle(element).textAlign,
+        hasLinesBesidePhoto: Boolean(photo && rects.some((rect) => rect.top < photo.bottom - 2)),
+        hasLinesBelowPhoto: Boolean(photo && rects.some((rect) => rect.top >= photo.bottom - 1)),
+      };
+    });
+    expect(flow.textAlign).toBe("justify");
+    expect(flow.hasLinesBesidePhoto, `${locale}: biography begins beside the portrait`).toBe(true);
+    expect(flow.hasLinesBelowPhoto, `${locale}: biography continues below the portrait`).toBe(true);
   }
 });
