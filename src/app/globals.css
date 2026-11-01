@@ -902,7 +902,7 @@ html[lang="fa"] .prose,html[lang="fa"] .about-biography-copy,html[lang="fa"] .ab
 .contact-links a{overflow-wrap:anywhere}
 .journal-pagination{align-items:center;gap:.65rem 1rem;margin-top:2rem;padding-top:1rem}
 .journal-pagination .gallery-results-status{flex:1 1 100%;margin:0}
-.journal-pagination .gallery-pagination-controls{display:flex;flex:1 1 auto;flex-wrap:nowrap;align-items:center;justify-content:space-between;gap:.6rem;min-width:0}
+.journal-pagination .gallery-pagination-controls{display:flex;flex:1 1 auto;flex-direction:row;flex-wrap:nowrap;align-items:center;justify-content:space-between;gap:.6rem;min-width:0}
 .journal-pagination .gallery-page-size{display:flex;flex:0 1 auto;align-items:center;gap:.45rem;min-width:0;white-space:nowrap}
 .journal-pagination .gallery-page-size select{min-width:3.5rem;width:auto}
 .journal-pagination .gallery-page-nav{display:flex;flex:0 1 auto;flex-wrap:nowrap;align-items:center;gap:.25rem;min-width:0}
