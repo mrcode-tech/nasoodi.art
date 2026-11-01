@@ -97,3 +97,16 @@ Do not call the study approved until the owner reviews the rendered artifact.
 - [ ] Inward torn edge and outer attachment edge are unambiguous.
 - [ ] English and Persian edge attachment are represented in review screenshots.
 - [ ] No visual approval is inferred from successful asset generation.
+
+## 9. Responsive composition decisions — implementation review
+
+The component uses three explicit geometry variants; the compact variants are not scaled copies of the viewport placement.
+
+- **Viewport placement:** retains the 3:2 paper proportion, uses a dedicated top inset for the close-control zone, and keeps the content column comfortably inset from both torn edges.
+- **Desktop sidebar:** uses a near-square/portrait note proportion at the real sidebar content width. The title receives the full usable inline width; the close control occupies a reserved top zone rather than consuming a permanent side column. This prevents narrow title wrapping caused by the former 3.4rem inline reservation.
+- **Mobile drawer:** keeps a wider landscape composition with a non-shrinking flex item, a minimum visible height, and a reserved top zone for the close control. The drawer remains the scrolling container on short screens.
+- All placements use logical block/inline spacing. The decorative SVG alone is mirrored for Persian; the content and controls are not transformed.
+- The component exposes stable `data-part` hooks for visual/behavioral browser tests. Tests must not target CSS-module implementation class names.
+- The paper SVG remains a provisional first study pending owner review. Responsive screenshots and the CI PNG are technical review evidence, not visual approval.
+
+These values are implementation decisions to be checked against the complete viewport matrix. If the actual sidebar/drawer geometry changes, update the relevant variant and its screenshot evidence rather than applying global scale or transform fixes.

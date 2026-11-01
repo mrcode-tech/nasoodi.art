@@ -40,9 +40,11 @@ test.describe("Journal announcement responsive placements", () => {
 
         const sticker = page.locator('[data-placement="viewport"]');
         await expect(sticker).toBeVisible();
-        await expect(sticker.locator(".eyebrow")).toBeVisible();
-        await expect(sticker.locator(".title")).toHaveText(item.title);
-        await expect(sticker.locator("time")).toBeVisible();
+        await expect(sticker.locator('[data-part="eyebrow"]')).toBeVisible();
+        await expect(sticker.locator('[data-part="link"]')).toHaveAttribute("href", /\\/journal\\//);
+        await expect(sticker.locator('[data-part="title"]')).toHaveText(item.title);
+      await expect(sticker.locator('[data-part="link"]')).toHaveAttribute("href", /\\/journal\\//);
+        await expect(sticker.locator('[data-part="date"]')).toBeVisible();
         await expectDismissButtonInsideSticker(sticker);
 
         const box = await sticker.boundingBox();
@@ -65,7 +67,7 @@ test.describe("Journal announcement responsive placements", () => {
       const sticker = sidebar.locator('[data-placement="desktop-sidebar"]');
       await expect(sidebar).toBeVisible();
       await expect(sticker).toBeVisible();
-      await expect(sticker.locator(".title")).toHaveText(item.title);
+      await expect(sticker.locator('[data-part="title"]')).toHaveText(item.title);
       await expectDismissButtonInsideSticker(sticker);
 
       const sidebarBox = await sidebar.boundingBox();
@@ -98,7 +100,7 @@ test.describe("Journal announcement responsive placements", () => {
         await expect(drawer).toBeVisible();
         const sticker = drawer.locator('[data-placement="mobile-sidebar"]');
         await expect(sticker).toBeVisible();
-        await expect(sticker.locator(".title")).toHaveText(item.title);
+        await expect(sticker.locator('[data-part="title"]')).toHaveText(item.title);
         await sticker.scrollIntoViewIfNeeded();
         await expect(sticker).toBeInViewport();
         await expectDismissButtonInsideSticker(sticker);

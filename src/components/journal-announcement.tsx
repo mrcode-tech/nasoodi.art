@@ -87,17 +87,18 @@ export function JournalAnnouncement({
         className={`${styles.paper} ${locale === "fa" ? styles.paperRtl : ""}`}
         aria-hidden="true"
       />
-      <Link className={styles.link} href={href}>
-        <span className={styles.eyebrow}>{eyebrow}</span>
-        <span className={`${styles.title} ${locale === "fa" ? styles.persianTitle : ""}`}>
+      <Link className={styles.link} href={href} data-part="link">
+        <span className={styles.eyebrow} data-part="eyebrow">{eyebrow}</span>
+        <span className={`${styles.title} ${locale === "fa" ? styles.persianTitle : ""}`} data-part="title">
           {event.title}
         </span>
-        <time className={styles.date} dateTime={event.startsAt}>
+        <time className={styles.date} dateTime={event.startsAt} data-part="date">
           {date}
         </time>
       </Link>
       <Button
         className={styles.dismiss}
+        data-part="dismiss"
         variant="ghost"
         size="sm"
         onClick={dismiss}

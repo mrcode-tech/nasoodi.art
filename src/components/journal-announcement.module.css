@@ -14,7 +14,8 @@
   z-index: 21;
   inset-block-end: 7.25rem;
   inset-inline-start: 0;
-  width: min(var(--sidebar), 16.5rem);
+  width: min(var(--sidebar), 17rem);
+  min-height: 9.5rem;
   aspect-ratio: 3 / 2;
 }
 
@@ -37,31 +38,28 @@
   min-width: 0;
   flex-direction: column;
   justify-content: center;
-  gap: 0.42rem;
-  padding: 1.75rem 3.75rem 1.25rem 1.55rem;
+  gap: 0.38rem;
+  padding-block: 2.8rem 1rem;
+  padding-inline: 1.4rem;
   color: inherit;
   text-align: start;
   text-decoration: none;
 }
 
-:dir(rtl) .link {
-  padding-inline: 1.55rem 3.75rem;
-}
-
 .eyebrow {
   margin: 0;
   color: var(--mauve-deep);
-  font-size: 0.68rem;
+  font-size: 0.67rem;
   font-weight: 700;
-  letter-spacing: 0.075em;
-  line-height: 1.45;
+  letter-spacing: 0.055em;
+  line-height: 1.4;
 }
 
 .title {
   display: block;
   max-width: 100%;
   color: var(--ink);
-  font: 400 clamp(1rem, 1.2vw, 1.2rem) / 1.38 Georgia, "Times New Roman", serif;
+  font: 400 clamp(1.05rem, 1.2vw, 1.25rem) / 1.34 Georgia, "Times New Roman", serif;
   overflow-wrap: anywhere;
   text-wrap: pretty;
 }
@@ -70,16 +68,16 @@
   display: block;
   margin-top: 0.08rem;
   color: var(--muted);
-  font-size: 0.78rem;
-  line-height: 1.55;
+  font-size: 0.76rem;
+  line-height: 1.5;
   font-variant-numeric: tabular-nums;
 }
 
 .dismiss {
   position: absolute;
   z-index: 2;
-  inset-block-start: 0.45rem;
-  inset-inline-end: 0.85rem;
+  inset-block-start: 0.35rem;
+  inset-inline-end: 0.45rem;
   display: inline-flex;
   width: 2.75rem !important;
   min-width: 2.75rem !important;
@@ -93,7 +91,7 @@
   background: transparent !important;
   box-shadow: none !important;
   color: var(--muted);
-  font-size: 1.45rem;
+  font-size: 1.55rem;
   font-weight: 400;
   line-height: 1;
 }
@@ -116,40 +114,34 @@
 .desktopSidebarContainer {
   width: 100%;
   max-width: 100%;
-  margin-block: 1.4rem 0.75rem;
-  aspect-ratio: 3 / 2;
+  min-height: 9.5rem;
+  margin-block: 1.1rem 0.75rem;
+  aspect-ratio: 1.2;
 }
 
 .desktopSidebarContainer .link {
-  gap: 0.28rem;
-  padding: 1.55rem 3.4rem 1rem 1.15rem;
+  gap: 0.3rem;
+  padding-block: 2.7rem 0.95rem;
+  padding-inline: 1rem;
 }
 
 .desktopSidebarContainer .eyebrow {
-  font-size: 0.56rem;
+  font-size: 0.61rem;
   letter-spacing: 0.035em;
 }
 
 .desktopSidebarContainer .title {
-  font-size: 0.9rem;
-  line-height: 1.35;
+  font-size: 1rem;
+  line-height: 1.34;
 }
 
 .desktopSidebarContainer .date {
-  font-size: 0.68rem;
+  font-size: 0.72rem;
 }
 
 .desktopSidebarContainer .dismiss {
-  inset-block-start: 0.25rem;
-  inset-inline-end: 0.45rem;
-  width: 2.75rem !important;
-  min-width: 2.75rem !important;
-  height: 2.75rem !important;
-  min-height: 2.75rem !important;
-}
-
-.desktopSidebarContainer .link:dir(rtl) {
-  padding-inline: 1.15rem 3.4rem;
+  inset-block-start: 0.3rem;
+  inset-inline-end: 0.35rem;
 }
 
 .mobileSidebarContainer {
@@ -158,7 +150,11 @@
 
 .persianTitle {
   font-family: Tahoma, Arial, sans-serif;
-  line-height: 1.5;
+  line-height: 1.55;
+  letter-spacing: 0;
+}
+
+:dir(rtl) .eyebrow {
   letter-spacing: 0;
 }
 
@@ -172,13 +168,15 @@
     display: block;
     width: 100%;
     max-width: 100%;
-    margin-block: 1.15rem 0.9rem;
-    aspect-ratio: 3 / 2;
+    min-height: 10rem;
+    margin-block: 1rem 0.9rem;
+    aspect-ratio: 1.45;
   }
 
   .mobileSidebarContainer .link {
-    gap: 0.4rem;
-    padding: 1.35rem 3.5rem 0.75rem 1.5rem;
+    gap: 0.36rem;
+    padding-block: 2.65rem 0.95rem;
+    padding-inline: 1.15rem;
   }
 
   .mobileSidebarContainer .eyebrow {
@@ -186,7 +184,7 @@
   }
 
   .mobileSidebarContainer .title {
-    font-size: clamp(1rem, 4vw, 1.18rem);
+    font-size: clamp(1.05rem, 4vw, 1.2rem);
     line-height: 1.45;
   }
 
@@ -195,12 +193,8 @@
   }
 
   .mobileSidebarContainer .dismiss {
-    inset-block-start: 0.45rem;
-    inset-inline-end: 0.7rem;
-  }
-
-  .mobileSidebarContainer .link:dir(rtl) {
-    padding-inline: 1.5rem 3.5rem;
+    inset-block-start: 0.35rem;
+    inset-inline-end: 0.45rem;
   }
 }
 
