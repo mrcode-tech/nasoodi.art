@@ -19,7 +19,9 @@ async function expectDismissButtonInsideSticker(sticker: Locator) {
   const stickerBox = await sticker.boundingBox();
   const buttonBox = await sticker.getByRole("button").boundingBox();
   const titleBox = await sticker.locator('[data-part="title"]').boundingBox();
-  const paperBox = await sticker.locator('[data-part="paper"]').boundingBox();
+  const paper = sticker.locator('[data-part="paper"]');
+  const paperBox = await paper.boundingBox();
+  const paperBackgroundSize = await paper.evaluate((element) => getComputedStyle(element).backgroundSize);
 
   expect(stickerBox).not.toBeNull();
   expect(buttonBox).not.toBeNull();
@@ -29,6 +31,7 @@ async function expectDismissButtonInsideSticker(sticker: Locator) {
   expect(paperBox!.y).toBe(stickerBox!.y);
   expect(paperBox!.width).toBe(stickerBox!.width);
   expect(paperBox!.height).toBe(stickerBox!.height);
+  expect(paperBackgroundSize).toBe('100% 100%');
   expect(buttonBox!.width).toBeGreaterThanOrEqual(44);
   expect(buttonBox!.height).toBeGreaterThanOrEqual(44);
   // Keep the 44px control inside the visible paper silhouette, clear of its transparent SVG edge.
