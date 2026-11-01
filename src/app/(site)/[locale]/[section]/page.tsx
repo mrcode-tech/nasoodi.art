@@ -5,6 +5,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { artworks,galleries,journalEntries,cvEntries,artistProfile,contactDetails,getPublicArtistProfile,getPublicContactDetails,getPublicArtworks,getPublicGalleries,getPublicJournal,getPublicCvEntries,getJournalEntriesForCategory,journalCategories,primaryImageFor,type JournalCategory } from "@/lib/site";
+import { paginateItems, resolveGalleryPagination } from "@/lib/gallery-pagination";
+import { JournalPagination } from "@/components/journal-pagination";
 import { copyFor,isLocale,pagePath,otherLocale } from "@/lib/site";
 type Props={params:Promise<{locale:string;section:string}>;searchParams:Promise<{category?:string;page?:string;pageSize?:string}>};
 const names=["works","galleries","journal","about","contact","cv"] as const;
@@ -26,7 +28,7 @@ export async function generateMetadata({params}:Props):Promise<Metadata>{const {
   section==="contact" ? Boolean(getPublicContactDetails(contactDetails,other)) : false;
  const profile=section==="about"?getPublicArtistProfile(artistProfile,locale):undefined;
  return {title:copyFor(locale)[section],...(profile?{description:profile.statement[locale]}:{}),alternates:{canonical:pagePath(locale,section),...(indexable&&translated?{languages:{[locale]:pagePath(locale,section),[other]:pagePath(other,section)}}:{})},robots:{index:section==="about"?false:indexable,follow:true}};}
-export default async function SectionPage({params,searchParams}:Props){const [{locale,section},{category:rawCategory}]=await Promise.all([params,searchParams]);if(!isLocale(locale)||!valid(section))notFound();const t=copyFor(locale);
+export default async function SectionPage({params,searchParams}:Props){const [{locale,section},{category:rawCategory,page:rawPage,pageSize:rawPageSize}]=await Promise.all([params,searchParams]);if(!isLocale(locale)||!valid(section))notFound();const t=copyFor(locale);
  if(section==="about"){
   const biography=aboutPreviewFixture.biography[locale];
   const statement=aboutPreviewFixture.statement[locale];
@@ -59,16 +61,18 @@ export default async function SectionPage({params,searchParams}:Props){const [{l
  const entries=getPublicJournal(journalEntries,locale);
  const selectedCategory=journalCategories.includes(rawCategory as JournalCategory)?rawCategory as JournalCategory:undefined;
  const visibleEntries=getJournalEntriesForCategory(entries,selectedCategory);
+ const pagination=resolveGalleryPagination(visibleEntries.length,rawPage,rawPageSize);
+ const pageEntries=paginateItems(visibleEntries,pagination);
  const filters:[string,string,JournalCategory|undefined][]=[
   ["all",t.journalAll,undefined],["exhibition",t.journalExhibitions,"exhibition"],["event",t.journalEvents,"event"],["studio-update",t.journalStudio,"studio-update"],["story",t.journalStories,"story"]
  ];
  const dateLabel=(value:string,timeZone="UTC",includeTime=false)=>new Intl.DateTimeFormat(locale,{dateStyle:"long",...(includeTime?{timeStyle:"short" as const}:{}),timeZone}).format(new Date(value));
  return <div className="page-content"><header className="page-heading"><p className="eyebrow">{t.portfolio}</p><h1>{t.journal}</h1></header>
   {entries.length>0&&<nav className="journal-filters" aria-label={locale==="fa"?"دسته‌بندی یادداشت‌ها":"Journal categories"}>{filters.map(([key,label,value])=><Link key={key} className="journal-filter" href={value?pagePath(locale,"journal")+ "?category="+value:pagePath(locale,"journal")} aria-current={(selectedCategory??"all")===key?"page":undefined}>{label}</Link>)}</nav>}
-  {entries.length===0?<p className="empty-note">{t.emptyJournal}</p>:visibleEntries.length===0?<p className="empty-note" role="status">{t.journalNoMatches}</p>:<div className="journal-cards">{visibleEntries.map(entry=><article className="journal-card" key={entry.id}>
+  {entries.length===0?<p className="empty-note">{t.emptyJournal}</p>:visibleEntries.length===0?<p className="empty-note" role="status">{t.journalNoMatches}</p>:<div className="journal-cards">{pageEntries.map(entry=><article className="journal-card" key={entry.id}>
    <div className="journal-card-meta"><span>{filters.find(([, ,value])=>value===(entry.type))?.[1]}</span>{entry.publishedAt&&Number.isFinite(Date.parse(entry.publishedAt))&&<time dateTime={entry.publishedAt}>{t.published}: {dateLabel(entry.publishedAt)}</time>}</div>
    <h2><Link href={pagePath(locale,`journal/${entry.slug}`)}>{entry.title[locale]}</Link></h2><p>{entry.summary[locale]}</p>
    {entry.type==="event"&&entry.event&&<><p className="journal-event-date"><time dateTime={entry.event.startsAt}>{dateLabel(entry.event.startsAt,entry.event.timeZone,true)}</time> <span dir="ltr">{entry.event.timeZone}</span></p>{entry.event.venue?.[locale]&&<p className="journal-event-date">{entry.event.venue[locale]}</p>}</>}
    <Link className="text-link" href={pagePath(locale,`journal/${entry.slug}`)}>{t.readMore} ↗</Link>
-  </article>)}</div>}</div>;
+  </article>)}</div>}{visibleEntries.length>0&&<JournalPagination totalItems={visibleEntries.length} locale={locale} labels={{itemsPerPage:t.itemsPerPage,previous:t.previousPage,next:t.nextPage,page:t.journalPage,showing:t.showingJournal}} />}</div>;
 }

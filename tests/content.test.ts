@@ -258,11 +258,11 @@ test("four curated collections publish valid ordered memberships with shared art
  assert.equal(homepageSelection.featuredGalleryIds.length,4);
 });
 
-test("homepage Journal preview selects the two newest published entries across article and event types", () => {
+test("homepage Journal preview selects only the newest published entry across article and event types", () => {
  const entry=(id:string,type:JournalEntry["type"],publishedAt:string):JournalEntry=>({id,slug:id,type,title:{en:id,fa:id},summary:{en:"Summary",fa:"خلاصه"},status:"published",approvedLocales:["en","fa"],artistApproved:true,publishedAt,...(type==="event"?{event:{startsAt:"2026-11-12T18:00:00+01:00",timeZone:"Europe/Berlin",venue:{en:"Studio",fa:"آتلیه"}}}:{})});
  const items=[entry("old-story","story","2026-10-01T10:00:00Z"),entry("new-event","event","2026-10-29T10:00:00Z"),entry("middle-exhibition","exhibition","2026-10-15T10:00:00Z"),entry("newest-story","story","2026-10-30T10:00:00Z"),entry("local-later-date","story","2026-10-30T00:30:00+02:00"),entry("later-instant","exhibition","2026-10-29T23:00:00Z"),{...entry("draft","story","2026-10-31T10:00:00Z"),status:"draft" as const}];
- assert.deepEqual(getHomepageJournalPreview(items,"en").map(item=>item.id),["newest-story","later-instant"]);
- assert.deepEqual(getHomepageJournalPreview(items,"fa").map(item=>item.id),["newest-story","later-instant"]);
+ assert.deepEqual(getHomepageJournalPreview(items,"en").map(item=>item.id),["newest-story"]);
+ assert.deepEqual(getHomepageJournalPreview(items,"fa").map(item=>item.id),["newest-story"]);
 });
 
 
@@ -308,7 +308,7 @@ test("upcoming Journal event selection excludes ongoing events and uses stable t
  assert.equal(getUpcomingJournalEvent(items,"en",now)?.id,"tie-a");
  assert.equal(getUpcomingJournalEvent(items,"fa",now)?.id,"tie-a");
 });
-test("homepage Journal ordering uses stable identity tie-breakers for equal publication instants",()=>{
+test("Journal ordering uses stable identity tie-breakers for equal publication instants",()=>{
  const make=(id:string):JournalEntry=>({id,slug:id,type:"story",title:{en:id},summary:{en:"Summary"},status:"published",approvedLocales:["en"],artistApproved:true,publishedAt:"2026-10-30T10:00:00Z"});
- assert.deepEqual(getHomepageJournalPreview([make("z-entry"),make("a-entry")],"en").map(item=>item.id),["a-entry","z-entry"]);
+ assert.deepEqual(getPublicJournal([make("z-entry"),make("a-entry")],"en").map(item=>item.id),["a-entry","z-entry"]);
 });
