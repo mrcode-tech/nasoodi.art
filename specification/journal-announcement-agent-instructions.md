@@ -12,7 +12,8 @@ Implement the approved Journal event experience described by the proposal, wiref
 
 ## Mandatory preflight
 
-1. Read AGENTS.md, root agent.md, and specification/README.md.\n2. Read specification/journal-announcement-sticker-visual-design.md before touching the sticker asset or announcement styling.
+1. Read AGENTS.md, root agent.md, and specification/README.md.
+2. Read specification/journal-announcement-sticker-visual-design.md before touching the sticker asset or announcement styling.
 3. Read every mandatory design and technical authority listed in journal-announcement-specification.md.
 4. Inspect current branch, worktree, latest commit, existing changes, and CI configuration.
 5. Confirm the active branch is feature. Do not create, switch, reset, delete, or rename branches.
