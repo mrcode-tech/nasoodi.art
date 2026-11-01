@@ -1332,6 +1332,13 @@ test("theme selector is available in the mobile drawer in both locales and artwo
     const drawer = page.getByRole("dialog", { name: labels.open });
     const themeTrigger = drawer.getByRole("button", { name: labels.theme });
     await expect(themeTrigger).toBeVisible();
+    const appearanceRow = drawer.locator(".drawer-setting-row").last();
+    const appearanceLabel = appearanceRow.locator(".language-label");
+    const appearanceLabelBox = await appearanceLabel.boundingBox();
+    const themeTriggerBox = await themeTrigger.boundingBox();
+    expect(appearanceLabelBox).not.toBeNull();
+    expect(themeTriggerBox).not.toBeNull();
+    expect(themeTriggerBox!.y).toBeGreaterThanOrEqual(appearanceLabelBox!.y + appearanceLabelBox!.height);
     await themeTrigger.click();
     await page.getByRole("menuitemradio", { name: labels.dark }).click();
     await expect(page.locator("html")).toHaveClass(/dark/);
