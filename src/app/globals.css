@@ -943,3 +943,11 @@ html[lang="fa"] .prose,html[lang="fa"] .about-biography-copy,html[lang="fa"] .ab
 .drawer-setting-row{display:flex;min-height:2.75rem;align-items:center;justify-content:space-between;gap:1rem}
 .desktop-utility .theme-trigger{margin-inline-start:.25rem}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+
+
+/* Keep nested appearance/language rows aligned with the Persian drawer's RTL flow. */
+@media (max-width: 900px) {
+  html[lang="fa"] .mobile-drawer .drawer-setting-row {
+    direction: rtl;
+  }
+}

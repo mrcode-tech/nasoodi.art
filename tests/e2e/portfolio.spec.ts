@@ -200,11 +200,15 @@ for (const locale of ["en", "fa"] as const) {
       expect((utility?.x ?? 0) + (utility?.width ?? 0)).toBeLessThanOrEqual(1440 - (bounds?.width ?? 0) + 1);
       await expect(utilityLocator).toHaveCSS("direction", "rtl");
     } else {
-      // The utility is a full-width fixed bar; assert the language control is
-      // anchored to its right edge rather than treating the bar as the control.
+      // The language selector is followed by the theme selector. Verify the
+      // complete control group is right-aligned and that its order is stable.
       const languageControl = await utilityLocator.getByRole("button", { name: "Language" }).boundingBox();
-      expect(languageControl?.x).toBeGreaterThan(1440 - 220);
-      expect((languageControl?.x ?? 0) + (languageControl?.width ?? 0)).toBeLessThanOrEqual(1440);
+      const themeControl = await utilityLocator.getByRole("button", { name: "Choose theme" }).boundingBox();
+      expect(languageControl).not.toBeNull();
+      expect(themeControl).not.toBeNull();
+      expect(languageControl!.x + languageControl!.width).toBeLessThan(themeControl!.x);
+      expect(themeControl!.x + themeControl!.width).toBeGreaterThan(1440 - 110);
+      expect(themeControl!.x + themeControl!.width).toBeLessThanOrEqual(1440);
     }
     await page.screenshot({ path: test.info().outputPath(`${locale}-desktop-sidebar.png`), fullPage: true });
   });
