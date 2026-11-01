@@ -1137,7 +1137,7 @@ test("homepage and Journal remain composed in English and Persian on desktop and
       await expect(page.locator("html")).toHaveAttribute("dir", locale === "fa" ? "rtl" : "ltr");
       await page.screenshot({ path: test.info().outputPath(`home-${locale}-${viewport.name}.png`), fullPage: true });
       await page.goto(`/${locale}/journal`);
-      await expect(page.getByRole("heading", { name: locale === "fa" ? "یادداشت‌ها" : "Journal" })).toBeVisible();
+      await expect(page.getByRole("heading", { name: locale === "fa" ? "یادداشت‌ها" : "Journal", exact: true })).toBeVisible();
       await page.screenshot({ path: test.info().outputPath(`journal-${locale}-${viewport.name}.png`), fullPage: true });
     }
   }
