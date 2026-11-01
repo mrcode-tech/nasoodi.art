@@ -308,7 +308,7 @@ test("upcoming Journal event selection excludes ongoing events and uses stable t
  assert.equal(getUpcomingJournalEvent(items,"en",now)?.id,"tie-a");
  assert.equal(getUpcomingJournalEvent(items,"fa",now)?.id,"tie-a");
 });
-test("homepage Journal ordering uses stable identity tie-breakers for equal publication instants",()=>{
+test("Journal ordering uses stable identity tie-breakers for equal publication instants",()=>{
  const make=(id:string):JournalEntry=>({id,slug:id,type:"story",title:{en:id},summary:{en:"Summary"},status:"published",approvedLocales:["en"],artistApproved:true,publishedAt:"2026-10-30T10:00:00Z"});
- assert.deepEqual(getHomepageJournalPreview([make("z-entry"),make("a-entry")],"en").map(item=>item.id),["a-entry","z-entry"]);
+ assert.deepEqual(getPublicJournal([make("z-entry"),make("a-entry")],"en").map(item=>item.id),["a-entry","z-entry"]);
 });
