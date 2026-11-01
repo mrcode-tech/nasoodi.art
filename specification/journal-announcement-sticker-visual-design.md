@@ -33,6 +33,7 @@ This is a design study, not final approval of the torn-paper variant. Review the
 - SVG viewBox: 420 × 280 units; 3:2 landscape ratio.
 - CI review render: 1260 × 840 pixels (3× source dimensions).
 - Background: transparent; only the paper silhouette and vector details are painted.
+- Root SVG uses `preserveAspectRatio="none"` so the CSS background can fill each responsive placement instead of letterboxing the 3:2 source canvas inside a wider mobile/sidebar shape.
 - No event title, category label, date, arrow, close icon, venue, logo, or interactive element may be baked into the SVG/PNG.
 - HTML owns all text, links, dates, and dismissal controls.
 - Keep the SVG decorative and hidden from assistive technology when used as a background or aria-hidden image.
@@ -97,3 +98,45 @@ Do not call the study approved until the owner reviews the rendered artifact.
 - [ ] Inward torn edge and outer attachment edge are unambiguous.
 - [ ] English and Persian edge attachment are represented in review screenshots.
 - [ ] No visual approval is inferred from successful asset generation.
+
+## 9. Responsive composition decisions — implementation review
+
+The component uses three explicit placement variants. They share one localized event view model and dismissal behavior, but adapt to their real available width.
+
+- **Viewport placement:** fixed to the physical outer edge. The normal event state has a compact minimum height of 7.5rem. Long titles may increase the paper height naturally; text must never be clipped or painted outside the paper.
+- **Desktop sidebar:** uses the real navigation-column width with a 7.5rem minimum height. The content reserves an inline-end column for the independent 44×44 close control.
+- **Mobile drawer:** uses the full drawer content width with a 7rem minimum height. The normal event state is designed to remain at or below 155px high, keeping the navigation drawer compact. Long titles may expand the sticker when required rather than overflow or be truncated.
+- The live link participates in normal layout flow so the paper silhouette can grow with wrapped title content. The decorative SVG remains absolutely positioned behind it.
+- The close control is inset from the component edge to account for the SVG's transparent side margins, keeping the full target visibly on the paper in both LTR and RTL.
+- All placements use logical block/inline spacing. The decorative SVG alone is mirrored for Persian; the content and controls are not transformed.
+- The component exposes stable `data-part` hooks for visual/behavioral browser tests. Tests must not target CSS-module implementation class names.
+- The paper SVG remains a provisional first study pending owner review. Responsive screenshots and the CI PNG are technical review evidence, not visual approval.
+
+If the actual sidebar/drawer geometry changes, update the relevant variant and its screenshot evidence rather than applying global scale or transform fixes.
+
+## 10. Responsive screenshot review — evidence and status
+
+The CI workflow captures English and Persian screenshots for the viewport announcement, desktop sidebar, and mobile drawer at desktop, tablet, standard mobile, narrow mobile, and short-height sizes. It also captures synthetic long- and short-title states in all three placements.
+
+The browser contract checks:
+- The close target remains at least 44×44 CSS pixels.
+- The close target stays at least 12px inside the component's horizontal bounds, accounting for the SVG's transparent side margins.
+- The title and close control do not overlap.
+- Title content remains within the paper's vertical and horizontal bounds, including long-title states.
+- The sticker remains contained by the drawer and the page has no horizontal overflow.
+- Activating the event link from the mobile drawer closes the drawer and navigates to the localized Journal detail route.
+
+The previous CI runs exposed real title/control geometry issues and a mobile height excess. Those findings were used to refine the CSS and strengthen the assertions. A successful latest full CI run is still required before marking this responsive matrix verified. Do not claim visual verification solely because screenshots were generated; inspect the uploaded screenshots at actual display size.
+
+The PNG and responsive screenshots are technical review evidence only. They do not constitute owner approval of the final paper silhouette or tape detail.
+
+## 11. Compact editorial treatment and mobile event navigation — 2026-11-01
+
+The owner requested a thinner, more minimal sticker in both sidebar contexts, especially on mobile so it does not create unnecessary drawer scrolling.
+
+- The viewport announcement has a 7.5rem minimum height and grows only when its live title content requires additional space.
+- The desktop sidebar has a 7.5rem minimum height, compact typography/spacing, and a reserved inline-end column for the close control.
+- The mobile drawer has a 7rem minimum height, compact typography/spacing, and a normal-state target of no more than 155px high. Its height may grow for unusually long titles instead of clipping content.
+- The close control remains a separate 44×44 target, inset far enough to sit on the visible paper rather than in the SVG's transparent outer margin.
+- Activating the announcement link inside the mobile drawer closes the drawer while navigating to the event's localized Journal detail route. Dismissing remains a separate, non-navigation action.
+- Playwright checks the mobile sticker's normal-state maximum height and verifies that activating its link both navigates to the event and closes the dialog.
