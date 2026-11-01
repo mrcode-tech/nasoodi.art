@@ -82,8 +82,8 @@
 .dismiss {
   position: absolute;
   z-index: 2;
-  inset-block-start: 0.35rem;
-  inset-inline-end: 1rem;
+  inset-block-start: 0.6rem;
+  inset-inline-end: 1.1rem;
   display: inline-flex;
   width: 2.75rem !important;
   min-width: 2.75rem !important;
@@ -145,8 +145,8 @@
 }
 
 .desktopSidebarContainer .dismiss {
-  inset-block-start: 0.45rem;
-  inset-inline-end: 1rem;
+  inset-block-start: 0.6rem;
+  inset-inline-end: 1.1rem;
 }
 
 .mobileSidebarContainer {
@@ -198,8 +198,8 @@
   }
 
   .mobileSidebarContainer .dismiss {
-    inset-block-start: 0.4rem;
-    inset-inline-end: 0.85rem;
+    inset-block-start: 0.6rem;
+    inset-inline-end: 1.1rem;
   }
 }
 
