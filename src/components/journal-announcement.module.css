@@ -16,7 +16,6 @@
   inset-inline-start: 0;
   width: min(var(--sidebar), 17rem);
   min-height: 7.5rem;
-  aspect-ratio: 2 / 1;
 }
 
 .paper {
@@ -32,8 +31,9 @@
 }
 
 .link {
-  position: absolute;
-  inset: 0;
+  position: relative;
+  width: 100%;
+  min-height: inherit;
   display: flex;
   min-width: 0;
   flex-direction: column;
@@ -116,7 +116,6 @@
   max-width: 100%;
   min-height: 7.5rem;
   margin-block: 0.8rem 0.55rem;
-  aspect-ratio: 1.6;
 }
 
 .desktopSidebarContainer .link {
@@ -170,7 +169,6 @@
     max-width: 100%;
     min-height: 7rem;
     margin-block: 0.7rem 0.6rem;
-    aspect-ratio: 2.2 / 1;
   }
 
   .mobileSidebarContainer .link {
