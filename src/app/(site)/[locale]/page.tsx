@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { artworks,galleries,journalEntries,homepageSelection,getPublicArtworks,getPublicGalleries,getHomepageHero,getHomepageFeaturedArtworks,getHomepageFeaturedGalleries,getHomepageJournalPreview,getUpcomingJournalEvent,primaryImageFor } from "@/lib/site";
+import { artworks,galleries,journalEntries,homepageSelection,getPublicArtworks,getPublicGalleries,getHomepageHero,getHomepageFeaturedArtworks,getHomepageFeaturedGalleries,getHomepageJournalPreview,journalCoverImageFor,getUpcomingJournalEvent,primaryImageFor } from "@/lib/site";
 import { copyFor,isLocale,pagePath } from "@/lib/site";
 export const revalidate = 60;
 type Props={params:Promise<{locale:string}>};
@@ -51,12 +51,18 @@ export default async function Home({params}:Props){const {locale}=await params;i
   </section>
   {journal.length > 0 && <section className="editorial-section" aria-labelledby="latest-journal">
    <div className="section-heading"><div><p className="eyebrow">{t.latest}</p><h2 id="latest-journal">{t.journal}</h2></div><Link className="text-link" href={pagePath(locale,"journal")}>{locale==="fa"?"مشاهده همه یادداشت‌ها":"Explore Journal"} ↗</Link></div>
-   <div className="journal-preview-list">{journal.map(entry=><article className="journal-preview-item" key={entry.id}>
-    {entry.publishedAt && Number.isFinite(Date.parse(entry.publishedAt)) && <time dateTime={entry.publishedAt}>{new Intl.DateTimeFormat(locale,{dateStyle:"long"}).format(new Date(entry.publishedAt))}</time>}
-    <h3><Link href={pagePath(locale,`journal/${entry.slug}`)}>{entry.title[locale]}</Link></h3>
-    <p>{entry.summary[locale]}</p>
-    <Link className="text-link" href={pagePath(locale,`journal/${entry.slug}`)}>{t.readMore} ↗</Link>
-   </article>)}</div>
+   <div className="journal-preview-list">{journal.map(entry=>{
+    const cover=journalCoverImageFor(entry,locale);
+    return <article className={`journal-preview-item${cover?" has-cover":""}`} key={entry.id}>
+     {cover&&<Image className="journal-cover-image" src={cover.src} alt={cover.alt[locale]} width={cover.width} height={cover.height} sizes="(max-width: 600px) 100vw, (max-width: 900px) 40vw, 24rem" />}
+     <div className="journal-preview-copy">
+      {entry.publishedAt && Number.isFinite(Date.parse(entry.publishedAt)) && <time dateTime={entry.publishedAt}>{new Intl.DateTimeFormat(locale,{dateStyle:"long"}).format(new Date(entry.publishedAt))}</time>}
+      <h3><Link href={pagePath(locale,`journal/${entry.slug}`)}>{entry.title[locale]}</Link></h3>
+      <p>{entry.summary[locale]}</p>
+      <Link className="text-link" href={pagePath(locale,`journal/${entry.slug}`)}>{t.readMore} ↗</Link>
+     </div>
+    </article>;
+   })}</div>
   </section>}
   {announcement?.event&&<JournalAnnouncement locale={locale} eyebrow={t.announcementEyebrow} dismissLabel={t.dismissAnnouncement} href={pagePath(locale,`journal/${announcement.slug}`)} event={{id:announcement.id,slug:announcement.slug,title:announcement.title[locale]!,startsAt:announcement.event.startsAt,timeZone:announcement.event.timeZone}} />}
  </div>;
