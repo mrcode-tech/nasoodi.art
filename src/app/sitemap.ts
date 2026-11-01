@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 import {
-  artworks, galleries, journalEntries, cvEntries, artistProfile, contactDetails, locales,
-  getPublicArtworks, getPublicGalleries, getPublicJournal, getPublicCvEntries, getPublicArtistProfile, getPublicContactDetails,
+  artworks, galleries, journalEntries, cvEntries, artistProfile, locales,
+  getPublicArtworks, getPublicGalleries, getPublicJournal, getPublicCvEntries, getPublicArtistProfile,
 } from "@/lib/site";
 
 const base = "https://nasoodi.art";
@@ -41,9 +41,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
     if (getPublicArtistProfile(artistProfile, locale)) {
       add("about", Boolean(getPublicArtistProfile(artistProfile, other)));
-    }
-    if (getPublicContactDetails(contactDetails, locale)) {
-      add("contact", Boolean(getPublicContactDetails(contactDetails, other)));
     }
 
     const cv = getPublicCvEntries(cvEntries, locale);

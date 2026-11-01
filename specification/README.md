@@ -141,3 +141,12 @@ Implementation scope:
 - Preserve the canonical Journal content model and routes; do not add a separate Events navigation destination.
 
 The overall proposal is approved in principle. The first hand-authored torn-edge vector study is available for review. The owner must approve or request refinements to the silhouette/tape detail after inspecting the CI-generated PNG; the PNG is not a hand-edited source asset. This task is the next implementation priority; it does not authorize merge, deployment, or publication.
+
+
+## Next implementation task — site-wide navigation, spacing, typography, and Contact
+
+The next cross-site UX refinement is defined in [Unified breadcrumbs, editorial spacing, and Contact implementation prompt](./site-wide-navigation-spacing-and-contact-implementation-prompt.md).
+
+This task introduces a shared shadcn/ui breadcrumb system with clickable intermediate paths (including artwork and Journal detail navigation), refines site-wide editorial spacing, compacts Journal pagination controls on mobile, keeps sidebar copyright on one desktop line, standardizes justified long-form text, and adds a bilingual Contact section/page.
+
+The owner explicitly requires the temporary fictional Telegram, email, and Instagram values to be rendered normally in production until replaced later. Do not hide them behind environment variables or production flags, and do not add a visible disclaimer. Keep the values centralized and easy to replace. Do not claim the social profiles are verified or monitored. The existing artist Instagram handle must remain unchanged. Read the full prompt and all mandatory design/localization/accessibility authorities before implementation.
