@@ -4,7 +4,7 @@
 **Repository:** mrcode-tech/nasoodi.art  
 **Working branch:** feature  
 **Primary specification:** journal-announcement-specification.md  
-**Visual asset:** approved paper-sticker PNG (decorative only), governed by the primary specification
+**Visual asset:** hand-authored SVG source with a GitHub Actions-generated PNG review artifact; governed by journal-announcement-sticker-visual-design.md
 
 ## Objective
 
@@ -12,12 +12,12 @@ Implement the approved Journal event experience described by the proposal, wiref
 
 ## Mandatory preflight
 
-1. Read AGENTS.md and specification/README.md.
-2. Read every mandatory design and technical authority listed in journal-announcement-specification.md.
-3. Inspect current branch, worktree, latest commit, existing changes, and CI configuration.
-4. Confirm the active branch is feature. Do not create, switch, reset, delete, or rename branches.
-5. Inspect the actual Journal schema, routes, data, validators, locale strings, shell, breakpoints, design tokens, and test utilities.
-6. Reconcile specification assumptions with implementation. If a conflict changes behavior or scope, stop and report it rather than silently inventing a solution.
+1. Read AGENTS.md, root agent.md, and specification/README.md.\n2. Read specification/journal-announcement-sticker-visual-design.md before touching the sticker asset or announcement styling.
+3. Read every mandatory design and technical authority listed in journal-announcement-specification.md.
+4. Inspect current branch, worktree, latest commit, existing changes, and CI configuration.
+5. Confirm the active branch is feature. Do not create, switch, reset, delete, or rename branches.
+6. Inspect the actual Journal schema, routes, data, validators, locale strings, shell, breakpoints, design tokens, and test utilities.
+7. Reconcile specification assumptions with implementation. If a conflict changes behavior or scope, stop and report it rather than silently inventing a solution.
 
 ## Implementation requirements
 
@@ -27,13 +27,13 @@ Implement the approved Journal event experience described by the proposal, wiref
 - Anchor the announcement to physical left in English and physical right in Persian.
 - Keep it fixed during scroll and independent of hero/layout geometry.
 - Keep the menu trigger, sidebar, artwork, focus, and essential content unobstructed.
-- Implement the functional announcement structure and prepare clean-paper and restrained torn-edge visual treatments for side-by-side screenshot review. Do not declare either final until the owner selects one.
+- Implement the functional announcement structure using the hand-authored torn-edge SVG study as a provisional decorative shape. Do not declare the visual treatment final until the owner reviews the CI-generated PNG and responsive screenshots.
 - Keep event link and dismissal as separate controls.
 - Use event-specific session dismissal unless an existing approved project preference contract supersedes it.
 - Preserve the independent homepage Journal preview, limited to the two newest eligible published entries across all Journal types, and canonical Journal detail routes.
 - Show confirmed event metadata only; never fabricate title, date, timezone, venue, participants, or registration details.
 - Use approved translations only.
-- Generate/add the final transparent paper PNG only after the owner selects the visual variant from the review screenshots; the image must contain no text or controls. The Journal and announcement implementation may proceed while this asset-selection gate remains open, using a temporary CSS/SVG shape that is clearly treated as provisional. Prefer CSS/SVG if a raster asset does not materially improve the result.
+- Treat specification/assets/journal-announcement-sticker.svg as the editable source of truth. Do not use image generation, screenshot tracing, raster painting, or image processing.\n- Use the existing CI workflow to render the SVG into a transparent 1260 × 840 PNG review artifact and verify alpha transparency and dimensions.\n- Do not commit a generated PNG or copy it into the application bundle before owner review. If SVG/CSS is sufficient for production, retain the vector and omit the raster runtime asset.
 - Reuse project components, semantic tokens, shadcn-style controls, and existing utilities.
 - Avoid unnecessary dependencies, tracking, or new personal-data collection.
 - Follow the repository's SEO, accessibility, privacy, performance, and content-governance contracts.
@@ -65,4 +65,4 @@ Run repository-prescribed lint, formatting, typecheck, unit, component, integrat
 
 ## Completion definition
 
-The task is complete only when the approved behavior is implemented, the approved sticker asset is included (or a documented CSS/SVG decision replaces it), required tests pass, CI is verified, screenshots are reviewed, and unresolved issues are clearly reported. A code change or successful build alone is not completion.
+The task is complete only when the approved behavior is implemented, the SVG source and CI PNG conversion are verified, required tests pass, CI is inspected, responsive/locale screenshots are reviewed, and unresolved visual decisions are clearly reported. Owner review is still required before the sticker is called final. A code change or successful build alone is not completion.

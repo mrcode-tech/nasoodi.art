@@ -209,3 +209,13 @@ LONG TITLE / NARROW VIEWPORT
 - Use existing z-index and spacing tokens.
 - No horizontal overflow at 320px, no clipping at 200% zoom, no overlap at short viewport heights.
 - The announcement does not reserve layout space and never changes hero geometry.
+
+
+## 10. Sticker visual close-up — first vector study
+
+The first review candidate is a small warm-ivory exhibition slip. Its straight outer edge is attached flush to the viewport; its irregular torn edge faces inward. A small muted paper-tape strip suggests physical attachment. The vector is a decorative silhouette only; all event copy and controls remain HTML.
+
+- English: straight attachment edge on physical left, torn edge on right.
+- Persian: reflect only the decorative silhouette horizontally; straight attachment edge on physical right, torn edge on left. Do not mirror text or artwork.
+- The paper remains compact and does not become a full-width banner.
+- See journal-announcement-sticker-visual-design.md and the SVG source for the visual study. The PNG is produced by CI for review, not hand-edited.

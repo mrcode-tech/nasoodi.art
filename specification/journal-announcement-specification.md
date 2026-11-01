@@ -8,9 +8,9 @@
 
 ## 1. Scope
 
-Specify the homepage event announcement sticker, homepage Journal preview, Journal archive integration, event-specific Journal detail presentation, and the decorative paper PNG asset workflow.
+Specify the homepage event announcement sticker, homepage Journal preview, Journal archive integration, event-specific Journal detail presentation, and the decorative paper SVG source plus CI-generated PNG review workflow.
 
-This is a design and implementation specification only. Do not implement application code until the owner has reviewed the proposal and wireframes.
+The owner has approved the overall Journal/sticker direction. The exact sticker treatment remains a visual review gate. The coding agent may implement Journal behavior and prepare the announcement using the hand-authored SVG study, but must not treat the study as final artist-approved artwork until the owner reviews the CI-rendered PNG.\n\nRead journal-announcement-sticker-visual-design.md for the normative vector design and generation contract.
 
 ## 2. Mandatory repository discovery
 
@@ -63,7 +63,7 @@ Exclude venue, long description, registration form, poster, ticket price, multip
 
 ## 6. Visual design and positioning
 
-Baseline: clean warm-paper tab. Optional variant: subtle torn/perforated inward edge. Use existing semantic tokens and the project's design-engineering rules.
+Baseline for the first visual review: the hand-authored torn-edge exhibition slip in specification/assets/journal-announcement-sticker.svg. The SVG is a candidate study, not final owner approval. Follow journal-announcement-sticker-visual-design.md for its exact vector, palette, dimensions, mirroring, and CI conversion rules.
 
 - English: physical-left outer edge flush; inward/right edge free.
 - Persian: physical-right outer edge flush; inward/left edge free.
@@ -74,7 +74,7 @@ Baseline: clean warm-paper tab. Optional variant: subtle torn/perforated inward 
 - Never span the viewport.
 - Avoid covering wordmark, navigation rows, artwork, easel decoration, skip link, focused controls, or essential content.
 - Use CSS logical properties where possible, but map the required physical edge explicitly from locale.
-- Keep shape detail subtle; no raster texture unless approved and licensed.
+- Keep shape detail subtle; no raster texture, image generation, screenshot tracing, or image-processing workflow. The SVG is authored directly as vector paths.
 - No attention animation. Respect reduced motion.
 
 The exact offset, dimensions, and z-index must be derived from the real shell and token system and verified at all supported breakpoints.

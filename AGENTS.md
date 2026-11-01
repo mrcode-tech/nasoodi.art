@@ -135,3 +135,8 @@ A task is not complete merely because code was written or the build passes. Comp
 - Preserve the unified Journal's existing editorial/post-style design. The homepage preview shows at most the two newest published Journal entries across article and event types; Explore Journal links to the full archive. Do not place Journal entries in artwork carousels or add a separate Events top-level route.
 - Use the canonical artwork and collection records in `approved-artwork-content-inventory.md`; never use sample/stock/generated artwork or duplicate artwork records.
 - A documentation-only task must not modify application source, dependencies, routes, or CI. A later implementation task must follow the component, responsive, RTL, accessibility, visual QA, and test requirements in the new experience specification.
+
+
+## Journal announcement sticker vector asset and CI contract
+
+For the Journal/sticker implementation, read specification/journal-announcement-sticker-visual-design.md and follow it as the visual asset authority. The paper sticker must be authored directly as editable SVG paths/strokes. Do not use image generation, screenshot tracing, raster painting, or image-processing tools. GitHub Actions converts the checked-in SVG into a transparent PNG review artifact and validates its dimensions/alpha channel. Keep event text and controls in accessible localized HTML. Do not check in a generated PNG or treat the visual study as owner-approved until the owner reviews it.

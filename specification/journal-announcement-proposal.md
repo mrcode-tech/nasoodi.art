@@ -40,7 +40,7 @@ Visual characteristics:
 - No price, percentage, discount language, loud sale colors, glossy finish, large shadow, or promotional burst.
 - No text over artwork.
 
-The paper effect should be achieved with CSS or a small SVG shape if practical. Do not introduce photographic texture unless a licensed, artist-approved asset is supplied and demonstrably improves the result.
+The paper effect must be authored as editable SVG paths and strokes. Do not use image generation, screenshot tracing, raster painting, or image-processing filters. The initial hand-authored vector study and CI-to-PNG workflow are specified in journal-announcement-sticker-visual-design.md.
 
 ## 4. Visual variants for review
 
@@ -166,4 +166,4 @@ The announcement is a UI component, not a flattened image containing event copy.
 - Exact offset and dimensions after comparison with the real shared shell.
 - Final approved Persian microcopy.
 - Whether session dismissal should be replaced by an existing project-standard persistence strategy.
-- Final PNG/SVG visual asset, if any. Do not create or add a raster sticker before the owner reviews the design direction.
+- Owner approval of the hand-authored torn-edge SVG study, including whether to retain the tape detail and exact paper silhouette.\n- Whether a PNG is needed at runtime. GitHub Actions generates a transparent PNG review artifact from the SVG; do not commit a generated PNG before owner approval.
