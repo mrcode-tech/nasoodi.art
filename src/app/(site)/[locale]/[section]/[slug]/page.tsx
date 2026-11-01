@@ -63,7 +63,7 @@ export default async function Detail({params}:{params:Promise<{locale:string;sec
     <Link className="back-link" href={pagePath(locale,"journal")}>← {t.journal}</Link>
     <p className="eyebrow">{typeLabel}</p><h1>{entry.title[locale]}</h1><p className="article-summary">{entry.summary[locale]}</p>
     {entry.publishedAt&&Number.isFinite(Date.parse(entry.publishedAt))&&<p className="article-publication-date"><time dateTime={entry.publishedAt}>{t.publicationDate}: {dateLabel(entry.publishedAt)}</time></p>}
-    {cover&&<figure className="journal-detail-cover"><Image src={cover.src} alt={cover.alt[locale] ?? entry.title[locale]} width={cover.width} height={cover.height} sizes="(max-width: 900px) 100vw, 58rem" /></figure>}
+    {cover&&<figure className="journal-detail-cover"><Image src={cover.src} alt={cover.alt[locale] ?? entry.title[locale] ?? entry.slug} width={cover.width} height={cover.height} sizes="(max-width: 900px) 100vw, 58rem" /></figure>}
     {event&&<section className="event-details" aria-label={locale==="fa"?"اطلاعات رویداد":"Event information"}>
       <h2>{t.eventDate}</h2><p><time dateTime={event.startsAt}>{dateLabel(event.startsAt,event.timeZone)}</time> <span dir="ltr">{event.timeZone}</span></p>
       {event.endsAt&&<p>{t.eventEnds}: <time dateTime={event.endsAt}>{dateLabel(event.endsAt,event.timeZone)}</time></p>}
