@@ -32,6 +32,7 @@ export async function generateMetadata({params}:DetailProps):Promise<Metadata>{
  }
  return {robots:{index:false,follow:true}};
 }
+export const revalidate = 60;
 export default async function Detail({params}:{params:Promise<{locale:string;section:string;slug:string}>}){
  const {locale,section,slug}=await params;if(!isLocale(locale))notFound();const t=copyFor(locale);
  if(section==="works"){const w=getPublicArtworks(artworks,locale).find(x=>x.slug===slug);if(!w)notFound();const img=primaryImageFor(w);if(!img)notFound();

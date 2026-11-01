@@ -18,7 +18,7 @@
  .dismiss{top:.45rem;right:1.55rem;width:1.8rem;min-width:1.8rem;height:1.8rem}
  .dismissRtl{right:auto!important;left:1.55rem}
 }
-@media(max-height:700px){.container{display:none}}
+@media(max-height:760px){.container{display:none}}
 @media(prefers-reduced-motion:reduce){.container,.container *{transition:none!important}}
 
 .persianTitle{font-family:Tahoma,Arial,sans-serif;line-height:1.65}
