@@ -259,7 +259,7 @@ export function getPublicJournal(items: JournalEntry[], locale: Locale) {
   return keepUniqueBy(keepUniqueBy(visible, (entry) => entry.id), (entry) => entry.slug)
     .sort((a, b) => {
       const timestamp = (entry: JournalEntry) => entry.publishedAt && Number.isFinite(Date.parse(entry.publishedAt)) ? Date.parse(entry.publishedAt) : Number.NEGATIVE_INFINITY;
-      return timestamp(b) - timestamp(a) || a.id.localeCompare(b.id) || a.slug.localeCompare(b.slug);
+      return timestamp(b) - timestamp(a) || (a.id < b.id ? -1 : a.id > b.id ? 1 : a.slug < b.slug ? -1 : a.slug > b.slug ? 1 : 0);
     });
 }
 export function getHomepageJournalPreview(items: JournalEntry[], locale: Locale): JournalEntry[] {
@@ -269,7 +269,7 @@ export function getUpcomingJournalEvents(items: JournalEntry[], locale: Locale, 
   const nowMs = now.getTime();
   return getPublicJournal(items, locale)
     .filter((entry) => {
-      if (!entry.event) return false;
+      if ((entry.type !== "event" && entry.type !== "exhibition") || !entry.event) return false;
       const startsAt = Date.parse(entry.event.startsAt);
       const endsAt = entry.event.endsAt ? Date.parse(entry.event.endsAt) : startsAt;
       return Number.isFinite(startsAt) && startsAt > nowMs && endsAt > nowMs;

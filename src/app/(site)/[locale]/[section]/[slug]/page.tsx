@@ -3,7 +3,7 @@ import { ArtworkExperience } from "@/components/artwork-experience";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { artworks,galleries,journalEntries,getPublicArtworks,getPublicGalleries,getPublicJournal,getGalleryCoverArtwork,copyFor,isLocale,pagePath,otherLocale,primaryImageFor,isSafeJournalHref,getArtworkStructuredData,getGalleryStructuredData,getJournalStructuredData,serializeJsonLd } from "@/lib/site";
+import { artworks,galleries,journalEntries,getPublicArtworks,getPublicGalleries,getPublicJournal,getUpcomingJournalEvents,getGalleryCoverArtwork,copyFor,isLocale,pagePath,otherLocale,primaryImageFor,isSafeJournalHref,getArtworkStructuredData,getGalleryStructuredData,getJournalStructuredData,serializeJsonLd } from "@/lib/site";
 type DetailProps={params:Promise<{locale:string;section:string;slug:string}>};
 export async function generateMetadata({params}:DetailProps):Promise<Metadata>{
  const {locale,section,slug}=await params;
@@ -54,7 +54,7 @@ export default async function Detail({params}:{params:Promise<{locale:string;sec
   const relatedEntries=getPublicJournal(journalEntries,locale).filter(item=>item.id!==entry.id).slice(0,3);
   const dateLabel=(value:string,timeZone?:string)=>new Intl.DateTimeFormat(locale,{dateStyle:"long",...(timeZone?{timeStyle:"short" as const,timeZone}:{})}).format(new Date(value));
   const event=entry.event;
-  const registrationStillRelevant=Boolean(event?.registrationUrl&&Date.parse(event.endsAt??event.startsAt)>Date.now());
+  const registrationStillRelevant=Boolean(event?.registrationUrl&&getUpcomingJournalEvents(journalEntries,locale).some(item=>item.id===entry.id));
   const typeLabel=entry.type==="event"?t.journalEvents:entry.type==="exhibition"?t.journalExhibitions:entry.type==="studio-update"?t.journalStudio:t.journalStories;
   return <><script type="application/ld+json" dangerouslySetInnerHTML={{__html:serializeJsonLd(getJournalStructuredData(entry,locale,`https://nasoodi.art${pagePath(locale,`journal/${entry.slug}`)}`))}}/>
    <article className="page-content article-page journal-detail">
