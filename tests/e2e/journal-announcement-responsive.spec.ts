@@ -39,10 +39,15 @@ async function expectDismissButtonInsideSticker(sticker: Locator) {
   expect(buttonBox!.y).toBeGreaterThanOrEqual(stickerBox!.y);
   expect(buttonBox!.x + buttonBox!.width).toBeLessThanOrEqual(stickerBox!.x + stickerBox!.width - 12);
   expect(buttonBox!.y + buttonBox!.height).toBeLessThanOrEqual(stickerBox!.y + stickerBox!.height);
-  expect(titleBox!.x).toBeGreaterThanOrEqual(stickerBox!.x);
-  expect(titleBox!.y).toBeGreaterThanOrEqual(stickerBox!.y);
-  expect(titleBox!.x + titleBox!.width).toBeLessThanOrEqual(stickerBox!.x + stickerBox!.width);
-  expect(titleBox!.y + titleBox!.height).toBeLessThanOrEqual(stickerBox!.y + stickerBox!.height);
+  const visiblePaperInset = stickerBox!.width * (16 / 420);
+  expect(titleBox!.x).toBeGreaterThanOrEqual(stickerBox!.x + visiblePaperInset + 7);
+  expect(titleBox!.y).toBeGreaterThanOrEqual(stickerBox!.y + 12);
+  expect(titleBox!.x + titleBox!.width).toBeLessThanOrEqual(stickerBox!.x + stickerBox!.width - visiblePaperInset - 7);
+  expect(titleBox!.y + titleBox!.height).toBeLessThanOrEqual(stickerBox!.y + stickerBox!.height - 12);
+  expect(buttonBox!.x).toBeGreaterThanOrEqual(stickerBox!.x + visiblePaperInset + 6);
+  expect(buttonBox!.x + buttonBox!.width).toBeLessThanOrEqual(stickerBox!.x + stickerBox!.width - visiblePaperInset + 1);
+  expect(buttonBox!.y).toBeGreaterThanOrEqual(stickerBox!.y + 6);
+  expect(buttonBox!.y + buttonBox!.height).toBeLessThanOrEqual(stickerBox!.y + stickerBox!.height - 6);
   const overlaps = buttonBox!.x < titleBox!.x + titleBox!.width &&
     buttonBox!.x + buttonBox!.width > titleBox!.x &&
     buttonBox!.y < titleBox!.y + titleBox!.height &&

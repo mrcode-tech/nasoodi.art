@@ -50,7 +50,7 @@ test("mobile navigation opens, traps focus, closes with Escape, and restores foc
   await page.keyboard.press("Enter");
   const dialog = page.getByRole("dialog", { name: "Open navigation" });
   await expect(dialog).toBeVisible();
-  await expect(trigger).toHaveAttribute("aria-expanded", "true");
+  await expect(page.locator(".menu-trigger")).toHaveAttribute("aria-expanded", "true");
   await expect(dialog.getByRole("link", { name: "Galleries" })).toBeVisible();
   const languageButton = dialog.getByRole("button", { name: "Language" });
   await expect(languageButton).toBeVisible();
@@ -1109,13 +1109,17 @@ test("mobile menu uses a minimal two-stroke icon in both locales and updates its
       return { borderWidth: getComputedStyle(button).borderTopWidth, firstWidth: getComputedStyle(lines[0]).width, secondWidth: getComputedStyle(lines[1]).width };
     });
     expect(iconStyle.borderWidth).toBe("0px");
-    expect(parseFloat(iconStyle.firstWidth)).toBeGreaterThan(parseFloat(iconStyle.secondWidth));
+    expect(parseFloat(iconStyle.firstWidth)).toBe(parseFloat(iconStyle.secondWidth));
     await page.screenshot({ path: test.info().outputPath(`menu-${locale}-mobile-closed.png`) });
     await trigger.click();
     const dialog = page.getByRole("dialog", { name: openLabel });
     await expect(dialog.getByRole("button", { name: closeLabel })).toBeVisible();
     await expect(page.locator(".menu-trigger")).toHaveAttribute("aria-expanded", "true");
+    await expect(page.locator(".menu-trigger")).toHaveAttribute("aria-label", closeLabel);
     await page.screenshot({ path: test.info().outputPath(`menu-${locale}-mobile-open.png`) });
+    await dialog.getByRole("button", { name: closeLabel }).click();
+    await expect(page.locator(".menu-trigger")).toHaveAttribute("aria-expanded", "false");
+    await expect(page.locator(".menu-trigger")).toHaveAttribute("aria-label", openLabel);
   }
 });
 
@@ -1133,7 +1137,7 @@ test("editorial sections use whitespace instead of decorative separator rules", 
   );
   expect(archiveBorders.every((border) => border.top === "0px" && border.bottom === "0px")).toBeTruthy();
   await expect(page.locator(".journal-card")).toHaveCount(5);
-  await expect(page.locator(".journal-card .journal-cover-image")).toHaveCount(0);
+  await expect(page.locator(".journal-card .journal-cover-image")).toHaveCount(5);
   await page.screenshot({ path: test.info().outputPath("journal-en-desktop.png"), fullPage: true });
 });
 
