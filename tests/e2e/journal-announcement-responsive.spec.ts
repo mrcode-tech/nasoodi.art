@@ -96,6 +96,47 @@ test.describe("Journal announcement responsive placements", () => {
       });
     });
 
+
+    test(`long and short event titles fit all sticker placements in ${item.locale}`, async ({ page }) => {
+      const stressTitles = item.locale === "en"
+        ? ["An Exhibition of Quiet Colour, Memory, and the Spaces Between Seasons", "Open Studio"]
+        : ["نمایشگاهی درباره رنگ، خاطره و فاصله‌های میان فصل‌ها و لحظه‌های آرام", "آتلیه باز"];
+
+      const placements = [
+        { kind: "viewport", width: 1920, height: 1080, route: `/${item.locale}` },
+        { kind: "desktop-sidebar", width: 1024, height: 768, route: `/${item.locale}/works` },
+        { kind: "mobile-sidebar", width: 320, height: 700, route: `/${item.locale}/works` },
+      ] as const;
+
+      for (const placement of placements) {
+        await page.setViewportSize({ width: placement.width, height: placement.height });
+        await page.goto(placement.route);
+        if (placement.kind === "mobile-sidebar") {
+          await page.getByRole("button", { name: item.menuLabel }).click();
+        }
+
+        const sticker = placement.kind === "viewport"
+          ? page.locator('[data-placement="viewport"]')
+          : placement.kind === "desktop-sidebar"
+            ? page.locator(".desktop-sidebar [data-placement=\"desktop-sidebar\"]")
+            : page.getByRole("dialog", { name: item.menuLabel }).locator('[data-placement="mobile-sidebar"]');
+
+        await expect(sticker).toBeVisible();
+        const title = sticker.locator('[data-part="title"]');
+        for (const titleText of stressTitles) {
+          await title.evaluate((element, value) => {
+            element.textContent = value;
+          }, titleText);
+          await expect(title).toBeVisible();
+          await expectDismissButtonInsideSticker(sticker);
+        }
+
+        await page.screenshot({
+          path: test.info().outputPath(`announcement-title-stress-${placement.kind}-${item.locale}.png`),
+        });
+      }
+    });
+
     for (const viewport of [
       { width: 390, height: 844, name: "standard" },
       { width: 360, height: 800, name: "narrow" },
