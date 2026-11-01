@@ -1225,3 +1225,46 @@ test("editorial section transitions avoid decorative rules while functional cont
   await page.goto("/en/journal");
   await expect(page.locator(".journal-filter").first()).toHaveCSS("border-top-width", "1px");
 });
+
+ 
+test("localized Contact methods are visible on homepage and Contact route", async ({ page }) => {
+ for (const locale of ["en","fa"] as const) {
+  await page.setViewportSize({width:390,height:844});
+  await page.goto(`/${locale}`);
+  const home=page.locator(".homepage-contact");
+  await expect(home).toBeVisible();
+  await expect(home.getByRole("link",{name:"@nasoodi_contact_demo"})).toHaveAttribute("href","https://t.me/nasoodi_contact_demo");
+  await expect(home.getByRole("link",{name:"studio@example.com"})).toHaveAttribute("href","mailto:studio@example.com");
+  await expect(home.getByRole("link",{name:"@ghazaleh.nasoodi.demo"})).toHaveAttribute("href","https://www.instagram.com/ghazaleh.nasoodi.demo/");
+  await page.goto(`/${locale}/contact`);
+  await expect(page.locator(".contact-links a")).toHaveCount(3);
+  await expect(page.getByRole("navigation",{name:locale==="fa"?"مسیر صفحه":"Breadcrumb"})).toBeVisible();
+  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=document.documentElement.clientWidth)).toBe(true);
+ }
+});
+test("breadcrumbs link to localized ancestors on archive and nested detail pages", async ({page})=>{
+ for(const locale of ["en","fa"] as const){
+  await page.setViewportSize({width:390,height:844});
+  await page.goto(`/${locale}/journal`);
+  const crumb=page.getByRole("navigation",{name:locale==="fa"?"مسیر صفحه":"Breadcrumb"});
+  await expect(crumb.getByRole("link",{name:locale==="fa"?"خانه":"Home"})).toHaveAttribute("href",`/${locale}`);
+  const first=page.locator(".journal-card h2 a").first();
+  if(await first.count()){await first.click();await expect(page.getByRole("navigation",{name:locale==="fa"?"مسیر صفحه":"Breadcrumb"}).getByRole("link",{name:locale==="fa"?"یادداشت‌ها":"Journal"})).toHaveAttribute("href",`/${locale}/journal`);}
+ }
+});
+test("Journal pagination remains within the viewport at common phone widths",async({page})=>{
+ for(const locale of ["en","fa"] as const) for(const width of [320,360,375,390,430]){
+  await page.setViewportSize({width,height:844});await page.goto(`/${locale}/journal?pageSize=5`);
+  await expect(page.locator(".journal-pagination .gallery-pagination-controls")).toBeVisible();
+  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=document.documentElement.clientWidth),`${locale} ${width}`).toBe(true);
+ }
+});
+test("desktop sidebar copyright is a single line and biography uses justified alignment",async({page})=>{
+ for(const locale of ["en","fa"] as const){
+  await page.setViewportSize({width:1280,height:900});await page.goto(`/${locale}/about`);
+  const copyright=page.locator(".desktop-sidebar .sidebar-bottom");await expect(copyright).toBeVisible();
+  const m=await copyright.evaluate(el=>({scroll:el.scrollWidth,client:el.clientWidth,whiteSpace:getComputedStyle(el).whiteSpace}));
+  expect(m.whiteSpace).toBe("nowrap");expect(m.scroll).toBeLessThanOrEqual(m.client+1);
+  await expect(page.locator(".about-biography-copy")).toHaveCSS("text-align","justify");
+ }
+});

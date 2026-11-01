@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { ArtworkExperience } from "@/components/artwork-experience";
+import { SiteBreadcrumbs } from "@/components/site-breadcrumbs";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -36,7 +37,7 @@ export const revalidate = 60;
 export default async function Detail({params}:{params:Promise<{locale:string;section:string;slug:string}>}){
  const {locale,section,slug}=await params;if(!isLocale(locale))notFound();const t=copyFor(locale);
  if(section==="works"){const w=getPublicArtworks(artworks,locale).find(x=>x.slug===slug);if(!w)notFound();const img=primaryImageFor(w);if(!img)notFound();
- return <><script type="application/ld+json" dangerouslySetInnerHTML={{__html:serializeJsonLd(getArtworkStructuredData(w,locale))}}/><article className="page-content artwork-detail"><div className="artwork-detail-image"><Image sizes="(max-width: 600px) 100vw, (max-width: 900px) 90vw, 50vw" src={img.src} alt={img.alt[locale]??""} width={img.width} height={img.height}/></div><div className="artwork-detail-copy"><h1>{w.title[locale]}</h1>{w.medium?.[locale]&&<p>{w.medium[locale]}</p>}{w.year&&<p>{w.year}</p>}{w.description?.[locale]&&<p>{w.description[locale]}</p>}</div></article></>;}
+ return <><script type="application/ld+json" dangerouslySetInnerHTML={{__html:serializeJsonLd(getArtworkStructuredData(w,locale))}}/><div className="page-content"><SiteBreadcrumbs locale={locale} items={[{label:t.home,href:pagePath(locale)},{label:t.selected,href:pagePath(locale,"works")},{label:w.title[locale]}]}/><article className="artwork-detail"><div className="artwork-detail-image"><Image sizes="(max-width: 600px) 100vw, (max-width: 900px) 90vw, 50vw" src={img.src} alt={img.alt[locale]??""} width={img.width} height={img.height}/></div><div className="artwork-detail-copy"><h1>{w.title[locale]}</h1>{w.medium?.[locale]&&<p>{w.medium[locale]}</p>}{w.year&&<p>{w.year}</p>}{w.description?.[locale]&&<p>{w.description[locale]}</p>}</div></article></div></>;}
  if(section==="galleries"){
   const g=getPublicGalleries(galleries,artworks,locale).find(x=>x.slug===slug);
   if(!g)notFound();
@@ -44,7 +45,7 @@ export default async function Detail({params}:{params:Promise<{locale:string;sec
   const members=g.artworkIds.map(id=>publicWorks.find(w=>w.id===id)).filter((w):w is (typeof publicWorks)[number]=>w!==undefined);
   const cover=getGalleryCoverArtwork(g,artworks,locale);
   return <><script type="application/ld+json" dangerouslySetInnerHTML={{__html:serializeJsonLd(getGalleryStructuredData(g,artworks,locale,`https://nasoodi.art${pagePath(locale,`galleries/${g.slug}`)}`))}}/><div className="page-content">
-   <Link className="back-link" href={pagePath(locale,"galleries")}>← {t.galleries}</Link>
+   <SiteBreadcrumbs locale={locale} items={[{label:t.home,href:pagePath(locale)},{label:t.galleries,href:pagePath(locale,"galleries")},{label:g.title[locale]}]}/>
    <header className="page-heading"><p className="eyebrow">{t.galleries}</p><h1>{g.title[locale]}</h1><p>{g.description[locale]}</p></header>
    {cover&&<figure className="gallery-detail-cover"><Image sizes="(max-width: 800px) 90vw, 54vw" src={cover.image.src} alt={cover.image.alt[locale]??""} width={cover.image.width} height={cover.image.height}/></figure>}
    <ArtworkExperience artworks={members} locale={locale} context={`gallery:${g.slug}`} />
@@ -60,7 +61,7 @@ export default async function Detail({params}:{params:Promise<{locale:string;sec
   const typeLabel=entry.type==="event"?t.journalEvents:entry.type==="exhibition"?t.journalExhibitions:entry.type==="studio-update"?t.journalStudio:t.journalStories;
   return <><script type="application/ld+json" dangerouslySetInnerHTML={{__html:serializeJsonLd(getJournalStructuredData(entry,locale,`https://nasoodi.art${pagePath(locale,`journal/${entry.slug}`)}`))}}/>
    <article className="page-content article-page journal-detail">
-    <Link className="back-link" href={pagePath(locale,"journal")}>← {t.journal}</Link>
+    <SiteBreadcrumbs locale={locale} items={[{label:t.home,href:pagePath(locale)},{label:t.journal,href:pagePath(locale,"journal")},{label:entry.title[locale]}]}/>
     <p className="eyebrow">{typeLabel}</p><h1>{entry.title[locale]}</h1><p className="article-summary">{entry.summary[locale]}</p>
     {entry.publishedAt&&Number.isFinite(Date.parse(entry.publishedAt))&&<p className="article-publication-date"><time dateTime={entry.publishedAt}>{t.publicationDate}: {dateLabel(entry.publishedAt)}</time></p>}
     {cover&&<figure className="journal-detail-cover"><Image src={cover.src} alt={cover.alt[locale] ?? entry.title[locale] ?? entry.slug} width={cover.width} height={cover.height} sizes="(max-width: 900px) 100vw, 58rem" /></figure>}

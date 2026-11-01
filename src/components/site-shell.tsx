@@ -71,7 +71,7 @@ export function SiteShell({ locale, children, announcement }: { locale: Locale; 
           />
         )}
       </SidebarContent>
-      <SidebarFooter className="sidebar-bottom"><span>nasoodi.art</span><span>© {new Date().getFullYear()}</span></SidebarFooter>
+      <SidebarFooter className="sidebar-bottom"><span>nasoodi.art · © {new Date().getFullYear()}</span></SidebarFooter>
     </Sidebar>
     <header className={`mobile-header mobile-header-${locale}`} data-locale={locale}>
       <Link className="mobile-wordmark" dir="ltr" href={pagePath(locale)}>Nasoodi<span>.</span></Link>
