@@ -31,7 +31,7 @@ Implement the approved Journal event experience described by the proposal, wiref
 - Anchor the announcement to physical left in English and physical right in Persian.
 - Keep it fixed during scroll and independent of hero/layout geometry.
 - Keep the menu trigger, sidebar, artwork, focus, and essential content unobstructed.
-- Implement the functional announcement structure using the hand-authored torn-edge SVG study as a provisional decorative shape. Do not declare the visual treatment final until the owner reviews the CI-generated PNG and responsive screenshots.
+- Refine or author the decorative SVG during the early implementation phase; the checked-in torn-edge study is a starting point, not a finished asset. Implement the announcement with the resulting SVG as a provisional visual until owner review. Do not declare the treatment final until the owner reviews the CI-generated PNG and responsive screenshots.
 - Keep event link and dismissal as separate controls.
 - Use event-specific session dismissal unless an existing approved project preference contract supersedes it.
 - Preserve the independent homepage Journal preview, limited to the two newest eligible published entries across all Journal types, and canonical Journal detail routes.
