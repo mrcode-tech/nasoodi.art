@@ -202,7 +202,7 @@ for (const locale of ["en", "fa"] as const) {
     } else {
       // The utility is a full-width fixed bar; assert the language control is
       // anchored to its right edge rather than treating the bar as the control.
-      const languageControl = await utilityLocator.locator(".ui-button").boundingBox();
+      const languageControl = await utilityLocator.getByRole("button", { name: "Language" }).boundingBox();
       expect(languageControl?.x).toBeGreaterThan(1440 - 220);
       expect((languageControl?.x ?? 0) + (languageControl?.width ?? 0)).toBeLessThanOrEqual(1440);
     }
@@ -576,8 +576,8 @@ test("Persian language label sits to the right of its selector in desktop utilit
   await page.getByRole("button", { name: "باز کردن راهبری" }).click();
   const drawer = page.getByRole("dialog", { name: "باز کردن راهبری" });
   const drawerSettings = drawer.locator(".drawer-settings");
-  const drawerLabel = drawerSettings.locator("> span");
-  const drawerSelector = drawerSettings.getByRole("button", { name: "زبان" });
+  const drawerLabel = drawerSettings.locator(".drawer-setting-row").first().locator(".language-label");
+  const drawerSelector = drawerSettings.locator(".drawer-setting-row").first().getByRole("button", { name: "زبان" });
   const drawerGeometry = await Promise.all([drawerLabel.boundingBox(), drawerSelector.boundingBox()]);
   expect(drawerGeometry[0]).not.toBeNull();
   expect(drawerGeometry[1]).not.toBeNull();
@@ -621,7 +621,7 @@ for (const locale of ["fa", "en"] as const) {
     await expect(drawer).toBeVisible();
     const settings = drawer.locator(".drawer-settings");
     const languageButton = settings.getByRole("button", { name: locale === "fa" ? "زبان" : "Language" });
-    await expect(settings.locator(".language-label")).toBeVisible();
+    await expect(settings.locator(".drawer-setting-row").first().locator(".language-label")).toBeVisible();
     await expect(languageButton).toBeVisible();
     await languageButton.click();
     await expect(page.getByRole("menuitem", { name: /English/ })).toBeVisible();
