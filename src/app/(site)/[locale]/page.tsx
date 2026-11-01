@@ -54,7 +54,7 @@ export default async function Home({params}:Props){const {locale}=await params;i
    <div className="journal-preview-list">{journal.map(entry=>{
     const cover=journalCoverImageFor(entry,locale);
     return <article className={`journal-preview-item${cover?" has-cover":""}`} key={entry.id}>
-     {cover&&<Image className="journal-cover-image" src={cover.src} alt={cover.alt[locale]} width={cover.width} height={cover.height} sizes="(max-width: 600px) 100vw, (max-width: 900px) 40vw, 24rem" />}
+     {cover&&<Image className="journal-cover-image" src={cover.src} alt={cover.alt[locale] ?? entry.title[locale]} width={cover.width} height={cover.height} sizes="(max-width: 600px) 100vw, (max-width: 900px) 40vw, 24rem" />}
      <div className="journal-preview-copy">
       {entry.publishedAt && Number.isFinite(Date.parse(entry.publishedAt)) && <time dateTime={entry.publishedAt}>{new Intl.DateTimeFormat(locale,{dateStyle:"long"}).format(new Date(entry.publishedAt))}</time>}
       <h3><Link href={pagePath(locale,`journal/${entry.slug}`)}>{entry.title[locale]}</Link></h3>
