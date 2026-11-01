@@ -951,3 +951,20 @@ html[lang="fa"] .prose,html[lang="fa"] .about-biography-copy,html[lang="fa"] .ab
     direction: rtl;
   }
 }
+
+
+/* In the mobile drawer, keep Appearance on its own line and place the theme
+   selector directly beneath its label rather than beside the Language control. */
+@media (max-width: 900px) {
+  .mobile-drawer .drawer-setting-row:last-child {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: .35rem;
+  }
+  .mobile-drawer .drawer-setting-row:last-child .theme-selector {
+    width: 100%;
+  }
+  .mobile-drawer .drawer-setting-row:last-child .theme-trigger {
+    justify-content: flex-start;
+  }
+}
