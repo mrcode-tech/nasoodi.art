@@ -1076,12 +1076,12 @@ test("desktop homepage biography expands around a fixed locale-aligned hero imag
   }
 });
 
-test("homepage keeps the Journal announcement absent when there is no approved upcoming event", async ({ page }) => {
+test("homepage suppresses the event sticker on short viewports without changing Journal flow", async ({ page }) => {
  for (const locale of ["en", "fa"] as const) {
-  await page.setViewportSize({ width: 390, height: 844 });
+  await page.setViewportSize({ width: 390, height: 700 });
   await page.goto(`/${locale}`);
-  await expect(page.locator(".journal-announcement")).toHaveCount(0);
-  await expect(page.locator(".editorial-section")).toHaveCount(2);
+  await expect(page.locator(`aside[aria-label="${locale === "en" ? "UPCOMING EXHIBITION" : "نمایشگاه پیشِ رو"}"]`)).toHaveCount(0);
+  await expect(page.locator(".journal-preview-item")).toHaveCount(1);
   const overflow=await page.evaluate(()=>document.documentElement.scrollWidth>document.documentElement.clientWidth);
   expect(overflow).toBe(false);
  }

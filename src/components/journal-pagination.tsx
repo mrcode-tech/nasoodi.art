@@ -30,7 +30,6 @@ export function JournalPagination({ totalItems, locale, labels }: Props) {
     if (normalizedHref !== currentHref) router.replace(normalizedHref, { scroll: false });
   }, [pathname, queryString, router, state.page, state.pageSize]);
 
-  if (state.totalPages <= 1) return null;
   const range = labels.showing
     .replace("{start}", String(state.startIndex + 1))
     .replace("{end}", String(state.endIndex))
@@ -49,7 +48,7 @@ export function JournalPagination({ totalItems, locale, labels }: Props) {
             {GALLERY_PAGE_SIZES.map((size) => <option key={size} value={size}>{size}</option>)}
           </select>
         </label>
-        <nav className="gallery-page-nav" aria-label={labels.page}>
+        {state.totalPages > 1 && <nav className="gallery-page-nav" aria-label={labels.page}>
           <button type="button" onClick={() => navigate(state.page - 1)} disabled={state.page <= 1} aria-label={labels.previous}>{locale === "fa" ? "→" : "←"}</button>
           {getCompactPageNumbers(state.page, state.totalPages).map((item, index) =>
             item === "ellipsis" ? <span className="gallery-page-ellipsis" key={"ellipsis-" + index} aria-hidden="true">…</span> :
@@ -57,7 +56,7 @@ export function JournalPagination({ totalItems, locale, labels }: Props) {
               aria-current={item === state.page ? "page" : undefined} className={item === state.page ? "is-current" : undefined}>{item}</button>,
           )}
           <button type="button" onClick={() => navigate(state.page + 1)} disabled={state.page >= state.totalPages} aria-label={labels.next}>{locale === "fa" ? "←" : "→"}</button>
-        </nav>
+        </nav>}
       </div>
     </section>
   );
