@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test, type Locator } from "@playwright/test";
 
 const locales = [
   {
@@ -15,7 +15,7 @@ const locales = [
   },
 ] as const;
 
-async function expectDismissButtonInsideSticker(sticker: ReturnType<import("@playwright/test").Page["locator"]>) {
+async function expectDismissButtonInsideSticker(sticker: Locator) {
   const stickerBox = await sticker.boundingBox();
   const buttonBox = await sticker.getByRole("button").boundingBox();
 
