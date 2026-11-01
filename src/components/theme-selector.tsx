@@ -1,5 +1,4 @@
 "use client";
-import { useEffect, useState } from "react";
 import { useTheme } from "next-themes";
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuRadioGroup, DropdownMenuRadioItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
@@ -12,11 +11,9 @@ const icons = {
 };
 export function ThemeSelector({ locale }: { locale: Locale }) {
  const { theme, setTheme } = useTheme();
- const [mounted, setMounted] = useState(false);
- useEffect(() => setMounted(true), []);
  const labels: Record<ThemeMode,string> = locale === "fa" ? {light:"روشن",dark:"تیره",system:"سیستم"} : {light:"Light",dark:"Dark",system:"System"};
  const accessibleName = locale === "fa" ? "انتخاب پوسته" : "Choose theme";
- const selected: ThemeMode = mounted && (theme === "light" || theme === "dark" || theme === "system") ? theme : "system";
+ const selected: ThemeMode = theme === "light" || theme === "dark" || theme === "system" ? theme : "system";
  return <div className="theme-selector"><DropdownMenu>
   <DropdownMenuTrigger asChild><Button className="theme-trigger" variant="ghost" size="sm" aria-label={accessibleName}>{icons[selected]}<span>{labels[selected]}</span><span aria-hidden="true">⌄</span></Button></DropdownMenuTrigger>
   <DropdownMenuContent align={locale === "fa" ? "start" : "end"} dir={locale === "fa" ? "rtl" : "ltr"} aria-label={accessibleName}>
