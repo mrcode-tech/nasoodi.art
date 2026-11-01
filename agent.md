@@ -1,3 +1,47 @@
+# NEXT IMPLEMENTATION TASK — SITE-WIDE BREADCRUMBS, EDITORIAL SPACING, AND CONTACT EXPERIENCE
+
+**Priority:** Next implementation task on the existing feature branch.  
+**Repository:** `mrcode-tech/nasoodi.art`  
+**Branch:** `feature` only  
+**Complete implementation prompt:** `specification/site-wide-navigation-spacing-and-contact-implementation-prompt.md`
+
+Implement the cross-site refinement as one coherent experience:
+
+1. A shared shadcn/ui Breadcrumb across all applicable pages, with clickable intermediate ancestors, correct artwork/collection/Journal paths, and robust Persian RTL behavior.
+2. A measured, consistent editorial spacing rhythm across the homepage and all pages.
+3. Minimal one-line Journal page-size and pagination controls on common mobile widths.
+4. One-line desktop sidebar copyright in English and Persian.
+5. Consistent justified long-form editorial text that uses the available content width without harming mobile readability or Persian shaping.
+6. A homepage Contact section, dedicated bilingual Contact page, and sidebar navigation item, using centralized fictional Telegram/email/Instagram fixtures strictly for design review and never as public artist contact details.
+
+Before coding, read in full:
+- `AGENTS.md`
+- `specification/README.md`
+- `specification/site-wide-navigation-spacing-and-contact-implementation-prompt.md`
+- `specification/design-engineering-skills.md`
+- `specification/design-direction-and-system-refinement.md`
+- `specification/site-wide-design-system-and-section-specification.md`
+- `specification/navigation-and-mobile-sidebar.md`
+- `specification/shadcn-component-reuse-and-bilingual-ui.md`
+- `specification/localization-and-editorial-governance.md`
+- `specification/accessibility-performance-security.md`
+- `specification/testing-qa-and-release.md`
+- Relevant route, content-model, Journal, artwork-detail, and page-specific specifications discovered during the audit.
+
+Inspect the current implementation and route hierarchy before editing. Do not assume a breadcrumb parent based only on browser history. Test direct entry, refresh, contextual artwork navigation, and fallback paths. Reuse the installed shadcn primitives and shared navigation architecture. Apply spacing changes through shared tokens/layout primitives before page-specific overrides. Preserve the quiet editorial gallery identity and all approved artwork/content.
+
+**Contact content gate:** the requested sample email and social handles are fictional design-review fixtures only. Centralize and label them as non-approved; do not publish, index, add to JSON-LD/sitemap, or imply that the accounts exist or are monitored. Keep the existing approved artist Instagram handle unchanged. Obtain owner-approved real contact destinations before any release publication.
+
+Run the complete relevant test suite and CI, inspect actual logs and final tested SHA, and capture/inspect English and Persian desktop/tablet/mobile screenshots. Verify breadcrumb clickability, RTL reading and keyboard order, no overflow, spacing, text measure, Journal controls, copyright fit, and Contact navigation/content.
+
+Work only on the existing `feature` branch. Preserve unrelated work. Do not merge to `stage` or `main`, deploy, publish, change external services, or commit/push without the required separate authorization.
+
+---
+
+## Previous task prompt — Journal and event announcement sticker
+
+The previous Journal/sticker task prompt and implementation history are retained below for traceability. It is not the next task unless the owner explicitly reopens it.
+
 # NEXT IMPLEMENTATION TASK — JOURNAL AND EVENT ANNOUNCEMENT STICKER
 
 **Priority:** Next feature implementation; this Journal/sticker task supersedes the previous About/CV task prompt below.  
@@ -314,3 +358,4 @@ Do not report completion until:
 7. Artist/site-owner approvals obtained and still required.
 8. Known issues or follow-up work.
 9. Explicit confirmation that no unauthorized merge/deploy/publish occurred.
+
