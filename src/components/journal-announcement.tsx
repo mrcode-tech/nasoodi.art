@@ -25,6 +25,7 @@ export function JournalAnnouncement({
   dismissLabel,
   href,
   placement = "viewport",
+  onNavigate,
 }: {
   locale: Locale;
   event: AnnouncementEvent;
@@ -32,6 +33,7 @@ export function JournalAnnouncement({
   dismissLabel: string;
   href: string;
   placement?: Placement;
+  onNavigate?: () => void;
 }) {
   const [visibility, setVisibility] = useState<"pending" | "visible" | "dismissed">("pending");
   const storageKey = `nasoodi:journal-announcement:dismissed:${event.id}`;
@@ -87,7 +89,7 @@ export function JournalAnnouncement({
         className={`${styles.paper} ${locale === "fa" ? styles.paperRtl : ""}`}
         aria-hidden="true"
       />
-      <Link className={styles.link} href={href} data-part="link">
+      <Link className={styles.link} href={href} data-part="link" onClick={onNavigate}>
         <span className={styles.eyebrow} data-part="eyebrow">{eyebrow}</span>
         <span className={`${styles.title} ${locale === "fa" ? styles.persianTitle : ""}`} data-part="title">
           {event.title}
