@@ -19,15 +19,25 @@ async function expectDismissButtonInsideSticker(sticker: Locator) {
   const stickerBox = await sticker.boundingBox();
   const buttonBox = await sticker.getByRole("button").boundingBox();
   const titleBox = await sticker.locator('[data-part="title"]').boundingBox();
+  const paper = sticker.locator('[data-part="paper"]');
+  const paperBox = await paper.boundingBox();
+  const paperBackgroundSize = await paper.evaluate((element) => getComputedStyle(element).backgroundSize);
 
   expect(stickerBox).not.toBeNull();
   expect(buttonBox).not.toBeNull();
   expect(titleBox).not.toBeNull();
+  expect(paperBox).not.toBeNull();
+  expect(paperBox!.x).toBe(stickerBox!.x);
+  expect(paperBox!.y).toBe(stickerBox!.y);
+  expect(paperBox!.width).toBe(stickerBox!.width);
+  expect(paperBox!.height).toBe(stickerBox!.height);
+  expect(paperBackgroundSize).toBe('100% 100%');
   expect(buttonBox!.width).toBeGreaterThanOrEqual(44);
   expect(buttonBox!.height).toBeGreaterThanOrEqual(44);
-  expect(buttonBox!.x).toBeGreaterThanOrEqual(stickerBox!.x);
+  // Keep the 44px control inside the visible paper silhouette, clear of its transparent SVG edge.
+  expect(buttonBox!.x).toBeGreaterThanOrEqual(stickerBox!.x + 12);
   expect(buttonBox!.y).toBeGreaterThanOrEqual(stickerBox!.y);
-  expect(buttonBox!.x + buttonBox!.width).toBeLessThanOrEqual(stickerBox!.x + stickerBox!.width);
+  expect(buttonBox!.x + buttonBox!.width).toBeLessThanOrEqual(stickerBox!.x + stickerBox!.width - 12);
   expect(buttonBox!.y + buttonBox!.height).toBeLessThanOrEqual(stickerBox!.y + stickerBox!.height);
   expect(titleBox!.x).toBeGreaterThanOrEqual(stickerBox!.x);
   expect(titleBox!.y).toBeGreaterThanOrEqual(stickerBox!.y);
@@ -164,6 +174,7 @@ test.describe("Journal announcement responsive placements", () => {
         expect(drawerBox).not.toBeNull();
         expect(stickerBox).not.toBeNull();
         expect(stickerBox!.width).toBeGreaterThanOrEqual(190);
+        expect(stickerBox!.height).toBeLessThanOrEqual(155);
         expect(stickerBox!.x).toBeGreaterThanOrEqual(drawerBox!.x);
         expect(stickerBox!.x + stickerBox!.width).toBeLessThanOrEqual(drawerBox!.x + drawerBox!.width);
 
@@ -179,6 +190,12 @@ test.describe("Journal announcement responsive placements", () => {
         if (viewport.name === "standard") {
           await sticker.getByRole("button", { name: item.dismissLabel }).click();
           await expect(sticker).toBeHidden();
+        }
+
+        if (viewport.name === "narrow") {
+          await sticker.locator('[data-part="link"]').click();
+          await expect(drawer).toBeHidden();
+          await expect(page).toHaveURL(new RegExp("/" + item.locale + "/journal/"));
         }
       });
     }
