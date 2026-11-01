@@ -1,3 +1,40 @@
+# NEXT IMPLEMENTATION TASK — JOURNAL AND EVENT ANNOUNCEMENT STICKER
+
+**Priority:** Next feature implementation after the current About/CV task is reviewed and closed.  
+**Repository:** `mrcode-tech/nasoodi.art`  
+**Branch:** `feature` only  
+**Primary specification:** `specification/journal-announcement-specification.md`  
+**Supporting documents:** proposal, wireframes, and task instructions listed below.
+
+The next implementation task is the approved Journal and event-announcement experience. Implement both connected parts as one coherent feature:
+
+1. **Journal experience:** homepage Journal preview, existing unified Journal archive, event-specific detail presentation, and accessible pagination/page-size behavior where the existing archive requires it.
+2. **Event announcement sticker:** create the approved restrained paper-sticker visual asset (transparent PNG, decorative only) and implement the fixed, dismissible, locale-aware announcement that links to the nearest eligible upcoming Journal event.
+
+Before coding, read in full:
+- `specification/README.md`
+- `specification/journal-announcement-proposal.md`
+- `specification/journal-announcement-wireframes.md`
+- `specification/journal-announcement-specification.md`
+- `specification/journal-announcement-agent-instructions.md`
+- `specification/journal-and-events.md`
+- `specification/artwork-discovery-carousel-and-editorial-experience.md`
+- All mandatory design, content, localization, navigation, SEO, accessibility, testing, and roadmap authorities referenced by `AGENTS.md` and the primary specification.
+
+**Important reconciled homepage rule:** the in-flow homepage Journal preview is limited to the two newest eligible published entries across article and event types. Do not add a third card or pin an older upcoming event into this preview. The fixed sticker independently selects the nearest eligible upcoming event. Dismissing the sticker must not hide the Journal preview.
+
+**Sticker asset rule:** the PNG is only a decorative paper silhouette/edge treatment with transparent background. Do not bake event text, dates, labels, arrows, or controls into the image. Keep all copy and interactions as accessible localized DOM content. Use CSS/SVG instead if it produces a materially better, sharper result. Do not invent an event or imply fictional sample content is real.
+
+The proposal is approved in principle, but the exact clean/torn/typographic visual variant and final sticker asset still require visual review. Follow the approval gate in the specification; do not silently choose a final variant. Inspect the real shell, locale-aware sidebar/menu geometry, Journal data model, routes, existing pagination, assets, and CI before coding.
+
+Use the detailed task workflow in `specification/journal-announcement-agent-instructions.md`. Preserve all repository safety rules in `AGENTS.md`: work on the existing feature branch, preserve unrelated changes, do not merge to stage/main, do not deploy, and do not push or commit without the required separate authorization. Run the repository's actual tests and CI, inspect logs, and capture reviewed English/Persian desktop/tablet/mobile screenshots before reporting completion.
+
+---
+
+## Previous task prompt — Artist About experience, CV, and mobile Hero
+
+The following task instructions and implementation history are retained for traceability. They describe the previous About/CV task and are not the next feature scope unless the owner explicitly reopens that work.
+
 # Agent Task: Implement the Artist About Experience, CV, and Mobile Hero Specification
 
 **Repository:** `mrcode-tech/nasoodi.art`  
