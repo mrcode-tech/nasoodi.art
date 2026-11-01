@@ -1,6 +1,6 @@
 # NEXT IMPLEMENTATION TASK — JOURNAL AND EVENT ANNOUNCEMENT STICKER
 
-**Priority:** Next feature implementation after the current About/CV task is reviewed and closed.  
+**Priority:** Next feature implementation; this Journal/sticker task supersedes the previous About/CV task prompt below.  
 **Repository:** `mrcode-tech/nasoodi.art`  
 **Branch:** `feature` only  
 **Primary specification:** `specification/journal-announcement-specification.md`  
@@ -25,7 +25,7 @@ Before coding, read in full:
 
 **Sticker asset rule:** the PNG is only a decorative paper silhouette/edge treatment with transparent background. Do not bake event text, dates, labels, arrows, or controls into the image. Keep all copy and interactions as accessible localized DOM content. Use CSS/SVG instead if it produces a materially better, sharper result. Do not invent an event or imply fictional sample content is real.
 
-The proposal is approved in principle, but the exact clean/torn/typographic visual variant and final sticker asset still require visual review. Follow the approval gate in the specification; do not silently choose a final variant. Inspect the real shell, locale-aware sidebar/menu geometry, Journal data model, routes, existing pagination, assets, and CI before coding.
+The proposal is approved in principle and implementation may proceed. The exact clean/torn/typographic visual variant and final sticker asset still require visual review. Build the functional experience and prepare visual comparisons, but do not declare a final variant or produce the final PNG until the owner selects it. Inspect the real shell, locale-aware sidebar/menu geometry, Journal data model, routes, existing pagination, assets, and CI before coding.
 
 Use the detailed task workflow in `specification/journal-announcement-agent-instructions.md`. Preserve all repository safety rules in `AGENTS.md`: work on the existing feature branch, preserve unrelated changes, do not merge to stage/main, do not deploy, and do not push or commit without the required separate authorization. Run the repository's actual tests and CI, inspect logs, and capture reviewed English/Persian desktop/tablet/mobile screenshots before reporting completion.
 
