@@ -7,25 +7,19 @@ import { Button } from "@/components/ui/button";
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar";
 import { Sheet, SheetClose, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { JournalAnnouncement, type AnnouncementEvent } from "@/components/journal-announcement";
 
 function LanguageSelector({ locale, alternate, pathname, label, onNavigate }: { locale: Locale; alternate: string; pathname: string; label: string; onNavigate?: () => void }) {
   const englishHref = locale === "en" ? pathname : alternate;
   const persianHref = locale === "fa" ? pathname : alternate;
   const router = useRouter();
   const preserveGalleryState = (event: React.MouseEvent<HTMLAnchorElement>) => {
-    if (!/^\/(fa|en)\/galleries$/.test(pathname)) return;
+    if (!/^\\/(fa|en)\\/galleries$/.test(pathname)) return;
     const current = new URLSearchParams(window.location.search);
     const query = new URLSearchParams();
-    for (const key of ["page", "pageSize"]) {
-      const value = current.get(key);
-      if (value) query.set(key, value);
-    }
+    for (const key of ["page", "pageSize"]) { const value = current.get(key); if (value) query.set(key, value); }
     const suffix = query.toString();
-    if (suffix) {
-      event.preventDefault();
-      router.push(alternate + "?" + suffix);
-      onNavigate?.();
-    }
+    if (suffix) { event.preventDefault(); router.push(alternate + "?" + suffix); onNavigate?.(); }
   };
   return <DropdownMenu>
     <DropdownMenuTrigger asChild><Button variant="ghost" size="sm" aria-label={label}><span>{locale === "fa" ? "فارسی" : "English"}</span><span className="language-chevron" aria-hidden="true">⌄</span></Button></DropdownMenuTrigger>
@@ -35,39 +29,29 @@ function LanguageSelector({ locale, alternate, pathname, label, onNavigate }: { 
     </DropdownMenuContent>
   </DropdownMenu>;
 }
-
-export function SiteShell({ locale, children }: { locale: Locale; children: React.ReactNode }) {
+export function SiteShell({ locale, children, announcement }: { locale: Locale; children: React.ReactNode; announcement?: AnnouncementEvent }) {
   const labels = copyFor(locale);
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
   useEffect(() => {
     const desktopQuery = window.matchMedia("(min-width: 901px)");
-    const closeMobileNavigation = (event: MediaQueryListEvent) => {
-      if (event.matches) setMobileOpen(false);
-    };
+    const closeMobileNavigation = (event: MediaQueryListEvent) => { if (event.matches) setMobileOpen(false); };
     desktopQuery.addEventListener("change", closeMobileNavigation);
     return () => desktopQuery.removeEventListener("change", closeMobileNavigation);
   }, []);
   const drawerHomeRef = useRef<HTMLAnchorElement>(null);
   const alternate = alternatePathFor(pathname, locale);
   const links: [string, string, string][] = [
-    ["home", labels.home, pagePath(locale)],
-    ["about", labels.about, pagePath(locale, "about")],
-    ["works", labels.works, pagePath(locale, "works")],
-    ["galleries", labels.galleries, pagePath(locale, "galleries")],
-    ["journal", labels.journal, pagePath(locale, "journal")],
-    ["contact", labels.contact, pagePath(locale, "contact")],
+    ["home", labels.home, pagePath(locale)], ["about", labels.about, pagePath(locale, "about")],
+    ["works", labels.works, pagePath(locale, "works")], ["galleries", labels.galleries, pagePath(locale, "galleries")],
+    ["journal", labels.journal, pagePath(locale, "journal")], ["contact", labels.contact, pagePath(locale, "contact")],
   ];
-
   const navigation = (insideSheet = false) => <nav dir={locale === "fa" ? "rtl" : "ltr"} aria-label={locale === "fa" ? "راهبری اصلی" : "Primary navigation"}>
-    <SidebarMenu className="nav-list">
-      {links.map(([key, label, href]) => {
-        const active = key === "home" ? pathname === href : pathname === href || pathname.startsWith(href + "/");
-        return <SidebarMenuItem key={key}><SidebarMenuButton><Link className="nav-link" dir={locale === "fa" ? "rtl" : "ltr"} href={href} aria-current={active ? "page" : undefined} onClick={() => insideSheet && setMobileOpen(false)}>{label}</Link></SidebarMenuButton></SidebarMenuItem>;
-      })}
-    </SidebarMenu>
+    <SidebarMenu className="nav-list">{links.map(([key, label, href]) => {
+      const active = key === "home" ? pathname === href : pathname === href || pathname.startsWith(href + "/");
+      return <SidebarMenuItem key={key}><SidebarMenuButton><Link className="nav-link" dir={locale === "fa" ? "rtl" : "ltr"} href={href} aria-current={active ? "page" : undefined} onClick={() => insideSheet && setMobileOpen(false)}>{label}</Link></SidebarMenuButton></SidebarMenuItem>;
+    })}</SidebarMenu>
   </nav>;
-
   return <>
     <a className="skip-link" href="#main-content">{labels.skip}</a>
     <Sidebar className="desktop-sidebar" dir={locale === "fa" ? "rtl" : "ltr"} aria-label="Nasoodi.art">
@@ -77,7 +61,6 @@ export function SiteShell({ locale, children }: { locale: Locale; children: Reac
       <SidebarContent>{navigation()}</SidebarContent>
       <SidebarFooter className="sidebar-bottom"><span>nasoodi.art</span><span>© {new Date().getFullYear()}</span></SidebarFooter>
     </Sidebar>
-
     <header className={`mobile-header mobile-header-${locale}`} data-locale={locale}>
       <Link className="mobile-wordmark" dir="ltr" href={pagePath(locale)}>Nasoodi<span>.</span></Link>
       <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
@@ -86,12 +69,12 @@ export function SiteShell({ locale, children }: { locale: Locale; children: Reac
           <SheetTitle className="sr-only">{labels.menu}</SheetTitle>
           <div className="drawer-heading"><Link ref={drawerHomeRef} className="mobile-wordmark" dir="ltr" href={pagePath(locale)}>Nasoodi<span>.</span></Link><SheetClose asChild><Button className="drawer-close" variant="ghost" size="sm" aria-label={labels.close}>×</Button></SheetClose></div>
           {navigation(true)}
+          {announcement && <JournalAnnouncement locale={locale} event={announcement} eyebrow={labels.announcementEyebrow} dismissLabel={labels.dismissAnnouncement} href={pagePath(locale, "journal")} placement="sidebar" />}
           <div className="drawer-settings" dir={locale === "fa" ? "rtl" : "ltr"}><span className="language-label">{labels.language}</span><LanguageSelector locale={locale} alternate={alternate} pathname={pathname} label={labels.language} onNavigate={() => setMobileOpen(false)}/></div>
           <div className="drawer-copyright" dir="ltr"><span>nasoodi.art</span><span>© {new Date().getFullYear()}</span></div>
         </SheetContent>
       </Sheet>
     </header>
-
     <div className="desktop-utility" dir={locale === "fa" ? "rtl" : "ltr"}><span className="language-label">{labels.language}</span><LanguageSelector locale={locale} alternate={alternate} pathname={pathname} label={labels.language}/></div>
     <div className="site-main"><main id="main-content">{children}</main></div>
   </>;
