@@ -1268,3 +1268,21 @@ test("desktop sidebar copyright is a single line and biography uses justified al
   await expect(page.locator(".about-biography-copy")).toHaveCSS("text-align","justify");
  }
 });
+
+
+test("artwork breadcrumbs preserve only a verified collection origin",async({page})=>{
+ await page.setViewportSize({width:1280,height:800});
+ await page.goto("/en/galleries/quiet-intervals");
+ const card=page.locator(".artwork-carousel .artwork-item").first();
+ await card.click();
+ const viewer=page.getByRole("dialog");
+ await viewer.getByRole("link",{name:"View artwork page"}).click();
+ await expect(page).toHaveURL(/fromGallery=quiet-intervals/);
+ const breadcrumb=page.getByRole("navigation",{name:"Breadcrumb"});
+ await expect(breadcrumb.getByRole("link",{name:"Galleries"})).toHaveAttribute("href","/en/galleries");
+ await expect(breadcrumb.getByRole("link",{name:/Quiet Intervals/})).toHaveAttribute("href","/en/galleries/quiet-intervals");
+ await page.goto("/en/works/a-quiet-place-between-seasons?fromGallery=not-a-real-gallery");
+ const fallback=page.getByRole("navigation",{name:"Breadcrumb"});
+ await expect(fallback.getByRole("link",{name:"Selected works"})).toHaveAttribute("href","/en/works");
+ await expect(fallback.getByRole("link",{name:"Galleries"})).toHaveCount(0);
+});
