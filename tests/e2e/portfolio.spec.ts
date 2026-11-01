@@ -1106,10 +1106,15 @@ test("mobile menu uses a minimal two-stroke icon in both locales and updates its
     await expect(strokes).toHaveCount(2);
     const iconStyle = await trigger.evaluate((button) => {
       const lines = Array.from(button.querySelectorAll(".menu-trigger-lines > span"));
-      return { borderWidth: getComputedStyle(button).borderTopWidth, firstWidth: getComputedStyle(lines[0]).width, secondWidth: getComputedStyle(lines[1]).width };
+      const first = lines[0].getBoundingClientRect();
+      const second = lines[1].getBoundingClientRect();
+      return { borderWidth: getComputedStyle(button).borderTopWidth, firstWidth: getComputedStyle(lines[0]).width, secondWidth: getComputedStyle(lines[1]).width, firstHeight: first.height, secondHeight: second.height, firstTop: first.top, secondTop: second.top };
     });
     expect(iconStyle.borderWidth).toBe("0px");
     expect(parseFloat(iconStyle.firstWidth)).toBe(parseFloat(iconStyle.secondWidth));
+    expect(iconStyle.firstHeight).toBeGreaterThanOrEqual(1.5);
+    expect(iconStyle.secondHeight).toBeGreaterThanOrEqual(1.5);
+    expect(iconStyle.secondTop).toBeGreaterThan(iconStyle.firstTop + iconStyle.firstHeight);
     await page.screenshot({ path: test.info().outputPath(`menu-${locale}-mobile-closed.png`) });
     await trigger.click();
     const dialog = page.getByRole("dialog", { name: openLabel });

@@ -873,8 +873,8 @@ html[dir="rtl"] .home-intro.has-hero > .hero-artwork {
 
 
 /* Minimalist navigation mark: two equal editorial strokes; the 44px button remains the touch target. */
-.menu-trigger-lines{width:1.25rem;gap:.4rem;align-items:stretch}
-.menu-trigger-lines>span,.menu-trigger-lines>span:first-child,.menu-trigger-lines>span:last-child{width:100%;height:1.75px;border-radius:0}
+.menu-trigger-lines{display:grid;width:1.25rem;height:auto;grid-template-rows:repeat(2,1.75px);row-gap:.4rem;align-items:center;line-height:0;overflow:visible}
+.menu-trigger-lines>span,.menu-trigger-lines>span:first-child,.menu-trigger-lines>span:last-child{display:block;flex:none;width:100%;height:1.75px;min-height:1.75px;border-radius:0;background:currentColor}
 
 /* Editorial content groups use whitespace and hierarchy rather than decorative separator rules. */
 .editorial-section,.empty-note,.gallery-list,.journal-list,.journal-preview-item,.journal-card{border-block:0}
