@@ -302,7 +302,7 @@ test("upcoming Journal event selection excludes ongoing events and uses stable t
   makeEvent("tie-a","2026-11-02T10:00:00Z","2026-11-02T12:00:00Z","exhibition"),
   makeEvent("past","2026-10-30T10:00:00Z","2026-10-30T12:00:00Z"),
   {...makeEvent("unapproved","2026-11-01T13:00:00Z"),artistApproved:false},
-  {...makeEvent("untranslated","2026-11-01T13:00:00Z"),approvedLocales:["en"] as ("en"|"fa")[]}
+  {...makeEvent("untranslated","2026-11-01T13:00:00Z"),approvedLocales:[]}
  ];
  assert.deepEqual(getUpcomingJournalEvents(items,"en",now).map(item=>item.id),["tie-a","tie-b","later"]);
  assert.equal(getUpcomingJournalEvent(items,"en",now)?.id,"tie-a");
