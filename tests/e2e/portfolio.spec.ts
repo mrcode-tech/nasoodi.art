@@ -1332,13 +1332,29 @@ test("theme selector is available in the mobile drawer in both locales and artwo
     const drawer = page.getByRole("dialog", { name: labels.open });
     const themeTrigger = drawer.getByRole("button", { name: labels.theme });
     await expect(themeTrigger).toBeVisible();
-    const appearanceRow = drawer.locator(".drawer-setting-row").last();
-    const appearanceLabel = appearanceRow.locator(".language-label");
-    const appearanceLabelBox = await appearanceLabel.boundingBox();
+    const settingRows = drawer.locator(".drawer-setting-row");
+    await expect(settingRows).toHaveCount(2);
+    const languageRow = settingRows.first();
+    const appearanceRow = settingRows.last();
+    const languageLabelBox = await languageRow.locator(".language-label").boundingBox();
+    const languageControlBox = await languageRow.getByRole("button", { name: "Language" }).boundingBox();
+    const appearanceLabelBox = await appearanceRow.locator(".language-label").boundingBox();
     const themeTriggerBox = await themeTrigger.boundingBox();
+    expect(languageLabelBox).not.toBeNull();
+    expect(languageControlBox).not.toBeNull();
     expect(appearanceLabelBox).not.toBeNull();
     expect(themeTriggerBox).not.toBeNull();
-    expect(themeTriggerBox!.y).toBeGreaterThanOrEqual(appearanceLabelBox!.y + appearanceLabelBox!.height);
+    // The controls share their label's line, and each locale mirrors the row's physical alignment.
+    expect(Math.abs(languageLabelBox!.y - languageControlBox!.y)).toBeLessThan(8);
+    expect(Math.abs(appearanceLabelBox!.y - themeTriggerBox!.y)).toBeLessThan(8);
+    expect(appearanceLabelBox!.y).toBeGreaterThan(languageLabelBox!.y + languageLabelBox!.height);
+    if (locale === "fa") {
+      expect(languageLabelBox!.x).toBeGreaterThan(languageControlBox!.x);
+      expect(appearanceLabelBox!.x).toBeGreaterThan(themeTriggerBox!.x);
+    } else {
+      expect(languageLabelBox!.x).toBeLessThan(languageControlBox!.x);
+      expect(appearanceLabelBox!.x).toBeLessThan(themeTriggerBox!.x);
+    }
     await themeTrigger.click();
     await page.getByRole("menuitemradio", { name: labels.dark }).click();
     await expect(page.locator("html")).toHaveClass(/dark/);

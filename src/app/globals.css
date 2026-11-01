@@ -970,8 +970,8 @@ html[lang="fa"] .prose,html[lang="fa"] .about-biography-copy,html[lang="fa"] .ab
 }
 
 
-/* Mobile drawer settings: language and appearance each use their own stacked row.
-   Keep selectors inside the drawer's existing width in both LTR and RTL layouts. */
+/* Mobile drawer settings use two distinct horizontal rows. Their inline direction
+   follows the locale: Persian label right / selector left; English is reversed. */
 @media (max-width: 900px) {
   .mobile-drawer .drawer-settings {
     width: 100%;
@@ -979,30 +979,30 @@ html[lang="fa"] .prose,html[lang="fa"] .about-biography-copy,html[lang="fa"] .ab
     flex: 0 0 auto;
     flex-direction: column;
     align-items: stretch;
-    gap: 1rem;
+    gap: .65rem;
   }
-  .mobile-drawer .drawer-setting-row {
+  .mobile-drawer .drawer-setting-row,
+  .mobile-drawer .drawer-setting-row:last-child {
     display: flex;
     width: 100%;
     min-width: 0;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: flex-start;
-    gap: .35rem;
+    min-height: 2.75rem;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
   }
   .mobile-drawer .drawer-setting-row > * {
+    min-width: 0;
     max-width: 100%;
   }
   .mobile-drawer .drawer-setting-row .theme-selector {
     width: auto;
-    max-width: 100%;
+    flex: 0 0 auto;
   }
   .mobile-drawer .drawer-setting-row .theme-trigger {
     width: auto;
     max-width: 100%;
-    justify-content: flex-start;
-  }
-  html[lang="fa"] .mobile-drawer .drawer-setting-row {
-    align-items: flex-start;
+    justify-content: center;
   }
 }
