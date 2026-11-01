@@ -1087,21 +1087,28 @@ test("homepage suppresses the event sticker on short viewports without changing 
  }
 });
 
-test("mobile menu uses a minimal two-stroke icon and updates its accessible action", async ({ page }) => {
+test("mobile menu uses a minimal two-stroke icon in both locales and updates its accessible action", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
-  await page.goto("/en");
-  const trigger = page.getByRole("button", { name: "Open navigation" });
-  const strokes = trigger.locator(".menu-trigger-lines > span");
-  await expect(strokes).toHaveCount(2);
-  const iconStyle = await trigger.evaluate((button) => {
-    const lines = Array.from(button.querySelectorAll(".menu-trigger-lines > span"));
-    return { borderWidth: getComputedStyle(button).borderTopWidth, firstWidth: getComputedStyle(lines[0]).width, secondWidth: getComputedStyle(lines[1]).width };
-  });
-  expect(iconStyle.borderWidth).toBe("0px");
-  expect(parseFloat(iconStyle.firstWidth)).toBeGreaterThan(parseFloat(iconStyle.secondWidth));
-  await trigger.click();
-  await expect(page.getByRole("button", { name: "Close navigation" })).toBeVisible();
-  await expect(page.locator(".menu-trigger")).toHaveAttribute("aria-expanded", "true");
+  for (const locale of ["en", "fa"] as const) {
+    const openLabel = locale === "en" ? "Open navigation" : "باز کردن راهبری";
+    const closeLabel = locale === "en" ? "Close navigation" : "بستن راهبری";
+    await page.goto(`/${locale}`);
+    const trigger = page.getByRole("button", { name: openLabel });
+    const strokes = trigger.locator(".menu-trigger-lines > span");
+    await expect(strokes).toHaveCount(2);
+    const iconStyle = await trigger.evaluate((button) => {
+      const lines = Array.from(button.querySelectorAll(".menu-trigger-lines > span"));
+      return { borderWidth: getComputedStyle(button).borderTopWidth, firstWidth: getComputedStyle(lines[0]).width, secondWidth: getComputedStyle(lines[1]).width };
+    });
+    expect(iconStyle.borderWidth).toBe("0px");
+    expect(parseFloat(iconStyle.firstWidth)).toBeGreaterThan(parseFloat(iconStyle.secondWidth));
+    await page.screenshot({ path: test.info().outputPath(`menu-${locale}-mobile-closed.png`) });
+    await trigger.click();
+    const dialog = page.getByRole("dialog", { name: openLabel });
+    await expect(dialog.getByRole("button", { name: closeLabel })).toBeVisible();
+    await expect(page.locator(".menu-trigger")).toHaveAttribute("aria-expanded", "true");
+    await page.screenshot({ path: test.info().outputPath(`menu-${locale}-mobile-open.png`) });
+  }
 });
 
 test("editorial sections use whitespace instead of decorative separator rules", async ({ page }) => {
