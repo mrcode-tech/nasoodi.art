@@ -25,9 +25,10 @@ async function expectDismissButtonInsideSticker(sticker: Locator) {
   expect(titleBox).not.toBeNull();
   expect(buttonBox!.width).toBeGreaterThanOrEqual(44);
   expect(buttonBox!.height).toBeGreaterThanOrEqual(44);
-  expect(buttonBox!.x).toBeGreaterThanOrEqual(stickerBox!.x);
+  // Keep the 44px control inside the visible paper silhouette, clear of its transparent SVG edge.
+  expect(buttonBox!.x).toBeGreaterThanOrEqual(stickerBox!.x + 12);
   expect(buttonBox!.y).toBeGreaterThanOrEqual(stickerBox!.y);
-  expect(buttonBox!.x + buttonBox!.width).toBeLessThanOrEqual(stickerBox!.x + stickerBox!.width);
+  expect(buttonBox!.x + buttonBox!.width).toBeLessThanOrEqual(stickerBox!.x + stickerBox!.width - 12);
   expect(buttonBox!.y + buttonBox!.height).toBeLessThanOrEqual(stickerBox!.y + stickerBox!.height);
   expect(titleBox!.x).toBeGreaterThanOrEqual(stickerBox!.x);
   expect(titleBox!.y).toBeGreaterThanOrEqual(stickerBox!.y);
