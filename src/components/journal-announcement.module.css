@@ -20,3 +20,5 @@
 }
 @media(max-height:700px){.container{display:none}}
 @media(prefers-reduced-motion:reduce){.container,.container *{transition:none!important}}
+
+.persianTitle{font-family:Tahoma,Arial,sans-serif;line-height:1.65}

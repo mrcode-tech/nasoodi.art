@@ -49,13 +49,36 @@ export default async function Detail({params}:{params:Promise<{locale:string;sec
    <ArtworkExperience artworks={members} locale={locale} context={`gallery:${g.slug}`} />
   </div></>;
  }
- if(section==="journal"){const entry=getPublicJournal(journalEntries,locale).find(x=>x.slug===slug);if(!entry)notFound();return <><script type="application/ld+json" dangerouslySetInnerHTML={{__html:serializeJsonLd(getJournalStructuredData(entry,locale,`https://nasoodi.art${pagePath(locale,`journal/${entry.slug}`)}`))}}/><article className="page-content article-page"><p className="eyebrow">{t.journal}</p><h1>{entry.title[locale]}</h1><p className="article-summary">{entry.summary[locale]}</p>{entry.type==="event"&&entry.event&&<div className="event-details"><time dateTime={entry.event.startsAt}>{new Intl.DateTimeFormat(locale,{dateStyle:"long",timeStyle:"short",timeZone:entry.event.timeZone}).format(new Date(entry.event.startsAt))}</time><span dir="ltr">{entry.event.timeZone}</span>{entry.event.endsAt&&<time dateTime={entry.event.endsAt}>{locale==="fa"?"پایان":"Ends"}: {new Intl.DateTimeFormat(locale,{dateStyle:"long",timeStyle:"short",timeZone:entry.event.timeZone}).format(new Date(entry.event.endsAt))}</time>}{entry.event.venue?.[locale]&&<p>{entry.event.venue[locale]}</p>}{entry.event.registrationUrl&&<a className="text-link" href={entry.event.registrationUrl} rel="noopener noreferrer" target="_blank">{locale==="fa"?"اطلاعات و ثبت‌نام":"Details and registration"} ↗</a>}</div>}{entry.body?.[locale]&&<div className="prose">{entry.body[locale].map((block,index)=>{
-  if(block.type==="paragraph")return <p key={index}>{block.text}</p>;
-  if(block.type==="heading")return block.level===2?<h2 key={index}>{block.text}</h2>:<h3 key={index}>{block.text}</h3>;
-  if(block.type==="list"){const items=block.items.map((item,i)=><li key={i}>{item}</li>);return block.ordered?<ol key={index}>{items}</ol>:<ul key={index}>{items}</ul>;}
-  if(block.type==="quote")return <blockquote key={index}><p>{block.text}</p>{block.attribution&&<cite>{block.attribution}</cite>}</blockquote>;
-  if(block.type==="link"&&isSafeJournalHref(block.href)){const external=block.href.startsWith("https://");return <p key={index}><a href={block.href} {...(external?{target:"_blank",rel:"noopener noreferrer"}:{})}>{block.text} ↗</a></p>;}
-  return null;
- })}</div>}</article></>;}
+ if(section==="journal"){
+  const entry=getPublicJournal(journalEntries,locale).find(x=>x.slug===slug);if(!entry)notFound();
+  const relatedEntries=getPublicJournal(journalEntries,locale).filter(item=>item.id!==entry.id).slice(0,3);
+  const dateLabel=(value:string,timeZone?:string)=>new Intl.DateTimeFormat(locale,{dateStyle:"long",...(timeZone?{timeStyle:"short" as const,timeZone}:{})}).format(new Date(value));
+  const event=entry.event;
+  const registrationStillRelevant=Boolean(event?.registrationUrl&&Date.parse(event.endsAt??event.startsAt)>Date.now());
+  const typeLabel=entry.type==="event"?t.journalEvents:entry.type==="exhibition"?t.journalExhibitions:entry.type==="studio-update"?t.journalStudio:t.journalStories;
+  return <><script type="application/ld+json" dangerouslySetInnerHTML={{__html:serializeJsonLd(getJournalStructuredData(entry,locale,`https://nasoodi.art${pagePath(locale,`journal/${entry.slug}`)}`))}}/>
+   <article className="page-content article-page journal-detail">
+    <Link className="back-link" href={pagePath(locale,"journal")}>← {t.journal}</Link>
+    <p className="eyebrow">{typeLabel}</p><h1>{entry.title[locale]}</h1><p className="article-summary">{entry.summary[locale]}</p>
+    {entry.publishedAt&&Number.isFinite(Date.parse(entry.publishedAt))&&<p className="article-publication-date"><time dateTime={entry.publishedAt}>{t.publicationDate}: {dateLabel(entry.publishedAt)}</time></p>}
+    {event&&<section className="event-details" aria-label={locale==="fa"?"اطلاعات رویداد":"Event information"}>
+      <h2>{t.eventDate}</h2><p><time dateTime={event.startsAt}>{dateLabel(event.startsAt,event.timeZone)}</time> <span dir="ltr">{event.timeZone}</span></p>
+      {event.endsAt&&<p>{t.eventEnds}: <time dateTime={event.endsAt}>{dateLabel(event.endsAt,event.timeZone)}</time></p>}
+      {event.venue?.[locale]&&<p>{t.eventVenue}: {event.venue[locale]}</p>}
+      {event.attendanceMode&&<p>{t.attendanceMode}: {event.attendanceMode==="in-person"?t.inPerson:event.attendanceMode==="online"?t.online:t.hybrid}</p>}
+      {registrationStillRelevant&&<a className="text-link" href={event.registrationUrl!} rel="noopener noreferrer" target="_blank">{t.registration} ↗</a>}
+    </section>}
+    {entry.body?.[locale]&&<div className="prose">{entry.body[locale].map((block,index)=>{
+      if(block.type==="paragraph")return <p key={index}>{block.text}</p>;
+      if(block.type==="heading")return block.level===2?<h2 key={index}>{block.text}</h2>:<h3 key={index}>{block.text}</h3>;
+      if(block.type==="list"){const items=block.items.map((item,i)=><li key={i}>{item}</li>);return block.ordered?<ol key={index}>{items}</ol>:<ul key={index}>{items}</ul>;}
+      if(block.type==="quote")return <blockquote key={index}><p>{block.text}</p>{block.attribution&&<cite>{block.attribution}</cite>}</blockquote>;
+      if(block.type==="link"&&isSafeJournalHref(block.href)){const external=block.href.startsWith("https://");return <p key={index}><a href={block.href} {...(external?{target:"_blank",rel:"noopener noreferrer"}:{})}>{block.text} ↗</a></p>;}
+      return null;
+    })}</div>}
+    {relatedEntries.length>0&&<nav className="journal-more" aria-label={locale==="fa"?"مطالب دیگر":"More from Journal"}><h2>{locale==="fa"?"مطالب دیگر":"More from Journal"}</h2><ul>{relatedEntries.map(item=><li key={item.id}><Link href={pagePath(locale,`journal/${item.slug}`)}>{item.title[locale]}</Link></li>)}</ul></nav>}
+   </article>
+  </>;
+ }
  notFound();
 }

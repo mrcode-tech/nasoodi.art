@@ -2,12 +2,13 @@ import Image from "next/image";
 import { ArtworkExperience } from "@/components/artwork-experience";
 import { CollectionCarousel } from "@/components/collection-carousel";
 import { BiographyDisclosure } from "@/components/biography-disclosure";
+import { JournalAnnouncement } from "@/components/journal-announcement";
 import { aboutPreviewFixture } from "@/lib/about-preview-fixtures";
 import { Button } from "@/components/ui/button";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { artworks,galleries,journalEntries,homepageSelection,getPublicArtworks,getPublicGalleries,getHomepageHero,getHomepageFeaturedArtworks,getHomepageFeaturedGalleries,getHomepageJournalPreview,primaryImageFor } from "@/lib/site";
+import { artworks,galleries,journalEntries,homepageSelection,getPublicArtworks,getPublicGalleries,getHomepageHero,getHomepageFeaturedArtworks,getHomepageFeaturedGalleries,getHomepageJournalPreview,getUpcomingJournalEvent,primaryImageFor } from "@/lib/site";
 import { copyFor,isLocale,pagePath } from "@/lib/site";
 type Props={params:Promise<{locale:string}>};
 export async function generateMetadata({params}:Props):Promise<Metadata>{const {locale}=await params;if(!isLocale(locale))return {};
@@ -21,6 +22,7 @@ export default async function Home({params}:Props){const {locale}=await params;i
  const hasSelectedWorks=getPublicArtworks(artworks,locale).length>0;
  const hasFeaturedGalleries=getPublicGalleries(galleries,artworks,locale).length>0;
  const journal=getHomepageJournalPreview(journalEntries,locale);
+ const announcement=getUpcomingJournalEvent(journalEntries,locale);
  return <div className="page-content home-page">
   <section className="home-intro has-hero" aria-labelledby="home-title">
    <figure className="hero-artwork">
@@ -55,5 +57,6 @@ export default async function Home({params}:Props){const {locale}=await params;i
     <Link className="text-link" href={pagePath(locale,`journal/${entry.slug}`)}>{t.readMore} ↗</Link>
    </article>)}</div>
   </section>}
+  {announcement?.event&&<JournalAnnouncement locale={locale} event={{id:announcement.id,slug:announcement.slug,title:announcement.title[locale]!,startsAt:announcement.event.startsAt,timeZone:announcement.event.timeZone}} />}
  </div>;
 }

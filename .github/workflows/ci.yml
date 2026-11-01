@@ -68,6 +68,14 @@ jobs:
             artifacts/journal-announcement-sticker.png
           if-no-files-found: ignore
           retention-days: 14
+      - name: Upload Journal sticker review PNG
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: journal-announcement-sticker-review-${{ github.sha }}
+          path: artifacts/journal-announcement-sticker.png
+          if-no-files-found: error
+          retention-days: 14
       - name: Smoke test production server
         shell: bash
         run: |

@@ -1026,3 +1026,14 @@ test("desktop homepage biography expands around a fixed locale-aligned hero imag
     expect(flow.hasLinesBelowPhoto, `${locale}: biography continues below the portrait`).toBe(true);
   }
 });
+
+test("homepage keeps the Journal announcement absent when there is no approved upcoming event", async ({ page }) => {
+ for (const locale of ["en", "fa"] as const) {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto(`/${locale}`);
+  await expect(page.locator(".journal-announcement")).toHaveCount(0);
+  await expect(page.locator(".editorial-section")).toHaveCount(2);
+  const overflow=await page.evaluate(()=>document.documentElement.scrollWidth>document.documentElement.clientWidth);
+  expect(overflow).toBe(false);
+ }
+});

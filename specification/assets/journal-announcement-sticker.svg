@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" width="420" height="280" viewBox="0 0 420 280" role="img" aria-labelledby="title desc">
-  <title id="title">Nasoodi.art exhibition paper edge — visual study</title>
-  <desc id="desc">Transparent warm ivory paper slip with a hand-torn inward edge and a small paper-tape attachment detail. No text or controls.</desc>
-  <path d="M0 0 H397 L401 12 L394 21 L403 31 L396 43 L405 54 L397 66 L404 78 L395 91 L403 103 L394 116 L405 128 L396 140 L403 152 L394 164 L405 176 L396 188 L403 200 L394 212 L404 224 L396 237 L402 248 L394 260 L399 280 H0 Z" fill="#F3EEE5" stroke="#CFC3B3" stroke-width="1.5" stroke-linejoin="round"/>
-  <path d="M18 18 H375 M18 262 H374 M18 18 V262" fill="none" stroke="#B9AA98" stroke-opacity=".25"/>
-  <path d="M34 0 H105 L101 25 L96 39 L43 35 L38 23 Z" fill="#D8C9AF" fill-opacity=".68" stroke="#B9A98F" stroke-opacity=".48"/>
-  <path d="M43 7 L96 7" stroke="#F8F4EC" stroke-opacity=".7" stroke-width="1.2"/>
-  <g fill="#A99781" fill-opacity=".28"><circle cx="22" cy="72" r="1.1"/><circle cx="28" cy="188" r=".8"/><circle cx="326" cy="36" r=".9"/><circle cx="338" cy="244" r="1"/></g>
+<svg xmlns="http://www.w3.org/2000/svg" width="420" height="280" viewBox="0 0 420 280">
+  <path d="M0 0H386L392 9 387 19 397 29 389 40 399 51 390 62 398 73 388 84 397 96 387 108 399 120 388 132 397 144 386 156 397 168 388 180 399 192 388 204 396 216 386 228 395 240 385 252 394 264 387 280H0Z"
+    fill="#F3EEE5" stroke="#CFC3B3" stroke-width="1.5" stroke-linejoin="round"/>
+  <path d="M17 17H365M17 263H365M17 17V263" fill="none" stroke="#B9AA98" stroke-opacity=".28" stroke-width="1"/>
+  <path d="M31 0H112L108 22 102 38 40 34 35 20Z" fill="#D8C9AF" fill-opacity=".72" stroke="#B9A98F" stroke-opacity=".55" stroke-width="1"/>
+  <path d="M41 7 101 7M39 11 100 12" fill="none" stroke="#F8F4EC" stroke-opacity=".78" stroke-width="1.2" stroke-linecap="round"/>
+  <path d="M20 78 24 80M27 193 30 195M343 39 346 41M350 235 353 237" fill="none" stroke="#A99781" stroke-opacity=".35" stroke-width="1.2" stroke-linecap="round"/>
+  <path d="M374 18 381 22M371 258 379 255" fill="none" stroke="#B9AA98" stroke-opacity=".35" stroke-width="1"/>
 </svg>

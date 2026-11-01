@@ -166,7 +166,7 @@ export function getJournalStructuredData(entry: JournalEntry, locale: Locale, ca
     url: canonicalUrl,
     inLanguage: locale,
   };
-  if (entry.type === "event" && entry.event) {
+  if (entry.event) {
     const attendanceModes = {
       "in-person": "https://schema.org/OfflineEventAttendanceMode",
       online: "https://schema.org/OnlineEventAttendanceMode",
@@ -246,21 +246,20 @@ export function getPublicJournal(items: JournalEntry[], locale: Locale) {
   const visible = items.filter((entry) => {
     if (entry.status !== "published" || !entry.artistApproved || !entry.approvedLocales.includes(locale) ||
       !entry.id.trim() || !isSafeContentSlug(entry.slug) || !entry.title[locale]?.trim() || !entry.summary[locale]?.trim()) return false;
-    if (entry.type !== "event") return true;
+    if (entry.type === "event" && !entry.event) return false;
+    if (!entry.event) return true;
     const event = entry.event;
-    if (!event || !hasExplicitTimeZone(event.startsAt) || !event.timeZone ||
+    if (!hasExplicitTimeZone(event.startsAt) || !event.timeZone ||
       (!event.venue?.[locale]?.trim() && !event.attendanceMode)) return false;
     try { new Intl.DateTimeFormat(locale, { timeZone: event.timeZone }); } catch { return false; }
     if (event.endsAt && (!hasExplicitTimeZone(event.endsAt) || Date.parse(event.endsAt) < Date.parse(event.startsAt))) return false;
-    if (event.registrationUrl) {
-      try { if (new URL(event.registrationUrl).protocol !== "https:") return false; } catch { return false; }
-    }
+    if (event.registrationUrl && !isSafeJournalHref(event.registrationUrl)) return false;
     return true;
   });
   return keepUniqueBy(keepUniqueBy(visible, (entry) => entry.id), (entry) => entry.slug)
-    .sort((a,b) => {
+    .sort((a, b) => {
       const timestamp = (entry: JournalEntry) => entry.publishedAt && Number.isFinite(Date.parse(entry.publishedAt)) ? Date.parse(entry.publishedAt) : Number.NEGATIVE_INFINITY;
-      return timestamp(b) - timestamp(a);
+      return timestamp(b) - timestamp(a) || a.id.localeCompare(b.id) || a.slug.localeCompare(b.slug);
     });
 }
 export function getHomepageJournalPreview(items: JournalEntry[], locale: Locale): JournalEntry[] {
@@ -269,8 +268,17 @@ export function getHomepageJournalPreview(items: JournalEntry[], locale: Locale)
 export function getUpcomingJournalEvents(items: JournalEntry[], locale: Locale, now: Date = new Date()) {
   const nowMs = now.getTime();
   return getPublicJournal(items, locale)
-    .filter((entry) => entry.type === "event" && entry.event !== undefined && Date.parse(entry.event.startsAt) > nowMs)
-    .sort((a, b) => Date.parse(a.event!.startsAt) - Date.parse(b.event!.startsAt));
+    .filter((entry) => {
+      if (!entry.event) return false;
+      const startsAt = Date.parse(entry.event.startsAt);
+      const endsAt = entry.event.endsAt ? Date.parse(entry.event.endsAt) : startsAt;
+      return Number.isFinite(startsAt) && startsAt > nowMs && endsAt > nowMs;
+    })
+    .sort((a, b) => Date.parse(a.event!.startsAt) - Date.parse(b.event!.startsAt) ||
+      a.id.localeCompare(b.id) || a.slug.localeCompare(b.slug));
+}
+export function getUpcomingJournalEvent(items: JournalEntry[], locale: Locale, now: Date = new Date()): JournalEntry | undefined {
+  return getUpcomingJournalEvents(items, locale, now)[0];
 }
 export function getPublicCvEntries(items: CvEntry[], locale: Locale) {
   const visible = items.filter((entry) => entry.status === "published" && entry.verified &&
@@ -322,8 +330,8 @@ export function getHomepageFeaturedGalleries(items: Gallery[], works: Artwork[],
   return [...new Set(selection.featuredGalleryIds)].map((id) => available.get(id)).filter((gallery) => gallery !== undefined);
 }
 export const copy = {
- en: { home:"Home",works:"Works",galleries:"Galleries",journal:"Journal",about:"About",contact:"Contact",cv:"CV / Exhibitions",statement:"Artist statement",biography:"Biography",email:"Email",instagram:"Instagram",language:"Language",menu:"Open navigation",close:"Close navigation",skip:"Skip to content",portfolio:"Artist portfolio",discipline:"Oil painter",selected:"Selected works",selectedIntro:"A considered selection of paintings.",explore:"Explore works",discover:"Discover the galleries",latest:"From the journal",upcoming:"Upcoming event",venue:"Venue",emptyWorks:"Selected paintings will appear here once their images and details are approved for publication.",emptyGalleries:"Curated galleries will appear here when their titles, selections, and cover works are approved.",emptyJournal:"Journal stories and event announcements will appear here when they are ready to publish.",profilePending:"The artist statement and biography will be added after editorial review.",contactPending:"Public contact details have not yet been confirmed.",notFound:"This page could not be found.",returnHome:"Return home",rights:"All rights reserved.",journalAll:"All",journalExhibitions:"Exhibitions",journalEvents:"Events",journalStudio:"Studio updates",journalStories:"Stories",journalNoMatches:"There are no published entries in this category yet.",readMore:"Read more",aboutArtist:"About the artist",showLess:"Show less",downloadCvPdf:"Download CV (PDF)",sampleContentNotice:"Sample content for design review — not artist-approved or publishable.",samplePreviewNotice:"Sample preview: all copy and CV entries are fictional layout fixtures and are not approved for publication.",samplePdfNotice:"This clearly marked fictional PDF is available for preview testing only; it is not a real artist CV.",published:"Published",itemsPerPage:"Items per page",previousPage:"Previous page",nextPage:"Next page",galleryPage:"Gallery page",showingGalleries:"Showing {start}–{end} of {total} galleries" },
- fa: { home:"خانه",works:"آثار",galleries:"گالری‌ها",journal:"یادداشت‌ها",about:"درباره",contact:"تماس",cv:"رزومه و نمایشگاه‌ها",statement:"بیانیه هنری",biography:"زندگی‌نامه",email:"ایمیل",instagram:"اینستاگرام",language:"زبان",menu:"باز کردن راهبری",close:"بستن راهبری",skip:"رفتن به محتوای اصلی",portfolio:"پورتفولیوی هنرمند",discipline:"نقاش رنگ‌روغن",selected:"گزیده آثار",selectedIntro:"گزیده‌ای از نقاشی‌ها.",explore:"دیدن آثار",discover:"گشت‌وگذار در گالری‌ها",latest:"از یادداشت‌ها",upcoming:"رویداد پیشِ رو",venue:"محل برگزاری",emptyWorks:"آثار پس از تأیید تصاویر و اطلاعات برای انتشار، در این بخش نمایش داده می‌شوند.",emptyGalleries:"گالری‌های منتخب پس از تأیید عنوان، آثار و تصویر اصلی در این بخش قرار می‌گیرند.",emptyJournal:"یادداشت‌ها و اطلاعیه‌های رویداد پس از آماده‌شدن برای انتشار در این بخش نمایش داده می‌شوند.",profilePending:"بیانیه هنری و زندگی‌نامه پس از بررسی و تأیید منتشر خواهند شد.",contactPending:"اطلاعات تماس عمومی هنوز تأیید نشده است.",notFound:"این صفحه پیدا نشد.",returnHome:"بازگشت به خانه",rights:"تمامی حقوق محفوظ است.",journalAll:"همه",journalExhibitions:"نمایشگاه‌ها",journalEvents:"رویدادها",journalStudio:"اخبار آتلیه",journalStories:"روایت‌ها",journalNoMatches:"هنوز مطلب منتشرشده‌ای در این دسته وجود ندارد.",readMore:"ادامه مطلب",aboutArtist:"درباره هنرمند",showLess:"نمایش کمتر",downloadCvPdf:"دریافت رزومه (PDF)",sampleContentNotice:"متن نمونه برای بررسی طراحی؛ تأییدنشده و غیرقابل انتشار",samplePreviewNotice:"پیش‌نمایش نمونه: تمام متن‌ها و سوابق این صفحه ساختگی‌اند و برای انتشار تأیید نشده‌اند.",samplePdfNotice:"این فایل PDF کاملاً ساختگی و فقط برای آزمایش پیش‌نمایش است؛ رزومه‌ی واقعی هنرمند نیست.",published:"انتشار",itemsPerPage:"تعداد در هر صفحه",previousPage:"صفحه قبل",nextPage:"صفحه بعد",galleryPage:"صفحه گالری‌ها",showingGalleries:"نمایش {start} تا {end} از {total} گالری" }
+ en: { home:"Home",works:"Works",galleries:"Galleries",journal:"Journal",about:"About",contact:"Contact",cv:"CV / Exhibitions",statement:"Artist statement",biography:"Biography",email:"Email",instagram:"Instagram",language:"Language",menu:"Open navigation",close:"Close navigation",skip:"Skip to content",portfolio:"Artist portfolio",discipline:"Oil painter",selected:"Selected works",selectedIntro:"A considered selection of paintings.",explore:"Explore works",discover:"Discover the galleries",latest:"From the journal",upcoming:"Upcoming event",announcementEyebrow:"UPCOMING EXHIBITION",dismissAnnouncement:"Dismiss exhibition announcement",publicationDate:"Published",eventDate:"Event date",eventEnds:"Ends",eventVenue:"Venue",attendanceMode:"Attendance",inPerson:"In person",online:"Online",hybrid:"Hybrid",registration:"Details and registration",emptyWorks:"Selected paintings will appear here once their images and details are approved for publication.",emptyGalleries:"Curated galleries will appear here when their titles, selections, and cover works are approved.",emptyJournal:"Journal stories and event announcements will appear here when they are ready to publish.",profilePending:"The artist statement and biography will be added after editorial review.",contactPending:"Public contact details have not yet been confirmed.",notFound:"This page could not be found.",returnHome:"Return home",rights:"All rights reserved.",journalAll:"All",journalExhibitions:"Exhibitions",journalEvents:"Events",journalStudio:"Studio updates",journalStories:"Stories",journalNoMatches:"There are no published entries in this category yet.",readMore:"Read more",aboutArtist:"About the artist",showLess:"Show less",downloadCvPdf:"Download CV (PDF)",sampleContentNotice:"Sample content for design review — not artist-approved or publishable.",samplePreviewNotice:"Sample preview: all copy and CV entries are fictional layout fixtures and are not approved for publication.",samplePdfNotice:"This clearly marked fictional PDF is available for preview testing only; it is not a real artist CV.",published:"Published",itemsPerPage:"Items per page",previousPage:"Previous page",nextPage:"Next page",galleryPage:"Gallery page",showingGalleries:"Showing {start}–{end} of {total} galleries" },
+ fa: { home:"خانه",works:"آثار",galleries:"گالری‌ها",journal:"یادداشت‌ها",about:"درباره",contact:"تماس",cv:"رزومه و نمایشگاه‌ها",statement:"بیانیه هنری",biography:"زندگی‌نامه",email:"ایمیل",instagram:"اینستاگرام",language:"زبان",menu:"باز کردن راهبری",close:"بستن راهبری",skip:"رفتن به محتوای اصلی",portfolio:"پورتفولیوی هنرمند",discipline:"نقاش رنگ‌روغن",selected:"گزیده آثار",selectedIntro:"گزیده‌ای از نقاشی‌ها.",explore:"دیدن آثار",discover:"گشت‌وگذار در گالری‌ها",latest:"از یادداشت‌ها",upcoming:"رویداد پیشِ رو",announcementEyebrow:"نمایشگاه پیشِ رو",dismissAnnouncement:"بستن اطلاعیه نمایشگاه",publicationDate:"تاریخ انتشار",eventDate:"تاریخ رویداد",eventEnds:"پایان",eventVenue:"محل برگزاری",attendanceMode:"شیوه حضور",inPerson:"حضوری",online:"آنلاین",hybrid:"ترکیبی",registration:"اطلاعات رویداد",emptyWorks:"آثار پس از تأیید تصاویر و اطلاعات برای انتشار، در این بخش نمایش داده می‌شوند.",emptyGalleries:"گالری‌های منتخب پس از تأیید عنوان، آثار و تصویر اصلی در این بخش قرار می‌گیرند.",emptyJournal:"یادداشت‌ها و اطلاعیه‌های رویداد پس از آماده‌شدن برای انتشار در این بخش نمایش داده می‌شوند.",profilePending:"بیانیه هنری و زندگی‌نامه پس از بررسی و تأیید منتشر خواهند شد.",contactPending:"اطلاعات تماس عمومی هنوز تأیید نشده است.",notFound:"این صفحه پیدا نشد.",returnHome:"بازگشت به خانه",rights:"تمامی حقوق محفوظ است.",journalAll:"همه",journalExhibitions:"نمایشگاه‌ها",journalEvents:"رویدادها",journalStudio:"اخبار آتلیه",journalStories:"روایت‌ها",journalNoMatches:"هنوز مطلب منتشرشده‌ای در این دسته وجود ندارد.",readMore:"ادامه مطلب",aboutArtist:"درباره هنرمند",showLess:"نمایش کمتر",downloadCvPdf:"دریافت رزومه (PDF)",sampleContentNotice:"متن نمونه برای بررسی طراحی؛ تأییدنشده و غیرقابل انتشار",samplePreviewNotice:"پیش‌نمایش نمونه: تمام متن‌ها و سوابق این صفحه ساختگی‌اند و برای انتشار تأیید نشده‌اند.",samplePdfNotice:"این فایل PDF کاملاً ساختگی و فقط برای آزمایش پیش‌نمایش است؛ رزومه‌ی واقعی هنرمند نیست.",published:"انتشار",itemsPerPage:"تعداد در هر صفحه",previousPage:"صفحه قبل",nextPage:"صفحه بعد",galleryPage:"صفحه گالری‌ها",showingGalleries:"نمایش {start} تا {end} از {total} گالری" }
 } as const;
 export const copyFor = (l: Locale) => copy[l];
 

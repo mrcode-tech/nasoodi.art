@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import { aboutPreviewFixture } from "../src/lib/about-preview-fixtures";
-import { artworks,galleries,homepageSelection,getPublicArtworks,getPublicGalleries,isSafeLocalImagePath,isSafeContentSlug,getPublicJournal,getPublicCvEntries,getPublicCvDocument,getPublicArtistProfile,getPublicContactDetails,getUpcomingJournalEvents,getArtworkStructuredData,getGalleryStructuredData,getJournalStructuredData,serializeJsonLd,getHomepageFeaturedArtworks,getGalleryCoverArtwork,getJournalEntriesForCategory,getHomepageJournalPreview,isSafeJournalHref,portfolioStructuredData,type Artwork,type Gallery,type JournalEntry,type CvEntry,type CvDocument,type ArtistProfile,type ContactDetails, hasExplicitTimeZone } from "../src/lib/site";
+import { artworks,galleries,homepageSelection,getPublicArtworks,getPublicGalleries,isSafeLocalImagePath,isSafeContentSlug,getPublicJournal,getPublicCvEntries,getPublicCvDocument,getPublicArtistProfile,getPublicContactDetails,getUpcomingJournalEvents,getUpcomingJournalEvent,getArtworkStructuredData,getGalleryStructuredData,getJournalStructuredData,serializeJsonLd,getHomepageFeaturedArtworks,getGalleryCoverArtwork,getJournalEntriesForCategory,getHomepageJournalPreview,isSafeJournalHref,portfolioStructuredData,type Artwork,type Gallery,type JournalEntry,type CvEntry,type CvDocument,type ArtistProfile,type ContactDetails, hasExplicitTimeZone } from "../src/lib/site";
 const work:Artwork={id:"w1",slug:"work-one",title:{en:"Work",fa:"اثر"},images:[{src:"/art/work.jpg",alt:{en:"Painting",fa:"نقاشی"},role:"primary",width:1200,height:900}],rightsConfirmed:true,status:"published"};
 test("artwork stays private until published and rights-cleared",()=>{assert.equal(getPublicArtworks([{...work,status:"needs-review"}],"en").length,0);assert.equal(getPublicArtworks([{...work,rightsConfirmed:false}],"en").length,0);assert.equal(getPublicArtworks([work],"en").length,1);});
 test("artwork requires localized title and primary image alt",()=>{assert.equal(getPublicArtworks([{...work,title:{en:"Work"}}],"fa").length,0);assert.equal(getPublicArtworks([{...work,images:[{...work.images[0],alt:{en:""}}]}],"en").length,0);});
@@ -286,4 +286,29 @@ test("long About preview fixtures are bilingual, clearly sample-only, and includ
  assert.ok(aboutPreviewFixture.statement.en.split(/\s+/).length>=150 && aboutPreviewFixture.statement.en.split(/\s+/).length<=220);
  assert.ok(aboutPreviewFixture.statement.en.includes("invented editorial sample"));
  assert.deepEqual(new Set(aboutPreviewFixture.cv.map(entry=>entry.category)),new Set(["education","exhibition","publication","award","practice"]));
+});
+
+test("upcoming Journal event selection excludes ongoing events and uses stable tie-breakers", () => {
+ const now=new Date("2026-11-01T12:00:00Z");
+ const makeEvent=(id:string,startsAt:string,endsAt?:string,type:JournalEntry["type"]="event"):JournalEntry=>({
+  id,slug:id,type,title:{en:id,fa:id},summary:{en:"Summary",fa:"خلاصه"},status:"published",
+  approvedLocales:["en","fa"],artistApproved:true,
+  event:{startsAt,timeZone:"Europe/London",venue:{en:"Gallery",fa:"گالری"},...(endsAt?{endsAt}:{})}
+ });
+ const items=[
+  makeEvent("ongoing","2026-11-01T10:00:00Z","2026-11-01T14:00:00Z"),
+  makeEvent("later","2026-11-03T10:00:00Z"),
+  makeEvent("tie-b","2026-11-02T10:00:00Z"),
+  makeEvent("tie-a","2026-11-02T10:00:00Z","2026-11-02T12:00:00Z","exhibition"),
+  makeEvent("past","2026-10-30T10:00:00Z","2026-10-30T12:00:00Z"),
+  {...makeEvent("unapproved","2026-11-01T13:00:00Z"),artistApproved:false},
+  {...makeEvent("untranslated","2026-11-01T13:00:00Z"),approvedLocales:["en"] as ("en"|"fa")[]}
+ ];
+ assert.deepEqual(getUpcomingJournalEvents(items,"en",now).map(item=>item.id),["tie-a","tie-b","later"]);
+ assert.equal(getUpcomingJournalEvent(items,"en",now)?.id,"tie-a");
+ assert.equal(getUpcomingJournalEvent(items,"fa",now)?.id,"tie-a");
+});
+test("homepage Journal ordering uses stable identity tie-breakers for equal publication instants",()=>{
+ const make=(id:string):JournalEntry=>({id,slug:id,type:"story",title:{en:id},summary:{en:"Summary"},status:"published",approvedLocales:["en"],artistApproved:true,publishedAt:"2026-10-30T10:00:00Z"});
+ assert.deepEqual(getHomepageJournalPreview([make("z-entry"),make("a-entry")],"en").map(item=>item.id),["a-entry","z-entry"]);
 });
