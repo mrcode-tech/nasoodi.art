@@ -188,21 +188,24 @@ A reader should see a consistent content edge and line measure across comparable
 - Maintain readable contrast and touch target sizes.
 - Contact methods should stack or form a restrained responsive row/grid according to available width, without card-heavy dashboard styling.
 
-### 8.3 Fictional contact fixtures — strict publication gate
+### 8.3 Fictional contact details — intentionally visible
 
-The owner requested fictional contact details to evaluate the complete visual experience. Implement sample values through a clearly named, centralized fixture/content object and label them as sample/demo data in code and the specification.
+The owner explicitly instructs that fictional contact details must be implemented, committed, and rendered in the normal production build/output for now. They will replace these values with the artist's real contact details later.
 
-Suggested safe design-review fixture values (do not treat as real accounts):
-- Email: `studio@example.com` (reserved example domain).
+Use these centralized values as the current site contact data:
+- Email: `studio@example.com`.
 - Telegram display: `@nasoodi_contact_demo`.
 - Instagram display: `@ghazaleh.nasoodi.demo`.
 
-These values are placeholders for layout and interaction testing only. Do not imply that these accounts exist, do not claim they are monitored, and do not publish them as artist contact details. Where a destination cannot be safely verified, render the sample handle as non-operational text or a clearly disabled sample link rather than sending visitors to an unrelated account. Keep the real existing artist handle `@ghazalenasoodi` unchanged in its existing approved context; do not silently replace it with a fictional handle.
-
-- The sample fixture must be unmistakably marked in the code/content governance and excluded from public production output, indexing, structured data, and sitemap as required by the repository's content approval rules.
-- Do not add environment toggles or configuration switches merely to make sample contact data appear/disappear unless the existing architecture already requires an established approval mechanism.
-- Before any merge to a release branch or public deployment, require the owner to provide and approve the real email address, Telegram destination, and Instagram destination (or explicitly approve omission of any method).
-- When approved real details are unavailable, keep the feature structurally complete but do not publish fictional contact details. Use the truthful pending/omitted state defined by the content governance.
+Rules:
+- Render these values normally on both the homepage Contact section and the dedicated Contact page, in English and Persian. They are not hidden, omitted, disabled, or replaced in production builds.
+- Do not introduce environment variables, production flags, feature flags, approval toggles, conditional build logic, or a runtime switch to suppress these values.
+- Do not add a visible “fictional”, “demo”, or “sample” disclaimer to the public Contact UI unless the owner later requests it. The owner understands these are temporary fictional values.
+- Keep the values in one centralized typed content source so the owner can replace them later in one place.
+- Use predictable link formats: `mailto:studio@example.com`; Telegram URL `https://t.me/nasoodi_contact_demo`; Instagram URL `https://www.instagram.com/ghazaleh.nasoodi.demo/`. The social profiles may not exist yet; do not claim that they are verified or monitored.
+- Do not change the existing artist Instagram handle `@ghazalenasoodi` in its existing approved context.
+- Do not invent a physical address, phone number, response-time promise, availability, commission policy, or other contact method.
+- Keep the contact data straightforward to replace later; no special migration or content approval mechanism is needed for these temporary values.
 
 ### 8.4 Localization
 
@@ -282,7 +285,7 @@ Use the repository's existing test architecture and add meaningful regression co
 - Homepage Contact section and Contact page use the same canonical data source.
 - Both localized routes render with correct direction and translation parity.
 - Email link is correctly formed; social destinations are validated or non-operational sample text.
-- Fictional fixture data is visibly identified in development/review and excluded from production output, metadata, JSON-LD, and sitemap.
+- Contact values render in production and remain easy for the owner to replace.
 - Existing real artist Instagram handle remains unchanged in its approved context.
 - No unrequested form, phone, address, or commercial claim is introduced.
 
@@ -326,7 +329,7 @@ Inspect spacing, alignment, content width, type, wrapping, visual hierarchy, foc
 5. One-line desktop sidebar copyright in both locales.
 6. A shared long-form justified text treatment with responsive readability safeguards.
 7. Homepage Contact section and dedicated bilingual Contact page/sidebar destination.
-8. Centralized fictional contact fixture, explicitly non-publishable and safely excluded from production output.
+8. Centralized temporary fictional contact values, intentionally rendered in production until the owner replaces them.
 9. Automated tests and inspected visual QA evidence.
 10. Updated specification index and task-specific `agent.md`.
 
