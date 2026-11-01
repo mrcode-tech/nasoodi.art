@@ -1135,3 +1135,16 @@ test("homepage and Journal remain composed in English and Persian on desktop and
     }
   }
 });
+
+test("About and CV content use editorial spacing without decorative row dividers", async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await page.goto("/en/about");
+  const borders = await page.locator(".sample-content-notice, .cv-list, .cv-list li").evaluateAll((elements) =>
+    elements.map((element) => ({
+      top: getComputedStyle(element).borderTopWidth,
+      bottom: getComputedStyle(element).borderBottomWidth,
+    }))
+  );
+  expect(borders.length).toBeGreaterThan(0);
+  expect(borders.every((border) => border.top === "0px" && border.bottom === "0px")).toBeTruthy();
+});
