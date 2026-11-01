@@ -1324,8 +1324,8 @@ test("theme selector is available in the mobile drawer in both locales and artwo
 
   for (const locale of ["en", "fa"] as const) {
     const labels = locale === "fa"
-      ? { open: "باز کردن راهبری", close: "بستن راهبری", theme: "انتخاب پوسته", dark: "تیره" }
-      : { open: "Open navigation", close: "Close navigation", theme: "Choose theme", dark: "Dark" };
+      ? { open: "باز کردن راهبری", close: "بستن راهبری", language: "زبان", theme: "انتخاب پوسته", dark: "تیره" }
+      : { open: "Open navigation", close: "Close navigation", language: "Language", theme: "Choose theme", dark: "Dark" };
 
     await page.goto(`/${locale}`);
     await page.getByRole("button", { name: labels.open }).click();
@@ -1337,7 +1337,7 @@ test("theme selector is available in the mobile drawer in both locales and artwo
     const languageRow = settingRows.first();
     const appearanceRow = settingRows.last();
     const languageLabelBox = await languageRow.locator(".language-label").boundingBox();
-    const languageControlBox = await languageRow.getByRole("button", { name: "Language" }).boundingBox();
+    const languageControlBox = await languageRow.getByRole("button", { name: labels.language }).boundingBox();
     const appearanceLabelBox = await appearanceRow.locator(".language-label").boundingBox();
     const themeTriggerBox = await themeTrigger.boundingBox();
     expect(languageLabelBox).not.toBeNull();
