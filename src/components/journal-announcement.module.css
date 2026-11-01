@@ -45,8 +45,8 @@
   flex-direction: column;
   justify-content: center;
   gap: 0.18rem;
-  padding-block: 1.55rem 1rem;
-  padding-inline: 1.25rem 3.85rem;
+  padding-block: 1.65rem 1.1rem;
+  padding-inline: 1.3rem 4rem;
   color: inherit;
   text-align: start;
   text-decoration: none;
@@ -82,8 +82,8 @@
 .dismiss {
   position: absolute;
   z-index: 2;
-  inset-block-start: 0.35rem;
-  inset-inline-end: 1rem;
+  inset-block-start: 0.6rem;
+  inset-inline-end: 1.1rem;
   display: inline-flex;
   width: 2.75rem !important;
   min-width: 2.75rem !important;
@@ -126,8 +126,8 @@
 
 .desktopSidebarContainer .link {
   gap: 0.18rem;
-  padding-block: 1.5rem 1rem;
-  padding-inline: 1rem 3.85rem;
+  padding-block: 1.6rem 1.05rem;
+  padding-inline: 1.3rem 4rem;
 }
 
 .desktopSidebarContainer .eyebrow {
@@ -145,8 +145,8 @@
 }
 
 .desktopSidebarContainer .dismiss {
-  inset-block-start: 0.3rem;
-  inset-inline-end: 1rem;
+  inset-block-start: 0.6rem;
+  inset-inline-end: 1.1rem;
 }
 
 .mobileSidebarContainer {
@@ -179,8 +179,8 @@
 
   .mobileSidebarContainer .link {
     gap: 0.2rem;
-    padding-block: 1.45rem 0.95rem;
-    padding-inline: 1.1rem 3.8rem;
+    padding-block: 1.55rem 1rem;
+    padding-inline: 1.3rem 4rem;
   }
 
   .mobileSidebarContainer .eyebrow {
@@ -198,8 +198,8 @@
   }
 
   .mobileSidebarContainer .dismiss {
-    inset-block-start: 0.35rem;
-    inset-inline-end: 1rem;
+    inset-block-start: 0.6rem;
+    inset-inline-end: 1.2rem;
   }
 }
 

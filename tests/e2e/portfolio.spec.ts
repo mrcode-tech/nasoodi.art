@@ -40,9 +40,17 @@ test("mobile navigation opens, traps focus, closes with Escape, and restores foc
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto("/en");
   const trigger = page.getByRole("button", { name: "Open navigation" });
-  await trigger.click();
+  const menuLines = trigger.locator(".menu-trigger-lines > span");
+  await expect(menuLines).toHaveCount(2);
+  const lineWidths = await menuLines.evaluateAll((nodes) => nodes.map((node) => getComputedStyle(node).width));
+  expect(lineWidths[0]).toBe(lineWidths[1]);
+  await expect(trigger).toHaveAttribute("aria-expanded", "false");
+  await trigger.focus();
+  await expect(trigger).toBeFocused();
+  await page.keyboard.press("Enter");
   const dialog = page.getByRole("dialog", { name: "Open navigation" });
   await expect(dialog).toBeVisible();
+  await expect(page.locator(".menu-trigger")).toHaveAttribute("aria-expanded", "true");
   await expect(dialog.getByRole("link", { name: "Galleries" })).toBeVisible();
   const languageButton = dialog.getByRole("button", { name: "Language" });
   await expect(languageButton).toBeVisible();
@@ -1098,16 +1106,25 @@ test("mobile menu uses a minimal two-stroke icon in both locales and updates its
     await expect(strokes).toHaveCount(2);
     const iconStyle = await trigger.evaluate((button) => {
       const lines = Array.from(button.querySelectorAll(".menu-trigger-lines > span"));
-      return { borderWidth: getComputedStyle(button).borderTopWidth, firstWidth: getComputedStyle(lines[0]).width, secondWidth: getComputedStyle(lines[1]).width };
+      const first = lines[0].getBoundingClientRect();
+      const second = lines[1].getBoundingClientRect();
+      return { borderWidth: getComputedStyle(button).borderTopWidth, firstWidth: getComputedStyle(lines[0]).width, secondWidth: getComputedStyle(lines[1]).width, firstHeight: first.height, secondHeight: second.height, firstTop: first.top, secondTop: second.top };
     });
     expect(iconStyle.borderWidth).toBe("0px");
-    expect(parseFloat(iconStyle.firstWidth)).toBeGreaterThan(parseFloat(iconStyle.secondWidth));
+    expect(parseFloat(iconStyle.firstWidth)).toBe(parseFloat(iconStyle.secondWidth));
+    expect(iconStyle.firstHeight).toBeGreaterThanOrEqual(1.5);
+    expect(iconStyle.secondHeight).toBeGreaterThanOrEqual(1.5);
+    expect(iconStyle.secondTop).toBeGreaterThan(iconStyle.firstTop + iconStyle.firstHeight);
     await page.screenshot({ path: test.info().outputPath(`menu-${locale}-mobile-closed.png`) });
     await trigger.click();
     const dialog = page.getByRole("dialog", { name: openLabel });
     await expect(dialog.getByRole("button", { name: closeLabel })).toBeVisible();
     await expect(page.locator(".menu-trigger")).toHaveAttribute("aria-expanded", "true");
+    await expect(page.locator(".menu-trigger")).toHaveAttribute("aria-label", closeLabel);
     await page.screenshot({ path: test.info().outputPath(`menu-${locale}-mobile-open.png`) });
+    await dialog.getByRole("button", { name: closeLabel }).click();
+    await expect(page.locator(".menu-trigger")).toHaveAttribute("aria-expanded", "false");
+    await expect(page.locator(".menu-trigger")).toHaveAttribute("aria-label", openLabel);
   }
 });
 
@@ -1125,7 +1142,7 @@ test("editorial sections use whitespace instead of decorative separator rules", 
   );
   expect(archiveBorders.every((border) => border.top === "0px" && border.bottom === "0px")).toBeTruthy();
   await expect(page.locator(".journal-card")).toHaveCount(5);
-  await expect(page.locator(".journal-card .journal-cover-image")).toHaveCount(0);
+  await expect(page.locator(".journal-card .journal-cover-image")).toHaveCount(5);
   await page.screenshot({ path: test.info().outputPath("journal-en-desktop.png"), fullPage: true });
 });
 
@@ -1154,4 +1171,57 @@ test("About and CV content use editorial spacing without decorative row dividers
   );
   expect(borders.length).toBeGreaterThan(0);
   expect(borders.every((border) => border.top === "0px" && border.bottom === "0px")).toBeTruthy();
+});
+
+
+test("Journal imagery is visible and balanced across archive and homepage in both locales", async ({ page }) => {
+  for (const locale of ["en", "fa"] as const) {
+    await page.setViewportSize({ width: 1440, height: 960 });
+    await page.goto(`/${locale}/journal`);
+    const cards = page.locator(".journal-card.has-cover");
+    await expect(cards).toHaveCount(5);
+    const imageMetadata = await cards.locator(".journal-cover-image").evaluateAll((images) => images.map((image) => ({
+      alt: image.getAttribute("alt") ?? "",
+      width: image.getAttribute("width"),
+      height: image.getAttribute("height"),
+      objectFit: getComputedStyle(image).objectFit,
+    })));
+    expect(imageMetadata.every((image) => image.width && image.height && image.objectFit === "contain")).toBe(true);
+    expect(imageMetadata.every((image) => locale === "en" ? /Temporary Journal image placeholder/.test(image.alt) : /تصویر موقت/.test(image.alt))).toBe(true);
+    const firstImage = cards.first().locator(".journal-cover-image");
+    await firstImage.scrollIntoViewIfNeeded();
+    await expect.poll(() => firstImage.evaluate((image) => (image as HTMLImageElement).naturalWidth)).toBeGreaterThan(0);
+    await page.screenshot({ path: test.info().outputPath(`journal-archive-${locale}-desktop.png`), fullPage: true });
+
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto(`/${locale}/journal`);
+    const mobileCard = page.locator(".journal-card.has-cover").first();
+    await expect(mobileCard.locator(".journal-cover-image")).toBeVisible();
+    const mobileColumns = await mobileCard.evaluate((element) => getComputedStyle(element).gridTemplateColumns.trim().split(/\s+/).length);
+    expect(mobileColumns).toBe(1);
+    const overflow = await page.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth);
+    expect(overflow).toBe(false);
+    await page.screenshot({ path: test.info().outputPath(`journal-archive-${locale}-mobile.png`), fullPage: true });
+
+    await page.goto(`/${locale}`);
+    const preview = page.locator(".journal-preview-item.has-cover");
+    await expect(preview).toHaveCount(1);
+    await expect(preview.locator(".journal-cover-image")).toBeVisible();
+    await expect(preview.locator(".journal-cover-image")).toHaveAttribute("alt", /.+/);
+    await page.screenshot({ path: test.info().outputPath(`journal-home-preview-${locale}-mobile.png`), fullPage: true });
+  }
+});
+
+test("editorial section transitions avoid decorative rules while functional controls retain boundaries", async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await page.goto("/en");
+  for (const selector of [".editorial-section", ".journal-preview-item"]) {
+    const elements = page.locator(selector);
+    for (let index = 0; index < await elements.count(); index++) {
+      await expect(elements.nth(index)).toHaveCSS("border-top-width", "0px");
+      await expect(elements.nth(index)).toHaveCSS("border-bottom-width", "0px");
+    }
+  }
+  await page.goto("/en/journal");
+  await expect(page.locator(".journal-filter").first()).toHaveCSS("border-top-width", "1px");
 });

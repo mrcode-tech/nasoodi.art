@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import { aboutPreviewFixture } from "../src/lib/about-preview-fixtures";
-import { artworks,galleries,homepageSelection,getPublicArtworks,getPublicGalleries,isSafeLocalImagePath,isSafeContentSlug,getPublicJournal,getPublicCvEntries,getPublicCvDocument,getPublicArtistProfile,getPublicContactDetails,getUpcomingJournalEvents,getUpcomingJournalEvent,getArtworkStructuredData,getGalleryStructuredData,getJournalStructuredData,serializeJsonLd,getHomepageFeaturedArtworks,getGalleryCoverArtwork,getJournalEntriesForCategory,getHomepageJournalPreview,journalCoverImageFor,isSafeJournalHref,portfolioStructuredData,type Artwork,type Gallery,type JournalEntry,type CvEntry,type CvDocument,type ArtistProfile,type ContactDetails, hasExplicitTimeZone } from "../src/lib/site";
+import { artworks,galleries,journalEntries,homepageSelection,getPublicArtworks,getPublicGalleries,isSafeLocalImagePath,isSafeContentSlug,getPublicJournal,getPublicCvEntries,getPublicCvDocument,getPublicArtistProfile,getPublicContactDetails,getUpcomingJournalEvents,getUpcomingJournalEvent,getArtworkStructuredData,getGalleryStructuredData,getJournalStructuredData,serializeJsonLd,getHomepageFeaturedArtworks,getGalleryCoverArtwork,getJournalEntriesForCategory,getHomepageJournalPreview,journalCoverImageFor,isSafeJournalHref,portfolioStructuredData,type Artwork,type Gallery,type JournalEntry,type CvEntry,type CvDocument,type ArtistProfile,type ContactDetails, hasExplicitTimeZone } from "../src/lib/site";
 const work:Artwork={id:"w1",slug:"work-one",title:{en:"Work",fa:"اثر"},images:[{src:"/art/work.jpg",alt:{en:"Painting",fa:"نقاشی"},role:"primary",width:1200,height:900}],rightsConfirmed:true,status:"published"};
 test("artwork stays private until published and rights-cleared",()=>{assert.equal(getPublicArtworks([{...work,status:"needs-review"}],"en").length,0);assert.equal(getPublicArtworks([{...work,rightsConfirmed:false}],"en").length,0);assert.equal(getPublicArtworks([work],"en").length,1);});
 test("artwork requires localized title and primary image alt",()=>{assert.equal(getPublicArtworks([{...work,title:{en:"Work"}}],"fa").length,0);assert.equal(getPublicArtworks([{...work,images:[{...work.images[0],alt:{en:""}}]}],"en").length,0);});
@@ -322,4 +322,24 @@ test("Journal cover images require a safe local path, explicit rights, dimension
  assert.equal(journalCoverImageFor({...entry,coverImage:{...cover,src:"https://example.org/event.jpg"}},"en"),undefined);
  assert.equal(journalCoverImageFor({...entry,coverImage:{...cover,width:0}},"en"),undefined);
  assert.equal(journalCoverImageFor({...entry,coverImage:{...cover,alt:{en:"",fa:""}}},"en"),undefined);
+});
+
+
+test("published Journal entries use localized, dimensioned, rights-cleared temporary gallery-image placeholders",()=>{
+ for(const locale of ["en","fa"] as const){
+  const entries=getPublicJournal(journalEntries,locale);
+  assert.equal(entries.length,8);
+  for(const entry of entries){
+   const cover=journalCoverImageFor(entry,locale);
+   assert.ok(cover,entry.slug+" should have a Journal image");
+   assert.equal(cover.rightsConfirmed,true);
+   assert.equal(isSafeLocalImagePath(cover.src),true);
+   assert.ok(cover.width>0&&cover.height>0);
+   assert.match(cover.alt[locale] ?? "",locale==="en"?/Temporary Journal image placeholder/:/تصویر موقت/);
+  }
+ }
+ const withoutCover={...journalEntries[0],coverImage:undefined};
+ assert.equal(journalCoverImageFor(withoutCover,"en"),undefined);
+ const unapprovedCover={...journalEntries[0],coverImage:{...journalEntries[0].coverImage!,rightsConfirmed:false}};
+ assert.equal(journalCoverImageFor(unapprovedCover,"en"),undefined);
 });
