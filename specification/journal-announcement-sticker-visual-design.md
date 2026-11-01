@@ -121,6 +121,6 @@ The responsive implementation was checked against the CI-rendered English and Pe
 
 Visual inspection confirmed that the close control remains inside each paper silhouette and does not overlap the event title; the title and date remain readable at the tested sizes; the desktop sidebar has sufficient title width; and the mobile sticker does not collapse horizontally. The short-height drawer retains its own vertical scrolling rather than hiding or compressing the sticker. The decorative paper edges remain visible in both LTR and RTL compositions.
 
-The CI browser tests also assert the 44×44 px close target, title/control non-overlap, sticker containment, expected event link, and absence of horizontal page overflow. Screenshot artifacts are generated for every tested mobile/tablet viewport and both locales.
+The CI browser tests also assert the 44×44 px close target, title/control non-overlap, sticker containment, expected event link, and absence of horizontal page overflow. Synthetic long- and short-title stress cases are exercised in all three placements and both locales, with a screenshot captured for each title length. Screenshot artifacts are generated for every tested mobile/tablet viewport and both locales.
 
 This is technical responsive verification of the current sample event and current SVG study. It does not constitute owner approval of the final paper silhouette or tape detail, and it does not replace review with longer owner-supplied event titles.

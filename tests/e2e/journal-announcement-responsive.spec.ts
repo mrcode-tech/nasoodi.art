@@ -123,17 +123,16 @@ test.describe("Journal announcement responsive placements", () => {
 
         await expect(sticker).toBeVisible();
         const title = sticker.locator('[data-part="title"]');
-        for (const titleText of stressTitles) {
+        for (const [index, titleText] of stressTitles.entries()) {
           await title.evaluate((element, value) => {
             element.textContent = value;
           }, titleText);
           await expect(title).toBeVisible();
           await expectDismissButtonInsideSticker(sticker);
+          await page.screenshot({
+            path: test.info().outputPath(`announcement-title-stress-${placement.kind}-${item.locale}-${index === 0 ? "long" : "short"}.png`),
+          });
         }
-
-        await page.screenshot({
-          path: test.info().outputPath(`announcement-title-stress-${placement.kind}-${item.locale}.png`),
-        });
       }
     });
 
