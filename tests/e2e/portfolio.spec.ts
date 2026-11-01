@@ -1287,3 +1287,46 @@ test("artwork breadcrumbs preserve only a verified collection origin",async({pag
  await expect(fallback.getByRole("link",{name:"Selected works"})).toHaveAttribute("href","/en/works");
  await expect(fallback.getByRole("link",{name:"Galleries"})).toHaveCount(0);
 });
+
+
+test("theme selector supports Light, Dark, and System in English and Persian", async ({ page }) => {
+  for (const locale of ["en", "fa"] as const) {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.goto(`/${locale}`);
+    const trigger = page.getByRole("button", { name: locale === "fa" ? "انتخاب پوسته" : "Choose theme" });
+    await expect(trigger).toBeVisible();
+    await trigger.click();
+    const menu = page.getByRole("menu");
+    await expect(menu.getByRole("menuitemradio", { name: locale === "fa" ? "تیره" : "Dark" })).toBeVisible();
+    await menu.getByRole("menuitemradio", { name: locale === "fa" ? "تیره" : "Dark" }).click();
+    await expect(page.locator("html")).toHaveClass(/dark/);
+    await page.reload();
+    await expect(page.locator("html")).toHaveClass(/dark/);
+    await page.getByRole("button", { name: locale === "fa" ? "انتخاب پوسته" : "Choose theme" }).click();
+    await page.getByRole("menuitemradio", { name: locale === "fa" ? "روشن" : "Light" }).click();
+    await expect(page.locator("html")).not.toHaveClass(/dark/);
+    await page.getByRole("button", { name: locale === "fa" ? "انتخاب پوسته" : "Choose theme" }).click();
+    await page.getByRole("menuitemradio", { name: locale === "fa" ? "سیستم" : "System" }).click();
+    await page.screenshot({ path: test.info().outputPath(`theme-${locale}-system.png`), fullPage: true });
+  }
+});
+
+test("theme selector is available in the mobile drawer and artwork styles remain unfiltered", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/en");
+  await page.getByRole("button", { name: "Open navigation" }).click();
+  const drawer = page.getByRole("dialog", { name: "Open navigation" });
+  const themeTrigger = drawer.getByRole("button", { name: "Choose theme" });
+  await expect(themeTrigger).toBeVisible();
+  await themeTrigger.click();
+  await drawer.getByRole("menuitemradio", { name: "Dark" }).click();
+  await expect(page.locator("html")).toHaveClass(/dark/);
+  await page.getByRole("button", { name: "Close navigation" }).click();
+  await page.goto("/en/works");
+  const artwork = page.locator(".artwork-item img").first();
+  if (await artwork.count()) {
+    await expect(artwork).toHaveCSS("filter", "none");
+    await expect(artwork).toHaveCSS("opacity", "1");
+    await expect(artwork).toHaveCSS("mix-blend-mode", "normal");
+  }
+});
