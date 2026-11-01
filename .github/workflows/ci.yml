@@ -30,6 +30,17 @@ jobs:
           node-version: 22
       - name: Install dependencies
         run: npm install --no-audit --no-fund
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install SVG rendering requirements
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes libcairo2
+          python -m pip install --disable-pip-version-check cairosvg pillow
+      - name: Render and validate Journal sticker SVG
+        run: python scripts/render-journal-sticker.py
       - name: Run ESLint
         run: npm run lint
       - name: Check TypeScript
@@ -54,7 +65,16 @@ jobs:
           path: |
             test-results/
             asset-audit/manifest.json
+            artifacts/journal-announcement-sticker.png
           if-no-files-found: ignore
+          retention-days: 14
+      - name: Upload Journal sticker review PNG
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: journal-announcement-sticker-review-${{ github.sha }}
+          path: artifacts/journal-announcement-sticker.png
+          if-no-files-found: error
           retention-days: 14
       - name: Smoke test production server
         shell: bash
