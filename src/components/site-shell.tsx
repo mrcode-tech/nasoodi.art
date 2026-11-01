@@ -58,7 +58,19 @@ export function SiteShell({ locale, children, announcement }: { locale: Locale; 
       <SidebarHeader><Link className="artist-wordmark" href={pagePath(locale)} aria-label="Ghazaleh Abdolahzade Nasoodi — Home">
         <span className="wordmark-name" dir="ltr">Ghazaleh</span><span className="wordmark-surname" dir="ltr">Abdolahzade Nasoodi</span><span className="wordmark-role" dir="auto">{labels.discipline}</span>
       </Link></SidebarHeader>
-      <SidebarContent>{navigation()}</SidebarContent>
+      <SidebarContent>
+        {navigation()}
+        {announcement && pathname !== pagePath(locale) && (
+          <JournalAnnouncement
+            locale={locale}
+            event={announcement}
+            eyebrow={labels.announcementEyebrow}
+            dismissLabel={labels.dismissAnnouncement}
+            href={pagePath(locale, `journal/${announcement.id}`)}
+            placement="desktop-sidebar"
+          />
+        )}
+      </SidebarContent>
       <SidebarFooter className="sidebar-bottom"><span>nasoodi.art</span><span>© {new Date().getFullYear()}</span></SidebarFooter>
     </Sidebar>
     <header className={`mobile-header mobile-header-${locale}`} data-locale={locale}>
@@ -69,7 +81,16 @@ export function SiteShell({ locale, children, announcement }: { locale: Locale; 
           <SheetTitle className="sr-only">{labels.menu}</SheetTitle>
           <div className="drawer-heading"><Link ref={drawerHomeRef} className="mobile-wordmark" dir="ltr" href={pagePath(locale)}>Nasoodi<span>.</span></Link><SheetClose asChild><Button className="drawer-close" variant="ghost" size="sm" aria-label={labels.close}>×</Button></SheetClose></div>
           {navigation(true)}
-          {announcement && <JournalAnnouncement locale={locale} event={announcement} eyebrow={labels.announcementEyebrow} dismissLabel={labels.dismissAnnouncement} href={pagePath(locale, "journal")} placement="sidebar" />}
+          {announcement && (
+            <JournalAnnouncement
+              locale={locale}
+              event={announcement}
+              eyebrow={labels.announcementEyebrow}
+              dismissLabel={labels.dismissAnnouncement}
+              href={pagePath(locale, `journal/${announcement.id}`)}
+              placement="mobile-sidebar"
+            />
+          )}
           <div className="drawer-settings" dir={locale === "fa" ? "rtl" : "ltr"}><span className="language-label">{labels.language}</span><LanguageSelector locale={locale} alternate={alternate} pathname={pathname} label={labels.language} onNavigate={() => setMobileOpen(false)}/></div>
           <div className="drawer-copyright" dir="ltr"><span>nasoodi.art</span><span>© {new Date().getFullYear()}</span></div>
         </SheetContent>
