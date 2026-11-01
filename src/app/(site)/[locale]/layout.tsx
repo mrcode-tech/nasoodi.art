@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { SiteShell } from "@/components/site-shell";
+import { ThemeProvider } from "@/components/providers/theme-provider";
 import { getUpcomingJournalEvent, isLocale, journalEntries, portfolioStructuredData, serializeJsonLd, type Locale } from "@/lib/site";
 import "../../globals.css";
 
@@ -18,7 +19,7 @@ export default async function LocaleLayout({ children, params }: { children: Rea
   const locale: Locale = value;
   const upcoming = getUpcomingJournalEvent(journalEntries, locale);
   const announcement = upcoming?.event ? { id: upcoming.id, slug: upcoming.slug, title: upcoming.title[locale]!, startsAt: upcoming.event.startsAt, timeZone: upcoming.event.timeZone } : undefined;
-  return <html lang={locale} dir={locale === "fa" ? "rtl" : "ltr"}><body>
+  return <html lang={locale} dir={locale === "fa" ? "rtl" : "ltr"} suppressHydrationWarning><body><ThemeProvider>
     <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeJsonLd(portfolioStructuredData) }} />
     <SiteShell locale={locale} announcement={announcement}>{children}</SiteShell>
   </body></html>;
