@@ -87,6 +87,7 @@ export function JournalAnnouncement({
     >
       <span
         className={`${styles.paper} ${locale === "fa" ? styles.paperRtl : ""}`}
+        data-part="paper"
         aria-hidden="true"
       />
       <Link className={styles.link} href={href} data-part="link" onClick={onNavigate}>
