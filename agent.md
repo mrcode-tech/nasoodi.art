@@ -23,7 +23,7 @@ Before coding, read in full:
 - `specification/artwork-discovery-carousel-and-editorial-experience.md`
 - All mandatory design, content, localization, navigation, SEO, accessibility, testing, and roadmap authorities referenced by `AGENTS.md` and the primary specification.
 
-**Important reconciled homepage rule:** the in-flow homepage Journal preview is limited to the two newest eligible published entries across article and event types. Do not add a third card or pin an older upcoming event into this preview. The fixed sticker independently selects the nearest eligible upcoming event. Dismissing the sticker must not hide the Journal preview.
+**Important reconciled homepage rule:** the in-flow homepage Journal preview is limited to the single newest eligible published entry across article and event types. Do not add a third card or pin an older upcoming event into this preview. The fixed sticker independently selects the nearest eligible upcoming event. Dismissing the sticker must not hide the Journal preview.
 
 **Sticker asset rule:** the checked-in SVG is the editable source of truth and contains only a decorative paper silhouette/edge treatment with transparent background. Do not bake event text, dates, labels, arrows, or controls into the image. Keep all copy and interactions as accessible localized DOM content. Do not use image generation, screenshot tracing, raster painting, or image processing. GitHub Actions must convert the SVG to PNG and verify RGBA transparency, dimensions, and absence of baked text/raster imagery. Do not commit generated PNG until owner review; SVG/CSS may be used directly at runtime. Do not invent an event or imply fictional sample content is real.
 

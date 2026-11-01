@@ -58,9 +58,9 @@ The Journal item:
 
 Place a restrained **Latest from the Journal** section after Featured Works and Featured Galleries, and before the final contact/footer area unless the approved homepage composition establishes a better fit.
 
-The homepage preview is limited to **at most the two newest eligible published Journal entries across all entry types** (articles and events), ordered by publication date descending with deterministic tie-breaking.
+The homepage preview is limited to **exactly one newest eligible published Journal entry across all entry types** (articles and events), ordered by publication date descending with deterministic tie-breaking.
 
-- Do not add a third entry/card.
+- Do not add a second entry/card.
 - Do not independently pin or promote an older upcoming event into this in-flow preview.
 - An upcoming event may appear in the preview only when it naturally belongs in the newest-two publication-date ordering.
 - Include a clear localized link to the complete Journal archive.
@@ -487,7 +487,7 @@ Journal is an editorial reading experience within the artist's gallery identity.
 
 The existing Journal design remains the approved editorial/post-style experience. The artwork-carousel redesign does not apply to Journal entries, article detail pages, or event detail pages.
 
-- The homepage displays at most the two newest eligible published Journal entries across all entry types (articles and events together), ordered by publication timestamp, newest first.
+- The homepage displays exactly one newest eligible published Journal entry across all entry types (articles and events together), ordered by publication timestamp, newest first.
 - When at least two eligible entries exist, show the two latest. If one exists, show one; if none exist, use the existing intentional omission/empty-state rule. Never invent or duplicate entries to fill the preview.
 - Preserve the existing editorial preview structure: approved representative image where available, title, publication date, excerpt, and article/event link.
 - Add one clear **Explore Journal** link to the complete `/[locale]/journal` archive.

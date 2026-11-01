@@ -14,10 +14,10 @@
 Implement the connected Journal and exhibition-announcement experience as one coherent feature. This is an implementation task, not a documentation-only exercise.
 
 Deliver:
-1. The approved homepage Journal preview, limited to the two newest eligible published entries across all Journal types.
+1. The homepage Journal preview, showing exactly one newest eligible published entry across all Journal types.
 2. The existing unified Journal archive and its established filters/taxonomy, without creating a separate Events destination or duplicate content model.
 3. Event-specific presentation on the canonical Journal detail route.
-4. Accessible archive pagination/page-size behavior only where justified by the actual archive and existing implementation.
+4. Accessible archive pagination with a default of 5 entries per page and page-size choices of 5, 10, and 20.
 5. A fixed, dismissible, locale-aware exhibition announcement sticker that independently selects the nearest eligible upcoming event.
 6. An SVG decorative paper asset authored or refined during this implementation.
 7. A transparent PNG rendered from that SVG by GitHub Actions for owner review.
@@ -30,12 +30,12 @@ The overall product direction is approved in principle. The exact sticker silhou
 - Journal remains the single editorial destination for articles, exhibitions, events, studio updates, and stories.
 - Do not add a top-level Events navigation item, separate Events archive, parallel event registry, or duplicate event record.
 - Use the canonical Journal content model, publication workflow, route structure, and approval state.
-- The homepage in-flow Journal preview shows **at most the two newest eligible published entries across article and event types**, sorted by publication date descending with deterministic tie-breaking.
-- Do not add a third entry or pin an older upcoming event into the two-entry preview.
-- The fixed sticker independently selects the nearest eligible upcoming event. It is not a third Journal preview card.
+- The homepage in-flow Journal preview shows **at most the single newest eligible published entry across article and event types**, sorted by publication date descending with deterministic tie-breaking.
+- Do not add a third entry or pin an older upcoming event into the single-entry preview.
+- The fixed sticker independently selects the nearest eligible upcoming event. It remains separate from the in-flow Journal preview.
 - Dismissing the sticker must not hide, reorder, or change the Journal preview.
 - With no eligible upcoming event, render no sticker and reserve no layout space.
-- Do not invent exhibitions, events, dates, time zones, venues, artists, registration links, artwork, or artist biography.
+- Keep all Journal records in the canonical content model, with internally consistent event dates, time zones, venues, and localized copy. Content can be replaced by editing the canonical Journal data without changing routes or components.
 - Only approved, published, locale-ready content may appear publicly.
 - Past events may remain published as Journal archive entries; temporal state and editorial publication state are separate.
 
@@ -78,7 +78,7 @@ Produce a short evidence-based gap matrix: requirement, current implementation e
 Resolve conflicts using this precedence:
 1. `AGENTS.md` and mandatory repository-wide safety/design authorities.
 2. This feature's detailed `journal-announcement-specification.md`.
-3. `journal-and-events.md` for canonical content model and Journal semantics, as reconciled by the newer two-entry homepage rule.
+3. `journal-and-events.md` for canonical content model and Journal semantics, as reconciled by the newer single-entry homepage rule.
 4. The approved proposal and wireframes.
 5. Existing code conventions, where they do not contradict the contracts.
 
@@ -169,8 +169,8 @@ Implement the existing unified Journal contract, not a generic blog template.
 ### Homepage preview
 
 - Preserve the existing homepage composition and editorial/post-style presentation.
-- Show zero, one, or two entries according to eligible published content.
-- Select the two newest eligible entries across article and event types by publication date descending, with deterministic tie-breaking.
+- Show zero or one entry according to eligible published content.
+- Select the single newest eligible entry across article and event types by publication date descending, with deterministic tie-breaking.
 - Never add a pinned older upcoming event as an extra item.
 - Include the approved localized heading/introduction only when available and a clear localized link to the full archive.
 - Omit the section when there are no eligible entries if required by the current homepage contract.
@@ -316,7 +316,7 @@ Cover:
 ### Integration/E2E tests
 
 Cover:
-1. Homepage Journal preview shows at most two newest eligible records.
+1. Homepage Journal preview shows only the newest eligible record.
 2. Sticker selects the nearest upcoming event independently.
 3. Dismissing sticker does not change the preview.
 4. Sticker link opens the correct localized Journal detail.

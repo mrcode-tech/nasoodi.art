@@ -127,7 +127,7 @@ Read it together with:
 - [Wireframes and interaction design](./wireframes.md)
 - [shadcn/ui component reuse](./shadcn-component-reuse-and-bilingual-ui.md)
 
-**Conflict resolution:** the new contract supersedes earlier grid-first artwork presentation guidance for the homepage Selected Works section and collection-detail primary browsing surface. It does not replace the static artwork-led Hero, the gallery-index editorial collection-preview role, the canonical artwork viewer, content/approval rules, or the Journal editorial layout. The Journal homepage preview is limited to the two newest eligible published entries. Existing routes and the unified Journal information architecture remain unchanged.
+**Conflict resolution:** the new contract supersedes earlier grid-first artwork presentation guidance for the homepage Selected Works section and collection-detail primary browsing surface. It does not replace the static artwork-led Hero, the gallery-index editorial collection-preview role, the canonical artwork viewer, content/approval rules, or the Journal editorial layout. The Journal homepage preview is limited to the single newest eligible published entry. Existing routes and the unified Journal information architecture remain unchanged.
 
 
 ## Next implementation task — Journal and event announcement sticker
@@ -137,7 +137,7 @@ The next feature to implement on `feature` is the combined Journal and announcem
 Implementation scope:
 - Complete the homepage Journal preview, existing unified archive, event detail presentation, and pagination behavior where required.
 - Use the hand-authored transparent SVG paper study (decorative only; no text or controls baked into the image) and have GitHub Actions convert it into a transparent PNG review artifact. Do not commit a generated PNG or call the treatment final before owner review.
-- Preserve the current homepage preview rule: at most the two newest eligible published Journal entries across all entry types. The sticker independently selects the nearest eligible upcoming event.
+- Preserve the current homepage preview rule: exactly one newest eligible published Journal entry across all entry types. The sticker independently selects the nearest eligible upcoming event.
 - Preserve the canonical Journal content model and routes; do not add a separate Events navigation destination.
 
 The overall proposal is approved in principle. The first hand-authored torn-edge vector study is available for review. The owner must approve or request refinements to the silhouette/tape detail after inspecting the CI-generated PNG; the PNG is not a hand-edited source asset. This task is the next implementation priority; it does not authorize merge, deployment, or publication.

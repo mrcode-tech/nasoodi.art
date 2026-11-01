@@ -96,13 +96,13 @@ The exact offset, dimensions, and z-index must be derived from the real shell an
 
 ## 8. Homepage Journal section
 
-Follow both journal-and-events.md and the newer artwork-discovery-carousel-and-editorial-experience.md contract. The homepage preview contains **at most the two newest eligible published Journal entries across article and event types**. Preserve the established editorial/post-style presentation; do not redesign it as an event-led dashboard or add a third card.
+Follow both journal-and-events.md and the newer artwork-discovery-carousel-and-editorial-experience.md contract. The homepage preview contains **exactly one newest eligible published Journal entry across article and event types**. Preserve the established editorial/post-style presentation; do not redesign it as an event-led dashboard or add a third card.
 
 - Section heading and approved introduction, if available.
-- Up to two newest eligible published entries, ordered by publication date descending with deterministic tie-breaking.
+- Show exactly one newest eligible published entry, ordered by publication date descending with deterministic tie-breaking.
 - A clear localized link to the complete Journal archive.
-- If fewer than two eligible entries exist, show fewer. If none exist, omit the section according to the existing Journal contract.
-- Do not independently pin an older upcoming event into this preview. The upcoming event may appear here only if it is one of the two newest entries.
+- If no eligible entry exists, omit the section according to the existing Journal contract.
+- Do not independently pin an older upcoming event into this preview. The upcoming event appears in this preview only when it is itself the newest published entry.
 
 The fixed announcement sticker independently selects the nearest eligible upcoming event. Dismissing the sticker never hides or changes the in-flow Journal preview.
 

@@ -95,10 +95,59 @@ test("robots and sitemap endpoints are available", async ({ request }) => {
   expect(sitemapText).not.toContain("https://nasoodi.art/en/contact");
 });
 
-test("filtered Journal URLs canonicalize to the localized archive and empty archives stay noindex", async ({ page }) => {
+
+test("homepage shows exactly the latest Journal entry and the independent event sticker", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 960 });
+  await page.goto("/en");
+  await expect(page.locator(".journal-preview-item")).toHaveCount(1);
+  await expect(page.getByRole("heading", { name: "Between Layers: Notes from the Studio" })).toBeVisible();
+  const sticker = page.getByRole("complementary", { name: "UPCOMING EXHIBITION" });
+  await expect(sticker).toBeVisible();
+  await expect(sticker.getByText("Open Studio: Colour and Stillness")).toBeVisible();
+  const stickerBounds = await sticker.boundingBox();
+  expect(stickerBounds?.x).toBe(0);
+  await page.getByRole("button", { name: "Dismiss exhibition announcement" }).click();
+  await expect(sticker).toBeHidden();
+  await expect(page.locator(".journal-preview-item")).toHaveCount(1);
+});
+
+test("Persian announcement is localized, right-anchored, and dismissible", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 960 });
+  await page.goto("/fa");
+  await expect(page.locator(".journal-preview-item")).toHaveCount(1);
+  const sticker = page.getByRole("complementary", { name: "نمایشگاه پیشِ رو" });
+  await expect(sticker).toBeVisible();
+  await expect(sticker.getByText("آتلیه باز: رنگ و سکون")).toBeVisible();
+  const bounds = await sticker.boundingBox();
+  expect((bounds?.x ?? 0) + (bounds?.width ?? 0)).toBe(1440);
+  await page.getByRole("button", { name: "بستن اطلاعیه نمایشگاه" }).click();
+  await expect(sticker).toBeHidden();
+});
+
+test("Journal archive paginates five entries by default and supports 5, 10, and 20 per page", async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await page.goto("/en/journal");
+  await expect(page.locator(".journal-card")).toHaveCount(5);
+  await expect(page.getByRole("status").filter({ hasText: "Showing 1–5 of 8 Journal entries" })).toBeVisible();
+  const pageSize = page.locator(".journal-pagination .gallery-page-size select");
+  await expect(pageSize).toHaveValue("5");
+  await page.getByRole("button", { name: "Journal pages 2" }).click();
+  await expect(page).toHaveURL(/page=2/);
+  await expect(page.locator(".journal-card")).toHaveCount(3);
+  await pageSize.selectOption("10");
+  await expect(page).toHaveURL(/pageSize=10/);
+  await expect(page.locator(".journal-card")).toHaveCount(8);
+  await expect(page.locator(".journal-pagination .gallery-page-size select")).toHaveValue("10");
+  await page.locator(".journal-pagination .gallery-page-size select").selectOption("20");
+  await expect(page).toHaveURL(/pageSize=20/);
+  await expect(page.locator(".journal-card")).toHaveCount(8);
+  await expect(page.locator(".journal-pagination .gallery-page-size select")).toHaveValue("20");
+});
+
+test("filtered Journal URLs canonicalize to the localized archive and published Journal entries are indexable", async ({ page }) => {
   await page.goto("/en/journal?category=event");
   await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", /\/en\/journal$/);
-  await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", /noindex/);
+  await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", /index/);
 });
 
 for (const locale of ["en", "fa"] as const) {
