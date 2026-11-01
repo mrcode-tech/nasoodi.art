@@ -14,6 +14,17 @@ This directory is the product, design, content, and implementation source of tru
 8. Follow implementation-roadmap.md for sequencing and phase exit criteria.
 9. Treat artist/site-owner approval as a required content and visual gate; do not infer missing facts.
 
+## Journal event announcement design package
+
+The following task-specific documents define the proposed homepage event announcement and the related Journal event experience:
+
+- [Journal event announcement proposal](./journal-announcement-proposal.md) — product decisions, visual direction, variants, placement, interaction, content safeguards, and review gates.
+- [Journal event announcement wireframes](./journal-announcement-wireframes.md) — English/Persian desktop and mobile placement, homepage Journal section, archive, event detail, and interaction states.
+- [Journal event announcement specification](./journal-announcement-specification.md) — detailed UI/UX, data eligibility, component architecture, localization, accessibility, SEO, acceptance criteria, tests, and implementation phases.
+- [Journal event announcement agent instructions](./journal-announcement-agent-instructions.md) — coding-agent preflight, implementation, verification, and Git/release boundaries.
+
+Read these documents together with [Journal, Articles, and Events](./journal-and-events.md). The existing Journal specification remains authoritative for the canonical content model and routes. This package does not authorize implementation before owner review.
+
 ## Document map
 
 ### Product and experience
