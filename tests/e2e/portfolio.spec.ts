@@ -1345,8 +1345,9 @@ test("theme selector is available in the mobile drawer in both locales and artwo
     expect(appearanceLabelBox).not.toBeNull();
     expect(themeTriggerBox).not.toBeNull();
     // The controls share their label's line, and each locale mirrors the row's physical alignment.
-    expect(Math.abs(languageLabelBox!.y - languageControlBox!.y)).toBeLessThan(8);
-    expect(Math.abs(appearanceLabelBox!.y - themeTriggerBox!.y)).toBeLessThan(8);
+    const verticalCenter = (box: { y: number; height: number }) => box.y + box.height / 2;
+    expect(Math.abs(verticalCenter(languageLabelBox!) - verticalCenter(languageControlBox!))).toBeLessThan(3);
+    expect(Math.abs(verticalCenter(appearanceLabelBox!) - verticalCenter(themeTriggerBox!))).toBeLessThan(3);
     expect(appearanceLabelBox!.y).toBeGreaterThan(languageLabelBox!.y + languageLabelBox!.height);
     if (locale === "fa") {
       expect(languageLabelBox!.x).toBeGreaterThan(languageControlBox!.x);
