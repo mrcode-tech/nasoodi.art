@@ -1086,3 +1086,72 @@ test("homepage suppresses the event sticker on short viewports without changing 
   expect(overflow).toBe(false);
  }
 });
+
+test("mobile menu uses a minimal two-stroke icon in both locales and updates its accessible action", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  for (const locale of ["en", "fa"] as const) {
+    const openLabel = locale === "en" ? "Open navigation" : "باز کردن راهبری";
+    const closeLabel = locale === "en" ? "Close navigation" : "بستن راهبری";
+    await page.goto(`/${locale}`);
+    const trigger = page.getByRole("button", { name: openLabel });
+    const strokes = trigger.locator(".menu-trigger-lines > span");
+    await expect(strokes).toHaveCount(2);
+    const iconStyle = await trigger.evaluate((button) => {
+      const lines = Array.from(button.querySelectorAll(".menu-trigger-lines > span"));
+      return { borderWidth: getComputedStyle(button).borderTopWidth, firstWidth: getComputedStyle(lines[0]).width, secondWidth: getComputedStyle(lines[1]).width };
+    });
+    expect(iconStyle.borderWidth).toBe("0px");
+    expect(parseFloat(iconStyle.firstWidth)).toBeGreaterThan(parseFloat(iconStyle.secondWidth));
+    await page.screenshot({ path: test.info().outputPath(`menu-${locale}-mobile-closed.png`) });
+    await trigger.click();
+    const dialog = page.getByRole("dialog", { name: openLabel });
+    await expect(dialog.getByRole("button", { name: closeLabel })).toBeVisible();
+    await expect(page.locator(".menu-trigger")).toHaveAttribute("aria-expanded", "true");
+    await page.screenshot({ path: test.info().outputPath(`menu-${locale}-mobile-open.png`) });
+  }
+});
+
+test("editorial sections use whitespace instead of decorative separator rules", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 960 });
+  await page.goto("/en");
+  const homeBorders = await page.locator(".editorial-section, .journal-preview-item").evaluateAll((elements) =>
+    elements.map((element) => ({ top: getComputedStyle(element).borderTopWidth, bottom: getComputedStyle(element).borderBottomWidth }))
+  );
+  expect(homeBorders.length).toBeGreaterThan(0);
+  expect(homeBorders.every((border) => border.top === "0px" && border.bottom === "0px")).toBeTruthy();
+  await page.goto("/en/journal");
+  const archiveBorders = await page.locator(".journal-card, .journal-filters").evaluateAll((elements) =>
+    elements.map((element) => ({ top: getComputedStyle(element).borderTopWidth, bottom: getComputedStyle(element).borderBottomWidth }))
+  );
+  expect(archiveBorders.every((border) => border.top === "0px" && border.bottom === "0px")).toBeTruthy();
+  await expect(page.locator(".journal-card")).toHaveCount(5);
+  await expect(page.locator(".journal-card .journal-cover-image")).toHaveCount(0);
+  await page.screenshot({ path: test.info().outputPath("journal-en-desktop.png"), fullPage: true });
+});
+
+test("homepage and Journal remain composed in English and Persian on desktop and mobile", async ({ page }) => {
+  for (const locale of ["en", "fa"] as const) {
+    for (const viewport of [{ width: 1440, height: 960, name: "desktop" }, { width: 390, height: 844, name: "mobile" }]) {
+      await page.setViewportSize({ width: viewport.width, height: viewport.height });
+      await page.goto(`/${locale}`);
+      await expect(page.locator("html")).toHaveAttribute("dir", locale === "fa" ? "rtl" : "ltr");
+      await page.screenshot({ path: test.info().outputPath(`home-${locale}-${viewport.name}.png`), fullPage: true });
+      await page.goto(`/${locale}/journal`);
+      await expect(page.getByRole("heading", { name: locale === "fa" ? "یادداشت‌ها" : "Journal", exact: true })).toBeVisible();
+      await page.screenshot({ path: test.info().outputPath(`journal-${locale}-${viewport.name}.png`), fullPage: true });
+    }
+  }
+});
+
+test("About and CV content use editorial spacing without decorative row dividers", async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await page.goto("/en/about");
+  const borders = await page.locator(".sample-content-notice, .cv-list, .cv-list li").evaluateAll((elements) =>
+    elements.map((element) => ({
+      top: getComputedStyle(element).borderTopWidth,
+      bottom: getComputedStyle(element).borderBottomWidth,
+    }))
+  );
+  expect(borders.length).toBeGreaterThan(0);
+  expect(borders.every((border) => border.top === "0px" && border.bottom === "0px")).toBeTruthy();
+});

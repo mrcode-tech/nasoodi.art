@@ -209,3 +209,12 @@ The detailed cross-page presentation contract is [artwork-discovery-carousel-and
 - Keep the homepage Hero static and distinct from the Selected Works carousel.
 - Keep Journal as a text-led editorial/post experience. The homepage shows at most the two newest eligible published Journal entries and links to the complete archive; do not apply artwork-carousel styling to Journal.
 - Maintain the existing warm-paper palette, typography, whitespace, and quiet gallery identity. Avoid generic repeated cards or decorative carousel chrome.
+
+
+## 15. Whitespace-first section transitions — 2026-11-01
+
+Use whitespace, typography, alignment, and content grouping as the default way to distinguish major page sections. Do not place a full-width horizontal rule above every homepage section, journal entry, gallery item, or CV row. Establish chapter-like pacing with responsive block spacing and keep related headings close to their content.
+
+Retain a line or border only when it communicates a meaningful functional boundary or control state—for example, a form field, pagination/control grouping, a selected navigation indicator, or the settings region in the mobile drawer. Link underlines and focus indicators are interactive affordances, not decorative section separators, and must remain accessible.
+
+For Journal imagery, use only an entry's optional approved cover image when its local path, rights confirmation, intrinsic dimensions, and localized alternative text are valid. Preserve the source aspect ratio with an editorial image-and-text composition. If no approved image exists, keep the entry text-led; never substitute artwork, a portrait, a studio photograph, stock imagery, or generated imagery as an event photograph.
