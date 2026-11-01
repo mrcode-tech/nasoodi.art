@@ -25,7 +25,10 @@
   height: 100%;
   z-index: -1;
   inset: 0;
-  background: url("/images/journal-announcement-sticker.svg") center / 100% 100% no-repeat;
+  background-image: url("/images/journal-announcement-sticker.svg");
+  background-position: center;
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
   pointer-events: none;
 }
 
