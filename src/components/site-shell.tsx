@@ -14,7 +14,7 @@ function LanguageSelector({ locale, alternate, pathname, label, onNavigate }: { 
   const persianHref = locale === "fa" ? pathname : alternate;
   const router = useRouter();
   const preserveGalleryState = (event: React.MouseEvent<HTMLAnchorElement>) => {
-    if (!/^\\/(fa|en)\\/galleries$/.test(pathname)) return;
+    if (!/^\/(fa|en)\/galleries$/.test(pathname)) return;
     const current = new URLSearchParams(window.location.search);
     const query = new URLSearchParams();
     for (const key of ["page", "pageSize"]) { const value = current.get(key); if (value) query.set(key, value); }
