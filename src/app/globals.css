@@ -520,8 +520,7 @@ html[lang="fa"] .mobile-drawer[dir="rtl"] .nav-link {
     flex-direction: column;
     gap: .3rem;
     margin-top: 1.25rem;
-    padding-top: 1rem;
-    border-top: 1px solid var(--border);
+    padding-top: .5rem;
     color: var(--muted);
     font-size: .72rem;
     line-height: 1.5;
@@ -785,7 +784,7 @@ html[lang=fa] .home-biography h2,html[lang=fa] .profile-content h2{font-family:T
 .biography-copy.is-collapsed{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:var(--biography-lines,4);line-clamp:var(--biography-lines,4);overflow:hidden}
 .biography-toggle.ui-button{display:inline-flex;width:max-content;min-height:2.4rem;margin-top:.35rem;padding:.2rem 0;border:0;border-bottom:1px solid var(--mauve);border-radius:0;background:transparent;color:var(--ink);font-size:.88rem;font-weight:700;box-shadow:none}
 .biography-toggle.ui-button:hover{background:transparent;color:var(--mauve-deep);box-shadow:none}
-.sample-content-notice{margin:0 0 1rem;padding:.75rem 0;border-block:1px solid var(--border);color:var(--mauve-deep);font-size:.82rem;line-height:1.8}
+.sample-content-notice{margin:0 0 1rem;padding:.75rem 0;border:0;color:var(--mauve-deep);font-size:.82rem;line-height:1.8}
 .about-biography-copy{max-width:68ch;margin:0;color:var(--muted);font-size:1rem;line-height:2;white-space:pre-line;overflow-wrap:break-word}
 .profile-content{max-width:58rem}
 .about-cv-section{margin-top:1rem}
