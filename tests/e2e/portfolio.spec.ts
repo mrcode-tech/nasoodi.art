@@ -1334,3 +1334,14 @@ test("theme selector is available in the mobile drawer and artwork styles remain
     await expect(artwork).toHaveCSS("mix-blend-mode", "normal");
   }
 });
+
+
+test("new visitors default to System and follow the operating-system color scheme", async ({ page }) => {
+  await page.emulateMedia({ colorScheme: "dark" });
+  await page.goto("/en");
+  await expect(page.locator("html")).toHaveClass(/dark/);
+  await page.emulateMedia({ colorScheme: "light" });
+  await expect(page.locator("html")).not.toHaveClass(/dark/);
+  await page.getByRole("button", { name: "Choose theme" }).click();
+  await expect(page.getByRole("menuitemradio", { name: "System" })).toHaveAttribute("data-state", "checked");
+});
