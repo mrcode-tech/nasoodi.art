@@ -1,6 +1,6 @@
 # Coding Agent Task — Journal Events and Homepage Announcement
 
-**Task type:** Specification-led implementation, after explicit owner approval  
+**Task type:** Implementation of the owner-approved direction; final sticker visual selection remains a review gate  
 **Repository:** mrcode-tech/nasoodi.art  
 **Working branch:** feature  
 **Primary specification:** journal-announcement-specification.md  
@@ -27,13 +27,13 @@ Implement the approved Journal event experience described by the proposal, wiref
 - Anchor the announcement to physical left in English and physical right in Persian.
 - Keep it fixed during scroll and independent of hero/layout geometry.
 - Keep the menu trigger, sidebar, artwork, focus, and essential content unobstructed.
-- Implement clean-paper baseline and provide a restrained torn-edge variant for screenshot review.
+- Implement the functional announcement structure and prepare clean-paper and restrained torn-edge visual treatments for side-by-side screenshot review. Do not declare either final until the owner selects one.
 - Keep event link and dismissal as separate controls.
 - Use event-specific session dismissal unless an existing approved project preference contract supersedes it.
 - Preserve the independent homepage Journal preview, limited to the two newest eligible published entries across all Journal types, and canonical Journal detail routes.
 - Show confirmed event metadata only; never fabricate title, date, timezone, venue, participants, or registration details.
 - Use approved translations only.
-- Produce the approved transparent paper PNG only after checking the final visual variant with the owner; the image must contain no text or controls. Prefer CSS/SVG if a raster asset does not materially improve the result.
+- Generate/add the final transparent paper PNG only after the owner selects the visual variant from the review screenshots; the image must contain no text or controls. The Journal and announcement implementation may proceed while this asset-selection gate remains open, using a temporary CSS/SVG shape that is clearly treated as provisional. Prefer CSS/SVG if a raster asset does not materially improve the result.
 - Reuse project components, semantic tokens, shadcn-style controls, and existing utilities.
 - Avoid unnecessary dependencies, tracking, or new personal-data collection.
 - Follow the repository's SEO, accessibility, privacy, performance, and content-governance contracts.
