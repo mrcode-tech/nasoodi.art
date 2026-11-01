@@ -512,10 +512,12 @@ export function getPublicContactDetails(details: ContactDetails | undefined, loc
   const validEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) ? email : undefined;
   const telegramHandle = details.telegramHandle && /^[A-Za-z0-9_]{5,32}$/.test(details.telegramHandle) ? details.telegramHandle : undefined;
   let instagramUrl: string | undefined;
-  try {
-    const url = new URL(details.instagramUrl);
-    if (url.protocol === "https:" && (url.hostname === "instagram.com" || url.hostname === "www.instagram.com")) instagramUrl = url.toString();
-  } catch { /* Invalid external destinations are omitted. */ }
+  if (details.instagramUrl) {
+    try {
+      const url = new URL(details.instagramUrl);
+      if (url.protocol === "https:" && (url.hostname === "instagram.com" || url.hostname === "www.instagram.com")) instagramUrl = url.toString();
+    } catch { /* Invalid external destinations are omitted. */ }
+  }
   return validEmail && telegramHandle && instagramUrl ? { email: validEmail, telegramHandle, telegramUrl: `https://t.me/${telegramHandle}`, instagramUrl } : undefined;
 }
 
