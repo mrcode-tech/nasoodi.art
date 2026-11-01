@@ -28,7 +28,7 @@ export async function generateMetadata({params}:Props):Promise<Metadata>{const {
   section==="about" ? Boolean(getPublicArtistProfile(artistProfile,other)) :
   section==="contact" ? Boolean(getPublicContactDetails(contactDetails,other)) : false;
  const profile=section==="about"?getPublicArtistProfile(artistProfile,locale):undefined;
- return {title:copyFor(locale)[section],...(profile?{description:profile.statement[locale]}:{}),alternates:{canonical:pagePath(locale,section),...(indexable&&translated?{languages:{[locale]:pagePath(locale,section),[other]:pagePath(other,section)}}:{})},robots:{index:section==="about"?false:indexable,follow:true}};}
+ return {title:copyFor(locale)[section],...(profile?{description:profile.statement[locale]}:{}),alternates:{canonical:pagePath(locale,section),...(indexable&&translated?{languages:{[locale]:pagePath(locale,section),[other]:pagePath(other,section)}}:{})},robots:{index:section==="about"||section==="contact"?false:indexable,follow:true}};}
 export default async function SectionPage({params,searchParams}:Props){const [{locale,section},{category:rawCategory,page:rawPage,pageSize:rawPageSize}]=await Promise.all([params,searchParams]);if(!isLocale(locale)||!valid(section))notFound();const t=copyFor(locale);
  if(section==="about"){
   const biography=aboutPreviewFixture.biography[locale];
