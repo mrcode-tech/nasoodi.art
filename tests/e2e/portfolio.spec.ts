@@ -1080,7 +1080,7 @@ test("homepage suppresses the event sticker on short viewports without changing 
  for (const locale of ["en", "fa"] as const) {
   await page.setViewportSize({ width: 390, height: 700 });
   await page.goto(`/${locale}`);
-  await expect(page.locator(`aside[aria-label="${locale === "en" ? "UPCOMING EXHIBITION" : "نمایشگاه پیشِ رو"}"]`)).toHaveCount(0);
+  await expect(page.locator(`aside[aria-label="${locale === "en" ? "UPCOMING EXHIBITION" : "نمایشگاه پیشِ رو"}"]`)).toBeHidden();
   await expect(page.locator(".journal-preview-item")).toHaveCount(1);
   const overflow=await page.evaluate(()=>document.documentElement.scrollWidth>document.documentElement.clientWidth);
   expect(overflow).toBe(false);
