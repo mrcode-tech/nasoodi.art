@@ -13,7 +13,7 @@ a{color:inherit;text-decoration:none}button,a{-webkit-tap-highlight-color:transp
 .home-intro{display:flex;min-height:min(620px,80vh);flex-direction:column;align-items:flex-start;justify-content:center;padding-block:2.5rem 3rem}.eyebrow{margin:0 0 1.25rem;color:var(--mauve-deep);font-size:.72rem;font-weight:700;letter-spacing:.13em;line-height:1.5;text-transform:uppercase}
 h1,h2,h3,p{overflow-wrap:anywhere}.home-intro h1,.page-heading h1,.not-found-page h1{max-width:950px;margin:0;font:400 clamp(2.8rem,6.4vw,6.2rem)/1.06 Georgia,"Times New Roman",serif;letter-spacing:-.065em}
 html[lang=fa] .home-intro h1,html[lang=fa] .page-heading h1,html[lang=fa] h2{font-family:Tahoma,Arial,sans-serif;letter-spacing:0;line-height:1.45}
-.artist-discipline{margin:1.3rem 0 0;color:var(--muted);font-size:1rem}.intro-rule{width:4.5rem;height:1px;margin-top:2.5rem;background:var(--mauve)}.intro-note{max-width:34rem;margin:1.4rem 0 1.25rem;color:var(--muted);font-size:1.05rem;line-height:1.9}
+.artist-discipline{margin:1.3rem 0 0;color:var(--muted);font-size:1rem}.intro-note{max-width:34rem;margin:1.4rem 0 1.25rem;color:var(--muted);font-size:1.05rem;line-height:1.9}
 .text-link,.back-link{display:inline-flex;min-height:2.8rem;align-items:center;gap:.65rem;border-bottom:1px solid var(--mauve);color:var(--ink);font-size:.9rem;font-weight:700}
 .editorial-section{padding-block:4rem 5rem}.section-heading{display:flex;align-items:flex-end;justify-content:space-between;gap:2rem;margin-bottom:2rem}.section-heading .eyebrow{margin-bottom:.45rem}.section-heading h2{margin:0;font:400 clamp(1.8rem,3.2vw,2.8rem)/1.2 Georgia,"Times New Roman",serif;letter-spacing:-.045em}
 .empty-note{max-width:46rem;margin:0;padding:.5rem 0;color:var(--muted);font-size:.95rem;line-height:1.9}.page-heading{max-width:58rem;margin-bottom:3.5rem}.page-heading h1{font-size:clamp(2.7rem,5.5vw,5rem)}.page-heading>p:last-child:not(.eyebrow){max-width:42rem;margin:1.2rem 0 0;color:var(--muted);font-size:1rem;line-height:1.9}.page-heading .artist-discipline{margin-top:1.5rem}
@@ -722,7 +722,7 @@ html[lang=fa] .artwork-viewer-info h2{font-family:Tahoma,Arial,sans-serif;line-h
 .gallery-cards-sparse{grid-template-columns:repeat(auto-fit,minmax(min(100%,20rem),1fr))}
 .gallery-detail-cover{display:flex;max-width:58rem;max-height:36rem;align-items:center;justify-content:flex-start;margin:2rem 0 2.5rem;background:transparent}
 .gallery-detail-cover img{display:block;width:auto;height:auto;max-width:100%;max-height:36rem;object-fit:contain}
-.journal-preview-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(2rem,4vw,3.5rem)}
+.journal-preview-list{display:grid;grid-template-columns:minmax(0,1fr);gap:clamp(2rem,4vw,3.5rem)}
 .journal-preview-item{min-width:0;padding:0}
 .journal-preview-item time{color:var(--muted);font-size:.8rem}
 .journal-preview-item h3{margin:.7rem 0;font:400 clamp(1.25rem,2vw,1.7rem)/1.4 Georgia,"Times New Roman",serif}
@@ -870,3 +870,11 @@ html[dir="rtl"] .home-intro.has-hero > .hero-artwork {
 .menu-trigger-lines>span{height:1.5px}
 .menu-trigger-lines>span:first-child{width:1.2rem}
 .menu-trigger-lines>span:last-child{width:.82rem}
+
+
+/* Minimalist navigation mark: two equal editorial strokes; the 44px button remains the touch target. */
+.menu-trigger-lines{display:grid;width:1.25rem;height:auto;grid-template-rows:repeat(2,1.75px);row-gap:.4rem;align-items:center;line-height:0;overflow:visible}
+.menu-trigger-lines>span,.menu-trigger-lines>span:first-child,.menu-trigger-lines>span:last-child{display:block;flex:none;width:100%;height:1.75px;min-height:1.75px;border-radius:0;background:currentColor}
+
+/* Editorial content groups use whitespace and hierarchy rather than decorative separator rules. */
+.editorial-section,.empty-note,.gallery-list,.journal-list,.journal-preview-item,.journal-card{border-block:0}
