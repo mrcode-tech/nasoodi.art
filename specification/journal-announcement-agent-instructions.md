@@ -3,7 +3,8 @@
 **Task type:** Specification-led implementation, after explicit owner approval  
 **Repository:** mrcode-tech/nasoodi.art  
 **Working branch:** feature  
-**Primary specification:** journal-announcement-specification.md
+**Primary specification:** journal-announcement-specification.md  
+**Visual asset:** approved paper-sticker PNG (decorative only), governed by the primary specification
 
 ## Objective
 
@@ -29,9 +30,10 @@ Implement the approved Journal event experience described by the proposal, wiref
 - Implement clean-paper baseline and provide a restrained torn-edge variant for screenshot review.
 - Keep event link and dismissal as separate controls.
 - Use event-specific session dismissal unless an existing approved project preference contract supersedes it.
-- Preserve the independent homepage Journal preview and canonical Journal detail routes.
+- Preserve the independent homepage Journal preview, limited to the two newest eligible published entries across all Journal types, and canonical Journal detail routes.
 - Show confirmed event metadata only; never fabricate title, date, timezone, venue, participants, or registration details.
 - Use approved translations only.
+- Produce the approved transparent paper PNG only after checking the final visual variant with the owner; the image must contain no text or controls. Prefer CSS/SVG if a raster asset does not materially improve the result.
 - Reuse project components, semantic tokens, shadcn-style controls, and existing utilities.
 - Avoid unnecessary dependencies, tracking, or new personal-data collection.
 - Follow the repository's SEO, accessibility, privacy, performance, and content-governance contracts.
@@ -63,4 +65,4 @@ Run repository-prescribed lint, formatting, typecheck, unit, component, integrat
 
 ## Completion definition
 
-The task is complete only when the approved behavior is implemented, required tests pass, CI is verified, screenshots are reviewed, and unresolved issues are clearly reported. A code change or successful build alone is not completion.
+The task is complete only when the approved behavior is implemented, the approved sticker asset is included (or a documented CSS/SVG decision replaces it), required tests pass, CI is verified, screenshots are reviewed, and unresolved issues are clearly reported. A code change or successful build alone is not completion.
