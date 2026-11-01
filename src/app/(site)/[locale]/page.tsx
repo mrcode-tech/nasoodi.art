@@ -3,6 +3,7 @@ import { ArtworkExperience } from "@/components/artwork-experience";
 import { CollectionCarousel } from "@/components/collection-carousel";
 import { BiographyDisclosure } from "@/components/biography-disclosure";
 import { JournalAnnouncement } from "@/components/journal-announcement";
+import { getPublicContactDetails, contactDetails } from "@/lib/site";
 import { aboutPreviewFixture } from "@/lib/about-preview-fixtures";
 import { Button } from "@/components/ui/button";
 import type { Metadata } from "next";
@@ -24,6 +25,7 @@ export default async function Home({params}:Props){const {locale}=await params;i
  const hasFeaturedGalleries=getPublicGalleries(galleries,artworks,locale).length>0;
  const journal=getHomepageJournalPreview(journalEntries,locale);
  const announcement=getUpcomingJournalEvent(journalEntries,locale);
+ const contact=getPublicContactDetails(contactDetails,locale);
  return <div className="page-content home-page">
   <section className="home-intro has-hero" aria-labelledby="home-title">
    <figure className="hero-artwork">
@@ -65,5 +67,6 @@ export default async function Home({params}:Props){const {locale}=await params;i
    })}</div>
   </section>}
   {announcement?.event&&<JournalAnnouncement locale={locale} eyebrow={t.announcementEyebrow} dismissLabel={t.dismissAnnouncement} href={pagePath(locale,`journal/${announcement.slug}`)} event={{id:announcement.id,slug:announcement.slug,title:announcement.title[locale]!,startsAt:announcement.event.startsAt,timeZone:announcement.event.timeZone}} />}
+  {contact&&<section className="editorial-section homepage-contact" aria-labelledby="homepage-contact-title"><div className="section-heading"><div><p className="eyebrow">{t.contact}</p><h2 id="homepage-contact-title">{t.contact}</h2></div><Link className="text-link" href={pagePath(locale,"contact")}>{locale==="fa"?"اطلاعات تماس":"Contact details"} ↗</Link></div><p className="contact-intro">{t.contactIntro}</p><div className="contact-links"><p><span>{t.telegram}</span><a href={contact.telegramUrl} target="_blank" rel="noopener noreferrer" dir="ltr">@{contact.telegramHandle}</a></p><p><span>{t.email}</span><a href={`mailto:${contact.email}`} dir="ltr">{contact.email}</a></p><p><span>{t.instagram}</span><a href={contact.instagramUrl} target="_blank" rel="noopener noreferrer" dir="ltr">@ghazaleh.nasoodi.demo</a></p></div></section>}
  </div>;
 }
