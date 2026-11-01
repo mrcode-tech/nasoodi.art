@@ -124,3 +124,15 @@ Visual inspection confirmed that the close control remains inside each paper sil
 The CI browser tests also assert the 44×44 px close target, title/control non-overlap, sticker containment, expected event link, and absence of horizontal page overflow. Synthetic long- and short-title stress cases are exercised in all three placements and both locales, with a screenshot captured for each title length. Screenshot artifacts are generated for every tested mobile/tablet viewport and both locales.
 
 This is technical responsive verification of the current sample event and current SVG study. It does not constitute owner approval of the final paper silhouette or tape detail, and it does not replace review with longer owner-supplied event titles.
+
+
+## 11. Compact editorial treatment and mobile event navigation — 2026-11-01
+
+The owner requested a thinner, more minimal sticker in both sidebar contexts, specifically to reduce the mobile drawer's vertical footprint and avoid unnecessary menu scrolling.
+
+- The viewport announcement uses a 2:1 landscape composition with a 7.5rem minimum height.
+- The desktop sidebar uses its own compact 1.6:1 composition with a 7.5rem minimum height and reduced vertical spacing.
+- The mobile drawer uses a 2:1 composition with a 7.25rem minimum height, smaller vertical gaps, and tighter text insets. The close target remains at least 44×44 CSS pixels.
+- These are compact editorial slips, not cards; content remains legible and titles are not line-clamped or clipped.
+- Activating the announcement link inside the mobile drawer closes the drawer while navigating to the event's localized Journal detail route. Dismissing remains a separate, non-navigation action.
+- Playwright checks the mobile sticker's maximum height and verifies that activating its link both navigates to the event and closes the dialog.
