@@ -123,3 +123,8 @@ The responsive carousel is now implemented as the project-owned `src/components/
 Implementation and QA must cover responsive item basis, content-container sizing, spacing, snap/alignment, disabled boundaries, keyboard navigation, touch/trackpad drag, accessible naming/position feedback, reduced motion, and clipping/focus behavior. For Persian set both `dir="rtl"` and Embla `direction: "rtl"`; for English use LTR. Directional controls must have correct localized movement meaning. Preserve the editorial artwork design; do not use default dashboard card styling.
 
 See [artwork-discovery-carousel-and-editorial-experience.md](./artwork-discovery-carousel-and-editorial-experience.md) for the complete component and behavior contract.
+
+
+## Shared theme selector
+
+The theme selector is implemented in `src/components/theme-selector.tsx`, composed from the existing Dropdown Menu radio-group primitives and shared `next-themes` provider. It is available in the desktop utility area and the mobile Sheet settings area, with Persian and English labels.
