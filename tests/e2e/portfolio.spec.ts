@@ -1266,6 +1266,7 @@ test("desktop sidebar copyright is a single line and biography uses justified al
   const m=await copyright.evaluate(el=>({scroll:el.scrollWidth,client:el.clientWidth,whiteSpace:getComputedStyle(el).whiteSpace}));
   expect(m.whiteSpace).toBe("nowrap");expect(m.scroll).toBeLessThanOrEqual(m.client+1);
   await expect(page.locator(".about-biography-copy")).toHaveCSS("text-align","justify");
+  await expect(page.locator(".profile-content")).toHaveCSS("max-width","none");
  }
 });
 

@@ -922,3 +922,6 @@ html[lang="fa"] .prose,html[lang="fa"] .about-biography-copy,html[lang="fa"] .ab
  .journal-pagination .gallery-page-ellipsis{font-size:.8rem}
 }
 @media(max-width:360px){.journal-pagination .gallery-pagination-controls{flex-wrap:wrap}}
+
+/* Long-form pages use the full editorial measure provided by the site content column. */
+.article-page,.profile-content,.profile-content section{max-width:none}
