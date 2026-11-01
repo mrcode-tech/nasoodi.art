@@ -89,6 +89,7 @@ export function SiteShell({ locale, children, announcement }: { locale: Locale; 
               dismissLabel={labels.dismissAnnouncement}
               href={pagePath(locale, `journal/${announcement.slug}`)}
               placement="mobile-sidebar"
+              onNavigate={() => setMobileOpen(false)}
             />
           )}
           <div className="drawer-settings" dir={locale === "fa" ? "rtl" : "ltr"}><span className="language-label">{labels.language}</span><LanguageSelector locale={locale} alternate={alternate} pathname={pathname} label={labels.language} onNavigate={() => setMobileOpen(false)}/></div>
