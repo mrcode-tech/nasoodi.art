@@ -133,7 +133,7 @@ test.describe("Journal announcement responsive placements", () => {
         expect(hasHorizontalOverflow).toBe(false);
 
         await page.screenshot({
-          path: test.info().outputPath('announcement-mobile-drawer-${item.locale}-${viewport.name}.png'),
+          path: test.info().outputPath(`announcement-mobile-drawer-${item.locale}-${viewport.name}.png`),
         });
 
         if (viewport.name === "standard") {

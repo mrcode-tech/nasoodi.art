@@ -110,3 +110,17 @@ The component uses three explicit geometry variants; the compact variants are no
 - The paper SVG remains a provisional first study pending owner review. Responsive screenshots and the CI PNG are technical review evidence, not visual approval.
 
 These values are implementation decisions to be checked against the complete viewport matrix. If the actual sidebar/drawer geometry changes, update the relevant variant and its screenshot evidence rather than applying global scale or transform fixes.
+
+## 10. Responsive screenshot review — 2026-11-01
+
+The responsive implementation was checked against the CI-rendered English and Persian screenshots for:
+
+- Viewport announcement: 1920×1080, 1440×900, and 1280×800.
+- Desktop sidebar: 1024×768.
+- Mobile drawer: 768×1024, 430×932, 390×844, 390×650, 360×800, and 320×700.
+
+Visual inspection confirmed that the close control remains inside each paper silhouette and does not overlap the event title; the title and date remain readable at the tested sizes; the desktop sidebar has sufficient title width; and the mobile sticker does not collapse horizontally. The short-height drawer retains its own vertical scrolling rather than hiding or compressing the sticker. The decorative paper edges remain visible in both LTR and RTL compositions.
+
+The CI browser tests also assert the 44×44 px close target, title/control non-overlap, sticker containment, expected event link, and absence of horizontal page overflow. Screenshot artifacts are generated for every tested mobile/tablet viewport and both locales.
+
+This is technical responsive verification of the current sample event and current SVG study. It does not constitute owner approval of the final paper silhouette or tape detail, and it does not replace review with longer owner-supplied event titles.
