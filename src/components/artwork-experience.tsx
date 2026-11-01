@@ -126,7 +126,7 @@ export function ArtworkExperience({ artworks, locale, context }: Props) {
                 <div className="artwork-viewer-controls">
                   <Button variant="outline" size="sm" onClick={() => move(-1)} disabled={activeIndex <= 0} aria-label={labels.previous}>{locale === "fa" ? "→" : "←"}</Button>
                   <Button variant="outline" size="sm" onClick={() => move(1)} disabled={activeIndex >= sequence.length - 1} aria-label={labels.next}>{locale === "fa" ? "←" : "→"}</Button>
-                  <Button asChild variant="ghost" size="sm"><a href={pagePath(locale, `works/${activeArtwork.slug}`)}>{labels.detail}</a></Button>
+                  <Button asChild variant="ghost" size="sm"><a href={pagePath(locale, `works/${activeArtwork.slug}`) + (context.startsWith("gallery:") ? `?fromGallery=${encodeURIComponent(context.slice(8))}` : "")}>{labels.detail}</a></Button>
                 </div>
               </section>
             </div>
