@@ -157,6 +157,9 @@ The owner explicitly requires the temporary fictional Telegram, email, and Insta
 The owner approved the Midnight Gallery direction and requested a comprehensive, shared design-system specification. Read [Shared Light and Dark Theme System](./shared-light-dark-theme-system.md) together with the design-engineering, refined design direction, site-wide design system, navigation, shadcn reuse, localization, accessibility, and testing authorities. The specification preserves the current light theme, defines the dark palette and semantic token architecture, and governs Light/Dark/System behavior, shared shadcn integration, RTL/LTR, artwork fidelity, the paper Journal sticker, contrast validation, responsive QA, and implementation boundaries. It is a design/implementation contract, not evidence that theme support is already implemented.
 
 
-## Next implementation task — shared Light/Dark theme system
+## Shared Light/Dark theme system — implementation committed
 
 Implement the approved shared theme system defined in [Shared Light and Dark Theme System](./shared-light-dark-theme-system.md). Preserve the existing light design, introduce the Midnight Gallery palette, centralize semantic tokens, and integrate the theme selector into the existing desktop utility and mobile Sheet using shadcn/ui. Support Light, Dark, and System preferences across all routes and locales. Complete contrast checks, responsive/RTL/LTR visual QA, artwork-fidelity checks, and the full CI workflow. Work on `feature` only; do not merge to `stage` or `main`, deploy, or publish.
+
+
+Implementation on `feature` is committed in `470c0228cfe4b8171d32fbf212378c35c52eba8f` and subsequent documentation updates. The shared `next-themes` provider, Midnight Gallery semantic tokens, localized shadcn radio-menu selector, desktop/mobile placement, and Playwright coverage are in the application. Automated CI and rendered visual QA remain verification gates; do not mark this feature fully verified until those results are inspected.
