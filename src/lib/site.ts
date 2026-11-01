@@ -19,7 +19,7 @@ export type JournalTextBlock =
   | { type: "quote"; text: string; attribution?: string }
   | { type: "link"; text: string; href: string };
 export type LocalizedRichText = Partial<Record<Locale, JournalTextBlock[]>>;
-export type JournalEntry = { id: string; slug: string; type: JournalCategory; title: Localized; summary: Localized; body?: LocalizedRichText; status: Status; publishedAt?: string; approvedLocales: Locale[]; artistApproved: boolean; event?: JournalEvent };
+export type JournalEntry = { id: string; slug: string; type: JournalCategory; title: Localized; summary: Localized; body?: LocalizedRichText; coverImage?: { src: string; alt: Localized; width: number; height: number; rightsConfirmed: boolean }; status: Status; publishedAt?: string; approvedLocales: Locale[]; artistApproved: boolean; event?: JournalEvent };
 export function isSafeJournalHref(href: string): boolean {
   if (!href || href.includes("\\") || /[\u0000-\u001f]/.test(href)) return false;
   if (href.startsWith("/") && !href.startsWith("//")) {
@@ -431,6 +431,11 @@ export function getPublicJournal(items: JournalEntry[], locale: Locale) {
       const timestamp = (entry: JournalEntry) => entry.publishedAt && Number.isFinite(Date.parse(entry.publishedAt)) ? Date.parse(entry.publishedAt) : Number.NEGATIVE_INFINITY;
       return timestamp(b) - timestamp(a) || (a.id < b.id ? -1 : a.id > b.id ? 1 : a.slug < b.slug ? -1 : a.slug > b.slug ? 1 : 0);
     });
+}
+export function journalCoverImageFor(entry: JournalEntry, locale: Locale): NonNullable<JournalEntry["coverImage"]> | undefined {
+  const image = entry.coverImage;
+  if (!image || !image.rightsConfirmed || !isSafeLocalImagePath(image.src) || !Number.isSafeInteger(image.width) || image.width < 1 || !Number.isSafeInteger(image.height) || image.height < 1 || !image.alt[locale]?.trim()) return undefined;
+  return image;
 }
 export function getHomepageJournalPreview(items: JournalEntry[], locale: Locale): JournalEntry[] {
   return getPublicJournal(items, locale).slice(0, 1);

@@ -45,8 +45,8 @@
   flex-direction: column;
   justify-content: center;
   gap: 0.18rem;
-  padding-block: 2.2rem 0.6rem;
-  padding-inline: 1.2rem 3.8rem;
+  padding-block: 1.55rem 1rem;
+  padding-inline: 1.25rem 3.85rem;
   color: inherit;
   text-align: start;
   text-decoration: none;
@@ -126,8 +126,8 @@
 
 .desktopSidebarContainer .link {
   gap: 0.18rem;
-  padding-block: 2.15rem 0.55rem;
-  padding-inline: 0.85rem 3.8rem;
+  padding-block: 1.5rem 1rem;
+  padding-inline: 1rem 3.85rem;
 }
 
 .desktopSidebarContainer .eyebrow {
@@ -179,8 +179,8 @@
 
   .mobileSidebarContainer .link {
     gap: 0.2rem;
-    padding-block: 2.05rem 0.5rem;
-    padding-inline: 1rem 3.8rem;
+    padding-block: 1.45rem 0.95rem;
+    padding-inline: 1.1rem 3.8rem;
   }
 
   .mobileSidebarContainer .eyebrow {
