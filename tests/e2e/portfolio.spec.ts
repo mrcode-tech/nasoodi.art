@@ -1340,15 +1340,19 @@ test("theme selector is available in the mobile drawer in both locales and artwo
     const languageControlBox = await languageRow.getByRole("button", { name: labels.language }).boundingBox();
     const appearanceLabelBox = await appearanceRow.locator(".language-label").boundingBox();
     const themeTriggerBox = await themeTrigger.boundingBox();
+    const languageRowBox = await languageRow.boundingBox();
+    const appearanceRowBox = await appearanceRow.boundingBox();
     expect(languageLabelBox).not.toBeNull();
     expect(languageControlBox).not.toBeNull();
     expect(appearanceLabelBox).not.toBeNull();
     expect(themeTriggerBox).not.toBeNull();
-    // The controls share their label's line, and each locale mirrors the row's physical alignment.
+    expect(languageRowBox).not.toBeNull();
+    expect(appearanceRowBox).not.toBeNull();
+    // Each setting occupies a distinct horizontal row; its label and selector share a centerline.
     const verticalCenter = (box: { y: number; height: number }) => box.y + box.height / 2;
     expect(Math.abs(verticalCenter(languageLabelBox!) - verticalCenter(languageControlBox!))).toBeLessThan(3);
     expect(Math.abs(verticalCenter(appearanceLabelBox!) - verticalCenter(themeTriggerBox!))).toBeLessThan(3);
-    expect(appearanceLabelBox!.y).toBeGreaterThan(languageLabelBox!.y + languageLabelBox!.height);
+    expect(appearanceRowBox!.y).toBeGreaterThanOrEqual(languageRowBox!.y + languageRowBox!.height);
     if (locale === "fa") {
       expect(languageLabelBox!.x).toBeGreaterThan(languageControlBox!.x);
       expect(appearanceLabelBox!.x).toBeGreaterThan(themeTriggerBox!.x);

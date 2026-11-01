@@ -945,52 +945,26 @@ html[lang="fa"] .prose,html[lang="fa"] .about-biography-copy,html[lang="fa"] .ab
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
 
 
-/* Keep nested appearance/language rows aligned with the Persian drawer's RTL flow. */
-@media (max-width: 900px) {
-  html[lang="fa"] .mobile-drawer .drawer-setting-row {
-    direction: rtl;
-  }
-}
-
-
-/* In the mobile drawer, keep Appearance on its own line and place the theme
-   selector directly beneath its label rather than beside the Language control. */
-@media (max-width: 900px) {
-  .mobile-drawer .drawer-setting-row:last-child {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: .35rem;
-  }
-  .mobile-drawer .drawer-setting-row:last-child .theme-selector {
-    width: 100%;
-  }
-  .mobile-drawer .drawer-setting-row:last-child .theme-trigger {
-    justify-content: flex-start;
-  }
-}
-
-
-/* Mobile drawer settings use two distinct horizontal rows. Their inline direction
-   follows the locale: Persian label right / selector left; English is reversed. */
+/* Mobile drawer settings: two compact horizontal rows. Grid follows the
+   document direction, so the label is inline-start and the selector inline-end. */
 @media (max-width: 900px) {
   .mobile-drawer .drawer-settings {
+    display: flex;
     width: 100%;
     min-width: 0;
     flex: 0 0 auto;
     flex-direction: column;
     align-items: stretch;
-    gap: .65rem;
+    gap: .75rem;
   }
-  .mobile-drawer .drawer-setting-row,
-  .mobile-drawer .drawer-setting-row:last-child {
-    display: flex;
+  .mobile-drawer .drawer-setting-row {
+    display: grid;
     width: 100%;
     min-width: 0;
     min-height: 2.75rem;
-    flex-direction: row;
+    grid-template-columns: minmax(0, 1fr) auto;
     align-items: center;
-    justify-content: space-between;
-    gap: 1rem;
+    column-gap: 1rem;
   }
   .mobile-drawer .drawer-setting-row > * {
     min-width: 0;
@@ -998,7 +972,7 @@ html[lang="fa"] .prose,html[lang="fa"] .about-biography-copy,html[lang="fa"] .ab
   }
   .mobile-drawer .drawer-setting-row .theme-selector {
     width: auto;
-    flex: 0 0 auto;
+    min-width: 0;
   }
   .mobile-drawer .drawer-setting-row .theme-trigger {
     width: auto;
