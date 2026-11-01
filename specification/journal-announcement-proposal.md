@@ -1,9 +1,13 @@
 # Journal Event Announcement — Design Proposal
 
-**Status:** Proposed for owner review  
+**Status:** Direction approved in principle on 2026-11-01; detailed visual treatment remains subject to screenshot review  
 **Project:** Nasoodi.art  
 **Branch:** feature  
 **Related contract:** journal-and-events.md
+
+## Owner review outcome — 2026-11-01
+
+The owner approved the overall proposal and requested refinement of the implementation contract. This approval confirms the unified Journal approach and the restrained, edge-attached announcement concept. It does **not** select the final clean/torn/typographic visual variant, approve final Persian microcopy, or approve a finished PNG asset. Those remain visual-review decisions.
 
 ## 1. Purpose
 
@@ -95,10 +99,11 @@ Use content-driven height with a controlled maximum width. Long Persian and Engl
 
 The homepage should retain a distinct Journal section near the bottom, after the featured Works and Galleries content and before the final Contact/footer region, subject to the existing homepage composition.
 
+The current authoritative artwork-discovery contract limits this preview to **the two newest eligible published Journal entries across all entry types**. Do not add a third card or independently pin an older upcoming event into this preview. An upcoming event may appear as one of the two entries when its publication date places it in the newest-two set. The fixed announcement sticker is the separate discovery path for the nearest eligible upcoming event.
+
 Recommended hierarchy:
 - Section heading and optional approved introduction.
-- One featured upcoming event card when eligible.
-- Up to two additional recent published Journal entries.
+- Up to two newest eligible published Journal entries, preserving the established post-style editorial presentation.
 - A clear “Explore Journal” / approved Persian equivalent link to the complete archive.
 
 Do not fabricate entries to fill a fixed number of cards. Show fewer entries or omit the section when no approved content exists, following the existing Journal specification. The floating announcement is an additional discovery path, not a replacement for this section.
@@ -122,7 +127,7 @@ Clearly distinguish the publication date from the actual event date. A past even
 
 The Journal remains the single destination for exhibitions, events, studio updates, and stories.
 
-The archive should follow journal-and-events.md. The proposed default page size is five entries, with a selector for 5, 10, or 20 if pagination is implemented for the archive. Preserve active filters and deterministic ordering in the URL. Do not add pagination to a short archive when it provides no value.
+The archive follows journal-and-events.md and the existing archive specification. Where pagination is implemented and justified by archive size, default to five entries and offer 5, 10, or 20 entries per page. Preserve active filters and deterministic ordering in URL state. Do not add pagination controls when all entries fit on one page.
 
 ## 11. Accessibility and responsive quality
 
@@ -151,7 +156,11 @@ The design is ready for implementation review when:
 - Screenshots demonstrate no obstruction, clipping, or overflow.
 - The owner has selected the final visual variant.
 
-## 14. Decisions intentionally deferred
+## 14. Sticker asset production contract
+
+The announcement is a UI component, not a flattened image containing event copy. The eventual PNG must be a transparent-background decorative paper silhouette/edge treatment only; title, category, date, close control, and directional affordance remain real localized HTML text and controls for accessibility, responsiveness, and translation. Prefer CSS/SVG for the shape where it produces a cleaner and sharper result; use the PNG only for the approved paper material/edge artwork. Do not use a raster image for text, controls, or layout. Create the PNG only after the owner selects the visual variant. Store the approved source asset in the specification asset area and document dimensions, transparency, intended display size, and provenance. The asset must not contain a real event name/date or imply a real exhibition.
+
+## 15. Decisions intentionally deferred
 
 - Final selection between clean edge and torn edge.
 - Exact offset and dimensions after comparison with the real shared shell.
