@@ -8,9 +8,13 @@
 
 ## 1. Scope
 
+The complete execution brief is [Journal and Sticker Implementation Prompt](./journal-announcement-implementation-prompt.md). That prompt is the coding-agent task package; this document remains the detailed product and technical acceptance contract. Read both, and resolve any discrepancy in favor of this specification plus the repository-wide authorities.
+
 Specify the homepage event announcement sticker, homepage Journal preview, Journal archive integration, event-specific Journal detail presentation, and the decorative paper SVG source plus CI-generated PNG review workflow.
 
-The owner has approved the overall Journal/sticker direction. The exact sticker treatment remains a visual review gate. The coding agent may implement Journal behavior and prepare the announcement using the hand-authored SVG study, but must not treat the study as final artist-approved artwork until the owner reviews the CI-rendered PNG.\n\nRead journal-announcement-sticker-visual-design.md for the normative vector design and generation contract.
+The owner has approved the overall Journal/sticker direction. The exact sticker treatment remains a visual review gate. The coding agent may implement Journal behavior and prepare the announcement using the hand-authored SVG study, but must not treat the study as final artist-approved artwork until the owner reviews the CI-rendered PNG.
+
+Read journal-announcement-sticker-visual-design.md for the normative vector design and generation contract.
 
 ## 2. Mandatory repository discovery
 
@@ -205,33 +209,44 @@ Provide:
 - Screenshots for both visual variants and all target breakpoints, including a short-height viewport.
 - CI workflow run links and actual results. Do not claim success without a completed run.
 
-## 17. Sticker PNG asset requirements
+## 17. SVG source and CI-rendered PNG requirements
 
-The PNG is a decorative paper treatment only, not a screenshot or flattened banner. It must:
-- Have a transparent background and clean alpha edges.
-- Contain no event title, date, category text, close icon, arrow, or other UI text/control.
-- Be designed for the approved paper-tab silhouette and inward-facing torn/perforated edge, if that variant is selected.
-- Remain legible and visually restrained at the actual rendered size; avoid noisy texture, harsh shadow, sale-sticker aesthetics, or strong contrast against the portfolio.
-- Be supplied at an appropriate resolution for high-density displays and documented with intended CSS display dimensions.
-- Be stored under the repository's existing specification asset convention after inspecting it; do not invent an asset folder if another convention exists.
-- Include a provenance/approval note. Do not describe generated artwork as a photograph or handmade physical paper.
+The SVG is the editable source of truth. The checked-in study at `specification/assets/journal-announcement-sticker.svg` is a starting point, not a reason to skip artwork authoring or visual refinement during implementation.
 
-Keep all text, links, and buttons as accessible DOM content above/within the visual treatment. If a CSS/SVG implementation is cleaner, sharper, and more maintainable, prefer it over a PNG; the PNG should be used only if it materially improves the approved visual result.
+Mandatory requirements:
+- Inspect and refine or replace the SVG paths during the implementation; do not merely copy the existing study into the application and call the artwork complete.
+- Author the decorative silhouette directly as SVG markup using editable vector paths and strokes.
+- Keep the outer canvas transparent and preserve the established warm-paper visual direction.
+- Keep all announcement text, dates, arrows, labels, and controls in localized accessible DOM content. Do not embed SVG `<text>` or raster `<image>` elements.
+- Do not use image generation, screenshot tracing, raster painting, or image-processing tools to create or modify the artwork.
+- Preserve the physical attachment direction: English attaches at the physical left edge with the torn edge facing inward/right; Persian attaches at the physical right edge with the torn edge facing inward/left. Mirror only the decorative silhouette, never text or artwork.
+- Keep the canonical SVG in the specification asset location. If an application asset copy is necessary, document the source-to-runtime relationship and prevent divergence.
+
+GitHub Actions must render a transparent PNG review artifact from the checked-in SVG during implementation, regardless of whether PNG is later selected for runtime use. Use the existing renderer and CI workflow where possible:
+- Source viewBox: 420 × 280 unless the visual-design specification is deliberately revised.
+- Review PNG: 1260 × 840 pixels (3×).
+- PNG mode: RGBA with transparent pixels outside the paper silhouette.
+- Validate SVG parsing, viewBox, expected dimensions, non-empty render, alpha transparency, and absence of baked text/raster imagery.
+- Upload the PNG as a named GitHub Actions artifact and make renderer/validation failures fail the workflow.
+- Inspect the actual PNG at intended display size and at higher density. CI success proves technical rendering only, not visual approval.
+
+The generated PNG is a CI review artifact, not a hand-maintained source asset. Do not commit it or add it to the application bundle before the owner has reviewed and approved the visual treatment. The live component may use the SVG directly if that is the sharper and more maintainable option. Runtime PNG use is a separate implementation decision and is not a reason to skip CI PNG generation.
+
+Record the SVG's provenance, review status, intended display dimensions, and any owner-approved refinements in the visual-design specification.
 
 ## 18. Implementation sequence
 
-Phase 1 — Discovery and reconciliation: inspect all required docs and actual code; report discrepancies before coding.
+Follow the detailed phase plan in `journal-announcement-implementation-prompt.md`. The minimum required order is:
 
-Phase 2 — Data selection: implement or reuse a pure eligible-event selector and test all editorial/temporal/locale rules.
+1. **Repository and specification audit:** inspect instructions, branch/worktree, current Journal implementation, content model, routes, localization, shared shell, tests, and CI. Record actual gaps and conflicts before editing.
+2. **SVG authoring and CI rendering:** refine or author the SVG immediately during implementation; validate it locally; run the existing GitHub Actions renderer; inspect the generated PNG. Do not postpone vector authoring until feature work is otherwise complete.
+3. **Canonical event selection:** implement or reuse a pure deterministic selector using publication approval, locale readiness, event temporal state, timezone semantics, and stable tie-breaking.
+4. **Journal experience:** implement the homepage preview, existing unified archive, event-specific detail presentation, and pagination/page-size behavior only where justified and not already implemented.
+5. **Announcement component:** implement server-selected event data, accessible localized DOM content, event-specific dismissal, fixed responsive placement, and decorative SVG integration.
+6. **Quality and regression:** add unit, component, integration, E2E, accessibility, localization, and responsive tests; protect existing homepage, gallery, artwork, and navigation behavior.
+7. **CI and visual QA:** run repository-required checks and complete GitHub Actions; inspect logs and final tested SHA; capture and inspect English/Persian desktop, tablet, mobile, and short-height screenshots plus the PNG artifact.
+8. **Owner review and handoff:** present the actual rendered PNG and browser screenshots. Record any visual decisions still awaiting owner approval. Do not merge, push, deploy, or publish without the required separate authorization.
 
-Phase 3 — Sticker visual asset: produce the approved transparent paper PNG (or document why CSS/SVG is superior), inspect it at target sizes, and add it to the specification asset area with provenance.
+## 19. Owner review and release gate
 
-Phase 4 — Announcement component: implement the approved paper treatment, event-specific dismissal, and responsive physical-edge positioning.
-
-Phase 5 — Homepage integration: add the fixed announcement and ensure the two-entry in-flow Journal preview remains independent.
-
-Phase 6 — Journal detail/archive alignment: implement event metadata presentation and page-size/pagination behavior only where needed and consistent with the existing Journal contract.
-
-Phase 7 — Verification: run lint, typecheck, unit/component/integration/E2E tests, visual checks, and CI. Fix regressions before reporting completion.
-
-Phase 8 — Owner review: present sticker PNG and screenshots, then list any unresolved visual decisions. Do not merge or deploy without separate authorization.
+The overall Journal/sticker direction is approved in principle. The exact paper silhouette, torn-edge character, tape detail, sizing, and final Persian microcopy remain subject to owner review. A successful renderer, build, or test suite is not visual approval. Do not merge, deploy, or publish without separate authorization.

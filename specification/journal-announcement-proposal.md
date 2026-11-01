@@ -40,7 +40,7 @@ Visual characteristics:
 - No price, percentage, discount language, loud sale colors, glossy finish, large shadow, or promotional burst.
 - No text over artwork.
 
-The paper effect must be authored as editable SVG paths and strokes. Do not use image generation, screenshot tracing, raster painting, or image-processing filters. The initial hand-authored vector study and CI-to-PNG workflow are specified in journal-announcement-sticker-visual-design.md.
+The paper effect must be authored or refined during implementation as editable SVG paths and strokes. The checked-in study is a starting point, not the finished artwork. GitHub Actions must render a transparent PNG review artifact from the SVG during implementation, even if PNG is not used at runtime. Do not use image generation, screenshot tracing, raster painting, or image-processing filters. See journal-announcement-sticker-visual-design.md and journal-announcement-implementation-prompt.md.
 
 ## 4. Visual variants for review
 
@@ -158,7 +158,7 @@ The design is ready for implementation review when:
 
 ## 14. Sticker asset production contract
 
-The announcement is a UI component, not a flattened image containing event copy. The eventual PNG must be a transparent-background decorative paper silhouette/edge treatment only; title, category, date, close control, and directional affordance remain real localized HTML text and controls for accessibility, responsiveness, and translation. Prefer CSS/SVG for the shape where it produces a cleaner and sharper result; use the PNG only for the approved paper material/edge artwork. Do not use a raster image for text, controls, or layout. Create the PNG only after the owner selects the visual variant. Store the approved source asset in the specification asset area and document dimensions, transparency, intended display size, and provenance. The asset must not contain a real event name/date or imply a real exhibition.
+The announcement is a UI component, not a flattened image containing event copy. The eventual PNG must be a transparent-background decorative paper silhouette/edge treatment only; title, category, date, close control, and directional affordance remain real localized HTML text and controls for accessibility, responsiveness, and translation. Prefer CSS/SVG for the shape where it produces a cleaner and sharper result; use the PNG only for the approved paper material/edge artwork. Do not use a raster image for text, controls, or layout. Render the PNG through GitHub Actions during implementation for owner review. The generated PNG is an artifact, not a committed source asset. Do not commit it or use it as a production asset until the owner approves the visual variant. Store the approved source asset in the specification asset area and document dimensions, transparency, intended display size, and provenance. The asset must not contain a real event name/date or imply a real exhibition.
 
 ## 15. Decisions intentionally deferred
 
@@ -166,4 +166,5 @@ The announcement is a UI component, not a flattened image containing event copy.
 - Exact offset and dimensions after comparison with the real shared shell.
 - Final approved Persian microcopy.
 - Whether session dismissal should be replaced by an existing project-standard persistence strategy.
-- Owner approval of the hand-authored torn-edge SVG study, including whether to retain the tape detail and exact paper silhouette.\n- Whether a PNG is needed at runtime. GitHub Actions generates a transparent PNG review artifact from the SVG; do not commit a generated PNG before owner approval.
+- Owner approval of the hand-authored torn-edge SVG study, including whether to retain the tape detail and exact paper silhouette.
+- Whether a PNG is needed at runtime. GitHub Actions generates a transparent PNG review artifact from the SVG; do not commit a generated PNG before owner approval.

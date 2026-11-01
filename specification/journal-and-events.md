@@ -56,25 +56,20 @@ The Journal item:
 
 ### 3.2 Homepage Journal section
 
-Place a restrained **Latest from the Journal** section after Featured Works and Featured Galleries, and before the final contact/footer area unless the approved page composition gives a stronger reason to adjust the order.
+Place a restrained **Latest from the Journal** section after Featured Works and Featured Galleries, and before the final contact/footer area unless the approved homepage composition establishes a better fit.
 
-Desktop:
-- Section heading and one short approved introduction, if available.
-- A prominent upcoming event card when a qualifying published event exists.
-- Up to two additional recent published entries, with varied types where possible.
-- A persistent “View all journal entries” link to the Journal index.
+The homepage preview is limited to **at most the two newest eligible published Journal entries across all entry types** (articles and events), ordered by publication date descending with deterministic tie-breaking.
 
-Mobile:
-- Keep the section in the same document order.
-- Use a readable one-column or compact horizontal-card treatment; never reduce artwork/editorial images to unusable thumbnails.
-- Keep the “View all” link visible and reachable after the latest entries.
+- Do not add a third entry/card.
+- Do not independently pin or promote an older upcoming event into this in-flow preview.
+- An upcoming event may appear in the preview only when it naturally belongs in the newest-two publication-date ordering.
+- Include a clear localized link to the complete Journal archive.
+- If only one eligible entry exists, show one. If none exist, omit the section according to the homepage content contract.
+- Keep the editorial/post-style presentation; do not turn the section into an event dashboard or artwork carousel.
+- The fixed announcement sticker is a separate discovery mechanism. It independently selects the nearest eligible upcoming event and does not change the Journal preview.
+- Dismissing the sticker must never hide, reorder, or otherwise alter the in-flow Journal preview.
 
-Selection rules:
-- Include only published, locale-ready, artist-approved entries.
-- Prefer the nearest upcoming event only if it is within its configured publication window and has not ended; otherwise show the most recent published entries.
-- Do not invent content to fill a fixed number of cards. The section may show fewer cards or be omitted when there is no eligible published content.
-- Do not show an expired event as upcoming.
-- Do not let the homepage section become a second full archive.
+On mobile, preserve the section's document order, readable text, artwork fidelity, and a visible, reachable archive link. Do not fabricate content to fill a fixed count.
 
 ## 4. Journal landing page design
 

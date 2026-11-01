@@ -4,16 +4,19 @@
 **Repository:** mrcode-tech/nasoodi.art  
 **Working branch:** feature  
 **Primary specification:** journal-announcement-specification.md  
+**Complete implementation prompt:** journal-announcement-implementation-prompt.md
 **Visual asset:** hand-authored SVG source with a GitHub Actions-generated PNG review artifact; governed by journal-announcement-sticker-visual-design.md
 
 ## Objective
+
+Read and follow [journal-announcement-implementation-prompt.md](./journal-announcement-implementation-prompt.md) as the complete implementation task brief. This file is the concise execution checklist; the detailed specification and repository authorities remain binding.
 
 Implement the approved Journal event experience described by the proposal, wireframes, and detailed specification. The feature includes the fixed homepage event announcement, the in-flow homepage Journal preview, event-specific Journal detail presentation, and archive pagination where justified.
 
 ## Mandatory preflight
 
 1. Read AGENTS.md, root agent.md, and specification/README.md.
-2. Read specification/journal-announcement-sticker-visual-design.md before touching the sticker asset or announcement styling.
+2. Read specification/journal-announcement-implementation-prompt.md and specification/journal-announcement-sticker-visual-design.md before implementation or touching the sticker asset.
 3. Read every mandatory design and technical authority listed in journal-announcement-specification.md.
 4. Inspect current branch, worktree, latest commit, existing changes, and CI configuration.
 5. Confirm the active branch is feature. Do not create, switch, reset, delete, or rename branches.
@@ -34,12 +37,16 @@ Implement the approved Journal event experience described by the proposal, wiref
 - Preserve the independent homepage Journal preview, limited to the two newest eligible published entries across all Journal types, and canonical Journal detail routes.
 - Show confirmed event metadata only; never fabricate title, date, timezone, venue, participants, or registration details.
 - Use approved translations only.
-- Treat specification/assets/journal-announcement-sticker.svg as the editable source of truth. Do not use image generation, screenshot tracing, raster painting, or image processing.\n- Use the existing CI workflow to render the SVG into a transparent 1260 × 840 PNG review artifact and verify alpha transparency and dimensions.\n- Do not commit a generated PNG or copy it into the application bundle before owner review. If SVG/CSS is sufficient for production, retain the vector and omit the raster runtime asset.
+- Treat specification/assets/journal-announcement-sticker.svg as the editable source of truth. Do not use image generation, screenshot tracing, raster painting, or image processing.
+- Use the existing CI workflow to render the SVG into a transparent 1260 × 840 PNG review artifact and verify alpha transparency and dimensions.
+- Do not commit a generated PNG or copy it into the application bundle before owner review. If SVG/CSS is sufficient for production, retain the vector and omit the raster runtime asset.
 - Reuse project components, semantic tokens, shadcn-style controls, and existing utilities.
 - Avoid unnecessary dependencies, tracking, or new personal-data collection.
 - Follow the repository's SEO, accessibility, privacy, performance, and content-governance contracts.
 
 ## Testing and verification
+
+Follow the full test matrix and phase exit criteria in journal-announcement-implementation-prompt.md and journal-announcement-specification.md.
 
 Add or update tests for:
 - Eligible event selection and nearest upcoming event.

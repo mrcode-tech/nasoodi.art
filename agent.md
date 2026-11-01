@@ -4,6 +4,7 @@
 **Repository:** `mrcode-tech/nasoodi.art`  
 **Branch:** `feature` only  
 **Primary specification:** `specification/journal-announcement-specification.md`  
+**Complete implementation prompt:** `specification/journal-announcement-implementation-prompt.md`  
 **Supporting documents:** proposal, wireframes, and task instructions listed below.
 
 The next implementation task is the approved Journal and event-announcement experience. Implement both connected parts as one coherent feature:
@@ -28,7 +29,7 @@ Before coding, read in full:
 
 The proposal is approved in principle and implementation may proceed. The initial hand-authored torn-edge SVG study is a candidate, not final approval. Review the CI-generated PNG and responsive screenshots with the owner; refine the vector paths directly if requested. Build the functional experience and prepare visual comparisons. The CI-generated PNG is a review artifact, not a final approved asset; do not commit it or declare the visual variant final until the owner selects it. Inspect the real shell, locale-aware sidebar/menu geometry, Journal data model, routes, existing pagination, assets, and CI before coding.
 
-Use the detailed task workflow in `specification/journal-announcement-agent-instructions.md`. Preserve all repository safety rules in `AGENTS.md`: work on the existing feature branch, preserve unrelated changes, do not merge to stage/main, do not deploy, and do not push or commit without the required separate authorization. Run the repository's actual tests and CI, inspect logs, and capture reviewed English/Persian desktop/tablet/mobile screenshots before reporting completion.
+Use `specification/journal-announcement-implementation-prompt.md` as the complete task brief and `specification/journal-announcement-agent-instructions.md` as the concise execution checklist. Preserve all repository safety rules in `AGENTS.md`: work on the existing feature branch, preserve unrelated changes, do not merge to stage/main, do not deploy, and do not push or commit without the required separate authorization. Run the repository's actual tests and CI, inspect logs, and capture reviewed English/Persian desktop/tablet/mobile screenshots before reporting completion.
 
 ---
 
