@@ -92,6 +92,8 @@ test.describe("Journal announcement responsive placements", () => {
         const sticker = drawer.locator('[data-placement="mobile-sidebar"]');
         await expect(sticker).toBeVisible();
         await expect(sticker.locator(".title")).toHaveText(item.title);
+        await sticker.scrollIntoViewIfNeeded();
+        await expect(sticker).toBeInViewport();
         await expectDismissButtonInsideSticker(sticker);
 
         const drawerBox = await drawer.boundingBox();
@@ -111,6 +113,11 @@ test.describe("Journal announcement responsive placements", () => {
           await page.screenshot({
             path: test.info().outputPath(`announcement-mobile-drawer-${item.locale}-${viewport.name}.png`),
           });
+        }
+
+        if (viewport.name === "standard") {
+          await sticker.getByRole("button", { name: item.dismissLabel }).click();
+          await expect(sticker).toBeHidden();
         }
       });
     }
