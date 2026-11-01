@@ -66,7 +66,7 @@ export function SiteShell({ locale, children, announcement }: { locale: Locale; 
             event={announcement}
             eyebrow={labels.announcementEyebrow}
             dismissLabel={labels.dismissAnnouncement}
-            href={pagePath(locale, `journal/${announcement.id}`)}
+            href={pagePath(locale, `journal/${announcement.slug}`)}
             placement="desktop-sidebar"
           />
         )}
@@ -87,7 +87,7 @@ export function SiteShell({ locale, children, announcement }: { locale: Locale; 
               event={announcement}
               eyebrow={labels.announcementEyebrow}
               dismissLabel={labels.dismissAnnouncement}
-              href={pagePath(locale, `journal/${announcement.id}`)}
+              href={pagePath(locale, `journal/${announcement.slug}`)}
               placement="mobile-sidebar"
             />
           )}
