@@ -19,6 +19,8 @@ if root.tag.split("}")[-1] != "svg":
     raise SystemExit("Canonical sticker source must have an SVG root element.")
 if root.attrib.get("viewBox") != EXPECTED_VIEWBOX:
     raise SystemExit(f"Expected viewBox {EXPECTED_VIEWBOX}, got {root.attrib.get('viewBox')!r}.")
+if root.attrib.get("preserveAspectRatio") != "none":
+    raise SystemExit("Sticker SVG must stretch to the responsive paper container with preserveAspectRatio=none.")
 if re.search(r"<(?:text|image)\b", svg, flags=re.IGNORECASE):
     raise SystemExit("Sticker SVG must not contain baked text or raster images.")
 if any(node.tag.split("}")[-1] in {"text", "image"} for node in root.iter()):
