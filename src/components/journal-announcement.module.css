@@ -7,7 +7,7 @@
 .eyebrow{color:var(--mauve-deep);font-size:.63rem;font-weight:700;letter-spacing:.1em;line-height:1.4}
 .title{display:-webkit-box;overflow:hidden;-webkit-box-orient:vertical;-webkit-line-clamp:2;font:400 1.1rem/1.35 Georgia,"Times New Roman",serif;overflow-wrap:anywhere}
 .date{color:var(--muted);font-size:.75rem;line-height:1.5}
-.dismiss.ui-button{position:absolute;top:.7rem;right:2.1rem;z-index:2;width:2rem;min-width:2rem;height:2rem;padding:0;border:1px solid rgb(103 90 81 / 25%);border-radius:50%;background:rgb(250 248 244 / 72%);font-size:1.15rem;line-height:1}
+.dismiss{position:absolute;top:.7rem;right:2.1rem;z-index:2;width:2rem;min-width:2rem;height:2rem;padding:0;border:1px solid rgb(103 90 81 / 25%);border-radius:50%;background:rgb(250 248 244 / 72%);font-size:1.15rem;line-height:1}
 .dismissRtl{right:auto!important;left:2.1rem}
 .container :global(:focus-visible){outline-offset:-3px}
 @media(max-width:900px){
@@ -15,7 +15,7 @@
  .link{gap:.25rem;padding:1.7rem 2.2rem 1rem 1.15rem}
  .linkRtl{padding:1.7rem 1.15rem 1rem 2.2rem}
  .title{font-size:.98rem}
- .dismiss.ui-button{top:.45rem;right:1.55rem;width:1.8rem;min-width:1.8rem;height:1.8rem}
+ .dismiss{top:.45rem;right:1.55rem;width:1.8rem;min-width:1.8rem;height:1.8rem}
  .dismissRtl{right:auto!important;left:1.55rem}
 }
 @media(max-height:700px){.container{display:none}}
