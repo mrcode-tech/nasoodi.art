@@ -29,30 +29,36 @@ async function expectDismissButtonInsideSticker(sticker: Locator) {
 
 test.describe("Journal announcement responsive placements", () => {
   for (const item of locales) {
-    test(`desktop viewport announcement is balanced and edge-attached in ${item.locale}`, async ({ page }) => {
-      await page.setViewportSize({ width: 1440, height: 900 });
-      await page.goto(`/${item.locale}`);
+    for (const viewport of [
+      { width: 1920, height: 1080 },
+      { width: 1440, height: 900 },
+      { width: 1280, height: 800 },
+    ]) {
+      test(`desktop viewport announcement is balanced in ${item.locale} at ${viewport.width}px`, async ({ page }) => {
+        await page.setViewportSize(viewport);
+        await page.goto(`/${item.locale}`);
 
-      const sticker = page.locator('[data-placement="viewport"]');
-      await expect(sticker).toBeVisible();
-      await expect(sticker.locator(".eyebrow")).toBeVisible();
-      await expect(sticker.locator(".title")).toHaveText(item.title);
-      await expect(sticker.locator("time")).toBeVisible();
-      await expectDismissButtonInsideSticker(sticker);
+        const sticker = page.locator('[data-placement="viewport"]');
+        await expect(sticker).toBeVisible();
+        await expect(sticker.locator(".eyebrow")).toBeVisible();
+        await expect(sticker.locator(".title")).toHaveText(item.title);
+        await expect(sticker.locator("time")).toBeVisible();
+        await expectDismissButtonInsideSticker(sticker);
 
-      const box = await sticker.boundingBox();
-      expect(box).not.toBeNull();
-      expect(box!.width).toBeGreaterThanOrEqual(240);
-      if (item.locale === "en") expect(box!.x).toBe(0);
-      else expect(box!.x + box!.width).toBe(1440);
+        const box = await sticker.boundingBox();
+        expect(box).not.toBeNull();
+        expect(box!.width).toBeGreaterThanOrEqual(240);
+        if (item.locale === "en") expect(box!.x).toBe(0);
+        else expect(box!.x + box!.width).toBe(viewport.width);
 
-      await page.screenshot({
-        path: test.info().outputPath(`announcement-viewport-${item.locale}-1440.png`),
+        await page.screenshot({
+          path: test.info().outputPath(`announcement-viewport-${item.locale}-${viewport.width}.png`),
+        });
       });
-    });
+    }
 
     test(`desktop sidebar announcement fits the navigation column in ${item.locale}`, async ({ page }) => {
-      await page.setViewportSize({ width: 1280, height: 900 });
+      await page.setViewportSize({ width: 1024, height: 768 });
       await page.goto(`/${item.locale}/works`);
 
       const sidebar = page.locator(".desktop-sidebar");
@@ -80,6 +86,7 @@ test.describe("Journal announcement responsive placements", () => {
       { width: 360, height: 800, name: "narrow" },
       { width: 320, height: 700, name: "small" },
       { width: 430, height: 932, name: "tall" },
+      { width: 768, height: 1024, name: "tablet-portrait" },
       { width: 390, height: 650, name: "short" },
     ]) {
       test(`mobile drawer sticker stays full-size and contained in ${item.locale} at ${viewport.width}x${viewport.height}`, async ({ page }) => {
