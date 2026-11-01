@@ -23,7 +23,7 @@ The following task-specific documents define the proposed homepage event announc
 - [Journal event announcement specification](./journal-announcement-specification.md) — detailed UI/UX, data eligibility, component architecture, localization, accessibility, SEO, acceptance criteria, tests, and implementation phases.
 - [Journal event announcement agent instructions](./journal-announcement-agent-instructions.md) — coding-agent preflight, implementation, verification, and Git/release boundaries.
 
-Read these documents together with [Journal, Articles, and Events](./journal-and-events.md). The existing Journal specification remains authoritative for the canonical content model and routes. This package does not authorize implementation before owner review.
+Read these documents together with [Journal, Articles, and Events](./journal-and-events.md). The existing Journal specification remains authoritative for the canonical content model and routes. The owner approved the overall direction in principle on 2026-11-01. The refined implementation contract is now the next feature specification; the exact sticker visual variant and final PNG remain subject to visual review.
 
 ## Document map
 
@@ -124,3 +124,16 @@ Read it together with:
 - [shadcn/ui component reuse](./shadcn-component-reuse-and-bilingual-ui.md)
 
 **Conflict resolution:** the new contract supersedes earlier grid-first artwork presentation guidance for the homepage Selected Works section and collection-detail primary browsing surface. It does not replace the static artwork-led Hero, the gallery-index editorial collection-preview role, the canonical artwork viewer, content/approval rules, or the Journal editorial layout. The Journal homepage preview is limited to the two newest eligible published entries. Existing routes and the unified Journal information architecture remain unchanged.
+
+
+## Next implementation task — Journal and event announcement sticker
+
+The next feature to implement on `feature` is the combined Journal and announcement-sticker experience. Start with [the refined detailed specification](./journal-announcement-specification.md) and follow [the coding-agent instructions](./journal-announcement-agent-instructions.md).
+
+Implementation scope:
+- Complete the homepage Journal preview, existing unified archive, event detail presentation, and pagination behavior where required.
+- Create the approved transparent paper-sticker PNG (decorative only; no text or controls baked into the image) and implement the fixed, dismissible upcoming-event announcement.
+- Preserve the current homepage preview rule: at most the two newest eligible published Journal entries across all entry types. The sticker independently selects the nearest eligible upcoming event.
+- Preserve the canonical Journal content model and routes; do not add a separate Events navigation destination.
+
+The overall proposal is approved in principle. Final selection of clean paper, torn-edge paper, or minimal typographic treatment and final asset review remain visual gates. This task is the next implementation priority; it does not authorize merge, deployment, or publication.
