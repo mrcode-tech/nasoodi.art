@@ -12,7 +12,7 @@ Implement the cross-site refinement as one coherent experience:
 3. Minimal one-line Journal page-size and pagination controls on common mobile widths.
 4. One-line desktop sidebar copyright in English and Persian.
 5. Consistent justified long-form editorial text that uses the available content width without harming mobile readability or Persian shaping.
-6. A homepage Contact section, dedicated bilingual Contact page, and sidebar navigation item, using centralized fictional Telegram/email/Instagram fixtures strictly for design review and never as public artist contact details.
+6. A homepage Contact section, dedicated bilingual Contact page, and sidebar navigation item, using centralized temporary fictional Telegram/email/Instagram values rendered normally in production until the owner replaces them.
 
 Before coding, read in full:
 - `AGENTS.md`
@@ -30,7 +30,7 @@ Before coding, read in full:
 
 Inspect the current implementation and route hierarchy before editing. Do not assume a breadcrumb parent based only on browser history. Test direct entry, refresh, contextual artwork navigation, and fallback paths. Reuse the installed shadcn primitives and shared navigation architecture. Apply spacing changes through shared tokens/layout primitives before page-specific overrides. Preserve the quiet editorial gallery identity and all approved artwork/content.
 
-**Contact content gate:** the requested sample email and social handles are fictional design-review fixtures only. Centralize and label them as non-approved; do not publish, index, add to JSON-LD/sitemap, or imply that the accounts exist or are monitored. Keep the existing approved artist Instagram handle unchanged. Obtain owner-approved real contact destinations before any release publication.
+**Contact data instruction:** the owner explicitly requires the temporary fictional email and social handles to be rendered in the normal production output, committed, and not hidden behind environment variables, production flags, feature flags, or approval switches. Centralize the values so the owner can replace them later. Do not claim the social profiles are verified or monitored. Keep the existing artist Instagram handle unchanged in its existing context.
 
 Run the complete relevant test suite and CI, inspect actual logs and final tested SHA, and capture/inspect English and Persian desktop/tablet/mobile screenshots. Verify breadcrumb clickability, RTL reading and keyboard order, no overflow, spacing, text measure, Journal controls, copyright fit, and Contact navigation/content.
 
