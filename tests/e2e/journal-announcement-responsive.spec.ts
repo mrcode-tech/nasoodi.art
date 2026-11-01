@@ -164,6 +164,7 @@ test.describe("Journal announcement responsive placements", () => {
         expect(drawerBox).not.toBeNull();
         expect(stickerBox).not.toBeNull();
         expect(stickerBox!.width).toBeGreaterThanOrEqual(190);
+        expect(stickerBox!.height).toBeLessThanOrEqual(155);
         expect(stickerBox!.x).toBeGreaterThanOrEqual(drawerBox!.x);
         expect(stickerBox!.x + stickerBox!.width).toBeLessThanOrEqual(drawerBox!.x + drawerBox!.width);
 
@@ -179,6 +180,12 @@ test.describe("Journal announcement responsive placements", () => {
         if (viewport.name === "standard") {
           await sticker.getByRole("button", { name: item.dismissLabel }).click();
           await expect(sticker).toBeHidden();
+        }
+
+        if (viewport.name === "narrow") {
+          await sticker.locator('[data-part="link"]').click();
+          await expect(drawer).toBeHidden();
+          await expect(page).toHaveURL(new RegExp("/" + item.locale + "/journal/"));
         }
       });
     }
