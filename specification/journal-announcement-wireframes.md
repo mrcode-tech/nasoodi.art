@@ -100,7 +100,7 @@ The notice anchors to the physical right edge. Text direction is RTL. The artwor
 
 ## 5. Homepage Journal section
 
-The page-bottom Journal section is part of normal document flow, not fixed positioning.
+The page-bottom Journal section is part of normal document flow, not fixed positioning. The current artwork-discovery contract limits this preview to the two newest eligible published entries across article and event types. An upcoming event appears here only when it is among those two entries; the fixed sticker is the separate upcoming-event discovery affordance.
 
 ~~~text
 ┌──────────────────────────────────────────────────────┐
@@ -108,19 +108,20 @@ The page-bottom Journal section is part of normal document flow, not fixed posit
 │ LATEST FROM THE JOURNAL                              │
 │                                                      │
 │ ┌────────────────────────────┐ ┌───────────────────┐ │
-│ │ FEATURED UPCOMING EVENT    │ │ RECENT JOURNAL    │ │
-│ │                            │ │ ENTRY             │ │
-│ │ Approved event image       │ │                   │ │
-│ │ Event title                │ │ Story / update    │ │
-│ │ Date and venue if known    │ │ Title and excerpt │ │
-│ │ Read event                 │ │ Read story        │ │
+│ │ NEWEST JOURNAL ENTRY       │ │ SECOND NEWEST     │ │
+│ │                            │ │ JOURNAL ENTRY     │ │
+│ │ Approved image if supplied │ │                   │ │
+│ │ Entry title                │ │ Entry title       │ │
+│ │ Type / publication date    │ │ Type / date       │ │
+│ │ Short excerpt              │ │ Short excerpt     │ │
+│ │ Read entry                 │ │ Read entry        │ │
 │ └────────────────────────────┘ └───────────────────┘ │
 │                                                      │
 │                         [Explore Journal →]          │
 └──────────────────────────────────────────────────────┘
 ~~~
 
-Use fewer cards when fewer approved entries exist. On mobile, stack entries in document order and keep the archive link visible after them.
+Use fewer cards when fewer approved entries exist. Do not pin an older upcoming event into this two-entry preview. On mobile, stack entries in document order and keep the archive link visible after them.
 
 ## 6. Journal archive
 
