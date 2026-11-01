@@ -58,6 +58,6 @@ export default async function Home({params}:Props){const {locale}=await params;i
     <Link className="text-link" href={pagePath(locale,`journal/${entry.slug}`)}>{t.readMore} ↗</Link>
    </article>)}</div>
   </section>}
-  {announcement?.event&&<JournalAnnouncement locale={locale} eyebrow={t.announcementEyebrow} dismissLabel={t.dismissAnnouncement} href={pagePath(locale,`journal/${announcement.slug}`)} event={{id:announcement.id,title:announcement.title[locale]!,startsAt:announcement.event.startsAt,timeZone:announcement.event.timeZone}} />}
+  {announcement?.event&&<JournalAnnouncement locale={locale} eyebrow={t.announcementEyebrow} dismissLabel={t.dismissAnnouncement} href={pagePath(locale,`journal/${announcement.slug}`)} event={{id:announcement.id,slug:announcement.slug,title:announcement.title[locale]!,startsAt:announcement.event.startsAt,timeZone:announcement.event.timeZone}} />}
  </div>;
 }

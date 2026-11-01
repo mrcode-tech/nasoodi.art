@@ -97,3 +97,30 @@ Do not call the study approved until the owner reviews the rendered artifact.
 - [ ] Inward torn edge and outer attachment edge are unambiguous.
 - [ ] English and Persian edge attachment are represented in review screenshots.
 - [ ] No visual approval is inferred from successful asset generation.
+
+## 9. Responsive composition decisions — implementation review
+
+The component uses three explicit geometry variants; the compact variants are not scaled copies of the viewport placement.
+
+- **Viewport placement:** retains the 3:2 paper proportion, uses a dedicated top inset for the close-control zone, and keeps the content column comfortably inset from both torn edges.
+- **Desktop sidebar:** uses a near-square/portrait note proportion at the real sidebar content width. The title receives the full usable inline width; the close control occupies a reserved top zone rather than consuming a permanent side column. This prevents narrow title wrapping caused by the former 3.4rem inline reservation.
+- **Mobile drawer:** keeps a wider landscape composition with a non-shrinking flex item, a minimum visible height, and a reserved top zone for the close control. The drawer remains the scrolling container on short screens.
+- All placements use logical block/inline spacing. The decorative SVG alone is mirrored for Persian; the content and controls are not transformed.
+- The component exposes stable `data-part` hooks for visual/behavioral browser tests. Tests must not target CSS-module implementation class names.
+- The paper SVG remains a provisional first study pending owner review. Responsive screenshots and the CI PNG are technical review evidence, not visual approval.
+
+These values are implementation decisions to be checked against the complete viewport matrix. If the actual sidebar/drawer geometry changes, update the relevant variant and its screenshot evidence rather than applying global scale or transform fixes.
+
+## 10. Responsive screenshot review — 2026-11-01
+
+The responsive implementation was checked against the CI-rendered English and Persian screenshots for:
+
+- Viewport announcement: 1920×1080, 1440×900, and 1280×800.
+- Desktop sidebar: 1024×768.
+- Mobile drawer: 768×1024, 430×932, 390×844, 390×650, 360×800, and 320×700.
+
+Visual inspection confirmed that the close control remains inside each paper silhouette and does not overlap the event title; the title and date remain readable at the tested sizes; the desktop sidebar has sufficient title width; and the mobile sticker does not collapse horizontally. The short-height drawer retains its own vertical scrolling rather than hiding or compressing the sticker. The decorative paper edges remain visible in both LTR and RTL compositions.
+
+The CI browser tests also assert the 44×44 px close target, title/control non-overlap, sticker containment, expected event link, and absence of horizontal page overflow. Synthetic long- and short-title stress cases are exercised in all three placements and both locales, with a screenshot captured for each title length. Screenshot artifacts are generated for every tested mobile/tablet viewport and both locales.
+
+This is technical responsive verification of the current sample event and current SVG study. It does not constitute owner approval of the final paper silhouette or tape detail, and it does not replace review with longer owner-supplied event titles.

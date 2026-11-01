@@ -17,7 +17,7 @@ export default async function LocaleLayout({ children, params }: { children: Rea
   if (!isLocale(value)) notFound();
   const locale: Locale = value;
   const upcoming = getUpcomingJournalEvent(journalEntries, locale);
-  const announcement = upcoming?.event ? { id: upcoming.id, title: upcoming.title[locale]!, startsAt: upcoming.event.startsAt, timeZone: upcoming.event.timeZone } : undefined;
+  const announcement = upcoming?.event ? { id: upcoming.id, slug: upcoming.slug, title: upcoming.title[locale]!, startsAt: upcoming.event.startsAt, timeZone: upcoming.event.timeZone } : undefined;
   return <html lang={locale} dir={locale === "fa" ? "rtl" : "ltr"}><body>
     <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeJsonLd(portfolioStructuredData) }} />
     <SiteShell locale={locale} announcement={announcement}>{children}</SiteShell>

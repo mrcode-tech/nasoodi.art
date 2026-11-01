@@ -83,6 +83,25 @@ Baseline for the first visual review: the hand-authored torn-edge exhibition sli
 
 The exact offset, dimensions, and z-index must be derived from the real shell and token system and verified at all supported breakpoints.
 
+### 6.1 Responsive presentation contexts
+
+The announcement has three deliberately composed placements. They share one localized event view model, canonical Journal destination, and event-specific session dismissal, but do not share a single scaled-down layout.
+
+1. **Homepage desktop announcement (`viewport`)** — fixed to the physical outer edge, with the decorative paper attachment edge flush to the viewport. It is shown on the homepage at desktop widths and is suppressed at short desktop heights when the existing layout rule requires it.
+2. **Desktop navigation sidebar (`desktop-sidebar`)** — on non-homepage desktop routes, place the compact paper treatment after the final navigation link and before the sidebar's bottom identity/footer area. It must fit the actual inner sidebar width; do not reuse the viewport dimensions or allow it to cover navigation.
+3. **Mobile navigation drawer (`mobile-sidebar`)** — place the sticker after the final navigation item and immediately before the language/settings area. It must retain its intrinsic width and height, remain a non-shrinking flex item, and allow the drawer itself to scroll on short screens.
+
+Only the placement appropriate to the current shell breakpoint is visible. The desktop homepage uses the viewport placement rather than duplicating the same announcement in the desktop sidebar. On mobile, the drawer placement is the announcement presentation; do not also display a second floating copy below the closed menu trigger.
+
+For all three placements:
+- Keep the SVG as a decorative background only and mirror only that background for Persian.
+- Keep the close control inside the sticker's own containing block, with a square, unfilled, non-circular appearance and a minimum 44 × 44 CSS-pixel target.
+- Reserve a clear text area that does not overlap the close control or torn-paper edge.
+- Allow long titles to wrap naturally; do not line-clamp or clip the title to preserve an arbitrary fixed height.
+- Use a clear type hierarchy: quiet eyebrow, prominent title, and secondary date.
+- Use logical inline positioning for the close control and content padding so the control remains at the correct visual edge in LTR and RTL.
+- Keep each placement's geometry independent; the compact sidebar compositions must not be produced by scaling the desktop viewport sticker.
+
 ## 7. Dismissal behavior
 
 - The event link and dismiss button are separate semantic controls.
