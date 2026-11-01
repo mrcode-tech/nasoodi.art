@@ -1323,7 +1323,7 @@ test("theme selector is available in the mobile drawer and artwork styles remain
   const themeTrigger = drawer.getByRole("button", { name: "Choose theme" });
   await expect(themeTrigger).toBeVisible();
   await themeTrigger.click();
-  await drawer.getByRole("menuitemradio", { name: "Dark" }).click();
+  await page.getByRole("menuitemradio", { name: "Dark" }).click();
   await expect(page.locator("html")).toHaveClass(/dark/);
   await page.getByRole("button", { name: "Close navigation" }).click();
   await page.goto("/en/works");
