@@ -33,6 +33,7 @@ This is a design study, not final approval of the torn-paper variant. Review the
 - SVG viewBox: 420 × 280 units; 3:2 landscape ratio.
 - CI review render: 1260 × 840 pixels (3× source dimensions).
 - Background: transparent; only the paper silhouette and vector details are painted.
+- Root SVG uses `preserveAspectRatio="none"` so the CSS background can fill each responsive placement instead of letterboxing the 3:2 source canvas inside a wider mobile/sidebar shape.
 - No event title, category label, date, arrow, close icon, venue, logo, or interactive element may be baked into the SVG/PNG.
 - HTML owns all text, links, dates, and dismissal controls.
 - Keep the SVG decorative and hidden from assistive technology when used as a background or aria-hidden image.
