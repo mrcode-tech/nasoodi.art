@@ -22,5 +22,5 @@ export default async function LocaleLayout({ children, params }: { children: Rea
   return <html lang={locale} dir={locale === "fa" ? "rtl" : "ltr"} suppressHydrationWarning><body><ThemeProvider>
     <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeJsonLd(portfolioStructuredData) }} />
     <SiteShell locale={locale} announcement={announcement}>{children}</SiteShell>
-  </body></html>;
+  </ThemeProvider></body></html>;
 }
