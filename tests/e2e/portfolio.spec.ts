@@ -1307,6 +1307,10 @@ test("theme selector supports Light, Dark, and System in English and Persian", a
     await expect(page.locator("html")).not.toHaveClass(/dark/);
     await page.getByRole("button", { name: locale === "fa" ? "انتخاب پوسته" : "Choose theme" }).click();
     await page.getByRole("menuitemradio", { name: locale === "fa" ? "سیستم" : "System" }).click();
+    await page.emulateMedia({ colorScheme: "dark" });
+    await expect(page.locator("html")).toHaveClass(/dark/);
+    await page.emulateMedia({ colorScheme: "light" });
+    await expect(page.locator("html")).not.toHaveClass(/dark/);
     await page.screenshot({ path: test.info().outputPath(`theme-${locale}-system.png`), fullPage: true });
   }
 });
