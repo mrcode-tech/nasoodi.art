@@ -1315,23 +1315,31 @@ test("theme selector supports Light, Dark, and System in English and Persian", a
   }
 });
 
-test("theme selector is available in the mobile drawer and artwork styles remain unfiltered", async ({ page }) => {
+test("theme selector is available in the mobile drawer in both locales and artwork styles remain unfiltered", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
-  await page.goto("/en");
-  await page.getByRole("button", { name: "Open navigation" }).click();
-  const drawer = page.getByRole("dialog", { name: "Open navigation" });
-  const themeTrigger = drawer.getByRole("button", { name: "Choose theme" });
-  await expect(themeTrigger).toBeVisible();
-  await themeTrigger.click();
-  await page.getByRole("menuitemradio", { name: "Dark" }).click();
-  await expect(page.locator("html")).toHaveClass(/dark/);
-  await page.getByRole("button", { name: "Close navigation" }).click();
-  await page.goto("/en/works");
-  const artwork = page.locator(".artwork-item img").first();
-  if (await artwork.count()) {
-    await expect(artwork).toHaveCSS("filter", "none");
-    await expect(artwork).toHaveCSS("opacity", "1");
-    await expect(artwork).toHaveCSS("mix-blend-mode", "normal");
+
+  for (const locale of ["en", "fa"] as const) {
+    const labels = locale === "fa"
+      ? { open: "باز کردن راهبری", close: "بستن راهبری", theme: "انتخاب پوسته", dark: "تیره" }
+      : { open: "Open navigation", close: "Close navigation", theme: "Choose theme", dark: "Dark" };
+
+    await page.goto(`/${locale}`);
+    await page.getByRole("button", { name: labels.open }).click();
+    const drawer = page.getByRole("dialog", { name: labels.open });
+    const themeTrigger = drawer.getByRole("button", { name: labels.theme });
+    await expect(themeTrigger).toBeVisible();
+    await themeTrigger.click();
+    await page.getByRole("menuitemradio", { name: labels.dark }).click();
+    await expect(page.locator("html")).toHaveClass(/dark/);
+    await page.getByRole("button", { name: labels.close }).click();
+
+    await page.goto(`/${locale}/works`);
+    const artwork = page.locator(".artwork-item img").first();
+    if (await artwork.count()) {
+      await expect(artwork).toHaveCSS("filter", "none");
+      await expect(artwork).toHaveCSS("opacity", "1");
+      await expect(artwork).toHaveCSS("mix-blend-mode", "normal");
+    }
   }
 });
 
