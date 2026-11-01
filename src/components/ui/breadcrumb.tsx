@@ -12,4 +12,4 @@ export function BreadcrumbLink({ href, children }: { href: string; children: Rea
 export function BreadcrumbPage({ children }: { children: ReactNode }) {
   return <span className="breadcrumb-current">{children}</span>;
 }
-export function BreadcrumbSeparator() { return <li className="breadcrumb-separator" aria-hidden="true">/</li>; }
+export function BreadcrumbSeparator() { return <span className="breadcrumb-separator" aria-hidden="true">/</span>; }

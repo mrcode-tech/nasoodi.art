@@ -47,9 +47,9 @@ export type ArtistProfile = {
   artistApproved: boolean;
 };
 export type ContactDetails = {
-  email: string;
-  telegramHandle: string;
-  instagramUrl: string;
+  email?: string;
+  telegramHandle?: string;
+  instagramUrl?: string;
   approvedLocales: Locale[];
   ownerApproved: boolean;
 };
@@ -508,9 +508,9 @@ export function getPublicArtistProfile(profile: ArtistProfile | undefined, local
 }
 export function getPublicContactDetails(details: ContactDetails | undefined, locale: Locale) {
   if (!details || !details.ownerApproved || !details.approvedLocales.includes(locale)) return undefined;
-  const email = details.email.trim();
+  const email = details.email?.trim() ?? "";
   const validEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) ? email : undefined;
-  const telegramHandle = /^[A-Za-z0-9_]{5,32}$/.test(details.telegramHandle) ? details.telegramHandle : undefined;
+  const telegramHandle = details.telegramHandle && /^[A-Za-z0-9_]{5,32}$/.test(details.telegramHandle) ? details.telegramHandle : undefined;
   let instagramUrl: string | undefined;
   try {
     const url = new URL(details.instagramUrl);
