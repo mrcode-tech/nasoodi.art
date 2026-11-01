@@ -8,6 +8,7 @@ import styles from "./journal-announcement.module.css";
 
 export type AnnouncementEvent = {
   id: string;
+  slug: string;
   title: string;
   startsAt: string;
   timeZone: string;
