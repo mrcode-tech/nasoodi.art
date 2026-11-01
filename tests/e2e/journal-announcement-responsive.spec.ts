@@ -18,13 +18,26 @@ const locales = [
 async function expectDismissButtonInsideSticker(sticker: Locator) {
   const stickerBox = await sticker.boundingBox();
   const buttonBox = await sticker.getByRole("button").boundingBox();
+  const titleBox = await sticker.locator('[data-part="title"]').boundingBox();
 
   expect(stickerBox).not.toBeNull();
   expect(buttonBox).not.toBeNull();
+  expect(titleBox).not.toBeNull();
+  expect(buttonBox!.width).toBeGreaterThanOrEqual(44);
+  expect(buttonBox!.height).toBeGreaterThanOrEqual(44);
   expect(buttonBox!.x).toBeGreaterThanOrEqual(stickerBox!.x);
   expect(buttonBox!.y).toBeGreaterThanOrEqual(stickerBox!.y);
   expect(buttonBox!.x + buttonBox!.width).toBeLessThanOrEqual(stickerBox!.x + stickerBox!.width);
   expect(buttonBox!.y + buttonBox!.height).toBeLessThanOrEqual(stickerBox!.y + stickerBox!.height);
+  expect(titleBox!.x).toBeGreaterThanOrEqual(stickerBox!.x);
+  expect(titleBox!.y).toBeGreaterThanOrEqual(stickerBox!.y);
+  expect(titleBox!.x + titleBox!.width).toBeLessThanOrEqual(stickerBox!.x + stickerBox!.width);
+  expect(titleBox!.y + titleBox!.height).toBeLessThanOrEqual(stickerBox!.y + stickerBox!.height);
+  const overlaps = buttonBox!.x < titleBox!.x + titleBox!.width &&
+    buttonBox!.x + buttonBox!.width > titleBox!.x &&
+    buttonBox!.y < titleBox!.y + titleBox!.height &&
+    buttonBox!.y + buttonBox!.height > titleBox!.y;
+  expect(overlaps).toBe(false);
 }
 
 test.describe("Journal announcement responsive placements", () => {
@@ -79,7 +92,7 @@ test.describe("Journal announcement responsive placements", () => {
       expect(stickerBox!.x + stickerBox!.width).toBeLessThanOrEqual(sidebarBox!.x + sidebarBox!.width);
 
       await page.screenshot({
-        path: test.info().outputPath(`announcement-desktop-sidebar-${item.locale}-1280.png`),
+        path: test.info().outputPath(`announcement-desktop-sidebar-${item.locale}-1024.png`),
       });
     });
 
@@ -119,11 +132,9 @@ test.describe("Journal announcement responsive placements", () => {
         );
         expect(hasHorizontalOverflow).toBe(false);
 
-        if (viewport.name === "standard" || viewport.name === "small") {
-          await page.screenshot({
-            path: test.info().outputPath(`announcement-mobile-drawer-${item.locale}-${viewport.name}.png`),
-          });
-        }
+        await page.screenshot({
+          path: test.info().outputPath('announcement-mobile-drawer-${item.locale}-${viewport.name}.png'),
+        });
 
         if (viewport.name === "standard") {
           await sticker.getByRole("button", { name: item.dismissLabel }).click();
