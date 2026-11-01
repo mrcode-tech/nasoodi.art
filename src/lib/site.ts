@@ -104,9 +104,24 @@ export const galleries: Gallery[] = [
   { id: "gallery-fragments-memory", slug: "fragments-of-memory", title: { en: "Fragments of Memory", fa: "پاره‌های خاطره" }, description: { en: "A small collection arranged around recollection, personal association, and the poetry of details.", fa: "مجموعه‌ای کوچک با محوریت یادآوری، تداعی‌های شخصی و شاعرانگی جزئیات." }, coverArtworkId: "artwork-shape-of-remembering", artworkIds: ["artwork-shape-of-remembering", "artwork-garden-small-moments", "artwork-blue-hour-within"], status: "published", sortOrder: 3 },
   { id: "gallery-selected-works", slug: "selected-works", title: { en: "Selected Works", fa: "گزیده آثار" }, description: { en: "Five paintings brought together as an introduction to this selection of the artist’s work.", fa: "پنج نقاشی در کنار هم؛ آشنایی‌ای کوتاه با این گزیده از آثار هنرمند." }, coverArtworkId: "artwork-quiet-place", artworkIds: ["artwork-quiet-place", "artwork-shape-of-remembering", "artwork-where-light-rests", "artwork-garden-small-moments", "artwork-blue-hour-within"], status: "published", sortOrder: 4 },
 ];
+// Owner-authorized temporary Journal imagery: existing approved gallery paintings are used as clearly labelled placeholders,
+// not represented as event documentation. Replace these mappings with real Journal/event photographs during content review.
+const journalPlaceholderImages = [
+  { image: approvedArtworkImages[0], alt: { en: "Temporary Journal image placeholder: A Quiet Place Between Seasons", fa: "تصویر موقت یادداشت: آرامش میان فصل‌ها" } },
+  { image: approvedArtworkImages[1], alt: { en: "Temporary Journal image placeholder: The Shape of Remembering", fa: "تصویر موقت یادداشت: شکل خاطره" } },
+  { image: approvedArtworkImages[2], alt: { en: "Temporary Journal image placeholder: Where Light Rests", fa: "تصویر موقت یادداشت: جایی که نور می‌آرامد" } },
+  { image: approvedArtworkImages[3], alt: { en: "Temporary Journal image placeholder: A Garden of Small Moments", fa: "تصویر موقت یادداشت: باغ لحظه‌های کوچک" } },
+  { image: approvedArtworkImages[4], alt: { en: "Temporary Journal image placeholder: The Blue Hour Within", fa: "تصویر موقت یادداشت: ساعت آبی درون" } },
+] as const;
+function journalPlaceholderCover(index: number): NonNullable<JournalEntry["coverImage"]> {
+  const { image, alt } = journalPlaceholderImages[index % journalPlaceholderImages.length];
+  return { src: image.src, alt, width: image.width, height: image.height, rightsConfirmed: true };
+}
+
 export const journalEntries: JournalEntry[] = [
   {
     id: "journal-studio-notes-november-2026",
+    coverImage: journalPlaceholderCover(0),
     slug: "between-layers-studio-notes",
     type: "studio-update",
     title: { en: "Between Layers: Notes from the Studio", fa: "میان لایه‌ها: یادداشت‌هایی از آتلیه" },
@@ -131,6 +146,7 @@ export const journalEntries: JournalEntry[] = [
   },
   {
     id: "journal-exhibition-open-studio-2026",
+    coverImage: journalPlaceholderCover(1),
     slug: "open-studio-colour-and-stillness",
     type: "exhibition",
     title: { en: "Open Studio: Colour and Stillness", fa: "آتلیه باز: رنگ و سکون" },
@@ -154,6 +170,7 @@ export const journalEntries: JournalEntry[] = [
   },
   {
     id: "journal-story-colour-memory",
+    coverImage: journalPlaceholderCover(2),
     slug: "the-colours-that-memory-keeps",
     type: "story",
     title: { en: "The Colours That Memory Keeps", fa: "رنگ‌هایی که در خاطره می‌مانند" },
@@ -176,6 +193,7 @@ export const journalEntries: JournalEntry[] = [
   },
   {
     id: "journal-studio-light-study",
+    coverImage: journalPlaceholderCover(3),
     slug: "studying-the-changing-light",
     type: "studio-update",
     title: { en: "Studying the Changing Light", fa: "مطالعه نورِ در حال تغییر" },
@@ -196,6 +214,7 @@ export const journalEntries: JournalEntry[] = [
   },
   {
     id: "journal-online-conversation-art",
+    coverImage: journalPlaceholderCover(4),
     slug: "a-conversation-about-looking",
     type: "event",
     title: { en: "A Conversation About Looking", fa: "گفت‌وگویی درباره تماشا" },
@@ -217,6 +236,7 @@ export const journalEntries: JournalEntry[] = [
   },
   {
     id: "journal-story-space-between",
+    coverImage: journalPlaceholderCover(5),
     slug: "the-space-between-marks",
     type: "story",
     title: { en: "The Space Between Marks", fa: "فضای میان نشانه‌ها" },
@@ -235,6 +255,7 @@ export const journalEntries: JournalEntry[] = [
   },
   {
     id: "journal-exhibition-notes-2026",
+    coverImage: journalPlaceholderCover(6),
     slug: "notes-on-colour-and-presence",
     type: "exhibition",
     title: { en: "Notes on Colour and Presence", fa: "یادداشت‌هایی درباره رنگ و حضور" },
@@ -258,6 +279,7 @@ export const journalEntries: JournalEntry[] = [
   },
   {
     id: "journal-studio-colour-study",
+    coverImage: journalPlaceholderCover(7),
     slug: "a-study-in-muted-colours",
     type: "studio-update",
     title: { en: "A Study in Muted Colours", fa: "مطالعه‌ای با رنگ‌های خاموش" },
