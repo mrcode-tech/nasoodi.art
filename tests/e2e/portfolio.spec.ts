@@ -200,11 +200,15 @@ for (const locale of ["en", "fa"] as const) {
       expect((utility?.x ?? 0) + (utility?.width ?? 0)).toBeLessThanOrEqual(1440 - (bounds?.width ?? 0) + 1);
       await expect(utilityLocator).toHaveCSS("direction", "rtl");
     } else {
-      // The utility is a full-width fixed bar; assert the language control is
-      // anchored to its right edge rather than treating the bar as the control.
-      const languageControl = await utilityLocator.locator(".ui-button").boundingBox();
-      expect(languageControl?.x).toBeGreaterThan(1440 - 220);
-      expect((languageControl?.x ?? 0) + (languageControl?.width ?? 0)).toBeLessThanOrEqual(1440);
+      // The language selector is followed by the theme selector. Verify the
+      // complete control group is right-aligned and that its order is stable.
+      const languageControl = await utilityLocator.getByRole("button", { name: "Language" }).boundingBox();
+      const themeControl = await utilityLocator.getByRole("button", { name: "Choose theme" }).boundingBox();
+      expect(languageControl).not.toBeNull();
+      expect(themeControl).not.toBeNull();
+      expect(languageControl!.x + languageControl!.width).toBeLessThan(themeControl!.x);
+      expect(themeControl!.x + themeControl!.width).toBeGreaterThan(1440 - 110);
+      expect(themeControl!.x + themeControl!.width).toBeLessThanOrEqual(1440);
     }
     await page.screenshot({ path: test.info().outputPath(`${locale}-desktop-sidebar.png`), fullPage: true });
   });
@@ -576,8 +580,8 @@ test("Persian language label sits to the right of its selector in desktop utilit
   await page.getByRole("button", { name: "باز کردن راهبری" }).click();
   const drawer = page.getByRole("dialog", { name: "باز کردن راهبری" });
   const drawerSettings = drawer.locator(".drawer-settings");
-  const drawerLabel = drawerSettings.locator("> span");
-  const drawerSelector = drawerSettings.getByRole("button", { name: "زبان" });
+  const drawerLabel = drawerSettings.locator(".drawer-setting-row").first().locator(".language-label");
+  const drawerSelector = drawerSettings.locator(".drawer-setting-row").first().getByRole("button", { name: "زبان" });
   const drawerGeometry = await Promise.all([drawerLabel.boundingBox(), drawerSelector.boundingBox()]);
   expect(drawerGeometry[0]).not.toBeNull();
   expect(drawerGeometry[1]).not.toBeNull();
@@ -621,7 +625,7 @@ for (const locale of ["fa", "en"] as const) {
     await expect(drawer).toBeVisible();
     const settings = drawer.locator(".drawer-settings");
     const languageButton = settings.getByRole("button", { name: locale === "fa" ? "زبان" : "Language" });
-    await expect(settings.locator(".language-label")).toBeVisible();
+    await expect(settings.locator(".drawer-setting-row").first().locator(".language-label")).toBeVisible();
     await expect(languageButton).toBeVisible();
     await languageButton.click();
     await expect(page.getByRole("menuitem", { name: /English/ })).toBeVisible();
@@ -1286,4 +1290,70 @@ test("artwork breadcrumbs preserve only a verified collection origin",async({pag
  const fallback=page.getByRole("navigation",{name:"Breadcrumb"});
  await expect(fallback.getByRole("link",{name:"Selected works"})).toHaveAttribute("href","/en/works");
  await expect(fallback.getByRole("link",{name:"Galleries"})).toHaveCount(0);
+});
+
+
+test("theme selector supports Light, Dark, and System in English and Persian", async ({ page }) => {
+  for (const locale of ["en", "fa"] as const) {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.goto(`/${locale}`);
+    const trigger = page.getByRole("button", { name: locale === "fa" ? "انتخاب پوسته" : "Choose theme" });
+    await expect(trigger).toBeVisible();
+    await trigger.click();
+    const menu = page.getByRole("menu");
+    await expect(menu.getByRole("menuitemradio", { name: locale === "fa" ? "تیره" : "Dark" })).toBeVisible();
+    await menu.getByRole("menuitemradio", { name: locale === "fa" ? "تیره" : "Dark" }).click();
+    await expect(page.locator("html")).toHaveClass(/dark/);
+    await page.reload();
+    await expect(page.locator("html")).toHaveClass(/dark/);
+    await page.getByRole("button", { name: locale === "fa" ? "انتخاب پوسته" : "Choose theme" }).click();
+    await page.getByRole("menuitemradio", { name: locale === "fa" ? "روشن" : "Light" }).click();
+    await expect(page.locator("html")).not.toHaveClass(/dark/);
+    await page.getByRole("button", { name: locale === "fa" ? "انتخاب پوسته" : "Choose theme" }).click();
+    await page.getByRole("menuitemradio", { name: locale === "fa" ? "سیستم" : "System" }).click();
+    await page.emulateMedia({ colorScheme: "dark" });
+    await expect(page.locator("html")).toHaveClass(/dark/);
+    await page.emulateMedia({ colorScheme: "light" });
+    await expect(page.locator("html")).not.toHaveClass(/dark/);
+    await page.screenshot({ path: test.info().outputPath(`theme-${locale}-system.png`), fullPage: true });
+  }
+});
+
+test("theme selector is available in the mobile drawer in both locales and artwork styles remain unfiltered", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+
+  for (const locale of ["en", "fa"] as const) {
+    const labels = locale === "fa"
+      ? { open: "باز کردن راهبری", close: "بستن راهبری", theme: "انتخاب پوسته", dark: "تیره" }
+      : { open: "Open navigation", close: "Close navigation", theme: "Choose theme", dark: "Dark" };
+
+    await page.goto(`/${locale}`);
+    await page.getByRole("button", { name: labels.open }).click();
+    const drawer = page.getByRole("dialog", { name: labels.open });
+    const themeTrigger = drawer.getByRole("button", { name: labels.theme });
+    await expect(themeTrigger).toBeVisible();
+    await themeTrigger.click();
+    await page.getByRole("menuitemradio", { name: labels.dark }).click();
+    await expect(page.locator("html")).toHaveClass(/dark/);
+    await page.getByRole("button", { name: labels.close }).click();
+
+    await page.goto(`/${locale}/works`);
+    const artwork = page.locator(".artwork-item img").first();
+    if (await artwork.count()) {
+      await expect(artwork).toHaveCSS("filter", "none");
+      await expect(artwork).toHaveCSS("opacity", "1");
+      await expect(artwork).toHaveCSS("mix-blend-mode", "normal");
+    }
+  }
+});
+
+
+test("new visitors default to System and follow the operating-system color scheme", async ({ page }) => {
+  await page.emulateMedia({ colorScheme: "dark" });
+  await page.goto("/en");
+  await expect(page.locator("html")).toHaveClass(/dark/);
+  await page.emulateMedia({ colorScheme: "light" });
+  await expect(page.locator("html")).not.toHaveClass(/dark/);
+  await page.getByRole("button", { name: "Choose theme" }).click();
+  await expect(page.getByRole("menuitemradio", { name: "System" })).toHaveAttribute("data-state", "checked");
 });
