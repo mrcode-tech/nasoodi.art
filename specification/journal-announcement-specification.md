@@ -1,6 +1,6 @@
 # Journal Event Announcement — Detailed UI/UX and Implementation Specification
 
-**Status:** Proposed implementation contract  
+**Status:** Refined implementation contract — overall direction owner-approved; detailed visual variant and PNG asset pending review  
 **Working branch:** feature  
 **Design proposal:** journal-announcement-proposal.md  
 **Wireframes:** journal-announcement-wireframes.md  
@@ -8,7 +8,7 @@
 
 ## 1. Scope
 
-Specify the homepage event announcement, homepage Journal preview, Journal archive integration, and event-specific Journal detail presentation.
+Specify the homepage event announcement sticker, homepage Journal preview, Journal archive integration, event-specific Journal detail presentation, and the decorative paper PNG asset workflow.
 
 This is a design and implementation specification only. Do not implement application code until the owner has reviewed the proposal and wireframes.
 
@@ -92,30 +92,21 @@ The exact offset, dimensions, and z-index must be derived from the real shell an
 
 ## 8. Homepage Journal section
 
-Follow journal-and-events.md. Recommended hierarchy:
-1. Section heading and approved introduction, if available.
-2. Featured upcoming event card when eligible.
-3. Up to two recent approved Journal entries.
-4. Clear localized link to the complete Journal archive.
+Follow both journal-and-events.md and the newer artwork-discovery-carousel-and-editorial-experience.md contract. The homepage preview contains **at most the two newest eligible published Journal entries across article and event types**. Preserve the established editorial/post-style presentation; do not redesign it as an event-led dashboard or add a third card.
 
-The section follows featured Works and Galleries and precedes final Contact/footer, subject to the established homepage composition. Use fewer entries when content is sparse. Never create fictional entries to fill a layout.
+- Section heading and approved introduction, if available.
+- Up to two newest eligible published entries, ordered by publication date descending with deterministic tie-breaking.
+- A clear localized link to the complete Journal archive.
+- If fewer than two eligible entries exist, show fewer. If none exist, omit the section according to the existing Journal contract.
+- Do not independently pin an older upcoming event into this preview. The upcoming event may appear here only if it is one of the two newest entries.
 
-The fixed announcement and the in-flow Journal section are independent. Dismissing the former does not hide the latter.
+The fixed announcement sticker independently selects the nearest eligible upcoming event. Dismissing the sticker never hides or changes the in-flow Journal preview.
 
 ## 9. Journal archive and pagination
 
-Preserve one unified Journal destination for exhibitions, events, studio updates, and stories.
+Preserve the existing unified Journal destination, route, taxonomy, filters, and editorial entry presentation defined by journal-and-events.md. Do not create a separate Events page or duplicate content model.
 
-If pagination is justified by actual archive size:
-- Default to five entries per page.
-- Offer 5, 10, and 20 entries per page.
-- Use the project's established accessible select component.
-- Preserve filters, sort order, and page-size selection in URL state where appropriate.
-- Reset to a valid page when filters or page size change.
-- Provide accessible previous/next controls and current-page indication.
-- Do not display pagination when all results fit on one page.
-- Keep ordering deterministic and publication-date descending by default.
-- Preserve the Journal taxonomy and avoid a duplicate Events route/navigation item.
+Where the actual archive size justifies pagination, use the requested page-size choices of 5, 10, and 20, with five as the default. Use the existing shadcn select pattern. Preserve filters and page size in URL state where supported; reset to a valid page after filter/page-size changes; provide accessible previous/next controls and current-page indication. Hide pagination when all results fit on one page. Default ordering remains publication date descending with deterministic tie-breaking. Reconcile with any already-implemented archive behavior before changing it; do not introduce a second pagination system.
 
 ## 10. Event detail page
 
@@ -214,18 +205,33 @@ Provide:
 - Screenshots for both visual variants and all target breakpoints, including a short-height viewport.
 - CI workflow run links and actual results. Do not claim success without a completed run.
 
-## 17. Implementation sequence
+## 17. Sticker PNG asset requirements
+
+The PNG is a decorative paper treatment only, not a screenshot or flattened banner. It must:
+- Have a transparent background and clean alpha edges.
+- Contain no event title, date, category text, close icon, arrow, or other UI text/control.
+- Be designed for the approved paper-tab silhouette and inward-facing torn/perforated edge, if that variant is selected.
+- Remain legible and visually restrained at the actual rendered size; avoid noisy texture, harsh shadow, sale-sticker aesthetics, or strong contrast against the portfolio.
+- Be supplied at an appropriate resolution for high-density displays and documented with intended CSS display dimensions.
+- Be stored under the repository's existing specification asset convention after inspecting it; do not invent an asset folder if another convention exists.
+- Include a provenance/approval note. Do not describe generated artwork as a photograph or handmade physical paper.
+
+Keep all text, links, and buttons as accessible DOM content above/within the visual treatment. If a CSS/SVG implementation is cleaner, sharper, and more maintainable, prefer it over a PNG; the PNG should be used only if it materially improves the approved visual result.
+
+## 18. Implementation sequence
 
 Phase 1 — Discovery and reconciliation: inspect all required docs and actual code; report discrepancies before coding.
 
 Phase 2 — Data selection: implement or reuse a pure eligible-event selector and test all editorial/temporal/locale rules.
 
-Phase 3 — Announcement component: implement baseline clean tab, event-specific dismissal, and responsive physical-edge positioning.
+Phase 3 — Sticker visual asset: produce the approved transparent paper PNG (or document why CSS/SVG is superior), inspect it at target sizes, and add it to the specification asset area with provenance.
 
-Phase 4 — Homepage integration: add the fixed announcement and ensure the in-flow Journal section remains independent.
+Phase 4 — Announcement component: implement the approved paper treatment, event-specific dismissal, and responsive physical-edge positioning.
 
-Phase 5 — Journal detail/archive alignment: implement event metadata presentation and page-size/pagination behavior only where needed and consistent with the existing Journal contract.
+Phase 5 — Homepage integration: add the fixed announcement and ensure the two-entry in-flow Journal preview remains independent.
 
-Phase 6 — Verification: run lint, typecheck, unit/component/integration/E2E tests, visual checks, and CI. Fix regressions before reporting completion.
+Phase 6 — Journal detail/archive alignment: implement event metadata presentation and page-size/pagination behavior only where needed and consistent with the existing Journal contract.
 
-Phase 7 — Owner review: present screenshots and list any unresolved visual decisions. Do not merge or deploy without separate authorization.
+Phase 7 — Verification: run lint, typecheck, unit/component/integration/E2E tests, visual checks, and CI. Fix regressions before reporting completion.
+
+Phase 8 — Owner review: present sticker PNG and screenshots, then list any unresolved visual decisions. Do not merge or deploy without separate authorization.
