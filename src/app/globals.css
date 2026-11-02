@@ -1064,3 +1064,9 @@ html[lang="fa"] .prose,html[lang="fa"] .about-biography-copy,html[lang="fa"] .ab
 .sheet-content.mobile-drawer {
   overflow: hidden;
 }
+
+/* Keep navigation content clear of the narrow ScrollArea thumb in every locale. */
+.sidebar-scroll-area .scroll-area-viewport,
+.mobile-drawer-scroll .scroll-area-viewport {
+  padding-inline-end: .75rem;
+}

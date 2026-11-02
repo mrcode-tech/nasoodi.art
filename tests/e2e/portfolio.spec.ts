@@ -571,6 +571,7 @@ test("desktop sidebar and mobile drawer use minimal ScrollArea when navigation o
   const desktopViewport = page.locator(".desktop-sidebar [data-slot='scroll-area-viewport']");
   const desktopScrollbar = page.locator(".desktop-sidebar [data-slot='scroll-area-scrollbar']");
   await expect(desktopViewport).toBeVisible();
+  await expect(desktopViewport).toHaveCSS("padding-inline-end", "12px");
   await page.locator(".desktop-sidebar .nav-list").evaluate((element) => {
     (element as HTMLElement).style.minHeight = "1200px";
   });
@@ -586,6 +587,7 @@ test("desktop sidebar and mobile drawer use minimal ScrollArea when navigation o
   const mobileViewport = drawer.locator("[data-slot='scroll-area-viewport']");
   const mobileScrollbar = drawer.locator("[data-slot='scroll-area-scrollbar']");
   await expect(mobileViewport).toBeVisible();
+  await expect(mobileViewport).toHaveCSS("padding-inline-end", "12px");
   await drawer.locator(".nav-list").evaluate((element) => {
     (element as HTMLElement).style.minHeight = "1200px";
   });
