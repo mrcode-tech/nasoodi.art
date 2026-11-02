@@ -564,6 +564,37 @@ test("navigation underlines fit their labels and the mobile trigger has no outli
 });
 
 
+
+test("desktop sidebar and mobile drawer use minimal ScrollArea when navigation overflows", async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 420 });
+  await page.goto("/en");
+  const desktopViewport = page.locator(".desktop-sidebar [data-slot='scroll-area-viewport']");
+  const desktopScrollbar = page.locator(".desktop-sidebar [data-slot='scroll-area-scrollbar']");
+  await expect(desktopViewport).toBeVisible();
+  await page.locator(".desktop-sidebar .nav-list").evaluate((element) => {
+    (element as HTMLElement).style.minHeight = "1200px";
+  });
+  await expect.poll(() => desktopViewport.evaluate((element) => element.scrollHeight > element.clientHeight)).toBe(true);
+  await expect(desktopScrollbar).toHaveAttribute("data-state", "visible");
+  await desktopViewport.evaluate((element) => { element.scrollTop = 180; });
+  await expect.poll(() => desktopViewport.evaluate((element) => element.scrollTop)).toBeGreaterThan(0);
+
+  await page.setViewportSize({ width: 390, height: 420 });
+  await page.goto("/fa");
+  await page.getByRole("button", { name: "باز کردن راهبری" }).click();
+  const drawer = page.getByRole("dialog", { name: "باز کردن راهبری" });
+  const mobileViewport = drawer.locator("[data-slot='scroll-area-viewport']");
+  const mobileScrollbar = drawer.locator("[data-slot='scroll-area-scrollbar']");
+  await expect(mobileViewport).toBeVisible();
+  await drawer.locator(".nav-list").evaluate((element) => {
+    (element as HTMLElement).style.minHeight = "1200px";
+  });
+  await expect.poll(() => mobileViewport.evaluate((element) => element.scrollHeight > element.clientHeight)).toBe(true);
+  await expect(mobileScrollbar).toHaveAttribute("data-state", "visible");
+  await mobileViewport.evaluate((element) => { element.scrollTop = 180; });
+  await expect.poll(() => mobileViewport.evaluate((element) => element.scrollTop)).toBeGreaterThan(0);
+});
+
 test("Persian language label sits to the right of its selector in desktop utility and mobile drawer", async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 800 });
   await page.goto("/fa");
