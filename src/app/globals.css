@@ -958,6 +958,10 @@ html[lang="fa"] .prose,html[lang="fa"] .about-biography-copy,html[lang="fa"] .ab
     align-items: stretch;
     gap: .75rem;
   }
+  /* Override the legacy, more-specific Persian row-direction rule. */
+  html[lang="fa"] .mobile-drawer .drawer-settings {
+    flex-direction: column;
+  }
   .mobile-drawer .drawer-setting-row {
     display: flex;
     width: 100%;
