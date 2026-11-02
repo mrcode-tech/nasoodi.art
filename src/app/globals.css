@@ -1,5 +1,5 @@
-@import "tailwindcss";
 @import url("https://fontlibrary.org/face/iranian-serif");
+@import "tailwindcss";
 :root{color-scheme:light;--paper:#f3f0ea;--surface:#faf8f4;--muted-surface:#e8e2da;--ink:#302824;--muted:#62564f;--mauve:#837369;--mauve-deep:#675a51;--sand:#c5b197;--border:#d8d0c7;--sidebar-surface:#f3f0ea;--interactive-surface:#e8e2da;--ring-color:#675a51;--selection:#d8c9b8;--overlay:rgb(35 28 24 / 38%);--drawer-shadow:rgb(48 40 36 / 12%);--sidebar:16.5rem}
 .dark{color-scheme:dark;--midnight-blue:#101a2b;--deep-blue:#172438;--gallery-slate:#202f42;--blue-charcoal:#2b3542;--warm-ivory:#eae4d9;--soft-ash:#b9b5ae;--smoky-mauve:#a18c83;--muted-sand:#c5b197;--dark-umber:#51483f;--canvas-light:#d9d0c2;--paper:var(--midnight-blue);--surface:var(--deep-blue);--muted-surface:var(--gallery-slate);--ink:var(--warm-ivory);--muted:var(--soft-ash);--mauve:var(--smoky-mauve);--mauve-deep:var(--muted-sand);--sand:var(--muted-sand);--border:var(--dark-umber);--sidebar-surface:var(--deep-blue);--interactive-surface:var(--blue-charcoal);--ring-color:var(--muted-sand);--selection:var(--blue-charcoal);--overlay:rgb(7 12 21 / 68%);--drawer-shadow:rgb(0 0 0 / 28%)}
 @theme inline{--color-background:var(--paper);--color-foreground:var(--ink);--font-sans:Arial,Tahoma,sans-serif}
