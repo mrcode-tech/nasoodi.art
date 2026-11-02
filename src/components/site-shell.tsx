@@ -9,6 +9,7 @@ import { Sheet, SheetClose, SheetContent, SheetTitle, SheetTrigger } from "@/com
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { JournalAnnouncement, type AnnouncementEvent } from "@/components/journal-announcement";
 import { ThemeSelector } from "@/components/theme-selector";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 function LanguageSelector({ locale, alternate, pathname, label, onNavigate }: { locale: Locale; alternate: string; pathname: string; label: string; onNavigate?: () => void }) {
   const englishHref = locale === "en" ? pathname : alternate;
@@ -60,17 +61,19 @@ export function SiteShell({ locale, children, announcement }: { locale: Locale; 
         <span className="wordmark-name" dir="ltr">Ghazaleh</span><span className="wordmark-surname" dir="ltr">Abdolahzade Nasoodi</span><span className="wordmark-role" dir="auto">{labels.discipline}</span>
       </Link></SidebarHeader>
       <SidebarContent>
-        {navigation()}
-        {announcement && pathname !== pagePath(locale) && (
-          <JournalAnnouncement
-            locale={locale}
-            event={announcement}
-            eyebrow={labels.announcementEyebrow}
-            dismissLabel={labels.dismissAnnouncement}
-            href={pagePath(locale, `journal/${announcement.slug}`)}
-            placement="desktop-sidebar"
-          />
-        )}
+        <ScrollArea className="sidebar-scroll-area">
+          {navigation()}
+          {announcement && pathname !== pagePath(locale) && (
+            <JournalAnnouncement
+              locale={locale}
+              event={announcement}
+              eyebrow={labels.announcementEyebrow}
+              dismissLabel={labels.dismissAnnouncement}
+              href={pagePath(locale, `journal/${announcement.slug}`)}
+              placement="desktop-sidebar"
+            />
+          )}
+        </ScrollArea>
       </SidebarContent>
       <SidebarFooter className="sidebar-bottom"><span>nasoodi.art · © {new Date().getFullYear()}</span></SidebarFooter>
     </Sidebar>
@@ -81,23 +84,27 @@ export function SiteShell({ locale, children, announcement }: { locale: Locale; 
         <SheetContent id="mobile-navigation" side={locale === "fa" ? "right" : "left"} className="mobile-drawer" dir={locale === "fa" ? "rtl" : "ltr"} aria-describedby={undefined} onOpenAutoFocus={(event) => { event.preventDefault(); drawerHomeRef.current?.focus(); }}>
           <SheetTitle className="sr-only">{labels.menu}</SheetTitle>
           <div className="drawer-heading"><Link ref={drawerHomeRef} className="mobile-wordmark" dir="ltr" href={pagePath(locale)}>Nasoodi<span>.</span></Link><SheetClose asChild><Button className="drawer-close" variant="ghost" size="sm" aria-label={labels.close}>×</Button></SheetClose></div>
-          {navigation(true)}
-          {announcement && (
-            <JournalAnnouncement
-              locale={locale}
-              event={announcement}
-              eyebrow={labels.announcementEyebrow}
-              dismissLabel={labels.dismissAnnouncement}
-              href={pagePath(locale, `journal/${announcement.slug}`)}
-              placement="mobile-sidebar"
-              onNavigate={() => setMobileOpen(false)}
-            />
-          )}
-          <div className="drawer-settings" dir={locale === "fa" ? "rtl" : "ltr"}>
-            <div className="drawer-setting-row"><span className="language-label">{labels.language}</span><LanguageSelector locale={locale} alternate={alternate} pathname={pathname} label={labels.language} onNavigate={() => setMobileOpen(false)}/></div>
-            <div className="drawer-setting-row"><span className="language-label">{locale === "fa" ? "نمایش" : "Appearance"}</span><ThemeSelector locale={locale}/></div>
-          </div>
-          <div className="drawer-copyright" dir="ltr"><span>nasoodi.art</span><span>© {new Date().getFullYear()}</span></div>
+          <ScrollArea className="mobile-drawer-scroll">
+            <div className="mobile-drawer-scroll-content">
+              {navigation(true)}
+              {announcement && (
+                <JournalAnnouncement
+                  locale={locale}
+                  event={announcement}
+                  eyebrow={labels.announcementEyebrow}
+                  dismissLabel={labels.dismissAnnouncement}
+                  href={pagePath(locale, `journal/${announcement.slug}`)}
+                  placement="mobile-sidebar"
+                  onNavigate={() => setMobileOpen(false)}
+                />
+              )}
+              <div className="drawer-settings" dir={locale === "fa" ? "rtl" : "ltr"}>
+                <div className="drawer-setting-row"><span className="language-label">{labels.language}</span><LanguageSelector locale={locale} alternate={alternate} pathname={pathname} label={labels.language} onNavigate={() => setMobileOpen(false)}/></div>
+                <div className="drawer-setting-row"><span className="language-label">{locale === "fa" ? "نمایش" : "Appearance"}</span><ThemeSelector locale={locale}/></div>
+              </div>
+              <div className="drawer-copyright" dir="ltr"><span>nasoodi.art</span><span>© {new Date().getFullYear()}</span></div>
+            </div>
+          </ScrollArea>
         </SheetContent>
       </Sheet>
     </header>
