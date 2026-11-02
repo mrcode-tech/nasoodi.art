@@ -1064,3 +1064,22 @@ html[lang="fa"] .prose,html[lang="fa"] .about-biography-copy,html[lang="fa"] .ab
 .sheet-content.mobile-drawer {
   overflow: hidden;
 }
+
+/* Keep the scrollbar on the sidebar's outer edge in both writing directions.
+   The viewport padding mirrors that edge so RTL/LTR menu labels never touch the thumb. */
+.scroll-area[dir="ltr"] > .scroll-area-scrollbar[data-orientation="vertical"] {
+  right: auto;
+  left: 0;
+}
+.scroll-area[dir="rtl"] > .scroll-area-scrollbar[data-orientation="vertical"] {
+  right: 0;
+  left: auto;
+}
+.scroll-area[dir="ltr"] > .scroll-area-viewport {
+  padding-left: .75rem;
+  padding-right: 0;
+}
+.scroll-area[dir="rtl"] > .scroll-area-viewport {
+  padding-right: .75rem;
+  padding-left: 0;
+}
