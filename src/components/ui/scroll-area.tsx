@@ -8,6 +8,7 @@ type ScrollAreaProps = React.ComponentPropsWithoutRef<typeof ScrollAreaPrimitive
 function ScrollArea({ className = "", children, ...props }: ScrollAreaProps) {
   return (
     <ScrollAreaPrimitive.Root
+      type="auto"
       data-slot="scroll-area"
       className={`scroll-area ${className}`}
       {...props}
