@@ -564,6 +564,59 @@ test("navigation underlines fit their labels and the mobile trigger has no outli
 });
 
 
+
+test("sidebar ScrollArea keeps its scrollbar at the outer edge with clear menu spacing in both directions", async ({ page }) => {
+  for (const locale of ["en", "fa"] as const) {
+    const edge = locale === "fa" ? "right" : "left";
+    const padding = locale === "fa" ? "0px 12px 0px 0px" : "0px 0px 0px 12px";
+    await page.setViewportSize({ width: 1280, height: 420 });
+    await page.goto(`/${locale}`);
+    const desktopRoot = page.locator(".desktop-sidebar .sidebar-scroll-area");
+    const desktopViewport = desktopRoot.locator("[data-slot='scroll-area-viewport']");
+    const desktopScrollbar = desktopRoot.locator("[data-slot='scroll-area-scrollbar']");
+    await expect(desktopViewport).toBeVisible();
+    await expect(desktopRoot).toHaveAttribute("dir", locale === "fa" ? "rtl" : "ltr");
+    await expect(desktopViewport).toHaveCSS("padding", padding);
+    await page.locator(".desktop-sidebar .nav-list").evaluate((element) => {
+      (element as HTMLElement).style.minHeight = "1200px";
+    });
+    await expect.poll(() => desktopViewport.evaluate((element) => element.scrollHeight > element.clientHeight)).toBe(true);
+    await expect(desktopScrollbar).toHaveAttribute("data-state", "visible");
+    const desktopGeometry = await Promise.all([
+      desktopRoot.boundingBox(), desktopScrollbar.boundingBox(), desktopViewport.boundingBox(),
+    ]);
+    expect(desktopGeometry.every(Boolean)).toBe(true);
+    const root = desktopGeometry[0]!;
+    const bar = desktopGeometry[1]!;
+    expect(edge === "left" ? Math.abs(bar.x - root.x) : Math.abs(root.x + root.width - bar.x - bar.width)).toBeLessThan(2);
+    await desktopViewport.evaluate((element) => { element.scrollTop = 180; });
+    await expect.poll(() => desktopViewport.evaluate((element) => element.scrollTop)).toBeGreaterThan(0);
+
+    await page.setViewportSize({ width: 390, height: 420 });
+    await page.goto(`/${locale}`);
+    await page.getByRole("button", { name: locale === "fa" ? "باز کردن راهبری" : "Open navigation" }).click();
+    const drawer = page.getByRole("dialog", { name: locale === "fa" ? "باز کردن راهبری" : "Open navigation" });
+    const mobileRoot = drawer.locator(".mobile-drawer-scroll");
+    const mobileViewport = mobileRoot.locator("[data-slot='scroll-area-viewport']");
+    const mobileScrollbar = mobileRoot.locator("[data-slot='scroll-area-scrollbar']");
+    await expect(mobileViewport).toBeVisible();
+    await expect(mobileRoot).toHaveAttribute("dir", locale === "fa" ? "rtl" : "ltr");
+    await expect(mobileViewport).toHaveCSS("padding", padding);
+    await drawer.locator(".nav-list").evaluate((element) => {
+      (element as HTMLElement).style.minHeight = "1200px";
+    });
+    await expect.poll(() => mobileViewport.evaluate((element) => element.scrollHeight > element.clientHeight)).toBe(true);
+    await expect(mobileScrollbar).toHaveAttribute("data-state", "visible");
+    const mobileGeometry = await Promise.all([mobileRoot.boundingBox(), mobileScrollbar.boundingBox()]);
+    expect(mobileGeometry.every(Boolean)).toBe(true);
+    const mobileArea = mobileGeometry[0]!;
+    const mobileBar = mobileGeometry[1]!;
+    expect(edge === "left" ? Math.abs(mobileBar.x - mobileArea.x) : Math.abs(mobileArea.x + mobileArea.width - mobileBar.x - mobileBar.width)).toBeLessThan(2);
+    await mobileViewport.evaluate((element) => { element.scrollTop = 180; });
+    await expect.poll(() => mobileViewport.evaluate((element) => element.scrollTop)).toBeGreaterThan(0);
+  }
+});
+
 test("Persian language label sits to the right of its selector in desktop utility and mobile drawer", async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 800 });
   await page.goto("/fa");
