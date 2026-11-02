@@ -568,7 +568,7 @@ test("navigation underlines fit their labels and the mobile trigger has no outli
 test("sidebar ScrollArea keeps its scrollbar at the outer edge with clear menu spacing in both directions", async ({ page }) => {
   for (const locale of ["en", "fa"] as const) {
     const edge = locale === "fa" ? "right" : "left";
-    const padding = locale === "fa" ? "12px 0px 0px 0px" : "0px 0px 0px 12px";
+    const padding = locale === "fa" ? "0px 12px 0px 0px" : "0px 0px 0px 12px";
     await page.setViewportSize({ width: 1280, height: 420 });
     await page.goto(`/${locale}`);
     const desktopRoot = page.locator(".desktop-sidebar .sidebar-scroll-area");
