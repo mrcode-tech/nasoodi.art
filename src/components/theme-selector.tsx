@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useSyncExternalStore } from "react";
 import { useTheme } from "next-themes";
 import { Button } from "@/components/ui/button";
 import {
@@ -13,6 +13,10 @@ import {
 import type { Locale } from "@/lib/site";
 
 type ThemeMode = "light" | "dark" | "system";
+
+const subscribeToMount = () => () => {};
+const getMountedSnapshot = () => true;
+const getServerMountedSnapshot = () => false;
 
 const icons = {
   light: (
@@ -59,11 +63,11 @@ const icons = {
 
 export function ThemeSelector({ locale }: { locale: Locale }) {
   const { theme, setTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  const mounted = useSyncExternalStore(
+    subscribeToMount,
+    getMountedSnapshot,
+    getServerMountedSnapshot,
+  );
 
   const labels: Record<ThemeMode, string> =
     locale === "fa"
