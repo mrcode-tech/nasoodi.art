@@ -219,3 +219,10 @@
     transition: none !important;
   }
 }
+
+
+/* Dark mode turns the paper itself into a deep gallery-slate surface while keeping
+   announcement copy on the normal semantic foreground tokens for clear contrast. */
+:global(.dark) .paper {
+  filter: brightness(0.38) saturate(0.72);
+}

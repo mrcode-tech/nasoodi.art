@@ -33,6 +33,7 @@ Read these documents together with [Journal, Articles, and Events](./journal-and
 - [Product proposal](./proposal.md) — goals, audiences, non-goals, routes, page content, functionality, and open decisions.
 - [Wireframes and interaction design](./wireframes.md) — page structure, responsive behavior, gallery, lightbox, and RTL interaction.
 - [Site-wide design system and section specification](./site-wide-design-system-and-section-specification.md) — semantic tokens, typography, global shell, homepage, Works, artwork detail, About, CV, Contact, components, and responsive design.
+- [Shared Light and Dark Theme System](./shared-light-dark-theme-system.md) — shared semantic token architecture, Midnight Gallery palette, Light/Dark/System preferences, shadcn integration, bilingual behavior, accessibility, and visual QA.
 - [Visual identity and photo direction](./visual-identity-and-photo-direction.md) — reference-photo analysis, palette, studio-image use, crop rules, and visual QA.
 - [Full-page easel scroll background](./easel-scroll-background.md) — left-edge document-length easel composition, scroll-linked reveal, responsive rules, reduced motion, and acceptance criteria.
 - [Responsive sidebar navigation, language, and theme](./navigation-and-mobile-sidebar.md) — persistent desktop left sidebar, desktop top-bar settings, mobile off-canvas menu, bottom-of-menu selectors, RTL, accessibility, and responsive acceptance criteria.
@@ -150,3 +151,15 @@ The next cross-site UX refinement is defined in [Unified breadcrumbs, editorial 
 This task introduces a shared shadcn/ui breadcrumb system with clickable intermediate paths (including artwork and Journal detail navigation), refines site-wide editorial spacing, compacts Journal pagination controls on mobile, keeps sidebar copyright on one desktop line, standardizes justified long-form text, and adds a bilingual Contact section/page.
 
 The owner explicitly requires the temporary fictional Telegram, email, and Instagram values to be rendered normally in production until replaced later. Do not hide them behind environment variables or production flags, and do not add a visible disclaimer. Keep the values centralized and easy to replace. Do not claim the social profiles are verified or monitored. The existing artist Instagram handle must remain unchanged. Read the full prompt and all mandatory design/localization/accessibility authorities before implementation.
+
+## Shared light and dark theme system — Midnight Gallery
+
+The owner approved the Midnight Gallery direction and requested a comprehensive, shared design-system specification. Read [Shared Light and Dark Theme System](./shared-light-dark-theme-system.md) together with the design-engineering, refined design direction, site-wide design system, navigation, shadcn reuse, localization, accessibility, and testing authorities. The specification preserves the current light theme, defines the dark palette and semantic token architecture, and governs Light/Dark/System behavior, shared shadcn integration, RTL/LTR, artwork fidelity, the paper Journal sticker, contrast validation, responsive QA, and implementation boundaries. It is a design/implementation contract, not evidence that theme support is already implemented.
+
+
+## Shared Light/Dark theme system — implementation committed
+
+Implement the approved shared theme system defined in [Shared Light and Dark Theme System](./shared-light-dark-theme-system.md). Preserve the existing light design, introduce the Midnight Gallery palette, centralize semantic tokens, and integrate the theme selector into the existing desktop utility and mobile Sheet using shadcn/ui. Support Light, Dark, and System preferences across all routes and locales. Complete contrast checks, responsive/RTL/LTR visual QA, artwork-fidelity checks, and the full CI workflow. Work on `feature` only; do not merge to `stage` or `main`, deploy, or publish.
+
+
+Implementation on `feature` is committed in `470c0228cfe4b8171d32fbf212378c35c52eba8f` and subsequent documentation updates. The shared `next-themes` provider, Midnight Gallery semantic tokens, localized shadcn radio-menu selector, desktop/mobile placement, and Playwright coverage are in the application. Automated CI and rendered visual QA remain verification gates; do not mark this feature fully verified until those results are inspected.

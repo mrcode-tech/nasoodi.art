@@ -206,3 +206,21 @@ test.describe("Journal announcement responsive placements", () => {
     }
   }
 });
+
+
+test("Journal announcement paper remains dark with readable copy in dark mode", async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 900 });
+  for (const locale of ["en", "fa"] as const) {
+    await page.goto(`/${locale}`);
+    await page.locator("html").evaluate((element) => element.classList.add("dark"));
+    const sticker = page.locator('[data-placement="viewport"]');
+    await expect(sticker).toBeVisible();
+    const paperFilter = await sticker.locator('[data-part="paper"]').evaluate((element) => getComputedStyle(element).filter);
+    expect(paperFilter).toBe("brightness(0.38) saturate(0.72)");
+    for (const part of ["eyebrow", "title", "date"]) {
+      const color = await sticker.locator(`[data-part="${part}"]`).evaluate((element) => getComputedStyle(element).color);
+      expect(color).not.toBe("rgba(0, 0, 0, 0)");
+      expect(color).not.toBe("rgb(16, 26, 43)");
+    }
+  }
+});
