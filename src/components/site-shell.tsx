@@ -63,7 +63,7 @@ export function SiteShell({ locale, children, announcement }: { locale: Locale; 
       <SidebarContent>
         <ScrollArea dir={locale === "fa" ? "rtl" : "ltr"} className="sidebar-scroll-area">
           {navigation()}
-          {announcement && pathname !== pagePath(locale) && (
+          {announcement && (
             <JournalAnnouncement
               locale={locale}
               event={announcement}
