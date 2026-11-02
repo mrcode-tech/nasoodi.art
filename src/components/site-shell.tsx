@@ -61,7 +61,7 @@ export function SiteShell({ locale, children, announcement }: { locale: Locale; 
         <span className="wordmark-name" dir="ltr">Ghazaleh</span><span className="wordmark-surname" dir="ltr">Abdolahzade Nasoodi</span><span className="wordmark-role" dir="auto">{labels.discipline}</span>
       </Link></SidebarHeader>
       <SidebarContent>
-        <ScrollArea className="sidebar-scroll-area">
+        <ScrollArea dir={locale === "fa" ? "rtl" : "ltr"} className="sidebar-scroll-area">
           {navigation()}
           {announcement && pathname !== pagePath(locale) && (
             <JournalAnnouncement
@@ -84,7 +84,7 @@ export function SiteShell({ locale, children, announcement }: { locale: Locale; 
         <SheetContent id="mobile-navigation" side={locale === "fa" ? "right" : "left"} className="mobile-drawer" dir={locale === "fa" ? "rtl" : "ltr"} aria-describedby={undefined} onOpenAutoFocus={(event) => { event.preventDefault(); drawerHomeRef.current?.focus(); }}>
           <SheetTitle className="sr-only">{labels.menu}</SheetTitle>
           <div className="drawer-heading"><Link ref={drawerHomeRef} className="mobile-wordmark" dir="ltr" href={pagePath(locale)}>Nasoodi<span>.</span></Link><SheetClose asChild><Button className="drawer-close" variant="ghost" size="sm" aria-label={labels.close}>×</Button></SheetClose></div>
-          <ScrollArea className="mobile-drawer-scroll">
+          <ScrollArea dir={locale === "fa" ? "rtl" : "ltr"} className="mobile-drawer-scroll">
             <div className="mobile-drawer-scroll-content">
               {navigation(true)}
               {announcement && (
