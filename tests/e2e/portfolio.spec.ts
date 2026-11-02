@@ -1324,21 +1324,42 @@ test("theme selector is available in the mobile drawer in both locales and artwo
 
   for (const locale of ["en", "fa"] as const) {
     const labels = locale === "fa"
-      ? { open: "باز کردن راهبری", close: "بستن راهبری", theme: "انتخاب پوسته", dark: "تیره" }
-      : { open: "Open navigation", close: "Close navigation", theme: "Choose theme", dark: "Dark" };
+      ? { open: "باز کردن راهبری", close: "بستن راهبری", language: "زبان", theme: "انتخاب پوسته", dark: "تیره" }
+      : { open: "Open navigation", close: "Close navigation", language: "Language", theme: "Choose theme", dark: "Dark" };
 
     await page.goto(`/${locale}`);
     await page.getByRole("button", { name: labels.open }).click();
     const drawer = page.getByRole("dialog", { name: labels.open });
     const themeTrigger = drawer.getByRole("button", { name: labels.theme });
     await expect(themeTrigger).toBeVisible();
-    const appearanceRow = drawer.locator(".drawer-setting-row").last();
-    const appearanceLabel = appearanceRow.locator(".language-label");
-    const appearanceLabelBox = await appearanceLabel.boundingBox();
+    const settingRows = drawer.locator(".drawer-setting-row");
+    await expect(settingRows).toHaveCount(2);
+    const languageRow = settingRows.first();
+    const appearanceRow = settingRows.last();
+    const languageLabelBox = await languageRow.locator(".language-label").boundingBox();
+    const languageControlBox = await languageRow.getByRole("button", { name: labels.language }).boundingBox();
+    const appearanceLabelBox = await appearanceRow.locator(".language-label").boundingBox();
     const themeTriggerBox = await themeTrigger.boundingBox();
+    const languageRowBox = await languageRow.boundingBox();
+    const appearanceRowBox = await appearanceRow.boundingBox();
+    expect(languageLabelBox).not.toBeNull();
+    expect(languageControlBox).not.toBeNull();
     expect(appearanceLabelBox).not.toBeNull();
     expect(themeTriggerBox).not.toBeNull();
-    expect(themeTriggerBox!.y).toBeGreaterThanOrEqual(appearanceLabelBox!.y + appearanceLabelBox!.height);
+    expect(languageRowBox).not.toBeNull();
+    expect(appearanceRowBox).not.toBeNull();
+    // Each setting occupies a distinct horizontal row; its label and selector share a centerline.
+    const verticalCenter = (box: { y: number; height: number }) => box.y + box.height / 2;
+    expect(Math.abs(verticalCenter(languageLabelBox!) - verticalCenter(languageControlBox!))).toBeLessThan(3);
+    expect(Math.abs(verticalCenter(appearanceLabelBox!) - verticalCenter(themeTriggerBox!))).toBeLessThan(3);
+    expect(appearanceRowBox!.y).toBeGreaterThanOrEqual(languageRowBox!.y + languageRowBox!.height);
+    if (locale === "fa") {
+      expect(languageLabelBox!.x).toBeGreaterThan(languageControlBox!.x);
+      expect(appearanceLabelBox!.x).toBeGreaterThan(themeTriggerBox!.x);
+    } else {
+      expect(languageLabelBox!.x).toBeLessThan(languageControlBox!.x);
+      expect(appearanceLabelBox!.x).toBeLessThan(themeTriggerBox!.x);
+    }
     await themeTrigger.click();
     await page.getByRole("menuitemradio", { name: labels.dark }).click();
     await expect(page.locator("html")).toHaveClass(/dark/);
