@@ -1057,14 +1057,6 @@ html[lang="fa"] .prose,html[lang="fa"] .about-biography-copy,html[lang="fa"] .ab
 .mobile-drawer-scroll .scroll-area-viewport {
   overscroll-behavior: contain;
 }
-.sidebar-scroll-area {
-  display: flex;
-  width: 100%;
-  height: auto;
-  min-height: 0;
-  flex: 1 1 auto;
-}
-
 .sidebar-scroll-content,
 .mobile-drawer-scroll-content {
   display: flex;
