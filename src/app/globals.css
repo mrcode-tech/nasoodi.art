@@ -1359,14 +1359,21 @@ html[lang="fa"] {
 }
 
 /* Persian font metrics differ; preserve native spacing and connected glyphs. */
-html[lang="fa"] .home-intro .home-intro-copy > h1,
+html[lang="fa"] .home-intro .home-intro-copy > h1 {
+  font-family: "IranianSerifRegular", Tahoma, serif;
+  font-size: var(--type-display);
+  letter-spacing: 0;
+  line-height: var(--leading-display);
+}
+
 html[lang="fa"] .page-heading h1,
 html[lang="fa"] .not-found-page h1,
 html[lang="fa"] .artwork-detail-copy h1,
 html[lang="fa"] .article-page h1 {
   font-family: "IranianSerifRegular", Tahoma, serif;
+  font-size: var(--type-page-title);
   letter-spacing: 0;
-  line-height: var(--leading-display);
+  line-height: var(--leading-heading);
 }
 
 html[lang="fa"] .section-heading h2,
