@@ -177,7 +177,8 @@ If the actual code conflicts with the specification, inspect the source and rele
 
 ## 5. Content and asset integrity — hard gate
 
-- Use only artist/site-owner-approved material for public production content.
+- Use only artist/site-owner-approved material for public production content, except for the explicitly owner-authorized fictional Contact fixture used during this demo phase.
+- Demo Contact exception: the centralized fictional email, Telegram, and Instagram values must render on the homepage and localized Contact pages without approval, confirmation, or environment/production-mode gates. Do not add a visible disclaimer or claim the accounts are real, verified, monitored, or artist-approved. Keep Contact routes noindex and out of the sitemap until real owner-supplied values replace the fixture; preserve the actual artist Instagram identity outside the demo fixture.
 - Explicit owner-authorized exception for this feature-branch design task: use clearly labelled fictional bilingual biography, artist statement, and CV data to populate the existing About page for visual review. Keep it non-approved, noindex, and disabled in production runtime; replace it before any release merge. Do not create a preview route or query parameter.
 - Never present fictional biography, education, exhibitions, awards, publications, dates, venues, or qualifications as verified or artist-approved facts.
 - Do not machine-translate and publish unreviewed biography or interface copy as approved Persian/English content.
