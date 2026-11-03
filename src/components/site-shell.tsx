@@ -4,7 +4,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { alternatePathFor, copyFor, pagePath, type Locale } from "@/lib/site";
 import { Button } from "@/components/ui/button";
-import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar";
+import { Sidebar, SidebarContent, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar";
 import { Sheet, SheetClose, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { JournalAnnouncement, type AnnouncementEvent } from "@/components/journal-announcement";
@@ -74,20 +74,23 @@ export function SiteShell({ locale, children, announcement }: { locale: Locale; 
       </Link></SidebarHeader>
       <SidebarContent>
         <ScrollArea dir={locale === "fa" ? "rtl" : "ltr"} className="sidebar-scroll-area">
-          {navigation()}
-          {announcement && !isHomePage && (
-            <JournalAnnouncement
-              locale={locale}
-              event={announcement}
-              eyebrow={labels.announcementEyebrow}
-              dismissLabel={labels.dismissAnnouncement}
-              href={pagePath(locale, `journal/${announcement.slug}`)}
-              placement="desktop-sidebar"
-            />
-          )}
+          <div className="sidebar-scroll-content">
+            {navigation()}
+            {announcement && !isHomePage && (
+              <JournalAnnouncement
+                locale={locale}
+                event={announcement}
+                eyebrow={labels.announcementEyebrow}
+                dismissLabel={labels.dismissAnnouncement}
+                href={pagePath(locale, `journal/${announcement.slug}`)}
+                placement="desktop-sidebar"
+              />
+            )}
+            <div className="sidebar-flex-spacer" aria-hidden="true" />
+            <div className="sidebar-bottom" dir="ltr"><span>nasoodi.art · © {new Date().getFullYear()}</span></div>
+          </div>
         </ScrollArea>
       </SidebarContent>
-      <SidebarFooter className="sidebar-bottom"><span>nasoodi.art · © {new Date().getFullYear()}</span></SidebarFooter>
     </Sidebar>
     <header className={`mobile-header mobile-header-${locale}`} data-locale={locale}>
       <Link className="mobile-wordmark" dir="ltr" href={pagePath(locale)}>Nasoodi<span>.</span></Link>
@@ -110,11 +113,14 @@ export function SiteShell({ locale, children, announcement }: { locale: Locale; 
                   onNavigate={() => setMobileOpen(false)}
                 />
               )}
-              <div className="drawer-settings" dir={locale === "fa" ? "rtl" : "ltr"}>
-                <div className="drawer-setting-row"><span className="language-label">{labels.language}</span><LanguageSelector locale={locale} alternate={alternate} pathname={pathname} label={labels.language} onNavigate={() => setMobileOpen(false)}/></div>
-                <div className="drawer-setting-row"><span className="language-label">{locale === "fa" ? "نمایش" : "Appearance"}</span><ThemeSelector locale={locale}/></div>
+              <div className="drawer-flex-spacer" aria-hidden="true" />
+              <div className="drawer-bottom">
+                <div className="drawer-settings" dir={locale === "fa" ? "rtl" : "ltr"}>
+                  <div className="drawer-setting-row"><span className="language-label">{labels.language}</span><LanguageSelector locale={locale} alternate={alternate} pathname={pathname} label={labels.language} onNavigate={() => setMobileOpen(false)}/></div>
+                  <div className="drawer-setting-row"><span className="language-label">{locale === "fa" ? "نمایش" : "Appearance"}</span><ThemeSelector locale={locale}/></div>
+                </div>
+                <div className="drawer-copyright" dir="ltr"><span>nasoodi.art</span><span>© {new Date().getFullYear()}</span></div>
               </div>
-              <div className="drawer-copyright" dir="ltr"><span>nasoodi.art</span><span>© {new Date().getFullYear()}</span></div>
             </div>
           </ScrollArea>
         </SheetContent>
