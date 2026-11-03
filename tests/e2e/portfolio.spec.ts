@@ -1440,6 +1440,7 @@ test("sidebar flexible space separates navigation from the bottom utility and co
   for (const locale of ["en", "fa"] as const) {
     await page.setViewportSize({ width: 1440, height: 960 });
     await page.goto(`/${locale}/about`);
+    await page.evaluate(() => new Promise<void>((resolve) => requestAnimationFrame(() => requestAnimationFrame(() => resolve()))));
 
     // First verify the optional sticker, then remove it to exercise the no-sticker layout.
     const desktopSticker = page.locator('.desktop-sidebar [data-placement="desktop-sidebar"]');
@@ -1469,11 +1470,14 @@ test("sidebar flexible space separates navigation from the bottom utility and co
       NonNullable<typeof desktopLayout[2]>
     ];
     expect(desktopSpacerBox.y).toBeGreaterThanOrEqual(desktopNavBox.y + desktopNavBox.height);
+    expect(desktopSpacerBox.height).toBeGreaterThan(80);
     expect(desktopCopyrightBox.y).toBeGreaterThanOrEqual(desktopSpacerBox.y + desktopSpacerBox.height);
+    expect(desktopCopyrightBox.y + desktopCopyrightBox.height).toBeGreaterThan(900);
 
     await page.setViewportSize({ width: 390, height: 960 });
     const openLabel = locale === "fa" ? "باز کردن راهبری" : "Open navigation";
     await page.goto(`/${locale}/about`);
+    await page.evaluate(() => new Promise<void>((resolve) => requestAnimationFrame(() => requestAnimationFrame(() => resolve()))));
     await page.getByRole("button", { name: openLabel }).click();
     const drawer = page.getByRole("dialog");
     // The sticker is optional; if present it belongs before the spacer. Remove it to
@@ -1508,7 +1512,9 @@ test("sidebar flexible space separates navigation from the bottom utility and co
       NonNullable<typeof mobileLayout[2]>
     ];
     expect(mobileSpacerBox.y).toBeGreaterThanOrEqual(mobileNavBox.y + mobileNavBox.height);
+    expect(mobileSpacerBox.height).toBeGreaterThan(80);
     expect(bottomBox.y).toBeGreaterThanOrEqual(mobileSpacerBox.y + mobileSpacerBox.height);
+    expect(bottomBox.y + bottomBox.height).toBeGreaterThan(900);
 
     // On short screens the same bottom section remains reachable through the drawer's ScrollArea.
     await page.setViewportSize({ width: 390, height: 480 });
