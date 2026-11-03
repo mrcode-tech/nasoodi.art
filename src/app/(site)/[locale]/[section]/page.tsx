@@ -19,15 +19,13 @@ export async function generateMetadata({params}:Props):Promise<Metadata>{const {
   section==="galleries" ? getPublicGalleries(galleries,artworks,locale).length>0 :
   section==="journal" ? getPublicJournal(journalEntries,locale).length>0 :
   section==="cv" ? getPublicCvEntries(cvEntries,locale).length>0 :
-  section==="about" ? Boolean(getPublicArtistProfile(artistProfile,locale)) :
-  section==="contact" ? false : false;
+  section==="about" ? Boolean(getPublicArtistProfile(artistProfile,locale)) : false;
  const other=otherLocale(locale);
  const translated = section==="works" ? getPublicArtworks(artworks,other).length>0 :
   section==="galleries" ? getPublicGalleries(galleries,artworks,other).length>0 :
   section==="journal" ? getPublicJournal(journalEntries,other).length>0 :
   section==="cv" ? getPublicCvEntries(cvEntries,other).length>0 :
-  section==="about" ? Boolean(getPublicArtistProfile(artistProfile,other)) :
-  section==="contact" ? false : false;
+  section==="about" ? Boolean(getPublicArtistProfile(artistProfile,other)) : false;
  const profile=section==="about"?getPublicArtistProfile(artistProfile,locale):undefined;
  return {title:copyFor(locale)[section],...(profile?{description:profile.statement[locale]}:{}),alternates:{canonical:pagePath(locale,section),...(indexable&&translated?{languages:{[locale]:pagePath(locale,section),[other]:pagePath(other,section)}}:{})},robots:{index:section==="about"||section==="contact"?false:indexable,follow:true}};}
 export default async function SectionPage({params,searchParams}:Props){const [{locale,section},{category:rawCategory,page:rawPage,pageSize:rawPageSize}]=await Promise.all([params,searchParams]);if(!isLocale(locale)||!valid(section))notFound();const t=copyFor(locale);
