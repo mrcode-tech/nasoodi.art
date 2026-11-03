@@ -340,3 +340,16 @@ The component selection, RTL/LTR rules, keyboard and focus behavior, and new-com
 - In Persian desktop layout, keep the language utility at the physical right edge of the content region (immediately before the right-hand sidebar), with the selector physically left of the «زبان» label.
 - Navigation item underline indicators must be limited to the rendered label width, not stretched across the full sidebar row.
 - The mobile navigation trigger uses a borderless, transparent ghost treatment. Its focus indicator remains visible for keyboard users; do not add a permanent outline or frame.
+
+
+## Owner-approved bottom-section spacing refinement (2026-11-03)
+
+- Treat the desktop copyright and the mobile language/theme controls plus copyright as one bottom-anchored sidebar section.
+- The desktop sidebar's scrollable content order is: primary navigation, optional Journal announcement sticker, flexible spacer, copyright.
+- The mobile drawer's scrollable content order is: primary navigation, optional Journal announcement sticker, flexible spacer, grouped language/theme settings and copyright.
+- When the sticker is absent, the flexible empty space must begin immediately after the final navigation item and end immediately before the bottom section. Do not leave the flexible gap behind or inside the copyright/settings area.
+- When the sticker is present, keep it after navigation and before the flexible spacer.
+- Implement the spacer inside the same scrollable flex column as the navigation and bottom section. Do not rely on margins on the footer/settings block to create the gap.
+- On short viewports or when content overflows, keep all controls and copyright reachable through the existing sidebar/drawer ScrollArea. The spacer may collapse to its minimum size, but must not push the bottom section outside the scrollable content.
+- Preserve the desktop top utility placement for language/theme selectors, mobile-only bottom placement for those controls, locale-specific physical drawer/sidebar edges, and Persian RTL row alignment.
+- Verify English and Persian, desktop and mobile, with and without the sticker, plus short-height scrolling.
