@@ -16,7 +16,7 @@ Implement the cross-site refinement as one coherent experience:
 3. Minimal one-line Journal page-size and pagination controls on common mobile widths.
 4. One-line desktop sidebar copyright in English and Persian.
 5. Consistent justified long-form editorial text that uses the available content width without harming mobile readability or Persian shaping.
-6. A homepage Contact section and dedicated bilingual Contact page, reusing the existing sidebar destination and rendering only individually validated, owner-approved contact methods. When no approved details exist, show the localized pending state without fictional links.
+6. A homepage Contact section and dedicated bilingual Contact page, using the centralized owner-authorized fictional demo contact details. Render them normally in both locales without approval/confirmation gates; keep the routes noindex until real details replace the fixtures.
 
 Before coding, read in full:
 - `AGENTS.md`
@@ -34,7 +34,7 @@ Before coding, read in full:
 
 Inspect the current implementation and route hierarchy before editing. Do not assume a breadcrumb parent based only on browser history. Test direct entry, refresh, contextual artwork navigation, and fallback paths. Reuse the installed shadcn primitives and shared navigation architecture. Apply spacing changes through shared tokens/layout primitives before page-specific overrides. Preserve the quiet editorial gallery identity and all approved artwork/content.
 
-**Contact data instruction:** do not publish fictional/example email addresses or demo social profiles. This replaces the earlier instruction to render fictional contact values in production, which conflicts with the higher-priority AGENTS.md, content-model.md, localization-and-editorial-governance.md, and Contact proposal. Render only destinations explicitly approved by the owner and locale. If no approved destination exists, retain the Contact layout and show the localized pending message. Never imply that a demo account is real, verified, or monitored.
+**Contact demo-data authorization (owner-confirmed 2026-11-03):** the site is in a demo phase and the owner explicitly authorizes fictional email and social destinations. Render the centralized fictional Contact fixture normally on the homepage and both localized Contact pages. Do not require owner approval, locale approval, confirmation flags, environment variables, or production-mode conditions to show the values. Do not add a visible disclaimer or claim demo accounts are real, verified, or monitored. Keep Contact routes noindex and excluded from the sitemap while these fictional values are in use. Replace the fixture with real owner-supplied details or remove the methods before public launch. Preserve the actual artist Instagram identity @ghazalenasoodi outside the demo Contact fixture.
 
 Run the complete relevant test suite and CI, inspect actual logs and final tested SHA, and capture/inspect English and Persian desktop/tablet/mobile screenshots. Verify breadcrumb clickability, RTL reading and keyboard order, no overflow, spacing, text measure, Journal controls, copyright fit, and Contact navigation/content.
 
