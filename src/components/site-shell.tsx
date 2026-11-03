@@ -54,8 +54,20 @@ export function SiteShell({ locale, children, announcement }: { locale: Locale; 
       return <SidebarMenuItem key={key}><SidebarMenuButton><Link className="nav-link" dir={locale === "fa" ? "rtl" : "ltr"} href={href} aria-current={active ? "page" : undefined} onClick={() => insideSheet && setMobileOpen(false)}>{label}</Link></SidebarMenuButton></SidebarMenuItem>;
     })}</SidebarMenu>
   </nav>;
+  const isHomePage = pathname === pagePath(locale);
+
   return <>
     <a className="skip-link" href="#main-content">{labels.skip}</a>
+    {announcement && isHomePage && (
+      <JournalAnnouncement
+        locale={locale}
+        event={announcement}
+        eyebrow={labels.announcementEyebrow}
+        dismissLabel={labels.dismissAnnouncement}
+        href={pagePath(locale, `journal/${announcement.slug}`)}
+        placement="viewport"
+      />
+    )}
     <Sidebar className="desktop-sidebar" dir={locale === "fa" ? "rtl" : "ltr"} aria-label="Nasoodi.art">
       <SidebarHeader><Link className="artist-wordmark" href={pagePath(locale)} aria-label="Ghazaleh Abdolahzade Nasoodi — Home">
         <span className="wordmark-name" dir="ltr">Ghazaleh</span><span className="wordmark-surname" dir="ltr">Abdolahzade Nasoodi</span><span className="wordmark-role" dir="auto">{labels.discipline}</span>
@@ -63,7 +75,7 @@ export function SiteShell({ locale, children, announcement }: { locale: Locale; 
       <SidebarContent>
         <ScrollArea dir={locale === "fa" ? "rtl" : "ltr"} className="sidebar-scroll-area">
           {navigation()}
-          {announcement && (
+          {announcement && !isHomePage && (
             <JournalAnnouncement
               locale={locale}
               event={announcement}

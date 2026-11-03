@@ -144,6 +144,10 @@ Implementation scope:
 The overall proposal is approved in principle. The first hand-authored torn-edge vector study is available for review. The owner must approve or request refinements to the silhouette/tape detail after inspecting the CI-generated PNG; the PNG is not a hand-edited source asset. This task is the next implementation priority; it does not authorize merge, deployment, or publication.
 
 
+## Contact experience proposal
+
+- [Contact experience design proposal](./contact-experience-proposal.md) — Quiet Editorial direction for the homepage Contact section and dedicated bilingual Contact page, including responsive composition, RTL/LTR, contact-data safeguards, accessibility, and acceptance criteria.
+
 ## Next implementation task — site-wide navigation, spacing, typography, and Contact
 
 The next cross-site UX refinement is defined in [Unified breadcrumbs, editorial spacing, and Contact implementation prompt](./site-wide-navigation-spacing-and-contact-implementation-prompt.md).
