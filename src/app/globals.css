@@ -1057,9 +1057,11 @@ html[lang="fa"] .prose,html[lang="fa"] .about-biography-copy,html[lang="fa"] .ab
 .mobile-drawer-scroll .scroll-area-viewport {
   overscroll-behavior: contain;
 }
-.sidebar-scroll-content,
-.mobile-drawer-scroll-content {
-  display: flex;
+/* Radix inserts a table-layout content wrapper inside each ScrollArea viewport.
+   Turn that wrapper into the flex column so the spacer can consume real free space. */
+.sidebar-scroll-area .scroll-area-viewport > div,
+.mobile-drawer-scroll .scroll-area-viewport > div {
+  display: flex !important;
   width: 100%;
   min-height: 100%;
   flex-direction: column;
