@@ -50,8 +50,6 @@ export type ContactDetails = {
   email?: string;
   telegramHandle?: string;
   instagramUrl?: string;
-  approvedLocales: Locale[];
-  ownerApproved: boolean;
 };
 export type CvEntry = { id: string; category: "education" | "solo-exhibition" | "group-exhibition" | "award" | "publication" | "collection" | "other"; title: Localized; organization?: Localized; location?: Localized; year: number; verified: boolean; status: Status; sortOrder?: number };
 export type CvDocument = { src: string; fileName: string; artistApproved: boolean; status: Status };
@@ -302,10 +300,13 @@ export const cvEntries: CvEntry[] = [];
 // No artist-approved public CV PDF has been supplied yet.
 export const cvDocument: CvDocument | undefined = undefined;
 export const artistProfile: ArtistProfile | undefined = undefined;
-// Public contact values are intentionally absent until the artist/site owner approves them.
+// Owner-authorized fictional contact fixtures for the current demo phase.
+// Replace these centralized values with the artist's real details before the public launch.
+// The example email domain and demo social handles are placeholders, not verified or monitored accounts.
 export const contactDetails: ContactDetails = {
-  approvedLocales: [],
-  ownerApproved: false,
+  email: "hello@example.com",
+  telegramHandle: "nasoodi_contact_demo",
+  instagramUrl: "https://www.instagram.com/nasoodi.demo/",
 };
 export const homepageSelection: HomepageSelection = { featuredArtworkIds: ["artwork-quiet-place", "artwork-shape-of-remembering", "artwork-where-light-rests", "artwork-garden-small-moments", "artwork-blue-hour-within"], featuredGalleryIds: ["gallery-quiet-intervals", "gallery-color-conversation", "gallery-fragments-memory", "gallery-selected-works"] };
 export function serializeJsonLd(value: unknown): string {
@@ -512,8 +513,8 @@ export type PublicContactDetails = {
   instagramUrl?: string;
 };
 
-export function getPublicContactDetails(details: ContactDetails | undefined, locale: Locale): PublicContactDetails | undefined {
-  if (!details || !details.ownerApproved || !details.approvedLocales.includes(locale)) return undefined;
+export function getPublicContactDetails(details: ContactDetails | undefined): PublicContactDetails | undefined {
+  if (!details) return undefined;
   const emailValue = details.email?.trim() ?? "";
   const email = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailValue) ? emailValue : undefined;
   const telegramHandle = details.telegramHandle && /^[A-Za-z0-9_]{5,32}$/.test(details.telegramHandle) ? details.telegramHandle : undefined;
