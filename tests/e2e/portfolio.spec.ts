@@ -1520,9 +1520,20 @@ test("shared Persian typography keeps the artist name and homepage Contact headi
 
     expect(artist.lineCount, `Persian artist name should fit on one line at ${width}px`).toBe(1);
     expect(contact.lineCount, `Persian Contact heading should fit on one line at ${width}px`).toBe(1);
-    const rootFontSize = await page.locator("html").evaluate((element) => Number.parseFloat(getComputedStyle(element).fontSize));
-    expect(artist.fontSize).toBeLessThanOrEqual(rootFontSize * 2.5 + 0.1);
-    expect(contact.fontSize).toBeLessThanOrEqual(rootFontSize * 1.875 + 0.1);
+    const tokenSizes = await page.evaluate(() => {
+      const probe = document.createElement("span");
+      probe.style.position = "absolute";
+      probe.style.visibility = "hidden";
+      document.body.append(probe);
+      probe.style.fontSize = "var(--type-display)";
+      const display = Number.parseFloat(getComputedStyle(probe).fontSize);
+      probe.style.fontSize = "var(--type-section-title)";
+      const section = Number.parseFloat(getComputedStyle(probe).fontSize);
+      probe.remove();
+      return { display, section };
+    });
+    expect(artist.fontSize).toBeLessThanOrEqual(tokenSizes.display + 0.1);
+    expect(contact.fontSize).toBeLessThanOrEqual(tokenSizes.section + 0.1);
     expect(artist.whiteSpace).not.toBe("nowrap");
     expect(contact.whiteSpace).not.toBe("nowrap");
     expect(artist.scrollWidth).toBeLessThanOrEqual(artist.clientWidth);
