@@ -192,14 +192,14 @@ A reader should see a consistent content edge and line measure across comparable
 
 - The owner authorizes fictional email and social destinations during the current demo phase. Render the centralized fixture on the homepage and localized Contact pages without approval-state gating.
 - Keep Contact routes noindex and out of the sitemap until the demo values are replaced with real owner-supplied details. Never claim demo accounts are verified or monitored.
-- Render each individually validated, approved method; do not require all three methods to exist before showing any approved method.
+- Render each individually validated method; do not require all three methods to exist before showing any method.
 - If all fixture methods are absent or invalid, keep the Contact layout and show the localized pending message as a defensive fallback.
-- Keep real contact data in one centralized typed source so the owner can update it safely.
+- Keep demo and future real contact data in one centralized typed source so the owner can replace the fixture safely.
 - Validate email syntax before creating a `mailto:` link. Validate Telegram handles and construct canonical `https://t.me/<handle>` destinations. Accept Instagram profile URLs only over HTTPS on the approved Instagram host and only for a single profile path.
 - Do not claim social profiles are verified or monitored unless that is confirmed.
 - Preserve the artist Instagram handle `@ghazalenasoodi` in any existing approved context; do not replace it with a demo account.
 - Do not invent a physical address, phone number, response-time promise, availability, commission policy, or other contact method.
-- Any fictional values used in automated tests must remain test-only and must never enter the public content source or production rendering.
+- The current fictional values are an explicit owner-authorized demo fixture in the canonical content source and runtime rendering; do not copy them into unrelated artist content or claim they are real.
 ### 8.4 Localization
 
 - Provide complete English and Persian content with equivalent meaning and professional tone.
