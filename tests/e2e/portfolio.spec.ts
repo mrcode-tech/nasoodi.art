@@ -175,7 +175,7 @@ for (const locale of ["en", "fa"] as const) {
     expect(direction).toBe(locale === "fa" ? "rtl" : "ltr");
     await expect(sidebar.locator("nav")).toHaveAttribute("dir", locale === "fa" ? "rtl" : "ltr");
     await expect(sidebar.locator(".nav-link").first()).toHaveCSS("text-align", locale === "fa" ? "right" : "start");
-    await expect(sidebar.locator(".sidebar-footer")).toHaveCSS("direction", locale === "fa" ? "rtl" : "ltr");
+    await expect(sidebar.locator(".sidebar-bottom")).toHaveCSS("direction", locale === "fa" ? "rtl" : "ltr");
     if (locale === "fa") {
       const navBox = await firstLink.boundingBox();
       const sidebarBox = bounds!;
@@ -1284,26 +1284,24 @@ test("editorial section transitions avoid decorative rules while functional cont
 });
 
  
-test("localized Contact surfaces show the approved-data pending state until owner approval", async ({ page }) => {
+test("localized Contact surfaces render centralized demo details without approval-state gating", async ({ page }) => {
  for (const locale of ["en","fa"] as const) {
   await page.setViewportSize({width:390,height:844});
-  const pendingCopy = locale === "fa"
-    ? "اطلاعات تماس عمومی هنوز تأیید نشده است."
-    : "Public contact details have not yet been confirmed.";
-
   await page.goto(`/${locale}`);
   const home=page.locator(".homepage-contact");
   await expect(home).toBeVisible();
   await expect(home).toHaveAttribute("dir", locale === "fa" ? "rtl" : "ltr");
-  await expect(home.getByRole("status")).toHaveText(pendingCopy);
-  await expect(home.getByRole("link")).toHaveCount(0);
+  await expect(home.locator('a[href="mailto:hello@example.com"]')).toBeVisible();
+  await expect(home.getByRole("link",{name:"@nasoodi_contact_demo"})).toHaveAttribute("href","https://t.me/nasoodi_contact_demo");
+  await expect(home.getByRole("link",{name:"@nasoodi.demo"})).toHaveAttribute("href","https://www.instagram.com/nasoodi.demo/");
 
   await page.goto(`/${locale}/contact`);
   const contactPage=page.locator(".contact-experience-page");
   await expect(contactPage).toBeVisible();
   await expect(contactPage).toHaveAttribute("dir", locale === "fa" ? "rtl" : "ltr");
-  await expect(contactPage.getByRole("status")).toHaveText(pendingCopy);
-  await expect(contactPage.getByRole("link")).toHaveCount(0);
+  await expect(contactPage.locator('a[href="mailto:hello@example.com"]')).toBeVisible();
+  await expect(contactPage.getByRole("link",{name:"@nasoodi_contact_demo"})).toHaveAttribute("href","https://t.me/nasoodi_contact_demo");
+  await expect(contactPage.getByRole("link",{name:"@nasoodi.demo"})).toHaveAttribute("href","https://www.instagram.com/nasoodi.demo/");
   await expect(page.getByRole("navigation",{name:locale==="fa"?"مسیر صفحه":"Breadcrumb"})).toBeVisible();
   expect(await page.evaluate(()=>document.documentElement.scrollWidth<=document.documentElement.clientWidth)).toBe(true);
  }
@@ -1438,6 +1436,96 @@ test("theme selector is available in the mobile drawer in both locales and artwo
 });
 
 
+test("sidebar flexible space separates navigation from the bottom utility and copyright sections", async ({ page }) => {
+  for (const locale of ["en", "fa"] as const) {
+    await page.setViewportSize({ width: 1440, height: 960 });
+    await page.goto(`/${locale}/about`);
+    await page.evaluate(() => new Promise<void>((resolve) => requestAnimationFrame(() => requestAnimationFrame(() => resolve()))));
+
+    // First verify the optional sticker, then remove it to exercise the no-sticker layout.
+    const desktopSticker = page.locator('.desktop-sidebar [data-placement="desktop-sidebar"]');
+    if (await desktopSticker.count()) {
+      const stickerBox = await desktopSticker.boundingBox();
+      const spacerBox = await page.locator(".desktop-sidebar .sidebar-flex-spacer").boundingBox();
+      expect(stickerBox).not.toBeNull();
+      expect(spacerBox).not.toBeNull();
+      expect(spacerBox!.y).toBeGreaterThanOrEqual(stickerBox!.y + stickerBox!.height);
+      await desktopSticker.evaluate((element) => element.remove());
+    }
+    const desktopNavLast = page.locator(".desktop-sidebar .nav-link").last();
+    const desktopSpacer = page.locator(".desktop-sidebar .sidebar-flex-spacer");
+    const desktopCopyright = page.locator(".desktop-sidebar .sidebar-bottom");
+    await expect(desktopSpacer).toBeVisible();
+    await expect(desktopCopyright).toBeVisible();
+
+    const desktopLayout = await Promise.all([
+      desktopNavLast.boundingBox(),
+      desktopSpacer.boundingBox(),
+      desktopCopyright.boundingBox(),
+    ]);
+    expect(desktopLayout.every(Boolean)).toBe(true);
+    const [desktopNavBox, desktopSpacerBox, desktopCopyrightBox] = desktopLayout as [
+      NonNullable<typeof desktopLayout[0]>,
+      NonNullable<typeof desktopLayout[1]>,
+      NonNullable<typeof desktopLayout[2]>
+    ];
+    expect(desktopSpacerBox.y).toBeGreaterThanOrEqual(desktopNavBox.y + desktopNavBox.height);
+    expect(desktopSpacerBox.height).toBeGreaterThan(80);
+    expect(desktopCopyrightBox.y).toBeGreaterThanOrEqual(desktopSpacerBox.y + desktopSpacerBox.height);
+    expect(desktopCopyrightBox.y + desktopCopyrightBox.height).toBeGreaterThan(900);
+
+    await page.setViewportSize({ width: 390, height: 960 });
+    const openLabel = locale === "fa" ? "باز کردن راهبری" : "Open navigation";
+    await page.goto(`/${locale}/about`);
+    await page.evaluate(() => new Promise<void>((resolve) => requestAnimationFrame(() => requestAnimationFrame(() => resolve()))));
+    await page.getByRole("button", { name: openLabel }).click();
+    const drawer = page.getByRole("dialog");
+    // The sticker is optional; if present it belongs before the spacer. Remove it to
+    // explicitly verify that the empty space starts immediately after the final menu item.
+    const mobileSticker = drawer.locator('[data-placement="mobile-sidebar"]');
+    if (await mobileSticker.count()) {
+      const stickerBox = await mobileSticker.boundingBox();
+      const spacerBox = await drawer.locator(".drawer-flex-spacer").boundingBox();
+      expect(stickerBox).not.toBeNull();
+      expect(spacerBox).not.toBeNull();
+      expect(spacerBox!.y).toBeGreaterThanOrEqual(stickerBox!.y + stickerBox!.height);
+      await mobileSticker.evaluate((element) => element.remove());
+    }
+    const mobileNavLast = drawer.locator("nav .nav-link").last();
+    const mobileSpacer = drawer.locator(".drawer-flex-spacer");
+    const bottomSection = drawer.locator(".drawer-bottom");
+    const mobileCopyright = bottomSection.locator(".drawer-copyright");
+    await expect(mobileSpacer).toBeVisible();
+    await expect(bottomSection).toBeVisible();
+    await expect(mobileCopyright).toBeVisible();
+    await expect(bottomSection.locator(".drawer-setting-row")).toHaveCount(2);
+
+    const mobileLayout = await Promise.all([
+      mobileNavLast.boundingBox(),
+      mobileSpacer.boundingBox(),
+      bottomSection.boundingBox(),
+    ]);
+    expect(mobileLayout.every(Boolean)).toBe(true);
+    const [mobileNavBox, mobileSpacerBox, bottomBox] = mobileLayout as [
+      NonNullable<typeof mobileLayout[0]>,
+      NonNullable<typeof mobileLayout[1]>,
+      NonNullable<typeof mobileLayout[2]>
+    ];
+    expect(mobileSpacerBox.y).toBeGreaterThanOrEqual(mobileNavBox.y + mobileNavBox.height);
+    expect(mobileSpacerBox.height).toBeGreaterThan(80);
+    expect(bottomBox.y).toBeGreaterThanOrEqual(mobileSpacerBox.y + mobileSpacerBox.height);
+    expect(bottomBox.y + bottomBox.height).toBeGreaterThan(900);
+
+    // On short screens the same bottom section remains reachable through the drawer's ScrollArea.
+    await page.setViewportSize({ width: 390, height: 480 });
+    await page.reload();
+    await page.getByRole("button", { name: openLabel }).click();
+    const viewport = page.locator(".mobile-drawer-scroll .scroll-area-viewport");
+    await viewport.evaluate((element) => { element.scrollTop = element.scrollHeight; });
+    await expect(page.locator(".mobile-drawer .drawer-copyright")).toBeVisible();
+  }
+});
+
 test("new visitors default to System and follow the operating-system color scheme", async ({ page }) => {
   await page.emulateMedia({ colorScheme: "dark" });
   await page.goto("/en");
@@ -1449,10 +1537,10 @@ test("new visitors default to System and follow the operating-system color schem
 });
 
 
-test("Contact experience is editorial, bilingual, responsive, and hides unapproved sample destinations", async ({ page }) => {
+test("Contact experience is editorial, bilingual, responsive, and displays the demo contact methods", async ({ page }) => {
   for (const locale of [
-    { code: "en", heading: "Let's start a conversation.", pending: "Public contact details have not yet been confirmed.", dir: "ltr" },
-    { code: "fa", heading: "بیایید گفت‌وگویی را آغاز کنیم.", pending: "اطلاعات تماس عمومی هنوز تأیید نشده است.", dir: "rtl" },
+    { code: "en", heading: "Let's start a conversation.", dir: "ltr" },
+    { code: "fa", heading: "بیایید گفت‌وگویی را آغاز کنیم.", dir: "rtl" },
   ]) {
     await page.setViewportSize({ width: 1440, height: 960 });
     await page.goto(`/${locale.code}`);
@@ -1460,23 +1548,22 @@ test("Contact experience is editorial, bilingual, responsive, and hides unapprov
     const homepageContact = page.locator(".contact-experience-home");
     await expect(homepageContact).toBeVisible();
     await expect(homepageContact.getByRole("heading", { name: locale.heading })).toBeVisible();
-    await expect(homepageContact.getByRole("status")).toHaveText(locale.pending);
-    await expect(homepageContact.locator('a[href^="mailto:"]')).toHaveCount(0);
-    await expect(homepageContact.getByRole("link", { name: /demo|nasoodi_contact_demo|example\.com/i })).toHaveCount(0);
+    await expect(homepageContact.locator('a[href="mailto:hello@example.com"]')).toBeVisible();
+    await expect(homepageContact.getByRole("link", { name: "@nasoodi_contact_demo" })).toBeVisible();
+    await expect(homepageContact.getByRole("link", { name: "@nasoodi.demo" })).toBeVisible();
 
     await page.goto(`/${locale.code}/contact`);
     await expect(page.locator("html")).toHaveAttribute("dir", locale.dir);
     const contactPage = page.locator(".contact-experience-page");
     await expect(contactPage.getByRole("heading", { name: locale.heading })).toBeVisible();
-    await expect(contactPage.getByRole("status")).toHaveText(locale.pending);
+    await expect(contactPage.locator('a[href="mailto:hello@example.com"]')).toBeVisible();
+    await expect(contactPage.getByRole("link", { name: "@nasoodi_contact_demo" })).toBeVisible();
+    await expect(contactPage.getByRole("link", { name: "@nasoodi.demo" })).toBeVisible();
     const desktopColumns = await contactPage.locator(".contact-composition").evaluate((element) =>
       getComputedStyle(element).gridTemplateColumns.split(" ").length
     );
     expect(desktopColumns).toBe(2);
-    await page.screenshot({
-      path: test.info().outputPath(`contact-${locale.code}-desktop.png`),
-      fullPage: true,
-    });
+    await page.screenshot({ path: test.info().outputPath(`contact-${locale.code}-desktop.png`), fullPage: true });
 
     await page.setViewportSize({ width: 390, height: 844 });
     const mobileColumns = await contactPage.locator(".contact-composition").evaluate((element) =>
@@ -1484,9 +1571,176 @@ test("Contact experience is editorial, bilingual, responsive, and hides unapprov
     );
     expect(mobileColumns).toBe(1);
     await expect(contactPage.getByRole("heading", { name: locale.heading })).toBeVisible();
-    await page.screenshot({
-      path: test.info().outputPath(`contact-${locale.code}-mobile.png`),
-      fullPage: true,
-    });
+    await page.screenshot({ path: test.info().outputPath(`contact-${locale.code}-mobile.png`), fullPage: true });
   }
+});
+
+
+test("shared Persian typography keeps the artist name and homepage Contact heading on one line at reference widths", async ({ page }) => {
+  const referenceWidths = [390, 430, 768, 1280, 1440];
+
+  for (const width of referenceWidths) {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto("/fa");
+    await page.evaluate(() => document.fonts.ready);
+
+    const measure = async (selector: string) => page.locator(selector).evaluate((element) => {
+      const range = document.createRange();
+      range.selectNodeContents(element);
+      const rects = Array.from(range.getClientRects()).filter((rect) => rect.width > 0 && rect.height > 0);
+      const style = getComputedStyle(element);
+      return {
+        lineCount: rects.length,
+        fontSize: Number.parseFloat(style.fontSize),
+        lineHeight: Number.parseFloat(style.lineHeight),
+        whiteSpace: style.whiteSpace,
+        scrollWidth: element.scrollWidth,
+        clientWidth: element.clientWidth,
+      };
+    });
+
+    const artist = await measure("#home-title");
+    const contact = await measure(".contact-experience-home .contact-title");
+
+    expect(artist.lineCount, `Persian artist name should fit on one line at ${width}px`).toBe(1);
+    expect(contact.lineCount, `Persian Contact heading should fit on one line at ${width}px`).toBe(1);
+    const tokenSizes = await page.evaluate(() => {
+      const probe = document.createElement("span");
+      probe.style.position = "absolute";
+      probe.style.visibility = "hidden";
+      document.body.append(probe);
+      probe.style.fontSize = "var(--type-display)";
+      const display = Number.parseFloat(getComputedStyle(probe).fontSize);
+      probe.style.fontSize = "var(--type-section-title)";
+      const section = Number.parseFloat(getComputedStyle(probe).fontSize);
+      probe.remove();
+      return { display, section };
+    });
+    expect(artist.fontSize).toBeLessThanOrEqual(tokenSizes.display + 0.1);
+    expect(contact.fontSize).toBeLessThanOrEqual(tokenSizes.section + 0.1);
+    expect(artist.whiteSpace).not.toBe("nowrap");
+    expect(contact.whiteSpace).not.toBe("nowrap");
+    expect(artist.scrollWidth).toBeLessThanOrEqual(artist.clientWidth);
+    expect(contact.scrollWidth).toBeLessThanOrEqual(contact.clientWidth);
+  }
+});
+
+test("shared Persian headings wrap naturally on narrow phones without horizontal overflow", async ({ page }) => {
+  for (const width of [320, 360]) {
+    await page.setViewportSize({ width, height: 640 });
+    await page.goto("/fa");
+    const metrics = await page.locator("#home-title, .contact-experience-home .contact-title").evaluateAll((elements) =>
+      elements.map((element) => {
+        const range = document.createRange();
+        range.selectNodeContents(element);
+        const lineCount = Array.from(range.getClientRects()).filter((rect) => rect.width > 0 && rect.height > 0).length;
+        const style = getComputedStyle(element);
+        return { lineCount, whiteSpace: style.whiteSpace, scrollWidth: element.scrollWidth, clientWidth: element.clientWidth };
+      })
+    );
+    expect(metrics).toHaveLength(2);
+    for (const metric of metrics) {
+      expect(metric.lineCount).toBeGreaterThanOrEqual(1);
+      expect(metric.lineCount).toBeLessThanOrEqual(2);
+      expect(metric.whiteSpace).not.toBe("nowrap");
+      expect(metric.scrollWidth).toBeLessThanOrEqual(metric.clientWidth);
+    }
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth)).toBe(true);
+  }
+});
+
+test("shared typography hierarchy is stable in English and across Light/Dark themes", async ({ page }) => {
+  for (const locale of ["en", "fa"] as const) {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.goto(`/${locale}`);
+    const homeTitle = page.locator("#home-title");
+    const contactTitle = page.locator(".contact-experience-home .contact-title");
+    await expect(homeTitle).toBeVisible();
+    await expect(contactTitle).toBeVisible();
+
+    const light = await Promise.all([
+      homeTitle.evaluate((element) => getComputedStyle(element).fontSize),
+      contactTitle.evaluate((element) => getComputedStyle(element).fontSize),
+    ]);
+    await page.getByRole("button", { name: locale === "fa" ? "انتخاب پوسته" : "Choose theme" }).click();
+    await page.getByRole("menuitemradio", { name: locale === "fa" ? "تیره" : "Dark" }).click();
+    await expect(page.locator("html")).toHaveClass(/dark/);
+    const dark = await Promise.all([
+      homeTitle.evaluate((element) => getComputedStyle(element).fontSize),
+      contactTitle.evaluate((element) => getComputedStyle(element).fontSize),
+    ]);
+    expect(dark).toEqual(light);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth)).toBe(true);
+  }
+});
+
+
+test("shared page-title tokens cover bilingual index and detail routes", async ({ page }) => {
+  const routes = [
+    "about",
+    "works",
+    "galleries",
+    "journal",
+    "contact",
+    "galleries/quiet-intervals",
+    "works/a-quiet-place-between-seasons",
+    "journal/between-layers-studio-notes",
+  ];
+
+  for (const locale of ["en", "fa"] as const) {
+    for (const route of routes) {
+      await page.setViewportSize({ width: 1280, height: 800 });
+      await page.goto(`/${locale}/${route}`);
+      const heading = page.getByRole("heading", { level: 1 }).first();
+      await expect(heading, `${locale}/${route} should expose its page title`).toBeVisible();
+
+      const expected = await page.evaluate(() => {
+        const probe = document.createElement("span");
+        probe.style.position = "absolute";
+        probe.style.visibility = "hidden";
+        probe.style.fontSize = "var(--type-page-title)";
+        document.body.append(probe);
+        const size = Number.parseFloat(getComputedStyle(probe).fontSize);
+        probe.remove();
+        return size;
+      });
+      const actual = await heading.evaluate((element) => Number.parseFloat(getComputedStyle(element).fontSize));
+      expect(Math.abs(actual - expected), `${locale}/${route} must use the shared page-title token`).toBeLessThanOrEqual(0.1);
+      expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth)).toBe(true);
+    }
+  }
+});
+
+test("About subsections and homepage Journal preview use shared editorial heading roles", async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await page.goto("/fa/about");
+  const aboutHeading = page.locator(".about-statement h2");
+  await expect(aboutHeading).toBeVisible();
+
+  const subsectionToken = await page.evaluate(() => {
+    const probe = document.createElement("span");
+    probe.style.position = "absolute";
+    probe.style.visibility = "hidden";
+    probe.style.fontSize = "var(--type-subsection-title)";
+    document.body.append(probe);
+    const size = Number.parseFloat(getComputedStyle(probe).fontSize);
+    probe.remove();
+    return size;
+  });
+  expect(await aboutHeading.evaluate((element) => Number.parseFloat(getComputedStyle(element).fontSize))).toBeCloseTo(subsectionToken, 1);
+
+  await page.goto("/fa");
+  const journalTitle = page.locator(".journal-preview-item h3").first();
+  await expect(journalTitle).toBeVisible();
+  const cardToken = await page.evaluate(() => {
+    const probe = document.createElement("span");
+    probe.style.position = "absolute";
+    probe.style.visibility = "hidden";
+    probe.style.fontSize = "var(--type-card-title)";
+    document.body.append(probe);
+    const size = Number.parseFloat(getComputedStyle(probe).fontSize);
+    probe.remove();
+    return size;
+  });
+  expect(await journalTitle.evaluate((element) => Number.parseFloat(getComputedStyle(element).fontSize))).toBeCloseTo(cardToken, 1);
 });

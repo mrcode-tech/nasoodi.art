@@ -66,14 +66,17 @@ Use a two-script editorial system. Exact font families remain a selection/approv
 
 Use clamp() or the project's fluid type utility where supported. These are target ranges, not fixed per-component overrides:
 
-| Role | Desktop target | Mobile target |
-|---|---:|---:|
-| Display | 3.25–5rem | 2.25–3rem |
-| Page title | 2.5–3.5rem | 2–2.75rem |
-| Section title | 1.75–2.5rem | 1.5–2rem |
-| Card title | 1.125–1.5rem | 1.0625–1.25rem |
-| Body | 1–1.125rem | 1–1.0625rem |
-| Metadata | 0.8125–0.9375rem | 0.8125–0.9375rem |
+The earlier proposed ranges below are superseded by the measured shared tokens in [shared-responsive-typography-system.md](./shared-responsive-typography-system.md). Use those semantic fluid tokens as the implementation authority rather than selecting independent page sizes.
+
+| Role | Shared implementation token |
+|---|---|
+| Display | --type-display |
+| Page title | --type-page-title |
+| Section title | --type-section-title |
+| Subsection title | --type-subsection-title |
+| Card title | --type-card-title |
+| Body / lead | --type-body / --type-body-lead |
+| Supporting / metadata | --type-supporting / --type-caption |
 
 Do not force identical optical sizing across Persian and Latin scripts. Tune line-height and weight for each family. Do not use letter-spacing on Persian text to imitate English editorial typography.
 
@@ -218,3 +221,14 @@ Use whitespace, typography, alignment, and content grouping as the default way t
 Retain a line or border only when it communicates a meaningful functional boundary or control state—for example, a form field, pagination/control grouping, a selected navigation indicator, or the settings region in the mobile drawer. Link underlines and focus indicators are interactive affordances, not decorative section separators, and must remain accessible.
 
 For Journal imagery, use only an entry's optional approved cover image when its local path, rights confirmation, intrinsic dimensions, and localized alternative text are valid. Preserve the source aspect ratio with an editorial image-and-text composition. If no approved image exists, keep the entry text-led; never substitute artwork, a portrait, a studio photograph, stock imagery, or generated imagery as an event photograph.
+
+
+## 16. Shared responsive typography refinement — 2026-11-03
+
+The implementation authority for all typography roles, Persian/English token values, script-specific line-height, natural wrapping, and responsive acceptance criteria is [shared-responsive-typography-system.md](./shared-responsive-typography-system.md). This refinement supersedes the original large display/page/section ranges in Section 4.
+
+- Use the shared semantic tokens across every route and reusable component; do not tune page headings independently.
+- The Persian homepage artist name (غزاله عبداله زاده نسودی) and homepage Contact heading (بیایید گفت‌وگویی را آغاز کنیم.) are single-line targets at the reference widths defined by the shared specification.
+- These two targets do not create a global no-wrap rule. Preserve natural, readable wrapping at narrower widths and for all other headings.
+- Persian and English share the same hierarchy but use script-appropriate token values and line-height.
+- Typography must remain unchanged between Light and Dark themes and must not compete with artwork.

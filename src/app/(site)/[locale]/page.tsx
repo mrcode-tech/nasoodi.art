@@ -24,7 +24,7 @@ export default async function Home({params}:Props){const {locale}=await params;i
  const hasSelectedWorks=getPublicArtworks(artworks,locale).length>0;
  const hasFeaturedGalleries=getPublicGalleries(galleries,artworks,locale).length>0;
  const journal=getHomepageJournalPreview(journalEntries,locale);
- const contact=getPublicContactDetails(contactDetails,locale);
+ const contact=getPublicContactDetails(contactDetails);
  return <div className="page-content home-page">
   <section className="home-intro has-hero" aria-labelledby="home-title">
    <figure className="hero-artwork">

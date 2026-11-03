@@ -45,6 +45,7 @@ Read these documents together with [Journal, Articles, and Events](./journal-and
 - [Bilingual homepage hero, CTAs, and showcase](./homepage-hero-cta-and-showcase.md) — implementation-ready English/Persian hero and CTA design, responsive wireframes, sample asset mapping, homepage showcase rules, and complete test scenarios.
 - [Design engineering skills and operating contract](./design-engineering-skills.md) — Emil Kowalski and Impeccable-inspired project rules for design workflow, interaction, motion, component craft, and visual QA.
 - [Refined design direction and unified design system](./design-direction-and-system-refinement.md) — the artist's quiet gallery direction, semantic tokens, typography, layout, image composition, navigation, and page-level design contracts.
+- [Shared responsive typography system](./shared-responsive-typography-system.md) — authoritative fluid type tokens, Persian/English metrics, natural heading wrapping, and responsive typography acceptance tests.
 - [Journal, articles, and events](./journal-and-events.md) — unified Journal archive, article/event content model, homepage latest entries, sidebar navigation, event lifecycle, SEO, and QA.
 - [Studio hero implementation prompt](./hero-implementation-prompt.md) — supporting studio-scene implementation brief; the artwork-led homepage hero specification takes precedence for the primary hero.
 
@@ -154,7 +155,7 @@ The next cross-site UX refinement is defined in [Unified breadcrumbs, editorial 
 
 This task introduces a shared shadcn/ui breadcrumb system with clickable intermediate paths (including artwork and Journal detail navigation), refines site-wide editorial spacing, compacts Journal pagination controls on mobile, keeps sidebar copyright on one desktop line, standardizes justified long-form text, and adds a bilingual Contact section/page.
 
-The owner explicitly requires the temporary fictional Telegram, email, and Instagram values to be rendered normally in production until replaced later. Do not hide them behind environment variables or production flags, and do not add a visible disclaimer. Keep the values centralized and easy to replace. Do not claim the social profiles are verified or monitored. The existing artist Instagram handle must remain unchanged. Read the full prompt and all mandatory design/localization/accessibility authorities before implementation.
+The owner explicitly authorizes temporary fictional Telegram, email, and Instagram values during the current demo phase. Render them normally on the homepage and localized Contact pages without approval gates, environment variables, or production-mode conditions, and do not add a visible disclaimer. Keep the values centralized and easy to replace; do not claim demo profiles are real, verified, or monitored. Keep Contact routes noindex and excluded from the sitemap until the fixture is replaced with real details. Preserve the actual artist Instagram handle @ghazalenasoodi wherever it represents the artist's identity outside the demo fixture. Read the full prompt and all mandatory design/localization/accessibility authorities before implementation.
 
 ## Shared light and dark theme system — Midnight Gallery
 

@@ -97,3 +97,8 @@ For the responsive artwork discovery experience, add/verify tests for:
 - Journal archive/detail preserving their existing editorial structure.
 
 Do not mark the carousel component or visual design as implemented/verified merely because the specification and wireframes exist. Record actual CI run, viewport/locale screenshots, manual review, and owner approval separately.
+
+
+## Shared responsive typography regression coverage — 2026-11-03
+
+Follow [shared-responsive-typography-system.md](./shared-responsive-typography-system.md) for the complete type-role and viewport matrix. Playwright must measure rendered text line boxes for the Persian homepage artist name and homepage Contact heading at 390, 430, 768, 1280, and 1440px; verify natural wrapping without overflow at 320 and 360px; assert computed font sizes remain within the shared role tokens; and verify English hierarchy, RTL/LTR direction, and both theme modes. A passing line-count test is necessary but does not replace screenshot inspection for visual balance.

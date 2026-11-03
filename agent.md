@@ -5,6 +5,10 @@
 **Branch:** `feature` only  
 **Complete implementation prompt:** `specification/site-wide-navigation-spacing-and-contact-implementation-prompt.md`
 
+## Global typography guardrail — 2026-11-03
+
+All future UI work must follow specification/shared-responsive-typography-system.md and the shared design authorities. Reuse its semantic fluid type tokens across routes; respect Persian and English font metrics and RTL/LTR behavior; preserve natural heading wrapping; and do not add isolated oversized heading values or global no-wrap rules. The Persian homepage artist name and homepage Contact heading are single-line targets only at the reference widths defined by the specification. Update the shared specification before changing the typography system.
+
 Implement the cross-site refinement as one coherent experience:
 
 1. A shared shadcn/ui Breadcrumb across all applicable pages, with clickable intermediate ancestors, correct artwork/collection/Journal paths, and robust Persian RTL behavior.
@@ -12,7 +16,7 @@ Implement the cross-site refinement as one coherent experience:
 3. Minimal one-line Journal page-size and pagination controls on common mobile widths.
 4. One-line desktop sidebar copyright in English and Persian.
 5. Consistent justified long-form editorial text that uses the available content width without harming mobile readability or Persian shaping.
-6. A homepage Contact section and dedicated bilingual Contact page, reusing the existing sidebar destination and rendering only individually validated, owner-approved contact methods. When no approved details exist, show the localized pending state without fictional links.
+6. A homepage Contact section and dedicated bilingual Contact page, using the centralized owner-authorized fictional demo contact details. Render them normally in both locales without approval/confirmation gates; keep the routes noindex until real details replace the fixtures.
 
 Before coding, read in full:
 - `AGENTS.md`
@@ -30,7 +34,7 @@ Before coding, read in full:
 
 Inspect the current implementation and route hierarchy before editing. Do not assume a breadcrumb parent based only on browser history. Test direct entry, refresh, contextual artwork navigation, and fallback paths. Reuse the installed shadcn primitives and shared navigation architecture. Apply spacing changes through shared tokens/layout primitives before page-specific overrides. Preserve the quiet editorial gallery identity and all approved artwork/content.
 
-**Contact data instruction:** do not publish fictional/example email addresses or demo social profiles. This replaces the earlier instruction to render fictional contact values in production, which conflicts with the higher-priority AGENTS.md, content-model.md, localization-and-editorial-governance.md, and Contact proposal. Render only destinations explicitly approved by the owner and locale. If no approved destination exists, retain the Contact layout and show the localized pending message. Never imply that a demo account is real, verified, or monitored.
+**Contact demo-data authorization (owner-confirmed 2026-11-03):** the site is in a demo phase and the owner explicitly authorizes fictional email and social destinations. Render the centralized fictional Contact fixture normally on the homepage and both localized Contact pages. Do not require owner approval, locale approval, confirmation flags, environment variables, or production-mode conditions to show the values. Do not add a visible disclaimer or claim demo accounts are real, verified, or monitored. Keep Contact routes noindex and excluded from the sitemap while these fictional values are in use. Replace the fixture with real owner-supplied details or remove the methods before public launch. Preserve the actual artist Instagram identity @ghazalenasoodi outside the demo Contact fixture.
 
 Run the complete relevant test suite and CI, inspect actual logs and final tested SHA, and capture/inspect English and Persian desktop/tablet/mobile screenshots. Verify breadcrumb clickability, RTL reading and keyboard order, no overflow, spacing, text measure, Journal controls, copyright fit, and Contact navigation/content.
 
@@ -173,7 +177,8 @@ If the actual code conflicts with the specification, inspect the source and rele
 
 ## 5. Content and asset integrity — hard gate
 
-- Use only artist/site-owner-approved material for public production content.
+- Use only artist/site-owner-approved material for public production content, except for the explicitly owner-authorized fictional Contact fixture used during this demo phase.
+- Demo Contact exception: the centralized fictional email, Telegram, and Instagram values must render on the homepage and localized Contact pages without approval, confirmation, or environment/production-mode gates. Do not add a visible disclaimer or claim the accounts are real, verified, monitored, or artist-approved. Keep Contact routes noindex and out of the sitemap until real owner-supplied values replace the fixture; preserve the actual artist Instagram identity outside the demo fixture.
 - Explicit owner-authorized exception for this feature-branch design task: use clearly labelled fictional bilingual biography, artist statement, and CV data to populate the existing About page for visual review. Keep it non-approved, noindex, and disabled in production runtime; replace it before any release merge. Do not create a preview route or query parameter.
 - Never present fictional biography, education, exhibitions, awards, publications, dates, venues, or qualifications as verified or artist-approved facts.
 - Do not machine-translate and publish unreviewed biography or interface copy as approved Persian/English content.

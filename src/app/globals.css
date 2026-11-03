@@ -9,7 +9,7 @@ html[lang=fa] body{font-family:"IranianSerifRegular",Tahoma,serif}a{color:inheri
 .desktop-sidebar{position:fixed;z-index:20;inset-block:0;left:0;display:flex;width:var(--sidebar);flex-direction:column;padding:2.5rem 2rem 1.75rem;border-right:1px solid var(--border);background:var(--paper)}
 .artist-wordmark{display:flex;flex-direction:column;align-items:flex-start;padding-bottom:2.5rem}.wordmark-name{font:1.8rem/1.05 Georgia,"Times New Roman",serif;letter-spacing:-.055em}.wordmark-surname{margin-top:.3rem;color:var(--muted);font-size:.83rem}.wordmark-role{margin-top:1rem;color:var(--mauve-deep);font-size:.78rem}
 .nav-list{display:flex;flex-direction:column;gap:.35rem;margin:0;padding:0;list-style:none}.nav-link{display:flex;min-height:2.85rem;align-items:center;padding:.5rem .2rem;border-bottom:1px solid transparent;color:var(--muted);font-size:.94rem;transition:color 150ms ease,border-color 150ms ease}.nav-link:hover,.nav-link[aria-current=page]{border-bottom-color:var(--mauve);color:var(--ink)}.nav-link[aria-current=page]{font-weight:700}
-.sidebar-bottom{display:flex;flex-direction:column;gap:.35rem;margin-top:auto;padding-top:1.5rem;color:var(--muted);font-size:.72rem}
+.sidebar-bottom{display:flex;flex-direction:column;gap:.35rem;margin-top:0;padding-top:1.5rem;color:var(--muted);font-size:.72rem}
 .desktop-utility{position:fixed;z-index:20;top:2rem;right:clamp(2rem,5vw,5rem);display:flex;min-height:2.75rem;align-items:center;gap:.9rem;color:var(--muted);font-size:.8rem}html[dir=rtl] .desktop-utility{right:var(--sidebar)}.desktop-utility a,.drawer-settings a{border-bottom:1px solid var(--mauve);color:var(--ink);font-weight:700}
 .site-main{min-height:100vh;margin-left:var(--sidebar)}.site-main>main{width:min(100%,1440px);min-height:calc(100vh - 7rem);margin-inline:auto}.page-content{width:min(100%,1320px);margin-inline:auto;padding:7.5rem clamp(2rem,6vw,6rem) 5rem}.home-page{padding-top:0}
 .home-intro{display:flex;min-height:min(620px,80vh);flex-direction:column;align-items:flex-start;justify-content:center;padding-block:2.5rem 3rem}.eyebrow{margin:0 0 1.25rem;color:var(--mauve-deep);font-size:.72rem;font-weight:700;letter-spacing:.13em;line-height:1.5;text-transform:uppercase}
@@ -24,7 +24,7 @@ html[lang=fa] .home-intro h1,html[lang=fa] .page-heading h1,html[lang=fa] h2{fon
 .artwork-detail{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(15rem,.7fr);align-items:start;gap:clamp(2rem,5vw,5rem)}.artwork-detail-copy h1,.article-page h1{margin-top:0;font:400 clamp(2rem,4vw,3.6rem)/1.2 Georgia,"Times New Roman",serif}.artwork-detail-copy p,.article-summary,.prose{color:var(--muted);line-height:1.9}.back-link{margin-bottom:2rem}.article-page{max-width:900px}.article-summary{font-size:1.15rem}.prose{margin-top:3rem;white-space:pre-wrap}.not-found-page h1{font-size:clamp(2.5rem,5vw,4rem)}.not-found-page .text-link{margin-top:2rem}
 .site-footer{display:flex;min-height:7rem;align-items:center;justify-content:space-between;gap:1rem;margin-top:2rem;padding:2.5rem clamp(2rem,6vw,6rem) 1.5rem;color:var(--muted);font-size:.74rem;line-height:1.7}
 .mobile-header,.mobile-drawer,.menu-backdrop{display:none}
-@media(max-width:900px){.desktop-sidebar,.desktop-utility{display:none}.site-main{margin-left:0}.mobile-header{position:relative;z-index:15;display:flex;min-height:4.75rem;align-items:center;justify-content:space-between;padding-inline:1.25rem;background:var(--paper)}.mobile-wordmark{font:1.45rem Georgia,"Times New Roman",serif;letter-spacing:-.055em}.mobile-wordmark span{color:var(--mauve-deep)}.menu-trigger,.drawer-close{display:flex;width:2.8rem;height:2.8rem;flex-direction:column;align-items:center;justify-content:center;gap:.35rem;border:1px solid var(--border);background:transparent;cursor:pointer}.menu-trigger span{width:1.1rem;height:1px;background:var(--ink)}.menu-backdrop{position:fixed;z-index:30;inset:0;display:block;border:0;background:var(--overlay)}.mobile-drawer{position:fixed;z-index:31;inset-block:0;left:0;display:flex;width:min(88vw,23rem);flex-direction:column;overflow-y:auto;overscroll-behavior:contain;padding:max(1.25rem,env(safe-area-inset-top)) 1.5rem max(1.25rem,env(safe-area-inset-bottom));background:var(--surface);box-shadow:12px 0 36px var(--drawer-shadow)}.mobile-drawer[hidden]{display:none}.drawer-heading{display:flex;align-items:center;justify-content:space-between;margin-bottom:2.5rem}.drawer-close{width:2.5rem;height:2.5rem;font-size:1.6rem;line-height:1}.mobile-drawer .nav-list{gap:.2rem}.mobile-drawer .nav-link{min-height:3.25rem;font-size:1rem}.drawer-settings{display:flex;align-items:center;justify-content:space-between;gap:1rem;margin-top:auto;padding-top:1.5rem;border-top:1px solid var(--border);color:var(--muted);font-size:.85rem}.page-content{padding:5rem 1.5rem 3.5rem}.home-page{padding-top:0}.home-intro{min-height:76vh;padding-block:5rem}.site-footer{padding-inline:1.5rem}}
+@media(max-width:900px){.desktop-sidebar,.desktop-utility{display:none}.site-main{margin-left:0}.mobile-header{position:relative;z-index:15;display:flex;min-height:4.75rem;align-items:center;justify-content:space-between;padding-inline:1.25rem;background:var(--paper)}.mobile-wordmark{font:1.45rem Georgia,"Times New Roman",serif;letter-spacing:-.055em}.mobile-wordmark span{color:var(--mauve-deep)}.menu-trigger,.drawer-close{display:flex;width:2.8rem;height:2.8rem;flex-direction:column;align-items:center;justify-content:center;gap:.35rem;border:1px solid var(--border);background:transparent;cursor:pointer}.menu-trigger span{width:1.1rem;height:1px;background:var(--ink)}.menu-backdrop{position:fixed;z-index:30;inset:0;display:block;border:0;background:var(--overlay)}.mobile-drawer{position:fixed;z-index:31;inset-block:0;left:0;display:flex;width:min(88vw,23rem);flex-direction:column;overflow-y:auto;overscroll-behavior:contain;padding:max(1.25rem,env(safe-area-inset-top)) 1.5rem max(1.25rem,env(safe-area-inset-bottom));background:var(--surface);box-shadow:12px 0 36px var(--drawer-shadow)}.mobile-drawer[hidden]{display:none}.drawer-heading{display:flex;align-items:center;justify-content:space-between;margin-bottom:2.5rem}.drawer-close{width:2.5rem;height:2.5rem;font-size:1.6rem;line-height:1}.mobile-drawer .nav-list{gap:.2rem}.mobile-drawer .nav-link{min-height:3.25rem;font-size:1rem}.drawer-settings{display:flex;align-items:center;justify-content:space-between;gap:1rem;margin-top:0;padding-top:0;border-top:0;color:var(--muted);font-size:.85rem}.page-content{padding:5rem 1.5rem 3.5rem}.home-page{padding-top:0}.home-intro{min-height:76vh;padding-block:5rem}.site-footer{padding-inline:1.5rem}}
 @media(max-width:600px){.section-heading{align-items:flex-start;flex-direction:column;gap:.8rem}.artwork-grid{grid-template-columns:minmax(0,1fr);gap:2rem}.artwork-detail{grid-template-columns:minmax(0,1fr)}.page-heading{margin-bottom:2.5rem}.site-footer{align-items:flex-start;flex-direction:column;justify-content:center;gap:.3rem}.home-intro h1{font-size:clamp(2.65rem,12vw,4.2rem)}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition-duration:.01ms!important;animation-duration:.01ms!important;animation-iteration-count:1!important}}
 
@@ -215,7 +215,7 @@ html[lang="fa"] .not-found-page h1 {
 .sidebar-root{position:fixed;z-index:20;inset-block:0;left:0;display:flex;width:var(--sidebar);flex-direction:column;padding:2.5rem 2rem 1.75rem;border-right:1px solid var(--border);background:var(--paper);direction:ltr}
 .sidebar-header{display:flex;flex-direction:column;align-items:flex-start}
 .sidebar-content{min-height:0;flex:1;overflow:hidden}
-.sidebar-footer{display:flex;flex-direction:column;gap:.35rem;margin-top:auto}
+.sidebar-bottom{display:flex;flex-direction:column;gap:.35rem;margin-top:auto}
 .sidebar-menu{display:flex;flex-direction:column;gap:.35rem;margin:0;padding:0;list-style:none}
 .sidebar-menu-item{min-width:0}
 .sidebar-menu-button{display:flex;width:100%;min-width:0}
@@ -299,7 +299,7 @@ html[lang="fa"] .desktop-utility { right:var(--sidebar); left:0; direction:rtl; 
 html[lang="fa"] .desktop-sidebar[dir="rtl"],
 html[lang="fa"] .desktop-sidebar[dir="rtl"] .sidebar-header,
 html[lang="fa"] .desktop-sidebar[dir="rtl"] .sidebar-content,
-html[lang="fa"] .desktop-sidebar[dir="rtl"] .sidebar-footer,
+html[lang="fa"] .desktop-sidebar[dir="rtl"] .sidebar-bottom,
 html[lang="fa"] .desktop-sidebar[dir="rtl"] nav,
 html[lang="fa"] .desktop-sidebar[dir="rtl"] .nav-list,
 html[lang="fa"] .desktop-sidebar[dir="rtl"] .sidebar-menu-item,
@@ -309,7 +309,7 @@ html[lang="fa"] .desktop-sidebar[dir="rtl"] .nav-link {
   text-align: right;
 }
 html[lang="fa"] .desktop-sidebar[dir="rtl"] .sidebar-header,
-html[lang="fa"] .desktop-sidebar[dir="rtl"] .sidebar-footer {
+html[lang="fa"] .desktop-sidebar[dir="rtl"] .sidebar-bottom {
   align-items: flex-end;
 }
 html[lang="fa"] .desktop-sidebar[dir="rtl"] .artist-wordmark {
@@ -336,7 +336,7 @@ html[lang="fa"] .desktop-sidebar[dir="rtl"] .nav-link {
   justify-content: flex-start;
   text-align: right;
 }
-html[lang="fa"] .desktop-sidebar[dir="rtl"] .sidebar-footer span {
+html[lang="fa"] .desktop-sidebar[dir="rtl"] .sidebar-bottom span {
   direction: ltr;
   unicode-bidi: isolate;
   text-align: right;
@@ -566,7 +566,7 @@ html[lang="fa"] .site-main {
 
 html[lang="fa"] .desktop-sidebar .artist-wordmark,
 html[lang="fa"] .desktop-sidebar .sidebar-header,
-html[lang="fa"] .desktop-sidebar .sidebar-footer {
+html[lang="fa"] .desktop-sidebar .sidebar-bottom {
   align-items: flex-end;
   text-align: right;
 }
@@ -593,7 +593,7 @@ html[lang="fa"] .desktop-sidebar .nav-link {
   justify-content: flex-start;
 }
 
-html[lang="fa"] .desktop-sidebar .sidebar-footer span {
+html[lang="fa"] .desktop-sidebar .sidebar-bottom span {
   direction: ltr;
   unicode-bidi: isolate;
 }
@@ -1057,10 +1057,45 @@ html[lang="fa"] .prose,html[lang="fa"] .about-biography-copy,html[lang="fa"] .ab
 .mobile-drawer-scroll .scroll-area-viewport {
   overscroll-behavior: contain;
 }
-.mobile-drawer-scroll-content {
-  display: flex;
+/* Radix inserts a table-layout content wrapper inside each ScrollArea viewport.
+   Turn that wrapper into the flex column so the spacer can consume real free space. */
+.sidebar-scroll-area .scroll-area-viewport > div,
+.mobile-drawer-scroll .scroll-area-viewport > div {
+  display: flex !important;
+  width: 100%;
   min-height: 100%;
   flex-direction: column;
+}
+
+.sidebar-flex-spacer,
+.drawer-flex-spacer {
+  min-height: 1.5rem;
+  flex: 1 0 1.5rem;
+}
+
+.sidebar-bottom {
+  flex: 0 0 auto;
+  margin-top: 0;
+}
+
+.drawer-bottom {
+  display: flex;
+  flex: 0 0 auto;
+  flex-direction: column;
+  gap: 1rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--border);
+}
+
+.mobile-drawer .drawer-settings {
+  margin-top: 0;
+  padding-top: 0;
+  border-top: 0;
+}
+
+.mobile-drawer .drawer-copyright {
+  margin-top: 0;
+  padding-top: 0;
 }
 .sheet-content.mobile-drawer {
   overflow: hidden;
@@ -1229,4 +1264,218 @@ html[lang="fa"] .contact-pending {
   .contact-title-page {
     font-size: clamp(2.2rem, 9vw, 3rem);
   }
+}
+
+
+/* Shared responsive typography system — 2026-11-03.
+   Semantic roles are defined once and reused across every locale and theme. */
+:root {
+  --type-display: clamp(1.875rem, 3.1vw, 2.75rem);
+  --type-page-title: clamp(1.875rem, 2.8vw, 2.5rem);
+  --type-section-title: clamp(1.5rem, 2.25vw, 2rem);
+  --type-subsection-title: clamp(1.1875rem, 1.65vw, 1.5rem);
+  --type-card-title: clamp(1.0625rem, 1.45vw, 1.35rem);
+  --type-body: 1rem;
+  --type-body-lead: clamp(1.0625rem, 1.3vw, 1.125rem);
+  --type-supporting: 0.9rem;
+  --type-caption: 0.8rem;
+  --leading-display: 1.2;
+  --leading-heading: 1.35;
+  --leading-body: 1.9;
+}
+
+html[lang="fa"] {
+  --type-display: clamp(1.75rem, 2.8vw, 2.5rem);
+  --type-page-title: clamp(1.75rem, 2.65vw, 2.35rem);
+  --type-section-title: clamp(1.5rem, 2.1vw, 1.875rem);
+  --type-subsection-title: clamp(1.125rem, 1.55vw, 1.375rem);
+  --type-card-title: clamp(1.0625rem, 1.4vw, 1.25rem);
+  --type-body: 1rem;
+  --type-body-lead: 1.0625rem;
+  --type-supporting: 0.9rem;
+  --type-caption: 0.8rem;
+  --leading-display: 1.5;
+  --leading-heading: 1.55;
+  --leading-body: 2;
+}
+
+/* Semantic display and page-title roles. Keep normal wrapping; no no-wrap hacks. */
+.home-intro .home-intro-copy > h1 {
+  max-width: none;
+  font-size: var(--type-display);
+  line-height: var(--leading-display);
+  letter-spacing: -0.035em;
+  text-wrap: balance;
+  overflow-wrap: normal;
+  word-break: normal;
+}
+
+.page-heading h1,
+.not-found-page h1,
+.artwork-detail-copy h1,
+.article-page h1 {
+  max-width: none;
+  font-size: var(--type-page-title);
+  line-height: var(--leading-heading);
+  letter-spacing: -0.025em;
+  text-wrap: balance;
+  overflow-wrap: normal;
+  word-break: normal;
+}
+
+/* Shared section, subsection, and card-title roles. */
+.section-heading h2,
+.contact-title-home {
+  max-width: none;
+  font-size: var(--type-section-title);
+  line-height: var(--leading-heading);
+  letter-spacing: -0.025em;
+  text-wrap: balance;
+  overflow-wrap: normal;
+  word-break: normal;
+}
+
+.profile-content h2,
+.home-biography h2 {
+  font-size: var(--type-subsection-title);
+  line-height: var(--leading-heading);
+  letter-spacing: -0.015em;
+  text-wrap: balance;
+  overflow-wrap: normal;
+  word-break: normal;
+}
+
+.journal-card h2,
+.gallery-card-copy strong,
+.journal-upcoming h3 {
+  font-size: var(--type-card-title);
+  line-height: var(--leading-heading);
+  letter-spacing: -0.015em;
+  text-wrap: balance;
+  overflow-wrap: normal;
+  word-break: normal;
+}
+
+.contact-title-page {
+  max-width: none;
+  font-size: var(--type-page-title);
+  line-height: var(--leading-heading);
+  text-wrap: balance;
+  overflow-wrap: normal;
+  word-break: normal;
+}
+
+/* Reuse supporting roles for shared interface and editorial metadata. */
+.nav-link,
+.theme-trigger {
+  font-size: var(--type-supporting);
+}
+
+.eyebrow,
+.journal-card-meta,
+.contact-method-label,
+.cv-list time {
+  font-size: var(--type-caption);
+}
+
+.intro-note {
+  font-size: var(--type-body-lead);
+}
+
+.biography-copy,
+.about-biography-copy,
+.profile-content section p,
+.prose,
+.article-summary,
+.contact-intro,
+.empty-note {
+  font-size: var(--type-body);
+  line-height: var(--leading-body);
+}
+
+/* Persian font metrics differ; preserve native spacing and connected glyphs. */
+html[lang="fa"] .home-intro .home-intro-copy > h1 {
+  font-family: "IranianSerifRegular", Tahoma, serif;
+  font-size: var(--type-display);
+  letter-spacing: 0;
+  line-height: var(--leading-display);
+}
+
+html[lang="fa"] .page-heading h1,
+html[lang="fa"] .not-found-page h1,
+html[lang="fa"] .artwork-detail-copy h1,
+html[lang="fa"] .article-page h1 {
+  font-family: "IranianSerifRegular", Tahoma, serif;
+  font-size: var(--type-page-title);
+  letter-spacing: 0;
+  line-height: var(--leading-heading);
+}
+
+html[lang="fa"] .section-heading h2,
+html[lang="fa"] .profile-content h2,
+html[lang="fa"] .home-biography h2,
+html[lang="fa"] .journal-card h2,
+html[lang="fa"] .gallery-card-copy strong,
+html[lang="fa"] .journal-upcoming h3,
+html[lang="fa"] .contact-title-home,
+html[lang="fa"] .contact-title-page {
+  font-family: "IranianSerifRegular", Tahoma, serif;
+  letter-spacing: 0;
+  line-height: var(--leading-heading);
+}
+
+@media (max-width: 600px) {
+  .home-intro .home-intro-copy > h1 {
+    font-size: var(--type-display);
+  }
+  .contact-title-home {
+    font-size: var(--type-section-title);
+  }
+  .contact-title-page {
+    font-size: var(--type-page-title);
+  }
+}
+
+
+/* Additional editorial roles used by About, Journal detail, and artwork viewer. */
+.about-statement h2,
+.about-biography h2,
+.about-cv-section h2,
+.article-page h2,
+.journal-more h2 {
+  font-size: var(--type-subsection-title);
+  line-height: var(--leading-heading);
+  letter-spacing: -0.015em;
+  text-wrap: balance;
+  overflow-wrap: normal;
+  word-break: normal;
+}
+
+.cv-category h3,
+.journal-preview-item h3,
+.artwork-viewer-info h2 {
+  font-size: var(--type-card-title);
+  line-height: var(--leading-heading);
+  letter-spacing: -0.015em;
+  text-wrap: balance;
+  overflow-wrap: normal;
+  word-break: normal;
+}
+
+html[lang="fa"] .about-statement h2,
+html[lang="fa"] .about-biography h2,
+html[lang="fa"] .about-cv-section h2,
+html[lang="fa"] .article-page h2,
+html[lang="fa"] .journal-more h2 {
+  font-family: "IranianSerifRegular", Tahoma, serif;
+  letter-spacing: 0;
+  line-height: var(--leading-heading);
+}
+
+html[lang="fa"] .cv-category h3,
+html[lang="fa"] .journal-preview-item h3,
+html[lang="fa"] .artwork-viewer-info h2 {
+  font-family: "IranianSerifRegular", Tahoma, serif;
+  letter-spacing: 0;
+  line-height: var(--leading-heading);
 }
