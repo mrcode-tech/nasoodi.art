@@ -60,7 +60,7 @@ Every page must have a clear purpose and visual identity consistent with the art
 
 ### 4.3 Typography
 - Use a deliberate, licensed Latin and Persian font system with appropriate shaping and weights.
-- Define semantic type roles and a responsive scale; do not choose sizes independently per page.
+- Define semantic type roles and a responsive scale; do not choose sizes independently per page. Follow [shared-responsive-typography-system.md](./shared-responsive-typography-system.md) for the authoritative tokens, Persian/English metrics, and wrapping acceptance criteria.
 - Use display typography for artist identity and page titles, readable text styles for long-form reading, and compact but legible metadata.
 - Avoid excessively thin weights, faux letter spacing in Persian, all-caps body copy, and tiny captions.
 - Verify line length, line-height, punctuation, numerals, mixed-script text, and heading wraps at real viewport widths.

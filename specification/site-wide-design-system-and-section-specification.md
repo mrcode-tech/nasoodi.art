@@ -568,3 +568,10 @@ All shared and page-level visual decisions must conform to [design-engineering-s
 - Motion requires a purpose and must pass the decision gate in design-engineering-skills.md. Artwork itself is static and must not receive decorative movement.
 - Each route must be visually reviewed in Persian and English at desktop, tablet, mobile, and short-height sizes. Include reduced-motion and keyboard/touch checks.
 - The shared design system does not override factual, editorial, accessibility, or artwork-fidelity constraints in specialized specifications.
+
+
+## 12. Shared responsive typography authority — 2026-11-03
+
+All page and component typography must follow [shared-responsive-typography-system.md](./shared-responsive-typography-system.md). The shared document defines the semantic type roles, fluid CSS tokens, Persian/English metrics, heading wrapping rules, and responsive test matrix. This is the site-wide implementation authority; page-specific composition documents do not introduce independent heading scales.
+
+The Persian homepage artist name and homepage Contact heading have explicit single-line targets at the reference widths in that document. This does not permit global no-wrap, forced scaling, or unreadably small text. Other headings retain natural wrapping.
