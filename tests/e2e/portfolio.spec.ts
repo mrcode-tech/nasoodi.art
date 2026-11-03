@@ -175,7 +175,7 @@ for (const locale of ["en", "fa"] as const) {
     expect(direction).toBe(locale === "fa" ? "rtl" : "ltr");
     await expect(sidebar.locator("nav")).toHaveAttribute("dir", locale === "fa" ? "rtl" : "ltr");
     await expect(sidebar.locator(".nav-link").first()).toHaveCSS("text-align", locale === "fa" ? "right" : "start");
-    await expect(sidebar.locator(".sidebar-footer")).toHaveCSS("direction", locale === "fa" ? "rtl" : "ltr");
+    await expect(sidebar.locator(".sidebar-bottom")).toHaveCSS("direction", locale === "fa" ? "rtl" : "ltr");
     if (locale === "fa") {
       const navBox = await firstLink.boundingBox();
       const sidebarBox = bounds!;
