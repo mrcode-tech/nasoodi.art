@@ -59,10 +59,11 @@ type ArtistProfile = {
 
 type ContactDetails = {
   email?: string;
+  telegramHandle?: string;
   instagramUrl?: string;
-  approvedLocales: Array<"fa" | "en">;
-  ownerApproved: boolean;
 };
+
+// Demo-phase fixtures are owner-authorized and are not gated by publication approvals.
 ```
 
 ## 3. Artwork record
