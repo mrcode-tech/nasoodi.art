@@ -1490,3 +1490,173 @@ test("Contact experience is editorial, bilingual, responsive, and hides unapprov
     });
   }
 });
+
+
+test("shared Persian typography keeps the artist name and homepage Contact heading on one line at reference widths", async ({ page }) => {
+  const referenceWidths = [390, 430, 768, 1280, 1440];
+
+  for (const width of referenceWidths) {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto("/fa");
+    await page.evaluate(() => document.fonts.ready);
+
+    const measure = async (selector: string) => page.locator(selector).evaluate((element) => {
+      const range = document.createRange();
+      range.selectNodeContents(element);
+      const rects = Array.from(range.getClientRects()).filter((rect) => rect.width > 0 && rect.height > 0);
+      const style = getComputedStyle(element);
+      return {
+        lineCount: rects.length,
+        fontSize: Number.parseFloat(style.fontSize),
+        lineHeight: Number.parseFloat(style.lineHeight),
+        whiteSpace: style.whiteSpace,
+        scrollWidth: element.scrollWidth,
+        clientWidth: element.clientWidth,
+      };
+    });
+
+    const artist = await measure("#home-title");
+    const contact = await measure(".contact-experience-home .contact-title");
+
+    expect(artist.lineCount, `Persian artist name should fit on one line at ${width}px`).toBe(1);
+    expect(contact.lineCount, `Persian Contact heading should fit on one line at ${width}px`).toBe(1);
+    const tokenSizes = await page.evaluate(() => {
+      const probe = document.createElement("span");
+      probe.style.position = "absolute";
+      probe.style.visibility = "hidden";
+      document.body.append(probe);
+      probe.style.fontSize = "var(--type-display)";
+      const display = Number.parseFloat(getComputedStyle(probe).fontSize);
+      probe.style.fontSize = "var(--type-section-title)";
+      const section = Number.parseFloat(getComputedStyle(probe).fontSize);
+      probe.remove();
+      return { display, section };
+    });
+    expect(artist.fontSize).toBeLessThanOrEqual(tokenSizes.display + 0.1);
+    expect(contact.fontSize).toBeLessThanOrEqual(tokenSizes.section + 0.1);
+    expect(artist.whiteSpace).not.toBe("nowrap");
+    expect(contact.whiteSpace).not.toBe("nowrap");
+    expect(artist.scrollWidth).toBeLessThanOrEqual(artist.clientWidth);
+    expect(contact.scrollWidth).toBeLessThanOrEqual(contact.clientWidth);
+  }
+});
+
+test("shared Persian headings wrap naturally on narrow phones without horizontal overflow", async ({ page }) => {
+  for (const width of [320, 360]) {
+    await page.setViewportSize({ width, height: 640 });
+    await page.goto("/fa");
+    const metrics = await page.locator("#home-title, .contact-experience-home .contact-title").evaluateAll((elements) =>
+      elements.map((element) => {
+        const range = document.createRange();
+        range.selectNodeContents(element);
+        const lineCount = Array.from(range.getClientRects()).filter((rect) => rect.width > 0 && rect.height > 0).length;
+        const style = getComputedStyle(element);
+        return { lineCount, whiteSpace: style.whiteSpace, scrollWidth: element.scrollWidth, clientWidth: element.clientWidth };
+      })
+    );
+    expect(metrics).toHaveLength(2);
+    for (const metric of metrics) {
+      expect(metric.lineCount).toBeGreaterThanOrEqual(1);
+      expect(metric.lineCount).toBeLessThanOrEqual(2);
+      expect(metric.whiteSpace).not.toBe("nowrap");
+      expect(metric.scrollWidth).toBeLessThanOrEqual(metric.clientWidth);
+    }
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth)).toBe(true);
+  }
+});
+
+test("shared typography hierarchy is stable in English and across Light/Dark themes", async ({ page }) => {
+  for (const locale of ["en", "fa"] as const) {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.goto(`/${locale}`);
+    const homeTitle = page.locator("#home-title");
+    const contactTitle = page.locator(".contact-experience-home .contact-title");
+    await expect(homeTitle).toBeVisible();
+    await expect(contactTitle).toBeVisible();
+
+    const light = await Promise.all([
+      homeTitle.evaluate((element) => getComputedStyle(element).fontSize),
+      contactTitle.evaluate((element) => getComputedStyle(element).fontSize),
+    ]);
+    await page.getByRole("button", { name: locale === "fa" ? "انتخاب پوسته" : "Choose theme" }).click();
+    await page.getByRole("menuitemradio", { name: locale === "fa" ? "تیره" : "Dark" }).click();
+    await expect(page.locator("html")).toHaveClass(/dark/);
+    const dark = await Promise.all([
+      homeTitle.evaluate((element) => getComputedStyle(element).fontSize),
+      contactTitle.evaluate((element) => getComputedStyle(element).fontSize),
+    ]);
+    expect(dark).toEqual(light);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth)).toBe(true);
+  }
+});
+
+
+test("shared page-title tokens cover bilingual index and detail routes", async ({ page }) => {
+  const routes = [
+    "about",
+    "works",
+    "galleries",
+    "journal",
+    "contact",
+    "galleries/quiet-intervals",
+    "works/a-quiet-place-between-seasons",
+    "journal/between-layers-studio-notes",
+  ];
+
+  for (const locale of ["en", "fa"] as const) {
+    for (const route of routes) {
+      await page.setViewportSize({ width: 1280, height: 800 });
+      await page.goto(`/${locale}/${route}`);
+      const heading = page.getByRole("heading", { level: 1 }).first();
+      await expect(heading, `${locale}/${route} should expose its page title`).toBeVisible();
+
+      const expected = await page.evaluate(() => {
+        const probe = document.createElement("span");
+        probe.style.position = "absolute";
+        probe.style.visibility = "hidden";
+        probe.style.fontSize = "var(--type-page-title)";
+        document.body.append(probe);
+        const size = Number.parseFloat(getComputedStyle(probe).fontSize);
+        probe.remove();
+        return size;
+      });
+      const actual = await heading.evaluate((element) => Number.parseFloat(getComputedStyle(element).fontSize));
+      expect(Math.abs(actual - expected), `${locale}/${route} must use the shared page-title token`).toBeLessThanOrEqual(0.1);
+      expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth)).toBe(true);
+    }
+  }
+});
+
+test("About subsections and homepage Journal preview use shared editorial heading roles", async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await page.goto("/fa/about");
+  const aboutHeading = page.locator(".about-statement h2");
+  await expect(aboutHeading).toBeVisible();
+
+  const subsectionToken = await page.evaluate(() => {
+    const probe = document.createElement("span");
+    probe.style.position = "absolute";
+    probe.style.visibility = "hidden";
+    probe.style.fontSize = "var(--type-subsection-title)";
+    document.body.append(probe);
+    const size = Number.parseFloat(getComputedStyle(probe).fontSize);
+    probe.remove();
+    return size;
+  });
+  expect(await aboutHeading.evaluate((element) => Number.parseFloat(getComputedStyle(element).fontSize))).toBeCloseTo(subsectionToken, 1);
+
+  await page.goto("/fa");
+  const journalTitle = page.locator(".journal-preview-item h3").first();
+  await expect(journalTitle).toBeVisible();
+  const cardToken = await page.evaluate(() => {
+    const probe = document.createElement("span");
+    probe.style.position = "absolute";
+    probe.style.visibility = "hidden";
+    probe.style.fontSize = "var(--type-card-title)";
+    document.body.append(probe);
+    const size = Number.parseFloat(getComputedStyle(probe).fontSize);
+    probe.remove();
+    return size;
+  });
+  expect(await journalTitle.evaluate((element) => Number.parseFloat(getComputedStyle(element).fontSize))).toBeCloseTo(cardToken, 1);
+});
