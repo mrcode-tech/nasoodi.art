@@ -140,14 +140,20 @@ test("artist portrait is omitted unless rights, dimensions, and localized alt ar
  assert.equal(getPublicArtistProfile({...profile,portrait:{...profile.portrait!,rightsConfirmed:false}},"en")?.portrait,undefined);
  assert.equal(getPublicArtistProfile({...profile,portrait:{...profile.portrait!,width:0}},"en")?.portrait,undefined);
 });
-test("contact destinations require owner and locale approval and safe values",()=>{
+test("contact destinations require owner and locale approval and validate each method independently",()=>{
  const details:ContactDetails={email:"artist@example.org",telegramHandle:"artist_contact",instagramUrl:"https://www.instagram.com/ghazalenasoodi/",approvedLocales:["en","fa"],ownerApproved:true};
  assert.equal(getPublicContactDetails(details,"en")?.email,"artist@example.org");
+ assert.equal(getPublicContactDetails(details,"en")?.telegramUrl,"https://t.me/artist_contact");
+ assert.equal(getPublicContactDetails(details,"en")?.instagramHandle,"ghazalenasoodi");
  assert.equal(getPublicContactDetails({...details,ownerApproved:false},"en"),undefined);
  assert.equal(getPublicContactDetails({...details,approvedLocales:["fa"]},"en"),undefined);
- assert.equal(getPublicContactDetails({...details,instagramUrl:"javascript:alert(1)",email:undefined},"en"),undefined);
- assert.equal(getPublicContactDetails({...details,instagramUrl:"https://example.org",email:undefined},"en"),undefined);
- assert.equal(getPublicContactDetails({...details,email:"not-an-email",instagramUrl:undefined},"en"),undefined);
+ assert.deepEqual(getPublicContactDetails({email:"artist@example.org",approvedLocales:["en"],ownerApproved:true},"en"),{email:"artist@example.org"});
+ assert.deepEqual(getPublicContactDetails({telegramHandle:"artist_contact",approvedLocales:["en"],ownerApproved:true},"en"),{telegramHandle:"artist_contact",telegramUrl:"https://t.me/artist_contact"});
+ assert.equal(getPublicContactDetails({...details,telegramHandle:"bad handle",instagramUrl:"javascript:alert(1)",email:undefined},"en"),undefined);
+ assert.equal(getPublicContactDetails({...details,instagramUrl:"https://example.org",email:undefined,telegramHandle:undefined},"en"),undefined);
+ assert.equal(getPublicContactDetails({...details,instagramUrl:"https://www.instagram.com/p/123/",email:undefined,telegramHandle:undefined},"en"),undefined);
+ assert.equal(getPublicContactDetails({...details,email:"not-an-email",instagramUrl:undefined,telegramHandle:undefined},"en"),undefined);
+ assert.equal(getPublicContactDetails({approvedLocales:[],ownerApproved:false},"en"),undefined);
 });
 
 test("Journal Article structured data uses only localized visible editorial fields",()=>{
