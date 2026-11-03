@@ -215,7 +215,7 @@ html[lang="fa"] .not-found-page h1 {
 .sidebar-root{position:fixed;z-index:20;inset-block:0;left:0;display:flex;width:var(--sidebar);flex-direction:column;padding:2.5rem 2rem 1.75rem;border-right:1px solid var(--border);background:var(--paper);direction:ltr}
 .sidebar-header{display:flex;flex-direction:column;align-items:flex-start}
 .sidebar-content{min-height:0;flex:1;overflow:hidden}
-.sidebar-footer{display:flex;flex-direction:column;gap:.35rem;margin-top:auto}
+.sidebar-bottom{display:flex;flex-direction:column;gap:.35rem;margin-top:auto}
 .sidebar-menu{display:flex;flex-direction:column;gap:.35rem;margin:0;padding:0;list-style:none}
 .sidebar-menu-item{min-width:0}
 .sidebar-menu-button{display:flex;width:100%;min-width:0}
@@ -299,7 +299,7 @@ html[lang="fa"] .desktop-utility { right:var(--sidebar); left:0; direction:rtl; 
 html[lang="fa"] .desktop-sidebar[dir="rtl"],
 html[lang="fa"] .desktop-sidebar[dir="rtl"] .sidebar-header,
 html[lang="fa"] .desktop-sidebar[dir="rtl"] .sidebar-content,
-html[lang="fa"] .desktop-sidebar[dir="rtl"] .sidebar-footer,
+html[lang="fa"] .desktop-sidebar[dir="rtl"] .sidebar-bottom,
 html[lang="fa"] .desktop-sidebar[dir="rtl"] nav,
 html[lang="fa"] .desktop-sidebar[dir="rtl"] .nav-list,
 html[lang="fa"] .desktop-sidebar[dir="rtl"] .sidebar-menu-item,
@@ -309,7 +309,7 @@ html[lang="fa"] .desktop-sidebar[dir="rtl"] .nav-link {
   text-align: right;
 }
 html[lang="fa"] .desktop-sidebar[dir="rtl"] .sidebar-header,
-html[lang="fa"] .desktop-sidebar[dir="rtl"] .sidebar-footer {
+html[lang="fa"] .desktop-sidebar[dir="rtl"] .sidebar-bottom {
   align-items: flex-end;
 }
 html[lang="fa"] .desktop-sidebar[dir="rtl"] .artist-wordmark {
@@ -336,7 +336,7 @@ html[lang="fa"] .desktop-sidebar[dir="rtl"] .nav-link {
   justify-content: flex-start;
   text-align: right;
 }
-html[lang="fa"] .desktop-sidebar[dir="rtl"] .sidebar-footer span {
+html[lang="fa"] .desktop-sidebar[dir="rtl"] .sidebar-bottom span {
   direction: ltr;
   unicode-bidi: isolate;
   text-align: right;
@@ -566,7 +566,7 @@ html[lang="fa"] .site-main {
 
 html[lang="fa"] .desktop-sidebar .artist-wordmark,
 html[lang="fa"] .desktop-sidebar .sidebar-header,
-html[lang="fa"] .desktop-sidebar .sidebar-footer {
+html[lang="fa"] .desktop-sidebar .sidebar-bottom {
   align-items: flex-end;
   text-align: right;
 }
@@ -1060,6 +1060,7 @@ html[lang="fa"] .prose,html[lang="fa"] .about-biography-copy,html[lang="fa"] .ab
 .sidebar-scroll-area {
   display: flex;
   width: 100%;
+  height: auto;
   min-height: 0;
   flex: 1 1 auto;
 }
