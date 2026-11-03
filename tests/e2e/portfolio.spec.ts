@@ -1436,6 +1436,69 @@ test("theme selector is available in the mobile drawer in both locales and artwo
 });
 
 
+test("sidebar flexible space separates navigation from the bottom utility and copyright sections", async ({ page }) => {
+  for (const locale of ["en", "fa"] as const) {
+    await page.setViewportSize({ width: 1440, height: 960 });
+    await page.goto(`/${locale}/about`);
+
+    const desktopNavLast = page.locator(".desktop-sidebar .nav-link").last();
+    const desktopSpacer = page.locator(".desktop-sidebar .sidebar-flex-spacer");
+    const desktopCopyright = page.locator(".desktop-sidebar .sidebar-bottom");
+    await expect(desktopSpacer).toBeVisible();
+    await expect(desktopCopyright).toBeVisible();
+
+    const desktopLayout = await Promise.all([
+      desktopNavLast.boundingBox(),
+      desktopSpacer.boundingBox(),
+      desktopCopyright.boundingBox(),
+    ]);
+    expect(desktopLayout.every(Boolean)).toBe(true);
+    const [desktopNavBox, desktopSpacerBox, desktopCopyrightBox] = desktopLayout as [
+      NonNullable<typeof desktopLayout[0]>,
+      NonNullable<typeof desktopLayout[1]>,
+      NonNullable<typeof desktopLayout[2]>
+    ];
+    expect(desktopSpacerBox.y).toBeGreaterThanOrEqual(desktopNavBox.y + desktopNavBox.height);
+    expect(desktopCopyrightBox.y).toBeGreaterThanOrEqual(desktopSpacerBox.y + desktopSpacerBox.height);
+
+    await page.setViewportSize({ width: 390, height: 960 });
+    const openLabel = locale === "fa" ? "باز کردن راهبری" : "Open navigation";
+    await page.goto(`/${locale}/about`);
+    await page.getByRole("button", { name: openLabel }).click();
+    const drawer = page.getByRole("dialog");
+    const mobileNavLast = drawer.locator("nav .nav-link").last();
+    const mobileSpacer = drawer.locator(".drawer-flex-spacer");
+    const bottomSection = drawer.locator(".drawer-bottom");
+    const mobileCopyright = bottomSection.locator(".drawer-copyright");
+    await expect(mobileSpacer).toBeVisible();
+    await expect(bottomSection).toBeVisible();
+    await expect(mobileCopyright).toBeVisible();
+    await expect(bottomSection.locator(".drawer-setting-row")).toHaveCount(2);
+
+    const mobileLayout = await Promise.all([
+      mobileNavLast.boundingBox(),
+      mobileSpacer.boundingBox(),
+      bottomSection.boundingBox(),
+    ]);
+    expect(mobileLayout.every(Boolean)).toBe(true);
+    const [mobileNavBox, mobileSpacerBox, bottomBox] = mobileLayout as [
+      NonNullable<typeof mobileLayout[0]>,
+      NonNullable<typeof mobileLayout[1]>,
+      NonNullable<typeof mobileLayout[2]>
+    ];
+    expect(mobileSpacerBox.y).toBeGreaterThanOrEqual(mobileNavBox.y + mobileNavBox.height);
+    expect(bottomBox.y).toBeGreaterThanOrEqual(mobileSpacerBox.y + mobileSpacerBox.height);
+
+    // On short screens the same bottom section remains reachable through the drawer's ScrollArea.
+    await page.setViewportSize({ width: 390, height: 480 });
+    await page.reload();
+    await page.getByRole("button", { name: openLabel }).click();
+    const viewport = page.locator(".mobile-drawer-scroll .scroll-area-viewport");
+    await viewport.evaluate((element) => { element.scrollTop = element.scrollHeight; });
+    await expect(page.locator(".mobile-drawer .drawer-copyright")).toBeVisible();
+  }
+});
+
 test("new visitors default to System and follow the operating-system color scheme", async ({ page }) => {
   await page.emulateMedia({ colorScheme: "dark" });
   await page.goto("/en");
