@@ -1284,26 +1284,24 @@ test("editorial section transitions avoid decorative rules while functional cont
 });
 
  
-test("localized Contact surfaces show the approved-data pending state until owner approval", async ({ page }) => {
+test("localized Contact surfaces render centralized demo details without approval-state gating", async ({ page }) => {
  for (const locale of ["en","fa"] as const) {
   await page.setViewportSize({width:390,height:844});
-  const pendingCopy = locale === "fa"
-    ? "اطلاعات تماس عمومی هنوز تأیید نشده است."
-    : "Public contact details have not yet been confirmed.";
-
   await page.goto(`/${locale}`);
   const home=page.locator(".homepage-contact");
   await expect(home).toBeVisible();
   await expect(home).toHaveAttribute("dir", locale === "fa" ? "rtl" : "ltr");
-  await expect(home.getByRole("status")).toHaveText(pendingCopy);
-  await expect(home.getByRole("link")).toHaveCount(0);
+  await expect(home.locator('a[href="mailto:hello@example.com"]')).toBeVisible();
+  await expect(home.getByRole("link",{name:"@nasoodi_contact_demo"})).toHaveAttribute("href","https://t.me/nasoodi_contact_demo");
+  await expect(home.getByRole("link",{name:"@nasoodi.demo"})).toHaveAttribute("href","https://www.instagram.com/nasoodi.demo/");
 
   await page.goto(`/${locale}/contact`);
   const contactPage=page.locator(".contact-experience-page");
   await expect(contactPage).toBeVisible();
   await expect(contactPage).toHaveAttribute("dir", locale === "fa" ? "rtl" : "ltr");
-  await expect(contactPage.getByRole("status")).toHaveText(pendingCopy);
-  await expect(contactPage.getByRole("link")).toHaveCount(0);
+  await expect(contactPage.locator('a[href="mailto:hello@example.com"]')).toBeVisible();
+  await expect(contactPage.getByRole("link",{name:"@nasoodi_contact_demo"})).toHaveAttribute("href","https://t.me/nasoodi_contact_demo");
+  await expect(contactPage.getByRole("link",{name:"@nasoodi.demo"})).toHaveAttribute("href","https://www.instagram.com/nasoodi.demo/");
   await expect(page.getByRole("navigation",{name:locale==="fa"?"مسیر صفحه":"Breadcrumb"})).toBeVisible();
   expect(await page.evaluate(()=>document.documentElement.scrollWidth<=document.documentElement.clientWidth)).toBe(true);
  }
@@ -1449,10 +1447,10 @@ test("new visitors default to System and follow the operating-system color schem
 });
 
 
-test("Contact experience is editorial, bilingual, responsive, and hides unapproved sample destinations", async ({ page }) => {
+test("Contact experience is editorial, bilingual, responsive, and displays the demo contact methods", async ({ page }) => {
   for (const locale of [
-    { code: "en", heading: "Let's start a conversation.", pending: "Public contact details have not yet been confirmed.", dir: "ltr" },
-    { code: "fa", heading: "بیایید گفت‌وگویی را آغاز کنیم.", pending: "اطلاعات تماس عمومی هنوز تأیید نشده است.", dir: "rtl" },
+    { code: "en", heading: "Let's start a conversation.", dir: "ltr" },
+    { code: "fa", heading: "بیایید گفت‌وگویی را آغاز کنیم.", dir: "rtl" },
   ]) {
     await page.setViewportSize({ width: 1440, height: 960 });
     await page.goto(`/${locale.code}`);
@@ -1460,23 +1458,22 @@ test("Contact experience is editorial, bilingual, responsive, and hides unapprov
     const homepageContact = page.locator(".contact-experience-home");
     await expect(homepageContact).toBeVisible();
     await expect(homepageContact.getByRole("heading", { name: locale.heading })).toBeVisible();
-    await expect(homepageContact.getByRole("status")).toHaveText(locale.pending);
-    await expect(homepageContact.locator('a[href^="mailto:"]')).toHaveCount(0);
-    await expect(homepageContact.getByRole("link", { name: /demo|nasoodi_contact_demo|example\.com/i })).toHaveCount(0);
+    await expect(homepageContact.locator('a[href="mailto:hello@example.com"]')).toBeVisible();
+    await expect(homepageContact.getByRole("link", { name: "@nasoodi_contact_demo" })).toBeVisible();
+    await expect(homepageContact.getByRole("link", { name: "@nasoodi.demo" })).toBeVisible();
 
     await page.goto(`/${locale.code}/contact`);
     await expect(page.locator("html")).toHaveAttribute("dir", locale.dir);
     const contactPage = page.locator(".contact-experience-page");
     await expect(contactPage.getByRole("heading", { name: locale.heading })).toBeVisible();
-    await expect(contactPage.getByRole("status")).toHaveText(locale.pending);
+    await expect(contactPage.locator('a[href="mailto:hello@example.com"]')).toBeVisible();
+    await expect(contactPage.getByRole("link", { name: "@nasoodi_contact_demo" })).toBeVisible();
+    await expect(contactPage.getByRole("link", { name: "@nasoodi.demo" })).toBeVisible();
     const desktopColumns = await contactPage.locator(".contact-composition").evaluate((element) =>
       getComputedStyle(element).gridTemplateColumns.split(" ").length
     );
     expect(desktopColumns).toBe(2);
-    await page.screenshot({
-      path: test.info().outputPath(`contact-${locale.code}-desktop.png`),
-      fullPage: true,
-    });
+    await page.screenshot({ path: test.info().outputPath(`contact-${locale.code}-desktop.png`), fullPage: true });
 
     await page.setViewportSize({ width: 390, height: 844 });
     const mobileColumns = await contactPage.locator(".contact-composition").evaluate((element) =>
@@ -1484,10 +1481,7 @@ test("Contact experience is editorial, bilingual, responsive, and hides unapprov
     );
     expect(mobileColumns).toBe(1);
     await expect(contactPage.getByRole("heading", { name: locale.heading })).toBeVisible();
-    await page.screenshot({
-      path: test.info().outputPath(`contact-${locale.code}-mobile.png`),
-      fullPage: true,
-    });
+    await page.screenshot({ path: test.info().outputPath(`contact-${locale.code}-mobile.png`), fullPage: true });
   }
 });
 
