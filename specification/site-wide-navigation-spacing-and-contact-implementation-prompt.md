@@ -16,7 +16,7 @@ Deliver a coherent refinement across the entire bilingual portfolio, not a colle
 3. Keep the Journal archive's page-size selector and pagination controls compact, minimal, and on one line at mobile widths whenever the available width permits, without clipping, overlap, or unreadable controls.
 4. Keep the sidebar copyright notice on one line at supported desktop sidebar widths, reclaiming unnecessary vertical space without shrinking it into illegibility.
 5. Establish a consistent readable text measure and justified alignment for long-form/editorial text across the site, using the actual remaining content width in the viewport rather than an unnecessarily narrow column that causes premature wrapping.
-6. Add a Contact section at the bottom of the homepage and a dedicated localized Contact page, linked from the sidebar, with Telegram, email, and Instagram contact methods. Use fictional sample contact details only as clearly identified design-review fixtures until the owner supplies and approves real details.
+6. Add a Contact section at the bottom of the homepage and a dedicated localized Contact page, linked from the sidebar, with Telegram, email, and Instagram contact methods. Render only owner-approved Telegram, email, and Instagram destinations. If none are approved, keep the editorial Contact invitation and show the localized pending state.
 
 The outcome must preserve Nasoodi.art's quiet, minimalist, image-led gallery identity. Do not turn the portfolio into a generic SaaS dashboard, marketing landing page, or contact-sales funnel.
 
@@ -188,25 +188,18 @@ A reader should see a consistent content edge and line measure across comparable
 - Maintain readable contrast and touch target sizes.
 - Contact methods should stack or form a restrained responsive row/grid according to available width, without card-heavy dashboard styling.
 
-### 8.3 Fictional contact details — intentionally visible
+### 8.3 Contact publication and approval
 
-The owner explicitly instructs that fictional contact details must be implemented, committed, and rendered in the normal production build/output for now. They will replace these values with the artist's real contact details later.
-
-Use these centralized values as the current site contact data:
-- Email: `studio@example.com`.
-- Telegram display: `@nasoodi_contact_demo`.
-- Instagram display: `@ghazaleh.nasoodi.demo`.
-
-Rules:
-- Render these values normally on both the homepage Contact section and the dedicated Contact page, in English and Persian. They are not hidden, omitted, disabled, or replaced in production builds.
-- Do not introduce environment variables, production flags, feature flags, approval toggles, conditional build logic, or a runtime switch to suppress these values.
-- Do not add a visible “fictional”, “demo”, or “sample” disclaimer to the public Contact UI unless the owner later requests it. The owner understands these are temporary fictional values.
-- Keep the values in one centralized typed content source so the owner can replace them later in one place.
-- Use predictable link formats: `mailto:studio@example.com`; Telegram URL `https://t.me/nasoodi_contact_demo`; Instagram URL `https://www.instagram.com/ghazaleh.nasoodi.demo/`. The social profiles may not exist yet; do not claim that they are verified or monitored.
-- Do not change the existing artist Instagram handle `@ghazalenasoodi` in its existing approved context.
+- Do not publish fictional/example email addresses or demo social profiles.
+- Contact destinations are public artist facts and require explicit owner approval and locale approval before rendering.
+- Render each individually validated, approved method; do not require all three methods to exist before showing any approved method.
+- If no approved method exists, keep the Contact layout and show the localized pending message without fake or disabled links.
+- Keep real contact data in one centralized typed source so the owner can update it safely.
+- Validate email syntax before creating a `mailto:` link. Validate Telegram handles and construct canonical `https://t.me/<handle>` destinations. Accept Instagram profile URLs only over HTTPS on the approved Instagram host and only for a single profile path.
+- Do not claim social profiles are verified or monitored unless that is confirmed.
+- Preserve the artist Instagram handle `@ghazalenasoodi` in any existing approved context; do not replace it with a demo account.
 - Do not invent a physical address, phone number, response-time promise, availability, commission policy, or other contact method.
-- Keep the contact data straightforward to replace later; no special migration or content approval mechanism is needed for these temporary values.
-
+- Any fictional values used in automated tests must remain test-only and must never enter the public content source or production rendering.
 ### 8.4 Localization
 
 - Provide complete English and Persian content with equivalent meaning and professional tone.
@@ -234,7 +227,7 @@ Rules:
 - Maintain logical DOM/keyboard order in both LTR and RTL.
 - Respect reduced motion; do not add motion solely for decoration.
 - Avoid horizontal overflow at all tested widths and zoom settings.
-- Keep fictional contact data out of public metadata, JSON-LD, sitemap, and production-visible pages.
+- Keep unapproved contact data out of public metadata, JSON-LD, sitemap, and production-visible pages.
 - Preserve canonical URLs, localized alternates, and metadata for existing routes.
 - Contact page metadata must not claim unverified contact facts or artist services.
 - Do not introduce analytics, tracking pixels, or third-party form services.
@@ -285,7 +278,7 @@ Use the repository's existing test architecture and add meaningful regression co
 - Homepage Contact section and Contact page use the same canonical data source.
 - Both localized routes render with correct direction and translation parity.
 - Email link is correctly formed; social destinations are validated or non-operational sample text.
-- Contact values render in production and remain easy for the owner to replace.
+- Only owner-approved contact values render; when none are approved, the localized pending state is shown.
 - Existing real artist Instagram handle remains unchanged in its approved context.
 - No unrequested form, phone, address, or commercial claim is introduced.
 
@@ -329,7 +322,7 @@ Inspect spacing, alignment, content width, type, wrapping, visual hierarchy, foc
 5. One-line desktop sidebar copyright in both locales.
 6. A shared long-form justified text treatment with responsive readability safeguards.
 7. Homepage Contact section and dedicated bilingual Contact page/sidebar destination.
-8. Centralized temporary fictional contact values, intentionally rendered in production until the owner replaces them.
+8. Centralized typed contact data with owner/locale approval gates and a truthful pending state when no public destination has been approved.
 9. Automated tests and inspected visual QA evidence.
 10. Updated specification index and task-specific `agent.md`.
 
@@ -343,7 +336,7 @@ Report:
 - Spacing/typography changes and responsive behavior.
 - Journal control widths tested and any narrow-width fallback.
 - Sidebar copyright results in both locales.
-- Contact fixture values and explicit publication approval still required.
+- Contact destinations remain unpublished until the artist/site owner supplies and approves them.
 - Test commands and exact results.
 - CI run URL, conclusion, and tested SHA.
 - Visual QA viewports/locales and artifact references.
