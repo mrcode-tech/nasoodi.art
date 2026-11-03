@@ -31,12 +31,12 @@ This document defines the minimum structured content required to publish a trust
 
 ## 2.1 Runtime artist profile and contact publication contracts
 
-The current application models the artist profile and public contact destinations separately from artwork and Journal records. These records remain absent until the artist/site owner supplies and approves the real values.
+The current application models the artist profile and public contact destinations separately from artwork and Journal records. Real public contact details require owner approval. Owner-authorized demo-phase exception (2026-11-03): centralized fictional email, Telegram, and Instagram values may be rendered without approval gates on the homepage and localized Contact routes; they are placeholders, not artist facts or verified/monitored channels.
 
 - An artist profile requires a published state, explicit artist approval, approved locale, and non-empty localized statement and factual biography before the About page becomes indexable.
 - An optional portrait is displayed only when its rights are confirmed, its dimensions are positive, and localized alternative text is supplied for the current locale. An invalid optional portrait is omitted without suppressing otherwise valid profile text.
-- Contact destinations require explicit owner approval and locale approval. Email is validated before creating a `mailto:` link. External social destinations must use HTTPS and the approved Instagram host; arbitrary external URLs are not accepted.
-- About and Contact routes remain available with truthful pending-content messages while their content is absent, but they remain noindex and are excluded from the sitemap.
+- Real artist Contact destinations require explicit owner approval and locale approval. During the authorized demo phase, the centralized fictional Contact fixture is rendered without owner/locale approval gates. Email syntax is validated before creating a mailto link; Telegram handles and Instagram URLs are validated, and arbitrary external URLs are rejected. Keep Contact routes noindex and out of the sitemap until real details replace the demo fixture.
+- About remains available with a truthful pending-content message while its content is absent. Contact remains available and noindex; it renders the owner-authorized demo fixture during the demo phase and remains excluded from the sitemap until real contact details replace the fixture.
 - A locale alternate is emitted only when the corresponding profile/contact content is approved in the other locale. Never copy or machine-translate the source-language statement, biography, or contact text.
 
 The implementation contract uses these fields:
