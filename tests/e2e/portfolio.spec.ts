@@ -1441,6 +1441,16 @@ test("sidebar flexible space separates navigation from the bottom utility and co
     await page.setViewportSize({ width: 1440, height: 960 });
     await page.goto(`/${locale}/about`);
 
+    // First verify the optional sticker, then remove it to exercise the no-sticker layout.
+    const desktopSticker = page.locator('.desktop-sidebar [data-placement="desktop-sidebar"]');
+    if (await desktopSticker.count()) {
+      const stickerBox = await desktopSticker.boundingBox();
+      const spacerBox = await page.locator(".desktop-sidebar .sidebar-flex-spacer").boundingBox();
+      expect(stickerBox).not.toBeNull();
+      expect(spacerBox).not.toBeNull();
+      expect(spacerBox!.y).toBeGreaterThanOrEqual(stickerBox!.y + stickerBox!.height);
+      await desktopSticker.evaluate((element) => element.remove());
+    }
     const desktopNavLast = page.locator(".desktop-sidebar .nav-link").last();
     const desktopSpacer = page.locator(".desktop-sidebar .sidebar-flex-spacer");
     const desktopCopyright = page.locator(".desktop-sidebar .sidebar-bottom");
@@ -1466,6 +1476,17 @@ test("sidebar flexible space separates navigation from the bottom utility and co
     await page.goto(`/${locale}/about`);
     await page.getByRole("button", { name: openLabel }).click();
     const drawer = page.getByRole("dialog");
+    // The sticker is optional; if present it belongs before the spacer. Remove it to
+    // explicitly verify that the empty space starts immediately after the final menu item.
+    const mobileSticker = drawer.locator('[data-placement="mobile-sidebar"]');
+    if (await mobileSticker.count()) {
+      const stickerBox = await mobileSticker.boundingBox();
+      const spacerBox = await drawer.locator(".drawer-flex-spacer").boundingBox();
+      expect(stickerBox).not.toBeNull();
+      expect(spacerBox).not.toBeNull();
+      expect(spacerBox!.y).toBeGreaterThanOrEqual(stickerBox!.y + stickerBox!.height);
+      await mobileSticker.evaluate((element) => element.remove());
+    }
     const mobileNavLast = drawer.locator("nav .nav-link").last();
     const mobileSpacer = drawer.locator(".drawer-flex-spacer");
     const bottomSection = drawer.locator(".drawer-bottom");
