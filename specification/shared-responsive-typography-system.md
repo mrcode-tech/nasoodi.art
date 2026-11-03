@@ -104,6 +104,8 @@ Apply shared roles to semantic elements and existing component classes:
 - Section H2 and homepage Contact H2 → section title.
 - Profile/biography subsection headings → subsection title.
 - Artwork, gallery, Journal, and event titles → card title.
+- About statement/biography/CV subsection headings and Journal article subheadings → subsection title.
+- CV category labels, homepage Journal preview titles, and artwork-viewer titles → card title.
 - Editorial paragraphs → body or body-lead as appropriate.
 - Navigation/supporting text and metadata → supporting/caption.
 
@@ -123,7 +125,7 @@ Required assertions:
 4. The display heading does not exceed the shared Persian display token.
 5. No heading uses white-space: nowrap as a workaround.
 6. English headings follow the same role hierarchy and may wrap naturally.
-7. Section, card, subsection, and page headings use their shared roles across all routes.
+7. Section, card, subsection, and page headings use their shared roles across all routes, including About, Contact, gallery/work/Journal index pages, and detail routes.
 8. Persian shaping, line height, punctuation, and RTL reading order remain correct.
 9. No page has horizontal overflow, clipped text, overlapping headings, or controls pushed outside the viewport.
 10. Font sizes and line heights remain consistent in Light and Dark themes.

@@ -1400,3 +1400,47 @@ html[lang="fa"] .contact-title-page {
     font-size: var(--type-page-title);
   }
 }
+
+
+/* Additional editorial roles used by About, Journal detail, and artwork viewer. */
+.about-statement h2,
+.about-biography h2,
+.about-cv-section h2,
+.article-page h2,
+.journal-more h2 {
+  font-size: var(--type-subsection-title);
+  line-height: var(--leading-heading);
+  letter-spacing: -0.015em;
+  text-wrap: balance;
+  overflow-wrap: normal;
+  word-break: normal;
+}
+
+.cv-category h3,
+.journal-preview-item h3,
+.artwork-viewer-info h2 {
+  font-size: var(--type-card-title);
+  line-height: var(--leading-heading);
+  letter-spacing: -0.015em;
+  text-wrap: balance;
+  overflow-wrap: normal;
+  word-break: normal;
+}
+
+html[lang="fa"] .about-statement h2,
+html[lang="fa"] .about-biography h2,
+html[lang="fa"] .about-cv-section h2,
+html[lang="fa"] .article-page h2,
+html[lang="fa"] .journal-more h2 {
+  font-family: "IranianSerifRegular", Tahoma, serif;
+  letter-spacing: 0;
+  line-height: var(--leading-heading);
+}
+
+html[lang="fa"] .cv-category h3,
+html[lang="fa"] .journal-preview-item h3,
+html[lang="fa"] .artwork-viewer-info h2 {
+  font-family: "IranianSerifRegular", Tahoma, serif;
+  letter-spacing: 0;
+  line-height: var(--leading-heading);
+}

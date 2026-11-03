@@ -1589,3 +1589,74 @@ test("shared typography hierarchy is stable in English and across Light/Dark the
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth)).toBe(true);
   }
 });
+
+
+test("shared page-title tokens cover bilingual index and detail routes", async ({ page }) => {
+  const routes = [
+    "about",
+    "works",
+    "galleries",
+    "journal",
+    "contact",
+    "galleries/quiet-intervals",
+    "works/a-quiet-place-between-seasons",
+    "journal/between-layers-studio-notes",
+  ];
+
+  for (const locale of ["en", "fa"] as const) {
+    for (const route of routes) {
+      await page.setViewportSize({ width: 1280, height: 800 });
+      await page.goto(`/${locale}/${route}`);
+      const heading = page.getByRole("heading", { level: 1 }).first();
+      await expect(heading, `${locale}/${route} should expose its page title`).toBeVisible();
+
+      const expected = await page.evaluate(() => {
+        const probe = document.createElement("span");
+        probe.style.position = "absolute";
+        probe.style.visibility = "hidden";
+        probe.style.fontSize = "var(--type-page-title)";
+        document.body.append(probe);
+        const size = Number.parseFloat(getComputedStyle(probe).fontSize);
+        probe.remove();
+        return size;
+      });
+      const actual = await heading.evaluate((element) => Number.parseFloat(getComputedStyle(element).fontSize));
+      expect(Math.abs(actual - expected), `${locale}/${route} must use the shared page-title token`).toBeLessThanOrEqual(0.1);
+      expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth)).toBe(true);
+    }
+  }
+});
+
+test("About subsections and homepage Journal preview use shared editorial heading roles", async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await page.goto("/fa/about");
+  const aboutHeading = page.locator(".about-statement h2");
+  await expect(aboutHeading).toBeVisible();
+
+  const subsectionToken = await page.evaluate(() => {
+    const probe = document.createElement("span");
+    probe.style.position = "absolute";
+    probe.style.visibility = "hidden";
+    probe.style.fontSize = "var(--type-subsection-title)";
+    document.body.append(probe);
+    const size = Number.parseFloat(getComputedStyle(probe).fontSize);
+    probe.remove();
+    return size;
+  });
+  expect(await aboutHeading.evaluate((element) => Number.parseFloat(getComputedStyle(element).fontSize))).toBeCloseTo(subsectionToken, 1);
+
+  await page.goto("/fa");
+  const journalTitle = page.locator(".journal-preview-item h3").first();
+  await expect(journalTitle).toBeVisible();
+  const cardToken = await page.evaluate(() => {
+    const probe = document.createElement("span");
+    probe.style.position = "absolute";
+    probe.style.visibility = "hidden";
+    probe.style.fontSize = "var(--type-card-title)";
+    document.body.append(probe);
+    const size = Number.parseFloat(getComputedStyle(probe).fontSize);
+    probe.remove();
+    return size;
+  });
+  expect(await journalTitle.evaluate((element) => Number.parseFloat(getComputedStyle(element).fontSize))).toBeCloseTo(cardToken, 1);
+});
