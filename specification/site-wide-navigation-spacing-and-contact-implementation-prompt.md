@@ -16,7 +16,7 @@ Deliver a coherent refinement across the entire bilingual portfolio, not a colle
 3. Keep the Journal archive's page-size selector and pagination controls compact, minimal, and on one line at mobile widths whenever the available width permits, without clipping, overlap, or unreadable controls.
 4. Keep the sidebar copyright notice on one line at supported desktop sidebar widths, reclaiming unnecessary vertical space without shrinking it into illegibility.
 5. Establish a consistent readable text measure and justified alignment for long-form/editorial text across the site, using the actual remaining content width in the viewport rather than an unnecessarily narrow column that causes premature wrapping.
-6. Add a Contact section at the bottom of the homepage and a dedicated localized Contact page, linked from the sidebar, with Telegram, email, and Instagram contact methods. Render only owner-approved Telegram, email, and Instagram destinations. If none are approved, keep the editorial Contact invitation and show the localized pending state.
+6. Add a Contact section at the bottom of the homepage and a dedicated localized Contact page, linked from the sidebar, with Telegram, email, and Instagram contact methods. During the owner-authorized demo phase, render the centralized fictional Contact fixture normally without approval or confirmation gates. Keep Contact routes noindex and outside the sitemap until real details replace the fixture.
 
 The outcome must preserve Nasoodi.art's quiet, minimalist, image-led gallery identity. Do not turn the portfolio into a generic SaaS dashboard, marketing landing page, or contact-sales funnel.
 
@@ -190,8 +190,8 @@ A reader should see a consistent content edge and line measure across comparable
 
 ### 8.3 Contact publication and approval
 
-- Do not publish fictional/example email addresses or demo social profiles.
-- Contact destinations are public artist facts and require explicit owner approval and locale approval before rendering.
+- The owner authorizes fictional email and social destinations during the current demo phase. Render the centralized fixture on the homepage and localized Contact pages without approval-state gating.
+- Keep Contact routes noindex and out of the sitemap until the demo values are replaced with real owner-supplied details. Never claim demo accounts are verified or monitored.
 - Render each individually validated, approved method; do not require all three methods to exist before showing any approved method.
 - If no approved method exists, keep the Contact layout and show the localized pending message without fake or disabled links.
 - Keep real contact data in one centralized typed source so the owner can update it safely.
