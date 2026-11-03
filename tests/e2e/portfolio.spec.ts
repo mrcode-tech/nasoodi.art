@@ -1438,3 +1438,46 @@ test("new visitors default to System and follow the operating-system color schem
   await page.getByRole("button", { name: "Choose theme" }).click();
   await expect(page.getByRole("menuitemradio", { name: "System" })).toHaveAttribute("data-state", "checked");
 });
+
+
+test("Contact experience is editorial, bilingual, responsive, and hides unapproved sample destinations", async ({ page }) => {
+  for (const locale of [
+    { code: "en", heading: "Let's start a conversation.", pending: "Public contact details have not yet been confirmed.", dir: "ltr" },
+    { code: "fa", heading: "بیایید گفت‌وگویی را آغاز کنیم.", pending: "اطلاعات تماس عمومی هنوز تأیید نشده است.", dir: "rtl" },
+  ]) {
+    await page.setViewportSize({ width: 1440, height: 960 });
+    await page.goto(`/${locale.code}`);
+    await expect(page.locator("html")).toHaveAttribute("dir", locale.dir);
+    const homepageContact = page.locator(".contact-experience-home");
+    await expect(homepageContact).toBeVisible();
+    await expect(homepageContact.getByRole("heading", { name: locale.heading })).toBeVisible();
+    await expect(homepageContact.getByRole("status")).toHaveText(locale.pending);
+    await expect(homepageContact.locator('a[href^="mailto:"]')).toHaveCount(0);
+    await expect(homepageContact.getByRole("link", { name: /demo|nasoodi_contact_demo|example\.com/i })).toHaveCount(0);
+
+    await page.goto(`/${locale.code}/contact`);
+    await expect(page.locator("html")).toHaveAttribute("dir", locale.dir);
+    const contactPage = page.locator(".contact-experience-page");
+    await expect(contactPage.getByRole("heading", { name: locale.heading })).toBeVisible();
+    await expect(contactPage.getByRole("status")).toHaveText(locale.pending);
+    const desktopColumns = await contactPage.locator(".contact-composition").evaluate((element) =>
+      getComputedStyle(element).gridTemplateColumns.split(" ").length
+    );
+    expect(desktopColumns).toBe(2);
+    await page.screenshot({
+      path: test.info().outputPath(`contact-${locale.code}-desktop.png`),
+      fullPage: true,
+    });
+
+    await page.setViewportSize({ width: 390, height: 844 });
+    const mobileColumns = await contactPage.locator(".contact-composition").evaluate((element) =>
+      getComputedStyle(element).gridTemplateColumns.split(" ").length
+    );
+    expect(mobileColumns).toBe(1);
+    await expect(contactPage.getByRole("heading", { name: locale.heading })).toBeVisible();
+    await page.screenshot({
+      path: test.info().outputPath(`contact-${locale.code}-mobile.png`),
+      fullPage: true,
+    });
+  }
+});
