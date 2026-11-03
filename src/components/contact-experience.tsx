@@ -14,7 +14,7 @@ export function ContactExperience({ locale, details, variant }: ContactExperienc
 
   return (
     <section
-      className={"contact-experience contact-experience-" + variant}
+      className={"contact-experience contact-experience-" + variant + (variant === "home" ? " homepage-contact" : "")}
       aria-labelledby={titleId}
       dir={locale === "fa" ? "rtl" : "ltr"}
     >

@@ -1284,17 +1284,26 @@ test("editorial section transitions avoid decorative rules while functional cont
 });
 
  
-test("localized Contact methods are visible on homepage and Contact route", async ({ page }) => {
+test("localized Contact surfaces show the approved-data pending state until owner approval", async ({ page }) => {
  for (const locale of ["en","fa"] as const) {
   await page.setViewportSize({width:390,height:844});
+  const pendingCopy = locale === "fa"
+    ? "اطلاعات تماس عمومی هنوز تأیید نشده است."
+    : "Public contact details have not yet been confirmed.";
+
   await page.goto(`/${locale}`);
   const home=page.locator(".homepage-contact");
   await expect(home).toBeVisible();
-  await expect(home.getByRole("link",{name:"@nasoodi_contact_demo"})).toHaveAttribute("href","https://t.me/nasoodi_contact_demo");
-  await expect(home.getByRole("link",{name:"studio@example.com"})).toHaveAttribute("href","mailto:studio@example.com");
-  await expect(home.getByRole("link",{name:"@ghazaleh.nasoodi.demo"})).toHaveAttribute("href","https://www.instagram.com/ghazaleh.nasoodi.demo/");
+  await expect(home).toHaveAttribute("dir", locale === "fa" ? "rtl" : "ltr");
+  await expect(home.getByRole("status")).toHaveText(pendingCopy);
+  await expect(home.getByRole("link")).toHaveCount(0);
+
   await page.goto(`/${locale}/contact`);
-  await expect(page.locator(".contact-links a")).toHaveCount(3);
+  const contactPage=page.locator(".contact-experience-page");
+  await expect(contactPage).toBeVisible();
+  await expect(contactPage).toHaveAttribute("dir", locale === "fa" ? "rtl" : "ltr");
+  await expect(contactPage.getByRole("status")).toHaveText(pendingCopy);
+  await expect(contactPage.getByRole("link")).toHaveCount(0);
   await expect(page.getByRole("navigation",{name:locale==="fa"?"مسیر صفحه":"Breadcrumb"})).toBeVisible();
   expect(await page.evaluate(()=>document.documentElement.scrollWidth<=document.documentElement.clientWidth)).toBe(true);
  }
