@@ -1092,13 +1092,13 @@ html[lang="fa"] .prose,html[lang="fa"] .about-biography-copy,html[lang="fa"] .ab
   border-top: 1px solid var(--border);
 }
 
-.drawer-settings {
+.mobile-drawer .drawer-settings {
   margin-top: 0;
   padding-top: 0;
   border-top: 0;
 }
 
-.drawer-copyright {
+.mobile-drawer .drawer-copyright {
   margin-top: 0;
   padding-top: 0;
 }
