@@ -19,17 +19,15 @@ export async function generateMetadata({params}:Props):Promise<Metadata>{const {
   section==="galleries" ? getPublicGalleries(galleries,artworks,locale).length>0 :
   section==="journal" ? getPublicJournal(journalEntries,locale).length>0 :
   section==="cv" ? getPublicCvEntries(cvEntries,locale).length>0 :
-  section==="about" ? Boolean(getPublicArtistProfile(artistProfile,locale)) :
-  section==="contact" ? Boolean(getPublicContactDetails(contactDetails,locale)) : false;
+  section==="about" ? Boolean(getPublicArtistProfile(artistProfile,locale)) : false;
  const other=otherLocale(locale);
  const translated = section==="works" ? getPublicArtworks(artworks,other).length>0 :
   section==="galleries" ? getPublicGalleries(galleries,artworks,other).length>0 :
   section==="journal" ? getPublicJournal(journalEntries,other).length>0 :
   section==="cv" ? getPublicCvEntries(cvEntries,other).length>0 :
-  section==="about" ? Boolean(getPublicArtistProfile(artistProfile,other)) :
-  section==="contact" ? Boolean(getPublicContactDetails(contactDetails,other)) : false;
+  section==="about" ? Boolean(getPublicArtistProfile(artistProfile,other)) : false;
  const profile=section==="about"?getPublicArtistProfile(artistProfile,locale):undefined;
- return {title:copyFor(locale)[section],...(profile?{description:profile.statement[locale]}:{}),alternates:{canonical:pagePath(locale,section),...(indexable&&translated?{languages:{[locale]:pagePath(locale,section),[other]:pagePath(other,section)}}:{})},robots:{index:section==="about"?false:indexable,follow:true}};}
+ return {title:copyFor(locale)[section],...(profile?{description:profile.statement[locale]}:{}),alternates:{canonical:pagePath(locale,section),...(indexable&&translated?{languages:{[locale]:pagePath(locale,section),[other]:pagePath(other,section)}}:{})},robots:{index:section==="about"||section==="contact"?false:indexable,follow:true}};}
 export default async function SectionPage({params,searchParams}:Props){const [{locale,section},{category:rawCategory,page:rawPage,pageSize:rawPageSize}]=await Promise.all([params,searchParams]);if(!isLocale(locale)||!valid(section))notFound();const t=copyFor(locale);
  if(section==="about"){
   const biography=aboutPreviewFixture.biography[locale];
@@ -57,7 +55,7 @@ export default async function SectionPage({params,searchParams}:Props){const [{l
    </div>
   </div>;
  }
- if(section==="contact"){const details=getPublicContactDetails(contactDetails,locale);return <div className="page-content"><SiteBreadcrumbs locale={locale} items={[{label:t.home,href:pagePath(locale)},{label:t.contact}]}/><ContactExperience locale={locale} details={details} variant="page" /></div>;}
+ if(section==="contact"){const details=getPublicContactDetails(contactDetails);return <div className="page-content"><SiteBreadcrumbs locale={locale} items={[{label:t.home,href:pagePath(locale)},{label:t.contact}]}/><ContactExperience locale={locale} details={details} variant="page" /></div>;}
  if(section==="cv"){const entries=getPublicCvEntries(cvEntries,locale);if(entries.length===0)notFound();return <div className="page-content"><SiteBreadcrumbs locale={locale} items={[{label:t.home,href:pagePath(locale)},{label:t.about,href:pagePath(locale,"about")},{label:t.cv}]}/><header className="page-heading"><p className="eyebrow">{t.about}</p><h1>{t.cv}</h1></header><ol className="cv-list">{entries.map(entry=><li key={entry.id}><time>{entry.year}</time><div><strong>{entry.title[locale]}</strong>{entry.organization?.[locale]&&<span>{entry.organization[locale]}</span>}{"location" in entry && entry.location?.[locale]&&<span>{entry.location[locale]}</span>}</div></li>)}</ol></div>;}
  if(section==="works"){const items=getPublicArtworks(artworks,locale);return <div className="page-content"><SiteBreadcrumbs locale={locale} items={[{label:t.home,href:pagePath(locale)},{label:t.selected}]}/><header className="page-heading"><p className="eyebrow">{t.portfolio}</p><h1>{t.works}</h1><p>{t.selectedIntro}</p></header>{items.length===0?<p className="empty-note">{t.emptyWorks}</p>:<div className="artwork-grid">{items.map(w=>{const img=primaryImageFor(w);return img?<Link className="artwork-item" key={w.id} href={pagePath(locale,`works/${w.slug}`)}><Image sizes="(max-width: 600px) 100vw, (max-width: 900px) 90vw, 50vw" src={img.src} alt={img.alt[locale]??""} width={img.width} height={img.height}/><span>{w.title[locale]}</span></Link>:null;})}</div>}</div>;}
  if(section==="galleries"){const items=getPublicGalleries(galleries,artworks,locale);return <div className="page-content"><SiteBreadcrumbs locale={locale} items={[{label:t.home,href:pagePath(locale)},{label:t.galleries}]}/><header className="page-heading"><p className="eyebrow">{t.portfolio}</p><h1>{t.galleries}</h1><p>{t.discover}</p></header>{items.length===0?<p className="empty-note">{t.emptyGalleries}</p>:<GalleryIndex galleries={items} artworks={artworks} locale={locale} labels={{itemsPerPage:t.itemsPerPage,previous:t.previousPage,next:t.nextPage,page:t.galleryPage,showing:t.showingGalleries}} />}</div>;}

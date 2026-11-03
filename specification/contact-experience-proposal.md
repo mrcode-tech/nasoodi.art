@@ -122,13 +122,13 @@ The data model should distinguish the contact method, display label/value, desti
 
 - Email uses a correctly encoded `mailto:` destination.
 - Instagram and Telegram use valid HTTPS destinations when actual profile URLs are supplied.
-- Do not invent or imply that a fictional address or profile is real, verified, or monitored.
-- Temporary sample values must remain clearly identified as fixtures in the source and must be replaced with owner-approved values before release/publication.
+- The owner explicitly authorizes fictional email and social destinations during the current demo phase. They must be clearly identified as fixtures in source comments and must never be described as real, verified, monitored, or artist-approved.
+- Render the owner-authorized demo fixtures normally without approval gates or a visible disclaimer. Keep Contact routes noindex and out of the sitemap until the values are replaced with real owner-supplied details before public launch.
 - Preserve the existing artist Instagram handle `@ghazalenasoodi` wherever it is already approved and used. Do not silently change it.
 - Do not add a phone number, postal address, opening hours, response-time promise, booking system, commission availability, or other unprovided facts.
 - Do not add an unrequested contact form. A form is a separate product decision and requires an approved, reliable message-delivery mechanism, spam protection, privacy review, and explicit owner approval.
 
-The implementation brief currently specifies centralized temporary sample contact values. Reconcile their exact publication treatment with the higher-level content and release rules before implementation; never present fictional values as verified artist contact details.
+The owner has explicitly approved the demo-phase treatment: centralized fictional values render on the homepage and localized Contact pages without approval-state conditions. They remain noindex and excluded from the sitemap until replaced with real details. Never present them as verified artist contact details.
 
 ## 9. Interaction and accessibility
 
@@ -219,4 +219,4 @@ The implementation agent must also follow:
 - `specification/README.md` — specification index and mandatory reading sequence.
 - The shared design, navigation, shadcn reuse, localization, accessibility, and testing specifications referenced by the implementation prompt.
 
-Before coding, inspect the current feature-branch implementation and reconcile any conflicting contact-data publication instructions with the higher-level content/approval rules. Implement only on the existing `feature` branch. Do not merge, deploy, or publish without separate authorization.
+Follow the owner-authorized demo Contact exception in AGENTS.md and the implementation prompt. Implement only on the existing `feature` branch. Do not merge, deploy, or publish without separate authorization.
