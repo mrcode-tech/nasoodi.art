@@ -193,7 +193,7 @@ A reader should see a consistent content edge and line measure across comparable
 - The owner authorizes fictional email and social destinations during the current demo phase. Render the centralized fixture on the homepage and localized Contact pages without approval-state gating.
 - Keep Contact routes noindex and out of the sitemap until the demo values are replaced with real owner-supplied details. Never claim demo accounts are verified or monitored.
 - Render each individually validated, approved method; do not require all three methods to exist before showing any approved method.
-- If no approved method exists, keep the Contact layout and show the localized pending message without fake or disabled links.
+- If all fixture methods are absent or invalid, keep the Contact layout and show the localized pending message as a defensive fallback.
 - Keep real contact data in one centralized typed source so the owner can update it safely.
 - Validate email syntax before creating a `mailto:` link. Validate Telegram handles and construct canonical `https://t.me/<handle>` destinations. Accept Instagram profile URLs only over HTTPS on the approved Instagram host and only for a single profile path.
 - Do not claim social profiles are verified or monitored unless that is confirmed.
@@ -227,7 +227,7 @@ A reader should see a consistent content edge and line measure across comparable
 - Maintain logical DOM/keyboard order in both LTR and RTL.
 - Respect reduced motion; do not add motion solely for decoration.
 - Avoid horizontal overflow at all tested widths and zoom settings.
-- Keep unapproved contact data out of public metadata, JSON-LD, sitemap, and production-visible pages.
+- Keep fictional demo Contact values out of metadata and JSON-LD. Contact routes remain noindex and excluded from the sitemap until real values replace the fixture.
 - Preserve canonical URLs, localized alternates, and metadata for existing routes.
 - Contact page metadata must not claim unverified contact facts or artist services.
 - Do not introduce analytics, tracking pixels, or third-party form services.
@@ -278,7 +278,7 @@ Use the repository's existing test architecture and add meaningful regression co
 - Homepage Contact section and Contact page use the same canonical data source.
 - Both localized routes render with correct direction and translation parity.
 - Email link is correctly formed; social destinations are validated or non-operational sample text.
-- Only owner-approved contact values render; when none are approved, the localized pending state is shown.
+- The centralized owner-authorized demo Contact values render in both locales without approval gates; malformed or absent individual methods are safely omitted.
 - Existing real artist Instagram handle remains unchanged in its approved context.
 - No unrequested form, phone, address, or commercial claim is introduced.
 
@@ -322,7 +322,7 @@ Inspect spacing, alignment, content width, type, wrapping, visual hierarchy, foc
 5. One-line desktop sidebar copyright in both locales.
 6. A shared long-form justified text treatment with responsive readability safeguards.
 7. Homepage Contact section and dedicated bilingual Contact page/sidebar destination.
-8. Centralized typed contact data with owner/locale approval gates and a truthful pending state when no public destination has been approved.
+8. Centralized typed demo contact data, validated independently of approval flags, with a pending fallback only when all methods are absent or invalid.
 9. Automated tests and inspected visual QA evidence.
 10. Updated specification index and task-specific `agent.md`.
 
@@ -336,7 +336,7 @@ Report:
 - Spacing/typography changes and responsive behavior.
 - Journal control widths tested and any narrow-width fallback.
 - Sidebar copyright results in both locales.
-- Contact destinations remain unpublished until the artist/site owner supplies and approves them.
+- Fictional demo Contact destinations remain visible during the demo phase; replace or remove them before the actual public launch.
 - Test commands and exact results.
 - CI run URL, conclusion, and tested SHA.
 - Visual QA viewports/locales and artifact references.
