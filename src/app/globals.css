@@ -1230,3 +1230,166 @@ html[lang="fa"] .contact-pending {
     font-size: clamp(2.2rem, 9vw, 3rem);
   }
 }
+
+
+/* Shared responsive typography system — 2026-11-03.
+   Semantic roles are defined once and reused across every locale and theme. */
+:root {
+  --type-display: clamp(1.875rem, 3.1vw, 2.75rem);
+  --type-page-title: clamp(1.875rem, 2.8vw, 2.5rem);
+  --type-section-title: clamp(1.5rem, 2.25vw, 2rem);
+  --type-subsection-title: clamp(1.1875rem, 1.65vw, 1.5rem);
+  --type-card-title: clamp(1.0625rem, 1.45vw, 1.35rem);
+  --type-body: 1rem;
+  --type-body-lead: clamp(1.0625rem, 1.3vw, 1.125rem);
+  --type-supporting: 0.9rem;
+  --type-caption: 0.8rem;
+  --leading-display: 1.2;
+  --leading-heading: 1.35;
+  --leading-body: 1.9;
+}
+
+html[lang="fa"] {
+  --type-display: clamp(1.75rem, 2.8vw, 2.5rem);
+  --type-page-title: clamp(1.75rem, 2.65vw, 2.35rem);
+  --type-section-title: clamp(1.5rem, 2.1vw, 1.875rem);
+  --type-subsection-title: clamp(1.125rem, 1.55vw, 1.375rem);
+  --type-card-title: clamp(1.0625rem, 1.4vw, 1.25rem);
+  --type-body: 1rem;
+  --type-body-lead: 1.0625rem;
+  --type-supporting: 0.9rem;
+  --type-caption: 0.8rem;
+  --leading-display: 1.5;
+  --leading-heading: 1.55;
+  --leading-body: 2;
+}
+
+/* Semantic display and page-title roles. Keep normal wrapping; no no-wrap hacks. */
+.home-intro .home-intro-copy > h1 {
+  max-width: none;
+  font-size: var(--type-display);
+  line-height: var(--leading-display);
+  letter-spacing: -0.035em;
+  text-wrap: balance;
+  overflow-wrap: normal;
+  word-break: normal;
+}
+
+.page-heading h1,
+.not-found-page h1,
+.artwork-detail-copy h1,
+.article-page h1 {
+  max-width: none;
+  font-size: var(--type-page-title);
+  line-height: var(--leading-heading);
+  letter-spacing: -0.025em;
+  text-wrap: balance;
+  overflow-wrap: normal;
+  word-break: normal;
+}
+
+/* Shared section, subsection, and card-title roles. */
+.section-heading h2,
+.contact-title-home {
+  max-width: none;
+  font-size: var(--type-section-title);
+  line-height: var(--leading-heading);
+  letter-spacing: -0.025em;
+  text-wrap: balance;
+  overflow-wrap: normal;
+  word-break: normal;
+}
+
+.profile-content h2,
+.home-biography h2 {
+  font-size: var(--type-subsection-title);
+  line-height: var(--leading-heading);
+  letter-spacing: -0.015em;
+  text-wrap: balance;
+  overflow-wrap: normal;
+  word-break: normal;
+}
+
+.journal-card h2,
+.gallery-card-copy strong,
+.journal-upcoming h3 {
+  font-size: var(--type-card-title);
+  line-height: var(--leading-heading);
+  letter-spacing: -0.015em;
+  text-wrap: balance;
+  overflow-wrap: normal;
+  word-break: normal;
+}
+
+.contact-title-page {
+  max-width: none;
+  font-size: var(--type-page-title);
+  line-height: var(--leading-heading);
+  text-wrap: balance;
+  overflow-wrap: normal;
+  word-break: normal;
+}
+
+/* Reuse supporting roles for shared interface and editorial metadata. */
+.nav-link,
+.theme-trigger {
+  font-size: var(--type-supporting);
+}
+
+.eyebrow,
+.journal-card-meta,
+.contact-method-label,
+.cv-list time {
+  font-size: var(--type-caption);
+}
+
+.intro-note {
+  font-size: var(--type-body-lead);
+}
+
+.biography-copy,
+.about-biography-copy,
+.profile-content section p,
+.prose,
+.article-summary,
+.contact-intro,
+.empty-note {
+  font-size: var(--type-body);
+  line-height: var(--leading-body);
+}
+
+/* Persian font metrics differ; preserve native spacing and connected glyphs. */
+html[lang="fa"] .home-intro .home-intro-copy > h1,
+html[lang="fa"] .page-heading h1,
+html[lang="fa"] .not-found-page h1,
+html[lang="fa"] .artwork-detail-copy h1,
+html[lang="fa"] .article-page h1 {
+  font-family: "IranianSerifRegular", Tahoma, serif;
+  letter-spacing: 0;
+  line-height: var(--leading-display);
+}
+
+html[lang="fa"] .section-heading h2,
+html[lang="fa"] .profile-content h2,
+html[lang="fa"] .home-biography h2,
+html[lang="fa"] .journal-card h2,
+html[lang="fa"] .gallery-card-copy strong,
+html[lang="fa"] .journal-upcoming h3,
+html[lang="fa"] .contact-title-home,
+html[lang="fa"] .contact-title-page {
+  font-family: "IranianSerifRegular", Tahoma, serif;
+  letter-spacing: 0;
+  line-height: var(--leading-heading);
+}
+
+@media (max-width: 600px) {
+  .home-intro .home-intro-copy > h1 {
+    font-size: var(--type-display);
+  }
+  .contact-title-home {
+    font-size: var(--type-section-title);
+  }
+  .contact-title-page {
+    font-size: var(--type-page-title);
+  }
+}

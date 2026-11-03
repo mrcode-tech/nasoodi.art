@@ -1490,3 +1490,90 @@ test("Contact experience is editorial, bilingual, responsive, and hides unapprov
     });
   }
 });
+
+
+test("shared Persian typography keeps the artist name and homepage Contact heading on one line at reference widths", async ({ page }) => {
+  const referenceWidths = [390, 430, 768, 1280, 1440];
+
+  for (const width of referenceWidths) {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto("/fa");
+    await page.evaluate(() => document.fonts.ready);
+
+    const measure = async (selector: string) => page.locator(selector).evaluate((element) => {
+      const range = document.createRange();
+      range.selectNodeContents(element);
+      const rects = Array.from(range.getClientRects()).filter((rect) => rect.width > 0 && rect.height > 0);
+      const style = getComputedStyle(element);
+      return {
+        lineCount: rects.length,
+        fontSize: Number.parseFloat(style.fontSize),
+        lineHeight: Number.parseFloat(style.lineHeight),
+        whiteSpace: style.whiteSpace,
+        scrollWidth: element.scrollWidth,
+        clientWidth: element.clientWidth,
+      };
+    });
+
+    const artist = await measure("#home-title");
+    const contact = await measure(".contact-experience-home .contact-title");
+
+    expect(artist.lineCount, `Persian artist name should fit on one line at ${width}px`).toBe(1);
+    expect(contact.lineCount, `Persian Contact heading should fit on one line at ${width}px`).toBe(1);
+    expect(artist.fontSize).toBeLessThanOrEqual(40);
+    expect(contact.fontSize).toBeLessThanOrEqual(30);
+    expect(artist.whiteSpace).not.toBe("nowrap");
+    expect(contact.whiteSpace).not.toBe("nowrap");
+    expect(artist.scrollWidth).toBeLessThanOrEqual(artist.clientWidth);
+    expect(contact.scrollWidth).toBeLessThanOrEqual(contact.clientWidth);
+  }
+});
+
+test("shared Persian headings wrap naturally on narrow phones without horizontal overflow", async ({ page }) => {
+  for (const width of [320, 360]) {
+    await page.setViewportSize({ width, height: 640 });
+    await page.goto("/fa");
+    const metrics = await page.locator("#home-title, .contact-experience-home .contact-title").evaluateAll((elements) =>
+      elements.map((element) => {
+        const range = document.createRange();
+        range.selectNodeContents(element);
+        const lineCount = Array.from(range.getClientRects()).filter((rect) => rect.width > 0 && rect.height > 0).length;
+        const style = getComputedStyle(element);
+        return { lineCount, whiteSpace: style.whiteSpace, scrollWidth: element.scrollWidth, clientWidth: element.clientWidth };
+      })
+    );
+    expect(metrics).toHaveLength(2);
+    for (const metric of metrics) {
+      expect(metric.lineCount).toBeGreaterThanOrEqual(1);
+      expect(metric.lineCount).toBeLessThanOrEqual(2);
+      expect(metric.whiteSpace).not.toBe("nowrap");
+      expect(metric.scrollWidth).toBeLessThanOrEqual(metric.clientWidth);
+    }
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth)).toBe(true);
+  }
+});
+
+test("shared typography hierarchy is stable in English and across Light/Dark themes", async ({ page }) => {
+  for (const locale of ["en", "fa"] as const) {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.goto(`/${locale}`);
+    const homeTitle = page.locator("#home-title");
+    const contactTitle = page.locator(".contact-experience-home .contact-title");
+    await expect(homeTitle).toBeVisible();
+    await expect(contactTitle).toBeVisible();
+
+    const light = await Promise.all([
+      homeTitle.evaluate((element) => getComputedStyle(element).fontSize),
+      contactTitle.evaluate((element) => getComputedStyle(element).fontSize),
+    ]);
+    await page.getByRole("button", { name: locale === "fa" ? "انتخاب پوسته" : "Choose theme" }).click();
+    await page.getByRole("menuitemradio", { name: locale === "fa" ? "تیره" : "Dark" }).click();
+    await expect(page.locator("html")).toHaveClass(/dark/);
+    const dark = await Promise.all([
+      homeTitle.evaluate((element) => getComputedStyle(element).fontSize),
+      contactTitle.evaluate((element) => getComputedStyle(element).fontSize),
+    ]);
+    expect(dark).toEqual(light);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth)).toBe(true);
+  }
+});
