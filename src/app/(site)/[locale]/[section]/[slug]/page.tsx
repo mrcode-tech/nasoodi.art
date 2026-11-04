@@ -83,7 +83,7 @@ export default async function Detail({params,searchParams}:DetailProps){
       if(block.type==="link"&&isSafeJournalHref(block.href)){const external=block.href.startsWith("https://");return <p key={index}><a href={block.href} {...(external?{target:"_blank",rel:"noopener noreferrer"}:{})}>{block.text} ↗</a></p>;}
       return null;
     })}</div>}
-    {relatedEntries.length>0&&<nav className="journal-more" aria-label={t("moreFromJournal")}><h2>{locale==="fa"?"مطالب دیگر":"More from Journal"}</h2><ul>{relatedEntries.map(item=><li key={item.id}><Link href={pagePath(locale,`journal/${getLocalizedSlug(item,locale)}`)}>{item.title[locale]}</Link></li>)}</ul></nav>}
+    {relatedEntries.length>0&&<nav className="journal-more" aria-label={t("moreFromJournal")}><h2>{t("moreFromJournal")}</h2><ul>{relatedEntries.map(item=><li key={item.id}><Link href={pagePath(locale,`journal/${getLocalizedSlug(item,locale)}`)}>{item.title[locale]}</Link></li>)}</ul></nav>}
    </article>
   </>;
  }
