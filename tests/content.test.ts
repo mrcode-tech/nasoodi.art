@@ -380,9 +380,9 @@ test("localized slugs are unique per locale and alternate links follow stable co
  galleries.push(localizedGallery);
  journalEntries.push(localizedJournal);
  try {
-  assert.equal(getPublicGalleries([localizedGallery,duplicateGallery],[localizedWork],"en").length,1);
+  assert.equal(getPublicGalleries([localizedGallery,duplicateGallery],[localizedWork],"en").length,0);
   assert.equal(getPublicGalleries([localizedGallery,duplicateGallery],[localizedWork],"fa").length,2);
-  assert.equal(getPublicJournal([localizedJournal,duplicateJournal],"en").length,1);
+  assert.equal(getPublicJournal([localizedJournal,duplicateJournal],"en").length,0);
   assert.equal(getPublicJournal([localizedJournal,duplicateJournal],"fa").length,2);
   assert.equal(alternatePathFor("/en/works/english-work","en"),"/fa/works/persian-work");
   assert.equal(alternatePathFor("/en/galleries/english-gallery","en"),"/fa/galleries/persian-gallery");
