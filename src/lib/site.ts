@@ -52,6 +52,12 @@ export {
   portfolioStructuredData,
 } from "@/content/portfolio";
 
+export type LocalizedSlugRecord = { slug: string; localizedSlugs?: Partial<Record<Locale, string>> };
+
+export function getLocalizedSlug(record: LocalizedSlugRecord, locale: Locale): string {
+  return record.localizedSlugs?.[locale]?.trim() || record.slug;
+}
+
 export type PublicContactDetails = {
   email?: string;
   telegramHandle?: string;
@@ -188,19 +194,19 @@ export function isSafeContentSlug(slug: string): boolean {
 }
 export function getPublicArtworks(items: Artwork[], locale: Locale) {
   const visible = items.filter((work) => work.status === "published" && work.rightsConfirmed &&
-    Boolean(work.id.trim()) && isSafeContentSlug(work.slug) &&
+    Boolean(work.id.trim()) && isSafeContentSlug(getLocalizedSlug(work, locale)) &&
     Boolean(work.title[locale]?.trim()) && Boolean(primaryImageFor(work)?.alt[locale]?.trim()));
-  return keepUniqueBy(keepUniqueBy(visible, (work) => work.id), (work) => work.slug)
+  return keepUniqueBy(keepUniqueBy(visible, (work) => work.id), (work) => getLocalizedSlug(work, locale))
     .sort((a,b) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0));
 }
 export function getPublicGalleries(items: Gallery[], works: Artwork[], locale: Locale) {
   const ids = new Set(getPublicArtworks(works, locale).map((work) => work.id));
   const visible = items.filter((g) => g.status === "published" && Boolean(g.id.trim()) &&
-    isSafeContentSlug(g.slug) && Boolean(g.title[locale]?.trim()) &&
+    isSafeContentSlug(getLocalizedSlug(g, locale)) && Boolean(g.title[locale]?.trim()) &&
     Boolean(g.description[locale]?.trim()) && g.artworkIds.length > 0 &&
     new Set(g.artworkIds).size === g.artworkIds.length && g.artworkIds.includes(g.coverArtworkId) &&
     g.artworkIds.every((id) => ids.has(id)));
-  return keepUniqueBy(keepUniqueBy(visible, (gallery) => gallery.id), (gallery) => gallery.slug)
+  return keepUniqueBy(keepUniqueBy(visible, (gallery) => gallery.id), (gallery) => getLocalizedSlug(gallery, locale))
     .sort((a,b) => a.sortOrder-b.sortOrder);
 }
 export function getGalleryCoverArtwork(gallery: Gallery, works: Artwork[], locale: Locale) {
@@ -213,7 +219,7 @@ export function hasExplicitTimeZone(value: string): boolean {
 export function getPublicJournal(items: JournalEntry[], locale: Locale) {
   const visible = items.filter((entry) => {
     if (entry.status !== "published" || !entry.artistApproved || !entry.approvedLocales.includes(locale) ||
-      !entry.id.trim() || !isSafeContentSlug(entry.slug) || !entry.title[locale]?.trim() || !entry.summary[locale]?.trim()) return false;
+      !entry.id.trim() || !isSafeContentSlug(getLocalizedSlug(entry, locale)) || !entry.title[locale]?.trim() || !entry.summary[locale]?.trim()) return false;
     if (entry.type === "event" && !entry.event) return false;
     if (!entry.event) return true;
     const event = entry.event;
@@ -224,7 +230,7 @@ export function getPublicJournal(items: JournalEntry[], locale: Locale) {
     if (event.registrationUrl && !isSafeJournalHref(event.registrationUrl)) return false;
     return true;
   });
-  return keepUniqueBy(keepUniqueBy(visible, (entry) => entry.id), (entry) => entry.slug)
+  return keepUniqueBy(keepUniqueBy(visible, (entry) => entry.id), (entry) => getLocalizedSlug(entry, locale))
     .sort((a, b) => {
       const timestamp = (entry: JournalEntry) => entry.publishedAt && Number.isFinite(Date.parse(entry.publishedAt)) ? Date.parse(entry.publishedAt) : Number.NEGATIVE_INFINITY;
       return timestamp(b) - timestamp(a) || (a.id < b.id ? -1 : a.id > b.id ? 1 : a.slug < b.slug ? -1 : a.slug > b.slug ? 1 : 0);
@@ -340,23 +346,30 @@ export function alternatePathFor(pathname: string, locale: Locale): string {
   if (segments.length === 0) return pagePath(target);
   const [section, slug] = segments;
   if (section === "about" || section === "contact") return pagePath(target, section);
-  if (section === "cv") {
-    return getPublicCvEntries(cvEntries, target).length > 0 ? pagePath(target, "cv") : pagePath(target);
-  }
+  if (section === "cv") return getPublicCvEntries(cvEntries, target).length > 0 ? pagePath(target, "cv") : pagePath(target);
   if (section === "works") {
-    const items = getPublicArtworks(artworks, target);
-    if (!slug) return items.length > 0 ? pagePath(target, "works") : pagePath(target);
-    return items.some((item) => item.slug === slug) ? pagePath(target, `works/${slug}`) : pagePath(target);
+    const sourceItems = getPublicArtworks(artworks, locale);
+    const targetItems = getPublicArtworks(artworks, target);
+    if (!slug) return sourceItems.length && targetItems.length ? pagePath(target, "works") : pagePath(target);
+    const source = sourceItems.find((item) => getLocalizedSlug(item, locale) === slug);
+    const translated = source && targetItems.find((item) => item.id === source.id);
+    return translated ? pagePath(target, `works/${getLocalizedSlug(translated, target)}`) : pagePath(target);
   }
   if (section === "galleries") {
-    const items = getPublicGalleries(galleries, artworks, target);
-    if (!slug) return items.length > 0 ? pagePath(target, "galleries") : pagePath(target);
-    return items.some((item) => item.slug === slug) ? pagePath(target, `galleries/${slug}`) : pagePath(target);
+    const sourceItems = getPublicGalleries(galleries, artworks, locale);
+    const targetItems = getPublicGalleries(galleries, artworks, target);
+    if (!slug) return sourceItems.length && targetItems.length ? pagePath(target, "galleries") : pagePath(target);
+    const source = sourceItems.find((item) => getLocalizedSlug(item, locale) === slug);
+    const translated = source && targetItems.find((item) => item.id === source.id);
+    return translated ? pagePath(target, `galleries/${getLocalizedSlug(translated, target)}`) : pagePath(target);
   }
   if (section === "journal") {
-    const items = getPublicJournal(journalEntries, target);
-    if (!slug) return items.length > 0 ? pagePath(target, "journal") : pagePath(target);
-    return items.some((item) => item.slug === slug) ? pagePath(target, `journal/${slug}`) : pagePath(target);
+    const sourceItems = getPublicJournal(journalEntries, locale);
+    const targetItems = getPublicJournal(journalEntries, target);
+    if (!slug) return sourceItems.length && targetItems.length ? pagePath(target, "journal") : pagePath(target);
+    const source = sourceItems.find((item) => getLocalizedSlug(item, locale) === slug);
+    const translated = source && targetItems.find((item) => item.id === source.id);
+    return translated ? pagePath(target, `journal/${getLocalizedSlug(translated, target)}`) : pagePath(target);
   }
   return pagePath(target);
 }

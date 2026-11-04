@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 import {
   artworks, galleries, journalEntries, cvEntries, artistProfile, locales,
-  getPublicArtworks, getPublicGalleries, getPublicJournal, getPublicCvEntries, getPublicArtistProfile,
+  getPublicArtworks, getPublicGalleries, getPublicJournal, getPublicCvEntries, getPublicArtistProfile, getLocalizedSlug,
 } from "@/lib/site";
 
 const base = "https://nasoodi.art";
@@ -11,40 +11,33 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${base}/fa`, alternates: { languages: { fa: `${base}/fa`, en: `${base}/en` } } },
     { url: `${base}/en`, alternates: { languages: { fa: `${base}/fa`, en: `${base}/en` } } },
   ];
-
   for (const locale of locales) {
     const other = locale === "fa" ? "en" : "fa";
-    const add = (path: string, translated: boolean) => {
-      entries.push({
-        url: `${base}/${locale}/${path}`,
-        ...(translated ? { alternates: { languages: {
-          [locale]: `${base}/${locale}/${path}`,
-          [other]: `${base}/${other}/${path}`,
-        } } } : {}),
-      });
+    const add = (path: string, translatedPath?: string) => {
+      const url = `${base}/${locale}/${path}`;
+      entries.push({ url, ...(translatedPath ? { alternates: { languages: { [locale]: url, [other]: `${base}/${other}/${translatedPath}` } } } : {}) });
     };
-
-    const works = getPublicArtworks(artworks, locale);
-    const otherWorks = new Set(getPublicArtworks(artworks, other).map((item) => item.slug));
-    if (works.length) add("works", otherWorks.size > 0);
-    for (const item of works) add(`works/${item.slug}`, otherWorks.has(item.slug));
-
-    const sets = getPublicGalleries(galleries, artworks, locale);
-    const otherSets = new Set(getPublicGalleries(galleries, artworks, other).map((item) => item.slug));
-    if (sets.length) add("galleries", otherSets.size > 0);
-    for (const item of sets) add(`galleries/${item.slug}`, otherSets.has(item.slug));
-
-    const journal = getPublicJournal(journalEntries, locale);
-    const otherJournal = new Set(getPublicJournal(journalEntries, other).map((item) => item.slug));
-    if (journal.length) add("journal", otherJournal.size > 0);
-    for (const item of journal) add(`journal/${item.slug}`, otherJournal.has(item.slug));
-
-    if (getPublicArtistProfile(artistProfile, locale)) {
-      add("about", Boolean(getPublicArtistProfile(artistProfile, other)));
+    const works = getPublicArtworks(artworks, locale), otherWorks = getPublicArtworks(artworks, other);
+    if (works.length) add("works", otherWorks.length ? "works" : undefined);
+    for (const item of works) {
+      const translated = otherWorks.find((candidate) => candidate.id === item.id);
+      add(`works/${getLocalizedSlug(item, locale)}`, translated ? `works/${getLocalizedSlug(translated, other)}` : undefined);
     }
-
-    const cv = getPublicCvEntries(cvEntries, locale);
-    if (cv.length) add("cv", getPublicCvEntries(cvEntries, other).length > 0);
+    const sets = getPublicGalleries(galleries, artworks, locale), otherSets = getPublicGalleries(galleries, artworks, other);
+    if (sets.length) add("galleries", otherSets.length ? "galleries" : undefined);
+    for (const item of sets) {
+      const translated = otherSets.find((candidate) => candidate.id === item.id);
+      add(`galleries/${getLocalizedSlug(item, locale)}`, translated ? `galleries/${getLocalizedSlug(translated, other)}` : undefined);
+    }
+    const journal = getPublicJournal(journalEntries, locale), otherJournal = getPublicJournal(journalEntries, other);
+    if (journal.length) add("journal", otherJournal.length ? "journal" : undefined);
+    for (const item of journal) {
+      const translated = otherJournal.find((candidate) => candidate.id === item.id);
+      add(`journal/${getLocalizedSlug(item, locale)}`, translated ? `journal/${getLocalizedSlug(translated, other)}` : undefined);
+    }
+    if (getPublicArtistProfile(artistProfile, locale)) add("about", getPublicArtistProfile(artistProfile, other) ? "about" : undefined);
+    const cv = getPublicCvEntries(cvEntries, locale), otherCv = getPublicCvEntries(cvEntries, other);
+    if (cv.length) add("cv", otherCv.length ? "cv" : undefined);
   }
   return entries;
 }

@@ -11,6 +11,7 @@ export type ImageRecord = {
 export type Artwork = {
   id: string;
   slug: string;
+  localizedSlugs?: Partial<Record<Locale, string>>;
   title: Localized;
   images: ImageRecord[];
   rightsConfirmed: boolean;
@@ -23,6 +24,7 @@ export type Artwork = {
 export type Gallery = {
   id: string;
   slug: string;
+  localizedSlugs?: Partial<Record<Locale, string>>;
   title: Localized;
   description: Localized;
   coverArtworkId: string;
@@ -49,6 +51,7 @@ export type LocalizedRichText = Partial<Record<Locale, JournalTextBlock[]>>;
 export type JournalEntry = {
   id: string;
   slug: string;
+  localizedSlugs?: Partial<Record<Locale, string>>;
   type: JournalCategory;
   title: Localized;
   summary: Localized;
