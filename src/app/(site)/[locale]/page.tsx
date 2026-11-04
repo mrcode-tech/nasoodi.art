@@ -14,7 +14,7 @@ import { artworks,galleries,journalEntries,homepageSelection,getPublicArtworks,g
 import { isLocale,pagePath } from "@/lib/site";
 export const revalidate = 60;
 type Props={params:Promise<{locale:string}>};
-export async function generateMetadata({params}:Props):Promise<Metadata>{const {locale}=await params;if(!isLocale(locale))return {};const t=await getTranslations();
+export async function generateMetadata({params}:Props):Promise<Metadata>{const {locale}=await params;if(!isLocale(locale))return {};const t=await getTranslations({ locale });
  return {title:t("artistName"),
  description:t("homeDescription"),
  alternates:{canonical:pagePath(locale),languages:{fa:"/fa",en:"/en"}}};}

@@ -15,7 +15,7 @@ type Props={params:Promise<{locale:string;section:string}>;searchParams:Promise<
 const names=["works","galleries","journal","about","contact","cv"] as const;
 type Section=typeof names[number];
 const valid=(s:string):s is Section=>names.includes(s as Section);
-export async function generateMetadata({params}:Props):Promise<Metadata>{const {locale,section}=await params;if(!isLocale(locale)||!valid(section))return {};const t=await getTranslations();
+export async function generateMetadata({params}:Props):Promise<Metadata>{const {locale,section}=await params;if(!isLocale(locale)||!valid(section))return {};const t=await getTranslations({ locale });
  const indexable = section==="works" ? getPublicArtworks(artworks,locale).length>0 :
   section==="galleries" ? getPublicGalleries(galleries,artworks,locale).length>0 :
   section==="journal" ? getPublicJournal(journalEntries,locale).length>0 :
