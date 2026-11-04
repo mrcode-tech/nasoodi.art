@@ -1,10 +1,11 @@
 import Image from "next/image";
+import { getTranslations } from "next-intl/server";
 import { ArtworkExperience } from "@/components/artwork-experience";
 import { SiteBreadcrumbs } from "@/components/site-breadcrumbs";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { artworks,galleries,journalEntries,getPublicArtworks,getPublicGalleries,getPublicJournal,getUpcomingJournalEvents,getGalleryCoverArtwork,copyFor,isLocale,pagePath,otherLocale,primaryImageFor,journalCoverImageFor,isSafeJournalHref,getArtworkStructuredData,getGalleryStructuredData,getJournalStructuredData,serializeJsonLd,getLocalizedSlug } from "@/lib/site";
+import { artworks,galleries,journalEntries,getPublicArtworks,getPublicGalleries,getPublicJournal,getUpcomingJournalEvents,getGalleryCoverArtwork,isLocale,pagePath,otherLocale,primaryImageFor,journalCoverImageFor,isSafeJournalHref,getArtworkStructuredData,getGalleryStructuredData,getJournalStructuredData,serializeJsonLd,getLocalizedSlug } from "@/lib/site";
 type DetailProps={params:Promise<{locale:string;section:string;slug:string}>;searchParams:Promise<{fromGallery?:string}>};
 export async function generateMetadata({params}:DetailProps):Promise<Metadata>{
  const {locale,section,slug}=await params;
@@ -35,10 +36,10 @@ export async function generateMetadata({params}:DetailProps):Promise<Metadata>{
 }
 export const revalidate = 60;
 export default async function Detail({params,searchParams}:DetailProps){
- const [{locale,section,slug},query]=await Promise.all([params,searchParams]);if(!isLocale(locale))notFound();const t=copyFor(locale);
+ const [{locale,section,slug},query]=await Promise.all([params,searchParams]);if(!isLocale(locale))notFound();const t=await getTranslations({locale});
  if(section==="works"){const w=getPublicArtworks(artworks,locale).find(x=>getLocalizedSlug(x,locale)===slug);if(!w)notFound();const img=primaryImageFor(w);if(!img)notFound();
  const originGallery=typeof query.fromGallery==="string"?getPublicGalleries(galleries,artworks,locale).find(gallery=>getLocalizedSlug(gallery,locale)===query.fromGallery&&gallery.artworkIds.includes(w.id)):undefined;
- const breadcrumbItems=originGallery?[{label:t.home,href:pagePath(locale)},{label:t.galleries,href:pagePath(locale,"galleries")},{label:originGallery.title[locale]??originGallery.slug,href:pagePath(locale,`galleries/${getLocalizedSlug(originGallery,locale)}`)},{label:w.title[locale]??w.slug}]:[{label:t.home,href:pagePath(locale)},{label:t.selected,href:pagePath(locale,"works")},{label:w.title[locale]??w.slug}];
+ const breadcrumbItems=originGallery?[{label:t("home"),href:pagePath(locale)},{label:t("galleries"),href:pagePath(locale,"galleries")},{label:originGallery.title[locale]??originGallery.slug,href:pagePath(locale,`galleries/${getLocalizedSlug(originGallery,locale)}`)},{label:w.title[locale]??w.slug}]:[{label:t("home"),href:pagePath(locale)},{label:t("selected"),href:pagePath(locale,"works")},{label:w.title[locale]??w.slug}];
  return <><script type="application/ld+json" dangerouslySetInnerHTML={{__html:serializeJsonLd(getArtworkStructuredData(w,locale))}}/><div className="page-content"><SiteBreadcrumbs locale={locale} items={breadcrumbItems}/><article className="artwork-detail"><div className="artwork-detail-image"><Image sizes="(max-width: 600px) 100vw, (max-width: 900px) 90vw, 50vw" src={img.src} alt={img.alt[locale]??""} width={img.width} height={img.height}/></div><div className="artwork-detail-copy"><h1>{w.title[locale]}</h1>{w.medium?.[locale]&&<p>{w.medium[locale]}</p>}{w.year&&<p>{w.year}</p>}{w.description?.[locale]&&<p>{w.description[locale]}</p>}</div></article></div></>;}
  if(section==="galleries"){
   const g=getPublicGalleries(galleries,artworks,locale).find(x=>getLocalizedSlug(x,locale)===slug);
@@ -47,8 +48,8 @@ export default async function Detail({params,searchParams}:DetailProps){
   const members=g.artworkIds.map(id=>publicWorks.find(w=>w.id===id)).filter((w):w is (typeof publicWorks)[number]=>w!==undefined);
   const cover=getGalleryCoverArtwork(g,artworks,locale);
   return <><script type="application/ld+json" dangerouslySetInnerHTML={{__html:serializeJsonLd(getGalleryStructuredData(g,artworks,locale,`https://nasoodi.art${pagePath(locale,`galleries/${getLocalizedSlug(g,locale)}`)}`))}}/><div className="page-content">
-   <SiteBreadcrumbs locale={locale} items={[{label:t.home,href:pagePath(locale)},{label:t.galleries,href:pagePath(locale,"galleries")},{label:g.title[locale] ?? g.slug}]}/>
-   <header className="page-heading"><p className="eyebrow">{t.galleries}</p><h1>{g.title[locale]}</h1><p>{g.description[locale]}</p></header>
+   <SiteBreadcrumbs locale={locale} items={[{label:t("home"),href:pagePath(locale)},{label:t("galleries"),href:pagePath(locale,"galleries")},{label:g.title[locale] ?? g.slug}]}/>
+   <header className="page-heading"><p className="eyebrow">{t("galleries")}</p><h1>{g.title[locale]}</h1><p>{g.description[locale]}</p></header>
    {cover&&<figure className="gallery-detail-cover"><Image sizes="(max-width: 800px) 90vw, 54vw" src={cover.image.src} alt={cover.image.alt[locale]??""} width={cover.image.width} height={cover.image.height}/></figure>}
    <ArtworkExperience artworks={members} locale={locale} context={`gallery:${getLocalizedSlug(g,locale)}`} />
   </div></>;
@@ -60,19 +61,19 @@ export default async function Detail({params,searchParams}:DetailProps){
   const event=entry.event;
   const cover=journalCoverImageFor(entry,locale);
   const registrationStillRelevant=Boolean(event?.registrationUrl&&getUpcomingJournalEvents(journalEntries,locale).some(item=>item.id===entry.id));
-  const typeLabel=entry.type==="event"?t.journalEvents:entry.type==="exhibition"?t.journalExhibitions:entry.type==="studio-update"?t.journalStudio:t.journalStories;
+  const typeLabel=entry.type==="event"?t("journalEvents"):entry.type==="exhibition"?t("journalExhibitions"):entry.type==="studio-update"?t("journalStudio"):t("journalStories");
   return <><script type="application/ld+json" dangerouslySetInnerHTML={{__html:serializeJsonLd(getJournalStructuredData(entry,locale,`https://nasoodi.art${pagePath(locale,`journal/${getLocalizedSlug(entry,locale)}`)}`))}}/>
    <article className="page-content article-page journal-detail">
-    <SiteBreadcrumbs locale={locale} items={[{label:t.home,href:pagePath(locale)},{label:t.journal,href:pagePath(locale,"journal")},{label:entry.title[locale] ?? entry.slug}]}/>
+    <SiteBreadcrumbs locale={locale} items={[{label:t("home"),href:pagePath(locale)},{label:t("journal"),href:pagePath(locale,"journal")},{label:entry.title[locale] ?? entry.slug}]}/>
     <p className="eyebrow">{typeLabel}</p><h1>{entry.title[locale]}</h1><p className="article-summary">{entry.summary[locale]}</p>
-    {entry.publishedAt&&Number.isFinite(Date.parse(entry.publishedAt))&&<p className="article-publication-date"><time dateTime={entry.publishedAt}>{t.publicationDate}: {dateLabel(entry.publishedAt)}</time></p>}
+    {entry.publishedAt&&Number.isFinite(Date.parse(entry.publishedAt))&&<p className="article-publication-date"><time dateTime={entry.publishedAt}>{t("publicationDate")}: {dateLabel(entry.publishedAt)}</time></p>}
     {cover&&<figure className="journal-detail-cover"><Image src={cover.src} alt={cover.alt[locale] ?? entry.title[locale] ?? entry.slug} width={cover.width} height={cover.height} sizes="(max-width: 900px) 100vw, 58rem" /></figure>}
-    {event&&<section className="event-details" aria-label={locale==="fa"?"اطلاعات رویداد":"Event information"}>
-      <h2>{t.eventDate}</h2><p><time dateTime={event.startsAt}>{dateLabel(event.startsAt,event.timeZone)}</time> <span dir="ltr">{event.timeZone}</span></p>
-      {event.endsAt&&<p>{t.eventEnds}: <time dateTime={event.endsAt}>{dateLabel(event.endsAt,event.timeZone)}</time></p>}
-      {event.venue?.[locale]&&<p>{t.eventVenue}: {event.venue[locale]}</p>}
-      {event.attendanceMode&&<p>{t.attendanceMode}: {event.attendanceMode==="in-person"?t.inPerson:event.attendanceMode==="online"?t.online:t.hybrid}</p>}
-      {registrationStillRelevant&&<a className="text-link" href={event.registrationUrl!} rel="noopener noreferrer" target="_blank">{t.registration} ↗</a>}
+    {event&&<section className="event-details" aria-label={t("eventInformation")}>
+      <h2>{t("eventDate")}</h2><p><time dateTime={event("startsAt")}>{dateLabel(event("startsAt"),event("timeZone"))}</time> <span dir="ltr">{event("timeZone")}</span></p>
+      {event("endsAt")&&<p>{t("eventEnds")}: <time dateTime={event("endsAt")}>{dateLabel(event("endsAt"),event("timeZone"))}</time></p>}
+      {event("venue")?.[locale]&&<p>{t("eventVenue")}: {event("venue")[locale]}</p>}
+      {event("attendanceMode")&&<p>{t("attendanceMode")}: {event("attendanceMode")==="in-person"?t("inPerson"):event("attendanceMode")==="online"?t("online"):t("hybrid")}</p>}
+      {registrationStillRelevant&&<a className="text-link" href={event("registrationUrl")!} rel="noopener noreferrer" target="_blank">{t("registration")} ↗</a>}
     </section>}
     {entry.body?.[locale]&&<div className="prose">{entry.body[locale].map((block,index)=>{
       if(block.type==="paragraph")return <p key={index}>{block.text}</p>;
@@ -82,7 +83,7 @@ export default async function Detail({params,searchParams}:DetailProps){
       if(block.type==="link"&&isSafeJournalHref(block.href)){const external=block.href.startsWith("https://");return <p key={index}><a href={block.href} {...(external?{target:"_blank",rel:"noopener noreferrer"}:{})}>{block.text} ↗</a></p>;}
       return null;
     })}</div>}
-    {relatedEntries.length>0&&<nav className="journal-more" aria-label={locale==="fa"?"مطالب دیگر":"More from Journal"}><h2>{locale==="fa"?"مطالب دیگر":"More from Journal"}</h2><ul>{relatedEntries.map(item=><li key={item.id}><Link href={pagePath(locale,`journal/${getLocalizedSlug(item,locale)}`)}>{item.title[locale]}</Link></li>)}</ul></nav>}
+    {relatedEntries.length>0&&<nav className="journal-more" aria-label={t("moreFromJournal")}><h2>{locale==="fa"?"مطالب دیگر":"More from Journal"}</h2><ul>{relatedEntries.map(item=><li key={item.id}><Link href={pagePath(locale,`journal/${getLocalizedSlug(item,locale)}`)}>{item.title[locale]}</Link></li>)}</ul></nav>}
    </article>
   </>;
  }
