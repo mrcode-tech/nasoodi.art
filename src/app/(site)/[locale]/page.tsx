@@ -18,7 +18,7 @@ export async function generateMetadata({params}:Props):Promise<Metadata>{const {
  return {title:t("artistName"),
  description:t("homeDescription"),
  alternates:{canonical:pagePath(locale),languages:{fa:"/fa",en:"/en"}}};}
-export default async function Home({params}:Props){const {locale}=await params;if(!isLocale(locale))notFound();const t=await getTranslations();const biography=aboutPreviewFixture.biography[locale];
+export default async function Home({params}:Props){const {locale}=await params;if(!isLocale(locale))notFound();const t=await getTranslations({ locale });const biography=aboutPreviewFixture.biography[locale];
  const hero=getHomepageHero(artworks,homepageSelection,locale),heroImage=hero?primaryImageFor(hero):undefined;
  const heroAlt=heroImage?.alt[locale] ?? (t("heroAlt"));
  const works=getHomepageFeaturedArtworks(artworks,homepageSelection,locale),sets=getHomepageFeaturedGalleries(galleries,artworks,homepageSelection,locale);
