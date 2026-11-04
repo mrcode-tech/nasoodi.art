@@ -1,4 +1,5 @@
-import { artworks, cvEntries, galleries, journalEntries } from "@/content/portfolio";import { otherLocale, pagePath } from "@/types/locale";
+import { artworks, cvEntries, galleries, journalEntries } from "@/content/portfolio";
+import { otherLocale, pagePath } from "@/types/locale";
 import type { Locale } from "@/types/locale";
 import type {
   Artwork,
