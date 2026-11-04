@@ -2,7 +2,8 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { alternatePathFor, copyFor, pagePath, type Locale } from "@/lib/site";
+import { useTranslations } from "next-intl";
+import { alternatePathFor, pagePath, type Locale } from "@/lib/site";
 import { Button } from "@/components/ui/button";
 import { Sidebar, SidebarContent, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar";
 import { Sheet, SheetClose, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
@@ -12,6 +13,7 @@ import { ThemeSelector } from "@/components/theme-selector";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
 function LanguageSelector({ locale, alternate, pathname, label, onNavigate }: { locale: Locale; alternate: string; pathname: string; label: string; onNavigate?: () => void }) {
+  const t = useTranslations();
   const englishHref = locale === "en" ? pathname : alternate;
   const persianHref = locale === "fa" ? pathname : alternate;
   const router = useRouter();
@@ -26,13 +28,20 @@ function LanguageSelector({ locale, alternate, pathname, label, onNavigate }: { 
   return <DropdownMenu>
     <DropdownMenuTrigger asChild><Button variant="ghost" size="sm" aria-label={label}><span>{locale === "fa" ? "فارسی" : "English"}</span><span className="language-chevron" aria-hidden="true">⌄</span></Button></DropdownMenuTrigger>
     <DropdownMenuContent align={locale === "fa" ? "start" : "end"} dir={locale === "fa" ? "rtl" : "ltr"} aria-label={label}>
-      <DropdownMenuItem asChild><Link href={englishHref} hrefLang="en" lang="en" aria-current={locale === "en" ? "page" : undefined} onClick={(event) => { preserveGalleryState(event); onNavigate?.(); }}>English{locale === "en" ? " · Current" : ""}</Link></DropdownMenuItem>
-      <DropdownMenuItem asChild><Link href={persianHref} hrefLang="fa" lang="fa" aria-current={locale === "fa" ? "page" : undefined} onClick={(event) => { preserveGalleryState(event); onNavigate?.(); }}>فارسی{locale === "fa" ? " · جاری" : ""}</Link></DropdownMenuItem>
+      <DropdownMenuItem asChild><Link href={englishHref} hrefLang="en" lang="en" aria-current={locale === "en" ? "page" : undefined} onClick={(event) => { preserveGalleryState(event); onNavigate?.(); }}>{t("languageEnglish")}{locale === "en" ? " · " + t("current") : ""}</Link></DropdownMenuItem>
+      <DropdownMenuItem asChild><Link href={persianHref} hrefLang="fa" lang="fa" aria-current={locale === "fa" ? "page" : undefined} onClick={(event) => { preserveGalleryState(event); onNavigate?.(); }}>{t("languagePersian")}{locale === "fa" ? " · " + t("currentFa") : ""}</Link></DropdownMenuItem>
     </DropdownMenuContent>
   </DropdownMenu>;
 }
 export function SiteShell({ locale, children, announcement }: { locale: Locale; children: React.ReactNode; announcement?: AnnouncementEvent }) {
-  const labels = copyFor(locale);
+  const t = useTranslations();
+  const labels = {
+    home: t("home"), about: t("about"), works: t("works"), galleries: t("galleries"),
+    journal: t("journal"), contact: t("contact"), skip: t("skip"),
+    announcementEyebrow: t("announcementEyebrow"), dismissAnnouncement: t("dismissAnnouncement"),
+    discipline: t("discipline"), close: t("close"), menu: t("menu"), language: t("language"),
+    appearance: t("appearance"), primaryNavigation: t("primaryNavigation"),
+  };
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
   useEffect(() => {
@@ -48,7 +57,7 @@ export function SiteShell({ locale, children, announcement }: { locale: Locale; 
     ["works", labels.works, pagePath(locale, "works")], ["galleries", labels.galleries, pagePath(locale, "galleries")],
     ["journal", labels.journal, pagePath(locale, "journal")], ["contact", labels.contact, pagePath(locale, "contact")],
   ];
-  const navigation = (insideSheet = false) => <nav dir={locale === "fa" ? "rtl" : "ltr"} aria-label={locale === "fa" ? "راهبری اصلی" : "Primary navigation"}>
+  const navigation = (insideSheet = false) => <nav dir={locale === "fa" ? "rtl" : "ltr"} aria-label={labels.primaryNavigation}>
     <SidebarMenu className="nav-list">{links.map(([key, label, href]) => {
       const active = key === "home" ? pathname === href : pathname === href || pathname.startsWith(href + "/");
       return <SidebarMenuItem key={key}><SidebarMenuButton><Link className="nav-link" dir={locale === "fa" ? "rtl" : "ltr"} href={href} aria-current={active ? "page" : undefined} onClick={() => insideSheet && setMobileOpen(false)}>{label}</Link></SidebarMenuButton></SidebarMenuItem>;
@@ -114,7 +123,7 @@ export function SiteShell({ locale, children, announcement }: { locale: Locale; 
             <div className="drawer-bottom">
               <div className="drawer-settings" dir={locale === "fa" ? "rtl" : "ltr"}>
                 <div className="drawer-setting-row"><span className="language-label">{labels.language}</span><LanguageSelector locale={locale} alternate={alternate} pathname={pathname} label={labels.language} onNavigate={() => setMobileOpen(false)}/></div>
-                <div className="drawer-setting-row"><span className="language-label">{locale === "fa" ? "نمایش" : "Appearance"}</span><ThemeSelector locale={locale}/></div>
+                <div className="drawer-setting-row"><span className="language-label">{labels.appearance}</span><ThemeSelector locale={locale}/></div>
               </div>
               <div className="drawer-copyright" dir="ltr"><span>nasoodi.art</span><span>© {new Date().getFullYear()}</span></div>
             </div>
