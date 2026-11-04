@@ -364,3 +364,31 @@ Do not report completion until:
 8. Known issues or follow-up work.
 9. Explicit confirmation that no unauthorized merge/deploy/publish occurred.
 
+
+
+## Architecture contracts — SEO, i18n, and editable content (2026-11-04)
+
+Before any future SEO, localization, or content-refactoring implementation, read these documents in full:
+
+- `specification/international-seo-and-search-discovery-architecture.md`
+- `specification/internationalization-and-ui-translation-architecture.md`
+- `specification/content-architecture-and-data-separation.md`
+- `specification/seo-and-discovery.md`
+- `specification/localization-and-editorial-governance.md`
+- `specification/content-model.md`
+- `specification/artwork-imaging-and-asset-pipeline.md`
+- `specification/accessibility-performance-security.md`
+- `specification/testing-qa-and-release.md`
+
+The owner requires three separate but coordinated concerns:
+1. SEO and multilingual search discovery.
+2. UI internationalization through a centralized i18n library (evaluate/adopt next-intl after compatibility audit), with no scattered Persian/English literals or conditional copy in components.
+3. Editable artist/portfolio content separated from UI messages, domain types, general utilities, and application logic. Artist profile, artwork, galleries, Journal, events, CV, and contact data belong in a clear content layer; generic utilities must not be content databases.
+
+Treat content as data, types as contracts, utilities/services as behavior, and components as presentation. Adding an artwork/gallery/Journal record should not require editing page or carousel components. Use stable content identity across locales and explicit localized slug mapping. Preserve editorial approval, asset rights, route behavior, ordering, and the existing demo Contact noindex safeguard.
+
+The proposed file-based content layout is a starting point only. First inspect the actual repository, including current util.ts/utils.ts and JSX data, classify each value, and map existing behavior. Choose JSON for structured records and Markdown for long-form prose where useful. Keep TypeScript for types, schemas, and logic. Do not adopt a CMS or database without a demonstrated requirement. Migrate incrementally with route/content/metadata parity tests; never perform a blind wholesale rewrite.
+
+For SEO research, the owner mentioned the community AgriciDaniel/claude-seo skill: https://github.com/AgriciDaniel/claude-seo. It may inform audit workflow, but is not a project dependency or authority. Inspect and pin/review its SKILL.md before using it. Validate claims against primary Google Search Central, Next.js, Schema.org, and web.dev documentation and actual production-rendered output. Do not install the full plugin, connect Search Console/analytics, use paid API extensions, or change production without explicit authorization.
+
+These architecture documents are specifications, not authorization to begin this work automatically. The current task at the top of this file remains the active implementation task unless the owner explicitly changes priority. Work on feature only; do not merge, deploy, or publish without separate authorization.
