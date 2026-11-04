@@ -13,7 +13,6 @@ import type {
   HomepageSelection,
   JournalEntry,
   JournalCategory,
-  JournalEntry,
 } from "@/types/content";
 
 export { locales, isLocale, otherLocale, pagePath } from "@/types/locale";
@@ -28,6 +27,7 @@ export type {
   HomepageSelection,
   ImageRecord,
   JournalCategory,
+  JournalEntry,
   JournalEvent,
   JournalTextBlock,
   LocalizedRichText,
