@@ -367,3 +367,29 @@ test("localized content slugs are validated and unique independently per locale"
  assert.equal(getPublicJournal([journal],"en").length,1);
  assert.equal(getLocalizedSlug(journal,"fa"),"yaddasht-haye-ateliye");
 });
+
+
+test("localized slugs are unique per locale and alternate links follow stable content ids",async()=>{
+ const {alternatePathFor}=await import("../src/lib/site");
+ const localizedWork:Artwork={...work,id:"localized-route-work",slug:"legacy-work",localizedSlugs:{en:"english-work",fa:"persian-work"}};
+ const localizedGallery:Gallery={id:"localized-route-gallery",slug:"legacy-gallery",localizedSlugs:{en:"english-gallery",fa:"persian-gallery"},title:{en:"Gallery",fa:"گالری"},description:{en:"Description",fa:"توضیح"},coverArtworkId:localizedWork.id,artworkIds:[localizedWork.id],status:"published",sortOrder:99};
+ const localizedJournal:JournalEntry={id:"localized-route-journal",slug:"legacy-journal",localizedSlugs:{en:"english-journal",fa:"persian-journal"},type:"story",title:{en:"Story",fa:"داستان"},summary:{en:"Summary",fa:"خلاصه"},status:"published",approvedLocales:["en","fa"],artistApproved:true};
+ const duplicateGallery:Gallery={...localizedGallery,id:"localized-route-gallery-duplicate",localizedSlugs:{en:"english-gallery",fa:"another-persian-gallery"}};
+ const duplicateJournal:JournalEntry={...localizedJournal,id:"localized-route-journal-duplicate",localizedSlugs:{en:"english-journal",fa:"another-persian-journal"}};
+ artworks.push(localizedWork);
+ galleries.push(localizedGallery,duplicateGallery);
+ journalEntries.push(localizedJournal,duplicateJournal);
+ try {
+  assert.equal(getPublicGalleries([localizedGallery,duplicateGallery],[localizedWork],"en").length,1);
+  assert.equal(getPublicGalleries([localizedGallery,duplicateGallery],[localizedWork],"fa").length,2);
+  assert.equal(getPublicJournal([localizedJournal,duplicateJournal],"en").length,1);
+  assert.equal(getPublicJournal([localizedJournal,duplicateJournal],"fa").length,2);
+  assert.equal(alternatePathFor("/en/works/english-work","en"),"/fa/works/persian-work");
+  assert.equal(alternatePathFor("/en/galleries/english-gallery","en"),"/fa/galleries/persian-gallery");
+  assert.equal(alternatePathFor("/en/journal/english-journal","en"),"/fa/journal/persian-journal");
+ } finally {
+  artworks.pop();
+  galleries.pop();galleries.pop();
+  journalEntries.pop();journalEntries.pop();
+ }
+});
