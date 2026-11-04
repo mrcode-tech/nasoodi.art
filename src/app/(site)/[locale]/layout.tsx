@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { NextIntlClientProvider } from "next-intl";
+import { getMessages } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { SiteShell } from "@/components/site-shell";
 import { ThemeProvider } from "@/components/providers/theme-provider";
@@ -17,10 +19,11 @@ export default async function LocaleLayout({ children, params }: { children: Rea
   const { locale: value } = await params;
   if (!isLocale(value)) notFound();
   const locale: Locale = value;
+  const [messages] = await Promise.all([getMessages()]);
   const upcoming = getUpcomingJournalEvent(journalEntries, locale);
   const announcement = upcoming?.event ? { id: upcoming.id, slug: getLocalizedSlug(upcoming, locale), title: upcoming.title[locale]!, startsAt: upcoming.event.startsAt, timeZone: upcoming.event.timeZone } : undefined;
-  return <html lang={locale} dir={locale === "fa" ? "rtl" : "ltr"} suppressHydrationWarning><body><ThemeProvider>
+  return <html lang={locale} dir={locale === "fa" ? "rtl" : "ltr"} suppressHydrationWarning><body><NextIntlClientProvider messages={messages}><ThemeProvider>
     <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeJsonLd(portfolioStructuredData) }} />
     <SiteShell locale={locale} announcement={announcement}>{children}</SiteShell>
-  </ThemeProvider></body></html>;
+  </ThemeProvider></NextIntlClientProvider></body></html>;
 }
