@@ -13,6 +13,7 @@ import type {
   HomepageSelection,
   JournalEntry,
   JournalCategory,
+  JournalEntry,
 } from "@/types/content";
 
 export { locales, isLocale, otherLocale, pagePath } from "@/types/locale";
@@ -49,14 +50,6 @@ export type LocalizedSlugRecord = { slug: string; localizedSlugs?: Partial<Recor
 export function getLocalizedSlug(record: LocalizedSlugRecord, locale: Locale): string {
   return record.localizedSlugs?.[locale]?.trim() || record.slug;
 }
-
-export type PublicContactDetails = {
-  email?: string;
-  telegramHandle?: string;
-  telegramUrl?: string;
-  instagramHandle?: string;
-  instagramUrl?: string;
-};
 
 export function isSafeJournalHref(href: string): boolean {
   if (!href || href.includes("\\") || /[\u0000-\u001f]/.test(href)) return false;
