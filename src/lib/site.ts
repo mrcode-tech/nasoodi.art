@@ -20,6 +20,7 @@ import type {
   Gallery,
   HomepageSelection,
   JournalEntry,
+  JournalCategory,
 } from "@/types/content";
 
 export { locales, isLocale, otherLocale, pagePath } from "@/types/locale";
@@ -60,7 +61,7 @@ export type PublicContactDetails = {
 };
 
 export function isSafeJournalHref(href: string): boolean {
-  if (!href || href.includes("\\") || /[\\u0000-\\u001f]/.test(href)) return false;
+  if (!href || href.includes("\\") || /[\u0000-\u001f]/.test(href)) return false;
   if (href.startsWith("/") && !href.startsWith("//")) {
     try { return new URL(href, "https://nasoodi.art").origin === "https://nasoodi.art"; }
     catch { return false; }
