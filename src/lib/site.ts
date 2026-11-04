@@ -1,16 +1,5 @@
-import {
-  artworks,
-  artistProfile,
-  contactDetails,
-  cvDocument,
-  cvEntries,
-  galleries,
-  homepageSelection,
-  journalEntries,
-  portfolioStructuredData,
-} from "@/content/portfolio";
-import { isLocale, locales, otherLocale, pagePath } from "@/types/locale";
-import type { Locale, Localized } from "@/types/locale";
+import { artworks, cvEntries, galleries, journalEntries } from "@/content/portfolio";import { otherLocale, pagePath } from "@/types/locale";
+import type { Locale } from "@/types/locale";
 import type {
   Artwork,
   ArtistProfile,
