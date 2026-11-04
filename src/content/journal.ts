@@ -19,7 +19,7 @@ export const journalEntries: JournalEntry[] = [
   {
     id: "journal-studio-notes-november-2026",
     coverImage: journalPlaceholderCover(0),
-    slug: "between-layers-studio-notes",
+    slug: "between-layers-studio-notes", localizedSlugs: { en: "between-layers-studio-notes", fa: "between-layers-studio-notes" },
     type: "studio-update",
     title: { en: "Between Layers: Notes from the Studio", fa: "میان لایه‌ها: یادداشت‌هایی از آتلیه" },
     summary: { en: "A few reflections on slow looking, translucent colour, and the small decisions that shape a painting while it is still becoming.", fa: "تأملی کوتاه درباره تماشای آهسته، رنگ‌های شفاف و تصمیم‌های کوچکی که در مسیر شکل‌گرفتن یک نقاشی معنا پیدا می‌کنند." },
@@ -44,7 +44,7 @@ export const journalEntries: JournalEntry[] = [
   {
     id: "journal-exhibition-open-studio-2026",
     coverImage: journalPlaceholderCover(1),
-    slug: "open-studio-colour-and-stillness",
+    slug: "open-studio-colour-and-stillness", localizedSlugs: { en: "open-studio-colour-and-stillness", fa: "open-studio-colour-and-stillness" },
     type: "exhibition",
     title: { en: "Open Studio: Colour and Stillness", fa: "آتلیه باز: رنگ و سکون" },
     summary: { en: "An intimate afternoon among recent paintings, with time to look closely at the surfaces, colour relationships, and quiet details of each work.", fa: "بعدازظهری صمیمی در کنار نقاشی‌های تازه؛ فرصتی برای تماشای نزدیک سطح آثار، نسبت رنگ‌ها و جزئیات آرام هر تابلو." },
@@ -68,7 +68,7 @@ export const journalEntries: JournalEntry[] = [
   {
     id: "journal-story-colour-memory",
     coverImage: journalPlaceholderCover(2),
-    slug: "the-colours-that-memory-keeps",
+    slug: "the-colours-that-memory-keeps", localizedSlugs: { en: "the-colours-that-memory-keeps", fa: "the-colours-that-memory-keeps" },
     type: "story",
     title: { en: "The Colours That Memory Keeps", fa: "رنگ‌هایی که در خاطره می‌مانند" },
     summary: { en: "On the way familiar colours return as atmosphere rather than exact images, and how memory can become a starting point for painting.", fa: "درباره بازگشت رنگ‌های آشنا نه به شکل تصویری دقیق، بلکه همچون حال‌وهوا؛ و اینکه خاطره چگونه می‌تواند نقطه آغاز یک نقاشی باشد." },
@@ -91,7 +91,7 @@ export const journalEntries: JournalEntry[] = [
   {
     id: "journal-studio-light-study",
     coverImage: journalPlaceholderCover(3),
-    slug: "studying-the-changing-light",
+    slug: "studying-the-changing-light", localizedSlugs: { en: "studying-the-changing-light", fa: "studying-the-changing-light" },
     type: "studio-update",
     title: { en: "Studying the Changing Light", fa: "مطالعه نورِ در حال تغییر" },
     summary: { en: "A studio note on observing how daylight shifts across a painted surface and changes the relationship between neighbouring tones.", fa: "یادداشتی از آتلیه درباره مشاهده جابه‌جایی نور روز بر سطح نقاشی و تغییر رابطه میان تُن‌های رنگی در کنار یکدیگر." },
@@ -112,7 +112,7 @@ export const journalEntries: JournalEntry[] = [
   {
     id: "journal-online-conversation-art",
     coverImage: journalPlaceholderCover(4),
-    slug: "a-conversation-about-looking",
+    slug: "a-conversation-about-looking", localizedSlugs: { en: "a-conversation-about-looking", fa: "a-conversation-about-looking" },
     type: "event",
     title: { en: "A Conversation About Looking", fa: "گفت‌وگویی درباره تماشا" },
     summary: { en: "An online conversation about attention, the experience of looking at paintings, and the small details that shape a personal response.", fa: "گفت‌وگویی آنلاین درباره توجه، تجربه تماشای نقاشی و جزئیات کوچکی که برداشت شخصی ما را شکل می‌دهند." },
@@ -134,7 +134,7 @@ export const journalEntries: JournalEntry[] = [
   {
     id: "journal-story-space-between",
     coverImage: journalPlaceholderCover(5),
-    slug: "the-space-between-marks",
+    slug: "the-space-between-marks", localizedSlugs: { en: "the-space-between-marks", fa: "the-space-between-marks" },
     type: "story",
     title: { en: "The Space Between Marks", fa: "فضای میان نشانه‌ها" },
     summary: { en: "A reflection on pauses, edges, and the open spaces that allow a painting to breathe.", fa: "تأملی درباره مکث‌ها، لبه‌ها و فضاهای بازی که به یک نقاشی امکان نفس‌کشیدن می‌دهند." },
@@ -153,7 +153,7 @@ export const journalEntries: JournalEntry[] = [
   {
     id: "journal-exhibition-notes-2026",
     coverImage: journalPlaceholderCover(6),
-    slug: "notes-on-colour-and-presence",
+    slug: "notes-on-colour-and-presence", localizedSlugs: { en: "notes-on-colour-and-presence", fa: "notes-on-colour-and-presence" },
     type: "exhibition",
     title: { en: "Notes on Colour and Presence", fa: "یادداشت‌هایی درباره رنگ و حضور" },
     summary: { en: "A look back at a small presentation of paintings exploring colour, atmosphere, and the presence of everyday moments.", fa: "نگاهی به ارائه‌ای کوچک از نقاشی‌ها با محوریت رنگ، فضا و حضور لحظه‌های روزمره." },
@@ -177,7 +177,7 @@ export const journalEntries: JournalEntry[] = [
   {
     id: "journal-studio-colour-study",
     coverImage: journalPlaceholderCover(7),
-    slug: "a-study-in-muted-colours",
+    slug: "a-study-in-muted-colours", localizedSlugs: { en: "a-study-in-muted-colours", fa: "a-study-in-muted-colours" },
     type: "studio-update",
     title: { en: "A Study in Muted Colours", fa: "مطالعه‌ای با رنگ‌های خاموش" },
     summary: { en: "A brief note on balancing warm neutrals with a restrained range of blue and green.", fa: "یادداشتی کوتاه درباره ایجاد تعادل میان رنگ‌های خنثی گرم و طیفی محدود از آبی و سبز." },
