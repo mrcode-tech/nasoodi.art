@@ -63,6 +63,10 @@ Read these documents together with [Journal, Articles, and Events](./journal-and
 - [Artwork imaging and asset pipeline](./artwork-imaging-and-asset-pipeline.md) — capture, provenance, rights, derivatives, fidelity, alt text, and image delivery.
 - [Localization and editorial governance](./localization-and-editorial-governance.md) — Persian/English rules, translation parity, content approval, and writing standards.
 
+### AI-assisted engineering and code quality
+
+- [AI-assisted development and code quality contract](./ai-assisted-development-and-code-quality.md) — reviewed external Agent Skills for React/Next.js best practices, frontend architecture, safe refactoring, and Next.js i18n; mandatory agent workflow, compatibility caveats, and skill security/maintenance rules.
+
 ### Technical quality
 - [SEO and discovery](./seo-and-discovery.md) — metadata, canonicals, hreflang, sitemap, robots, structured data, and measurement.
 - [Accessibility, performance, privacy, and security](./accessibility-performance-security.md) — WCAG 2.2 AA target, motion, Core Web Vitals, privacy, and security.
