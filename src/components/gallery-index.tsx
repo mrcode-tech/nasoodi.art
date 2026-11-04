@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
@@ -22,6 +23,7 @@ type Props = {
 };
 
 export function GalleryIndex({ galleries, artworks, locale, labels }: Props) {
+  const t = useTranslations();
   const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -48,7 +50,7 @@ export function GalleryIndex({ galleries, artworks, locale, labels }: Props) {
   return (
     <>
       {galleries.length === 0 ? null : (
-        <div className="gallery-index-grid" role="list" aria-label={locale === "fa" ? "گالری‌ها" : "Galleries"}>
+        <div className="gallery-index-grid" role="list" aria-label={t("galleriesList")}>
           {visible.map((gallery) => {
             const cover = getGalleryCoverArtwork(gallery, artworks, locale);
             if (!cover) return null;
@@ -70,7 +72,7 @@ export function GalleryIndex({ galleries, artworks, locale, labels }: Props) {
         </div>
       )}
       {state.totalPages > 1 && (
-        <section className="gallery-pagination" aria-label={locale === "fa" ? "صفحه‌بندی گالری‌ها" : "Gallery pagination"}>
+        <section className="gallery-pagination" aria-label={t("galleryPagination")}>
           <p className="gallery-results-status" role="status" aria-live="polite">{range}</p>
           <div className="gallery-pagination-controls" dir={locale === "fa" ? "rtl" : "ltr"}>
             <label className="gallery-page-size">

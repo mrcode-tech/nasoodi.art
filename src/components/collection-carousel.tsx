@@ -2,12 +2,14 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious, CarouselStatus } from "@/components/ui/carousel";
 import { getGalleryCoverArtwork, getLocalizedSlug, pagePath, type Artwork, type Gallery, type Locale } from "@/lib/site";
 
 type Props = { galleries: Gallery[]; artworks: Artwork[]; locale: Locale; label: string };
 
 function CollectionLink({ gallery, artworks, locale }: { gallery: Gallery; artworks: Artwork[]; locale: Locale }) {
+  const t = useTranslations();
   const cover = getGalleryCoverArtwork(gallery, artworks, locale);
   return (
     <Link className="gallery-card" href={pagePath(locale, `galleries/${getLocalizedSlug(gallery, locale)}`)}>
@@ -15,32 +17,33 @@ function CollectionLink({ gallery, artworks, locale }: { gallery: Gallery; artwo
       <span className="gallery-card-copy">
         <strong>{gallery.title[locale]}</strong>
         <span>{gallery.description[locale]}</span>
-        <span className="gallery-card-action">{locale === "fa" ? "مشاهده مجموعه" : "Explore collection"} ↗</span>
+        <span className="gallery-card-action">{t("exploreCollection")} ↗</span>
       </span>
     </Link>
   );
 }
 
 export function CollectionCarousel({ galleries, artworks, locale, label }: Props) {
+  const t = useTranslations();
   if (galleries.length === 0) return null;
   if (galleries.length <= 2) {
     return <div className="gallery-cards gallery-cards-sparse">{galleries.map((gallery) => <CollectionLink key={gallery.id} gallery={gallery} artworks={artworks} locale={locale} />)}</div>;
   }
   const direction = locale === "fa" ? "rtl" : "ltr";
   return (
-    <Carousel dir={direction} label={label} roleDescription={locale === "fa" ? "گالری مجموعه‌ها" : "carousel"} opts={{ slidesToScroll: 1 }} className="collection-carousel">
+    <Carousel dir={direction} label={label} roleDescription={t("carouselRole")} opts={{ slidesToScroll: 1 }} className="collection-carousel">
       <CarouselContent>
         {galleries.map((gallery, index) => (
-          <CarouselItem key={gallery.id} aria-label={`${index + 1} ${locale === "fa" ? "از" : "of"} ${galleries.length}`}>
+          <CarouselItem key={gallery.id} aria-label={`${index + 1} ${t("of")} ${galleries.length}`}>
             <CollectionLink gallery={gallery} artworks={artworks} locale={locale} />
           </CarouselItem>
         ))}
       </CarouselContent>
       <div className="carousel-footer">
-        <CarouselStatus label={locale === "fa" ? "موقعیت مجموعه‌ها" : "Collection position"} />
+        <CarouselStatus label={t("collectionPosition")} />
         <div className="carousel-controls">
-          <CarouselPrevious label={locale === "fa" ? "مجموعه قبلی" : "Previous collection"} />
-          <CarouselNext label={locale === "fa" ? "مجموعه بعدی" : "Next collection"} />
+          <CarouselPrevious label={t("previousCollection")} />
+          <CarouselNext label={t("nextCollection")} />
         </div>
       </div>
     </Carousel>

@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useCallback, useEffect, useMemo, useState, useSyncExternalStore } from "react";
+import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious, CarouselStatus } from "@/components/ui/carousel";
@@ -23,9 +24,17 @@ export function ArtworkExperience({ artworks, locale, context }: Props) {
     return params.get("viewerContext") === context ? params.get("artwork") : null;
   }, [locationSearch, context]);
   const [failedImages, setFailedImages] = useState<string[]>([]);
-  const labels = locale === "fa"
-    ? { close: "بستن نمایشگر", previous: "اثر قبلی", next: "اثر بعدی", unavailable: "نمایش تصویر ممکن نیست", position: "از", detail: "مشاهده صفحه اثر", carousel: "آثار هنری", artworkPosition: "موقعیت اثر" }
-    : { close: "Close artwork viewer", previous: "Previous artwork", next: "Next artwork", unavailable: "The artwork image is unavailable", position: "of", detail: "View artwork page", carousel: "Selected artworks", artworkPosition: "Artwork position" };
+  const t = useTranslations();
+  const labels = {
+    close: t("viewerClose"),
+    previous: t("viewerPrevious"),
+    next: t("viewerNext"),
+    unavailable: t("viewerUnavailable"),
+    position: t("viewerPosition"),
+    detail: t("viewerDetail"),
+    carousel: t("viewerCarousel"),
+    artworkPosition: t("artworkPosition"),
+  };
   const sequence = useMemo(() => artworks.filter((work) => primaryImageFor(work) && work.title[locale]?.trim()), [artworks, locale]);
   const activeIndex = sequence.findIndex((work) => getLocalizedSlug(work, locale) === activeSlug);
   const activeArtwork = activeIndex >= 0 ? sequence[activeIndex] : undefined;
