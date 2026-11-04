@@ -69,11 +69,11 @@ export default async function Detail({params,searchParams}:DetailProps){
     {entry.publishedAt&&Number.isFinite(Date.parse(entry.publishedAt))&&<p className="article-publication-date"><time dateTime={entry.publishedAt}>{t("publicationDate")}: {dateLabel(entry.publishedAt)}</time></p>}
     {cover&&<figure className="journal-detail-cover"><Image src={cover.src} alt={cover.alt[locale] ?? entry.title[locale] ?? entry.slug} width={cover.width} height={cover.height} sizes="(max-width: 900px) 100vw, 58rem" /></figure>}
     {event&&<section className="event-details" aria-label={t("eventInformation")}>
-      <h2>{t("eventDate")}</h2><p><time dateTime={event("startsAt")}>{dateLabel(event("startsAt"),event("timeZone"))}</time> <span dir="ltr">{event("timeZone")}</span></p>
-      {event("endsAt")&&<p>{t("eventEnds")}: <time dateTime={event("endsAt")}>{dateLabel(event("endsAt"),event("timeZone"))}</time></p>}
-      {event("venue")?.[locale]&&<p>{t("eventVenue")}: {event("venue")[locale]}</p>}
-      {event("attendanceMode")&&<p>{t("attendanceMode")}: {event("attendanceMode")==="in-person"?t("inPerson"):event("attendanceMode")==="online"?t("online"):t("hybrid")}</p>}
-      {registrationStillRelevant&&<a className="text-link" href={event("registrationUrl")!} rel="noopener noreferrer" target="_blank">{t("registration")} ↗</a>}
+      <h2>{t("eventDate")}</h2><p><time dateTime={event.startsAt}>{dateLabel(event.startsAt,event.timeZone)}</time> <span dir="ltr">{event.timeZone}</span></p>
+      {event.endsAt&&<p>{t("eventEnds")}: <time dateTime={event.endsAt}>{dateLabel(event.endsAt,event.timeZone)}</time></p>}
+      {event.venue?.[locale]&&<p>{t("eventVenue")}: {event.venue[locale]}</p>}
+      {event.attendanceMode&&<p>{t("attendanceMode")}: {event.attendanceMode==="in-person"?t("inPerson"):event.attendanceMode==="online"?t("online"):t("hybrid")}</p>}
+      {registrationStillRelevant&&<a className="text-link" href={event.registrationUrl!} rel="noopener noreferrer" target="_blank">{t("registration")} ↗</a>}
     </section>}
     {entry.body?.[locale]&&<div className="prose">{entry.body[locale].map((block,index)=>{
       if(block.type==="paragraph")return <p key={index}>{block.text}</p>;
