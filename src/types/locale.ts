@@ -8,5 +8,7 @@ export const isLocale = (value: string): value is Locale =>
 export const otherLocale = (locale: Locale): Locale =>
   locale === "fa" ? "en" : "fa";
 
-export const pagePath = (locale: Locale, path = "") =>
-  `/${locale}${path ? `/${path.replace(/^\\/+/, "")}` : ""}`;
+export const pagePath = (locale: Locale, path = "") => {
+  const normalizedPath = path.replace(/^\/+/, "");
+  return `/${locale}${normalizedPath ? `/${normalizedPath}` : ""}`;
+};
