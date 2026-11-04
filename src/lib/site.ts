@@ -114,7 +114,7 @@ export function getGalleryStructuredData(gallery: Gallery, works: Artwork[], loc
           item: {
             "@type": "VisualArtwork",
             name: work.title[locale],
-            url: `https://nasoodi.art${pagePath(locale, `works/${work.slug}`)}`,
+            url: `https://nasoodi.art${pagePath(locale, `works/${getLocalizedSlug(work, locale)}`)}`,
             ...(image ? { image: new URL(image.src, "https://nasoodi.art").toString() } : {}),
           },
         };
