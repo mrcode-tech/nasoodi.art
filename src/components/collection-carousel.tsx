@@ -3,14 +3,14 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious, CarouselStatus } from "@/components/ui/carousel";
-import { getGalleryCoverArtwork, pagePath, type Artwork, type Gallery, type Locale } from "@/lib/site";
+import { getGalleryCoverArtwork, getLocalizedSlug, pagePath, type Artwork, type Gallery, type Locale } from "@/lib/site";
 
 type Props = { galleries: Gallery[]; artworks: Artwork[]; locale: Locale; label: string };
 
 function CollectionLink({ gallery, artworks, locale }: { gallery: Gallery; artworks: Artwork[]; locale: Locale }) {
   const cover = getGalleryCoverArtwork(gallery, artworks, locale);
   return (
-    <Link className="gallery-card" href={pagePath(locale, `galleries/${gallery.slug}`)}>
+    <Link className="gallery-card" href={pagePath(locale, `galleries/${getLocalizedSlug(gallery, locale)}`)}>
       {cover && <Image sizes="(max-width: 600px) 84vw, (max-width: 900px) 48vw, 32vw" src={cover.image.src} alt={cover.image.alt[locale] ?? ""} width={cover.image.width} height={cover.image.height} />}
       <span className="gallery-card-copy">
         <strong>{gallery.title[locale]}</strong>

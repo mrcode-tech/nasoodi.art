@@ -12,7 +12,7 @@ import {
   resolveGalleryPagination,
   type GalleryPageSize,
 } from "@/lib/gallery-pagination";
-import { getGalleryCoverArtwork, pagePath, type Artwork, type Gallery, type Locale } from "@/lib/site";
+import { getGalleryCoverArtwork, getLocalizedSlug, pagePath, type Artwork, type Gallery, type Locale } from "@/lib/site";
 
 type Props = {
   galleries: Gallery[];
@@ -54,7 +54,7 @@ export function GalleryIndex({ galleries, artworks, locale, labels }: Props) {
             if (!cover) return null;
             return (
               <article className="gallery-index-card" role="listitem" key={gallery.id}>
-                <Link className="gallery-index-card-link" href={pagePath(locale, "galleries/" + gallery.slug)}>
+                <Link className="gallery-index-card-link" href={pagePath(locale, "galleries/" + getLocalizedSlug(gallery, locale))}>
                   <span className="gallery-index-image-frame">
                     <Image src={cover.image.src} alt={cover.image.alt[locale] ?? ""} width={cover.image.width} height={cover.image.height}
                       sizes="(max-width: 600px) 100vw, (max-width: 900px) 50vw, 33vw" />
