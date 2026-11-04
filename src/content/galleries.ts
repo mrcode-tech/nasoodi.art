@@ -1,4 +1,4 @@
-import type { Gallery } from "@/types/content";
+import type { Gallery } from "../types/content";
 
 export const galleries: Gallery[] = [
   { id: "gallery-quiet-intervals", slug: "quiet-intervals", title: { en: "Quiet Intervals", fa: "فاصله‌های آرام" }, description: { en: "A considered sequence of works for an unhurried encounter with stillness, reflection, and the spaces between moments.", fa: "چیدمانی برای مواجهه‌ای بی‌شتاب با سکون، تأمل و فاصله‌هایی که میان لحظه‌ها شکل می‌گیرند." }, coverArtworkId: "artwork-quiet-place", artworkIds: ["artwork-quiet-place", "artwork-where-light-rests", "artwork-garden-small-moments"], status: "published", sortOrder: 1 },

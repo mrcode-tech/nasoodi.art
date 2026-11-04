@@ -1,5 +1,5 @@
-import { approvedArtworkImageDimensions } from "@/lib/approved-artwork-image-dimensions";
-import type { Artwork } from "@/types/content";
+import { approvedArtworkImageDimensions } from "../lib/approved-artwork-image-dimensions";
+import type { Artwork } from "../types/content";
 
 // The five source photographs were explicitly approved by the site owner for public portfolio use.
 // Public derivatives are copied from specification/assets/gallery by scripts/copy-approved-gallery-assets.mjs.

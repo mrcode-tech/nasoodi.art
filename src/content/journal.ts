@@ -1,5 +1,5 @@
 import { approvedArtworkImages } from "./artworks";
-import type { JournalEntry } from "@/types/content";
+import type { JournalEntry } from "../types/content";
 
 // Owner-authorized temporary Journal imagery: existing approved gallery paintings are used as clearly labelled placeholders,
 // not represented as event documentation. Replace these mappings with real Journal/event photographs during content review.

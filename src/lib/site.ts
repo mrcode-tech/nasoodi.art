@@ -1,6 +1,6 @@
-import { artworks, cvEntries, galleries, journalEntries } from "@/content/portfolio";
-import { otherLocale, pagePath } from "@/types/locale";
-import type { Locale } from "@/types/locale";
+import { artworks, cvEntries, galleries, journalEntries } from "../content/portfolio";
+import { otherLocale, pagePath } from "../types/locale";
+import type { Locale } from "../types/locale";
 import type {
   Artwork,
   ArtistProfile,
@@ -11,10 +11,10 @@ import type {
   HomepageSelection,
   JournalEntry,
   JournalCategory,
-} from "@/types/content";
+} from "../types/content";
 
-export { locales, isLocale, otherLocale, pagePath } from "@/types/locale";
-export type { Locale, Localized } from "@/types/locale";
+export { locales, isLocale, otherLocale, pagePath } from "../types/locale";
+export type { Locale, Localized } from "../types/locale";
 export type {
   Artwork,
   ArtistProfile,
@@ -30,7 +30,7 @@ export type {
   JournalTextBlock,
   LocalizedRichText,
   Status,
-} from "@/types/content";
+} from "../types/content";
 export {
   artworks,
   artistProfile,
@@ -41,7 +41,7 @@ export {
   homepageSelection,
   journalEntries,
   portfolioStructuredData,
-} from "@/content/portfolio";
+} from "../content/portfolio";
 
 export type LocalizedSlugRecord = { slug: string; localizedSlugs?: Partial<Record<Locale, string>> };
 

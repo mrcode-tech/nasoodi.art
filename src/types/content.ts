@@ -1,4 +1,4 @@
-import type { Locale, Localized } from "@/types/locale";
+import type { Locale, Localized } from "./locale";
 
 export type Status = "draft" | "scheduled" | "needs-review" | "approved" | "published" | "archived";
 export type ImageRecord = {
