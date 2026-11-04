@@ -36,7 +36,7 @@ export async function generateMetadata({params}:DetailProps):Promise<Metadata>{
 }
 export const revalidate = 60;
 export default async function Detail({params,searchParams}:DetailProps){
- const [{locale,section,slug},query]=await Promise.all([params,searchParams]);if(!isLocale(locale))notFound();const t=await getTranslations({locale});
+ const [{locale,section,slug},query]=await Promise.all([params,searchParams]);if(!isLocale(locale))notFound();const t=await getTranslations();
  if(section==="works"){const w=getPublicArtworks(artworks,locale).find(x=>getLocalizedSlug(x,locale)===slug);if(!w)notFound();const img=primaryImageFor(w);if(!img)notFound();
  const originGallery=typeof query.fromGallery==="string"?getPublicGalleries(galleries,artworks,locale).find(gallery=>getLocalizedSlug(gallery,locale)===query.fromGallery&&gallery.artworkIds.includes(w.id)):undefined;
  const breadcrumbItems=originGallery?[{label:t("home"),href:pagePath(locale)},{label:t("galleries"),href:pagePath(locale,"galleries")},{label:originGallery.title[locale]??originGallery.slug,href:pagePath(locale,`galleries/${getLocalizedSlug(originGallery,locale)}`)},{label:w.title[locale]??w.slug}]:[{label:t("home"),href:pagePath(locale)},{label:t("selected"),href:pagePath(locale,"works")},{label:w.title[locale]??w.slug}];

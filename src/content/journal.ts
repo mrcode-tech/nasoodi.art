@@ -1,3 +1,4 @@
+import { approvedArtworkImages } from "./artworks";
 import type { JournalEntry } from "@/types/content";
 
 // Owner-authorized temporary Journal imagery: existing approved gallery paintings are used as clearly labelled placeholders,

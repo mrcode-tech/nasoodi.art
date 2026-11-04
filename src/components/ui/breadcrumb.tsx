@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
-export function Breadcrumb({ children, label }: { children: ReactNode; label: string }) {
-  return <nav aria-label={label} className="breadcrumb-nav"><ol className="breadcrumb-list">{children}</ol></nav>;
+export function Breadcrumb({ children, label, dir }: { children: ReactNode; label: string; dir?: "ltr" | "rtl" }) {
+  return <nav dir={dir} aria-label={label} className="breadcrumb-nav"><ol className="breadcrumb-list">{children}</ol></nav>;
 }
 export function BreadcrumbItem({ children, current = false }: { children: ReactNode; current?: boolean }) {
   return <li className="breadcrumb-item" aria-current={current ? "page" : undefined}>{children}</li>;

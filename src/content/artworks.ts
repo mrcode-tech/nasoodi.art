@@ -4,7 +4,7 @@ import type { Artwork } from "@/types/content";
 // The five source photographs were explicitly approved by the site owner for public portfolio use.
 // Public derivatives are copied from specification/assets/gallery by scripts/copy-approved-gallery-assets.mjs.
 // Intrinsic dimensions are generated from each source JPEG before dev/build, preserving its exact aspect ratio.
-const approvedArtworkImages = [
+export const approvedArtworkImages = [
   { src: "/images/approved-artwork-1.jpg", alt: { en: "Painting titled A Quiet Place Between Seasons", fa: "تابلوی نقاشی با عنوان «آرامش میان فصل‌ها»" }, role: "primary" as const, width: approvedArtworkImageDimensions[0].width, height: approvedArtworkImageDimensions[0].height },
   { src: "/images/approved-artwork-2.jpg", alt: { en: "Painting titled The Shape of Remembering", fa: "تابلوی نقاشی با عنوان «شکلِ خاطره»" }, role: "primary" as const, width: approvedArtworkImageDimensions[1].width, height: approvedArtworkImageDimensions[1].height },
   { src: "/images/approved-artwork-3.jpg", alt: { en: "Painting titled Where Light Rests", fa: "تابلوی نقاشی با عنوان «جایی که نور می‌آرامد»" }, role: "primary" as const, width: approvedArtworkImageDimensions[2].width, height: approvedArtworkImageDimensions[2].height },
