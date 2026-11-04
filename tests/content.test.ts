@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import { aboutPreviewFixture } from "../src/lib/about-preview-fixtures";
-import { artworks,galleries,journalEntries,homepageSelection,getPublicArtworks,getPublicGalleries,isSafeLocalImagePath,isSafeContentSlug,getPublicJournal,getPublicCvEntries,getPublicCvDocument,getPublicArtistProfile,getPublicContactDetails,getUpcomingJournalEvents,getUpcomingJournalEvent,getArtworkStructuredData,getGalleryStructuredData,getJournalStructuredData,serializeJsonLd,getHomepageFeaturedArtworks,getGalleryCoverArtwork,getJournalEntriesForCategory,getHomepageJournalPreview,journalCoverImageFor,isSafeJournalHref,portfolioStructuredData,type Artwork,type Gallery,type JournalEntry,type CvEntry,type CvDocument,type ArtistProfile,type ContactDetails, hasExplicitTimeZone } from "../src/lib/site";
+import { artworks,galleries,journalEntries,homepageSelection,getPublicArtworks,getPublicGalleries,isSafeLocalImagePath,isSafeContentSlug,getPublicJournal,getPublicCvEntries,getPublicCvDocument,getPublicArtistProfile,getPublicContactDetails,getUpcomingJournalEvents,getUpcomingJournalEvent,getArtworkStructuredData,getGalleryStructuredData,getJournalStructuredData,serializeJsonLd,getHomepageFeaturedArtworks,getGalleryCoverArtwork,getJournalEntriesForCategory,getHomepageJournalPreview,journalCoverImageFor,isSafeJournalHref,portfolioStructuredData,getLocalizedSlug,type Artwork,type Gallery,type JournalEntry,type CvEntry,type CvDocument,type ArtistProfile,type ContactDetails, hasExplicitTimeZone } from "../src/lib/site";
 const work:Artwork={id:"w1",slug:"work-one",title:{en:"Work",fa:"اثر"},images:[{src:"/art/work.jpg",alt:{en:"Painting",fa:"نقاشی"},role:"primary",width:1200,height:900}],rightsConfirmed:true,status:"published"};
 test("artwork stays private until published and rights-cleared",()=>{assert.equal(getPublicArtworks([{...work,status:"needs-review"}],"en").length,0);assert.equal(getPublicArtworks([{...work,rightsConfirmed:false}],"en").length,0);assert.equal(getPublicArtworks([work],"en").length,1);});
 test("artwork requires localized title and primary image alt",()=>{assert.equal(getPublicArtworks([{...work,title:{en:"Work"}}],"fa").length,0);assert.equal(getPublicArtworks([{...work,images:[{...work.images[0],alt:{en:""}}]}],"en").length,0);});
@@ -346,4 +346,24 @@ test("published Journal entries use localized, dimensioned, rights-cleared tempo
  assert.equal(journalCoverImageFor(withoutCover,"en"),undefined);
  const unapprovedCover={...journalEntries[0],coverImage:{...journalEntries[0].coverImage!,rightsConfirmed:false}};
  assert.equal(journalCoverImageFor(unapprovedCover,"en"),undefined);
+});
+
+
+test("localized content slugs are validated and unique independently per locale",()=>{
+ const localizedWork:Artwork={...work,localizedSlugs:{en:"spring-garden",fa:"bagh-bahar"}};
+ assert.equal(getLocalizedSlug(localizedWork,"en"),"spring-garden");
+ assert.equal(getLocalizedSlug(localizedWork,"fa"),"bagh-bahar");
+ assert.equal(getPublicArtworks([localizedWork],"en").length,1);
+ assert.equal(getPublicArtworks([localizedWork],"fa").length,1);
+ const duplicateEnglish:Artwork={...localizedWork,id:"w2",localizedSlugs:{en:"spring-garden",fa:"bagh-bahar-second"}};
+ assert.equal(getPublicArtworks([localizedWork,duplicateEnglish],"en").length,0);
+ assert.equal(getPublicArtworks([localizedWork,duplicateEnglish],"fa").length,2);
+
+ const gallery:Gallery={id:"g1",slug:"legacy-gallery",localizedSlugs:{en:"quiet-intervals",fa:"faslehaye-aram"},title:{en:"Gallery",fa:"گالری"},description:{en:"Description",fa:"توضیح"},coverArtworkId:"w1",artworkIds:["w1"],status:"published",sortOrder:1};
+ assert.equal(getPublicGalleries([gallery],[work],"en").length,1);
+ assert.equal(getLocalizedSlug(gallery,"fa"),"faslehaye-aram");
+
+ const journal:JournalEntry={id:"j1",slug:"legacy-story",localizedSlugs:{en:"studio-notes",fa:"yaddasht-haye-ateliye"},type:"story",title:{en:"Story",fa:"داستان"},summary:{en:"Summary",fa:"خلاصه"},status:"published",approvedLocales:["en","fa"],artistApproved:true};
+ assert.equal(getPublicJournal([journal],"en").length,1);
+ assert.equal(getLocalizedSlug(journal,"fa"),"yaddasht-haye-ateliye");
 });
