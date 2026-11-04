@@ -20,7 +20,7 @@ export default async function LocaleLayout({ children, params }: { children: Rea
   if (!isLocale(value)) notFound();
   const locale: Locale = value;
   setRequestLocale(locale);
-  const [messages] = await Promise.all([getMessages()]);
+  const [messages] = await Promise.all([getMessages({ locale })]);
   const upcoming = getUpcomingJournalEvent(journalEntries, locale);
   const announcement = upcoming?.event ? { id: upcoming.id, slug: getLocalizedSlug(upcoming, locale), title: upcoming.title[locale]!, startsAt: upcoming.event.startsAt, timeZone: upcoming.event.timeZone } : undefined;
   return <html lang={locale} dir={locale === "fa" ? "rtl" : "ltr"} suppressHydrationWarning><body><NextIntlClientProvider messages={messages}><ThemeProvider>
