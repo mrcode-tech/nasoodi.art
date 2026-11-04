@@ -1,4 +1,4 @@
-import { artworks, cvEntries, galleries, journalEntries } from "../content/portfolio";
+import { artistProfile, artworks, cvEntries, galleries, journalEntries } from "../content/portfolio";
 import { otherLocale, pagePath } from "../types/locale";
 import type { Locale } from "../types/locale";
 import type {
@@ -47,6 +47,11 @@ export type LocalizedSlugRecord = { slug: string; localizedSlugs?: Partial<Recor
 
 export function getLocalizedSlug(record: LocalizedSlugRecord, locale: Locale): string {
   return record.localizedSlugs?.[locale]?.trim() || record.slug;
+}
+
+export function hasSharedContentIdentity<T extends { id: string }>(source: readonly T[], target: readonly T[]): boolean {
+  const targetIds = new Set(target.map((item) => item.id));
+  return source.some((item) => targetIds.has(item.id));
 }
 
 export function isSafeJournalHref(href: string): boolean {
@@ -322,12 +327,13 @@ export function alternatePathFor(pathname: string, locale: Locale): string {
   const segments = pathname.split("/").filter(Boolean).slice(1);
   if (segments.length === 0) return pagePath(target);
   const [section, slug] = segments;
-  if (section === "about" || section === "contact") return pagePath(target, section);
-  if (section === "cv") return getPublicCvEntries(cvEntries, target).length > 0 ? pagePath(target, "cv") : pagePath(target);
+  if (section === "about") return getPublicArtistProfile(artistProfile, locale) && getPublicArtistProfile(artistProfile, target) ? pagePath(target, "about") : pagePath(target);
+  if (section === "contact") return pagePath(target, "contact");
+  if (section === "cv") return hasSharedContentIdentity(getPublicCvEntries(cvEntries, locale), getPublicCvEntries(cvEntries, target)) ? pagePath(target, "cv") : pagePath(target);
   if (section === "works") {
     const sourceItems = getPublicArtworks(artworks, locale);
     const targetItems = getPublicArtworks(artworks, target);
-    if (!slug) return sourceItems.length && targetItems.length ? pagePath(target, "works") : pagePath(target);
+    if (!slug) return hasSharedContentIdentity(sourceItems, targetItems) ? pagePath(target, "works") : pagePath(target);
     const source = sourceItems.find((item) => getLocalizedSlug(item, locale) === slug);
     const translated = source && targetItems.find((item) => item.id === source.id);
     return translated ? pagePath(target, `works/${getLocalizedSlug(translated, target)}`) : pagePath(target);
@@ -335,7 +341,7 @@ export function alternatePathFor(pathname: string, locale: Locale): string {
   if (section === "galleries") {
     const sourceItems = getPublicGalleries(galleries, artworks, locale);
     const targetItems = getPublicGalleries(galleries, artworks, target);
-    if (!slug) return sourceItems.length && targetItems.length ? pagePath(target, "galleries") : pagePath(target);
+    if (!slug) return hasSharedContentIdentity(sourceItems, targetItems) ? pagePath(target, "galleries") : pagePath(target);
     const source = sourceItems.find((item) => getLocalizedSlug(item, locale) === slug);
     const translated = source && targetItems.find((item) => item.id === source.id);
     return translated ? pagePath(target, `galleries/${getLocalizedSlug(translated, target)}`) : pagePath(target);
@@ -343,7 +349,7 @@ export function alternatePathFor(pathname: string, locale: Locale): string {
   if (section === "journal") {
     const sourceItems = getPublicJournal(journalEntries, locale);
     const targetItems = getPublicJournal(journalEntries, target);
-    if (!slug) return sourceItems.length && targetItems.length ? pagePath(target, "journal") : pagePath(target);
+    if (!slug) return hasSharedContentIdentity(sourceItems, targetItems) ? pagePath(target, "journal") : pagePath(target);
     const source = sourceItems.find((item) => getLocalizedSlug(item, locale) === slug);
     const translated = source && targetItems.find((item) => item.id === source.id);
     return translated ? pagePath(target, `journal/${getLocalizedSlug(translated, target)}`) : pagePath(target);
