@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { getTranslations } from "next-intl/server";
 import { ArtworkExperience } from "@/components/artwork-experience";
 import { CollectionCarousel } from "@/components/collection-carousel";
 import { BiographyDisclosure } from "@/components/biography-disclosure";
@@ -10,16 +11,16 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { artworks,galleries,journalEntries,homepageSelection,getPublicArtworks,getPublicGalleries,getHomepageHero,getHomepageFeaturedArtworks,getHomepageFeaturedGalleries,getHomepageJournalPreview,journalCoverImageFor,primaryImageFor,getLocalizedSlug } from "@/lib/site";
-import { copyFor,isLocale,pagePath } from "@/lib/site";
+import { isLocale,pagePath } from "@/lib/site";
 export const revalidate = 60;
 type Props={params:Promise<{locale:string}>};
-export async function generateMetadata({params}:Props):Promise<Metadata>{const {locale}=await params;if(!isLocale(locale))return {};
- return {title:locale==="fa"?"غزاله عبداله زاده نسودی":"Ghazaleh Abdolahzade Nasoodi",
- description:locale==="fa"?"پورتفولیوی هنری غزاله عبداله زاده نسودی.":"The artist portfolio of Ghazaleh Abdolahzade Nasoodi.",
+export async function generateMetadata({params}:Props):Promise<Metadata>{const {locale}=await params;if(!isLocale(locale))return {};const t=await getTranslations({locale});
+ return {title:t("artistName"),
+ description:t("homeDescription"),
  alternates:{canonical:pagePath(locale),languages:{fa:"/fa",en:"/en"}}};}
-export default async function Home({params}:Props){const {locale}=await params;if(!isLocale(locale))notFound();const t=copyFor(locale);const biography=aboutPreviewFixture.biography[locale];
+export default async function Home({params}:Props){const {locale}=await params;if(!isLocale(locale))notFound();const t=await getTranslations({locale});const biography=aboutPreviewFixture.biography[locale];
  const hero=getHomepageHero(artworks,homepageSelection,locale),heroImage=hero?primaryImageFor(hero):undefined;
- const heroAlt=heroImage?.alt[locale] ?? (locale==="fa" ? "هنرمند در آتلیه، روبه‌روی بوم نقاشی ایستاده است." : "The artist standing before a canvas in her studio.");
+ const heroAlt=heroImage?.alt[locale] ?? (t("heroAlt"));
  const works=getHomepageFeaturedArtworks(artworks,homepageSelection,locale),sets=getHomepageFeaturedGalleries(galleries,artworks,homepageSelection,locale);
  const hasSelectedWorks=getPublicArtworks(artworks,locale).length>0;
  const hasFeaturedGalleries=getPublicGalleries(galleries,artworks,locale).length>0;
@@ -32,26 +33,26 @@ export default async function Home({params}:Props){const {locale}=await params;i
     {hero?.title[locale] && <figcaption>{hero.title[locale]}</figcaption>}
    </figure>
    <div className="home-intro-copy">
-    <p className="eyebrow">{t.portfolio}</p>
-    <h1 id="home-title">{locale==="fa"?"غزاله عبداله زاده نسودی":"Ghazaleh Abdolahzade Nasoodi"}</h1>
+    <p className="eyebrow">{t("portfolio")}</p>
+    <h1 id="home-title">{t("artistName")}</h1>
     <section className="home-biography" aria-label={locale==="fa"?"زندگی‌نامه":"Biography"}>
-      <BiographyDisclosure biography={biography} readMoreLabel={t.readMore} showLessLabel={t.showLess} lines={4}/>
+      <BiographyDisclosure biography={biography} readMoreLabel={t("readMore")} showLessLabel={t("showLess")} lines={4}/>
     </section>
     {(hasFeaturedGalleries || hasSelectedWorks) && <div className="hero-actions">
-     {hasFeaturedGalleries && <Button asChild variant="default" size="lg"><Link href={pagePath(locale,"galleries")}>{locale==="fa"?"گالری‌ها را ببینید":"Explore galleries"}</Link></Button>}
-     {hasSelectedWorks && <Button asChild variant="outline" size="lg"><Link href={pagePath(locale,"works")}>{locale==="fa"?"گزیده آثار را ببینید":"View selected works"}</Link></Button>}
+     {hasFeaturedGalleries && <Button asChild variant="default" size="lg"><Link href={pagePath(locale,"galleries")}>{t("exploreGalleries")}</Link></Button>}
+     {hasSelectedWorks && <Button asChild variant="outline" size="lg"><Link href={pagePath(locale,"works")}>{t("viewSelectedWorks")}</Link></Button>}
     </div>}
    </div>
 
   </section>
-  <section className="editorial-section" aria-labelledby="featured-works"><div className="section-heading"><div><p className="eyebrow">{t.portfolio}</p><h2 id="featured-works">{t.selected}</h2></div><Link className="text-link" href={pagePath(locale,"galleries")}>{locale==="fa"?"گشت‌وگذار در مجموعه‌ها":"Explore collections"} ↗</Link></div>
-   {works.length===0?<p className="empty-note">{t.emptyWorks}</p>:<ArtworkExperience artworks={works.slice(0,6)} locale={locale} context="home" />}
+  <section className="editorial-section" aria-labelledby="featured-works"><div className="section-heading"><div><p className="eyebrow">{t("portfolio")}</p><h2 id="featured-works">{t("selected")}</h2></div><Link className="text-link" href={pagePath(locale,"galleries")}>{t("exploreCollections")} ↗</Link></div>
+   {works.length===0?<p className="empty-note">{t("emptyWorks")}</p>:<ArtworkExperience artworks={works.slice(0,6)} locale={locale} context="home" />}
   </section>
-  <section className="editorial-section" aria-labelledby="featured-galleries"><div className="section-heading"><div><p className="eyebrow">{t.discover}</p><h2 id="featured-galleries">{t.galleries}</h2></div><Link className="text-link" href={pagePath(locale,"galleries")}>{t.discover} ↗</Link></div>
-   {sets.length===0?<p className="empty-note">{t.emptyGalleries}</p>:<CollectionCarousel galleries={sets} artworks={artworks} locale={locale} label={locale==="fa"?"مجموعه‌های هنری":"Featured collections"} />}
+  <section className="editorial-section" aria-labelledby="featured-galleries"><div className="section-heading"><div><p className="eyebrow">{t("discover")}</p><h2 id="featured-galleries">{t("galleries")}</h2></div><Link className="text-link" href={pagePath(locale,"galleries")}>{t("discover")} ↗</Link></div>
+   {sets.length===0?<p className="empty-note">{t("emptyGalleries")}</p>:<CollectionCarousel galleries={sets} artworks={artworks} locale={locale} label={locale==="fa"?"مجموعه‌های هنری":"Featured collections"} />}
   </section>
   {journal.length > 0 && <section className="editorial-section" aria-labelledby="latest-journal">
-   <div className="section-heading"><div><p className="eyebrow">{t.latest}</p><h2 id="latest-journal">{t.journal}</h2></div><Link className="text-link" href={pagePath(locale,"journal")}>{locale==="fa"?"مشاهده همه یادداشت‌ها":"Explore Journal"} ↗</Link></div>
+   <div className="section-heading"><div><p className="eyebrow">{t("latest")}</p><h2 id="latest-journal">{t("journal")}</h2></div><Link className="text-link" href={pagePath(locale,"journal")}>{t("exploreJournal")} ↗</Link></div>
    <div className="journal-preview-list">{journal.map(entry=>{
     const cover=journalCoverImageFor(entry,locale);
     return <article className={`journal-preview-item${cover?" has-cover":""}`} key={entry.id}>
@@ -60,7 +61,7 @@ export default async function Home({params}:Props){const {locale}=await params;i
       {entry.publishedAt && Number.isFinite(Date.parse(entry.publishedAt)) && <time dateTime={entry.publishedAt}>{new Intl.DateTimeFormat(locale,{dateStyle:"long"}).format(new Date(entry.publishedAt))}</time>}
       <h3><Link href={pagePath(locale,`journal/${getLocalizedSlug(entry,locale)}`)}>{entry.title[locale]}</Link></h3>
       <p>{entry.summary[locale]}</p>
-      <Link className="text-link" href={pagePath(locale,`journal/${getLocalizedSlug(entry,locale)}`)}>{t.readMore} ↗</Link>
+      <Link className="text-link" href={pagePath(locale,`journal/${getLocalizedSlug(entry,locale)}`)}>{t("readMore")} ↗</Link>
      </div>
     </article>;
    })}</div>
