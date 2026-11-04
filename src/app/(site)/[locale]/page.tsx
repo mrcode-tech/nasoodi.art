@@ -35,7 +35,7 @@ export default async function Home({params}:Props){const {locale}=await params;i
    <div className="home-intro-copy">
     <p className="eyebrow">{t("portfolio")}</p>
     <h1 id="home-title">{t("artistName")}</h1>
-    <section className="home-biography" aria-label={locale==="fa"?"زندگی‌نامه":"Biography"}>
+    <section className="home-biography" aria-label={t("biography")}>
       <BiographyDisclosure biography={biography} readMoreLabel={t("readMore")} showLessLabel={t("showLess")} lines={4}/>
     </section>
     {(hasFeaturedGalleries || hasSelectedWorks) && <div className="hero-actions">
@@ -49,7 +49,7 @@ export default async function Home({params}:Props){const {locale}=await params;i
    {works.length===0?<p className="empty-note">{t("emptyWorks")}</p>:<ArtworkExperience artworks={works.slice(0,6)} locale={locale} context="home" />}
   </section>
   <section className="editorial-section" aria-labelledby="featured-galleries"><div className="section-heading"><div><p className="eyebrow">{t("discover")}</p><h2 id="featured-galleries">{t("galleries")}</h2></div><Link className="text-link" href={pagePath(locale,"galleries")}>{t("discover")} ↗</Link></div>
-   {sets.length===0?<p className="empty-note">{t("emptyGalleries")}</p>:<CollectionCarousel galleries={sets} artworks={artworks} locale={locale} label={locale==="fa"?"مجموعه‌های هنری":"Featured collections"} />}
+   {sets.length===0?<p className="empty-note">{t("emptyGalleries")}</p>:<CollectionCarousel galleries={sets} artworks={artworks} locale={locale} label={t("galleries")} />}
   </section>
   {journal.length > 0 && <section className="editorial-section" aria-labelledby="latest-journal">
    <div className="section-heading"><div><p className="eyebrow">{t("latest")}</p><h2 id="latest-journal">{t("journal")}</h2></div><Link className="text-link" href={pagePath(locale,"journal")}>{t("exploreJournal")} ↗</Link></div>

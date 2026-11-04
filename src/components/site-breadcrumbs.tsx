@@ -5,7 +5,7 @@ export type BreadcrumbEntry = { label: string; href?: string };
 export function SiteBreadcrumbs({ locale, items }: { locale: Locale; items: BreadcrumbEntry[] }) {
   const t = useTranslations();
   if (items.length < 2) return null;
-  return <Breadcrumb label={t("breadcrumb")}>
+  return <Breadcrumb label={t("breadcrumb")} dir={locale === "fa" ? "rtl" : "ltr"}>
     {items.map((item, index) => {
       const current = index === items.length - 1;
       return <BreadcrumbItem key={item.href ?? item.label} current={current}>

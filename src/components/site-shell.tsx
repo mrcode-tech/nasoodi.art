@@ -26,7 +26,7 @@ function LanguageSelector({ locale, alternate, pathname, label, onNavigate }: { 
     if (suffix) { event.preventDefault(); router.push(alternate + "?" + suffix); onNavigate?.(); }
   };
   return <DropdownMenu>
-    <DropdownMenuTrigger asChild><Button variant="ghost" size="sm" aria-label={label}><span>{locale === "fa" ? "فارسی" : "English"}</span><span className="language-chevron" aria-hidden="true">⌄</span></Button></DropdownMenuTrigger>
+    <DropdownMenuTrigger asChild><Button variant="ghost" size="sm" aria-label={label}><span>{locale === "fa" ? t("languagePersian") : t("languageEnglish")}</span><span className="language-chevron" aria-hidden="true">⌄</span></Button></DropdownMenuTrigger>
     <DropdownMenuContent align={locale === "fa" ? "start" : "end"} dir={locale === "fa" ? "rtl" : "ltr"} aria-label={label}>
       <DropdownMenuItem asChild><Link href={englishHref} hrefLang="en" lang="en" aria-current={locale === "en" ? "page" : undefined} onClick={(event) => { preserveGalleryState(event); onNavigate?.(); }}>{t("languageEnglish")}{locale === "en" ? " · " + t("current") : ""}</Link></DropdownMenuItem>
       <DropdownMenuItem asChild><Link href={persianHref} hrefLang="fa" lang="fa" aria-current={locale === "fa" ? "page" : undefined} onClick={(event) => { preserveGalleryState(event); onNavigate?.(); }}>{t("languagePersian")}{locale === "fa" ? " · " + t("currentFa") : ""}</Link></DropdownMenuItem>

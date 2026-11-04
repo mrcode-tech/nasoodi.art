@@ -97,7 +97,7 @@ export function ArtworkExperience({ artworks, locale, context }: Props) {
       {sequence.length === 1 ? <div className="artwork-experience-static">{renderArtwork(sequence[0])}</div> :
         sequence.length > 1 ? (
           <div className="artwork-experience">
-            <Carousel dir={locale === "fa" ? "rtl" : "ltr"} label={labels.carousel} roleDescription={locale === "fa" ? "گالری آثار" : "carousel"} opts={{ slidesToScroll: 1 }} className="artwork-carousel">
+            <Carousel dir={locale === "fa" ? "rtl" : "ltr"} label={labels.carousel} roleDescription={t("artworkCarouselRole")} opts={{ slidesToScroll: 1 }} className="artwork-carousel">
               <CarouselContent>
                 {sequence.map((work, index) => <CarouselItem key={work.id} aria-label={`${index + 1} ${labels.position} ${sequence.length}`}>{renderArtwork(work)}</CarouselItem>)}
               </CarouselContent>
