@@ -372,7 +372,7 @@ test("localized content slugs are validated and unique independently per locale"
 test("localized slugs are unique per locale and alternate links follow stable content ids",async()=>{
  const {alternatePathFor}=await import("../src/lib/site");
  const localizedWork:Artwork={...work,id:"localized-route-work",slug:"legacy-work",localizedSlugs:{en:"english-work",fa:"persian-work"}};
- const localizedGallery:Gallery={id:"localized-route-gallery",slug:"legacy-gallery",localizedSlugs:{en:"english-gallery",fa:"persian-gallery"},title:{en:"Gallery",fa:"گالری"},description:{en:"Description",fa:"توضیح"},coverArtworkId:localizedWork.id,artworkIds:[localizedWork.id],status:"published",sortOrder:99};
+ const localizedGallery:Gallery={id:"localized-route-gallery",slug:"legacy-gallery",localizedSlugs:{en:"english-gallery",fa:"persian-gallery"},title:{en:"Gallery",fa:"گالری"},description:{en:"Description",fa:"توضیح"},coverArtworkId:work.id,artworkIds:[work.id],status:"published",sortOrder:99};
  const localizedJournal:JournalEntry={id:"localized-route-journal",slug:"legacy-journal",localizedSlugs:{en:"english-journal",fa:"persian-journal"},type:"story",title:{en:"Story",fa:"داستان"},summary:{en:"Summary",fa:"خلاصه"},status:"published",approvedLocales:["en","fa"],artistApproved:true};
  const duplicateGallery:Gallery={...localizedGallery,id:"localized-route-gallery-duplicate",localizedSlugs:{en:"english-gallery",fa:"another-persian-gallery"}};
  const duplicateJournal:JournalEntry={...localizedJournal,id:"localized-route-journal-duplicate",localizedSlugs:{en:"english-journal",fa:"another-persian-journal"}};
@@ -380,7 +380,7 @@ test("localized slugs are unique per locale and alternate links follow stable co
  galleries.push(localizedGallery,duplicateGallery);
  journalEntries.push(localizedJournal,duplicateJournal);
  try {
-  assert.equal(getPublicGalleries([localizedGallery,duplicateGallery],[localizedWork],"en").length,1);
+  assert.equal(getPublicGalleries([localizedGallery,duplicateGallery],[work],"en").length,1);
   assert.equal(getPublicGalleries([localizedGallery,duplicateGallery],[localizedWork],"fa").length,2);
   assert.equal(getPublicJournal([localizedJournal,duplicateJournal],"en").length,1);
   assert.equal(getPublicJournal([localizedJournal,duplicateJournal],"fa").length,2);
