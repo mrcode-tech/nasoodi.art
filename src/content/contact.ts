@@ -1,4 +1,4 @@
-import type { ContactDetails } from "@/types/content";
+import type { ContactDetails } from "../types/content";
 
 // Owner-authorized fictional contact fixtures for the current demo phase.
 // Replace these centralized values with the artist's real details before the public launch.
