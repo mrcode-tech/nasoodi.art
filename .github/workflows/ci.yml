@@ -29,19 +29,7 @@ jobs:
         with:
           node-version: 22
       - name: Install dependencies
-        run: npm install --no-audit --no-fund
-      - name: Upload resolved npm lockfile
-        uses: actions/upload-artifact@v4
-        with:
-          name: resolved-package-lock-${{ github.sha }}
-          path: package-lock.json
-          retention-days: 1
-      - name: Emit resolved npm lockfile for one-time synchronization
-        run: |
-          echo "RESOLVED_LOCKFILE_BEGIN"
-          base64 -w0 package-lock.json
-          echo
-          echo "RESOLVED_LOCKFILE_END"
+        run: npm ci --no-audit --no-fund
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
