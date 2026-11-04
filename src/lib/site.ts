@@ -327,7 +327,7 @@ export function alternatePathFor(pathname: string, locale: Locale): string {
   const segments = pathname.split("/").filter(Boolean).slice(1);
   if (segments.length === 0) return pagePath(target);
   const [section, slug] = segments;
-  if (section === "about") return getPublicArtistProfile(artistProfile, locale) && getPublicArtistProfile(artistProfile, target) ? pagePath(target, "about") : pagePath(target);
+  if (section === "about") return pagePath(target, "about");
   if (section === "contact") return pagePath(target, "contact");
   if (section === "cv") return hasSharedContentIdentity(getPublicCvEntries(cvEntries, locale), getPublicCvEntries(cvEntries, target)) ? pagePath(target, "cv") : pagePath(target);
   if (section === "works") {
