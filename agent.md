@@ -9,6 +9,20 @@
 
 All future UI work must follow specification/shared-responsive-typography-system.md and the shared design authorities. Reuse its semantic fluid type tokens across routes; respect Persian and English font metrics and RTL/LTR behavior; preserve natural heading wrapping; and do not add isolated oversized heading values or global no-wrap rules. The Persian homepage artist name and homepage Contact heading are single-line targets only at the reference widths defined by the specification. Update the shared specification before changing the typography system.
 
+## AI-assisted engineering and refactoring requirements
+
+Before any non-trivial React, Next.js, TypeScript, i18n, content-architecture, or refactoring work, read `specification/ai-assisted-development-and-code-quality.md` in full.
+
+Use the selected skills according to that contract:
+- Vercel React Best Practices for React/Next.js implementation, review, and refactoring.
+- Frontend Convention Skills (`react-architecture`) when component boundaries, folder organization, or separation of concerns are in scope.
+- Patterns and Refactoring for non-trivial, test-backed, behavior-preserving restructuring.
+- i18n for Next.js as an advisory checklist for translation and multilingual SEO work.
+
+Invoke the relevant skill if it is installed and available to the active coding agent. Otherwise read its linked `SKILL.md` and apply relevant guidance manually. Never claim a skill was installed or invoked without verifying it. Do not install, update, or execute third-party skills automatically. Official documentation matching the installed Next.js version, this repository's actual `/en` and `/fa` route contract, root `AGENTS.md`, and approved specifications take precedence over third-party examples. In particular, do not copy the i18n skill's default-locale URL or middleware conventions without a compatibility decision.
+
+Refactoring must be incremental and behavior-preserving: establish existing behavior, protect it with tests, make one coherent structural change at a time, and verify focused tests plus the broader relevant checks. Prefer simple code over speculative abstractions. Do not combine unrelated feature work, dependency upgrades, or formatting churn with a refactor.
+
 Implement the cross-site refinement as one coherent experience:
 
 1. A shared shadcn/ui Breadcrumb across all applicable pages, with clickable intermediate ancestors, correct artwork/collection/Journal paths, and robust Persian RTL behavior.
