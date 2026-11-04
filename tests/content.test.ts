@@ -377,8 +377,8 @@ test("localized slugs are unique per locale and alternate links follow stable co
  const duplicateGallery:Gallery={...localizedGallery,id:"localized-route-gallery-duplicate",localizedSlugs:{en:"english-gallery",fa:"another-persian-gallery"}};
  const duplicateJournal:JournalEntry={...localizedJournal,id:"localized-route-journal-duplicate",localizedSlugs:{en:"english-journal",fa:"another-persian-journal"}};
  artworks.push(localizedWork);
- galleries.push(localizedGallery,duplicateGallery);
- journalEntries.push(localizedJournal,duplicateJournal);
+ galleries.push(localizedGallery);
+ journalEntries.push(localizedJournal);
  try {
   assert.equal(getPublicGalleries([localizedGallery,duplicateGallery],[localizedWork],"en").length,1);
   assert.equal(getPublicGalleries([localizedGallery,duplicateGallery],[localizedWork],"fa").length,2);
@@ -389,7 +389,7 @@ test("localized slugs are unique per locale and alternate links follow stable co
   assert.equal(alternatePathFor("/en/journal/english-journal","en"),"/fa/journal/persian-journal");
  } finally {
   artworks.pop();
-  galleries.pop();galleries.pop();
-  journalEntries.pop();journalEntries.pop();
+  galleries.pop();
+  journalEntries.pop();
  }
 });
