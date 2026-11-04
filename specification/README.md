@@ -168,3 +168,16 @@ Implement the approved shared theme system defined in [Shared Light and Dark The
 
 
 Implementation on `feature` is committed in `470c0228cfe4b8171d32fbf212378c35c52eba8f` and subsequent documentation updates. The shared `next-themes` provider, Midnight Gallery semantic tokens, localized shadcn radio-menu selector, desktop/mobile placement, and Playwright coverage are in the application. Automated CI and rendered visual QA remain verification gates; do not mark this feature fully verified until those results are inspected.
+
+
+## International SEO, i18n, and content architecture — 2026-11-04
+
+Three complementary architecture contracts define the next maintainability and discoverability work:
+
+- [International SEO and Search Discovery Architecture](./international-seo-and-search-discovery-architecture.md) — indexability, page metadata, canonical URLs, hreflang, sitemap/robots, artwork SEO, structured data, Persian/English search quality, monitoring, and CI verification.
+- [Internationalization and UI Translation Architecture](./internationalization-and-ui-translation-architecture.md) — next-intl evaluation/adoption, centralized locale message bundles, App Router integration, localized navigation, server/client boundaries, RTL/LTR, and translation parity.
+- [Content Architecture and Separation from Application Logic](./content-architecture-and-data-separation.md) — separate artist-editable portfolio content from UI messages, TypeScript types, general utilities, and React presentation; file-based records, validation, editorial workflow, and incremental migration.
+
+Read these together with [SEO and discovery](./seo-and-discovery.md), [Localization and editorial governance](./localization-and-editorial-governance.md), and [Content and artwork model](./content-model.md). The new documents are proposed architecture contracts, not evidence that the refactor or SEO improvements have been implemented. Audit current code before choosing exact paths or moving existing data. Preserve the demo Contact noindex safeguard and all content/asset approval rules.
+
+The owner also identified the community [Claude SEO skill](https://github.com/AgriciDaniel/claude-seo) as a useful reference. Treat it as an optional, reviewed assistant workflow—not an authoritative source or mandatory dependency. Verify recommendations against Google Search Central, current Next.js documentation, Schema.org, and the rendered site. Do not install optional extensions, connect accounts, or use external APIs without authorization.
