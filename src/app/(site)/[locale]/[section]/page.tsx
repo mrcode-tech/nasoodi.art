@@ -9,7 +9,7 @@ import { artworks,galleries,journalEntries,cvEntries,artistProfile,contactDetail
 import { paginateItems, resolveGalleryPagination } from "@/lib/gallery-pagination";
 import { JournalPagination } from "@/components/journal-pagination";
 import { SiteBreadcrumbs } from "@/components/site-breadcrumbs";
-import { copyFor,isLocale,pagePath,otherLocale } from "@/lib/site";
+import { copyFor,isLocale,pagePath,otherLocale,getLocalizedSlug } from "@/lib/site";
 type Props={params:Promise<{locale:string;section:string}>;searchParams:Promise<{category?:string;page?:string;pageSize?:string}>};
 const names=["works","galleries","journal","about","contact","cv"] as const;
 type Section=typeof names[number];
@@ -57,7 +57,7 @@ export default async function SectionPage({params,searchParams}:Props){const [{l
  }
  if(section==="contact"){const details=getPublicContactDetails(contactDetails);return <div className="page-content"><SiteBreadcrumbs locale={locale} items={[{label:t.home,href:pagePath(locale)},{label:t.contact}]}/><ContactExperience locale={locale} details={details} variant="page" /></div>;}
  if(section==="cv"){const entries=getPublicCvEntries(cvEntries,locale);if(entries.length===0)notFound();return <div className="page-content"><SiteBreadcrumbs locale={locale} items={[{label:t.home,href:pagePath(locale)},{label:t.about,href:pagePath(locale,"about")},{label:t.cv}]}/><header className="page-heading"><p className="eyebrow">{t.about}</p><h1>{t.cv}</h1></header><ol className="cv-list">{entries.map(entry=><li key={entry.id}><time>{entry.year}</time><div><strong>{entry.title[locale]}</strong>{entry.organization?.[locale]&&<span>{entry.organization[locale]}</span>}{"location" in entry && entry.location?.[locale]&&<span>{entry.location[locale]}</span>}</div></li>)}</ol></div>;}
- if(section==="works"){const items=getPublicArtworks(artworks,locale);return <div className="page-content"><SiteBreadcrumbs locale={locale} items={[{label:t.home,href:pagePath(locale)},{label:t.selected}]}/><header className="page-heading"><p className="eyebrow">{t.portfolio}</p><h1>{t.works}</h1><p>{t.selectedIntro}</p></header>{items.length===0?<p className="empty-note">{t.emptyWorks}</p>:<div className="artwork-grid">{items.map(w=>{const img=primaryImageFor(w);return img?<Link className="artwork-item" key={w.id} href={pagePath(locale,`works/${w.slug}`)}><Image sizes="(max-width: 600px) 100vw, (max-width: 900px) 90vw, 50vw" src={img.src} alt={img.alt[locale]??""} width={img.width} height={img.height}/><span>{w.title[locale]}</span></Link>:null;})}</div>}</div>;}
+ if(section==="works"){const items=getPublicArtworks(artworks,locale);return <div className="page-content"><SiteBreadcrumbs locale={locale} items={[{label:t.home,href:pagePath(locale)},{label:t.selected}]}/><header className="page-heading"><p className="eyebrow">{t.portfolio}</p><h1>{t.works}</h1><p>{t.selectedIntro}</p></header>{items.length===0?<p className="empty-note">{t.emptyWorks}</p>:<div className="artwork-grid">{items.map(w=>{const img=primaryImageFor(w);return img?<Link className="artwork-item" key={w.id} href={pagePath(locale,`works/${getLocalizedSlug(w,locale)}`)}><Image sizes="(max-width: 600px) 100vw, (max-width: 900px) 90vw, 50vw" src={img.src} alt={img.alt[locale]??""} width={img.width} height={img.height}/><span>{w.title[locale]}</span></Link>:null;})}</div>}</div>;}
  if(section==="galleries"){const items=getPublicGalleries(galleries,artworks,locale);return <div className="page-content"><SiteBreadcrumbs locale={locale} items={[{label:t.home,href:pagePath(locale)},{label:t.galleries}]}/><header className="page-heading"><p className="eyebrow">{t.portfolio}</p><h1>{t.galleries}</h1><p>{t.discover}</p></header>{items.length===0?<p className="empty-note">{t.emptyGalleries}</p>:<GalleryIndex galleries={items} artworks={artworks} locale={locale} labels={{itemsPerPage:t.itemsPerPage,previous:t.previousPage,next:t.nextPage,page:t.galleryPage,showing:t.showingGalleries}} />}</div>;}
  const entries=getPublicJournal(journalEntries,locale);
  const selectedCategory=journalCategories.includes(rawCategory as JournalCategory)?rawCategory as JournalCategory:undefined;
@@ -76,9 +76,9 @@ export default async function SectionPage({params,searchParams}:Props){const [{l
     {cover&&<Image className="journal-cover-image" src={cover.src} alt={cover.alt[locale] ?? entry.title[locale] ?? entry.slug} width={cover.width} height={cover.height} sizes="(max-width: 700px) 100vw, (max-width: 1100px) 40vw, 24rem" />}
     <div className="journal-card-copy">
      <div className="journal-card-meta"><span>{filters.find(([, ,value])=>value===(entry.type))?.[1]}</span>{entry.publishedAt&&Number.isFinite(Date.parse(entry.publishedAt))&&<time dateTime={entry.publishedAt}>{t.published}: {dateLabel(entry.publishedAt)}</time>}</div>
-     <h2><Link href={pagePath(locale,`journal/${entry.slug}`)}>{entry.title[locale]}</Link></h2><p>{entry.summary[locale]}</p>
+     <h2><Link href={pagePath(locale,`journal/${getLocalizedSlug(entry,locale)}`)}>{entry.title[locale]}</Link></h2><p>{entry.summary[locale]}</p>
      {entry.type==="event"&&entry.event&&<><p className="journal-event-date"><time dateTime={entry.event.startsAt}>{dateLabel(entry.event.startsAt,entry.event.timeZone,true)}</time> <span dir="ltr">{entry.event.timeZone}</span></p>{entry.event.venue?.[locale]&&<p className="journal-event-date">{entry.event.venue[locale]}</p>}</>}
-     <Link className="text-link" href={pagePath(locale,`journal/${entry.slug}`)}>{t.readMore} ↗</Link>
+     <Link className="text-link" href={pagePath(locale,`journal/${getLocalizedSlug(entry,locale)}`)}>{t.readMore} ↗</Link>
     </div>
    </article>;
   })}</div>}{visibleEntries.length>0&&<JournalPagination totalItems={visibleEntries.length} locale={locale} labels={{itemsPerPage:t.itemsPerPage,previous:t.previousPage,next:t.nextPage,page:t.journalPage,showing:t.showingJournal}} />}</div>;
