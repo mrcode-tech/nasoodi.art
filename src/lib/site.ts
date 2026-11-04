@@ -1,4 +1,4 @@
-import { artistProfile, artworks, cvEntries, galleries, journalEntries } from "../content/portfolio";
+import { artworks, cvEntries, galleries, journalEntries } from "../content/portfolio";
 import { otherLocale, pagePath } from "../types/locale";
 import type { Locale } from "../types/locale";
 import type {
