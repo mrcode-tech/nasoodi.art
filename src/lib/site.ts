@@ -1,6 +1,4 @@
 import { artworks, cvEntries, galleries, journalEntries } from "@/content/portfolio";
-import enMessages from "@/i18n/messages/en.json";
-import faMessages from "@/i18n/messages/fa.json";
 import { otherLocale, pagePath } from "@/types/locale";
 import type { Locale } from "@/types/locale";
 import type {
@@ -314,10 +312,6 @@ export function getHomepageFeaturedGalleries(items: Gallery[], works: Artwork[],
   const available = new Map(getPublicGalleries(items, works, locale).map((gallery) => [gallery.id, gallery]));
   return [...new Set(selection.featuredGalleryIds)].map((id) => available.get(id)).filter((gallery) => gallery !== undefined);
 }
-export const copy = { en: enMessages, fa: faMessages } as const;
-export const copyFor = (locale: Locale) => copy[locale];
-
-
 /**
  * Resolve a locale switch to the equivalent published destination when it exists.
  * Static editorial routes have localized shells in both locales; content routes
