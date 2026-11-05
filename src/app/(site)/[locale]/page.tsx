@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { getTranslations, setRequestLocale } from "next-intl/server";
+import { createLocalizedMetadata } from "@/lib/seo/metadata";
 import { ArtworkExperience } from "@/components/artwork-experience";
 import { CollectionCarousel } from "@/components/collection-carousel";
 import { BiographyDisclosure } from "@/components/biography-disclosure";
@@ -11,13 +12,26 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { artworks,galleries,journalEntries,homepageSelection,getPublicArtworks,getPublicGalleries,getHomepageHero,getHomepageFeaturedArtworks,getHomepageFeaturedGalleries,getHomepageJournalPreview,journalCoverImageFor,primaryImageFor,getLocalizedSlug } from "@/lib/site";
-import { isLocale,pagePath } from "@/lib/site";
+import { isLocale,pagePath,otherLocale } from "@/lib/site";
 export const revalidate = 60;
 type Props={params:Promise<{locale:string}>};
-export async function generateMetadata({params}:Props):Promise<Metadata>{const {locale}=await params;if(!isLocale(locale))return {};setRequestLocale(locale);const t=await getTranslations({ locale });
- return {title:t("artistName"),
- description:t("homeDescription"),
- alternates:{canonical:pagePath(locale),languages:{fa:"/fa",en:"/en"}}};}
+export async function generateMetadata({params}:Props):Promise<Metadata>{
+ const {locale}=await params;
+ if(!isLocale(locale))return {};
+ setRequestLocale(locale);
+ const t=await getTranslations({ locale });
+ const hero=getHomepageHero(artworks,homepageSelection,locale);
+ const image=hero?primaryImageFor(hero):undefined;
+ return createLocalizedMetadata({
+  locale,
+  path:"",
+  title:t("artistName"),
+  description:t("homeDescription"),
+  alternatePath:pagePath(otherLocale(locale)),
+  indexable:true,
+  images:image?[image.src]:undefined,
+ });
+}
 export default async function Home({params}:Props){const {locale}=await params;if(!isLocale(locale))notFound();setRequestLocale(locale);const t=await getTranslations({ locale });const biography=aboutPreviewFixture.biography[locale];
  const hero=getHomepageHero(artworks,homepageSelection,locale),heroImage=hero?primaryImageFor(hero):undefined;
  const heroAlt=heroImage?.alt[locale] ?? (t("heroAlt"));
