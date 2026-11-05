@@ -11,7 +11,7 @@ import { siteContent } from "@/content/site";
 import { getPublicArtistProfile,getPublicContactDetails,getPublicArtworks,getPublicGalleries,getPublicCvEntries,getGalleryCoverArtwork,primaryImageFor } from "@/lib/content/publication";
 import { getPublicJournal,journalCoverImageFor } from "@/lib/content/journal";
 import { hasEquivalentContentSet } from "@/lib/content/identity";
-import { isLocale,pagePath,locales,type Locale } from "@/types/locale";
+import { pagePath,locales,type Locale } from "@/types/locale";
 
 export type Section = "works" | "galleries" | "journal" | "about" | "contact" | "cv";
 
