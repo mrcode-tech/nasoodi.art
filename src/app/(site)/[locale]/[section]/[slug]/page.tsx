@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { getTranslations, setRequestLocale } from "next-intl/server";
+import { createLocalizedMetadata } from "@/lib/seo/metadata";
 import { ArtworkExperience } from "@/components/artwork-experience";
 import { SiteBreadcrumbs } from "@/components/site-breadcrumbs";
 import type { Metadata } from "next";
@@ -9,28 +10,56 @@ import { artworks,galleries,journalEntries,getPublicArtworks,getPublicGalleries,
 type DetailProps={params:Promise<{locale:string;section:string;slug:string}>;searchParams:Promise<{fromGallery?:string}>};
 export async function generateMetadata({params}:DetailProps):Promise<Metadata>{
  const {locale,section,slug}=await params;
- if(!isLocale(locale))return {};setRequestLocale(locale);
- const canonical=pagePath(locale,`${section}/${slug}`);
+ if(!isLocale(locale))return {};
+ setRequestLocale(locale);
+ const path=section+"/"+slug;
  if(section==="works"){
   const work=getPublicArtworks(artworks,locale).find(item=>getLocalizedSlug(item,locale)===slug);
   if(!work)return {robots:{index:false,follow:true}};
   const image=primaryImageFor(work);
-  const description=work.description?.[locale]??work.title[locale];
   const translated=getPublicArtworks(artworks,otherLocale(locale)).find(item=>item.id===work.id);
-  return {title:work.title[locale],description,alternates:{canonical,...(translated?{languages:{[locale]:canonical,[otherLocale(locale)]:pagePath(otherLocale(locale),`works/${getLocalizedSlug(translated,otherLocale(locale))}`)}}:{})},openGraph:{type:"article",title:work.title[locale],description,...(image?{images:[image.src]}:{})},...(image?{twitter:{card:"summary_large_image",images:[image.src],title:work.title[locale],description}}:{})};
+  return createLocalizedMetadata({
+   locale,
+   path,
+   title:work.title[locale],
+   description:work.description?.[locale]??work.title[locale],
+   alternatePath:translated?pagePath(otherLocale(locale),"works/"+getLocalizedSlug(translated,otherLocale(locale))):undefined,
+   indexable:true,
+   openGraphType:"article",
+   images:image?[image.src]:undefined,
+  });
  }
  if(section==="galleries"){
   const gallery=getPublicGalleries(galleries,artworks,locale).find(item=>getLocalizedSlug(item,locale)===slug);
   if(!gallery)return {robots:{index:false,follow:true}};
   const translated=getPublicGalleries(galleries,artworks,otherLocale(locale)).find(item=>item.id===gallery.id);
   const cover=getGalleryCoverArtwork(gallery,artworks,locale)?.image;
-  return {title:gallery.title[locale],description:gallery.description[locale],alternates:{canonical,...(translated?{languages:{[locale]:canonical,[otherLocale(locale)]:pagePath(otherLocale(locale),`galleries/${getLocalizedSlug(translated,otherLocale(locale))}`)}}:{})},openGraph:{type:"website",title:gallery.title[locale],description:gallery.description[locale],...(cover?{images:[cover.src]}:{})},...(cover?{twitter:{card:"summary_large_image",images:[cover.src],title:gallery.title[locale],description:gallery.description[locale]}}:{})};
+  return createLocalizedMetadata({
+   locale,
+   path,
+   title:gallery.title[locale],
+   description:gallery.description[locale],
+   alternatePath:translated?pagePath(otherLocale(locale),"galleries/"+getLocalizedSlug(translated,otherLocale(locale))):undefined,
+   indexable:true,
+   images:cover?[cover.src]:undefined,
+  });
  }
  if(section==="journal"){
   const entry=getPublicJournal(journalEntries,locale).find(item=>getLocalizedSlug(item,locale)===slug);
   if(!entry)return {robots:{index:false,follow:true}};
   const translated=getPublicJournal(journalEntries,otherLocale(locale)).find(item=>item.id===entry.id);
-  return {title:entry.title[locale],description:entry.summary[locale],alternates:{canonical,...(translated?{languages:{[locale]:canonical,[otherLocale(locale)]:pagePath(otherLocale(locale),`journal/${getLocalizedSlug(translated,otherLocale(locale))}`)}}:{})},openGraph:{type:"article",title:entry.title[locale],description:entry.summary[locale],...(entry.publishedAt?{publishedTime:entry.publishedAt}:{})}};
+  const cover=journalCoverImageFor(entry,locale);
+  return createLocalizedMetadata({
+   locale,
+   path,
+   title:entry.title[locale],
+   description:entry.summary[locale],
+   alternatePath:translated?pagePath(otherLocale(locale),"journal/"+getLocalizedSlug(translated,otherLocale(locale))):undefined,
+   indexable:true,
+   openGraphType:"article",
+   images:cover?[cover.src]:undefined,
+   publishedTime:entry.publishedAt,
+  });
  }
  return {robots:{index:false,follow:true}};
 }
