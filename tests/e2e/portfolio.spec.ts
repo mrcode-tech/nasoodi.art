@@ -1783,7 +1783,7 @@ test("localized SEO metadata is rendered from canonical content for archives and
   await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", "https://nasoodi.art/en/works");
   await expect(page.locator('link[rel="alternate"][hreflang="en"]')).toHaveAttribute("href", "https://nasoodi.art/en/works");
   await expect(page.locator('link[rel="alternate"][hreflang="fa"]')).toHaveAttribute("href", "https://nasoodi.art/fa/works");
-  await expect(page.locator('meta[name="description"]')).toHaveAttribute("content", "Explore selected oil paintings by Ghazaleh Abdolahzade Nasoodi.");
+  await expect(page.locator('meta[name="description"]')).toHaveAttribute("content", "Explore a selection of oil paintings, with localized artwork details and original image references.");
   await expect(page.locator('meta[property="og:type"]')).toHaveAttribute("content", "website");
   await expect(page.locator('meta[property="og:image"]')).toHaveAttribute("content", "https://nasoodi.art/images/approved-artwork-1.jpg");
   await expect(page.locator('meta[name="twitter:card"]')).toHaveAttribute("content", "summary_large_image");
@@ -1792,7 +1792,7 @@ test("localized SEO metadata is rendered from canonical content for archives and
   await expect(page.locator("html")).toHaveAttribute("lang", "fa");
   await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", "https://nasoodi.art/fa/works");
   await expect(page.locator('link[rel="alternate"][hreflang="en"]')).toHaveAttribute("href", "https://nasoodi.art/en/works");
-  await expect(page.locator('meta[name="description"]')).toHaveAttribute("content", "گزیده‌ای از نقاشی‌های رنگ‌روغن غزاله عبداله زاده نسودی را ببینید.");
+  await expect(page.locator('meta[name="description"]')).toHaveAttribute("content", "گزیده‌ای از نقاشی‌های رنگ‌روغن را همراه با جزئیات هر اثر و تصاویر اصلی آن‌ها ببینید.");
 
   await page.goto("/en/works/a-quiet-place-between-seasons");
   await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", "https://nasoodi.art/en/works/a-quiet-place-between-seasons");
@@ -1800,13 +1800,10 @@ test("localized SEO metadata is rendered from canonical content for archives and
   await expect(page.locator('meta[property="og:type"]')).toHaveAttribute("content", "article");
   await expect(page.locator('meta[property="og:image"]')).toHaveAttribute("content", "https://nasoodi.art/images/approved-artwork-1.jpg");
 
-  await page.goto("/en/contact");
-  await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", /noindex/);
-  await expect(page.locator('meta[property="og:title"]')).toHaveCount(0);
-  await expect(page.locator('meta[name="twitter:card"]')).toHaveCount(0);
-
-  await page.goto("/en/about");
-  await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", /noindex/);
-  await expect(page.locator('meta[property="og:title"]')).toHaveCount(0);
-  await expect(page.locator('meta[name="twitter:card"]')).toHaveCount(0);
+  for (const section of ["contact", "about", "cv"]) {
+    await page.goto("/en/" + section);
+    await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", /index/);
+    await expect(page.locator('meta[property="og:title"]')).toHaveAttribute("content", /.+/);
+    await expect(page.locator('meta[name="twitter:card"]')).toHaveAttribute("content", /summary/);
+  }
 });
