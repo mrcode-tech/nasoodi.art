@@ -1,3 +1,31 @@
+# CURRENT IMPLEMENTATION TASK — Unified JSON Content, Internationalization, and SEO
+
+**Repository:** `mrcode-tech/nasoodi.art`  
+**Working branch:** `feature` only  
+**Task:** Complete the owner-provided unified JSON content, About/CV, next-intl, route architecture, and international SEO implementation prompt.  
+**Audit:** `specification/internationalization-content-seo-completion-audit.md`
+
+## Current architecture decisions — 2026-11-05
+
+- Editorial content is canonical localized JSON. UI translations remain in `src/i18n/messages/{en,fa}/`.
+- Journal article bodies are structured localized rich-text arrays inside `src/content/data/journal/index.json`; Markdown body files and the generation pipeline are obsolete and must not be reintroduced.
+- The artist identity, biography, statement, and profile copy live in `src/content/data/artist-profile.json`. Homepage and About consume the same artist repository.
+- CV entries and the optional PDF reference live in one `src/content/data/cv.json` record. CV entries do not use a separate `verified` flag. Do not invent education, awards, exhibitions, qualifications, or dates.
+- Contact title, description, and owner-supplied contact destinations live in `src/content/data/contact.json`. Never add invented email addresses or social handles.
+- `src/content/data/site.json` owns localized archive metadata for Works, Galleries, Journal, and CV.
+- Preserve artwork IDs, original asset paths, gallery membership/order, existing routes, design tokens, responsive behavior, and RTL/LTR behavior.
+- No separate preview/sample/fictional/verified content providers, production suppression, or fixture fallback. All environments use the same canonical JSON records.
+- Keep content resolution in repositories/adapters, validation in domain utilities, and presentation in route/component layers. Components must not import editorial JSON directly.
+- The latest task-specific completion audit is the source for remaining gaps and risk; update it with verified findings as work progresses.
+
+## Implementation checkpoint
+
+The first migration increment is on `feature`: all eight Journal bodies moved to localized JSON; Markdown sources/generator removed; artist profile populated from canonical JSON; About preview fixture and sample CV endpoint removed; CV consolidated into one JSON record and the obsolete CV verification flag removed; Contact demo destinations replaced with the owner-supplied artist Instagram; About/CV/Contact metadata and sitemap eligibility updated; i18n literal auditing upgraded to TypeScript AST analysis.
+
+This checkpoint is **not a completion claim**. Run and inspect GitHub Actions against the final tested SHA, fix any failures, complete the remaining route/i18n/SEO/documentation work, and report exact evidence. Do not merge, deploy, or publish.
+
+---
+
 # NEXT IMPLEMENTATION TASK — SITE-WIDE BREADCRUMBS, EDITORIAL SPACING, AND CONTACT EXPERIENCE
 
 **Priority:** Next implementation task on the existing feature branch.  
