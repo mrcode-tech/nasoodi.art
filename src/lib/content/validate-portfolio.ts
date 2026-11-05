@@ -48,16 +48,20 @@ function validateRouteIdentity(
 
     for (const locale of locales) {
       const localizedSlug = record.localizedSlugs?.[locale];
-      if (localizedSlug !== undefined && !isSafeContentSlug(localizedSlug)) {
+      if (!localizedSlug?.trim()) {
+        issues.push({ path: path + ".localizedSlugs." + locale, message: "A localized slug is required for every supported locale." });
+      } else if (!isSafeContentSlug(localizedSlug)) {
         issues.push({ path: path + ".localizedSlugs." + locale, message: "The localized slug must be one safe URL segment." });
       }
 
       const resolvedSlug = getLocalizedSlug(record, locale);
-      const localeSlugs = slugs.get(locale)!;
-      if (localeSlugs.has(resolvedSlug)) {
-        issues.push({ path: path + ".localizedSlugs." + locale, message: "Duplicate " + locale + " route slug " + resolvedSlug + " in " + kind + "." });
+      if (isSafeContentSlug(resolvedSlug)) {
+        const localeSlugs = slugs.get(locale)!;
+        if (localeSlugs.has(resolvedSlug)) {
+          issues.push({ path: path + ".localizedSlugs." + locale, message: "Duplicate " + locale + " route slug " + resolvedSlug + " in " + kind + "." });
+        }
+        localeSlugs.add(resolvedSlug);
       }
-      localeSlugs.add(resolvedSlug);
     }
   });
 }
