@@ -12,7 +12,7 @@ test("locale metadata is complete in one authoritative registry", () => {
   assert.equal(pagePath(defaultLocale), "/fa");
   assert.equal(localeDirections.fa, "rtl");
   assert.equal(localeDirections.en, "ltr");
-} );
+});
 
 test("localized page metadata uses self canonicals and reciprocal language alternates", () => {
   const metadata = createLocalizedMetadata({

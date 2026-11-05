@@ -7,7 +7,8 @@ import { ThemeProvider } from "@/components/providers/theme-provider";
 import { getUpcomingJournalEvent } from "@/lib/content/journal";
 import { getLocalizedSlug } from "@/lib/content/paths";
 import { isLocale, locales, getLocaleDirection, type Locale } from "@/types/locale";
-import { journalEntries, portfolioStructuredData } from "@/content/portfolio";
+import { journalEntries } from "@/content/journal";
+import { portfolioStructuredData } from "@/content/portfolio-structured-data";
 import { serializeJsonLd } from "@/lib/seo/structured-data";
 import "../../globals.css";
 
