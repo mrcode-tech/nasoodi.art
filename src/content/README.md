@@ -4,6 +4,8 @@ This directory separates owner-editable editorial JSON from TypeScript domain co
 
 ## Canonical data
 
+- `data/site.json`: localized editorial metadata for the site-wide Works, Galleries, Journal, and CV archive pages.
+
 - `data/artworks.json`: artwork identity, localized titles/descriptions, approved image references, rights state, and editorial order.
 - `data/galleries.json`: gallery metadata, cover artwork IDs, ordered artwork membership, and publication state.
 - `data/journal/index.json`: Journal identity, localized metadata, complete localized rich-text bodies, event details, and cover-artwork relationships. Each entry contains its English and Persian body as structured JSON blocks.
