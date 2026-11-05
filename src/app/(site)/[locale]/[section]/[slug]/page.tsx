@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { getTranslations } from "next-intl/server";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 import { ArtworkExperience } from "@/components/artwork-experience";
 import { SiteBreadcrumbs } from "@/components/site-breadcrumbs";
 import type { Metadata } from "next";
@@ -9,7 +9,7 @@ import { artworks,galleries,journalEntries,getPublicArtworks,getPublicGalleries,
 type DetailProps={params:Promise<{locale:string;section:string;slug:string}>;searchParams:Promise<{fromGallery?:string}>};
 export async function generateMetadata({params}:DetailProps):Promise<Metadata>{
  const {locale,section,slug}=await params;
- if(!isLocale(locale))return {};
+ if(!isLocale(locale))return {};setRequestLocale(locale);
  const canonical=pagePath(locale,`${section}/${slug}`);
  if(section==="works"){
   const work=getPublicArtworks(artworks,locale).find(item=>getLocalizedSlug(item,locale)===slug);
@@ -36,7 +36,7 @@ export async function generateMetadata({params}:DetailProps):Promise<Metadata>{
 }
 export const revalidate = 60;
 export default async function Detail({params,searchParams}:DetailProps){
- const [{locale,section,slug},query]=await Promise.all([params,searchParams]);if(!isLocale(locale))notFound();const t=await getTranslations({ locale });
+ const [{locale,section,slug},query]=await Promise.all([params,searchParams]);if(!isLocale(locale))notFound();setRequestLocale(locale);const t=await getTranslations({ locale });
  if(section==="works"){const w=getPublicArtworks(artworks,locale).find(x=>getLocalizedSlug(x,locale)===slug);if(!w)notFound();const img=primaryImageFor(w);if(!img)notFound();
  const originGallery=typeof query.fromGallery==="string"?getPublicGalleries(galleries,artworks,locale).find(gallery=>getLocalizedSlug(gallery,locale)===query.fromGallery&&gallery.artworkIds.includes(w.id)):undefined;
  const breadcrumbItems=originGallery?[{label:t("home"),href:pagePath(locale)},{label:t("galleries"),href:pagePath(locale,"galleries")},{label:originGallery.title[locale]??originGallery.slug,href:pagePath(locale,`galleries/${getLocalizedSlug(originGallery,locale)}`)},{label:w.title[locale]??w.slug}]:[{label:t("home"),href:pagePath(locale)},{label:t("selected"),href:pagePath(locale,"works")},{label:w.title[locale]??w.slug}];
