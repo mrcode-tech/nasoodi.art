@@ -6,7 +6,10 @@ import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious, CarouselStatus } from "@/components/ui/carousel";
-import { getLocalizedSlug, pagePath, primaryImageFor, type Artwork, type Locale } from "@/lib/site";
+import { getLocalizedSlug } from "@/lib/content/paths";
+import { primaryImageFor } from "@/lib/content/publication";
+import { pagePath, type Locale } from "@/types/locale";
+import type { Artwork } from "@/types/content";
 
 type Props = { artworks: Artwork[]; locale: Locale; context: "home" | `gallery:${string}`; };
 const subscribeToLocation = (onChange: () => void) => {
