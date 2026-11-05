@@ -186,13 +186,13 @@ export function validatePortfolioContent(source: PortfolioContentSource): Conten
 
   if (source.artistProfile) {
     const profile = source.artistProfile;
-    if (new Set(profile.approvedLocales).size !== profile.approvedLocales.length) {
-      issues.push({ path: "artistProfile.approvedLocales", message: "Approved locales must be unique." });
-    }
-    if (profile.status === "published") {
-      for (const locale of profile.approvedLocales) {
-        if (!profile.statement[locale]?.trim()) issues.push({ path: "artistProfile.statement." + locale, message: "Published profile statement is required for each approved locale." });
-        if (!profile.biography[locale]?.trim()) issues.push({ path: "artistProfile.biography." + locale, message: "Published profile biography is required for each approved locale." });
+    if (!profile.id?.trim()) issues.push({ path: "artistProfile.id", message: "A stable artist profile ID is required." });
+    for (const locale of locales) {
+      if (!profile.name?.[locale]?.trim()) issues.push({ path: "artistProfile.name." + locale, message: "Artist name is required in every supported locale." });
+      if (!profile.statement[locale]?.trim()) issues.push({ path: "artistProfile.statement." + locale, message: "Artist statement is required in every supported locale." });
+      if (!profile.biography[locale]?.trim()) issues.push({ path: "artistProfile.biography." + locale, message: "Artist biography is required in every supported locale." });
+      if (profile.slug?.[locale] && !isSafeContentSlug(profile.slug[locale]!)) {
+        issues.push({ path: "artistProfile.slug." + locale, message: "Artist profile slug must be one safe URL segment." });
       }
     }
     if (profile.portrait) validateImage(profile.portrait, "artistProfile.portrait", issues);
