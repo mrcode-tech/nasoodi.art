@@ -1569,3 +1569,23 @@ html[lang="fa"] .artwork-viewer-info h2 {
     gap: .35rem;
   }
 }
+
+/* Final editorial alignment contract: all descriptive copy stays justified
+   across desktop/mobile and both locales. Interface text and metadata are excluded. */
+.site-main main p:not(.eyebrow):not(.journal-event-date):not(.gallery-results-status) {
+  text-align: justify;
+  text-align-last: start;
+  text-justify: inter-word;
+}
+.contact-experience .contact-intro,
+.contact-experience .contact-pending,
+.collection-carousel .gallery-card-copy > span:not(.gallery-card-action),
+.gallery-cards .gallery-card-copy > span:not(.gallery-card-action),
+.gallery-card-copy > p,
+.gallery-index-card-copy > span,
+.artwork-experience-caption,
+.artwork-viewer-description {
+  text-align: justify;
+  text-align-last: start;
+  text-justify: inter-word;
+}
