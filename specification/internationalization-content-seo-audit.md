@@ -160,7 +160,8 @@ No merge to \`stage\` or \`main\`, production deployment, or external service ch
 5. **SEO coverage:** rendered HTML tests cover representative homepage, archive, detail, About, and Contact cases. Expand the route matrix for every page type and test sitemap alternate pairs for records with genuinely different localized slugs.
 6. **Editorial approval:** confirm the current Journal copy and temporary Journal image mappings with the owner. Existing approval flags were preserved; passing technical tests does not replace artist/editorial/rights approval.
 7. **Manual QA:** automated Chromium checks do not establish manual screen-reader, keyboard-only, real-device, Safari/Firefox, contrast, or production Core Web Vitals verification. These remain release checks.
-8. **Search monitoring:** Search Console/Bing verification and indexing monitoring require explicit launch authorization and are not part of this branch-only refactor.
+8. **Locale expansion:** the locale list, direction, Open Graph tags, and content validation are centralized, but the language selector and alternate-route/metadata API still model one counterpart locale. Generalize them to enumerate all configured locales before adding a third language.
+9. **Search monitoring:** Search Console/Bing verification and indexing monitoring require explicit launch authorization and are not part of this branch-only refactor.
 
 ### Skills usage clarification
 
