@@ -1,6 +1,9 @@
 import { artworks, cvEntries, galleries, journalEntries } from "../content/portfolio";
 import { otherLocale, pagePath } from "../types/locale";
 import type { Locale } from "../types/locale";
+import { getLocalizedSlug, isSafeContentSlug, isSafeLocalImagePath } from "./content/paths";
+export { getLocalizedSlug, isSafeContentSlug, isSafeLocalImagePath } from "./content/paths";
+export type { LocalizedSlugRecord } from "./content/paths";
 import type {
   Artwork,
   ArtistProfile,
@@ -42,12 +45,6 @@ export {
   journalEntries,
   portfolioStructuredData,
 } from "../content/portfolio";
-
-export type LocalizedSlugRecord = { slug: string; localizedSlugs?: Partial<Record<Locale, string>> };
-
-export function getLocalizedSlug(record: LocalizedSlugRecord, locale: Locale): string {
-  return record.localizedSlugs?.[locale]?.trim() || record.slug;
-}
 
 export function hasSharedContentIdentity<T extends { id: string }>(source: readonly T[], target: readonly T[]): boolean {
   const targetIds = new Set(target.map((item) => item.id));
@@ -157,11 +154,6 @@ export function getJournalStructuredData(entry: JournalEntry, locale: Locale, ca
       : {}),
   };
 }
-export function isSafeLocalImagePath(src: string): boolean {
-  if (!src.startsWith("/") || src.startsWith("//") || src.includes("\\") ||
-    /[?#\u0000-\u001f]/.test(src) || /%(?:2e|2f|5c)/i.test(src)) return false;
-  return src.split("/").every((segment) => segment !== "." && segment !== "..");
-}
 export function primaryImageFor(work: Artwork) {
   return work.images.find((image) => image.role === "primary" && isSafeLocalImagePath(image.src) &&
     image.width > 0 && image.height > 0);
@@ -176,9 +168,6 @@ function keepUniqueBy<T>(items: T[], keyOf: (item: T) => string): T[] {
     const key = keyOf(item);
     return Boolean(key.trim()) && counts.get(key) === 1;
   });
-}
-export function isSafeContentSlug(slug: string): boolean {
-  return /^[\p{L}\p{N}]+(?:-[\p{L}\p{N}]+)*$/u.test(slug);
 }
 export function getPublicArtworks(items: Artwork[], locale: Locale) {
   const visible = items.filter((work) => work.status === "published" && work.rightsConfirmed &&
