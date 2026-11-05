@@ -1,7 +1,8 @@
 import type { MetadataRoute } from "next";
 import { artworks, galleries, journalEntries, cvEntries, artistProfile } from "@/content/portfolio";
 import { locales } from "@/types/locale";
-import { getPublicArtworks, getPublicGalleries, getPublicJournal, getPublicCvEntries, getPublicArtistProfile } from "@/lib/content/publication";
+import { getPublicArtworks, getPublicGalleries, getPublicCvEntries, getPublicArtistProfile } from "@/lib/content/publication";
+import { getPublicJournal } from "@/lib/content/journal";
 import { getLocalizedSlug } from "@/lib/content/paths";
 import { hasEquivalentContentSet } from "@/lib/content/identity";
 
