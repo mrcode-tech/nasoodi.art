@@ -10,7 +10,7 @@ import { artworks,galleries,journalEntries,cvEntries,artistProfile,contactDetail
 import { paginateItems, resolveGalleryPagination } from "@/lib/gallery-pagination";
 import { JournalPagination } from "@/components/journal-pagination";
 import { SiteBreadcrumbs } from "@/components/site-breadcrumbs";
-import { isLocale,pagePath,otherLocale,getLocalizedSlug,hasSharedContentIdentity } from "@/lib/site";
+import { isLocale,pagePath,otherLocale,getLocalizedSlug,hasEquivalentContentSet } from "@/lib/site";
 type Props={params:Promise<{locale:string;section:string}>;searchParams:Promise<{category?:string;page?:string;pageSize?:string}>};
 const names=["works","galleries","journal","about","contact","cv"] as const;
 type Section=typeof names[number];
@@ -22,10 +22,10 @@ export async function generateMetadata({params}:Props):Promise<Metadata>{const {
   section==="cv" ? getPublicCvEntries(cvEntries,locale).length>0 :
   section==="about" ? Boolean(getPublicArtistProfile(artistProfile,locale)) : false;
  const other=otherLocale(locale);
- const translated = section==="works" ? hasSharedContentIdentity(getPublicArtworks(artworks,locale),getPublicArtworks(artworks,other)) :
-  section==="galleries" ? hasSharedContentIdentity(getPublicGalleries(galleries,artworks,locale),getPublicGalleries(galleries,artworks,other)) :
-  section==="journal" ? hasSharedContentIdentity(getPublicJournal(journalEntries,locale),getPublicJournal(journalEntries,other)) :
-  section==="cv" ? hasSharedContentIdentity(getPublicCvEntries(cvEntries,locale),getPublicCvEntries(cvEntries,other)) :
+ const translated = section==="works" ? hasEquivalentContentSet(getPublicArtworks(artworks,locale),getPublicArtworks(artworks,other)) :
+  section==="galleries" ? hasEquivalentContentSet(getPublicGalleries(galleries,artworks,locale),getPublicGalleries(galleries,artworks,other)) :
+  section==="journal" ? hasEquivalentContentSet(getPublicJournal(journalEntries,locale),getPublicJournal(journalEntries,other)) :
+  section==="cv" ? hasEquivalentContentSet(getPublicCvEntries(cvEntries,locale),getPublicCvEntries(cvEntries,other)) :
   section==="about" ? Boolean(getPublicArtistProfile(artistProfile,other)) : false;
  const profile=section==="about"?getPublicArtistProfile(artistProfile,locale):undefined;
  return {title:t(section),...(profile?{description:profile.statement[locale]}:{}),alternates:{canonical:pagePath(locale,section),...(indexable&&translated?{languages:{[locale]:pagePath(locale,section),[other]:pagePath(other,section)}}:{})},robots:{index:section==="about"||section==="contact"?false:indexable,follow:true}};}
