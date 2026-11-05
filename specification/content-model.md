@@ -287,3 +287,13 @@ Artwork image records reference same-origin public assets using root-relative pa
 ## Public identity and route integrity
 
 Before publication, artwork, gallery, and Journal records must have a non-empty stable ID and a single-segment Unicode-letter/number slug (hyphen-separated). Public records with duplicate IDs or duplicate slugs in the same locale are excluded rather than allowing ambiguous routes or silently selecting one record. CV entries likewise require unique non-empty IDs. This validation runs after publication, rights, and locale-completeness checks, so drafts do not reserve public identities.
+
+## Unified JSON editorial model — 2026-11-05
+
+This owner-approved architecture supersedes earlier Markdown, empty-profile, and preview-fixture notes in this document.
+
+One canonical localized record/collection exists for each domain: site metadata, artist profile, CV, Contact, artworks, galleries, Journal/events, and homepage selection. Journal body text is structured rich text embedded in the Journal JSON record; Markdown is not an editorial source. About and homepage biography use the same artist-profile JSON. CV entries and an optional PDF reference use one CV JSON record.
+
+Do not maintain parallel verified/unverified, sample, temporary, preview, or fictional content repositories. Do not add `isFictional`, `isPlaceholder`, `isVerified`, `isTemporary`, `contentSource`, or `verificationStatus` flags. Existing artwork rights/publication rules remain in force. CV entries use stable IDs, localized titles, and either a year or localized period; no `verified` flag is required.
+
+Initial editorial copy may describe the supplied artist identity and the presented portfolio. Do not invent education, awards, exhibitions, qualifications, institutional affiliations, or other factual career claims. Missing factual CV sections remain empty until owner-supplied facts are available. Never invent email addresses, social handles, or contact destinations.
