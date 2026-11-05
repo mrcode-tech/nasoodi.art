@@ -1303,7 +1303,7 @@ test("localized Contact surfaces render centralized demo details without approva
   await expect(home.locator('a[href="mailto:hello@example.com"]')).toBeVisible();
   await expect(home.getByRole("link",{name:"@nasoodi_contact_demo"})).toHaveAttribute("href","https://t.me/nasoodi_contact_demo");
   await expect(home.getByRole("link",{name:"@nasoodi.demo"})).toHaveAttribute("href","https://www.instagram.com/nasoodi.demo/");
-  const contactLink=home.getByRole("link",{name:/contact/i});
+  const contactLink=home.getByRole("link",{name:locale==="fa"?"تماس":/contact/i});
   await expect(contactLink).toHaveAttribute("href",`/${locale}/contact`);
   await contactLink.click();
   await expect(page).toHaveURL(`/${locale}/contact`);
