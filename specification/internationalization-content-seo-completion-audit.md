@@ -3,7 +3,7 @@
 **Updated:** 2026-11-05  
 **Repository:** `mrcode-tech/nasoodi.art`  
 **Working branch:** `feature` only  
-**Latest change recorded in this audit:** `b17f32068cdec2f7a3831e3ae130c5d75dab0e96`
+**Latest implementation checkpoint recorded:** `03e0b0751e3736c073f23a007cb1b431761408e4`
 
 ## Executive summary
 
@@ -16,14 +16,14 @@ The work is **not complete**. The remaining high-risk items are route decomposit
 | Area | Current implementation | Remaining issue | Required change | Risk |
 |---|---|---|---|---|
 | i18n | next-intl 4.14.9; explicit `/en` and `/fa`; locale registry and message namespaces; AST-based audit now scans TSX/TS/JSX/JS in app/components | New AST audit has not yet been run and any detected hardcoded literals have not been remediated; unsupported-locale Playwright test has been added but not executed | Run CI; fix all diagnostics; verify unsupported locale 404, locale switching, missing editorial translations/slugs, lang/dir, and parity | High |
-| Content | Artwork/gallery/homepage selection remain JSON; Journal bodies now live in localized JSON rich-text blocks; artist profile, CV, Contact, and site metadata have canonical JSON records | Runtime schemas are not yet organized/complete for every record; validator still needs comprehensive localized-field/body/asset/relationship checks | Add focused runtime schemas/repositories and content completeness tests; verify all existing asset paths and relationships | High |
+| Content | Canonical JSON exists for site metadata, artist profile, CV, Contact, artworks, galleries, Journal/event records, and homepage selection; focused repositories exist for artist/About, CV, Contact, artwork, gallery, Journal, event, and site metadata; published Journal bodies are validated in both locales with safe link checks | Runtime schema coverage is still implemented primarily through TypeScript contracts plus a portfolio validator rather than dedicated per-domain schema modules; artwork/gallery/slug/asset validation needs a final full pass | Complete focused schema coverage and tests for every domain, stable IDs, localized slugs, relationships, image paths, and all required locale fields | Medium |
 | About/CV | Homepage and About read `artist-profile.json`; About fixture and sample-CV API removed; CV entries and optional document now live in `cv.json`; CV entries no longer require a `verified` flag | CV is only populated with the known current oil-painting practice; no owner-supplied education, exhibition, award, or qualification details exist; PDF document remains unset | Keep factual sections empty rather than inventing credentials; add owner-supplied records later; preserve download mechanism when an actual PDF is provided | Medium |
 | Journal/events | All eight entries preserve IDs, localized metadata, dates, event relationships, and artwork cover IDs; body is JSON; Markdown generation removed | Confirm every entry body is complete in both locales; strengthen body block and event relationship validation; rendered detail HTML not yet inspected | Add validation for required localized rich-text blocks, safe links, event dates/time zones, and cover relationships; inspect rendered details | Medium |
 | Contact | One canonical `contact.json` contains localized title/description and owner-supplied Instagram; invented demo email/Telegram destinations removed; Contact metadata and sitemap eligibility use canonical data | Verify actual Contact page HTML, metadata, links, and sitemap alternates in both locales; decide whether any additional owner-supplied channels should be added | Complete rendered route and link tests; do not add unprovided destinations | Medium |
-| SEO | Metadata for homepage/About uses artist JSON; Works/Galleries/Journal/CV archive metadata uses `site.json`; detail pages use localized records; Contact uses Contact JSON; sitemap includes eligible About/CV/Contact pages | Need production HTML verification for all required page types and event details; structured-data validation coverage is incomplete | Build production app; inspect canonical/hreflang/OG/Twitter/JSON-LD/robots and server-rendered content for every page type; validate sitemap/robots | High |
-| Routing | Existing routes and public URLs remain in place; localized slug resolution still uses stable IDs | `src/app/(site)/[locale]/[section]/page.tsx` still handles six unrelated page domains and is too large | Extract focused route/page modules for About, Contact, Works, Galleries, Journal, and CV without URL or visual changes | Medium |
+| SEO | Homepage/layout metadata and global Person JSON-LD use the canonical artist profile; archive metadata uses localized site JSON; About/CV/Contact use their canonical records; detail metadata uses localized entity records; sitemap includes eligible About/CV/Contact pages | Production rendered HTML has not been inspected after the refactor; schema validation and all page-type metadata assertions still need CI/browser execution | Build production app; inspect canonical/hreflang/OG/Twitter/JSON-LD/robots and server-rendered content for every page type; validate sitemap/robots | High |
+| Routing | The generic `[section]/page.tsx` route has been removed; dedicated localized route modules now exist for About, Contact, CV, Works, Galleries, and Journal; shared metadata resolution lives in `section-metadata.ts`; focused repositories are used by these route modules | The localized detail route `[section]/[slug]/page.tsx` still owns artwork, gallery, and Journal detail dispatch; Events remain typed Journal entries exposed by an event repository rather than a duplicate event JSON collection | Consider a small detail-route decomposition if it materially reduces complexity; preserve existing URLs and keep event data canonical in the Journal collection unless a separate event entity is explicitly needed | Medium |
 | Documentation | `AGENTS.md`, `agent.md`, README, content architecture, i18n, SEO, content model, editorial governance, and this audit now contain the unified JSON policy | Historical sections may still contain superseded preview/demo/Markdown language; practical editing examples and test instructions need review for consistency | Remove remaining contradictory instructions; add verified examples for every JSON domain and locale addition | Medium |
-| Testing/CI | Content, SEO, and Playwright tests were updated for JSON Journal bodies, canonical About/CV, Contact, sitemap, and unsupported locales; push CI is configured for `feature` | The current integration does not expose a push-run listing/dispatch operation or the latest run logs; no new run conclusion, test counts, or tested SHA can yet be claimed | Inspect the GitHub Actions run for the final feature SHA; fix failures and record run URL, conclusion, job logs, and artifacts | High |
+| Testing/CI | Unit/content and Playwright test definitions were updated for JSON Journal bodies, localized body validation, canonical About/CV, Contact, localized global JSON-LD, sitemap, and unsupported locales; push CI is configured for `feature` | No local checkout is available in this execution environment (GitHub network clone failed); the GitHub integration exposes combined commit statuses and PR-triggered workflow runs but not push-run listing/dispatch, so the latest run conclusion/logs cannot be inspected here | Inspect the automatically triggered GitHub Actions run for the latest feature SHA in the repository UI; fix failures and record run URL, conclusion, job logs, and artifacts | High |
 
 ## Changes implemented on `feature`
 
@@ -39,6 +39,10 @@ The work is **not complete**. The remaining high-risk items are route decomposit
 - Replaced demo Contact email/Telegram/social values with the owner-supplied Instagram destination and localized Contact metadata.
 - Added localized archive metadata in `site.json`.
 - Updated About/CV/Contact metadata, sitemap eligibility, content tests, and relevant Playwright tests.
+- Split About, Contact, CV, Works, Galleries, and Journal into dedicated localized route modules; removed the generic localized section index route and extracted shared metadata resolution.
+- Added focused artist, CV, Contact, artwork, gallery, Journal, event, and site metadata repositories; localized routes now consume repository APIs.
+- Updated global layout metadata and Person JSON-LD to use localized canonical artist identity; the layout announcement uses the event repository.
+- Extended portfolio validation to require complete localized Journal rich-text bodies and validate safe links/list content.
 - Upgraded the i18n audit to use the TypeScript AST and inspect user-facing literals in TSX/TS/JSX/JS.
 - Updated repository guidance and specifications to make the unified JSON architecture authoritative.
 
@@ -71,10 +75,9 @@ The current canonical CV contains only a non-credential description of the known
 
 ## Next implementation sequence
 
-1. Inspect the current feature-branch CI run and fix failures before adding more architectural change.
-2. Complete route decomposition for the six localized page domains.
-3. Add runtime schemas and repository functions with strict localized-content, ID, slug, relationship, rich-text, and asset validation.
-4. Extend missing-locale and unsupported-locale tests; run the AST audit and remediate its findings.
-5. Verify rendered HTML and structured data for homepage, About, CV, Contact, Works, Galleries, artwork detail, Journal archive/detail, and event detail.
-6. Review every remaining specification paragraph for contradictory fixture, Markdown, verification, and Contact demo instructions.
-7. Run full CI against the final feature SHA and record actual results and artifacts.
+1. Inspect the automatically triggered GitHub Actions run for the latest feature SHA and fix all failures.
+2. Complete per-domain runtime schema coverage and validate all IDs, localized slugs, relationships, rich-text blocks, and asset references.
+3. Run the AST i18n audit, remediate every hardcoded UI literal, and verify missing-locale/unsupported-locale behavior.
+4. Verify rendered HTML and structured data for homepage, About, CV, Contact, Works, Galleries, artwork detail, Journal archive/detail, and event detail.
+5. Review every remaining specification paragraph for contradictory fixture, Markdown, verification, and Contact demo instructions.
+6. Run full CI against the final feature SHA and record actual results and artifacts.
