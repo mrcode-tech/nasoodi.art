@@ -1,0 +1,20 @@
+{
+  "id": "artist-cv",
+  "entries": [
+    {
+      "id": "cv-oil-painting-practice",
+      "category": "other",
+      "title": {
+        "en": "Oil painting",
+        "fa": "نقاشی رنگ‌روغن"
+      },
+      "period": {
+        "en": "Current practice",
+        "fa": "فعالیت هنری کنونی"
+      },
+      "status": "published",
+      "sortOrder": 1
+    }
+  ],
+  "document": null
+}
