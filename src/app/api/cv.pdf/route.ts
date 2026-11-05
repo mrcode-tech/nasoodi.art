@@ -1,5 +1,5 @@
 import { cvEntries } from "@/content/cv";
-import { artistProfile } from "@/content/artist-profile";
+import { artistProfile } from "@/content/artist";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
