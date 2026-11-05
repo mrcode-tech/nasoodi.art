@@ -9,7 +9,7 @@ import { notFound } from "next/navigation";
 import { artworks,galleries,journalEntries } from "@/content/portfolio";
 import { getPublicArtworks,getPublicGalleries,getGalleryCoverArtwork,primaryImageFor } from "@/lib/content/publication";
 import { getPublicJournal,getUpcomingJournalEvents,journalCoverImageFor,isSafeJournalHref } from "@/lib/content/journal";
-import { isLocale,pagePath,otherLocale } from "@/types/locale";
+import { isLocale,pagePath,locales,type Locale } from "@/types/locale";
 import { getLocalizedSlug } from "@/lib/content/paths";
 import { getArtworkStructuredData,getGalleryStructuredData,getJournalStructuredData,serializeJsonLd } from "@/lib/seo/structured-data";
 type DetailProps={params:Promise<{locale:string;section:string;slug:string}>;searchParams:Promise<{fromGallery?:string}>};
@@ -22,13 +22,16 @@ export async function generateMetadata({params}:DetailProps):Promise<Metadata>{
   const work=getPublicArtworks(artworks,locale).find(item=>getLocalizedSlug(item,locale)===slug);
   if(!work)return {robots:{index:false,follow:true}};
   const image=primaryImageFor(work);
-  const translated=getPublicArtworks(artworks,otherLocale(locale)).find(item=>item.id===work.id);
+  const alternatePaths=Object.fromEntries(locales.filter(target=>target!==locale).flatMap(target=>{
+   const translated=getPublicArtworks(artworks,target).find(item=>item.id===work.id);
+   return translated?[[target,pagePath(target,"works/"+getLocalizedSlug(translated,target))]]:[];
+  })) as Partial<Record<Locale,string>>;
   return createLocalizedMetadata({
    locale,
    path,
    title:work.title[locale]??work.slug,
    description:work.description?.[locale]??work.title[locale],
-   alternatePath:translated?pagePath(otherLocale(locale),"works/"+getLocalizedSlug(translated,otherLocale(locale))):undefined,
+   alternatePaths,
    indexable:true,
    openGraphType:"article",
    images:image?[image.src]:undefined,
@@ -37,14 +40,17 @@ export async function generateMetadata({params}:DetailProps):Promise<Metadata>{
  if(section==="galleries"){
   const gallery=getPublicGalleries(galleries,artworks,locale).find(item=>getLocalizedSlug(item,locale)===slug);
   if(!gallery)return {robots:{index:false,follow:true}};
-  const translated=getPublicGalleries(galleries,artworks,otherLocale(locale)).find(item=>item.id===gallery.id);
+  const alternatePaths=Object.fromEntries(locales.filter(target=>target!==locale).flatMap(target=>{
+   const translated=getPublicGalleries(galleries,artworks,target).find(item=>item.id===gallery.id);
+   return translated?[[target,pagePath(target,"galleries/"+getLocalizedSlug(translated,target))]]:[];
+  })) as Partial<Record<Locale,string>>;
   const cover=getGalleryCoverArtwork(gallery,artworks,locale)?.image;
   return createLocalizedMetadata({
    locale,
    path,
    title:gallery.title[locale]??gallery.slug,
    description:gallery.description[locale],
-   alternatePath:translated?pagePath(otherLocale(locale),"galleries/"+getLocalizedSlug(translated,otherLocale(locale))):undefined,
+   alternatePaths,
    indexable:true,
    images:cover?[cover.src]:undefined,
   });
@@ -52,14 +58,17 @@ export async function generateMetadata({params}:DetailProps):Promise<Metadata>{
  if(section==="journal"){
   const entry=getPublicJournal(journalEntries,locale).find(item=>getLocalizedSlug(item,locale)===slug);
   if(!entry)return {robots:{index:false,follow:true}};
-  const translated=getPublicJournal(journalEntries,otherLocale(locale)).find(item=>item.id===entry.id);
+  const alternatePaths=Object.fromEntries(locales.filter(target=>target!==locale).flatMap(target=>{
+   const translated=getPublicJournal(journalEntries,target).find(item=>item.id===entry.id);
+   return translated?[[target,pagePath(target,"journal/"+getLocalizedSlug(translated,target))]]:[];
+  })) as Partial<Record<Locale,string>>;
   const cover=journalCoverImageFor(entry,locale);
   return createLocalizedMetadata({
    locale,
    path,
    title:entry.title[locale]??entry.slug,
    description:entry.summary[locale],
-   alternatePath:translated?pagePath(otherLocale(locale),"journal/"+getLocalizedSlug(translated,otherLocale(locale))):undefined,
+   alternatePaths,
    indexable:true,
    openGraphType:"article",
    images:cover?[cover.src]:undefined,

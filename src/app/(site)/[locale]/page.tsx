@@ -15,7 +15,7 @@ import { notFound } from "next/navigation";
 import { getPublicArtworks,getPublicGalleries,getHomepageHero,getHomepageFeaturedArtworks,getHomepageFeaturedGalleries,primaryImageFor } from "@/lib/content/publication";
 import { getHomepageJournalPreview,journalCoverImageFor } from "@/lib/content/journal";
 import { getLocalizedSlug } from "@/lib/content/paths";
-import { isLocale,pagePath,otherLocale } from "@/types/locale";
+import { isLocale,pagePath,locales,type Locale } from "@/types/locale";
 export const revalidate = 60;
 type Props={params:Promise<{locale:string}>};
 export async function generateMetadata({params}:Props):Promise<Metadata>{
@@ -30,7 +30,7 @@ export async function generateMetadata({params}:Props):Promise<Metadata>{
   path:"",
   title:t("artistName"),
   description:t("homeDescription"),
-  alternatePath:pagePath(otherLocale(locale)),
+  alternatePaths:Object.fromEntries(locales.filter(target=>target!==locale).map(target=>[target,pagePath(target)])) as Partial<Record<Locale,string>>,
   indexable:true,
   images:image?[image.src]:undefined,
  });

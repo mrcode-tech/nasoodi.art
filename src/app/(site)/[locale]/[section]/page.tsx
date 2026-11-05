@@ -14,7 +14,7 @@ import type { JournalCategory } from "@/types/content";
 import { paginateItems, resolveGalleryPagination } from "@/lib/gallery-pagination";
 import { JournalPagination } from "@/components/journal-pagination";
 import { SiteBreadcrumbs } from "@/components/site-breadcrumbs";
-import { isLocale,pagePath,otherLocale } from "@/types/locale";
+import { isLocale,pagePath,locales,type Locale } from "@/types/locale";
 import { getLocalizedSlug } from "@/lib/content/paths";
 import { hasEquivalentContentSet } from "@/lib/content/identity";
 type Props={params:Promise<{locale:string;section:string}>;searchParams:Promise<{category?:string;page?:string;pageSize?:string}>};
@@ -26,29 +26,26 @@ export async function generateMetadata({params}:Props):Promise<Metadata>{
  if(!isLocale(locale)||!valid(section))return {};
  setRequestLocale(locale);
  const t=await getTranslations({ locale });
- const other=otherLocale(locale);
  const works=getPublicArtworks(artworks,locale);
- const otherWorks=getPublicArtworks(artworks,other);
  const sets=getPublicGalleries(galleries,artworks,locale);
- const otherSets=getPublicGalleries(galleries,artworks,other);
  const journal=getPublicJournal(journalEntries,locale);
- const otherJournal=getPublicJournal(journalEntries,other);
  const cv=getPublicCvEntries(cvEntries,locale);
- const otherCv=getPublicCvEntries(cvEntries,other);
  const profile=getPublicArtistProfile(artistProfile,locale);
- const otherProfile=getPublicArtistProfile(artistProfile,other);
 
  const indexable=section==="works"?works.length>0:
   section==="galleries"?sets.length>0:
   section==="journal"?journal.length>0:
   section==="cv"?cv.length>0:
   section==="about"?Boolean(profile):false;
- const equivalent=section==="works"?hasEquivalentContentSet(works,otherWorks):
-  section==="galleries"?hasEquivalentContentSet(sets,otherSets):
-  section==="journal"?hasEquivalentContentSet(journal,otherJournal):
-  section==="cv"?hasEquivalentContentSet(cv,otherCv):
-  section==="about"?Boolean(profile&&otherProfile):false;
-
+ const equivalentFor=(target:Locale)=>{
+  if(section==="works")return hasEquivalentContentSet(works,getPublicArtworks(artworks,target));
+  if(section==="galleries")return hasEquivalentContentSet(sets,getPublicGalleries(galleries,artworks,target));
+  if(section==="journal")return hasEquivalentContentSet(journal,getPublicJournal(journalEntries,target));
+  if(section==="cv")return hasEquivalentContentSet(cv,getPublicCvEntries(cvEntries,target));
+  if(section==="about")return Boolean(profile&&getPublicArtistProfile(artistProfile,target));
+  return false;
+ };
+ const alternatePaths=Object.fromEntries(locales.filter(target=>target!==locale&&equivalentFor(target)).map(target=>[target,pagePath(target,section)])) as Partial<Record<Locale,string>>;
  const description=section==="works"?t("worksDescription"):
   section==="galleries"?t("galleriesDescription"):
   section==="journal"?t("journalDescription"):
@@ -68,7 +65,7 @@ export async function generateMetadata({params}:Props):Promise<Metadata>{
   path:section,
   title:t(section),
   description,
-  alternatePath:indexablePage&&equivalent?pagePath(other,section):undefined,
+  alternatePaths:indexablePage?alternatePaths:undefined,
   indexable:indexablePage,
   images:socialImage?[socialImage]:undefined,
  });

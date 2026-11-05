@@ -8,7 +8,7 @@ test("localized page metadata uses self canonicals and reciprocal language alter
     path: "works",
     title: "آثار",
     description: "گزیده آثار نقاشی",
-    alternatePath: "/en/works",
+    alternatePaths: { en: "/en/works" },
     indexable: true,
     images: ["/images/approved-artwork-1.jpg"],
   });
@@ -47,7 +47,7 @@ test("article metadata uses the localized URL and publication timestamp", () => 
     path: "journal/studio-notes",
     title: "Studio Notes",
     description: "Notes from the studio",
-    alternatePath: "/fa/journal/ateliye",
+    alternatePaths: { fa: "/fa/journal/ateliye" },
     indexable: true,
     openGraphType: "article",
     publishedTime: "2026-10-20T10:00:00Z",
