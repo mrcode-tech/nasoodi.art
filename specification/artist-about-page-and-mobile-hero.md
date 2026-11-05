@@ -352,13 +352,13 @@ type ArtistProfile = {
 };
 ```
 
-This is a conceptual contract, not a command to adopt this exact type. Inspect the actual implementation and use its established schema/validation conventions.
+This is a conceptual contract, not a command to add fields or editorial data validation. Follow the existing technical data-access patterns.
 
 Technical rendering rules:
 
 - A CV download is rendered only when the file exists, is a valid PDF, and is explicitly approved for public download.
 - Validate the path is a safe local public asset path; do not allow arbitrary external URLs or path traversal.
-- Do not expose internal approval fields or private source metadata to the browser.
+- Keep internal implementation metadata out of the browser when it is not needed for presentation.
 - A CV file's existence does not imply that the HTML CV entries are complete or approved.
 - The biography preview and full About biography must resolve from one canonical localized source.
 
@@ -484,7 +484,7 @@ Record viewport, locale, state, artifact path, and findings. A generated screens
 - [ ] Desktop, tablet, mobile portrait, mobile landscape, and short-height layouts are visually inspected.
 - [ ] Automated tests, lint, typecheck, and production build pass.
 - [ ] CI evidence and visual artifacts are recorded.
-- [ ] Artist/site-owner content and PDF approval gates are explicitly recorded.
+- [ ] About and CV render the canonical JSON records and configured PDF without editorial approval gates.
 
 ## 16. Non-goals and preservation
 
@@ -536,4 +536,4 @@ The site owner explicitly authorized temporary fictional About-page content on t
 - The sample CV download must be derived from the same fixture records displayed on the page and must carry a visible fictional-sample notice.
 - Replace the fixture with artist-authored and artist-approved material before any release merge or deployment.
 
-This owner-authorized feature-branch fixture is a design/QA aid only; it does not satisfy artist approval or make the profile publishable.
+The current canonical JSON profile is the site's initial editable content; no separate preview fixture or approval-state provider is used.
