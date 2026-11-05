@@ -81,8 +81,8 @@ test("editorial destinations render safely and unknown unpublished details retur
     const response = await request.get(`/fa/${section}`);
     expect(response.status(), section).toBe(200);
   }
-  const hiddenCv = await request.get("/fa/cv");
-  expect(hiddenCv.status()).toBe(404);
+  const populatedCv = await request.get("/fa/cv");
+  expect(populatedCv.status()).toBe(200);
   const unknownWork = await request.get("/fa/works/not-published");
   expect(unknownWork.status()).toBe(404);
   await page.goto("/en/galleries");
@@ -1049,37 +1049,30 @@ test("homepage biography expands in place without replacing the hero image or mo
   }
 });
 
-test("normal About routes render bilingual fictional sample content and the complete CV", async ({ page }) => {
+test("About and CV routes render canonical bilingual JSON content without preview fixtures", async ({ page, request }) => {
   for (const locale of ["en", "fa"] as const) {
     await page.setViewportSize({ width: 1280, height: 900 });
+    const aboutResponse = await request.get(`/${locale}/about`);
+    expect(aboutResponse.status()).toBe(200);
     await page.goto(`/${locale}/about`);
-    await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", /noindex/);
-    await expect(page.locator(".sample-content-notice").first()).toBeVisible();
+    await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", /index/);
+    await expect(page.locator(".sample-content-notice")).toHaveCount(0);
     await expect(page.locator(".artist-portrait")).toHaveAttribute("src", /homepage-hero/);
     await expect(page.locator(".about-statement")).toBeVisible();
     await expect(page.locator(".about-biography-copy")).toBeVisible();
-    await expect(page.locator(".cv-category")).toHaveCount(5);
-    await expect(page.locator(".cv-list li")).toHaveCount(16);
-    await expect(page.getByRole("link", { name: /Download CV|دریافت رزومه/ })).toHaveAttribute("href", "/api/sample-cv");
+    await expect(page.locator(".cv-category")).toHaveCount(1);
+    await expect(page.locator(".cv-list li")).toHaveCount(1);
+    await expect(page.getByRole("heading", { name: locale === "en" ? "Ghazaleh Abdolahzade Nasoodi" : "غزاله عبداله زاده نسودی" })).toBeVisible();
     const overflow = await page.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth);
     expect(overflow).toBe(false);
     await page.screenshot({ path: test.info().outputPath("about-" + locale + "-desktop.png"), fullPage: true });
-  }
-});
 
-test("sample CV endpoint returns a valid non-indexable PDF without a preview query", async ({ request }) => {
-  const response = await request.get("/api/sample-cv");
-  expect(response.status()).toBe(200);
-  expect(response.headers()["content-type"]).toContain("application/pdf");
-  expect(response.headers()["x-robots-tag"]).toContain("noindex");
-  const body = await response.body();
-  expect(body.subarray(0, 8).toString("ascii")).toBe("%PDF-1.4");
-  expect(body.toString("ascii")).toContain("GHAZALEH ABDOLAHZADE NASOODI");
-  expect(body.toString("ascii")).toContain("FICTIONAL SAMPLE");
-  expect(body.toString("ascii")).toContain("Quiet Arrangements");
-  expect(body.toString("ascii")).toContain("A Small Atlas of Looking");
-  expect(body.toString("ascii")).toContain("ARTISTIC PRACTICE");
-  expect(body.toString("ascii").trimEnd()).toContain("%%EOF");
+    const cvResponse = await request.get(`/${locale}/cv`);
+    expect(cvResponse.status()).toBe(200);
+    await page.goto(`/${locale}/cv`);
+    await expect(page.locator(".cv-list li")).toHaveCount(1);
+    await expect(page.locator(".sample-content-notice")).toHaveCount(0);
+  }
 });
 
 test("About pages preserve mobile and tablet layouts in both locales", async ({ page }) => {
