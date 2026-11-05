@@ -24,15 +24,17 @@ function LanguageSelector({ locale, alternates, pathname, label, onNavigate }: {
     const suffix = query.toString();
     if (suffix) { event.preventDefault(); router.push(targetHref + "?" + suffix); onNavigate?.(); }
   };
-  return <DropdownMenu>
-    <DropdownMenuTrigger asChild><Button variant="ghost" size="sm" aria-label={label}><span>{getLocaleName(locale)}</span><span className="language-chevron" aria-hidden="true">⌄</span></Button></DropdownMenuTrigger>
+  return <div className="theme-selector language-selector">
+    <DropdownMenu>
+    <DropdownMenuTrigger asChild><Button className="theme-trigger language-trigger" variant="ghost" size="sm" aria-label={label}><span className="language-code-icon" aria-hidden="true">{locale.toUpperCase()}</span><span>{getLocaleName(locale)}</span><svg className="selector-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6" /></svg></Button></DropdownMenuTrigger>
     <DropdownMenuContent align={getLocaleDirection(locale) === "rtl" ? "start" : "end"} dir={getLocaleDirection(locale)} aria-label={label}>
       {locales.map((target) => {
         const href = target === locale ? pathname : alternates[target] ?? pagePath(target);
         return <DropdownMenuItem asChild key={target}><Link href={href} hrefLang={target} lang={target} aria-current={locale === target ? "page" : undefined} onClick={(event) => { preserveGalleryState(event, href); onNavigate?.(); }}>{getLocaleName(target)}{locale === target ? " · " + t("current") : ""}</Link></DropdownMenuItem>;
       })}
     </DropdownMenuContent>
-  </DropdownMenu>;
+    </DropdownMenu>
+  </div>;
 }
 export function SiteShell({ locale, children, announcement }: { locale: Locale; children: React.ReactNode; announcement?: AnnouncementEvent }) {
   const t = useTranslations();
