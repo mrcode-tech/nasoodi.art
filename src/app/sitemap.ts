@@ -3,9 +3,10 @@ import { artworks } from "@/content/artworks";
 import { galleries } from "@/content/galleries";
 import { journalEntries } from "@/content/journal";
 import { cvEntries } from "@/content/cv";
+import { contactDetails } from "@/content/contact";
 import { artistProfile } from "@/content/artist";
 import { locales, type Locale } from "@/types/locale";
-import { getPublicArtworks, getPublicGalleries, getPublicCvEntries, getPublicArtistProfile } from "@/lib/content/publication";
+import { getPublicArtworks, getPublicGalleries, getPublicCvEntries, getPublicArtistProfile, getPublicContactDetails } from "@/lib/content/publication";
 import { getPublicJournal } from "@/lib/content/journal";
 import { getLocalizedSlug } from "@/lib/content/paths";
 import { hasEquivalentContentSet } from "@/lib/content/identity";
@@ -86,6 +87,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
         .filter((target) => Boolean(getPublicArtistProfile(artistProfile, target)))
         .map((target) => [target, "about"])) as Partial<Record<Locale, string>>;
       add(locale, "about", aboutAlternates);
+    }
+
+    const contact = getPublicContactDetails(contactDetails);
+    if (contact && contactDetails.title?.[locale] && contactDetails.description?.[locale]) {
+      const contactAlternates = Object.fromEntries(targets
+        .filter((target) => Boolean(getPublicContactDetails(contactDetails)) && contactDetails.title?.[target] && contactDetails.description?.[target])
+        .map((target) => [target, "contact"])) as Partial<Record<Locale, string>>;
+      add(locale, "contact", contactAlternates);
     }
   }
 
