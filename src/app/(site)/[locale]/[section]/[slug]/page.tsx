@@ -21,7 +21,7 @@ export async function generateMetadata({params}:DetailProps):Promise<Metadata>{
   return createLocalizedMetadata({
    locale,
    path,
-   title:work.title[locale],
+   title:work.title[locale]??work.slug,
    description:work.description?.[locale]??work.title[locale],
    alternatePath:translated?pagePath(otherLocale(locale),"works/"+getLocalizedSlug(translated,otherLocale(locale))):undefined,
    indexable:true,
@@ -37,7 +37,7 @@ export async function generateMetadata({params}:DetailProps):Promise<Metadata>{
   return createLocalizedMetadata({
    locale,
    path,
-   title:gallery.title[locale],
+   title:gallery.title[locale]??gallery.slug,
    description:gallery.description[locale],
    alternatePath:translated?pagePath(otherLocale(locale),"galleries/"+getLocalizedSlug(translated,otherLocale(locale))):undefined,
    indexable:true,
@@ -52,7 +52,7 @@ export async function generateMetadata({params}:DetailProps):Promise<Metadata>{
   return createLocalizedMetadata({
    locale,
    path,
-   title:entry.title[locale],
+   title:entry.title[locale]??entry.slug,
    description:entry.summary[locale],
    alternatePath:translated?pagePath(otherLocale(locale),"journal/"+getLocalizedSlug(translated,otherLocale(locale))):undefined,
    indexable:true,
