@@ -382,7 +382,7 @@ test("Journal cover images require a safe local path, explicit rights, dimension
 });
 
 
-test("published Journal entries use localized, dimensioned, rights-cleared temporary gallery-image placeholders",()=>{
+test("published Journal entries use localized, dimensioned, rights-cleared canonical artwork covers",()=>{
  for(const locale of ["en","fa"] as const){
   const entries=getPublicJournal(journalEntries,locale);
   assert.equal(entries.length,8);
@@ -392,7 +392,9 @@ test("published Journal entries use localized, dimensioned, rights-cleared tempo
    assert.equal(cover.rightsConfirmed,true);
    assert.equal(isSafeLocalImagePath(cover.src),true);
    assert.ok(cover.width>0&&cover.height>0);
-   assert.match(cover.alt[locale] ?? "",locale==="en"?/Temporary Journal image placeholder/:/تصویر موقت/);
+   const artwork=artworks.find(item=>item.images.some(image=>image.src===cover.src));
+   assert.equal(cover.alt[locale],artwork?.images.find(image=>image.src===cover.src)?.alt[locale]);
+   assert.doesNotMatch(cover.alt[locale] ?? "",/temporary|placeholder|موقت/iu);
   }
  }
  const withoutCover={...journalEntries[0],coverImage:undefined};
@@ -421,6 +423,16 @@ test("localized content slugs are validated and unique independently per locale"
  assert.equal(getLocalizedSlug(journal,"fa"),"yaddasht-haye-ateliye");
 });
 
+
+test("a missing localized slug never falls back to another locale and fails content validation",()=>{
+ const localized={...artworks[0],localizedSlugs:{en:"english-only"}};
+ assert.equal(getLocalizedSlug(localized,"en"),"english-only");
+ assert.equal(getLocalizedSlug(localized,"fa"),"");
+ const issues=validatePortfolioContent({
+  artworks:[localized],galleries,journalEntries,cvEntries,homepageSelection,artistProfile,cvDocument,
+ });
+ assert.ok(issues.some(issue=>issue.path.endsWith(".localizedSlugs.fa")));
+});
 
 test("localized slugs are unique per locale and alternate links follow stable content ids",async()=>{
  const localizedWork:Artwork={...artworks[0],id:"localized-route-work",slug:"legacy-work",localizedSlugs:{en:"english-work",fa:"persian-work"}};

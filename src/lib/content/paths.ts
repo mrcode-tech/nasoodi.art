@@ -7,7 +7,7 @@ export type LocalizedSlugRecord = {
 
 /** Resolve a route slug from the canonical content record for one locale. */
 export function getLocalizedSlug(record: LocalizedSlugRecord, locale: Locale): string {
-  return record.localizedSlugs?.[locale]?.trim() || record.slug;
+  return record.localizedSlugs ? (record.localizedSlugs[locale]?.trim() ?? "") : record.slug;
 }
 
 /** Accept a single safe URL segment, including Unicode letters and numbers. */

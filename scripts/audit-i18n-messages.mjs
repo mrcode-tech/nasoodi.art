@@ -3,10 +3,10 @@ import { resolve, extname, relative } from "node:path";
 import ts from "typescript";
 
 const messageRoot = resolve("src/i18n/messages");
-const sourceRoots = [resolve("src/app"), resolve("src/components")];
+const sourceRoots = [resolve("src/app"), resolve("src/components"), resolve("src/lib")];
 const sourceExtensions = new Set([".tsx", ".ts", ".jsx", ".js"]);
 const visibleAttributes = new Set([
-  "alt", "aria-label", "aria-description", "aria-roledescription",
+  "alt", "aria-label", "aria-description",
   "placeholder", "title", "label", "value", "emptytext", "description", "content",
 ]);
 const technicalAttributes = new Set([
@@ -15,7 +15,7 @@ const technicalAttributes = new Set([
   "data-testid", "suppressHydrationWarning",
 ]);
 const knownBrandAndProperNames = new Set([
-  "Nasoodi.art", "Instagram", "GitHub", "Next.js", "React", "TypeScript",
+  "Nasoodi.art", "Nasoodi", "Ghazaleh", "Abdolahzade Nasoodi", "Instagram", "GitHub", "Next.js", "React", "TypeScript",
   "Vercel", "Radix", "Embla", "shadcn/ui",
 ]);
 const uiMessagePropertyNames = new Set([

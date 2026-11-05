@@ -79,7 +79,7 @@ export function SiteShell({ locale, children, announcement }: { locale: Locale; 
       />
     )}
     <Sidebar className="desktop-sidebar" dir={getLocaleDirection(locale)} aria-label="Nasoodi.art">
-      <SidebarHeader><Link className="artist-wordmark" href={pagePath(locale)} aria-label="Ghazaleh Abdolahzade Nasoodi — Home">
+      <SidebarHeader><Link className="artist-wordmark" href={pagePath(locale)} aria-label={labels.home}>
         <span className="wordmark-name" dir="ltr">Ghazaleh</span><span className="wordmark-surname" dir="ltr">Abdolahzade Nasoodi</span><span className="wordmark-role" dir="auto">{labels.discipline}</span>
       </Link></SidebarHeader>
       <SidebarContent>
@@ -96,7 +96,7 @@ export function SiteShell({ locale, children, announcement }: { locale: Locale; 
             />
           )}
           <div className="sidebar-flex-spacer" aria-hidden="true" />
-          <div className="sidebar-bottom" dir="ltr"><span>nasoodi.art · © {new Date().getFullYear()}</span></div>
+          <div className="sidebar-bottom" dir="ltr"><span>{"nasoodi.art"} · © {new Date().getFullYear()}</span></div>
         </ScrollArea>
       </SidebarContent>
     </Sidebar>
