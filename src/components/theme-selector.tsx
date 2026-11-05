@@ -99,7 +99,7 @@ export function ThemeSelector({ locale }: { locale: Locale }) {
           >
             {icons[selected]}
             <span>{labels[selected]}</span>
-            <span aria-hidden="true">⌄</span>
+            <svg className="selector-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6" /></svg>
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent
