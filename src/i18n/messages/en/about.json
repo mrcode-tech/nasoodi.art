@@ -1,0 +1,15 @@
+{
+  "statement": "Artist statement",
+  "biography": "Biography",
+  "aboutArtist": "About the artist",
+  "showLess": "Show less",
+  "downloadCvPdf": "Download CV (PDF)",
+  "sampleContentNotice": "Sample content for design review — not artist-approved or publishable.",
+  "samplePreviewNotice": "Sample preview: all copy and CV entries are fictional layout fixtures and are not approved for publication.",
+  "samplePdfNotice": "This clearly marked fictional PDF is available for preview testing only; it is not a real artist CV.",
+  "education": "Education & Training",
+  "selectedExhibitions": "Selected Exhibitions",
+  "publications": "Publications",
+  "awards": "Awards & Recognition",
+  "artisticPractice": "Artistic Practice"
+}

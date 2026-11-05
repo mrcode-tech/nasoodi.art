@@ -1,2 +1,3 @@
 import { redirect } from "next/navigation";
-export default function RootPage(){redirect("/fa");}
+import { defaultLocale } from "@/types/locale";
+export default function RootPage(){redirect("/" + defaultLocale);}

@@ -4,7 +4,7 @@
 **Locales:** Persian (fa) and English (en)
 
 ## Editorial authority
-The artist is authoritative for her name, artwork titles, artist statement, biography, series, professional history, image selection, and real public contact details. Distinguish verified facts, artist-authored text, approved translation, editorial draft, and development-only placeholder. Only approved factual artist content may be indexed. Owner-authorized demo-phase exception (2026-11-03): fictional email/social Contact destinations may be rendered on the homepage and Contact routes without approval gates, but Contact routes must remain noindex and outside the sitemap until replaced with real details. AI may assist with proofreading or translation drafts, but artist/human review is required before publication.
+The artist is authoritative for her name, artwork titles, artist statement, biography, series, professional history, image selection, and public contact details. Keep factual records accurate and do not invent credentials, dates, exhibitions, awards, or contact channels. Initial descriptive editorial copy may be authored as the site's normal editable content, but do not create a parallel sample/preview store or attach verification labels to it. AI may assist with proofreading or translation drafts; artist/human review is required for artist-authored statements and translations.
 
 ## Locale behavior
 - Persian documents use lang=fa and dir=rtl; English documents use lang=en and dir=ltr.
@@ -35,8 +35,8 @@ Use calm, precise, personal editorial language. Avoid generic art-world clichés
 - Works: image rights, stable slug, title or approved untitled treatment, alt text.
 - Artwork: verified metadata only; enquiry only if configured.
 - About: separate approved statement and biography.
-- CV: sourced, verified entries; omit empty categories.
-- Contact: use owner-approved real destinations for public launch. During the authorized demo phase, use the centralized fictional Contact fixture without approval-state gating; keep the route noindex and outside the sitemap. Never imply demo accounts are real, verified, or monitored.
+- CV: owner-supplied factual entries only; omit categories with no supplied records.
+- Contact: use only owner-supplied destinations from the canonical Contact JSON. Localized metadata and sitemap eligibility follow that record; never invent contact methods.
 
 ## Review checklist
 Review artist facts/spelling, Persian grammar and punctuation, English grammar/transliteration, artwork identity and metadata, image rights/crop, alt text, SEO metadata, social preview, and responsive layouts. Record reviewer, date, and approval scope. If rights or facts are disputed, unpublish until resolved.
@@ -52,3 +52,27 @@ Bilingual design is a first-class visual requirement under design-engineering-sk
 - Review mixed-script names, URLs, dates, numerals, punctuation, and long titles in rendered pages.
 - Do not force identical line breaks or component dimensions across locales when natural script metrics differ.
 - Translated labels and editorial content require approval; visual polish must not conceal missing or unapproved translations.
+
+## UI message governance — implementation checkpoint 2026-11-05
+
+The CI message audit is a required gate, not a translation approval mechanism. It validates matching namespace files, recursively flattened message keys, duplicate keys across namespaces, missing keys in either locale, non-empty values, and matching interpolation placeholders. It also rejects Persian UI literals in application/component TSX so localized interface copy remains in message resources.
+
+Human review remains mandatory for Persian grammar, English terminology, artist-facing tone, context, and semantic equivalence. A passing audit proves structural consistency only; it does not prove translation quality or artist approval. New UI copy must be added to both locale resources, reviewed in context, and covered by the existing route/component tests. Editorial artist content remains in the content layer, not in UI messages.
+
+## Unified JSON content and locale governance — 2026-11-05
+
+The owner-approved content policy for this implementation supersedes previous demo-fixture and separate About/CV preview rules.
+
+- Store editorial copy in canonical JSON records with localized fields. UI messages alone belong in next-intl resources.
+- Use stable entity IDs across locales and explicit localized slugs. Relationships use IDs, not translated titles or slug equality.
+- Do not create a second record/provider for verified, unverified, sample, fictional, temporary, or preview content. Do not add status flags solely to label initial copy.
+- Homepage and About use the same canonical artist profile. CV uses one canonical JSON record. Journal body text lives in localized JSON rich-text blocks.
+- Initial descriptive editorial copy can be authored as the website's normal editable content. Do not fabricate external credentials, education, exhibitions, awards, dates, institutions, or contact channels.
+- Missing localized editorial content is an explicit incomplete record, not permission to silently fall back to English. Keep routes from rendering another language as a fallback.
+- Contact destinations must be owner-supplied. Preserve the artist's actual Instagram identity and do not retain invented demo email/Telegram destinations.
+- Content changes should require JSON edits and validation, not React component changes.
+
+
+## Missing localized slugs and audit scope — 2026-11-05
+
+Published artwork, gallery, and Journal records must include a safe slug for every supported locale. An incomplete `localizedSlugs` map resolves to no route in the missing locale; the validator emits a domain-specific issue rather than silently reusing the common/English slug. The AST UI literal audit covers `src/app`, `src/components`, and `src/lib`, including TSX/TS/JSX/JS. Semantic `aria-roledescription` values and supplied brand/proper names are exceptions; accessible labels remain localized.

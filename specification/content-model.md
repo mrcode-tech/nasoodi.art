@@ -2,7 +2,7 @@
 
 **Status:** Proposed content contract
 
-This document defines the minimum structured content required to publish a trustworthy artist portfolio. It intentionally separates verified facts from optional or unknown fields.
+This document defines the structured editorial content required for the artist portfolio. Factual claims must be owner-supplied; unknown facts remain absent rather than being replaced with invented credentials.
 
 ## 1. Content principles
 
@@ -27,16 +27,16 @@ This document defines the minimum structured content required to publish a trust
 | Portrait/studio image | No | Only if supplied and approved |
 | Instagram URL | Yes if social link displayed | Supplied profile URL |
 | Contact email | Required only if email contact is offered | Must be confirmed |
-| CV/exhibitions | Optional | Publish only verified entries |
+| CV/exhibitions | Optional | Add only owner-supplied factual entries |
 
 ## 2.1 Runtime artist profile and contact publication contracts
 
-The current application models the artist profile and public contact destinations separately from artwork and Journal records. Real public contact details require owner approval. Owner-authorized demo-phase exception (2026-11-03): centralized fictional email, Telegram, and Instagram values may be rendered without approval gates on the homepage and localized Contact routes; they are placeholders, not artist facts or verified/monitored channels.
+The current application stores the artist profile and Contact configuration in their own canonical localized JSON records. Contact destinations must be supplied by the owner. Do not create demo email, Telegram, or social destinations.
 
 - An artist profile requires a published state, explicit artist approval, approved locale, and non-empty localized statement and factual biography before the About page becomes indexable.
 - An optional portrait is displayed only when its rights are confirmed, its dimensions are positive, and localized alternative text is supplied for the current locale. An invalid optional portrait is omitted without suppressing otherwise valid profile text.
-- Real artist Contact destinations require explicit owner approval and locale approval. During the authorized demo phase, the centralized fictional Contact fixture is rendered without owner/locale approval gates. Email syntax is validated before creating a mailto link; Telegram handles and Instagram URLs are validated, and arbitrary external URLs are rejected. Keep Contact routes noindex and out of the sitemap until real details replace the demo fixture.
-- About remains available with a truthful pending-content message while its content is absent. Contact remains available and noindex; it renders the owner-authorized demo fixture during the demo phase and remains excluded from the sitemap until real contact details replace the fixture.
+- Contact destinations are validated before rendering. Only owner-supplied methods are permitted; invalid external destinations are omitted. Contact indexability and sitemap eligibility follow the canonical localized Contact metadata.
+- About and CV render from their canonical localized JSON records in every environment; no pending-content or preview provider is used. Contact renders the canonical localized Contact record and only owner-supplied public destinations. Indexability follows the current metadata/publication rules, not a demo-phase fixture rule.
 - A locale alternate is emitted only when the corresponding profile/contact content is approved in the other locale. Never copy or machine-translate the source-language statement, biography, or contact text.
 
 The implementation contract uses these fields:
@@ -52,9 +52,8 @@ type ArtistProfile = {
     height: number;
     rightsConfirmed: boolean;
   };
-  status: PublicationStatus;
-  approvedLocales: Array<"fa" | "en">;
-  artistApproved: boolean;
+  // Artist identity, biography, and statement are required localized editorial values.
+
 };
 
 type ContactDetails = {
@@ -63,7 +62,7 @@ type ContactDetails = {
   instagramUrl?: string;
 };
 
-// Demo-phase fixtures are owner-authorized and are not gated by publication approvals.
+// Canonical Contact content is owner-maintained JSON; public destinations must be owner-supplied.
 ```
 
 ## 3. Artwork record
@@ -287,3 +286,18 @@ Artwork image records reference same-origin public assets using root-relative pa
 ## Public identity and route integrity
 
 Before publication, artwork, gallery, and Journal records must have a non-empty stable ID and a single-segment Unicode-letter/number slug (hyphen-separated). Public records with duplicate IDs or duplicate slugs in the same locale are excluded rather than allowing ambiguous routes or silently selecting one record. CV entries likewise require unique non-empty IDs. This validation runs after publication, rights, and locale-completeness checks, so drafts do not reserve public identities.
+
+## Unified JSON editorial model — 2026-11-05
+
+This owner-approved architecture supersedes earlier Markdown, empty-profile, and preview-fixture notes in this document.
+
+One canonical localized record/collection exists for each domain: site metadata, artist profile, CV, Contact, artworks, galleries, Journal/events, and homepage selection. Journal body text is structured rich text embedded in the Journal JSON record; Markdown is not an editorial source. About and homepage biography use the same artist-profile JSON. CV entries and an optional PDF reference use one CV JSON record.
+
+Do not maintain parallel verified/unverified, sample, temporary, preview, or fictional content repositories. Do not add `isFictional`, `isPlaceholder`, `isVerified`, `isTemporary`, `contentSource`, or `verificationStatus` flags. Existing artwork rights/publication rules remain in force. CV entries use stable IDs, localized titles, and either a year or localized period; no `verified` flag is required.
+
+Initial editorial copy may describe the supplied artist identity and the presented portfolio. Do not invent education, awards, exhibitions, qualifications, institutional affiliations, or other factual career claims. Missing factual CV sections remain empty until owner-supplied facts are available. Never invent email addresses, social handles, or contact destinations.
+
+
+## Required localized route identity — 2026-11-05
+
+The canonical JSON record must include `localizedSlugs.en` and `localizedSlugs.fa` for every published artwork, gallery, and Journal entry. Stable IDs connect locale variants; slugs are route values only. A missing locale slug makes the record unavailable at that locale and fails content validation. The legacy common `slug` field is not a substitute for a missing localized slug in canonical published content.

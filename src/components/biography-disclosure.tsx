@@ -19,7 +19,26 @@ export function BiographyDisclosure({ biography, readMoreLabel, showLessLabel, l
     const element = contentRef.current;
     if (!element) return;
     const measure = () => {
-      if (!expanded) setIsLong(element.scrollHeight > element.clientHeight + 1);
+      if (expanded) return;
+      const clone = element.cloneNode(true) as HTMLParagraphElement;
+      clone.className = "biography-copy";
+      clone.style.position = "absolute";
+      clone.style.visibility = "hidden";
+      clone.style.pointerEvents = "none";
+      clone.style.top = "-100000px";
+      clone.style.left = "-100000px";
+      clone.style.width = element.getBoundingClientRect().width + "px";
+      clone.style.height = "auto";
+      clone.style.maxHeight = "none";
+      clone.style.overflow = "visible";
+      clone.style.display = "block";
+      clone.style.setProperty("-webkit-line-clamp", "unset");
+      clone.style.setProperty("line-clamp", "unset");
+      document.body.appendChild(clone);
+      const fullHeight = clone.getBoundingClientRect().height;
+      const lineHeight = Number.parseFloat(getComputedStyle(element).lineHeight);
+      clone.remove();
+      setIsLong(Number.isFinite(lineHeight) && fullHeight > lineHeight * lines + 1);
     };
     measure();
     const observer = typeof ResizeObserver === "undefined" ? undefined : new ResizeObserver(measure);

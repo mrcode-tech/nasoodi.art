@@ -29,7 +29,7 @@ jobs:
         with:
           node-version: 22
       - name: Install dependencies
-        run: npm install --no-audit --no-fund
+        run: npm ci --no-audit --no-fund
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
@@ -43,6 +43,8 @@ jobs:
         run: python scripts/render-journal-sticker.py
       - name: Run ESLint
         run: npm run lint
+      - name: Audit bilingual message catalogs
+        run: npm run audit:i18n
       - name: Check TypeScript
         run: npm run typecheck
       - name: Run content publication tests

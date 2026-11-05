@@ -63,6 +63,10 @@ Read these documents together with [Journal, Articles, and Events](./journal-and
 - [Artwork imaging and asset pipeline](./artwork-imaging-and-asset-pipeline.md) — capture, provenance, rights, derivatives, fidelity, alt text, and image delivery.
 - [Localization and editorial governance](./localization-and-editorial-governance.md) — Persian/English rules, translation parity, content approval, and writing standards.
 
+### AI-assisted engineering and code quality
+
+- [AI-assisted development and code quality contract](./ai-assisted-development-and-code-quality.md) — reviewed external Agent Skills for React/Next.js best practices, frontend architecture, safe refactoring, and Next.js i18n; mandatory agent workflow, compatibility caveats, and skill security/maintenance rules.
+
 ### Technical quality
 - [SEO and discovery](./seo-and-discovery.md) — metadata, canonicals, hreflang, sitemap, robots, structured data, and measurement.
 - [Accessibility, performance, privacy, and security](./accessibility-performance-security.md) — WCAG 2.2 AA target, motion, Core Web Vitals, privacy, and security.
@@ -87,7 +91,7 @@ These supplied facts do not confirm an artist statement, biography, education, e
 - If two documents conflict, proposal.md defines product intent; site-wide-design-system-and-section-specification.md defines page/component design; specialized contracts define their named domains. Record and resolve conflicts rather than silently choosing.
 - The implementation roadmap is a plan, not evidence that a feature or CI check already exists.
 - Distinguish proposed, implemented, verified, artist-approved, and published states.
-- Never publish invented content, unapproved assets, fake testimonials, fake CV entries, or placeholder artwork.
+- Never publish invented real-world facts, unapproved assets, fake testimonials, fake CV entries, or placeholder artwork. Initial editorial prose may be authored as normal site content, but education, awards, exhibitions, qualifications, institutional affiliations, event dates/venues, rights claims, and contact destinations must not be fabricated or presented as confirmed facts.
 - The studio-process photograph and layered scene are not finished artwork reproductions. Actual paintings must be presented separately in Works.
 - The site is a portfolio, not an e-commerce store by default. Sales, pricing, availability, commissions, and enquiry forms require explicit decisions and real operational support.
 
@@ -155,7 +159,7 @@ The next cross-site UX refinement is defined in [Unified breadcrumbs, editorial 
 
 This task introduces a shared shadcn/ui breadcrumb system with clickable intermediate paths (including artwork and Journal detail navigation), refines site-wide editorial spacing, compacts Journal pagination controls on mobile, keeps sidebar copyright on one desktop line, standardizes justified long-form text, and adds a bilingual Contact section/page.
 
-The owner explicitly authorizes temporary fictional Telegram, email, and Instagram values during the current demo phase. Render them normally on the homepage and localized Contact pages without approval gates, environment variables, or production-mode conditions, and do not add a visible disclaimer. Keep the values centralized and easy to replace; do not claim demo profiles are real, verified, or monitored. Keep Contact routes noindex and excluded from the sitemap until the fixture is replaced with real details. Preserve the actual artist Instagram handle @ghazalenasoodi wherever it represents the artist's identity outside the demo fixture. Read the full prompt and all mandatory design/localization/accessibility authorities before implementation.
+The current Contact configuration uses only owner-supplied public destinations from canonical JSON. Do not add invented email addresses, Telegram handles, or social profiles. Contact metadata and sitemap eligibility follow the localized canonical Contact record. Preserve the artist Instagram handle @ghazalenasoodi. The unified JSON content and SEO completion audit supersedes the former demo-fixture instruction.
 
 ## Shared light and dark theme system — Midnight Gallery
 
@@ -168,3 +172,35 @@ Implement the approved shared theme system defined in [Shared Light and Dark The
 
 
 Implementation on `feature` is committed in `470c0228cfe4b8171d32fbf212378c35c52eba8f` and subsequent documentation updates. The shared `next-themes` provider, Midnight Gallery semantic tokens, localized shadcn radio-menu selector, desktop/mobile placement, and Playwright coverage are in the application. Automated CI and rendered visual QA remain verification gates; do not mark this feature fully verified until those results are inspected.
+
+
+## International SEO, i18n, and content architecture — 2026-11-04
+
+Three complementary architecture contracts define the next maintainability and discoverability work:
+
+- [International SEO and Search Discovery Architecture](./international-seo-and-search-discovery-architecture.md) — indexability, page metadata, canonical URLs, hreflang, sitemap/robots, artwork SEO, structured data, Persian/English search quality, monitoring, and CI verification.
+- [Internationalization and UI Translation Architecture](./internationalization-and-ui-translation-architecture.md) — next-intl evaluation/adoption, centralized locale message bundles, App Router integration, localized navigation, server/client boundaries, RTL/LTR, and translation parity.
+- [Content Architecture and Separation from Application Logic](./content-architecture-and-data-separation.md) — separate artist-editable portfolio content from UI messages, TypeScript types, general utilities, and React presentation; file-based records, validation, editorial workflow, and incremental migration.
+
+Read these together with [SEO and discovery](./seo-and-discovery.md), [Localization and editorial governance](./localization-and-editorial-governance.md), and [Content and artwork model](./content-model.md). The new documents are proposed architecture contracts, not evidence that the refactor or SEO improvements have been implemented. Audit current code before choosing exact paths or moving existing data. Preserve artwork rights safeguards and use owner-supplied Contact data; follow the unified JSON content contract and current SEO eligibility rules.
+
+The owner also identified the community [Claude SEO skill](https://github.com/AgriciDaniel/claude-seo) as a useful reference. Treat it as an optional, reviewed assistant workflow—not an authoritative source or mandatory dependency. Verify recommendations against Google Search Central, current Next.js documentation, Schema.org, and the rendered site. Do not install optional extensions, connect accounts, or use external APIs without authorization.
+
+
+## Site-wide breadcrumbs, spacing, and Contact — implementation verified 2026-11-05
+
+The cross-site refinement defined in [Unified breadcrumbs, editorial spacing, and Contact implementation prompt](./site-wide-navigation-spacing-and-contact-implementation-prompt.md) is implemented on the existing `feature` branch. The shared breadcrumb, responsive editorial spacing, justified long-form text scope, Journal pagination fallback, desktop copyright, and bilingual Contact destinations are covered by automated regression tests. GitHub Actions [run #889](https://github.com/mrcode-tech/nasoodi.art/actions/runs/41993382170) passed against `01c00996c60313088e06478df4cca7aea47d3569`, including 135 Playwright tests. CI screenshot evidence was inspected for English/Persian desktop home and Contact pages and mobile Contact/Journal archive layouts. This is historical implementation and technical/visual QA evidence, not authorization to merge, deploy, or publish. The current Contact JSON now uses the owner-supplied artist Instagram identity and no invented email or Telegram destination.
+
+
+## Current internationalization, JSON content, and SEO implementation
+
+The owner-provided implementation contract is tracked in [Internationalization, Content, and SEO Completion Audit](./internationalization-content-seo-completion-audit.md). It supersedes older preview-fixture and Markdown-body decisions where they conflict. Editorial content is canonical localized JSON; UI translations remain in next-intl messages. The artist profile, CV, Contact, artworks, galleries, Journal/events, and site metadata each have one canonical source. About and homepage biography use the same artist profile. Read the audit before continuing implementation and keep its findings current.
+undefined
+
+## Unified JSON editorial architecture — implementation contract (2026-11-05)
+
+The owner-approved implementation contract is `internationalization-content-seo-completion-audit.md`. Canonical editorial sources are `src/content/data/site.json`, `artist-profile.json`, `cv.json`, `contact.json`, `artworks.json`, `galleries.json`, `journal/index.json`, and `homepage-selection.json`. Long-form Journal bodies are localized JSON rich-text blocks; do not reintroduce Markdown editorial sources or separate preview/sample/verified content providers. UI strings remain in `src/i18n/messages/{en,fa}/`.
+
+All route-level content resolution should use `src/content/repositories/`. About and homepage share `getArtist`/`getAbout`; CV uses `getCv`; homepage composition uses `getHomepageContent`; detail routes, sitemap, metadata, and structured data consume the same repositories. Stable IDs establish cross-locale identity; each published artwork, gallery, and Journal record must have a safe localized slug for every supported locale. Missing locale slugs or editorial text are unavailable, never borrowed from English.
+
+Run `npm test`, `npm run audit:i18n`, `npm run lint`, `npm run typecheck`, `npm run build`, and `npm run test:e2e`. Content-only changes should normally touch canonical JSON and tests—not React components or application logic.

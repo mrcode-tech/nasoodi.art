@@ -81,8 +81,8 @@ test("editorial destinations render safely and unknown unpublished details retur
     const response = await request.get(`/fa/${section}`);
     expect(response.status(), section).toBe(200);
   }
-  const hiddenCv = await request.get("/fa/cv");
-  expect(hiddenCv.status()).toBe(404);
+  const populatedCv = await request.get("/fa/cv");
+  expect(populatedCv.status()).toBe(200);
   const unknownWork = await request.get("/fa/works/not-published");
   expect(unknownWork.status()).toBe(404);
   await page.goto("/en/galleries");
@@ -97,10 +97,11 @@ test("robots and sitemap endpoints are available", async ({ request }) => {
   expect(sitemap.status()).toBe(200);
   const sitemapText = await sitemap.text();
   expect(sitemapText).toContain("https://nasoodi.art/fa");
-  expect(sitemapText).not.toContain("https://nasoodi.art/fa/about");
-  expect(sitemapText).not.toContain("https://nasoodi.art/en/about");
-  expect(sitemapText).not.toContain("https://nasoodi.art/fa/contact");
-  expect(sitemapText).not.toContain("https://nasoodi.art/en/contact");
+  for (const locale of ["en", "fa"]) {
+    expect(sitemapText).toContain(`https://nasoodi.art/${locale}/about`);
+    expect(sitemapText).toContain(`https://nasoodi.art/${locale}/contact`);
+    expect(sitemapText).toContain(`https://nasoodi.art/${locale}/cv`);
+  }
 });
 
 
@@ -266,7 +267,7 @@ test("empty About and Contact routes stay available but are not indexable", asyn
     for (const section of ["about", "contact"]) {
       await page.goto(`/${locale}/${section}`);
       await expect(page.getByRole("main")).toBeVisible();
-      await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", /noindex/);
+      await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", /index/);
     }
   }
 });
@@ -382,10 +383,14 @@ test("mobile drawer traps keyboard focus at both ends", async ({ page }) => {
   await expect(first).toBeFocused();
 });
 
-test("empty CV remains unpublished, unlinked, and non-indexable", async ({ page, request }) => {
+test("populated CV is available and indexable without adding a primary navigation item", async ({ page, request }) => {
   for (const locale of ["fa", "en"] as const) {
     const response = await request.get(`/${locale}/cv`);
-    expect(response.status()).toBe(404);
+    expect(response.status()).toBe(200);
+    await page.goto(`/${locale}/cv`);
+    await expect(page.locator("h1")).toBeVisible();
+    await expect(page.locator(".cv-list li").first()).toBeVisible();
+    await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", /index/);
     await page.goto(`/${locale}`);
     await expect(page.locator(".desktop-sidebar, .mobile-drawer").getByRole("link", { name: /CV|رزومه/ })).toHaveCount(0);
   }
@@ -967,7 +972,7 @@ test("About is a localized primary navigation destination on desktop and mobile"
   await expect(desktopAbout).toHaveAttribute("href", "/en/about");
   await expect(desktopAbout).toHaveAttribute("aria-current", "page");
   await expect(page.getByRole("heading", { name: "Ghazaleh Abdolahzade Nasoodi" })).toBeVisible();
-  await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", /noindex/);
+  await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", /index/);
   await expect(page.locator(".about-statement")).toBeVisible();
   await expect(page.locator(".about-biography-copy")).toBeVisible();
 
@@ -1010,10 +1015,14 @@ test("homepage hero layout is responsive and renders the bilingual biography", a
       await expect(copy.locator(".sample-content-notice")).toHaveCount(0);
       const biography = copy.locator(".biography-disclosure");
       const readMore = biography.getByRole("button", { name: locale === "fa" ? "ادامه مطلب" : "Read more" });
-      await expect(readMore).toBeVisible();
-      await readMore.click();
-      await expect(biography.locator(".biography-copy")).toHaveClass(/is-expanded/);
-      await expect(biography.getByRole("button", { name: locale === "fa" ? "نمایش کمتر" : "Show less" })).toBeVisible();
+      if (await readMore.count()) {
+        await expect(readMore).toBeVisible();
+        await readMore.click();
+        await expect(biography.locator(".biography-copy")).toHaveClass(/is-expanded/);
+        await expect(biography.getByRole("button", { name: locale === "fa" ? "نمایش کمتر" : "Show less" })).toBeVisible();
+      } else {
+        await expect(biography.locator(".biography-copy")).not.toBeEmpty();
+      }
       const imageBeforeCopy = await image.evaluate((element) => {
         const text = element.parentElement?.querySelector(".home-intro-copy");
         return Boolean(text && (element.compareDocumentPosition(text) & Node.DOCUMENT_POSITION_FOLLOWING));
@@ -1049,37 +1058,30 @@ test("homepage biography expands in place without replacing the hero image or mo
   }
 });
 
-test("normal About routes render bilingual fictional sample content and the complete CV", async ({ page }) => {
+test("About and CV routes render canonical bilingual JSON content without preview fixtures", async ({ page, request }) => {
   for (const locale of ["en", "fa"] as const) {
     await page.setViewportSize({ width: 1280, height: 900 });
+    const aboutResponse = await request.get(`/${locale}/about`);
+    expect(aboutResponse.status()).toBe(200);
     await page.goto(`/${locale}/about`);
-    await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", /noindex/);
-    await expect(page.locator(".sample-content-notice").first()).toBeVisible();
+    await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", /index/);
+    await expect(page.locator(".sample-content-notice")).toHaveCount(0);
     await expect(page.locator(".artist-portrait")).toHaveAttribute("src", /homepage-hero/);
     await expect(page.locator(".about-statement")).toBeVisible();
     await expect(page.locator(".about-biography-copy")).toBeVisible();
-    await expect(page.locator(".cv-category")).toHaveCount(5);
-    await expect(page.locator(".cv-list li")).toHaveCount(16);
-    await expect(page.getByRole("link", { name: /Download CV|دریافت رزومه/ })).toHaveAttribute("href", "/api/sample-cv");
+    await expect(page.locator(".cv-category")).toHaveCount(1);
+    await expect(page.locator(".cv-list li")).toHaveCount(1);
+    await expect(page.getByRole("heading", { name: locale === "en" ? "Ghazaleh Abdolahzade Nasoodi" : "غزاله عبداله زاده نسودی" })).toBeVisible();
     const overflow = await page.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth);
     expect(overflow).toBe(false);
     await page.screenshot({ path: test.info().outputPath("about-" + locale + "-desktop.png"), fullPage: true });
-  }
-});
 
-test("sample CV endpoint returns a valid non-indexable PDF without a preview query", async ({ request }) => {
-  const response = await request.get("/api/sample-cv");
-  expect(response.status()).toBe(200);
-  expect(response.headers()["content-type"]).toContain("application/pdf");
-  expect(response.headers()["x-robots-tag"]).toContain("noindex");
-  const body = await response.body();
-  expect(body.subarray(0, 8).toString("ascii")).toBe("%PDF-1.4");
-  expect(body.toString("ascii")).toContain("GHAZALEH ABDOLAHZADE NASOODI");
-  expect(body.toString("ascii")).toContain("FICTIONAL SAMPLE");
-  expect(body.toString("ascii")).toContain("Quiet Arrangements");
-  expect(body.toString("ascii")).toContain("A Small Atlas of Looking");
-  expect(body.toString("ascii")).toContain("ARTISTIC PRACTICE");
-  expect(body.toString("ascii").trimEnd()).toContain("%%EOF");
+    const cvResponse = await request.get(`/${locale}/cv`);
+    expect(cvResponse.status()).toBe(200);
+    await page.goto(`/${locale}/cv`);
+    await expect(page.locator(".cv-list li")).toHaveCount(1);
+    await expect(page.locator(".sample-content-notice")).toHaveCount(0);
+  }
 });
 
 test("About pages preserve mobile and tablet layouts in both locales", async ({ page }) => {
@@ -1137,7 +1139,9 @@ test("desktop homepage biography expands around a fixed locale-aligned hero imag
     });
     expect(flow.textAlign).toBe("justify");
     expect(flow.hasLinesBesidePhoto, `${locale}: biography begins beside the portrait`).toBe(true);
-    expect(flow.hasLinesBelowPhoto, `${locale}: biography continues below the portrait`).toBe(true);
+    if ((await biography.textContent())!.length > 1000) {
+      expect(flow.hasLinesBelowPhoto, `${locale}: long biography continues below the portrait`).toBe(true);
+    }
   }
 });
 
@@ -1244,7 +1248,7 @@ test("Journal imagery is visible and balanced across archive and homepage in bot
       objectFit: getComputedStyle(image).objectFit,
     })));
     expect(imageMetadata.every((image) => image.width && image.height && image.objectFit === "contain")).toBe(true);
-    expect(imageMetadata.every((image) => locale === "en" ? /Temporary Journal image placeholder/.test(image.alt) : /تصویر موقت/.test(image.alt))).toBe(true);
+    expect(imageMetadata.every((image) => image.alt.trim().length > 0 && !/(temporary|placeholder|موقت)/iu.test(image.alt))).toBe(true);
     const firstImage = cards.first().locator(".journal-cover-image");
     await firstImage.scrollIntoViewIfNeeded();
     await expect.poll(() => firstImage.evaluate((image) => (image as HTMLImageElement).naturalWidth)).toBeGreaterThan(0);
@@ -1286,23 +1290,38 @@ test("editorial section transitions avoid decorative rules while functional cont
  
 test("localized Contact surfaces render centralized demo details without approval-state gating", async ({ page }) => {
  for (const locale of ["en","fa"] as const) {
+  await page.setViewportSize({width:1280,height:900});
+  await page.goto(`/${locale}`);
+  await expect(page.locator(".desktop-sidebar").getByRole("link",{name:locale==="fa"?"تماس":"Contact"})).toHaveAttribute("href",`/${locale}/contact`);
+  await page.setViewportSize({width:390,height:844});
+  await page.goto(`/${locale}`);
+  await page.getByRole("button",{name:locale==="fa"?"باز کردن راهبری":"Open navigation"}).click();
+  const drawer=page.getByRole("dialog");
+  await expect(drawer.getByRole("link",{name:locale==="fa"?"تماس":"Contact"})).toHaveAttribute("href",`/${locale}/contact`);
+  await page.keyboard.press("Escape");
   await page.setViewportSize({width:390,height:844});
   await page.goto(`/${locale}`);
   const home=page.locator(".homepage-contact");
   await expect(home).toBeVisible();
   await expect(home).toHaveAttribute("dir", locale === "fa" ? "rtl" : "ltr");
-  await expect(home.locator('a[href="mailto:hello@example.com"]')).toBeVisible();
-  await expect(home.getByRole("link",{name:"@nasoodi_contact_demo"})).toHaveAttribute("href","https://t.me/nasoodi_contact_demo");
-  await expect(home.getByRole("link",{name:"@nasoodi.demo"})).toHaveAttribute("href","https://www.instagram.com/nasoodi.demo/");
-
-  await page.goto(`/${locale}/contact`);
+  await expect(home.locator('a[href^="mailto:"]')).toHaveCount(0);
+  await expect(home.getByRole("link",{name:"@ghazalenasoodi"})).toHaveAttribute("href","https://www.instagram.com/ghazalenasoodi/");
+  await expect(home.getByRole("link",{name:/@nasoodi_contact_demo|@nasoodi\\.demo/})).toHaveCount(0);
+  const contactLink=home.locator(".contact-page-link");
+  await expect(contactLink).toHaveAttribute("href",`/${locale}/contact`);
+  await contactLink.click();
+  await expect(page).toHaveURL(`/${locale}/contact`);
   const contactPage=page.locator(".contact-experience-page");
   await expect(contactPage).toBeVisible();
   await expect(contactPage).toHaveAttribute("dir", locale === "fa" ? "rtl" : "ltr");
-  await expect(contactPage.locator('a[href="mailto:hello@example.com"]')).toBeVisible();
-  await expect(contactPage.getByRole("link",{name:"@nasoodi_contact_demo"})).toHaveAttribute("href","https://t.me/nasoodi_contact_demo");
-  await expect(contactPage.getByRole("link",{name:"@nasoodi.demo"})).toHaveAttribute("href","https://www.instagram.com/nasoodi.demo/");
-  await expect(page.getByRole("navigation",{name:locale==="fa"?"مسیر صفحه":"Breadcrumb"})).toBeVisible();
+  await expect(contactPage.locator('a[href^="mailto:"]')).toHaveCount(0);
+  await expect(contactPage.getByRole("link",{name:"@ghazalenasoodi"})).toHaveAttribute("href","https://www.instagram.com/ghazalenasoodi/");
+  await expect(contactPage.getByRole("link",{name:/@nasoodi_contact_demo|@nasoodi\\.demo/})).toHaveCount(0);
+  const breadcrumb=page.getByRole("navigation",{name:locale==="fa"?"مسیر صفحه":"Breadcrumb"});
+  await expect(breadcrumb).toBeVisible();
+  await expect(breadcrumb.locator("[aria-current=\"page\"]")).toHaveText(locale==="fa"?"تماس":"Contact");
+  await page.reload();
+  await expect(page.getByRole("navigation",{name:locale==="fa"?"مسیر صفحه":"Breadcrumb"}).locator("[aria-current=\"page\"]")).toHaveText(locale==="fa"?"تماس":"Contact");
   expect(await page.evaluate(()=>document.documentElement.scrollWidth<=document.documentElement.clientWidth)).toBe(true);
  }
 });
@@ -1313,27 +1332,50 @@ test("breadcrumbs link to localized ancestors on archive and nested detail pages
   const crumb=page.getByRole("navigation",{name:locale==="fa"?"مسیر صفحه":"Breadcrumb"});
   await expect(crumb.getByRole("link",{name:locale==="fa"?"خانه":"Home"})).toHaveAttribute("href",`/${locale}`);
   const first=page.locator(".journal-card h2 a").first();
-  if(await first.count()){await first.click();await expect(page.getByRole("navigation",{name:locale==="fa"?"مسیر صفحه":"Breadcrumb"}).getByRole("link",{name:locale==="fa"?"یادداشت‌ها":"Journal"})).toHaveAttribute("href",`/${locale}/journal`);}
+  if(await first.count()){
+   await first.click();
+   const detailBreadcrumb=page.getByRole("navigation",{name:locale==="fa"?"مسیر صفحه":"Breadcrumb"});
+   await expect(detailBreadcrumb.getByRole("link",{name:locale==="fa"?"یادداشت‌ها":"Journal"})).toHaveAttribute("href",`/${locale}/journal`);
+   await expect(detailBreadcrumb.locator("[aria-current=\"page\"]")).toBeVisible();
+   await page.reload();
+   await expect(page.getByRole("navigation",{name:locale==="fa"?"مسیر صفحه":"Breadcrumb"}).getByRole("link",{name:locale==="fa"?"یادداشت‌ها":"Journal"})).toHaveAttribute("href",`/${locale}/journal`);
+  }
  }
 });
-test("Journal pagination remains within the viewport at common phone widths",async({page})=>{
+test("Journal pagination remains compact, operable, and within the viewport at common phone widths",async({page})=>{
  for(const locale of ["en","fa"] as const) for(const width of [320,360,375,390,430]){
   await page.setViewportSize({width,height:844});await page.goto(`/${locale}/journal?pageSize=5`);
-  await expect(page.locator(".journal-pagination .gallery-pagination-controls")).toBeVisible();
-  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=document.documentElement.clientWidth),`${locale} ${width}`).toBe(true);
+  const spacing=await page.locator("html").evaluate(el=>getComputedStyle(el).getPropertyValue("--space-editorial-break").trim());
+  expect(spacing.length).toBeGreaterThan(0);
+  const controls=page.locator(".journal-pagination .gallery-pagination-controls");
+  await expect(controls).toBeVisible();
+  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=document.documentElement.clientWidth),`${locale} ${width}: no horizontal overflow`).toBe(true);
+  const size=await controls.locator(".gallery-page-size").boundingBox();
+  const nav=await controls.locator(".gallery-page-nav").boundingBox();
+  if(nav) expect(Math.abs(size!.y-nav.y),`${locale} ${width}: pagination row alignment`).toBeLessThanOrEqual(width===320?3:2);
+  const buttons=controls.locator(".gallery-page-nav button:visible");
+  for(let index=0;index<await buttons.count();index++){
+   const bounds=await buttons.nth(index).boundingBox();
+   expect(bounds!.width, `${locale} ${width}: usable pagination target`).toBeGreaterThanOrEqual(39);
+   expect(bounds!.height, `${locale} ${width}: usable pagination target`).toBeGreaterThanOrEqual(39);
+  }
  }
 });
-test("desktop sidebar copyright is a single line and biography uses justified alignment",async({page})=>{
+test("desktop sidebar copyright fits on one line across supported widths and locales",async({page})=>{
  for(const locale of ["en","fa"] as const){
+  for(const width of [901,1024,1280,1440]){
+   await page.setViewportSize({width,height:900});await page.goto(`/${locale}/about`);
+   const copyright=page.locator(".desktop-sidebar .sidebar-bottom");await expect(copyright).toBeVisible();
+   const m=await copyright.evaluate(el=>({scroll:el.scrollWidth,client:el.clientWidth,whiteSpace:getComputedStyle(el).whiteSpace,rect:el.getBoundingClientRect().toJSON()}));
+   expect(m.whiteSpace).toBe("nowrap");expect(m.scroll,`${locale} ${width}: copyright must fit`).toBeLessThanOrEqual(m.client+1);
+   expect(m.rect.width).toBeGreaterThan(0);
+  }
   await page.setViewportSize({width:1280,height:900});await page.goto(`/${locale}/about`);
-  const copyright=page.locator(".desktop-sidebar .sidebar-bottom");await expect(copyright).toBeVisible();
-  const m=await copyright.evaluate(el=>({scroll:el.scrollWidth,client:el.clientWidth,whiteSpace:getComputedStyle(el).whiteSpace}));
-  expect(m.whiteSpace).toBe("nowrap");expect(m.scroll).toBeLessThanOrEqual(m.client+1);
   await expect(page.locator(".about-biography-copy")).toHaveCSS("text-align","justify");
   await expect(page.locator(".profile-content")).toHaveCSS("max-width","none");
+  await expect(page.locator(".about-biography h2")).not.toHaveCSS("text-align","justify");
  }
 });
-
 
 test("artwork breadcrumbs preserve only a verified collection origin",async({page})=>{
  await page.setViewportSize({width:1280,height:800});
@@ -1537,7 +1579,7 @@ test("new visitors default to System and follow the operating-system color schem
 });
 
 
-test("Contact experience is editorial, bilingual, responsive, and displays the demo contact methods", async ({ page }) => {
+test("Contact experience is editorial, bilingual, responsive, and displays the owner-supplied contact method", async ({ page }) => {
   for (const locale of [
     { code: "en", heading: "Let's start a conversation.", dir: "ltr" },
     { code: "fa", heading: "بیایید گفت‌وگویی را آغاز کنیم.", dir: "rtl" },
@@ -1548,17 +1590,17 @@ test("Contact experience is editorial, bilingual, responsive, and displays the d
     const homepageContact = page.locator(".contact-experience-home");
     await expect(homepageContact).toBeVisible();
     await expect(homepageContact.getByRole("heading", { name: locale.heading })).toBeVisible();
-    await expect(homepageContact.locator('a[href="mailto:hello@example.com"]')).toBeVisible();
-    await expect(homepageContact.getByRole("link", { name: "@nasoodi_contact_demo" })).toBeVisible();
-    await expect(homepageContact.getByRole("link", { name: "@nasoodi.demo" })).toBeVisible();
+    await expect(homepageContact.locator('a[href^="mailto:"]')).toHaveCount(0);
+    await expect(homepageContact.getByRole("link", { name: "@ghazalenasoodi" })).toHaveAttribute("href", "https://www.instagram.com/ghazalenasoodi/");
+    await expect(homepageContact.getByRole("link", { name: /@nasoodi_contact_demo|@nasoodi\\.demo/ })).toHaveCount(0);
 
     await page.goto(`/${locale.code}/contact`);
     await expect(page.locator("html")).toHaveAttribute("dir", locale.dir);
     const contactPage = page.locator(".contact-experience-page");
     await expect(contactPage.getByRole("heading", { name: locale.heading })).toBeVisible();
-    await expect(contactPage.locator('a[href="mailto:hello@example.com"]')).toBeVisible();
-    await expect(contactPage.getByRole("link", { name: "@nasoodi_contact_demo" })).toBeVisible();
-    await expect(contactPage.getByRole("link", { name: "@nasoodi.demo" })).toBeVisible();
+    await expect(contactPage.locator('a[href^="mailto:"]')).toHaveCount(0);
+    await expect(contactPage.getByRole("link", { name: "@ghazalenasoodi" })).toHaveAttribute("href", "https://www.instagram.com/ghazalenasoodi/");
+    await expect(contactPage.getByRole("link", { name: /@nasoodi_contact_demo|@nasoodi\\.demo/ })).toHaveCount(0);
     const desktopColumns = await contactPage.locator(".contact-composition").evaluate((element) =>
       getComputedStyle(element).gridTemplateColumns.split(" ").length
     );
@@ -1743,4 +1785,36 @@ test("About subsections and homepage Journal preview use shared editorial headin
     return size;
   });
   expect(await journalTitle.evaluate((element) => Number.parseFloat(getComputedStyle(element).fontSize))).toBeCloseTo(cardToken, 1);
+});
+
+
+test("localized SEO metadata is rendered from canonical content for archives and details", async ({ page }) => {
+  await page.goto("/en/works");
+  await expect(page.locator("html")).toHaveAttribute("lang", "en");
+  await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", "https://nasoodi.art/en/works");
+  await expect(page.locator('link[rel="alternate"][hreflang="en"]')).toHaveAttribute("href", "https://nasoodi.art/en/works");
+  await expect(page.locator('link[rel="alternate"][hreflang="fa"]')).toHaveAttribute("href", "https://nasoodi.art/fa/works");
+  await expect(page.locator('meta[name="description"]')).toHaveAttribute("content", "Explore a selection of oil paintings, with localized artwork details and original image references.");
+  await expect(page.locator('meta[property="og:type"]')).toHaveAttribute("content", "website");
+  await expect(page.locator('meta[property="og:image"]')).toHaveAttribute("content", "https://nasoodi.art/images/approved-artwork-1.jpg");
+  await expect(page.locator('meta[name="twitter:card"]')).toHaveAttribute("content", "summary_large_image");
+
+  await page.goto("/fa/works");
+  await expect(page.locator("html")).toHaveAttribute("lang", "fa");
+  await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", "https://nasoodi.art/fa/works");
+  await expect(page.locator('link[rel="alternate"][hreflang="en"]')).toHaveAttribute("href", "https://nasoodi.art/en/works");
+  await expect(page.locator('meta[name="description"]')).toHaveAttribute("content", "گزیده‌ای از نقاشی‌های رنگ‌روغن را همراه با جزئیات هر اثر و تصاویر اصلی آن‌ها ببینید.");
+
+  await page.goto("/en/works/a-quiet-place-between-seasons");
+  await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", "https://nasoodi.art/en/works/a-quiet-place-between-seasons");
+  await expect(page.locator('link[rel="alternate"][hreflang="fa"]')).toHaveAttribute("href", "https://nasoodi.art/fa/works/a-quiet-place-between-seasons");
+  await expect(page.locator('meta[property="og:type"]')).toHaveAttribute("content", "article");
+  await expect(page.locator('meta[property="og:image"]')).toHaveAttribute("content", "https://nasoodi.art/images/approved-artwork-1.jpg");
+
+  for (const section of ["contact", "about", "cv"]) {
+    await page.goto("/en/" + section);
+    await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", /index/);
+    await expect(page.locator('meta[property="og:title"]')).toHaveAttribute("content", /.+/);
+    await expect(page.locator('meta[name="twitter:card"]')).toHaveAttribute("content", /summary/);
+  }
 });

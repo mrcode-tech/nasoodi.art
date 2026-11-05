@@ -1,6 +1,7 @@
 "use client";
 
 import { useSyncExternalStore } from "react";
+import { useTranslations } from "next-intl";
 import { useTheme } from "next-themes";
 import { Button } from "@/components/ui/button";
 import {
@@ -10,7 +11,7 @@ import {
   DropdownMenuRadioItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import type { Locale } from "@/lib/site";
+import { getLocaleDirection, type Locale } from "@/types/locale";
 
 type ThemeMode = "light" | "dark" | "system";
 
@@ -69,13 +70,13 @@ export function ThemeSelector({ locale }: { locale: Locale }) {
     getServerMountedSnapshot,
   );
 
-  const labels: Record<ThemeMode, string> =
-    locale === "fa"
-      ? { light: "روشن", dark: "تیره", system: "سیستم" }
-      : { light: "Light", dark: "Dark", system: "System" };
-
-  const accessibleName =
-    locale === "fa" ? "انتخاب پوسته" : "Choose theme";
+  const t = useTranslations();
+  const labels: Record<ThemeMode, string> = {
+    light: t("themeLight"),
+    dark: t("themeDark"),
+    system: t("themeSystem"),
+  };
+  const accessibleName = t("chooseTheme");
 
   // The server cannot know the user's persisted/system theme. Render the
   // same deterministic System state on the server and during first hydration.
@@ -102,8 +103,8 @@ export function ThemeSelector({ locale }: { locale: Locale }) {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent
-          align={locale === "fa" ? "start" : "end"}
-          dir={locale === "fa" ? "rtl" : "ltr"}
+          align={getLocaleDirection(locale) === "rtl" ? "start" : "end"}
+          dir={getLocaleDirection(locale)}
           aria-label={accessibleName}
         >
           <DropdownMenuRadioGroup

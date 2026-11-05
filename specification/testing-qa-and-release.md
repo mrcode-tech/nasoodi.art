@@ -93,7 +93,7 @@ For the responsive artwork discovery experience, add/verify tests for:
 - Persian RTL and English LTR direction, icon orientation, movement meaning, keyboard sequence, and unchanged artwork order.
 - Shared Artwork Viewer activation, context-scoped previous/next, browser history, close behavior, and focus restoration.
 - Artwork images retaining intrinsic proportions without crop/filter/mirroring; layout stability and lazy loading.
-- Homepage Journal preview selecting no more than two newest eligible published entries across article/event types, correct publication-date ordering, and Explore Journal destination.
+- Homepage Journal preview follows the current approved design contract for the single latest editorial item and Explore Journal destination; verify publication-date ordering across Journal and event types.
 - Journal archive/detail preserving their existing editorial structure.
 
 Do not mark the carousel component or visual design as implemented/verified merely because the specification and wireframes exist. Record actual CI run, viewport/locale screenshots, manual review, and owner approval separately.
@@ -102,3 +102,10 @@ Do not mark the carousel component or visual design as implemented/verified mere
 ## Shared responsive typography regression coverage — 2026-11-03
 
 Follow [shared-responsive-typography-system.md](./shared-responsive-typography-system.md) for the complete type-role and viewport matrix. Playwright must measure rendered text line boxes for the Persian homepage artist name and homepage Contact heading at 390, 430, 768, 1280, and 1440px; verify natural wrapping without overflow at 320 and 360px; assert computed font sizes remain within the shared role tokens; and verify English hierarchy, RTL/LTR direction, and both theme modes. A passing line-count test is necessary but does not replace screenshot inspection for visual balance.
+
+
+## International content/SEO regression gates — 2026-11-05
+
+The CI workflow runs the TypeScript-AST message audit, typecheck, content publication tests, production build, asset inventory, Playwright browser/responsive tests, and production-server smoke test. URL-driven client pagination (`useSearchParams`) must be placed under a React Suspense boundary on Galleries and Journal routes for Next.js 16 static rendering.
+
+The SEO Playwright suite covers both locale archives and About/CV/Contact routes, document language/direction, canonical URLs, localized hreflang, robots/description metadata, stable-ID detail alternates, sitemap inclusion, unsupported locale 404s, and unknown content 404s. Extend rendered-HTML assertions when adding page types or metadata fields.
