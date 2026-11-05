@@ -4,7 +4,7 @@
 **Locales:** Persian (fa) and English (en)
 
 ## Editorial authority
-The artist is authoritative for her name, artwork titles, artist statement, biography, series, professional history, image selection, and real public contact details. Distinguish verified facts, artist-authored text, approved translation, editorial draft, and development-only placeholder. Only approved factual artist content may be indexed. Owner-authorized demo-phase exception (2026-11-03): fictional email/social Contact destinations may be rendered on the homepage and Contact routes without approval gates, but Contact routes must remain noindex and outside the sitemap until replaced with real details. AI may assist with proofreading or translation drafts, but artist/human review is required before publication.
+The artist is authoritative for her name, artwork titles, artist statement, biography, series, professional history, image selection, and public contact details. Keep factual records accurate and do not invent credentials, dates, exhibitions, awards, or contact channels. Initial descriptive editorial copy may be authored as the site's normal editable content, but do not create a parallel sample/preview store or attach verification labels to it. AI may assist with proofreading or translation drafts; artist/human review is required for artist-authored statements and translations.
 
 ## Locale behavior
 - Persian documents use lang=fa and dir=rtl; English documents use lang=en and dir=ltr.
@@ -35,8 +35,8 @@ Use calm, precise, personal editorial language. Avoid generic art-world clichés
 - Works: image rights, stable slug, title or approved untitled treatment, alt text.
 - Artwork: verified metadata only; enquiry only if configured.
 - About: separate approved statement and biography.
-- CV: sourced, verified entries; omit empty categories.
-- Contact: use owner-approved real destinations for public launch. During the authorized demo phase, use the centralized fictional Contact fixture without approval-state gating; keep the route noindex and outside the sitemap. Never imply demo accounts are real, verified, or monitored.
+- CV: owner-supplied factual entries only; omit categories with no supplied records.
+- Contact: use only owner-supplied destinations from the canonical Contact JSON. Localized metadata and sitemap eligibility follow that record; never invent contact methods.
 
 ## Review checklist
 Review artist facts/spelling, Persian grammar and punctuation, English grammar/transliteration, artwork identity and metadata, image rights/crop, alt text, SEO metadata, social preview, and responsive layouts. Record reviewer, date, and approval scope. If rights or facts are disputed, unpublish until resolved.
