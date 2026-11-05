@@ -1505,3 +1505,46 @@ html[lang="fa"] .artwork-viewer-info h2 {
   .editorial-section { padding-block: var(--space-spacious) calc(var(--space-spacious) * 1.2); }
   .contact-page-link-wrap { margin-top: var(--space-compact); }
 }
+
+
+/* Language and appearance selectors share one trigger system in the sidebar. */
+.language-selector { display: inline-flex; align-items: center; }
+.language-code-icon {
+  display: inline-flex;
+  width: 1rem;
+  min-width: 1rem;
+  height: 1rem;
+  align-items: center;
+  justify-content: center;
+  color: currentColor;
+  font-size: .56rem;
+  font-weight: 800;
+  letter-spacing: -.035em;
+  line-height: 1;
+}
+.selector-chevron {
+  width: .9rem;
+  height: .9rem;
+  flex: 0 0 auto;
+}
+.language-trigger { gap: .5rem; }
+@media (max-width: 900px) {
+  .mobile-drawer .drawer-setting-row .language-selector,
+  .mobile-drawer .drawer-setting-row .theme-selector {
+    display: inline-flex;
+    width: auto;
+    min-width: 5.5rem;
+    align-items: center;
+    justify-content: flex-end;
+  }
+  .mobile-drawer .drawer-setting-row .language-trigger,
+  .mobile-drawer .drawer-setting-row .theme-trigger {
+    width: 5.5rem;
+    min-width: 5.5rem;
+    min-height: 2.5rem;
+    box-sizing: border-box;
+    justify-content: space-between;
+    padding: .35rem .65rem;
+    gap: .35rem;
+  }
+}
