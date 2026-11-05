@@ -1302,7 +1302,9 @@ test("localized Contact surfaces render centralized demo details without approva
   await expect(contactPage.locator('a[href="mailto:hello@example.com"]')).toBeVisible();
   await expect(contactPage.getByRole("link",{name:"@nasoodi_contact_demo"})).toHaveAttribute("href","https://t.me/nasoodi_contact_demo");
   await expect(contactPage.getByRole("link",{name:"@nasoodi.demo"})).toHaveAttribute("href","https://www.instagram.com/nasoodi.demo/");
-  await expect(page.getByRole("navigation",{name:locale==="fa"?"مسیر صفحه":"Breadcrumb"})).toBeVisible();
+  const breadcrumb=page.getByRole("navigation",{name:locale==="fa"?"مسیر صفحه":"Breadcrumb"});
+  await expect(breadcrumb).toBeVisible();
+  await expect(breadcrumb.locator("[aria-current=\"page\"]")).toHaveText(locale==="fa"?"تماس":"Contact");
   expect(await page.evaluate(()=>document.documentElement.scrollWidth<=document.documentElement.clientWidth)).toBe(true);
  }
 });
