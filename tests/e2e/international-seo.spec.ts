@@ -103,3 +103,52 @@ test("unknown localized content slugs return a real 404 instead of indexable sof
     expect(response.status()).toBe(404);
   }
 });
+
+
+test("rendered HTML serves localized editorial content and metadata for every canonical page type", async ({ page, request }) => {
+  const routes = [
+    { path: "/en", locale: "en", structuredType: "Person" },
+    { path: "/fa", locale: "fa", structuredType: "Person" },
+    { path: "/en/about", locale: "en", structuredType: "Person" },
+    { path: "/fa/about", locale: "fa", structuredType: "Person" },
+    { path: "/en/contact", locale: "en", structuredType: "Person" },
+    { path: "/fa/contact", locale: "fa", structuredType: "Person" },
+    { path: "/en/galleries", locale: "en", structuredType: "Person" },
+    { path: "/fa/galleries", locale: "fa", structuredType: "Person" },
+    { path: "/en/works", locale: "en", structuredType: "Person" },
+    { path: "/fa/works", locale: "fa", structuredType: "Person" },
+    { path: "/en/works/a-quiet-place-between-seasons", locale: "en", structuredType: "VisualArtwork" },
+    { path: "/fa/works/a-quiet-place-between-seasons", locale: "fa", structuredType: "VisualArtwork" },
+    { path: "/en/journal", locale: "en", structuredType: "Person" },
+    { path: "/fa/journal", locale: "fa", structuredType: "Person" },
+    { path: "/en/journal/between-layers-studio-notes", locale: "en", structuredType: "Article" },
+    { path: "/fa/journal/between-layers-studio-notes", locale: "fa", structuredType: "Article" },
+    { path: "/en/journal/open-studio-colour-and-stillness", locale: "en", structuredType: "Event" },
+    { path: "/fa/journal/open-studio-colour-and-stillness", locale: "fa", structuredType: "Event" },
+    { path: "/en/galleries/quiet-intervals", locale: "en", structuredType: "CollectionPage" },
+    { path: "/fa/galleries/quiet-intervals", locale: "fa", structuredType: "CollectionPage" },
+  ];
+
+  for (const route of routes) {
+    const response = await request.get(route.path);
+    expect(response.status(), route.path).toBe(200);
+
+    await page.goto(route.path);
+    await expect(page.locator("html")).toHaveAttribute("lang", route.locale);
+    await expect(page.locator("html")).toHaveAttribute("dir", route.locale === "fa" ? "rtl" : "ltr");
+    await expect(page.locator("h1").first()).toBeVisible();
+    await expect(page.locator('meta[name="description"]')).toHaveAttribute("content", /.+/);
+    await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", "https://nasoodi.art" + route.path);
+    await expect(page.locator('meta[property="og:title"]')).toHaveAttribute("content", /.+/);
+    await expect(page.locator('meta[name="twitter:card"]')).toHaveAttribute("content", /summary/);
+
+    const renderedText = await page.locator("main").innerText();
+    expect(renderedText.trim().length, route.path + " must contain server-rendered editorial text").toBeGreaterThan(30);
+
+    const jsonLd = await page.locator('script[type="application/ld+json"]').allTextContents();
+    expect(jsonLd.length, route.path + " must emit structured data").toBeGreaterThan(0);
+    const serialized = JSON.stringify(jsonLd.map((value) => JSON.parse(value)));
+    expect(serialized).toContain('"@type":"Person"');
+    expect(serialized).toContain('"@type":"' + route.structuredType + '"');
+  }
+});

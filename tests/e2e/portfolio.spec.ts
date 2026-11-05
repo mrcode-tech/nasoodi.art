@@ -971,7 +971,7 @@ test("About is a localized primary navigation destination on desktop and mobile"
   await expect(desktopAbout).toHaveAttribute("href", "/en/about");
   await expect(desktopAbout).toHaveAttribute("aria-current", "page");
   await expect(page.getByRole("heading", { name: "Ghazaleh Abdolahzade Nasoodi" })).toBeVisible();
-  await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", /noindex/);
+  await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", /index/);
   await expect(page.locator(".about-statement")).toBeVisible();
   await expect(page.locator(".about-biography-copy")).toBeVisible();
 
