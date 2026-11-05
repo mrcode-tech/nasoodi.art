@@ -1,111 +1,31 @@
 # Testing, Visual QA, and Release Acceptance
 
-**Status:** Proposed verification contract  
-**Working branch:** feature
+## 1. Verification principles
 
-## Verification principles
-A phase is complete only with implementation, content, accessibility, visual, and test evidence. A successful build alone is not proof of portfolio readiness. Never fabricate test results, screenshots, CI status, artist approval, or production behavior.
+CI verifies application behavior and code quality. It does not decide whether editorial data is true, artist-approved, verified, or ready for publication. Content supplied in the canonical JSON files is rendered as stored.
 
-## Test layers
-**Static:** ESLint, TypeScript noEmit, production build, dependency/security review.
+## 2. Test layers
 
-**Unit:** artwork/series schema, publication and rights gates, locale fallback, metadata omission, image record validation, slug uniqueness and ordering.
+- Static: ESLint, TypeScript, translation-key parity, and source audits.
+- Unit: pure formatting, route, URL/path safety, pagination, and repository behavior.
+- Integration: localized routes, page rendering, metadata, and JSON-LD.
+- Browser: English/Persian, LTR/RTL, responsive layouts, contact links, CV entries, PDF download, Journal and gallery navigation.
+- Build/smoke: production build and server response.
 
-**Component:** header/mobile navigation/locale switcher, artwork cards and metadata, grid ordering, image loading/fallback/alt, optional lightbox, optional contact form.
+Tests must reflect the actual canonical JSON data. Do not assert that CV, Contact, exhibitions, awards, publications, or Journal content is hidden until an approval or verification flag is set. Do not add editorial validation rules to tests.
 
-**Integration/routes:** public routes in each locale, lang/dir, canonical and alternate metadata, sitemap/robots, unknown artwork 404, draft/archived exclusion, contact provider in safe test mode.
+## 3. Visual QA
 
-**End-to-end:** Home → Works → artwork → About → Contact; locale switching; keyboard gallery; dialog behavior if present; valid/invalid form in test environment; no fake data; mobile navigation and overflow.
+Review both locales and common desktop, tablet, mobile, and short-height viewports. Check Persian shaping, RTL composition, artwork display, responsive reflow, focus behavior, and absence of horizontal overflow. Capture screenshots for materially changed surfaces.
 
-**Accessibility:** automated core-page checks, manual keyboard, screen-reader spot checks in both locales, reduced-motion, zoom/reflow, focus, and dialog semantics.
+## 4. Technical safety
 
-## Visual regression
-Capture Home, Works, an artwork detail, About, Contact, and populated CV where applicable:
-- Desktop 1440×900.
-- Laptop 1280×800.
-- Tablet 768×1024.
-- Mobile 390×844 and 360×800.
-- Short-height and landscape views.
+Keep checks for valid application behavior, safe links and asset paths, stable route resolution, and graceful optional fields. These are technical safeguards, not editorial data-validation gates.
 
-Review both locales. Assess fonts/Persian shaping, palette, shared shell, hero/fallback, artwork fidelity/crop/aspect ratio, captions, metadata, responsive reflow, loading and error states. Pixel snapshots do not replace human review of paintings because browser and image encoder differences occur. Compare derivatives with source masters and request artist approval.
+## 5. CI evidence
 
-Store screenshots/reports as CI artifacts where supported. Include commit, route, locale, viewport, and environment in the manifest.
+Record the exact commit SHA, workflow URL, conclusion, and failed step details. Distinguish automated CI results from visual review. Do not claim a check passed unless the corresponding run completed successfully.
 
-## CI expectations
-The documented package scripts are lint, typecheck, and build. Inspect actual workflow files before claiming additional tests exist. Extend CI as suites are implemented. A feature-branch pipeline should install reproducibly from lockfile, run static checks and existing tests, run accessibility smoke checks where configured, build production, run production smoke tests, and upload diagnostic artifacts. Use synthetic fixtures that cannot be mistaken for published artist content.
+## 6. Release workflow
 
-The repository also carries a Vercel Git deployment allowlist in `vercel.json`: the wildcard is disabled and only `stage` and `main` are enabled. GitHub Actions validation intentionally continues to run on `feature`, `stage`, and `main`; CI validation is not a deployment. The `npm test` suite must verify this policy so a future configuration change cannot silently enable preview deployment from the feature branch or another branch. The repository check verifies committed configuration; it does not replace checking the Vercel project's dashboard-level Production Branch and Git settings.
-
-## Content and rights gate
-Every public artwork needs confirmed source/rights, artist approval for image/crop/title/caption/metadata, approved translations, reviewed alt text, and no private metadata. No test, placeholder, or invented records in production.
-
-## Release gates
-Technical: lint, typecheck, relevant tests, build, feature CI, no critical security/accessibility issues, production-like route smoke tests.
-
-Visual/content: approved assets and copy, image fidelity reviewed, both locales reviewed, responsive screenshots approved, SEO/structured data validated, contact actions verified.
-
-Authorization: artist/site owner explicitly approves public content; deployment and merge target are separately authorized. Passing tests does not authorize merge or deployment.
-
-## Completion report
-Record status, commit SHA/paths, commands and actual results, CI run URL/conclusion, screenshots/artifacts, outstanding approvals, known limitations, and next dependency.
-
-## Visual design-engineering verification
-In addition to functional checks, release QA must follow design-engineering-skills.md and design-direction-and-system-refinement.md.
-
-Required visual evidence:
-- Desktop, tablet, mobile, and short-height screenshots.
-- Persian RTL and English LTR captures.
-- Normal and reduced-motion behavior.
-- Navigation, gallery filters, Journal filters, drawers, focus, and touch states.
-- Artwork fidelity comparison against approved source files.
-- Long titles, sparse content, empty Journal/event states, and mixed artwork ratios.
-
-A build passing lint/typecheck/build does not establish visual quality. Record what was actually inspected, the viewport/locale, findings, and unresolved artist approvals. Do not claim visual verification without rendered evidence.
-
-## Mobile navigation regression coverage — 2026-10-30
-
-The automated Chromium suite now covers drawer dismissal by close control, backdrop, route selection, and Escape; focus restoration to the trigger; keyboard focus trapping at both ends; RTL physical-left placement; and usability at a 320×568 short-height viewport. The same suite checks that an empty CV route remains unpublished and is not linked from either locale's navigation.
-
-Passing evidence: [GitHub Actions run 41084829442](https://github.com/mrcode-tech/nasoodi.art/actions/runs/41084829442), commit `71749ae10e9de3f9a5161657450471b56c1d1ca8`, 22 Chromium E2E tests and 24 content tests. These tests do not replace manual assistive-technology or real-device review.
-
-## Vercel deployment branch policy regression guard — 2026-10-30
-
-Added `scripts/verify-vercel-deployment-policy.mjs` and wired it into `npm test`. The guard parses the committed `vercel.json` and fails unless:
-- wildcard branch deployment is disabled;
-- `stage` and `main` are explicitly enabled;
-- `feature` resolves to disabled; and
-- the only branches explicitly enabled are `stage` and `main`.
-
-The GitHub Actions workflow continues to validate `feature`, `stage`, and `main`; this check protects the separate Vercel deployment allowlist. It does not claim to inspect or change Vercel dashboard settings. CI verification for the new guard must be recorded against the resulting feature-branch commit before treating this regression coverage as verified.
-
-
-## Portfolio asset audit CI artifact — 2026-10-30
-
-CI now runs `npm run audit:assets` after the production build and uploads `asset-audit/manifest.json` alongside browser screenshots and diagnostics. The manifest records candidate path, detected PNG/JPEG format, pixel dimensions, aspect ratio, byte size, SHA-256, and explicit approval-required/non-publishable status. Missing or invalid image candidates fail CI. The audit is not a rights or artist-approval check and does not generate public derivatives.
-
-
-## Artwork carousel and homepage Journal preview QA contract — 2026-10-31
-
-For the responsive artwork discovery experience, add/verify tests for:
-- Homepage Selected Works responsive item sizing and controls at wide desktop, desktop with sidebar, tablet, 390px mobile, 320px narrow mobile, landscape, and short-height viewports.
-- Collection carousel with one, two, and multiple artworks; disabled boundaries; canonical curated order; and no autoplay.
-- Keyboard-only navigation, visible focus not clipped by overflow, accessible carousel/slide names, and position announcements.
-- Persian RTL and English LTR direction, icon orientation, movement meaning, keyboard sequence, and unchanged artwork order.
-- Shared Artwork Viewer activation, context-scoped previous/next, browser history, close behavior, and focus restoration.
-- Artwork images retaining intrinsic proportions without crop/filter/mirroring; layout stability and lazy loading.
-- Homepage Journal preview follows the current approved design contract for the single latest editorial item and Explore Journal destination; verify publication-date ordering across Journal and event types.
-- Journal archive/detail preserving their existing editorial structure.
-
-Do not mark the carousel component or visual design as implemented/verified merely because the specification and wireframes exist. Record actual CI run, viewport/locale screenshots, manual review, and owner approval separately.
-
-
-## Shared responsive typography regression coverage — 2026-11-03
-
-Follow [shared-responsive-typography-system.md](./shared-responsive-typography-system.md) for the complete type-role and viewport matrix. Playwright must measure rendered text line boxes for the Persian homepage artist name and homepage Contact heading at 390, 430, 768, 1280, and 1440px; verify natural wrapping without overflow at 320 and 360px; assert computed font sizes remain within the shared role tokens; and verify English hierarchy, RTL/LTR direction, and both theme modes. A passing line-count test is necessary but does not replace screenshot inspection for visual balance.
-
-
-## International content/SEO regression gates — 2026-11-05
-
-The CI workflow runs the TypeScript-AST message audit, typecheck, content publication tests, production build, asset inventory, Playwright browser/responsive tests, and production-server smoke test. URL-driven client pagination (`useSearchParams`) must be placed under a React Suspense boundary on Galleries and Journal routes for Next.js 16 static rendering.
-
-The SEO Playwright suite covers both locale archives and About/CV/Contact routes, document language/direction, canonical URLs, localized hreflang, robots/description metadata, stable-ID detail alternates, sitemap inclusion, unsupported locale 404s, and unknown content 404s. Extend rendered-HTML assertions when adding page types or metadata fields.
+Work only on the authorized branch and follow the repository's branch/deployment permissions. CI completion does not itself authorize merging or deployment.
