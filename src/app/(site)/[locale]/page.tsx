@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { getTranslations } from "next-intl/server";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 import { ArtworkExperience } from "@/components/artwork-experience";
 import { CollectionCarousel } from "@/components/collection-carousel";
 import { BiographyDisclosure } from "@/components/biography-disclosure";
@@ -14,11 +14,11 @@ import { artworks,galleries,journalEntries,homepageSelection,getPublicArtworks,g
 import { isLocale,pagePath } from "@/lib/site";
 export const revalidate = 60;
 type Props={params:Promise<{locale:string}>};
-export async function generateMetadata({params}:Props):Promise<Metadata>{const {locale}=await params;if(!isLocale(locale))return {};const t=await getTranslations({ locale });
+export async function generateMetadata({params}:Props):Promise<Metadata>{const {locale}=await params;if(!isLocale(locale))return {};setRequestLocale(locale);const t=await getTranslations({ locale });
  return {title:t("artistName"),
  description:t("homeDescription"),
  alternates:{canonical:pagePath(locale),languages:{fa:"/fa",en:"/en"}}};}
-export default async function Home({params}:Props){const {locale}=await params;if(!isLocale(locale))notFound();const t=await getTranslations({ locale });const biography=aboutPreviewFixture.biography[locale];
+export default async function Home({params}:Props){const {locale}=await params;if(!isLocale(locale))notFound();setRequestLocale(locale);const t=await getTranslations({ locale });const biography=aboutPreviewFixture.biography[locale];
  const hero=getHomepageHero(artworks,homepageSelection,locale),heroImage=hero?primaryImageFor(hero):undefined;
  const heroAlt=heroImage?.alt[locale] ?? (t("heroAlt"));
  const works=getHomepageFeaturedArtworks(artworks,homepageSelection,locale),sets=getHomepageFeaturedGalleries(galleries,artworks,homepageSelection,locale);
