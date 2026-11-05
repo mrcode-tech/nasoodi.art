@@ -846,10 +846,6 @@ html[dir="rtl"] .home-intro.has-hero > .hero-artwork {
   text-justify: inter-word;
   hyphens: auto;
 }
-.page-content p:not(.eyebrow) {
-  text-align: justify;
-  text-justify: inter-word;
-}
 @media (max-width: 900px) {
   .home-intro.has-hero > .hero-artwork {
     float: none;
