@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { getOpenGraphLocale, otherLocale, pagePath, type Locale } from "../../types/locale";
+import { getOpenGraphLocale, pagePath, type Locale } from "../../types/locale";
 
 const siteOrigin = "https://nasoodi.art";
 
@@ -8,7 +8,7 @@ export type LocalizedMetadataInput = {
   path: string;
   title: string;
   description?: string;
-  alternatePath?: string;
+  alternatePaths?: Partial<Record<Locale, string>>;
   indexable: boolean;
   openGraphType?: "website" | "article";
   images?: readonly string[];
@@ -21,9 +21,11 @@ export type LocalizedMetadataInput = {
  */
 export function createLocalizedMetadata(input: LocalizedMetadataInput): Metadata {
   const canonical = new URL(pagePath(input.locale, input.path), siteOrigin).toString();
-  const alternate = input.alternatePath
-    ? new URL(input.alternatePath, siteOrigin).toString()
-    : undefined;
+  const alternateEntries = Object.entries(input.alternatePaths ?? {})
+    .filter(([target, path]) => target !== input.locale && Boolean(path)) as [Locale, string][];
+  const alternateUrls = Object.fromEntries(
+    alternateEntries.map(([target, path]) => [target, new URL(path, siteOrigin).toString()]),
+  ) as Partial<Record<Locale, string>>;
   const images = input.images?.filter(Boolean).map((image) => new URL(image, siteOrigin).toString());
   const description = input.description?.trim() || undefined;
 
@@ -32,8 +34,8 @@ export function createLocalizedMetadata(input: LocalizedMetadataInput): Metadata
     ...(description ? { description } : {}),
     alternates: {
       canonical,
-      ...(alternate
-        ? { languages: { [input.locale]: canonical, [otherLocale(input.locale)]: alternate } }
+      ...(alternateEntries.length
+        ? { languages: { [input.locale]: canonical, ...alternateUrls } }
         : {}),
     },
     robots: { index: input.indexable, follow: true },
@@ -42,14 +44,13 @@ export function createLocalizedMetadata(input: LocalizedMetadataInput): Metadata
   if (!input.indexable) return { ...metadata, openGraph: null, twitter: null };
 
   const localeTag = getOpenGraphLocale(input.locale);
-  const alternateLocaleTag = getOpenGraphLocale(otherLocale(input.locale));
   const commonOpenGraph = {
     title: input.title,
     ...(description ? { description } : {}),
     url: canonical,
     siteName: "Nasoodi.art",
     locale: localeTag,
-    ...(alternate ? { alternateLocale: [alternateLocaleTag] } : {}),
+    ...(alternateEntries.length ? { alternateLocale: alternateEntries.map(([target]) => getOpenGraphLocale(target)) } : {}),
     ...(images?.length ? { images } : {}),
   };
 

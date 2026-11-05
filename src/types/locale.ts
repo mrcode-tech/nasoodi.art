@@ -2,10 +2,10 @@ export const locales = ["fa", "en"] as const;
 export type Locale = (typeof locales)[number];
 export type Localized = Partial<Record<Locale, string>>;
 
-export const localeAlternates = {
-  fa: "en",
-  en: "fa",
-} as const satisfies Record<Locale, Locale>;
+export const localeNames = {
+  fa: "فارسی",
+  en: "English",
+} as const satisfies Record<Locale, string>;
 
 export const localeDirections = {
   fa: "rtl",
@@ -17,13 +17,15 @@ export const localeOpenGraphTags = {
   en: "en_US",
 } as const satisfies Record<Locale, string>;
 
+export const getLocaleName = (locale: Locale) => localeNames[locale];
 export const getLocaleDirection = (locale: Locale) => localeDirections[locale];
 export const getOpenGraphLocale = (locale: Locale) => localeOpenGraphTags[locale];
+export const getOtherLocales = (locale: Locale) => locales.filter((candidate) => candidate !== locale);
 
 export const isLocale = (value: string): value is Locale =>
   locales.includes(value as Locale);
 
-export const otherLocale = (locale: Locale): Locale => localeAlternates[locale];
+export const otherLocale = (locale: Locale): Locale => getOtherLocales(locale)[0] ?? locale;
 
 export const pagePath = (locale: Locale, path = "") => {
   const normalizedPath = path.replace(/^\/+/, "");

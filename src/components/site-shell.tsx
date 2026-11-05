@@ -4,7 +4,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 import { alternatePathFor } from "@/lib/routing/alternate-path";
-import { pagePath, getLocaleDirection, type Locale } from "@/types/locale";
+import { pagePath, getLocaleDirection, getLocaleName, locales, type Locale } from "@/types/locale";
 import { Button } from "@/components/ui/button";
 import { Sidebar, SidebarContent, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar";
 import { Sheet, SheetClose, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
@@ -13,24 +13,24 @@ import { JournalAnnouncement, type AnnouncementEvent } from "@/components/journa
 import { ThemeSelector } from "@/components/theme-selector";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
-function LanguageSelector({ locale, alternate, pathname, label, onNavigate }: { locale: Locale; alternate: string; pathname: string; label: string; onNavigate?: () => void }) {
+function LanguageSelector({ locale, alternates, pathname, label, onNavigate }: { locale: Locale; alternates: Partial<Record<Locale, string>>; pathname: string; label: string; onNavigate?: () => void }) {
   const t = useTranslations();
-  const englishHref = locale === "en" ? pathname : alternate;
-  const persianHref = locale === "fa" ? pathname : alternate;
   const router = useRouter();
-  const preserveGalleryState = (event: React.MouseEvent<HTMLAnchorElement>) => {
-    if (!/^\/(fa|en)\/galleries$/.test(pathname)) return;
+  const preserveGalleryState = (event: React.MouseEvent<HTMLAnchorElement>, targetHref: string) => {
+    if (!locales.some((candidate) => pathname === pagePath(candidate, "galleries"))) return;
     const current = new URLSearchParams(window.location.search);
     const query = new URLSearchParams();
     for (const key of ["page", "pageSize"]) { const value = current.get(key); if (value) query.set(key, value); }
     const suffix = query.toString();
-    if (suffix) { event.preventDefault(); router.push(alternate + "?" + suffix); onNavigate?.(); }
+    if (suffix) { event.preventDefault(); router.push(targetHref + "?" + suffix); onNavigate?.(); }
   };
   return <DropdownMenu>
-    <DropdownMenuTrigger asChild><Button variant="ghost" size="sm" aria-label={label}><span>{locale === "fa" ? t("languagePersian") : t("languageEnglish")}</span><span className="language-chevron" aria-hidden="true">⌄</span></Button></DropdownMenuTrigger>
+    <DropdownMenuTrigger asChild><Button variant="ghost" size="sm" aria-label={label}><span>{getLocaleName(locale)}</span><span className="language-chevron" aria-hidden="true">⌄</span></Button></DropdownMenuTrigger>
     <DropdownMenuContent align={getLocaleDirection(locale) === "rtl" ? "start" : "end"} dir={getLocaleDirection(locale)} aria-label={label}>
-      <DropdownMenuItem asChild><Link href={englishHref} hrefLang="en" lang="en" aria-current={locale === "en" ? "page" : undefined} onClick={(event) => { preserveGalleryState(event); onNavigate?.(); }}>{t("languageEnglish")}{locale === "en" ? " · " + t("current") : ""}</Link></DropdownMenuItem>
-      <DropdownMenuItem asChild><Link href={persianHref} hrefLang="fa" lang="fa" aria-current={locale === "fa" ? "page" : undefined} onClick={(event) => { preserveGalleryState(event); onNavigate?.(); }}>{t("languagePersian")}{locale === "fa" ? " · " + t("currentFa") : ""}</Link></DropdownMenuItem>
+      {locales.map((target) => {
+        const href = target === locale ? pathname : alternates[target] ?? pagePath(target);
+        return <DropdownMenuItem asChild key={target}><Link href={href} hrefLang={target} lang={target} aria-current={locale === target ? "page" : undefined} onClick={(event) => { preserveGalleryState(event, href); onNavigate?.(); }}>{getLocaleName(target)}{locale === target ? " · " + t("current") : ""}</Link></DropdownMenuItem>;
+      })}
     </DropdownMenuContent>
   </DropdownMenu>;
 }
@@ -52,7 +52,7 @@ export function SiteShell({ locale, children, announcement }: { locale: Locale; 
     return () => desktopQuery.removeEventListener("change", closeMobileNavigation);
   }, []);
   const drawerHomeRef = useRef<HTMLAnchorElement>(null);
-  const alternate = alternatePathFor(pathname, locale);
+  const alternatePaths = Object.fromEntries(locales.filter((target) => target !== locale).map((target) => [target, alternatePathFor(pathname, locale, target)])) as Partial<Record<Locale, string>>;
   const links: [string, string, string][] = [
     ["home", labels.home, pagePath(locale)], ["about", labels.about, pagePath(locale, "about")],
     ["works", labels.works, pagePath(locale, "works")], ["galleries", labels.galleries, pagePath(locale, "galleries")],
@@ -123,7 +123,7 @@ export function SiteShell({ locale, children, announcement }: { locale: Locale; 
             <div className="drawer-flex-spacer" aria-hidden="true" />
             <div className="drawer-bottom">
               <div className="drawer-settings" dir={getLocaleDirection(locale)}>
-                <div className="drawer-setting-row"><span className="language-label">{labels.language}</span><LanguageSelector locale={locale} alternate={alternate} pathname={pathname} label={labels.language} onNavigate={() => setMobileOpen(false)}/></div>
+                <div className="drawer-setting-row"><span className="language-label">{labels.language}</span><LanguageSelector locale={locale} alternates={alternatePaths} pathname={pathname} label={labels.language} onNavigate={() => setMobileOpen(false)}/></div>
                 <div className="drawer-setting-row"><span className="language-label">{labels.appearance}</span><ThemeSelector locale={locale}/></div>
               </div>
               <div className="drawer-copyright" dir="ltr"><span>nasoodi.art</span><span>© {new Date().getFullYear()}</span></div>

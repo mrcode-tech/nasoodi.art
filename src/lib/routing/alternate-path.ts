@@ -10,8 +10,9 @@ import { getPublicJournal } from "../content/journal";
  * Static editorial shells exist in both locales; content routes fall back to the
  * target locale home rather than connecting unrelated or unpublished records.
  */
-export function alternatePathFor(pathname: string, locale: Locale): string {
-  const target = otherLocale(locale);
+export function alternatePathFor(pathname: string, locale: Locale, targetLocale: Locale = otherLocale(locale)): string {
+  const target = targetLocale;
+  if (target === locale) return pathname;
   const segments = pathname.split("/").filter(Boolean).slice(1);
   if (segments.length === 0) return pagePath(target);
 
