@@ -1,5 +1,11 @@
 {
-  "email": "hello@example.com",
-  "telegramHandle": "nasoodi_contact_demo",
-  "instagramUrl": "https://www.instagram.com/nasoodi.demo/"
+  "title": {
+    "en": "Contact Ghazaleh Abdolahzade Nasoodi",
+    "fa": "ارتباط با غزاله عبداله زاده نسودی"
+  },
+  "description": {
+    "en": "For enquiries and conversations about the paintings, connect with Ghazaleh Abdolahzade Nasoodi through her official Instagram profile.",
+    "fa": "برای پرسش‌ها و گفت‌وگو درباره‌ی نقاشی‌ها، از طریق صفحه‌ی رسمی اینستاگرام با غزاله عبداله زاده نسودی در ارتباط باشید."
+  },
+  "instagramUrl": "https://www.instagram.com/ghazalenasoodi/"
 }
