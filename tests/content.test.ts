@@ -1,7 +1,13 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import { aboutPreviewFixture } from "../src/lib/about-preview-fixtures";
-import { artworks, galleries, journalEntries, homepageSelection, artistProfile, cvDocument, cvEntries, portfolioStructuredData } from "../src/content/portfolio";
+import { artworks } from "../src/content/artworks";
+import { galleries } from "../src/content/galleries";
+import { journalEntries } from "../src/content/journal";
+import { homepageSelection } from "../src/content/homepage";
+import { artistProfile } from "../src/content/artist";
+import { cvDocument, cvEntries } from "../src/content/cv";
+import { portfolioStructuredData } from "../src/content/portfolio-structured-data";
 import {
   getPublicArtworks,
   getPublicGalleries,

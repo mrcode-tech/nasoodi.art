@@ -1,5 +1,8 @@
 export const locales = ["fa", "en"] as const;
 export type Locale = (typeof locales)[number];
+
+/** Default locale for root redirects and next-intl routing. */
+export const defaultLocale: Locale = "fa";
 export type Localized = Partial<Record<Locale, string>>;
 
 export const localeNames = {

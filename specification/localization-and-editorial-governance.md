@@ -52,3 +52,9 @@ Bilingual design is a first-class visual requirement under design-engineering-sk
 - Review mixed-script names, URLs, dates, numerals, punctuation, and long titles in rendered pages.
 - Do not force identical line breaks or component dimensions across locales when natural script metrics differ.
 - Translated labels and editorial content require approval; visual polish must not conceal missing or unapproved translations.
+
+## UI message governance — implementation checkpoint 2026-11-05
+
+The CI message audit is a required gate, not a translation approval mechanism. It validates matching namespace files, recursively flattened message keys, duplicate keys across namespaces, missing keys in either locale, non-empty values, and matching interpolation placeholders. It also rejects Persian UI literals in application/component TSX so localized interface copy remains in message resources.
+
+Human review remains mandatory for Persian grammar, English terminology, artist-facing tone, context, and semantic equivalence. A passing audit proves structural consistency only; it does not prove translation quality or artist approval. New UI copy must be added to both locale resources, reviewed in context, and covered by the existing route/component tests. Editorial artist content remains in the content layer, not in UI messages.

@@ -198,3 +198,12 @@ Do not rewrite everything in one pass or change wording, URLs, artwork ordering,
 - artwork-imaging-and-asset-pipeline.md defines image rights and derivatives.
 - internationalization-and-ui-translation-architecture.md defines UI translation.
 - international-seo-and-search-discovery-architecture.md defines search/indexing behavior.
+
+
+## Implementation checkpoint — 2026-11-05
+
+The first consumer migration is complete: application routes, sitemap generation, language-switch resolution, and content tests import explicit domain modules. The former aggregate `src/content/portfolio.ts` and broad compatibility `src/lib/site.ts` barrels are removed. This makes ownership visible and prevents new consumers from depending on a cross-domain export surface.
+
+**Content-format decision:** new structured editorial records should use JSON; long-form prose should use Markdown; TypeScript remains appropriate for domain contracts, validation/behavior, generated image dimensions, and small code-owned configuration. Existing typed artwork and Journal records remain in place until a record-family migration can preserve generated dimensions, rich-text block semantics, IDs, localized slugs, approvals, order, and rendered parity. This is an incremental migration boundary, not a claim that every existing record has already moved to JSON/Markdown.
+
+Exit checks for the remaining data-format migration are: one canonical record source per domain, no duplicate data, build-time schema validation, unchanged published routes and ordering, and bilingual rendered/SEO parity.

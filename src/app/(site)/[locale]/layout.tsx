@@ -6,7 +6,7 @@ import { SiteShell } from "@/components/site-shell";
 import { ThemeProvider } from "@/components/providers/theme-provider";
 import { getUpcomingJournalEvent } from "@/lib/content/journal";
 import { getLocalizedSlug } from "@/lib/content/paths";
-import { isLocale, getLocaleDirection, type Locale } from "@/types/locale";
+import { isLocale, locales, getLocaleDirection, type Locale } from "@/types/locale";
 import { journalEntries, portfolioStructuredData } from "@/content/portfolio";
 import { serializeJsonLd } from "@/lib/seo/structured-data";
 import "../../globals.css";
@@ -18,7 +18,7 @@ export const metadata: Metadata = {
   openGraph: { type: "website", siteName: "Nasoodi.art" },
 };
 export const dynamicParams = false;
-export function generateStaticParams() { return [{ locale: "fa" }, { locale: "en" }]; }
+export function generateStaticParams() { return locales.map((locale) => ({ locale })); }
 export default async function LocaleLayout({ children, params }: { children: React.ReactNode; params: Promise<{ locale: string }> }) {
   const { locale: value } = await params;
   if (!isLocale(value)) notFound();

@@ -1,6 +1,18 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import { createLocalizedMetadata } from "../src/lib/seo/metadata";
+import { defaultLocale, locales, localeDirections, localeNames, localeOpenGraphTags, pagePath } from "../src/types/locale";
+
+test("locale metadata is complete in one authoritative registry", () => {
+  const expected = [...locales].sort();
+  assert.deepEqual(Object.keys(localeNames).sort(), expected);
+  assert.deepEqual(Object.keys(localeDirections).sort(), expected);
+  assert.deepEqual(Object.keys(localeOpenGraphTags).sort(), expected);
+  assert.equal(defaultLocale, "fa");
+  assert.equal(pagePath(defaultLocale), "/fa");
+  assert.equal(localeDirections.fa, "rtl");
+  assert.equal(localeDirections.en, "ltr");
+} );
 
 test("localized page metadata uses self canonicals and reciprocal language alternates", () => {
   const metadata = createLocalizedMetadata({

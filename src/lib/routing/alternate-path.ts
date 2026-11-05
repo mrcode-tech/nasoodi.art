@@ -1,4 +1,7 @@
-import { artworks, cvEntries, galleries, journalEntries } from "../../content/portfolio";
+import { artworks } from "../../content/artworks";
+import { cvEntries } from "../../content/cv";
+import { galleries } from "../../content/galleries";
+import { journalEntries } from "../../content/journal";
 import { otherLocale, pagePath, type Locale } from "../../types/locale";
 import { getLocalizedSlug } from "../content/paths";
 import { hasSharedContentIdentity } from "../content/identity";
