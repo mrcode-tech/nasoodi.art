@@ -12,6 +12,7 @@ import { journalEntries } from "@/content/journal";
 import { cvEntries, cvDocument } from "@/content/cv";
 import { artistProfile } from "@/content/artist";
 import { contactDetails } from "@/content/contact";
+import { siteContent } from "@/content/site";
 import { getPublicArtistProfile,getPublicContactDetails,getPublicArtworks,getPublicGalleries,getPublicCvEntries,getPublicCvDocument,getGalleryCoverArtwork,primaryImageFor } from "@/lib/content/publication";
 import { getPublicJournal,getJournalEntriesForCategory,journalCategories,journalCoverImageFor } from "@/lib/content/journal";
 import type { JournalCategory } from "@/types/content";
@@ -52,10 +53,10 @@ export async function generateMetadata({params}:Props):Promise<Metadata>{
   return false;
  };
  const alternatePaths=Object.fromEntries(locales.filter(target=>target!==locale&&equivalentFor(target)).map(target=>[target,pagePath(target,section)])) as Partial<Record<Locale,string>>;
- const description=section==="works"?t("worksDescription"):
-  section==="galleries"?t("galleriesDescription"):
-  section==="journal"?t("journalDescription"):
-  section==="cv"?t("cvDescription"):
+ const description=section==="works"?siteContent.pages.works.description[locale]:
+  section==="galleries"?siteContent.pages.galleries.description[locale]:
+  section==="journal"?siteContent.pages.journal.description[locale]:
+  section==="cv"?siteContent.pages.cv.description[locale]:
   section==="about"?profile?.shortIntroduction?.[locale]??profile?.statement[locale]:
   section==="contact"?contactDetails.description?.[locale]:undefined;
  const firstWork=works[0];
@@ -71,8 +72,11 @@ export async function generateMetadata({params}:Props):Promise<Metadata>{
   locale,
   path:section,
   title:section==="about"&&profile?.name?.[locale]?profile.name[locale]+" — "+t("about"):
-   section==="cv"&&profile?.name?.[locale]?t("cv")+" — "+profile.name[locale]:
-   section==="contact"?contactDetails.title?.[locale]??t("contact"):t(section),
+   section==="cv"?siteContent.pages.cv.title[locale]:
+   section==="contact"?contactDetails.title?.[locale]??t("contact"):
+   section==="works"?siteContent.pages.works.title[locale]:
+   section==="galleries"?siteContent.pages.galleries.title[locale]:
+   section==="journal"?siteContent.pages.journal.title[locale]:t(section),
   description,
   alternatePaths:indexablePage?alternatePaths:undefined,
   indexable:indexablePage,
