@@ -1,5 +1,4 @@
-import { readFileSync } from "node:fs";
-import { join } from "node:path";
+import { journalMarkdown } from "./data/journal/markdown.generated";
 import journalRecords from "./data/journal/index.json";
 import { artworks } from "./artworks";
 import type { JournalEntry, JournalTextBlock } from "../types/content";
@@ -41,12 +40,7 @@ function markdownForEntry(source: string, id: string): string {
   return source.slice(bodyStart, next < 0 ? undefined : next).trim();
 }
 
-const journalBody = Object.fromEntries(
-  (["en", "fa"] as const).map((locale) => [
-    locale,
-    readFileSync(join(process.cwd(), "src/content/data/journal", `body.${locale}.md`), "utf8"),
-  ]),
-) as Record<Locale, string>;
+const journalBody: Record<Locale, string> = journalMarkdown;
 
 export const journalEntries: JournalEntry[] = (journalRecords as unknown as JournalJsonRecord[]).map((record) => {
   const artwork = artworks.find((item) => item.id === record.coverArtworkId);

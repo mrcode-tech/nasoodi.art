@@ -3,9 +3,6 @@ import createNextIntlPlugin from "next-intl/plugin";
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
-  outputFileTracingIncludes: {
-    "/*": ["./src/content/data/journal/*.md"],
-  },
   async headers() {
     return [
       {
