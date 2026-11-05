@@ -103,9 +103,7 @@ export function getPublicCvDocument(document: CvDocument | undefined): CvDocumen
 export function getPublicArtistProfile(profile: ArtistProfile | undefined, locale: Locale): ArtistProfile | undefined {
   if (
     !profile ||
-    profile.status !== "published" ||
-    !profile.artistApproved ||
-    !profile.approvedLocales.includes(locale) ||
+    !profile.name?.[locale]?.trim() ||
     !profile.statement[locale]?.trim() ||
     !profile.biography[locale]?.trim()
   ) return undefined;
