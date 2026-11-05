@@ -7,7 +7,7 @@ const sourceRoots = [resolve("src/app"), resolve("src/components")];
 const sourceExtensions = new Set([".tsx", ".ts", ".jsx", ".js"]);
 const visibleAttributes = new Set([
   "alt", "aria-label", "aria-description", "aria-roledescription",
-  "placeholder", "title", "label", "value", "emptytext", "description",
+  "placeholder", "title", "label", "value", "emptytext", "description", "content",
 ]);
 const technicalAttributes = new Set([
   "className", "class", "id", "key", "name", "type", "role", "href",
@@ -96,7 +96,7 @@ function auditSource(file) {
   const source = ts.createSourceFile(file, sourceText, ts.ScriptTarget.Latest, true, scriptKind);
   const violations = [];
   const report = (node, value) => {
-    if (!hasUserFacingText(value) || hasExceptionComment(sourceText, node)) return;
+    if (!hasUserFacingText(value, true) || hasExceptionComment(sourceText, node)) return;
     const position = source.getLineAndCharacterOfPosition(node.getStart(source));
     violations.push({
       line: position.line + 1,
