@@ -1,4 +1,6 @@
+import Link from "next/link";
 import { useTranslations } from "next-intl";
+import { pagePath } from "@/types/locale";
 import { getLocaleDirection, type Locale } from "@/types/locale";
 import type { PublicContactDetails } from "@/lib/content/publication";
 
@@ -59,6 +61,13 @@ export function ContactExperience({ locale, details, variant }: ContactExperienc
           )}
         </div>
       </div>
+      {variant === "home" && (
+        <div className="contact-page-link-wrap">
+          <Link className="text-link contact-page-link" href={pagePath(locale, "contact")}>
+            {t("contact")} <span aria-hidden="true">↗</span>
+          </Link>
+        </div>
+      )}
     </section>
   );
 }
