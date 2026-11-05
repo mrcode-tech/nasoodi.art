@@ -34,7 +34,7 @@ export default async function CvPage({ params }: Props) {
         {document && (
           <p className="cv-download">
             <a className="text-link" href={document.src} download={document.fileName}>
-              {t("about.downloadCvPdf")}
+              {t("downloadCvPdf")}
             </a>
           </p>
         )}
