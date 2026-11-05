@@ -1294,6 +1294,7 @@ test("localized Contact surfaces render centralized demo details without approva
   await expect(home.locator('a[href="mailto:hello@example.com"]')).toBeVisible();
   await expect(home.getByRole("link",{name:"@nasoodi_contact_demo"})).toHaveAttribute("href","https://t.me/nasoodi_contact_demo");
   await expect(home.getByRole("link",{name:"@nasoodi.demo"})).toHaveAttribute("href","https://www.instagram.com/nasoodi.demo/");
+  await expect(home.getByRole("link",{name:/contact/i})).toHaveAttribute("href",`/${locale}/contact`);
 
   await page.goto(`/${locale}/contact`);
   const contactPage=page.locator(".contact-experience-page");
@@ -1318,24 +1319,38 @@ test("breadcrumbs link to localized ancestors on archive and nested detail pages
   if(await first.count()){await first.click();await expect(page.getByRole("navigation",{name:locale==="fa"?"مسیر صفحه":"Breadcrumb"}).getByRole("link",{name:locale==="fa"?"یادداشت‌ها":"Journal"})).toHaveAttribute("href",`/${locale}/journal`);}
  }
 });
-test("Journal pagination remains within the viewport at common phone widths",async({page})=>{
+test("Journal pagination remains compact, operable, and within the viewport at common phone widths",async({page})=>{
  for(const locale of ["en","fa"] as const) for(const width of [320,360,375,390,430]){
   await page.setViewportSize({width,height:844});await page.goto(`/${locale}/journal?pageSize=5`);
-  await expect(page.locator(".journal-pagination .gallery-pagination-controls")).toBeVisible();
-  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=document.documentElement.clientWidth),`${locale} ${width}`).toBe(true);
+  const controls=page.locator(".journal-pagination .gallery-pagination-controls");
+  await expect(controls).toBeVisible();
+  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=document.documentElement.clientWidth),`${locale} ${width}: no horizontal overflow`).toBe(true);
+  const size=await controls.locator(".gallery-page-size").boundingBox();
+  const nav=await controls.locator(".gallery-page-nav").boundingBox();
+  if(nav) expect(Math.abs(size!.y-nav.y),`${locale} ${width}: pagination row alignment`).toBeLessThanOrEqual(width===320?3:2);
+  const buttons=controls.locator(".gallery-page-nav button");
+  for(let index=0;index<await buttons.count();index++){
+   const bounds=await buttons.nth(index).boundingBox();
+   expect(bounds!.width, `${locale} ${width}: usable pagination target`).toBeGreaterThanOrEqual(39);
+   expect(bounds!.height, `${locale} ${width}: usable pagination target`).toBeGreaterThanOrEqual(39);
+  }
  }
 });
-test("desktop sidebar copyright is a single line and biography uses justified alignment",async({page})=>{
+test("desktop sidebar copyright fits on one line across supported widths and locales",async({page})=>{
  for(const locale of ["en","fa"] as const){
+  for(const width of [901,1024,1280,1440]){
+   await page.setViewportSize({width,height:900});await page.goto(`/${locale}/about`);
+   const copyright=page.locator(".desktop-sidebar .sidebar-bottom");await expect(copyright).toBeVisible();
+   const m=await copyright.evaluate(el=>({scroll:el.scrollWidth,client:el.clientWidth,whiteSpace:getComputedStyle(el).whiteSpace,rect:el.getBoundingClientRect().toJSON()}));
+   expect(m.whiteSpace).toBe("nowrap");expect(m.scroll,`${locale} ${width}: copyright must fit`).toBeLessThanOrEqual(m.client+1);
+   expect(m.rect.width).toBeGreaterThan(0);
+  }
   await page.setViewportSize({width:1280,height:900});await page.goto(`/${locale}/about`);
-  const copyright=page.locator(".desktop-sidebar .sidebar-bottom");await expect(copyright).toBeVisible();
-  const m=await copyright.evaluate(el=>({scroll:el.scrollWidth,client:el.clientWidth,whiteSpace:getComputedStyle(el).whiteSpace}));
-  expect(m.whiteSpace).toBe("nowrap");expect(m.scroll).toBeLessThanOrEqual(m.client+1);
   await expect(page.locator(".about-biography-copy")).toHaveCSS("text-align","justify");
   await expect(page.locator(".profile-content")).toHaveCSS("max-width","none");
+  await expect(page.locator(".about-biography h2")).not.toHaveCSS("text-align","justify");
  }
 });
-
 
 test("artwork breadcrumbs preserve only a verified collection origin",async({page})=>{
  await page.setViewportSize({width:1280,height:800});
