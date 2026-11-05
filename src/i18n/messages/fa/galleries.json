@@ -1,0 +1,12 @@
+{
+  "galleryPage": "صفحه گالری‌ها",
+  "showingGalleries": "نمایش {start} تا {end} از {total} گالری",
+  "galleriesList": "گالری‌ها",
+  "galleryPagination": "صفحه‌بندی گالری‌ها",
+  "exploreCollection": "مشاهده مجموعه",
+  "carouselRole": "گالری مجموعه‌ها",
+  "collectionPosition": "موقعیت مجموعه‌ها",
+  "previousCollection": "مجموعه قبلی",
+  "nextCollection": "مجموعه بعدی",
+  "of": "از"
+}
