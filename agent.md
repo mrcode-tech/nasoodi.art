@@ -20,7 +20,7 @@
 
 ## Implementation checkpoint
 
-The first migration increment is on `feature`: all eight Journal bodies moved to localized JSON; Markdown sources/generator removed; artist profile populated from canonical JSON; About preview fixture and sample CV endpoint removed; CV consolidated into one JSON record and the obsolete CV verification flag removed; Contact demo destinations replaced with the owner-supplied artist Instagram; About/CV/Contact metadata and sitemap eligibility updated; i18n literal auditing upgraded to TypeScript AST analysis.
+The current implementation increment is on `feature`: all eight Journal bodies moved to localized JSON and Markdown sources/generator removed; artist profile populated and shared by homepage/About; About preview fixture and sample CV endpoint removed; CV consolidated into one JSON record without a verification flag; Contact uses only the owner-supplied Instagram and canonical metadata; site archive metadata is JSON-backed; About, Contact, CV, Works, Galleries, and Journal have dedicated route modules; focused content repositories and localized metadata/Person JSON-LD were added; sitemap eligibility and tests were updated; the i18n audit now uses TypeScript AST analysis.
 
 This checkpoint is **not a completion claim**. Run and inspect GitHub Actions against the final tested SHA, fix any failures, complete the remaining route/i18n/SEO/documentation work, and report exact evidence. Do not merge, deploy, or publish.
 
