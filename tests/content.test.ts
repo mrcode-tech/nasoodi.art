@@ -7,7 +7,7 @@ import { homepageSelection } from "../src/content/homepage";
 import { artistProfile } from "../src/content/artist";
 import { cvDocument, cvEntries } from "../src/content/cv";
 import { getEvents } from "../src/content/repositories/event.repository";
-import { portfolioStructuredData } from "../src/content/portfolio-structured-data";
+import { getPortfolioStructuredData } from "../src/content/portfolio-structured-data";
 import {
   getPublicArtworks,
   getPublicGalleries,
@@ -111,19 +111,24 @@ test("journal publication requires explicit artist approval and locale approval"
  assert.equal(getPublicJournal([{...approved,approvedLocales:[]}],"en").length,0);
 });
 
-test("portfolio JSON-LD describes only confirmed artist and website facts",()=>{
- const graph=portfolioStructuredData["@graph"];
- const person=graph[0] as Record<string,unknown>;
- const website=graph[1] as Record<string,unknown>;
- assert.equal(graph.length,2);
- assert.equal(person["@type"],"Person");
- assert.equal(person.name,"Ghazaleh Abdolahzade Nasoodi");
- assert.equal(person.alternateName,"غزاله عبداله زاده نسودی");
- assert.equal(person.jobTitle,"Oil painter");
+test("portfolio JSON-LD resolves localized artist identity from canonical profile JSON",()=>{
+ const english=getPortfolioStructuredData("en")["@graph"];
+ const persian=getPortfolioStructuredData("fa")["@graph"];
+ const personEn=english[0] as Record<string,unknown>;
+ const personFa=persian[0] as Record<string,unknown>;
+ const website=english[1] as Record<string,unknown>;
+ assert.equal(english.length,2);
+ assert.equal(personEn["@type"],"Person");
+ assert.equal(personEn.name,"Ghazaleh Abdolahzade Nasoodi");
+ assert.equal(personEn.alternateName,"غزاله عبداله زاده نسودی");
+ assert.equal(personEn.jobTitle,"Oil painter");
+ assert.equal(personFa.name,"غزاله عبداله زاده نسودی");
+ assert.equal(personFa.alternateName,"Ghazaleh Abdolahzade Nasoodi");
+ assert.equal(personFa.jobTitle,"نقاش رنگ‌روغن");
  assert.equal(website["@type"],"WebSite");
  assert.deepEqual(website.inLanguage,["fa","en"]);
  assert.deepEqual(website.publisher,{"@id":"https://nasoodi.art/#artist"});
- assert.equal("sameAs" in person,false);
+ assert.equal("sameAs" in personEn,false);
 });
 
 test("locale switching preserves available localized sections and falls back for unavailable content", async () => {
