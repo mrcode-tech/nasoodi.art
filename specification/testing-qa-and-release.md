@@ -102,3 +102,10 @@ Do not mark the carousel component or visual design as implemented/verified mere
 ## Shared responsive typography regression coverage — 2026-11-03
 
 Follow [shared-responsive-typography-system.md](./shared-responsive-typography-system.md) for the complete type-role and viewport matrix. Playwright must measure rendered text line boxes for the Persian homepage artist name and homepage Contact heading at 390, 430, 768, 1280, and 1440px; verify natural wrapping without overflow at 320 and 360px; assert computed font sizes remain within the shared role tokens; and verify English hierarchy, RTL/LTR direction, and both theme modes. A passing line-count test is necessary but does not replace screenshot inspection for visual balance.
+
+
+## International content/SEO regression gates — 2026-11-05
+
+The CI workflow runs the TypeScript-AST message audit, typecheck, content publication tests, production build, asset inventory, Playwright browser/responsive tests, and production-server smoke test. URL-driven client pagination (`useSearchParams`) must be placed under a React Suspense boundary on Galleries and Journal routes for Next.js 16 static rendering.
+
+The SEO Playwright suite covers both locale archives and About/CV/Contact routes, document language/direction, canonical URLs, localized hreflang, robots/description metadata, stable-ID detail alternates, sitemap inclusion, unsupported locale 404s, and unknown content 404s. Extend rendered-HTML assertions when adding page types or metadata fields.

@@ -97,10 +97,11 @@ test("robots and sitemap endpoints are available", async ({ request }) => {
   expect(sitemap.status()).toBe(200);
   const sitemapText = await sitemap.text();
   expect(sitemapText).toContain("https://nasoodi.art/fa");
-  expect(sitemapText).not.toContain("https://nasoodi.art/fa/about");
-  expect(sitemapText).not.toContain("https://nasoodi.art/en/about");
-  expect(sitemapText).not.toContain("https://nasoodi.art/fa/contact");
-  expect(sitemapText).not.toContain("https://nasoodi.art/en/contact");
+  for (const locale of ["en", "fa"]) {
+    expect(sitemapText).toContain(`https://nasoodi.art/${locale}/about`);
+    expect(sitemapText).toContain(`https://nasoodi.art/${locale}/contact`);
+    expect(sitemapText).toContain(`https://nasoodi.art/${locale}/cv`);
+  }
 });
 
 
@@ -1138,7 +1139,7 @@ test("desktop homepage biography expands around a fixed locale-aligned hero imag
     });
     expect(flow.textAlign).toBe("justify");
     expect(flow.hasLinesBesidePhoto, `${locale}: biography begins beside the portrait`).toBe(true);
-    if ((await biography.locator(".biography-copy").textContent())!.length > 1000) {
+    if ((await biography.textContent())!.length > 1000) {
       expect(flow.hasLinesBelowPhoto, `${locale}: long biography continues below the portrait`).toBe(true);
     }
   }

@@ -296,3 +296,8 @@ One canonical localized record/collection exists for each domain: site metadata,
 Do not maintain parallel verified/unverified, sample, temporary, preview, or fictional content repositories. Do not add `isFictional`, `isPlaceholder`, `isVerified`, `isTemporary`, `contentSource`, or `verificationStatus` flags. Existing artwork rights/publication rules remain in force. CV entries use stable IDs, localized titles, and either a year or localized period; no `verified` flag is required.
 
 Initial editorial copy may describe the supplied artist identity and the presented portfolio. Do not invent education, awards, exhibitions, qualifications, institutional affiliations, or other factual career claims. Missing factual CV sections remain empty until owner-supplied facts are available. Never invent email addresses, social handles, or contact destinations.
+
+
+## Required localized route identity — 2026-11-05
+
+The canonical JSON record must include `localizedSlugs.en` and `localizedSlugs.fa` for every published artwork, gallery, and Journal entry. Stable IDs connect locale variants; slugs are route values only. A missing locale slug makes the record unavailable at that locale and fails content validation. The legacy common `slug` field is not a substitute for a missing localized slug in canonical published content.

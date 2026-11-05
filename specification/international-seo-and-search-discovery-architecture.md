@@ -152,3 +152,10 @@ Metadata must be resolved from the canonical editorial records:
 Hreflang is emitted only when the same stable content identity has a complete corresponding localized record. Do not compare localized slug strings to establish identity. Contact indexability and sitemap eligibility follow the presence of complete localized canonical Contact metadata and owner-supplied destinations; no demo destination is treated as a public contact method.
 
 Rendered production HTML is the acceptance source for title, description, canonical, hreflang, Open Graph, Twitter/X, JSON-LD, language/direction, and server-rendered editorial content. Unit tests of metadata helpers alone are insufficient.
+
+
+## Repository-backed metadata and rendered HTML evidence — 2026-11-05
+
+The sitemap resolves Works, Galleries, Journal, CV, About, and Contact through focused content repositories rather than importing raw JSON adapters. Section metadata and the global Person/WebSite graph also resolve the canonical artist/artwork repositories. Detail-route alternate URLs are found by stable entity ID and then use the target locale's explicit slug. Do not emit an alternate link when the target locale lacks the corresponding published record.
+
+Production acceptance checks actual localized HTML: document `lang`/`dir`, unique title/description, self canonical, reciprocal hreflang, Open Graph/Twitter metadata, robots, sitemap URLs, structured data, and visible server-rendered editorial content. Unit tests of metadata helpers alone are not rendered-HTML evidence.

@@ -232,3 +232,56 @@ Initial editorial prose may be authored as the site's normal editable content, b
 ### Layer boundaries
 
 JSON contains editorial data only. TypeScript types and runtime validation define contracts. Repositories/adapters resolve records and relationships. Utilities own filtering, routing, validation, and metadata behavior. Route modules pass resolved data to presentation components; components never import JSON files directly.
+
+
+## Canonical JSON editing guide — 2026-11-05
+
+The following files are the editable source of truth. Preserve stable `id` values when changing copy or localized slugs; relationships use IDs rather than translated titles.
+
+| Domain | Canonical file | Editing guidance |
+|---|---|---|
+| Site/archive metadata | `src/content/data/site.json` | Update localized page titles/descriptions for Works, Galleries, Journal, and CV. |
+| Artist/About | `src/content/data/artist-profile.json` | Update the single artist identity record, localized name/slug/discipline/intro, biography, statement, approach, and interests. Homepage and About share it. |
+| CV | `src/content/data/cv.json` | Add ordered entries with stable IDs, category, localized titles, and a known year or localized period. Keep unsupported factual categories empty; do not manufacture credentials. Add a PDF only when supplied and approved. |
+| Contact | `src/content/data/contact.json` | Edit localized title/description and only artist-supplied email/social destinations. Never invent a channel. |
+| Artworks | `src/content/data/artworks.json` | Add stable ID, localized title/description/alt, explicit localized slugs, approved image path, dimensions/role, and existing rights/publication fields. Do not fabricate year, medium, dimensions, or rights. |
+| Galleries | `src/content/data/galleries.json` | Add stable ID, localized title/description/slugs, cover artwork ID, ordered artwork IDs, and publication state. Every reference must exist. |
+| Journal/events | `src/content/data/journal/index.json` | Add one record per article/event with localized title/summary/body blocks, stable ID, localized slugs, and dates/venues only when confirmed. Rich-text block types are paragraph, heading, quote, list, and safe link. |
+| Homepage selections | `src/content/data/homepage-selection.json` | Change featured artwork/gallery IDs and order without editing components. IDs must reference existing records. |
+
+### Localized record pattern
+
+```json
+{
+  "id": "stable-record-id",
+  "slug": "legacy-common-slug",
+  "localizedSlugs": { "en": "english-route-slug", "fa": "persian-route-slug" },
+  "title": { "en": "English title", "fa": "عنوان فارسی" }
+}
+```
+
+### CV entry pattern
+
+```json
+{
+  "id": "stable-cv-entry-id",
+  "category": "other",
+  "title": { "en": "Current studio practice", "fa": "فعالیت هنری در آتلیه" },
+  "period": { "en": "Current", "fa": "ادامه دارد" },
+  "status": "published"
+}
+```
+
+Use `year` instead of `period` only when a year is known. Do not add empty or fabricated education, award, or exhibition entries merely to fill headings.
+
+### Journal body pattern
+
+Store each locale as an array of typed blocks under `body.en` and `body.fa`. For example, a paragraph block is `{ "type": "paragraph", "text": "Localized paragraph text." }`. Keep both locale arrays complete for published entries.
+
+### Adding another locale
+
+Register locale and direction in `src/types/locale.ts` and `src/i18n/routing.ts`; add matching `src/i18n/messages/<locale>/` namespace files; provide localized editorial fields and slugs in the same records; then run message audit, content tests, route tests, SEO tests, and RTL/LTR browser checks. Do not duplicate entities.
+
+### Validation and boundaries
+
+Run `npm test`, `npm run audit:i18n`, `npm run lint`, `npm run typecheck`, `npm run build`, and `npm run test:e2e`. Repositories in `src/content/repositories/` resolve locale, relationships, and publication eligibility. Routes compose repository results; presentation components receive resolved props and never import JSON. Sitemap, metadata, hreflang, structured data, and internal links use the same canonical identities.

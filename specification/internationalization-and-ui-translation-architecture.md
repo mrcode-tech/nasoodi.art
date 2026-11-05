@@ -124,3 +124,10 @@ The required `scripts/audit-i18n-messages.mjs` audit validates namespace parity,
 Comments and non-rendered code are not UI copy. Brand names, proper nouns, technical identifiers, CSS classes, URLs, route paths, editorial JSON, and tests are legitimate exceptions. A narrowly scoped inline `i18n-literal-ok` comment documents an intentional source-code literal exception. Do not use broad file-level exclusions to hide actual UI copy.
 
 Unsupported locale routes must return 404; do not silently render the default locale. Editorial fields required by a route must exist in the active locale. UI message fallback and editorial-content fallback are separate concerns: never substitute English editorial text into a Persian page.
+
+
+## Expanded AST audit and strict editorial slug behavior — 2026-11-05
+
+The AST audit scans `.tsx`, `.ts`, `.jsx`, and `.js` under `src/app`, `src/components`, and `src/lib`. It checks rendered JSX text, visible/accessibility attributes, UI-message-shaped object properties, and alert/confirm/prompt strings. Supplied brand/proper names are narrow exceptions. `aria-roledescription` values such as `carousel` and `slide` are semantic ARIA role descriptors, not translatable prose; visible `aria-label` and `aria-description` remain audited. Use `i18n-literal-ok` only for a narrow, explained exception.
+
+Every published artwork, gallery, and Journal record requires a safe localized slug for every supported locale. If `localizedSlugs` exists but lacks the active locale, resolution returns no slug and validation reports the missing value. It never borrows the other locale's slug. Legacy records without a localized map remain helper-compatible but fail canonical validation.

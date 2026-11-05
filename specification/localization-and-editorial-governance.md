@@ -71,3 +71,8 @@ The owner-approved content policy for this implementation supersedes previous de
 - Missing localized editorial content is an explicit incomplete record, not permission to silently fall back to English. Keep routes from rendering another language as a fallback.
 - Contact destinations must be owner-supplied. Preserve the artist's actual Instagram identity and do not retain invented demo email/Telegram destinations.
 - Content changes should require JSON edits and validation, not React component changes.
+
+
+## Missing localized slugs and audit scope — 2026-11-05
+
+Published artwork, gallery, and Journal records must include a safe slug for every supported locale. An incomplete `localizedSlugs` map resolves to no route in the missing locale; the validator emits a domain-specific issue rather than silently reusing the common/English slug. The AST UI literal audit covers `src/app`, `src/components`, and `src/lib`, including TSX/TS/JSX/JS. Semantic `aria-roledescription` values and supplied brand/proper names are exceptions; accessible labels remain localized.

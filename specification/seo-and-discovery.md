@@ -79,3 +79,8 @@ The helper is unit-tested with published and unpublished synthetic artwork recor
 The current content architecture is authoritative for metadata: artist/About from `artist-profile.json`; archive titles/descriptions from `site.json`; Contact metadata from `contact.json`; CV metadata from the canonical CV/site record; and detail metadata from each artwork, gallery, or Journal entity. All localized alternatives are matched by stable content ID, never by slug equality.
 
 The Contact page may be indexed only when the canonical localized title and description and an owner-supplied public contact destination exist for that locale. Do not retain the old demo Contact noindex rule after demo destinations have been removed and replaced by owner-supplied data. Verify actual rendered HTML and sitemap output for each supported locale.
+
+
+## Canonical repository boundary — 2026-11-05
+
+The homepage uses `getHomepageContent`; About uses `getAbout` and `getCv`; artwork/gallery/Journal detail pages use focused repositories; sitemap uses the same repositories as page rendering; and global Person structured data resolves through `getArtist`. Avoid importing JSON adapters directly into route or presentation modules. Localized detail alternates match stable IDs and then use the target record's explicit localized slug.
