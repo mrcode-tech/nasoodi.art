@@ -39,7 +39,7 @@ The architecture is not yet at the requested completion standard. The main remai
 - Locale routing is `fa` and `en`, default `fa`, always-prefixed, with automatic locale detection/cookie disabled.
 - Locale layout sets `lang` and `dir` and calls `setRequestLocale`.
 - `src/i18n/types.d.ts` derives the message type from the English catalog.
-- Current CI reports 111 bilingual message keys with matching placeholders.
+- Current CI reports 109 bilingual message keys with matching placeholders.
 - The locale-resolution fix explicitly passes locale to route-level translation calls and sets request locale in the layout.
 
 ### Content
@@ -78,7 +78,7 @@ The requested named skills were checked in the installed skill registry during t
 GitHub Actions run `41899192403` completed successfully for commit `dc1e40c97c0f777f9659e8e5f8f4048da12a41aa`, which matches the `feature` branch HEAD at audit time.
 
 - ESLint: passed
-- Bilingual message-catalog audit: passed (111 keys and matching placeholders)
+- Bilingual message-catalog audit: passed (109 keys and matching placeholders)
 - TypeScript: passed
 - Content publication tests: passed
 - Production build: passed
