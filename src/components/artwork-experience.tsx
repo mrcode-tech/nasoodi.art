@@ -8,7 +8,7 @@ import { Dialog, DialogClose, DialogContent, DialogDescription, DialogTitle } fr
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious, CarouselStatus } from "@/components/ui/carousel";
 import { getLocalizedSlug } from "@/lib/content/paths";
 import { primaryImageFor } from "@/lib/content/publication";
-import { pagePath, type Locale } from "@/types/locale";
+import { pagePath, getLocaleDirection, type Locale } from "@/types/locale";
 import type { Artwork } from "@/types/content";
 
 type Props = { artworks: Artwork[]; locale: Locale; context: "home" | `gallery:${string}`; };
@@ -70,8 +70,8 @@ export function ArtworkExperience({ artworks, locale, context }: Props) {
     const onKeyDown = (event: KeyboardEvent) => {
       const target = event.target;
       if (target instanceof HTMLElement && target.closest("input, textarea, select, [contenteditable='true']")) return;
-      if (event.key === "ArrowRight") { event.preventDefault(); move(locale === "fa" ? -1 : 1); }
-      else if (event.key === "ArrowLeft") { event.preventDefault(); move(locale === "fa" ? 1 : -1); }
+      if (event.key === "ArrowRight") { event.preventDefault(); move(getLocaleDirection(locale) === "rtl" ? -1 : 1); }
+      else if (event.key === "ArrowLeft") { event.preventDefault(); move(getLocaleDirection(locale) === "rtl" ? 1 : -1); }
     };
     document.addEventListener("keydown", onKeyDown);
     return () => document.removeEventListener("keydown", onKeyDown);
@@ -100,7 +100,7 @@ export function ArtworkExperience({ artworks, locale, context }: Props) {
       {sequence.length === 1 ? <div className="artwork-experience-static">{renderArtwork(sequence[0])}</div> :
         sequence.length > 1 ? (
           <div className="artwork-experience">
-            <Carousel dir={locale === "fa" ? "rtl" : "ltr"} label={labels.carousel} roleDescription={t("artworkCarouselRole")} opts={{ slidesToScroll: 1 }} className="artwork-carousel">
+            <Carousel dir={getLocaleDirection(locale)} label={labels.carousel} roleDescription={t("artworkCarouselRole")} opts={{ slidesToScroll: 1 }} className="artwork-carousel">
               <CarouselContent>
                 {sequence.map((work, index) => <CarouselItem key={work.id} aria-label={`${index + 1} ${labels.position} ${sequence.length}`}>{renderArtwork(work)}</CarouselItem>)}
               </CarouselContent>
@@ -136,8 +136,8 @@ export function ArtworkExperience({ artworks, locale, context }: Props) {
                   <p className="artwork-viewer-metadata">{activeArtwork.year && <span>{activeArtwork.year}</span>}{activeArtwork.medium?.[locale]?.trim() && <span>{activeArtwork.medium[locale]}</span>}</p>
                 )}
                 <div className="artwork-viewer-controls">
-                  <Button variant="outline" size="sm" onClick={() => move(-1)} disabled={activeIndex <= 0} aria-label={labels.previous}>{locale === "fa" ? "→" : "←"}</Button>
-                  <Button variant="outline" size="sm" onClick={() => move(1)} disabled={activeIndex >= sequence.length - 1} aria-label={labels.next}>{locale === "fa" ? "←" : "→"}</Button>
+                  <Button variant="outline" size="sm" onClick={() => move(-1)} disabled={activeIndex <= 0} aria-label={labels.previous}>{getLocaleDirection(locale) === "rtl" ? "→" : "←"}</Button>
+                  <Button variant="outline" size="sm" onClick={() => move(1)} disabled={activeIndex >= sequence.length - 1} aria-label={labels.next}>{getLocaleDirection(locale) === "rtl" ? "←" : "→"}</Button>
                   <Button asChild variant="ghost" size="sm"><a href={pagePath(locale, `works/${getLocalizedSlug(activeArtwork, locale)}`) + (context.startsWith("gallery:") ? `?fromGallery=${encodeURIComponent(context.slice(8))}` : "")}>{labels.detail}</a></Button>
                 </div>
               </section>

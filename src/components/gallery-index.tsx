@@ -15,7 +15,7 @@ import {
 } from "@/lib/gallery-pagination";
 import { getGalleryCoverArtwork } from "@/lib/content/publication";
 import { getLocalizedSlug } from "@/lib/content/paths";
-import { pagePath, type Locale } from "@/types/locale";
+import { pagePath, getLocaleDirection, type Locale } from "@/types/locale";
 import type { Artwork, Gallery } from "@/types/content";
 
 type Props = {
@@ -77,7 +77,7 @@ export function GalleryIndex({ galleries, artworks, locale, labels }: Props) {
       {state.totalPages > 1 && (
         <section className="gallery-pagination" aria-label={t("galleryPagination")}>
           <p className="gallery-results-status" role="status" aria-live="polite">{range}</p>
-          <div className="gallery-pagination-controls" dir={locale === "fa" ? "rtl" : "ltr"}>
+          <div className="gallery-pagination-controls" dir={getLocaleDirection(locale)}>
             <label className="gallery-page-size">
               <span>{labels.itemsPerPage}</span>
               <select value={state.pageSize} onChange={(event) => navigate(1, Number(event.target.value) as GalleryPageSize)}>
@@ -85,13 +85,13 @@ export function GalleryIndex({ galleries, artworks, locale, labels }: Props) {
               </select>
             </label>
             <nav className="gallery-page-nav" aria-label={labels.page}>
-              <button type="button" onClick={() => navigate(state.page - 1)} disabled={state.page <= 1} aria-label={labels.previous}>{locale === "fa" ? "→" : "←"}</button>
+              <button type="button" onClick={() => navigate(state.page - 1)} disabled={state.page <= 1} aria-label={labels.previous}>{getLocaleDirection(locale) === "rtl" ? "→" : "←"}</button>
               {getCompactPageNumbers(state.page, state.totalPages).map((item, index) =>
                 item === "ellipsis" ? <span className="gallery-page-ellipsis" key={"ellipsis-" + index} aria-hidden="true">…</span> :
                 <button type="button" key={item} onClick={() => navigate(item)} aria-label={labels.page + " " + item}
                   aria-current={item === state.page ? "page" : undefined} className={item === state.page ? "is-current" : undefined}>{item}</button>,
               )}
-              <button type="button" onClick={() => navigate(state.page + 1)} disabled={state.page >= state.totalPages} aria-label={labels.next}>{locale === "fa" ? "←" : "→"}</button>
+              <button type="button" onClick={() => navigate(state.page + 1)} disabled={state.page >= state.totalPages} aria-label={labels.next}>{getLocaleDirection(locale) === "rtl" ? "←" : "→"}</button>
             </nav>
           </div>
         </section>

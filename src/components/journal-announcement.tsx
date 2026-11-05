@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import type { Locale } from "@/types/locale";
+import { getLocaleDirection, type Locale } from "@/types/locale";
 import styles from "./journal-announcement.module.css";
 
 export type AnnouncementEvent = {
@@ -83,10 +83,10 @@ export function JournalAnnouncement({
       className={containerClass}
       data-placement={placement}
       aria-label={eyebrow}
-      dir={locale === "fa" ? "rtl" : "ltr"}
+      dir={getLocaleDirection(locale)}
     >
       <span
-        className={`${styles.paper} ${locale === "fa" ? styles.paperRtl : ""}`}
+        className={`${styles.paper} ${getLocaleDirection(locale) === "rtl" ? styles.paperRtl : ""}`}
         data-part="paper"
         aria-hidden="true"
       />

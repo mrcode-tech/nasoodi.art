@@ -11,7 +11,7 @@ import {
   DropdownMenuRadioItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import type { Locale } from "@/types/locale";
+import { getLocaleDirection, type Locale } from "@/types/locale";
 
 type ThemeMode = "light" | "dark" | "system";
 
@@ -103,8 +103,8 @@ export function ThemeSelector({ locale }: { locale: Locale }) {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent
-          align={locale === "fa" ? "start" : "end"}
-          dir={locale === "fa" ? "rtl" : "ltr"}
+          align={getLocaleDirection(locale) === "rtl" ? "start" : "end"}
+          dir={getLocaleDirection(locale)}
           aria-label={accessibleName}
         >
           <DropdownMenuRadioGroup
