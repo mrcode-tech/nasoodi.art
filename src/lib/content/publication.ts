@@ -78,15 +78,13 @@ export function getGalleryCoverArtwork(gallery: Gallery, works: readonly Artwork
 export function getPublicCvEntries(items: readonly CvEntry[], locale: Locale): CvEntry[] {
   const visible = items.filter((entry) =>
     entry.status === "published" &&
-    entry.verified &&
     Boolean(entry.id.trim()) &&
     Boolean(entry.title[locale]?.trim()) &&
-    Number.isInteger(entry.year) &&
-    entry.year > 0,
+    ((Number.isInteger(entry.year) && (entry.year ?? 0) > 0) || Boolean(entry.period?.[locale]?.trim())),
   );
 
   return keepUniqueBy(visible, (entry) => entry.id)
-    .sort((a, b) => b.year - a.year || (a.sortOrder ?? 0) - (b.sortOrder ?? 0));
+    .sort((a, b) => (b.year ?? 0) - (a.year ?? 0) || (a.sortOrder ?? 0) - (b.sortOrder ?? 0));
 }
 
 export function getPublicCvDocument(document: CvDocument | undefined): CvDocument | undefined {
