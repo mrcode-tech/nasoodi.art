@@ -13,7 +13,7 @@ const englishKeys = Object.keys(english).sort();
 const persianKeys = Object.keys(persian).sort();
 const missingInPersian = englishKeys.filter((key) => !(key in persian));
 const missingInEnglish = persianKeys.filter((key) => !(key in english));
-const placeholders = (value) => [...value.matchAll(/\\{([A-Za-z0-9_]+)\\}/g)].map((match) => match[1]).sort();
+const placeholders = (value) => [...value.matchAll(/\{([A-Za-z0-9_]+)\}/g)].map((match) => match[1]).sort();
 const placeholderMismatches = englishKeys
   .filter((key) => key in persian)
   .filter((key) => JSON.stringify(placeholders(english[key])) !== JSON.stringify(placeholders(persian[key])));
