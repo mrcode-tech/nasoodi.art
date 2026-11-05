@@ -9,7 +9,7 @@ export function Breadcrumb({ children, label, dir }: { children: ReactNode; labe
   );
 }
 
-export function BreadcrumbItem({ children }: { children: ReactNode }) {
+export function BreadcrumbItem({ children }: { children: ReactNode; current?: boolean }) {
   return <li className="breadcrumb-item">{children}</li>;
 }
 
