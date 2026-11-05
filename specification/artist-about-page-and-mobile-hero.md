@@ -1,6 +1,6 @@
 # Artist About Experience, CV, and Homepage Hero Responsive Specification
 
-**Status:** Proposed design and implementation contract; implementation requires artist/site-owner content approval  
+**Status:** Owner-approved design and implementation contract; canonical JSON content is displayed without editorial approval-state gating  
 **Scope:** Homepage hero biography preview and expansion, global About navigation, localized About page, CV section and PDF download, and mobile hero content order  
 **Working branch:** `feature`  
 **Locales:** Persian (`fa`, RTL) and English (`en`, LTR)  
@@ -24,7 +24,7 @@ This is a specialized contract for the artist introduction and About/CV experien
 - `AGENTS.md` remains the repository-wide engineering and design authority.
 - `design-engineering-skills.md` and `design-direction-and-system-refinement.md` remain mandatory project-wide design authorities.
 - `navigation-and-mobile-sidebar.md` remains authoritative for the global sidebar/drawer mechanics, locale-dependent placement, focus management, language/theme controls, and mobile navigation behavior. This document adds About as a required destination; it does not replace the navigation system.
-- `content-model.md` remains authoritative for artist profile fields, localized statement/biography, approval state, CV facts, and publication eligibility. This document adds the PDF asset and download contract without creating a competing artist-profile model.
+- `content-model.md` remains authoritative for artist profile fields, localized statement/biography, CV entries, and the canonical JSON source. This document adds the PDF asset and download contract without creating a competing artist-profile model.
 - `homepage-artwork-hero-and-featured-works.md` remains authoritative for artwork fidelity, the finished-artwork hero requirement, and the image treatment of paintings. This document changes the order and behavior of the artist identity/biography/actions within the existing hero content area; it does not authorize changing, cropping, filtering, or replacing the hero artwork.
 - Where older homepage or site-wide prose places a separate Artist Introduction after Selected Works, do not duplicate the same biography. The short biography belongs directly under the artist's name in the hero as requested here. A later introduction section may remain only when it contains distinct, approved material and has a clear purpose.
 - The existing site-wide navigation model already includes About and conditionally includes CV/Exhibitions. This specification makes About a first-class route/navigation item and defines the CV as a section at the end of About. Do not add a separate CV navigation item unless the owner separately approves it and the route/content are ready.
@@ -173,11 +173,11 @@ The page may adapt the portrait and title arrangement to the existing editorial 
 The CV section appears after the complete biography and is the final substantive section of the About page, before any global footer.
 
 - Use the localized heading **Curriculum Vitae** or **CV**.
-- If verified CV entries are already modeled and approved, the page may present a concise, curated CV summary using the existing content model. Keep categories/entries factual and chronologically consistent with that model.
+- Render the CV entries present in the canonical CV JSON. Do not require verification or approval flags.
 - Omit empty categories and unknown facts. Do not invent education, exhibitions, awards, residencies, publications, venues, dates, locations, or qualifications.
 - A PDF download is a separate deliverable from any HTML CV summary. Both must use the same approved source facts and must not contradict each other.
-- If no verified CV entries exist but an approved PDF does, the page may show the CV heading and download action without fabricating an HTML timeline.
-- If neither verified CV entries nor an approved PDF exists, do not show a fake or empty CV section. Keep the About biography usable and record the missing asset/content as a release dependency.
+- Render the configured CV PDF download when the canonical CV record provides a document.
+- If the canonical CV record has no entries or PDF, omit the corresponding optional section or action without blocking the About page.
 
 ### 6.5 Downloadable CV PDF
 
@@ -194,7 +194,7 @@ Asset contract:
 - Link directly to the stable public file. Use normal browser PDF behavior or the download attribute where appropriate to deliver the intended experience.
 - Give the action a localized accessible name and visibly identify the format (PDF). If file size is known and useful, it may be displayed, but do not invent it.
 - Verify the link returns a successful response and that the downloaded/opened file is the expected document.
-- If the PDF is missing, unapproved, invalid, or inaccessible, do not render a broken download link. Keep the action absent and report the exact missing approval/asset as a blocker.
+- If the PDF is missing or inaccessible, omit the download action gracefully; do not block the About page.
 
 ## 7. Responsive composition
 
@@ -333,7 +333,7 @@ Target WCAG 2.2 AA under the repository's accessibility specification.
 
 Extend the existing artist profile/content model only as necessary. Do not introduce a duplicate profile store.
 
-The existing conceptual profile contract includes localized statement, biography, optional portrait with localized alt text and dimensions, publication status, approved locales, and artist approval. Preserve it.
+The canonical profile record contains localized statement, biography, and optional portrait metadata. Do not add editorial approval or verification flags.
 
 Add a CV document reference only if the current repository model has no equivalent. The conceptual extension may be:
 
@@ -354,7 +354,7 @@ type ArtistProfile = {
 
 This is a conceptual contract, not a command to adopt this exact type. Inspect the actual implementation and use its established schema/validation conventions.
 
-Validation/publication rules:
+Technical rendering rules:
 
 - A CV download is rendered only when the file exists, is a valid PDF, and is explicitly approved for public download.
 - Validate the path is a safe local public asset path; do not allow arbitrary external URLs or path traversal.
@@ -398,7 +398,7 @@ Cover:
 - Correct localized labels and direction.
 - No duplicate biography source.
 - Missing/unapproved biography: no fabricated content.
-- CV section conditions for verified entries, approved PDF only, and neither available.
+- CV section renders the current canonical JSON entries and configured PDF link.
 - Invalid/missing PDF does not produce a broken link.
 
 ### 14.2 Browser/E2E tests
