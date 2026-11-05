@@ -118,7 +118,7 @@ Read these before changing any visual surface. Page-specific specifications rema
 - [Phased implementation blueprint](./phased-implementation-blueprint.md) — canonical phase order, dependencies, exit criteria, evidence, and current implementation progress.
 - [Asset review register](./asset-review-register.md) — source-asset classification, inspection, rights, and public-use approval gates.
 
-The blueprint's progress snapshot is the current status authority. Do not treat proposed specifications or empty content records as evidence of publication approval.
+The blueprint's progress snapshot is the current implementation-status reference. Canonical JSON content is rendered as stored; editorial approval states are not used as data gates.
 
 
 ## Artwork discovery and editorial presentation refinement — 2026-10-31
@@ -133,7 +133,7 @@ Read it together with:
 - [Wireframes and interaction design](./wireframes.md)
 - [shadcn/ui component reuse](./shadcn-component-reuse-and-bilingual-ui.md)
 
-**Conflict resolution:** the new contract supersedes earlier grid-first artwork presentation guidance for the homepage Selected Works section and collection-detail primary browsing surface. It does not replace the static artwork-led Hero, the gallery-index editorial collection-preview role, the canonical artwork viewer, content/approval rules, or the Journal editorial layout. The Journal homepage preview is limited to the single newest eligible published entry. Existing routes and the unified Journal information architecture remain unchanged.
+**Conflict resolution:** the new contract supersedes earlier grid-first artwork presentation guidance for the homepage Selected Works section and collection-detail primary browsing surface. It does not replace the static artwork-led Hero, the gallery-index editorial collection-preview role, the canonical artwork viewer or the Journal editorial layout. The Journal homepage preview is limited to the single newest eligible published entry. Existing routes and the unified Journal information architecture remain unchanged.
 
 
 ## Next implementation task — Journal and event announcement sticker
@@ -180,7 +180,7 @@ Three complementary architecture contracts define the next maintainability and d
 
 - [International SEO and Search Discovery Architecture](./international-seo-and-search-discovery-architecture.md) — indexability, page metadata, canonical URLs, hreflang, sitemap/robots, artwork SEO, structured data, Persian/English search quality, monitoring, and CI verification.
 - [Internationalization and UI Translation Architecture](./internationalization-and-ui-translation-architecture.md) — next-intl evaluation/adoption, centralized locale message bundles, App Router integration, localized navigation, server/client boundaries, RTL/LTR, and translation parity.
-- [Content Architecture and Separation from Application Logic](./content-architecture-and-data-separation.md) — separate artist-editable portfolio content from UI messages, TypeScript types, general utilities, and React presentation; file-based records, validation, editorial workflow, and incremental migration.
+- [Content Architecture and Separation from Application Logic](./content-architecture-and-data-separation.md) — separate artist-editable portfolio content from UI messages, TypeScript types, general utilities, and React presentation; file-based records, repository boundaries, and incremental migration.
 
 Read these together with [SEO and discovery](./seo-and-discovery.md), [Localization and editorial governance](./localization-and-editorial-governance.md), and [Content and artwork model](./content-model.md). The new documents are proposed architecture contracts, not evidence that the refactor or SEO improvements have been implemented. Audit current code before choosing exact paths or moving existing data. Preserve artwork rights safeguards and use owner-supplied Contact data; follow the unified JSON content contract and current SEO eligibility rules.
 
