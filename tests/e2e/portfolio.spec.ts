@@ -1079,7 +1079,8 @@ test("About and CV routes render canonical bilingual JSON content without previe
     const cvResponse = await request.get(`/${locale}/cv`);
     expect(cvResponse.status()).toBe(200);
     await page.goto(`/${locale}/cv`);
-    await expect(page.locator(".cv-list li")).toHaveCount(1);
+    await expect(page.locator(".cv-list li")).toHaveCount(16);
+    await expect(page.locator('a[href="/api/cv.pdf"]')).toBeVisible();
     await expect(page.locator(".sample-content-notice")).toHaveCount(0);
   }
 });
