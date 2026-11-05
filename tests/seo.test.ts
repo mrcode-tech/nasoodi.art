@@ -19,7 +19,12 @@ test("localized page metadata uses self canonicals and reciprocal language alter
     en: "https://nasoodi.art/en/works",
   });
   assert.equal(metadata.robots && typeof metadata.robots === "object" && "index" in metadata.robots ? metadata.robots.index : undefined, true);
-  assert.equal(metadata.twitter?.card, "summary_large_image");
+  assert.deepEqual(metadata.twitter, {
+    card: "summary_large_image",
+    title: "آثار",
+    description: "گزیده آثار نقاشی",
+    images: ["https://nasoodi.art/images/approved-artwork-1.jpg"],
+  });
 });
 
 test("localized metadata omits social cards for noindex demo and incomplete pages", () => {
@@ -49,7 +54,14 @@ test("article metadata uses the localized URL and publication timestamp", () => 
   });
 
   assert.equal(metadata.alternates?.canonical, "https://nasoodi.art/en/journal/studio-notes");
-  assert.equal(metadata.openGraph?.type, "article");
-  assert.equal(metadata.openGraph?.url, "https://nasoodi.art/en/journal/studio-notes");
-  assert.equal(metadata.openGraph?.publishedTime, "2026-10-20T10:00:00Z");
+  assert.deepEqual(metadata.openGraph, {
+    type: "article",
+    title: "Studio Notes",
+    description: "Notes from the studio",
+    url: "https://nasoodi.art/en/journal/studio-notes",
+    siteName: "Nasoodi.art",
+    locale: "en_US",
+    alternateLocale: ["fa_IR"],
+    publishedTime: "2026-10-20T10:00:00Z",
+  });
 });
