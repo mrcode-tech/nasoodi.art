@@ -221,12 +221,14 @@ If the actual code conflicts with the specification, inspect the source and rele
 
 ## 5. Content and asset integrity — hard gate
 
-- Use only artist/site-owner-approved material for public production content, except for the explicitly owner-authorized fictional Contact fixture used during this demo phase.
-- Demo Contact exception: the centralized fictional email, Telegram, and Instagram values must render on the homepage and localized Contact pages without approval, confirmation, or environment/production-mode gates. Do not add a visible disclaimer or claim the accounts are real, verified, monitored, or artist-approved. Keep Contact routes noindex and out of the sitemap until real owner-supplied values replace the fixture; preserve the actual artist Instagram identity outside the demo fixture.
-- Explicit owner-authorized exception for this feature-branch design task: use clearly labelled fictional bilingual biography, artist statement, and CV data to populate the existing About page for visual review. Keep it non-approved, noindex, and disabled in production runtime; replace it before any release merge. Do not create a preview route or query parameter.
+- Use canonical localized JSON for all editable editorial content in every environment; do not maintain separate preview/sample providers or production suppression.
+- Homepage and About use the same artist profile. CV entries and an optional real PDF reference use one CV JSON record. Journal bodies are localized JSON rich-text blocks.
+- Write initial descriptive editorial content as the site's normal data, but never invent factual education, exhibitions, awards, qualifications, institutions, venues, dates, or contact methods. Keep unsupported factual CV categories empty until owner-supplied information is available.
+- Contact destinations must be owner-supplied and stored in the canonical Contact JSON. Do not invent email addresses or social handles.
+- Do not create synthetic CV PDFs; preserve the download mechanism for an actual owner-supplied PDF.
 - Never present fictional biography, education, exhibitions, awards, publications, dates, venues, or qualifications as verified or artist-approved facts.
 - Do not machine-translate and publish unreviewed biography or interface copy as approved Persian/English content.
-- Do not create a synthetic CV PDF for public or artist-approved content. The explicitly authorized feature-branch sample PDF is the sole exception: derive it from the same labelled fixture records shown on the About page, mark it fictional, and disable its route in production runtime.
+- Do not create synthetic CV PDFs; use the download mechanism only when an actual owner-supplied PDF exists.
 - Verify the exact PDF file, public-download permission, readability, and metadata before exposing its link.
 - Verify image identity, dimensions, rights, and intended use before adding it to About.
 - Preserve all artwork/photo fidelity and existing image-treatment restrictions.
