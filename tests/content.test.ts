@@ -460,3 +460,24 @@ test("archive hreflang requires the same published content identities in both lo
  assert.equal(hasEquivalentContentSet([{id:"a"},{id:"a"}],[{id:"a"},{id:"a"}]),false);
  assert.equal(hasEquivalentContentSet([],[]),false);
 });
+
+test("CV identifiers are validated independently from URL slugs", () => {
+ const cvEntry: CvEntry = {
+  id: "cv_entry_01",
+  category: "education",
+  title: { en: "Fine Arts" },
+  year: 2020,
+  verified: false,
+  status: "draft",
+ };
+ const issues = validatePortfolioContent({
+  artworks,
+  galleries,
+  journalEntries,
+  cvEntries: [cvEntry],
+  homepageSelection,
+  artistProfile,
+  cvDocument,
+ });
+ assert.deepEqual(issues, []);
+});

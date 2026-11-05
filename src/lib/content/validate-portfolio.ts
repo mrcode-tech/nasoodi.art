@@ -9,6 +9,7 @@ import type {
 } from "../../types/content";
 import { locales as supportedLocales, type Locale } from "../../types/locale";
 import { getLocalizedSlug, isSafeContentSlug, isSafeLocalImagePath } from "./paths";
+import { isSafeJournalHref } from "./journal";
 
 const locales = supportedLocales;
 
@@ -33,10 +34,7 @@ function validateRouteIdentity(
   issues: ContentValidationIssue[],
 ) {
   const ids = new Set<string>();
-  const slugs = new Map<Locale, Set<string>>([
-    ["en", new Set<string>()],
-    ["fa", new Set<string>()],
-  ]);
+  const slugs = new Map<Locale, Set<string>>(locales.map((locale) => [locale, new Set<string>()]));
 
   records.forEach((record, index) => {
     const path = kind + "[" + index + "]";
@@ -64,26 +62,20 @@ function validateRouteIdentity(
   });
 }
 
+function validateUniqueIds(kind: string, records: readonly { id: string }[], issues: ContentValidationIssue[]) {
+  const ids = new Set<string>();
+  records.forEach((record, index) => {
+    const path = kind + "[" + index + "].id";
+    if (!record.id.trim()) issues.push({ path, message: "A stable content ID is required." });
+    else if (ids.has(record.id)) issues.push({ path, message: "Duplicate " + kind + " ID " + record.id + "." });
+    ids.add(record.id);
+  });
+}
+
 function isValidExplicitDate(value: string): boolean {
   return /(?:Z|[+-]\d{2}:\d{2})$/i.test(value) && Number.isFinite(Date.parse(value));
 }
 
-function isSafeExternalOrLocalHref(value: string): boolean {
-  if (!value || value.includes("\\") || /[\u0000-\u001f]/.test(value)) return false;
-  if (value.startsWith("/") && !value.startsWith("//")) {
-    try {
-      return new URL(value, "https://nasoodi.art").origin === "https://nasoodi.art";
-    } catch {
-      return false;
-    }
-  }
-  try {
-    const url = new URL(value);
-    return url.protocol === "https:" && !url.username && !url.password;
-  } catch {
-    return false;
-  }
-}
 
 function validateImage(
   image: { src: string; width: number; height: number; alt: Partial<Record<Locale, string>> },
@@ -136,10 +128,16 @@ export function validatePortfolioContent(source: PortfolioContentSource): Conten
 
   source.journalEntries.forEach((entry, index) => {
     const path = "journalEntries[" + index + "]";
+    if (entry.status === "published" && entry.approvedLocales.length === 0) {
+      issues.push({ path: path + ".approvedLocales", message: "A published Journal entry must be approved for at least one locale." });
+    }
     if (new Set(entry.approvedLocales).size !== entry.approvedLocales.length) {
       issues.push({ path: path + ".approvedLocales", message: "Approved locales must be unique." });
     }
     entry.approvedLocales.forEach((locale, localeIndex) => {
+      if (entry.status === "published" && (!entry.title[locale]?.trim() || !entry.summary[locale]?.trim())) {
+        issues.push({ path: path + ".approvedLocales[" + localeIndex + "]", message: "Published Journal content requires a localized title and summary for each approved locale." });
+      }
       if (!locales.includes(locale)) issues.push({ path: path + ".approvedLocales[" + localeIndex + "]", message: "Unsupported locale " + locale + "." });
     });
     if (entry.event) {
@@ -153,14 +151,14 @@ export function validatePortfolioContent(source: PortfolioContentSource): Conten
         try { new Intl.DateTimeFormat("en", { timeZone: event.timeZone }); }
         catch { issues.push({ path: path + ".event.timeZone", message: "Invalid IANA time zone " + event.timeZone + "." }); }
       }
-      if (event.registrationUrl && !isSafeExternalOrLocalHref(event.registrationUrl)) {
+      if (event.registrationUrl && !isSafeJournalHref(event.registrationUrl)) {
         issues.push({ path: path + ".event.registrationUrl", message: "Registration links must use HTTPS or a same-origin path." });
       }
     }
     if (entry.coverImage) validateImage(entry.coverImage, path + ".coverImage", issues);
   });
 
-  validateRouteIdentity("cvEntries", source.cvEntries.map((entry) => ({ id: entry.id, slug: entry.id })), issues);
+  validateUniqueIds("cvEntries", source.cvEntries, issues);
   source.cvEntries.forEach((entry, index) => {
     if (!Number.isSafeInteger(entry.year) || entry.year < 1) {
       issues.push({ path: "cvEntries[" + index + "].year", message: "CV year must be a positive integer." });
