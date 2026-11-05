@@ -1,6 +1,8 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import { aboutPreviewFixture } from "../src/lib/about-preview-fixtures";
+import { artistProfile, cvDocument } from "../src/content/portfolio";
+import { validatePortfolioContent } from "../src/lib/content/validate-portfolio";
 import { artworks,galleries,journalEntries,homepageSelection,getPublicArtworks,getPublicGalleries,isSafeLocalImagePath,isSafeContentSlug,getPublicJournal,getPublicCvEntries,getPublicCvDocument,getPublicArtistProfile,getPublicContactDetails,getUpcomingJournalEvents,getUpcomingJournalEvent,getArtworkStructuredData,getGalleryStructuredData,getJournalStructuredData,serializeJsonLd,getHomepageFeaturedArtworks,getGalleryCoverArtwork,getJournalEntriesForCategory,getHomepageJournalPreview,journalCoverImageFor,isSafeJournalHref,portfolioStructuredData,getLocalizedSlug,type Artwork,type Gallery,type JournalEntry,type CvEntry,type CvDocument,type ArtistProfile,type ContactDetails, hasExplicitTimeZone } from "../src/lib/site";
 const work:Artwork={id:"w1",slug:"work-one",title:{en:"Work",fa:"اثر"},images:[{src:"/art/work.jpg",alt:{en:"Painting",fa:"نقاشی"},role:"primary",width:1200,height:900}],rightsConfirmed:true,status:"published"};
 test("artwork stays private until published and rights-cleared",()=>{assert.equal(getPublicArtworks([{...work,status:"needs-review"}],"en").length,0);assert.equal(getPublicArtworks([{...work,rightsConfirmed:false}],"en").length,0);assert.equal(getPublicArtworks([work],"en").length,1);});
@@ -392,4 +394,34 @@ test("localized slugs are unique per locale and alternate links follow stable co
   galleries.pop();
   journalEntries.pop();
  }
+});
+
+test("canonical portfolio registry passes cross-record validation", () => {
+ const issues = validatePortfolioContent({
+  artworks,
+  galleries,
+  journalEntries,
+  cvEntries: [],
+  homepageSelection,
+  artistProfile,
+  cvDocument,
+ });
+ assert.deepEqual(issues, []);
+});
+
+test("portfolio validation reports duplicate routes and broken content relationships", () => {
+ const duplicateArtwork = { ...artworks[0], slug: "different-fallback-slug" };
+ const brokenGallery = { ...galleries[0], artworkIds: ["missing-artwork"], coverArtworkId: "missing-artwork" };
+ const issues = validatePortfolioContent({
+  artworks: [...artworks, duplicateArtwork],
+  galleries: [brokenGallery],
+  journalEntries,
+  cvEntries: [],
+  homepageSelection: { ...homepageSelection, featuredArtworkIds: [...homepageSelection.featuredArtworkIds, "missing-artwork"] },
+  artistProfile,
+  cvDocument,
+ });
+ assert.ok(issues.some((issue) => issue.path.endsWith(".id") && issue.message.includes("Duplicate artworks ID")));
+ assert.ok(issues.some((issue) => issue.path.includes("artworkIds") && issue.message.includes("Unknown artwork ID")));
+ assert.ok(issues.some((issue) => issue.path.includes("featuredArtworkIds") && issue.message.includes("Unknown content ID")));
 });
