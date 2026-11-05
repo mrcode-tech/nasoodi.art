@@ -163,15 +163,14 @@ test("JSON-LD serialization escapes HTML-sensitive opening brackets",()=>{
  assert.equal(serialized.includes(String.fromCharCode(92)+"u003c/script>"),true);
 });
 
-test("artist profile requires published artist approval and complete localized statement and biography",()=>{
- const profile:ArtistProfile={statement:{en:"Statement",fa:"بیانیه"},biography:{en:"Biography",fa:"زندگی‌نامه"},status:"published",approvedLocales:["en","fa"],artistApproved:true};
+test("artist profile resolves from localized canonical identity, statement, and biography",()=>{
+ const profile:ArtistProfile={id:"artist-profile",name:{en:"Artist",fa:"هنرمند"},statement:{en:"Statement",fa:"بیانیه"},biography:{en:"Biography",fa:"زندگی‌نامه"}};
  assert.equal(getPublicArtistProfile(profile,"en")?.statement.en,"Statement");
- assert.equal(getPublicArtistProfile({...profile,artistApproved:false},"en"),undefined);
  assert.equal(getPublicArtistProfile({...profile,biography:{en:"Biography"}},"fa"),undefined);
- assert.equal(getPublicArtistProfile({...profile,status:"draft"},"en"),undefined);
+ assert.equal(getPublicArtistProfile({...profile,name:{en:"Artist"}},"fa"),undefined);
 });
 test("artist portrait is omitted unless rights, dimensions, and localized alt are valid",()=>{
- const profile:ArtistProfile={statement:{en:"Statement"},biography:{en:"Biography"},status:"published",approvedLocales:["en"],artistApproved:true,portrait:{src:"/artist.jpg",alt:{en:"Artist in studio"},width:800,height:1000,rightsConfirmed:true}};
+ const profile:ArtistProfile={id:"artist-profile",name:{en:"Artist"},statement:{en:"Statement"},biography:{en:"Biography"},portrait:{src:"/artist.jpg",alt:{en:"Artist in studio"},width:800,height:1000,rightsConfirmed:true}};
  assert.equal(getPublicArtistProfile(profile,"en")?.portrait?.src,"/artist.jpg");
  assert.equal(getPublicArtistProfile({...profile,portrait:{...profile.portrait!,rightsConfirmed:false}},"en")?.portrait,undefined);
  assert.equal(getPublicArtistProfile({...profile,portrait:{...profile.portrait!,width:0}},"en")?.portrait,undefined);
