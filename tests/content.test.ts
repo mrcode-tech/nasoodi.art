@@ -433,6 +433,15 @@ test("localized slugs are unique per locale and alternate links follow stable co
  }
 });
 
+test("published Journal records require a complete localized JSON body",()=>{
+ const entry=journalEntries[0];
+ const issues=validatePortfolioContent({
+  artworks,galleries,journalEntries:[{...entry,body:{en:entry.body?.en}}],
+  cvEntries,homepageSelection,artistProfile,cvDocument,
+ });
+ assert.ok(issues.some((issue)=>issue.path.endsWith(".body.fa")));
+});
+
 test("canonical portfolio registry passes cross-record validation", () => {
  const issues = validatePortfolioContent({
   artworks,
