@@ -36,8 +36,8 @@ test("localized metadata omits social cards for noindex demo and incomplete page
   });
 
   assert.equal(metadata.alternates?.canonical, "https://nasoodi.art/en/contact");
-  assert.equal(metadata.openGraph, undefined);
-  assert.equal(metadata.twitter, undefined);
+  assert.equal(metadata.openGraph, null);
+  assert.equal(metadata.twitter, null);
   assert.equal(metadata.robots && typeof metadata.robots === "object" && "index" in metadata.robots ? metadata.robots.index : undefined, false);
 });
 
