@@ -101,8 +101,8 @@ export type CvEntry = {
   title: Localized;
   organization?: Localized;
   location?: Localized;
-  year: number;
-  verified: boolean;
+  year?: number;
+  period?: Localized;
   status: Status;
   sortOrder?: number;
 };
