@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { otherLocale, pagePath, type Locale } from "../../types/locale";
+import { getOpenGraphLocale, otherLocale, pagePath, type Locale } from "../../types/locale";
 
 const siteOrigin = "https://nasoodi.art";
 
@@ -41,8 +41,8 @@ export function createLocalizedMetadata(input: LocalizedMetadataInput): Metadata
 
   if (!input.indexable) return { ...metadata, openGraph: null, twitter: null };
 
-  const localeTag = input.locale === "fa" ? "fa_IR" : "en_US";
-  const alternateLocaleTag = input.locale === "fa" ? "en_US" : "fa_IR";
+  const localeTag = getOpenGraphLocale(input.locale);
+  const alternateLocaleTag = getOpenGraphLocale(otherLocale(input.locale));
   const commonOpenGraph = {
     title: input.title,
     ...(description ? { description } : {}),

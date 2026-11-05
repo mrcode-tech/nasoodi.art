@@ -7,10 +7,10 @@ import type {
   HomepageSelection,
   JournalEntry,
 } from "../../types/content";
-import type { Locale } from "../../types/locale";
+import { locales as supportedLocales, type Locale } from "../../types/locale";
 import { getLocalizedSlug, isSafeContentSlug, isSafeLocalImagePath } from "./paths";
 
-const locales = ["en", "fa"] as const;
+const locales = supportedLocales;
 
 export type ContentValidationIssue = {
   path: string;
