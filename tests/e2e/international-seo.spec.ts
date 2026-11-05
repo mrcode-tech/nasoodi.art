@@ -11,6 +11,8 @@ const indexableArchives = [
   { locale: "fa", path: "/fa/about", alternate: "/en/about" },
   { locale: "en", path: "/en/cv", alternate: "/fa/cv" },
   { locale: "fa", path: "/fa/cv", alternate: "/en/cv" },
+  { locale: "en", path: "/en/contact", alternate: "/fa/contact" },
+  { locale: "fa", path: "/fa/contact", alternate: "/en/contact" },
 ];
 
 test("indexable archive routes render localized document metadata and reciprocal alternates", async ({ page, request }) => {
@@ -70,26 +72,24 @@ test("sitemap lists canonical localized archives and excludes demo or unpublishe
     "https://nasoodi.art/fa/about",
     "https://nasoodi.art/en/cv",
     "https://nasoodi.art/fa/cv",
+    "https://nasoodi.art/en/contact",
+    "https://nasoodi.art/fa/contact",
   ]) expect(xml).toContain(url);
 
-  for (const forbidden of ["/en/contact", "/fa/contact"]) {
+  for (const forbidden of []) {
     expect(xml).not.toContain("https://nasoodi.art" + forbidden);
   }
 });
 
-test("Contact remains noindex while canonical About and CV pages are indexable", async ({ page }) => {
+test("canonical Contact, About, and CV pages are indexable with localized alternates", async ({ page }) => {
   for (const locale of ["en", "fa"] as const) {
-    await page.goto("/" + locale + "/contact");
-    await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", "https://nasoodi.art/" + locale + "/contact");
-    await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", /noindex/);
-    await expect(page.locator('link[rel="alternate"][hreflang]')).toHaveCount(0);
-    await expect(page.locator('meta[property^="og:"]')).toHaveCount(0);
-    await expect(page.locator('meta[name^="twitter:"]')).toHaveCount(0);
-
-    for (const section of ["about", "cv"]) {
+    for (const section of ["contact", "about", "cv"]) {
       await page.goto("/" + locale + "/" + section);
+      await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", "https://nasoodi.art/" + locale + "/" + section);
       await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", /index/);
       await expect(page.locator('link[rel="alternate"][hreflang="' + (locale === "en" ? "fa" : "en") + '"]')).toHaveAttribute("href", "https://nasoodi.art/" + (locale === "en" ? "fa" : "en") + "/" + section);
+      await expect(page.locator('meta[name="description"]')).toHaveAttribute("content", /.+/);
+      await expect(page.locator('meta[property="og:title"]')).toHaveAttribute("content", /.+/);
     }
   }
 });
