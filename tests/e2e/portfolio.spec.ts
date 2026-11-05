@@ -1286,6 +1286,15 @@ test("editorial section transitions avoid decorative rules while functional cont
  
 test("localized Contact surfaces render centralized demo details without approval-state gating", async ({ page }) => {
  for (const locale of ["en","fa"] as const) {
+  await page.setViewportSize({width:1280,height:900});
+  await page.goto(`/${locale}`);
+  await expect(page.locator(".desktop-sidebar").getByRole("link",{name:locale==="fa"?"تماس":"Contact"})).toHaveAttribute("href",`/${locale}/contact`);
+  await page.setViewportSize({width:390,height:844});
+  await page.goto(`/${locale}`);
+  await page.getByRole("button",{name:locale==="fa"?"باز کردن راهبری":"Open navigation"}).click();
+  const drawer=page.getByRole("dialog");
+  await expect(drawer.getByRole("link",{name:locale==="fa"?"تماس":"Contact"})).toHaveAttribute("href",`/${locale}/contact`);
+  await page.keyboard.press("Escape");
   await page.setViewportSize({width:390,height:844});
   await page.goto(`/${locale}`);
   const home=page.locator(".homepage-contact");
