@@ -1568,7 +1568,7 @@ test("new visitors default to System and follow the operating-system color schem
 });
 
 
-test("Contact experience is editorial, bilingual, responsive, and displays the demo contact methods", async ({ page }) => {
+test("Contact experience is editorial, bilingual, responsive, and displays the owner-supplied contact method", async ({ page }) => {
   for (const locale of [
     { code: "en", heading: "Let's start a conversation.", dir: "ltr" },
     { code: "fa", heading: "بیایید گفت‌وگویی را آغاز کنیم.", dir: "rtl" },
