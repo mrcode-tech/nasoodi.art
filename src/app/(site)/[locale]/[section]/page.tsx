@@ -1,12 +1,13 @@
 import Image from "next/image";
 import { getTranslations, setRequestLocale } from "next-intl/server";
+import { createLocalizedMetadata } from "@/lib/seo/metadata";
 import { GalleryIndex } from "@/components/gallery-index";
 import { ContactExperience } from "@/components/contact-experience";
 import { aboutPreviewFixture } from "@/lib/about-preview-fixtures";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { artworks,galleries,journalEntries,cvEntries,artistProfile,contactDetails,getPublicArtistProfile,getPublicContactDetails,getPublicArtworks,getPublicGalleries,getPublicJournal,getPublicCvEntries,getJournalEntriesForCategory,journalCategories,journalCoverImageFor,primaryImageFor,type JournalCategory } from "@/lib/site";
+import { artworks,galleries,journalEntries,cvEntries,artistProfile,contactDetails,getPublicArtistProfile,getPublicContactDetails,getPublicArtworks,getPublicGalleries,getPublicJournal,getPublicCvEntries,getGalleryCoverArtwork,getJournalEntriesForCategory,journalCategories,journalCoverImageFor,primaryImageFor,type JournalCategory } from "@/lib/site";
 import { paginateItems, resolveGalleryPagination } from "@/lib/gallery-pagination";
 import { JournalPagination } from "@/components/journal-pagination";
 import { SiteBreadcrumbs } from "@/components/site-breadcrumbs";
@@ -15,20 +16,57 @@ type Props={params:Promise<{locale:string;section:string}>;searchParams:Promise<
 const names=["works","galleries","journal","about","contact","cv"] as const;
 type Section=typeof names[number];
 const valid=(s:string):s is Section=>names.includes(s as Section);
-export async function generateMetadata({params}:Props):Promise<Metadata>{const {locale,section}=await params;if(!isLocale(locale)||!valid(section))return {};setRequestLocale(locale);const t=await getTranslations({ locale });
- const indexable = section==="works" ? getPublicArtworks(artworks,locale).length>0 :
-  section==="galleries" ? getPublicGalleries(galleries,artworks,locale).length>0 :
-  section==="journal" ? getPublicJournal(journalEntries,locale).length>0 :
-  section==="cv" ? getPublicCvEntries(cvEntries,locale).length>0 :
-  section==="about" ? Boolean(getPublicArtistProfile(artistProfile,locale)) : false;
+export async function generateMetadata({params}:Props):Promise<Metadata>{
+ const {locale,section}=await params;
+ if(!isLocale(locale)||!valid(section))return {};
+ setRequestLocale(locale);
+ const t=await getTranslations({ locale });
  const other=otherLocale(locale);
- const translated = section==="works" ? hasEquivalentContentSet(getPublicArtworks(artworks,locale),getPublicArtworks(artworks,other)) :
-  section==="galleries" ? hasEquivalentContentSet(getPublicGalleries(galleries,artworks,locale),getPublicGalleries(galleries,artworks,other)) :
-  section==="journal" ? hasEquivalentContentSet(getPublicJournal(journalEntries,locale),getPublicJournal(journalEntries,other)) :
-  section==="cv" ? hasEquivalentContentSet(getPublicCvEntries(cvEntries,locale),getPublicCvEntries(cvEntries,other)) :
-  section==="about" ? Boolean(getPublicArtistProfile(artistProfile,other)) : false;
- const profile=section==="about"?getPublicArtistProfile(artistProfile,locale):undefined;
- return {title:t(section),...(profile?{description:profile.statement[locale]}:{}),alternates:{canonical:pagePath(locale,section),...(indexable&&translated?{languages:{[locale]:pagePath(locale,section),[other]:pagePath(other,section)}}:{})},robots:{index:section==="about"||section==="contact"?false:indexable,follow:true}};}
+ const works=getPublicArtworks(artworks,locale);
+ const otherWorks=getPublicArtworks(artworks,other);
+ const sets=getPublicGalleries(galleries,artworks,locale);
+ const otherSets=getPublicGalleries(galleries,artworks,other);
+ const journal=getPublicJournal(journalEntries,locale);
+ const otherJournal=getPublicJournal(journalEntries,other);
+ const cv=getPublicCvEntries(cvEntries,locale);
+ const otherCv=getPublicCvEntries(cvEntries,other);
+ const profile=getPublicArtistProfile(artistProfile,locale);
+ const otherProfile=getPublicArtistProfile(artistProfile,other);
+
+ const indexable=section==="works"?works.length>0:
+  section==="galleries"?sets.length>0:
+  section==="journal"?journal.length>0:
+  section==="cv"?cv.length>0:
+  section==="about"?Boolean(profile):false;
+ const equivalent=section==="works"?hasEquivalentContentSet(works,otherWorks):
+  section==="galleries"?hasEquivalentContentSet(sets,otherSets):
+  section==="journal"?hasEquivalentContentSet(journal,otherJournal):
+  section==="cv"?hasEquivalentContentSet(cv,otherCv):
+  section==="about"?Boolean(profile&&otherProfile):false;
+
+ const description=section==="works"?t("worksDescription"):
+  section==="galleries"?t("galleriesDescription"):
+  section==="journal"?t("journalDescription"):
+  section==="cv"?t("cvDescription"):
+  section==="about"?profile?.statement[locale]:undefined;
+ const firstWork=works[0];
+ const firstGallery=sets[0];
+ const firstJournal=journal[0];
+ const socialImage=section==="works"&&firstWork?primaryImageFor(firstWork)?.src:
+  section==="galleries"&&firstGallery?getGalleryCoverArtwork(firstGallery,artworks,locale)?.image.src:
+  section==="journal"&&firstJournal?journalCoverImageFor(firstJournal,locale)?.src:undefined;
+ const indexablePage=indexable&&section!=="about"&&section!=="contact";
+
+ return createLocalizedMetadata({
+  locale,
+  path:section,
+  title:t(section),
+  description,
+  alternatePath:indexablePage&&equivalent?pagePath(other,section):undefined,
+  indexable:indexablePage,
+  images:socialImage?[socialImage]:undefined,
+ });
+}
 export default async function SectionPage({params,searchParams}:Props){const [{locale,section},{category:rawCategory,page:rawPage,pageSize:rawPageSize}]=await Promise.all([params,searchParams]);if(!isLocale(locale)||!valid(section))notFound();setRequestLocale(locale);const t=await getTranslations({ locale });
  if(section==="about"){
   const biography=aboutPreviewFixture.biography[locale];
