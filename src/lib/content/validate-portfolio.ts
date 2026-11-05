@@ -135,11 +135,32 @@ export function validatePortfolioContent(source: PortfolioContentSource): Conten
       issues.push({ path: path + ".approvedLocales", message: "Approved locales must be unique." });
     }
     entry.approvedLocales.forEach((locale, localeIndex) => {
-      if (entry.status === "published" && (!entry.title[locale]?.trim() || !entry.summary[locale]?.trim())) {
-        issues.push({ path: path + ".approvedLocales[" + localeIndex + "]", message: "Published Journal content requires a localized title and summary for each approved locale." });
-      }
       if (!locales.includes(locale)) issues.push({ path: path + ".approvedLocales[" + localeIndex + "]", message: "Unsupported locale " + locale + "." });
     });
+    if (entry.status === "published") {
+      for (const locale of locales) {
+        if (!entry.title[locale]?.trim() || !entry.summary[locale]?.trim()) {
+          issues.push({ path: path + ".localizedContent." + locale, message: "Published Journal records require a localized title and summary in every supported locale." });
+        }
+        const blocks = entry.body?.[locale];
+        if (!blocks?.length) {
+          issues.push({ path: path + ".body." + locale, message: "Published Journal records require a non-empty localized JSON rich-text body in every supported locale." });
+        } else {
+          blocks.forEach((block, blockIndex) => {
+            const blockPath = path + ".body." + locale + "[" + blockIndex + "]";
+            if (block.type === "paragraph" || block.type === "heading" || block.type === "quote") {
+              if (!block.text.trim()) issues.push({ path: blockPath + ".text", message: "Rich-text block content cannot be empty." });
+            } else if (block.type === "list") {
+              if (!block.items.length || block.items.some((item) => !item.trim())) {
+                issues.push({ path: blockPath + ".items", message: "Rich-text lists require non-empty items." });
+              }
+            } else if (block.type === "link" && (!block.text.trim() || !isSafeJournalHref(block.href))) {
+              issues.push({ path: blockPath, message: "Rich-text links require a label and a safe HTTPS or same-origin destination." });
+            }
+          });
+        }
+      }
+    }
     if (entry.event) {
       const event = entry.event;
       if (!isValidExplicitDate(event.startsAt)) issues.push({ path: path + ".event.startsAt", message: "Event start must include an explicit UTC offset or Z." });
