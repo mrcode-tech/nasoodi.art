@@ -1,9 +1,37 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import { aboutPreviewFixture } from "../src/lib/about-preview-fixtures";
-import { artistProfile, cvDocument, cvEntries } from "../src/content/portfolio";
+import { artworks, galleries, journalEntries, homepageSelection, artistProfile, cvDocument, cvEntries, portfolioStructuredData } from "../src/content/portfolio";
+import {
+  getPublicArtworks,
+  getPublicGalleries,
+  getGalleryCoverArtwork,
+  getPublicCvEntries,
+  getPublicCvDocument,
+  getPublicArtistProfile,
+  getPublicContactDetails,
+  getHomepageFeaturedArtworks,
+} from "../src/lib/content/publication";
+import {
+  isSafeJournalHref,
+  getPublicJournal,
+  getUpcomingJournalEvents,
+  getUpcomingJournalEvent,
+  getJournalEntriesForCategory,
+  getHomepageJournalPreview,
+  journalCoverImageFor,
+  hasExplicitTimeZone,
+} from "../src/lib/content/journal";
+import { getLocalizedSlug, isSafeLocalImagePath, isSafeContentSlug } from "../src/lib/content/paths";
+import { hasEquivalentContentSet } from "../src/lib/content/identity";
+import {
+  getArtworkStructuredData,
+  getGalleryStructuredData,
+  getJournalStructuredData,
+  serializeJsonLd,
+} from "../src/lib/seo/structured-data";
+import type { Artwork, Gallery, JournalEntry, CvEntry, CvDocument, ArtistProfile, ContactDetails } from "../src/types/content";
 import { validatePortfolioContent } from "../src/lib/content/validate-portfolio";
-import { artworks,galleries,journalEntries,homepageSelection,getPublicArtworks,getPublicGalleries,isSafeLocalImagePath,isSafeContentSlug,getPublicJournal,getPublicCvEntries,getPublicCvDocument,getPublicArtistProfile,getPublicContactDetails,getUpcomingJournalEvents,getUpcomingJournalEvent,getArtworkStructuredData,getGalleryStructuredData,getJournalStructuredData,serializeJsonLd,getHomepageFeaturedArtworks,getGalleryCoverArtwork,getJournalEntriesForCategory,getHomepageJournalPreview,journalCoverImageFor,isSafeJournalHref,portfolioStructuredData,getLocalizedSlug,hasEquivalentContentSet,type Artwork,type Gallery,type JournalEntry,type CvEntry,type CvDocument,type ArtistProfile,type ContactDetails, hasExplicitTimeZone } from "../src/lib/site";
 const work:Artwork={id:"w1",slug:"work-one",title:{en:"Work",fa:"اثر"},images:[{src:"/art/work.jpg",alt:{en:"Painting",fa:"نقاشی"},role:"primary",width:1200,height:900}],rightsConfirmed:true,status:"published"};
 test("artwork stays private until published and rights-cleared",()=>{assert.equal(getPublicArtworks([{...work,status:"needs-review"}],"en").length,0);assert.equal(getPublicArtworks([{...work,rightsConfirmed:false}],"en").length,0);assert.equal(getPublicArtworks([work],"en").length,1);});
 test("artwork requires localized title and primary image alt",()=>{assert.equal(getPublicArtworks([{...work,title:{en:"Work"}}],"fa").length,0);assert.equal(getPublicArtworks([{...work,images:[{...work.images[0],alt:{en:""}}]}],"en").length,0);});
