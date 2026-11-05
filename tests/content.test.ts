@@ -317,6 +317,17 @@ test("CV PDF publication requires an approved published same-origin PDF and safe
  assert.equal(getPublicCvDocument(undefined),undefined);
 });
 
+test("canonical CV record contains localized editable entries",()=>{
+ assert.ok(cvEntries.length>0);
+ for(const entry of cvEntries){
+  assert.ok(entry.id);
+  assert.ok(entry.title.en?.trim());
+  assert.ok(entry.title.fa?.trim());
+  assert.ok(entry.period?.en?.trim() || entry.year);
+  assert.ok(entry.period?.fa?.trim() || entry.year);
+ }
+});
+
 test("canonical artist profile is populated in both locales",()=>{
  assert.ok(artistProfile);
  assert.equal(artistProfile?.id,"artist-profile");
@@ -489,7 +500,7 @@ test("CV identifiers are validated independently from URL slugs", () => {
 });
 
 
-test("JSON and Markdown editorial sources preserve bilingual records and rich-text semantics", () => {
+test("JSON editorial records preserve bilingual Journal bodies and rich-text semantics", () => {
  assert.equal(artworks.length, 5);
  assert.equal(galleries.length, 4);
  assert.equal(journalEntries.length, 8);
@@ -502,8 +513,8 @@ test("JSON and Markdown editorial sources preserve bilingual records and rich-te
  assert.equal(first.body.fa[0].type === "paragraph" ? first.body.fa[0].text : "", "این روزها آتلیه پر از گفت‌وگوهای ناتمام میان رنگ و سطح است. بعضی بخش‌ها با لایه‌های نازک و آرام شکل می‌گیرند تا ردّ رنگ‌های پیشین باقی بماند؛ بخش‌های دیگر به حرکتی قاطع‌تر نیاز دارند.");
  assert.equal(journalEntries.find((entry) => entry.id === "journal-exhibition-open-studio-2026")?.event?.startsAt, "2026-11-14T14:00:00+00:00");
  for (const entry of journalEntries) {
-  assert.ok(entry.body?.en?.length, entry.id + " must have English Markdown content");
-  assert.ok(entry.body?.fa?.length, entry.id + " must have Persian Markdown content");
+  assert.ok(entry.body?.en?.length, entry.id + " must have an English JSON rich-text body");
+  assert.ok(entry.body?.fa?.length, entry.id + " must have a Persian JSON rich-text body");
   assert.ok(entry.coverImage?.rightsConfirmed, entry.id + " must resolve an approved artwork cover");
  }
 });
