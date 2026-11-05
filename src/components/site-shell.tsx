@@ -132,7 +132,7 @@ export function SiteShell({ locale, children, announcement }: { locale: Locale; 
         </SheetContent>
       </Sheet>
     </header>
-    <div className="desktop-utility" dir={getLocaleDirection(locale)}><span className="language-label">{labels.language}</span><LanguageSelector locale={locale} alternate={alternate} pathname={pathname} label={labels.language}/><ThemeSelector locale={locale}/></div>
+    <div className="desktop-utility" dir={getLocaleDirection(locale)}><span className="language-label">{labels.language}</span><LanguageSelector locale={locale} alternates={alternatePaths} pathname={pathname} label={labels.language}/><ThemeSelector locale={locale}/></div>
     <div className="site-main"><main id="main-content">{children}</main></div>
   </>;
 }
