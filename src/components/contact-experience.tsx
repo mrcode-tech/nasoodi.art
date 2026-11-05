@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { useTranslations } from "next-intl";
-import { pagePath } from "@/types/locale";
-import { getLocaleDirection, type Locale } from "@/types/locale";
+import { getLocaleDirection, pagePath, type Locale } from "@/types/locale";
 import type { PublicContactDetails } from "@/lib/content/publication";
 
 type ContactExperienceProps = {
