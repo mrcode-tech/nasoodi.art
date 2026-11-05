@@ -1294,9 +1294,10 @@ test("localized Contact surfaces render centralized demo details without approva
   await expect(home.locator('a[href="mailto:hello@example.com"]')).toBeVisible();
   await expect(home.getByRole("link",{name:"@nasoodi_contact_demo"})).toHaveAttribute("href","https://t.me/nasoodi_contact_demo");
   await expect(home.getByRole("link",{name:"@nasoodi.demo"})).toHaveAttribute("href","https://www.instagram.com/nasoodi.demo/");
-  await expect(home.getByRole("link",{name:/contact/i})).toHaveAttribute("href",`/${locale}/contact`);
-
-  await page.goto(`/${locale}/contact`);
+  const contactLink=home.getByRole("link",{name:/contact/i});
+  await expect(contactLink).toHaveAttribute("href",`/${locale}/contact`);
+  await contactLink.click();
+  await expect(page).toHaveURL(`/${locale}/contact`);
   const contactPage=page.locator(".contact-experience-page");
   await expect(contactPage).toBeVisible();
   await expect(contactPage).toHaveAttribute("dir", locale === "fa" ? "rtl" : "ltr");
@@ -1306,6 +1307,8 @@ test("localized Contact surfaces render centralized demo details without approva
   const breadcrumb=page.getByRole("navigation",{name:locale==="fa"?"مسیر صفحه":"Breadcrumb"});
   await expect(breadcrumb).toBeVisible();
   await expect(breadcrumb.locator("[aria-current=\"page\"]")).toHaveText(locale==="fa"?"تماس":"Contact");
+  await page.reload();
+  await expect(page.getByRole("navigation",{name:locale==="fa"?"مسیر صفحه":"Breadcrumb"}).locator("[aria-current=\"page\"]")).toHaveText(locale==="fa"?"تماس":"Contact");
   expect(await page.evaluate(()=>document.documentElement.scrollWidth<=document.documentElement.clientWidth)).toBe(true);
  }
 });
@@ -1316,12 +1319,21 @@ test("breadcrumbs link to localized ancestors on archive and nested detail pages
   const crumb=page.getByRole("navigation",{name:locale==="fa"?"مسیر صفحه":"Breadcrumb"});
   await expect(crumb.getByRole("link",{name:locale==="fa"?"خانه":"Home"})).toHaveAttribute("href",`/${locale}`);
   const first=page.locator(".journal-card h2 a").first();
-  if(await first.count()){await first.click();await expect(page.getByRole("navigation",{name:locale==="fa"?"مسیر صفحه":"Breadcrumb"}).getByRole("link",{name:locale==="fa"?"یادداشت‌ها":"Journal"})).toHaveAttribute("href",`/${locale}/journal`);}
+  if(await first.count()){
+   await first.click();
+   const detailBreadcrumb=page.getByRole("navigation",{name:locale==="fa"?"مسیر صفحه":"Breadcrumb"});
+   await expect(detailBreadcrumb.getByRole("link",{name:locale==="fa"?"یادداشت‌ها":"Journal"})).toHaveAttribute("href",`/${locale}/journal`);
+   await expect(detailBreadcrumb.locator("[aria-current=\"page\"]")).toBeVisible();
+   await page.reload();
+   await expect(page.getByRole("navigation",{name:locale==="fa"?"مسیر صفحه":"Breadcrumb"}).getByRole("link",{name:locale==="fa"?"یادداشت‌ها":"Journal"})).toHaveAttribute("href",`/${locale}/journal`);
+  }
  }
 });
 test("Journal pagination remains compact, operable, and within the viewport at common phone widths",async({page})=>{
  for(const locale of ["en","fa"] as const) for(const width of [320,360,375,390,430]){
   await page.setViewportSize({width,height:844});await page.goto(`/${locale}/journal?pageSize=5`);
+  const spacing=await page.locator("html").evaluate(el=>getComputedStyle(el).getPropertyValue("--space-editorial-break").trim());
+  expect(spacing.length).toBeGreaterThan(0);
   const controls=page.locator(".journal-pagination .gallery-pagination-controls");
   await expect(controls).toBeVisible();
   expect(await page.evaluate(()=>document.documentElement.scrollWidth<=document.documentElement.clientWidth),`${locale} ${width}: no horizontal overflow`).toBe(true);
