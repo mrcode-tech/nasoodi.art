@@ -7,6 +7,10 @@ const indexableArchives = [
   { locale: "fa", path: "/fa/galleries", alternate: "/en/galleries" },
   { locale: "en", path: "/en/journal", alternate: "/fa/journal" },
   { locale: "fa", path: "/fa/journal", alternate: "/en/journal" },
+  { locale: "en", path: "/en/about", alternate: "/fa/about" },
+  { locale: "fa", path: "/fa/about", alternate: "/en/about" },
+  { locale: "en", path: "/en/cv", alternate: "/fa/cv" },
+  { locale: "fa", path: "/fa/cv", alternate: "/en/cv" },
 ];
 
 test("indexable archive routes render localized document metadata and reciprocal alternates", async ({ page, request }) => {
@@ -62,22 +66,30 @@ test("sitemap lists canonical localized archives and excludes demo or unpublishe
     "https://nasoodi.art/fa/galleries",
     "https://nasoodi.art/en/journal",
     "https://nasoodi.art/fa/journal",
+    "https://nasoodi.art/en/about",
+    "https://nasoodi.art/fa/about",
+    "https://nasoodi.art/en/cv",
+    "https://nasoodi.art/fa/cv",
   ]) expect(xml).toContain(url);
 
-  for (const forbidden of ["/en/contact", "/fa/contact", "/en/about", "/fa/about", "/en/cv", "/fa/cv"]) {
+  for (const forbidden of ["/en/contact", "/fa/contact"]) {
     expect(xml).not.toContain("https://nasoodi.art" + forbidden);
   }
 });
 
-test("demo Contact and sample About routes remain noindex without hreflang alternates", async ({ page }) => {
+test("Contact remains noindex while canonical About and CV pages are indexable", async ({ page }) => {
   for (const locale of ["en", "fa"] as const) {
-    for (const section of ["contact", "about"]) {
+    await page.goto("/" + locale + "/contact");
+    await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", "https://nasoodi.art/" + locale + "/contact");
+    await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", /noindex/);
+    await expect(page.locator('link[rel="alternate"][hreflang]')).toHaveCount(0);
+    await expect(page.locator('meta[property^="og:"]')).toHaveCount(0);
+    await expect(page.locator('meta[name^="twitter:"]')).toHaveCount(0);
+
+    for (const section of ["about", "cv"]) {
       await page.goto("/" + locale + "/" + section);
-      await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", "https://nasoodi.art/" + locale + "/" + section);
-      await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", /noindex/);
-      await expect(page.locator('link[rel="alternate"][hreflang]')).toHaveCount(0);
-      await expect(page.locator('meta[property^="og:"]')).toHaveCount(0);
-      await expect(page.locator('meta[name^="twitter:"]')).toHaveCount(0);
+      await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", /index/);
+      await expect(page.locator('link[rel="alternate"][hreflang="' + (locale === "en" ? "fa" : "en") + '"]')).toHaveAttribute("href", "https://nasoodi.art/" + (locale === "en" ? "fa" : "en") + "/" + section);
     }
   }
 });
