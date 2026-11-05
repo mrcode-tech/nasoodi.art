@@ -30,7 +30,6 @@ test("desktop announcement close control has no circular button treatment", asyn
   await expect(close).toHaveCSS("background-color", "rgba(0, 0, 0, 0)");
 });
 
-
 for (const locale of ["en", "fa"] as const) {
   test(`mobile ${locale} language and appearance selectors share the same trigger design`, async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 844 });
@@ -39,7 +38,7 @@ for (const locale of ["en", "fa"] as const) {
 
     const drawer = page.locator(".mobile-drawer");
     const language = drawer.locator(".language-trigger");
-    const appearance = drawer.locator(".theme-trigger");
+    const appearance = drawer.locator(".theme-trigger:not(.language-trigger)");
     await expect(language).toBeVisible();
     await expect(appearance).toBeVisible();
     await expect(language.locator(".language-code-icon")).toHaveText(locale.toUpperCase());
