@@ -160,11 +160,18 @@ export function validatePortfolioContent(source: PortfolioContentSource): Conten
 
   validateUniqueIds("cvEntries", source.cvEntries, issues);
   source.cvEntries.forEach((entry, index) => {
-    if (!Number.isSafeInteger(entry.year) || entry.year < 1) {
-      issues.push({ path: "cvEntries[" + index + "].year", message: "CV year must be a positive integer." });
+    const path = "cvEntries[" + index + "]";
+    const validYear = Number.isSafeInteger(entry.year) && (entry.year ?? 0) > 0;
+    const hasPeriod = Boolean(entry.period?.en?.trim() && entry.period?.fa?.trim());
+    if (!validYear && !hasPeriod) {
+      issues.push({ path: path + ".year", message: "A CV entry requires a positive year or a period in every supported locale." });
     }
-    if (entry.status === "published" && !entry.verified) {
-      issues.push({ path: "cvEntries[" + index + "].verified", message: "A published CV entry must be verified." });
+    if (entry.status === "published") {
+      for (const locale of locales) {
+        if (!entry.title[locale]?.trim()) {
+          issues.push({ path: path + ".title." + locale, message: "A published CV entry requires a localized title." });
+        }
+      }
     }
   });
 
