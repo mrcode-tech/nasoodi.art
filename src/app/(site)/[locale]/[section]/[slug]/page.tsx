@@ -6,7 +6,12 @@ import { SiteBreadcrumbs } from "@/components/site-breadcrumbs";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { artworks,galleries,journalEntries,getPublicArtworks,getPublicGalleries,getPublicJournal,getUpcomingJournalEvents,getGalleryCoverArtwork,isLocale,pagePath,otherLocale,primaryImageFor,journalCoverImageFor,isSafeJournalHref,getArtworkStructuredData,getGalleryStructuredData,getJournalStructuredData,serializeJsonLd,getLocalizedSlug } from "@/lib/site";
+import { artworks,galleries,journalEntries } from "@/content/portfolio";
+import { getPublicArtworks,getPublicGalleries,getGalleryCoverArtwork,primaryImageFor } from "@/lib/content/publication";
+import { getPublicJournal,getUpcomingJournalEvents,journalCoverImageFor,isSafeJournalHref } from "@/lib/content/journal";
+import { isLocale,pagePath,otherLocale } from "@/types/locale";
+import { getLocalizedSlug } from "@/lib/content/paths";
+import { getArtworkStructuredData,getGalleryStructuredData,getJournalStructuredData,serializeJsonLd } from "@/lib/seo/structured-data";
 type DetailProps={params:Promise<{locale:string;section:string;slug:string}>;searchParams:Promise<{fromGallery?:string}>};
 export async function generateMetadata({params}:DetailProps):Promise<Metadata>{
  const {locale,section,slug}=await params;

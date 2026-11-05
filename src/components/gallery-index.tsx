@@ -13,7 +13,10 @@ import {
   resolveGalleryPagination,
   type GalleryPageSize,
 } from "@/lib/gallery-pagination";
-import { getGalleryCoverArtwork, getLocalizedSlug, pagePath, type Artwork, type Gallery, type Locale } from "@/lib/site";
+import { getGalleryCoverArtwork } from "@/lib/content/publication";
+import { getLocalizedSlug } from "@/lib/content/paths";
+import { pagePath, type Locale } from "@/types/locale";
+import type { Artwork, Gallery } from "@/types/content";
 
 type Props = {
   galleries: Gallery[];

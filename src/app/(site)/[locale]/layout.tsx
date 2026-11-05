@@ -4,7 +4,11 @@ import { getMessages, setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { SiteShell } from "@/components/site-shell";
 import { ThemeProvider } from "@/components/providers/theme-provider";
-import { getUpcomingJournalEvent, getLocalizedSlug, isLocale, journalEntries, portfolioStructuredData, serializeJsonLd, type Locale } from "@/lib/site";
+import { getUpcomingJournalEvent } from "@/lib/content/journal";
+import { getLocalizedSlug } from "@/lib/content/paths";
+import { isLocale, type Locale } from "@/types/locale";
+import { journalEntries, portfolioStructuredData } from "@/content/portfolio";
+import { serializeJsonLd } from "@/lib/seo/structured-data";
 import "../../globals.css";
 
 export const metadata: Metadata = {

@@ -1,8 +1,9 @@
 import type { MetadataRoute } from "next";
-import {
-  artworks, galleries, journalEntries, cvEntries, artistProfile, locales,
-  getPublicArtworks, getPublicGalleries, getPublicJournal, getPublicCvEntries, getPublicArtistProfile, getLocalizedSlug, hasEquivalentContentSet,
-} from "@/lib/site";
+import { artworks, galleries, journalEntries, cvEntries, artistProfile } from "@/content/portfolio";
+import { locales } from "@/types/locale";
+import { getPublicArtworks, getPublicGalleries, getPublicJournal, getPublicCvEntries, getPublicArtistProfile } from "@/lib/content/publication";
+import { getLocalizedSlug } from "@/lib/content/paths";
+import { hasEquivalentContentSet } from "@/lib/content/identity";
 
 const base = "https://nasoodi.art";
 
