@@ -263,7 +263,7 @@ export function validatePortfolioContent(source: PortfolioContentSource): Conten
     }
     let validDestination = false;
     if (contact.email) {
-      if (/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(contact.email)) validDestination = true;
+      if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contact.email)) validDestination = true;
       else issues.push({ path: "contactDetails.email", message: "Contact email must be a valid email address." });
     }
     if (contact.telegramHandle) {
