@@ -12,12 +12,12 @@ export function getLocalizedSlug(record: LocalizedSlugRecord, locale: Locale): s
 
 /** Accept a single safe URL segment, including Unicode letters and numbers. */
 export function isSafeContentSlug(slug: string): boolean {
-  return /^[\\p{L}\\p{N}]+(?:-[\\p{L}\\p{N}]+)*$/u.test(slug);
+  return /^[\p{L}\p{N}]+(?:-[\p{L}\p{N}]+)*$/u.test(slug);
 }
 
 /** Content images must be same-origin public paths, never remote or traversal paths. */
 export function isSafeLocalImagePath(src: string): boolean {
-  if (!src.startsWith("/") || src.startsWith("//") || src.includes("\\\\") ||
-    /[?#\\u0000-\\u001f]/.test(src) || /%(?:2e|2f|5c)/i.test(src)) return false;
+  if (!src.startsWith("/") || src.startsWith("//") || src.includes("\\") ||
+    /[?#\u0000-\u001f]/.test(src) || /%(?:2e|2f|5c)/i.test(src)) return false;
   return src.split("/").every((segment) => segment !== "." && segment !== "..");
 }
