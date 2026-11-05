@@ -6,7 +6,7 @@ import { SiteShell } from "@/components/site-shell";
 import { ThemeProvider } from "@/components/providers/theme-provider";
 import { getUpcomingJournalEvent } from "@/lib/content/journal";
 import { getLocalizedSlug } from "@/lib/content/paths";
-import { isLocale, type Locale } from "@/types/locale";
+import { isLocale, getLocaleDirection, type Locale } from "@/types/locale";
 import { journalEntries, portfolioStructuredData } from "@/content/portfolio";
 import { serializeJsonLd } from "@/lib/seo/structured-data";
 import "../../globals.css";
@@ -27,7 +27,7 @@ export default async function LocaleLayout({ children, params }: { children: Rea
   const [messages] = await Promise.all([getMessages({ locale })]);
   const upcoming = getUpcomingJournalEvent(journalEntries, locale);
   const announcement = upcoming?.event ? { id: upcoming.id, slug: getLocalizedSlug(upcoming, locale), title: upcoming.title[locale]!, startsAt: upcoming.event.startsAt, timeZone: upcoming.event.timeZone } : undefined;
-  return <html lang={locale} dir={locale === "fa" ? "rtl" : "ltr"} suppressHydrationWarning><body><NextIntlClientProvider locale={locale} messages={messages}><ThemeProvider>
+  return <html lang={locale} dir={getLocaleDirection(locale)} suppressHydrationWarning><body><NextIntlClientProvider locale={locale} messages={messages}><ThemeProvider>
     <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeJsonLd(portfolioStructuredData) }} />
     <SiteShell locale={locale} announcement={announcement}>{children}</SiteShell>
   </ThemeProvider></NextIntlClientProvider></body></html>;

@@ -4,7 +4,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 import { alternatePathFor } from "@/lib/routing/alternate-path";
-import { pagePath, type Locale } from "@/types/locale";
+import { pagePath, getLocaleDirection, type Locale } from "@/types/locale";
 import { Button } from "@/components/ui/button";
 import { Sidebar, SidebarContent, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar";
 import { Sheet, SheetClose, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
@@ -28,7 +28,7 @@ function LanguageSelector({ locale, alternate, pathname, label, onNavigate }: { 
   };
   return <DropdownMenu>
     <DropdownMenuTrigger asChild><Button variant="ghost" size="sm" aria-label={label}><span>{locale === "fa" ? t("languagePersian") : t("languageEnglish")}</span><span className="language-chevron" aria-hidden="true">⌄</span></Button></DropdownMenuTrigger>
-    <DropdownMenuContent align={locale === "fa" ? "start" : "end"} dir={locale === "fa" ? "rtl" : "ltr"} aria-label={label}>
+    <DropdownMenuContent align={getLocaleDirection(locale) === "rtl" ? "start" : "end"} dir={getLocaleDirection(locale)} aria-label={label}>
       <DropdownMenuItem asChild><Link href={englishHref} hrefLang="en" lang="en" aria-current={locale === "en" ? "page" : undefined} onClick={(event) => { preserveGalleryState(event); onNavigate?.(); }}>{t("languageEnglish")}{locale === "en" ? " · " + t("current") : ""}</Link></DropdownMenuItem>
       <DropdownMenuItem asChild><Link href={persianHref} hrefLang="fa" lang="fa" aria-current={locale === "fa" ? "page" : undefined} onClick={(event) => { preserveGalleryState(event); onNavigate?.(); }}>{t("languagePersian")}{locale === "fa" ? " · " + t("currentFa") : ""}</Link></DropdownMenuItem>
     </DropdownMenuContent>
@@ -58,10 +58,10 @@ export function SiteShell({ locale, children, announcement }: { locale: Locale; 
     ["works", labels.works, pagePath(locale, "works")], ["galleries", labels.galleries, pagePath(locale, "galleries")],
     ["journal", labels.journal, pagePath(locale, "journal")], ["contact", labels.contact, pagePath(locale, "contact")],
   ];
-  const navigation = (insideSheet = false) => <nav dir={locale === "fa" ? "rtl" : "ltr"} aria-label={labels.primaryNavigation}>
+  const navigation = (insideSheet = false) => <nav dir={getLocaleDirection(locale)} aria-label={labels.primaryNavigation}>
     <SidebarMenu className="nav-list">{links.map(([key, label, href]) => {
       const active = key === "home" ? pathname === href : pathname === href || pathname.startsWith(href + "/");
-      return <SidebarMenuItem key={key}><SidebarMenuButton><Link className="nav-link" dir={locale === "fa" ? "rtl" : "ltr"} href={href} aria-current={active ? "page" : undefined} onClick={() => insideSheet && setMobileOpen(false)}>{label}</Link></SidebarMenuButton></SidebarMenuItem>;
+      return <SidebarMenuItem key={key}><SidebarMenuButton><Link className="nav-link" dir={getLocaleDirection(locale)} href={href} aria-current={active ? "page" : undefined} onClick={() => insideSheet && setMobileOpen(false)}>{label}</Link></SidebarMenuButton></SidebarMenuItem>;
     })}</SidebarMenu>
   </nav>;
   const isHomePage = pathname === pagePath(locale);
@@ -78,12 +78,12 @@ export function SiteShell({ locale, children, announcement }: { locale: Locale; 
         placement="viewport"
       />
     )}
-    <Sidebar className="desktop-sidebar" dir={locale === "fa" ? "rtl" : "ltr"} aria-label="Nasoodi.art">
+    <Sidebar className="desktop-sidebar" dir={getLocaleDirection(locale)} aria-label="Nasoodi.art">
       <SidebarHeader><Link className="artist-wordmark" href={pagePath(locale)} aria-label="Ghazaleh Abdolahzade Nasoodi — Home">
         <span className="wordmark-name" dir="ltr">Ghazaleh</span><span className="wordmark-surname" dir="ltr">Abdolahzade Nasoodi</span><span className="wordmark-role" dir="auto">{labels.discipline}</span>
       </Link></SidebarHeader>
       <SidebarContent>
-        <ScrollArea dir={locale === "fa" ? "rtl" : "ltr"} className="sidebar-scroll-area">
+        <ScrollArea dir={getLocaleDirection(locale)} className="sidebar-scroll-area">
           {navigation()}
           {announcement && !isHomePage && (
             <JournalAnnouncement
@@ -104,10 +104,10 @@ export function SiteShell({ locale, children, announcement }: { locale: Locale; 
       <Link className="mobile-wordmark" dir="ltr" href={pagePath(locale)}>Nasoodi<span>.</span></Link>
       <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
         <SheetTrigger asChild><Button className="menu-trigger" variant="ghost" size="sm" aria-label={mobileOpen ? labels.close : labels.menu} aria-controls="mobile-navigation" aria-expanded={mobileOpen}><span className="menu-trigger-lines" aria-hidden="true"><span/><span/></span></Button></SheetTrigger>
-        <SheetContent id="mobile-navigation" side={locale === "fa" ? "right" : "left"} className="mobile-drawer" dir={locale === "fa" ? "rtl" : "ltr"} aria-describedby={undefined} onOpenAutoFocus={(event) => { event.preventDefault(); drawerHomeRef.current?.focus(); }}>
+        <SheetContent id="mobile-navigation" side={getLocaleDirection(locale) === "rtl" ? "right" : "left"} className="mobile-drawer" dir={getLocaleDirection(locale)} aria-describedby={undefined} onOpenAutoFocus={(event) => { event.preventDefault(); drawerHomeRef.current?.focus(); }}>
           <SheetTitle className="sr-only">{labels.menu}</SheetTitle>
           <div className="drawer-heading"><Link ref={drawerHomeRef} className="mobile-wordmark" dir="ltr" href={pagePath(locale)}>Nasoodi<span>.</span></Link><SheetClose asChild><Button className="drawer-close" variant="ghost" size="sm" aria-label={labels.close}>×</Button></SheetClose></div>
-          <ScrollArea dir={locale === "fa" ? "rtl" : "ltr"} className="mobile-drawer-scroll">
+          <ScrollArea dir={getLocaleDirection(locale)} className="mobile-drawer-scroll">
             {navigation(true)}
             {announcement && (
               <JournalAnnouncement
@@ -122,7 +122,7 @@ export function SiteShell({ locale, children, announcement }: { locale: Locale; 
             )}
             <div className="drawer-flex-spacer" aria-hidden="true" />
             <div className="drawer-bottom">
-              <div className="drawer-settings" dir={locale === "fa" ? "rtl" : "ltr"}>
+              <div className="drawer-settings" dir={getLocaleDirection(locale)}>
                 <div className="drawer-setting-row"><span className="language-label">{labels.language}</span><LanguageSelector locale={locale} alternate={alternate} pathname={pathname} label={labels.language} onNavigate={() => setMobileOpen(false)}/></div>
                 <div className="drawer-setting-row"><span className="language-label">{labels.appearance}</span><ThemeSelector locale={locale}/></div>
               </div>
@@ -132,7 +132,7 @@ export function SiteShell({ locale, children, announcement }: { locale: Locale; 
         </SheetContent>
       </Sheet>
     </header>
-    <div className="desktop-utility" dir={locale === "fa" ? "rtl" : "ltr"}><span className="language-label">{labels.language}</span><LanguageSelector locale={locale} alternate={alternate} pathname={pathname} label={labels.language}/><ThemeSelector locale={locale}/></div>
+    <div className="desktop-utility" dir={getLocaleDirection(locale)}><span className="language-label">{labels.language}</span><LanguageSelector locale={locale} alternate={alternate} pathname={pathname} label={labels.language}/><ThemeSelector locale={locale}/></div>
     <div className="site-main"><main id="main-content">{children}</main></div>
   </>;
 }

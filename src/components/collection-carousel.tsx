@@ -6,7 +6,7 @@ import { useTranslations } from "next-intl";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious, CarouselStatus } from "@/components/ui/carousel";
 import { getGalleryCoverArtwork } from "@/lib/content/publication";
 import { getLocalizedSlug } from "@/lib/content/paths";
-import { pagePath, type Locale } from "@/types/locale";
+import { pagePath, getLocaleDirection, type Locale } from "@/types/locale";
 import type { Artwork, Gallery } from "@/types/content";
 
 type Props = { galleries: Gallery[]; artworks: Artwork[]; locale: Locale; label: string };
@@ -32,7 +32,7 @@ export function CollectionCarousel({ galleries, artworks, locale, label }: Props
   if (galleries.length <= 2) {
     return <div className="gallery-cards gallery-cards-sparse">{galleries.map((gallery) => <CollectionLink key={gallery.id} gallery={gallery} artworks={artworks} locale={locale} />)}</div>;
   }
-  const direction = locale === "fa" ? "rtl" : "ltr";
+  const direction = getLocaleDirection(locale);
   return (
     <Carousel dir={direction} label={label} roleDescription={t("carouselRole")} opts={{ slidesToScroll: 1 }} className="collection-carousel">
       <CarouselContent>

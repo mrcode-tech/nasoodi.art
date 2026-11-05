@@ -1,5 +1,5 @@
 import { useTranslations } from "next-intl";
-import type { Locale } from "@/types/locale";
+import { getLocaleDirection, type Locale } from "@/types/locale";
 import type { PublicContactDetails } from "@/lib/content/publication";
 
 type ContactExperienceProps = {
@@ -18,7 +18,7 @@ export function ContactExperience({ locale, details, variant }: ContactExperienc
     <section
       className={"contact-experience contact-experience-" + variant + (variant === "home" ? " homepage-contact" : "")}
       aria-labelledby={titleId}
-      dir={locale === "fa" ? "rtl" : "ltr"}
+      dir={getLocaleDirection(locale)}
     >
       <div className="contact-composition">
         <div className="contact-introduction">
