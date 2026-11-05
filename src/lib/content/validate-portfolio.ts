@@ -3,6 +3,8 @@ import type {
   ArtistProfile,
   CvDocument,
   CvEntry,
+  ContactDetails,
+  SiteContent,
   Gallery,
   HomepageSelection,
   JournalEntry,
