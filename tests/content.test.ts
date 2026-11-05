@@ -1,6 +1,5 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { aboutPreviewFixture } from "../src/lib/about-preview-fixtures";
 import { artworks } from "../src/content/artworks";
 import { galleries } from "../src/content/galleries";
 import { journalEntries } from "../src/content/journal";
@@ -56,11 +55,12 @@ test("event entries require a valid time zone and occurrence time",()=>{
  assert.equal(getPublicJournal([{...valid,event:{...valid.event!,timeZone:"Not/AZone"}}],"en").length,0);
  assert.equal(getPublicJournal([{...valid,event:{...valid.event!,startsAt:"2026-11-12T18:00:00"}}],"en").length,0);
 });
-test("CV entries require explicit verification and localized titles",()=>{
- const entry:CvEntry={id:"cv1",category:"group-exhibition",title:{en:"Group exhibition",fa:"نمایشگاه گروهی"},year:2024,verified:true,status:"published"};
+test("CV entries resolve from localized editorial content without verification flags",()=>{
+ const entry:CvEntry={id:"cv1",category:"group-exhibition",title:{en:"Group exhibition",fa:"نمایشگاه گروهی"},year:2024,status:"published"};
  assert.equal(getPublicCvEntries([entry],"en").length,1);
- assert.equal(getPublicCvEntries([{...entry,verified:false}],"en").length,0);
+ assert.equal(getPublicCvEntries([{...entry,status:"draft"}],"en").length,0);
  assert.equal(getPublicCvEntries([{...entry,title:{en:"Group exhibition"}}],"fa").length,0);
+ assert.equal(getPublicCvEntries([{id:"cv2",category:"other",title:{en:"Painting"},period:{en:"Current practice"},status:"published"}],"en").length,1);
 });
 test("homepage featured selection is explicit, ordered, unique, and publication-gated",()=>{
  const selection={featuredArtworkIds:["w1","w1","hidden"],featuredGalleryIds:[]};
@@ -244,7 +244,7 @@ test("published route records reject unsafe slugs and duplicate public identitie
  assert.equal(getPublicGalleries([gallery,{...gallery,id:"g2"}],[work],"en").length,0);
  const story:JournalEntry={id:"j1",slug:"story",type:"story",title:{en:"Story"},summary:{en:"Summary"},status:"published",approvedLocales:["en"],artistApproved:true};
  assert.equal(getPublicJournal([story,{...story,id:"j2"}],"en").length,0);
- const cv:CvEntry={id:"cv1",category:"education",title:{en:"Education"},year:2020,verified:true,status:"published"};
+ const cv:CvEntry={id:"cv1",category:"education",title:{en:"Education"},year:2020,status:"published"};
  assert.equal(getPublicCvEntries([cv,cv],"en").length,0);
 });
 
@@ -317,15 +317,15 @@ test("CV PDF publication requires an approved published same-origin PDF and safe
  assert.equal(getPublicCvDocument(undefined),undefined);
 });
 
-test("long About preview fixtures are bilingual, clearly sample-only, and include CV layout rows",()=>{
- assert.ok(aboutPreviewFixture.biography.en.length>700);
- assert.ok(aboutPreviewFixture.biography.en.split(/\s+/).length>=250);
- assert.ok(aboutPreviewFixture.biography.fa.length>500);
- assert.equal(aboutPreviewFixture.cv.length,16);
- assert.notEqual(aboutPreviewFixture.statement.en,aboutPreviewFixture.biography.en);
- assert.ok(aboutPreviewFixture.statement.en.split(/\s+/).length>=150 && aboutPreviewFixture.statement.en.split(/\s+/).length<=220);
- assert.ok(aboutPreviewFixture.statement.en.includes("invented editorial sample"));
- assert.deepEqual(new Set(aboutPreviewFixture.cv.map(entry=>entry.category)),new Set(["education","exhibition","publication","award","practice"]));
+test("canonical artist profile is populated in both locales",()=>{
+ assert.ok(artistProfile);
+ assert.equal(artistProfile?.id,"artist-profile");
+ assert.ok(artistProfile?.name?.en?.trim());
+ assert.ok(artistProfile?.name?.fa?.trim());
+ assert.ok(artistProfile?.biography.en?.trim());
+ assert.ok(artistProfile?.biography.fa?.trim());
+ assert.ok(artistProfile?.statement.en?.trim());
+ assert.ok(artistProfile?.statement.fa?.trim());
 });
 
 test("upcoming Journal event selection excludes ongoing events and uses stable tie-breakers", () => {
@@ -473,7 +473,7 @@ test("CV identifiers are validated independently from URL slugs", () => {
   category: "education",
   title: { en: "Fine Arts" },
   year: 2020,
-  verified: false,
+  
   status: "draft",
  };
  const issues = validatePortfolioContent({
