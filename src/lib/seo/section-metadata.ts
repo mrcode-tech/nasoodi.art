@@ -2,8 +2,6 @@ import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { createLocalizedMetadata } from "@/lib/seo/metadata";
 import { artworks } from "@/content/artworks";
-import { galleries } from "@/content/galleries";
-import { journalEntries } from "@/content/journal";
 import { getArtist } from "@/content/repositories/artist.repository";
 import { getCv } from "@/content/repositories/cv.repository";
 import { getContact } from "@/content/repositories/contact.repository";
@@ -33,14 +31,14 @@ export async function getSectionMetadata(section: Section, locale: Locale): Prom
   section==="journal"?journal.length>0:
   section==="cv"?cv.length>0:
   section==="about"?Boolean(profile):
-  section==="contact"?Boolean(Boolean(contact)):false;
+  section==="contact"?Boolean(contact):false;
  const equivalentFor=(target:Locale)=>{
   if(section==="works")return hasEquivalentContentSet(works,getArtworks(target));
   if(section==="galleries")return hasEquivalentContentSet(sets,getGalleries(target));
   if(section==="journal")return hasEquivalentContentSet(journal,getJournalEntries(target));
   if(section==="cv")return hasEquivalentContentSet(cv,getCv(target).entries);
   if(section==="about")return Boolean(profile&&getArtist(target));
-  if(section==="contact")return Boolean(Boolean(getContact(target)));
+  if(section==="contact")return Boolean(getContact(target));
   return false;
  };
  const alternatePaths=Object.fromEntries(locales.filter(target=>target!==locale&&equivalentFor(target)).map(target=>[target,pagePath(target,section)])) as Partial<Record<Locale,string>>;
