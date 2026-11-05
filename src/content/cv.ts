@@ -1,7 +1,6 @@
-import entries from "./data/cv-entries.json";
-import document from "./data/cv-document.json";
+import cv from "./data/cv.json";
 import type { CvDocument, CvEntry } from "../types/content";
 
-export const cvEntries: CvEntry[] = entries as CvEntry[];
-// No artist-approved public CV PDF has been supplied yet.
+export const cvEntries: CvEntry[] = cv.entries as CvEntry[];
+const document = cv.document as CvDocument | null;
 export const cvDocument: CvDocument | undefined = document ?? undefined;
