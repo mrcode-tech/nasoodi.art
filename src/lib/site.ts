@@ -2,6 +2,8 @@ import { artworks, cvEntries, galleries, journalEntries } from "../content/portf
 import { otherLocale, pagePath } from "../types/locale";
 import type { Locale } from "../types/locale";
 import { getLocalizedSlug, isSafeContentSlug, isSafeLocalImagePath } from "./content/paths";
+import { hasSharedContentIdentity } from "./content/identity";
+export { hasSharedContentIdentity, hasEquivalentContentSet } from "./content/identity";
 export { getLocalizedSlug, isSafeContentSlug, isSafeLocalImagePath } from "./content/paths";
 export type { LocalizedSlugRecord } from "./content/paths";
 import type {
@@ -45,11 +47,6 @@ export {
   journalEntries,
   portfolioStructuredData,
 } from "../content/portfolio";
-
-export function hasSharedContentIdentity<T extends { id: string }>(source: readonly T[], target: readonly T[]): boolean {
-  const targetIds = new Set(target.map((item) => item.id));
-  return source.some((item) => targetIds.has(item.id));
-}
 
 export function isSafeJournalHref(href: string): boolean {
   if (!href || href.includes("\\") || /[\u0000-\u001f]/.test(href)) return false;
