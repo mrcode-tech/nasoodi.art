@@ -6,7 +6,7 @@ import { getPublicArtistProfile,getPublicCvEntries,getPublicCvDocument } from "@
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
-import { isLocale,pagePath,type Locale } from "@/types/locale";
+import { isLocale,pagePath } from "@/types/locale";
 import { getSectionMetadata } from "@/lib/seo/section-metadata";
 type Props={params:Promise<{locale:string}>};
 export async function generateMetadata({params}:Props):Promise<Metadata>{
