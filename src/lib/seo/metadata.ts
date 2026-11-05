@@ -39,7 +39,7 @@ export function createLocalizedMetadata(input: LocalizedMetadataInput): Metadata
     robots: { index: input.indexable, follow: true },
   };
 
-  if (!input.indexable) return metadata;
+  if (!input.indexable) return { ...metadata, openGraph: null, twitter: null };
 
   const localeTag = input.locale === "fa" ? "fa_IR" : "en_US";
   const alternateLocaleTag = input.locale === "fa" ? "en_US" : "fa_IR";
