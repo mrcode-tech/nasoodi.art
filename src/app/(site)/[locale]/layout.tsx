@@ -23,7 +23,7 @@ export default async function LocaleLayout({ children, params }: { children: Rea
   const [messages] = await Promise.all([getMessages({ locale })]);
   const upcoming = getUpcomingJournalEvent(journalEntries, locale);
   const announcement = upcoming?.event ? { id: upcoming.id, slug: getLocalizedSlug(upcoming, locale), title: upcoming.title[locale]!, startsAt: upcoming.event.startsAt, timeZone: upcoming.event.timeZone } : undefined;
-  return <html lang={locale} dir={locale === "fa" ? "rtl" : "ltr"} suppressHydrationWarning><body><NextIntlClientProvider messages={messages}><ThemeProvider>
+  return <html lang={locale} dir={locale === "fa" ? "rtl" : "ltr"} suppressHydrationWarning><body><NextIntlClientProvider locale={locale} messages={messages}><ThemeProvider>
     <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeJsonLd(portfolioStructuredData) }} />
     <SiteShell locale={locale} announcement={announcement}>{children}</SiteShell>
   </ThemeProvider></NextIntlClientProvider></body></html>;
