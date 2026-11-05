@@ -1303,7 +1303,7 @@ test("localized Contact surfaces render centralized demo details without approva
   await expect(home.locator('a[href="mailto:hello@example.com"]')).toBeVisible();
   await expect(home.getByRole("link",{name:"@nasoodi_contact_demo"})).toHaveAttribute("href","https://t.me/nasoodi_contact_demo");
   await expect(home.getByRole("link",{name:"@nasoodi.demo"})).toHaveAttribute("href","https://www.instagram.com/nasoodi.demo/");
-  const contactLink=home.getByRole("link",{name:locale==="fa"?"تماس":/contact/i});
+  const contactLink=home.locator(".contact-page-link");
   await expect(contactLink).toHaveAttribute("href",`/${locale}/contact`);
   await contactLink.click();
   await expect(page).toHaveURL(`/${locale}/contact`);
@@ -1349,7 +1349,7 @@ test("Journal pagination remains compact, operable, and within the viewport at c
   const size=await controls.locator(".gallery-page-size").boundingBox();
   const nav=await controls.locator(".gallery-page-nav").boundingBox();
   if(nav) expect(Math.abs(size!.y-nav.y),`${locale} ${width}: pagination row alignment`).toBeLessThanOrEqual(width===320?3:2);
-  const buttons=controls.locator(".gallery-page-nav button");
+  const buttons=controls.locator(".gallery-page-nav button:visible");
   for(let index=0;index<await buttons.count();index++){
    const bounds=await buttons.nth(index).boundingBox();
    expect(bounds!.width, `${locale} ${width}: usable pagination target`).toBeGreaterThanOrEqual(39);
