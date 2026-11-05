@@ -176,20 +176,14 @@ test("artist portrait is omitted unless rights, dimensions, and localized alt ar
  assert.equal(getPublicArtistProfile({...profile,portrait:{...profile.portrait!,rightsConfirmed:false}},"en")?.portrait,undefined);
  assert.equal(getPublicArtistProfile({...profile,portrait:{...profile.portrait!,width:0}},"en")?.portrait,undefined);
 });
-test("demo contact destinations render without approval gates and validate each method independently",()=>{
- const details:ContactDetails={email:"hello@example.com",telegramHandle:"nasoodi_contact_demo",instagramUrl:"https://www.instagram.com/nasoodi.demo/"};
- assert.equal(getPublicContactDetails(details)?.email,"hello@example.com");
- assert.equal(getPublicContactDetails(details)?.telegramUrl,"https://t.me/nasoodi_contact_demo");
- assert.equal(getPublicContactDetails(details)?.instagramHandle,"nasoodi.demo");
- assert.deepEqual(getPublicContactDetails({email:"artist@example.org"}),{email:"artist@example.org"});
- assert.deepEqual(getPublicContactDetails({telegramHandle:"artist_contact"}),{telegramHandle:"artist_contact",telegramUrl:"https://t.me/artist_contact"});
- assert.equal(getPublicContactDetails({...details,telegramHandle:"bad handle",instagramUrl:"http://evil.example/profile",email:undefined}),undefined);
- assert.equal(getPublicContactDetails({...details,instagramUrl:"https://example.org",email:undefined,telegramHandle:undefined}),undefined);
- assert.equal(getPublicContactDetails({...details,instagramUrl:"https://www.instagram.com/p/123/",email:undefined,telegramHandle:undefined}),undefined);
- assert.equal(getPublicContactDetails({...details,email:"not-an-email",instagramUrl:undefined,telegramHandle:undefined}),undefined);
- assert.equal(getPublicContactDetails(undefined),undefined);
+test("canonical Contact record exposes only the artist-supplied Instagram destination",()=>{
+ const details:ContactDetails={instagramUrl:"https://www.instagram.com/ghazalenasoodi/"};
+ assert.deepEqual(getPublicContactDetails(details),{
+  instagramUrl:"https://www.instagram.com/ghazalenasoodi/",
+  instagramHandle:"ghazalenasoodi",
+ });
+ assert.equal(getPublicContactDetails({email:"not-an-email",telegramHandle:"x",instagramUrl:"https://example.org/"}),undefined);
 });
-
 test("Journal Article structured data uses only localized visible editorial fields",()=>{
  const entry:JournalEntry={id:"story",slug:"story",type:"story",title:{en:"A story",fa:"روایت"},summary:{en:"A short summary",fa:"خلاصه"},status:"published",approvedLocales:["en","fa"],artistApproved:true,publishedAt:"2026-10-20T10:00:00Z"};
  const schema=getJournalStructuredData(entry,"en","https://nasoodi.art/en/journal/story");
