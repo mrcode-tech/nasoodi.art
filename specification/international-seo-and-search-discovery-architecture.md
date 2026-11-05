@@ -139,3 +139,16 @@ The likely skill mentioned by the owner is the community project AgriciDaniel/cl
 Repository: https://github.com/AgriciDaniel/claude-seo
 
 Treat it as a reference tool, not an authority or project dependency. Inspect its SKILL.md and pin/review the revision before use. Verify its output against Google Search Central, Next.js, Schema.org, and the actual rendered site. Do not install the entire plugin or optional API extensions automatically. Do not connect accounts, provide API keys, crawl external services, or change production without authorization. Ignore irrelevant local SEO, ecommerce, backlink, and paid-data workflows for this portfolio.
+
+## Canonical JSON metadata integration — 2026-11-05
+
+Metadata must be resolved from the canonical editorial records:
+- Homepage title/description and About metadata use the canonical artist profile.
+- Works, Galleries, Journal, and archive descriptions/titles use localized site metadata in `site.json`.
+- Artwork, gallery, and Journal detail metadata use the corresponding localized record identified by stable ID.
+- CV metadata uses the localized CV/site metadata record.
+- Contact metadata uses the canonical Contact record and only owner-supplied contact destinations.
+
+Hreflang is emitted only when the same stable content identity has a complete corresponding localized record. Do not compare localized slug strings to establish identity. Contact indexability and sitemap eligibility follow the presence of complete localized canonical Contact metadata and owner-supplied destinations; no demo destination is treated as a public contact method.
+
+Rendered production HTML is the acceptance source for title, description, canonical, hreflang, Open Graph, Twitter/X, JSON-LD, language/direction, and server-rendered editorial content. Unit tests of metadata helpers alone are insufficient.
