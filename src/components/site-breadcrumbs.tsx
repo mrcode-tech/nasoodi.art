@@ -1,6 +1,6 @@
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbPage, BreadcrumbSeparator } from "@/components/ui/breadcrumb";
 import { useTranslations } from "next-intl";
-import type { Locale } from "@/lib/site";
+import type { Locale } from "@/types/locale";
 export type BreadcrumbEntry = { label: string; href?: string };
 export function SiteBreadcrumbs({ locale, items }: { locale: Locale; items: BreadcrumbEntry[] }) {
   const t = useTranslations();

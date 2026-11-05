@@ -11,7 +11,7 @@ import {
   DropdownMenuRadioItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import type { Locale } from "@/lib/site";
+import type { Locale } from "@/types/locale";
 
 type ThemeMode = "light" | "dark" | "system";
 

@@ -1,5 +1,6 @@
 import { useTranslations } from "next-intl";
-import type { Locale, PublicContactDetails } from "@/lib/site";
+import type { Locale } from "@/types/locale";
+import type { PublicContactDetails } from "@/lib/content/publication";
 
 type ContactExperienceProps = {
   locale: Locale;

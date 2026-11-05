@@ -4,7 +4,10 @@ import Image from "next/image";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious, CarouselStatus } from "@/components/ui/carousel";
-import { getGalleryCoverArtwork, getLocalizedSlug, pagePath, type Artwork, type Gallery, type Locale } from "@/lib/site";
+import { getGalleryCoverArtwork } from "@/lib/content/publication";
+import { getLocalizedSlug } from "@/lib/content/paths";
+import { pagePath, type Locale } from "@/types/locale";
+import type { Artwork, Gallery } from "@/types/content";
 
 type Props = { galleries: Gallery[]; artworks: Artwork[]; locale: Locale; label: string };
 

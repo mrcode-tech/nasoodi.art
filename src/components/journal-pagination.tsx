@@ -9,7 +9,7 @@ import {
   resolveGalleryPagination,
   type GalleryPageSize,
 } from "@/lib/gallery-pagination";
-import type { Locale } from "@/lib/site";
+import type { Locale } from "@/types/locale";
 
 type Props = {
   totalItems: number;
