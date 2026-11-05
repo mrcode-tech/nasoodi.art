@@ -21,7 +21,28 @@ html[lang=fa] .home-intro h1,html[lang=fa] .page-heading h1,html[lang=fa] h2{fon
 .empty-note{max-width:46rem;margin:0;padding:.5rem 0;color:var(--muted);font-size:.95rem;line-height:1.9}.page-heading{max-width:58rem;margin-bottom:3.5rem}.page-heading h1{font-size:clamp(2.7rem,5.5vw,5rem)}.page-heading>p:last-child:not(.eyebrow){max-width:42rem;margin:1.2rem 0 0;color:var(--muted);font-size:1rem;line-height:1.9}.page-heading .artist-discipline{margin-top:1.5rem}
 .artwork-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(1.5rem,3vw,3rem)}.artwork-item{display:flex;min-width:0;flex-direction:column;gap:.8rem}.artwork-item img,.artwork-detail-image img{display:block;width:100%;height:auto;object-fit:contain}.artwork-item span{font-size:.9rem}
 .gallery-list,.journal-list{display:grid;gap:1.25rem}.gallery-list-item,.journal-list-item{display:flex;min-height:5rem;align-items:center;justify-content:space-between;gap:1rem;padding-block:1rem;font:clamp(1.25rem,2.4vw,1.8rem) Georgia,"Times New Roman",serif;transition:padding 150ms ease}.gallery-list-item:hover,.journal-list-item:hover{padding-inline:.5rem}
-.artwork-detail{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(15rem,.7fr);align-items:start;gap:clamp(2rem,5vw,5rem)}.artwork-detail-copy h1,.article-page h1{margin-top:0;font:400 clamp(2rem,4vw,3.6rem)/1.2 Georgia,"Times New Roman",serif}.artwork-detail-copy p,.article-summary,.prose{color:var(--muted);line-height:1.9}.back-link{margin-bottom:2rem}.article-page{max-width:900px}.article-summary{font-size:1.15rem}.prose{margin-top:3rem;white-space:pre-wrap}.journal-detail .prose p{text-align:justify;text-justify:inter-word}.not-found-page h1{font-size:clamp(2.5rem,5vw,4rem)}.not-found-page .text-link{margin-top:2rem}
+.artwork-detail{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(15rem,.7fr);align-items:start;gap:clamp(2rem,5vw,5rem)}.artwork-detail-copy h1,.article-page h1{margin-top:0;font:400 clamp(2rem,4vw,3.6rem)/1.2 Georgia,"Times New Roman",serif}.artwork-detail-copy p,.article-summary,.prose{color:var(--muted);line-height:1.9}.back-link{margin-bottom:2rem}.article-page{max-width:900px}.article-summary{font-size:1.15rem}.prose{margin-top:3rem;white-space:pre-wrap}/* Consistent justified body copy across the bilingual portfolio. Keep headings,
+   navigation, labels, dates, and controls in their existing alignment. */
+.intro-note,
+.empty-note,
+.page-heading>p:last-child:not(.eyebrow),
+.artwork-detail-copy>p,
+.article-summary,
+.prose p,
+.cv-list li>div,
+.cv-list li>div p,
+.cv-list li>div span,
+.journal-card-copy>p:not(.journal-event-date),
+.gallery-card-copy>span:not(.gallery-card-action),
+.gallery-index-card-copy>span,
+.journal-upcoming>p:not(.eyebrow),
+.profile-content section p,
+.artwork-viewer-description,
+.event-details p {
+  text-align: justify;
+  text-justify: inter-word;
+}
+.not-found-page h1{font-size:clamp(2.5rem,5vw,4rem)}.not-found-page .text-link{margin-top:2rem}
 .site-footer{display:flex;min-height:7rem;align-items:center;justify-content:space-between;gap:1rem;margin-top:2rem;padding:2.5rem clamp(2rem,6vw,6rem) 1.5rem;color:var(--muted);font-size:.74rem;line-height:1.7}
 .mobile-header,.mobile-drawer,.menu-backdrop{display:none}
 @media(max-width:900px){.desktop-sidebar,.desktop-utility{display:none}.site-main{margin-left:0}.mobile-header{position:relative;z-index:15;display:flex;min-height:4.75rem;align-items:center;justify-content:space-between;padding-inline:1.25rem;background:var(--paper)}.mobile-wordmark{font:1.45rem Georgia,"Times New Roman",serif;letter-spacing:-.055em}.mobile-wordmark span{color:var(--mauve-deep)}.menu-trigger,.drawer-close{display:flex;width:2.8rem;height:2.8rem;flex-direction:column;align-items:center;justify-content:center;gap:.35rem;border:1px solid var(--border);background:transparent;cursor:pointer}.menu-trigger span{width:1.1rem;height:1px;background:var(--ink)}.menu-backdrop{position:fixed;z-index:30;inset:0;display:block;border:0;background:var(--overlay)}.mobile-drawer{position:fixed;z-index:31;inset-block:0;left:0;display:flex;width:min(88vw,23rem);flex-direction:column;overflow-y:auto;overscroll-behavior:contain;padding:max(1.25rem,env(safe-area-inset-top)) 1.5rem max(1.25rem,env(safe-area-inset-bottom));background:var(--surface);box-shadow:12px 0 36px var(--drawer-shadow)}.mobile-drawer[hidden]{display:none}.drawer-heading{display:flex;align-items:center;justify-content:space-between;margin-bottom:2.5rem}.drawer-close{width:2.5rem;height:2.5rem;font-size:1.6rem;line-height:1}.mobile-drawer .nav-list{gap:.2rem}.mobile-drawer .nav-link{min-height:3.25rem;font-size:1rem}.drawer-settings{display:flex;align-items:center;justify-content:space-between;gap:1rem;margin-top:0;padding-top:0;border-top:0;color:var(--muted);font-size:.85rem}.page-content{padding:5rem 1.5rem 3.5rem}.home-page{padding-top:0}.home-intro{min-height:76vh;padding-block:5rem}.site-footer{padding-inline:1.5rem}}
