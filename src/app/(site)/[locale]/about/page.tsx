@@ -1,8 +1,7 @@
 import Image from "next/image";
 import { SiteBreadcrumbs } from "@/components/site-breadcrumbs";
-import { artistProfile } from "@/content/artist";
-import { cvEntries,cvDocument } from "@/content/cv";
-import { getPublicArtistProfile,getPublicCvEntries,getPublicCvDocument } from "@/lib/content/publication";
+import { getAbout } from "@/content/repositories/artist.repository";
+import { getCv } from "@/content/repositories/cv.repository";
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
