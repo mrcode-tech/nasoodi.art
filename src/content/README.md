@@ -8,7 +8,8 @@ This directory separates owner-editable editorial JSON from TypeScript domain co
 - `data/galleries.json`: gallery metadata, cover artwork IDs, ordered artwork membership, and publication state.
 - `data/journal/index.json`: Journal identity, localized metadata, complete localized rich-text bodies, event details, and cover-artwork relationships. Each entry contains its English and Persian body as structured JSON blocks.
 - `data/homepage-selection.json`: homepage featured content IDs and ordering.
-- `data/artist-profile.json`, `data/cv-entries.json`, and `data/cv-document.json`: current artist profile and CV records. These are the canonical sources; do not add preview fixtures or environment-specific alternatives.
+- `data/artist-profile.json`: the single localized artist profile, including biography, statement, identity, and profile copy.
+- `data/cv.json`: the single CV record, containing ordered entries and the optional downloadable document reference.
 - `data/contact.json`: the single Contact configuration. Only owner-supplied contact destinations may be published; do not invent addresses or handles.
 
 ## TypeScript adapters and services
