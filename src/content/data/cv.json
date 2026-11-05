@@ -2,19 +2,299 @@
   "id": "artist-cv",
   "entries": [
     {
-      "id": "cv-oil-painting-practice",
-      "category": "other",
-      "title": {
-        "en": "Oil painting",
-        "fa": "نقاشی رنگ‌روغن"
-      },
+      "id": "edu-1",
+      "category": "education",
       "period": {
-        "en": "Current practice",
-        "fa": "فعالیت هنری کنونی"
+        "en": "2012–2016",
+        "fa": "۲۰۱۲–۲۰۱۶"
+      },
+      "title": {
+        "en": "Bachelor of Fine Arts, Painting",
+        "fa": "کارشناسی هنرهای تجسمی، نقاشی"
+      },
+      "organization": {
+        "en": "Meridian School of Art",
+        "fa": "مدرسه هنر مریدین"
+      },
+      "location": {
+        "en": "Tehran, Iran",
+        "fa": "تهران، ایران"
       },
       "status": "published",
       "sortOrder": 1
+    },
+    {
+      "id": "edu-2",
+      "category": "education",
+      "period": {
+        "en": "2017–2018",
+        "fa": "۲۰۱۷–۲۰۱۸"
+      },
+      "title": {
+        "en": "Independent Studies in Colour and Composition",
+        "fa": "مطالعات آزاد رنگ و ترکیب‌بندی"
+      },
+      "organization": {
+        "en": "Atelier Studies Programme",
+        "fa": "برنامه مطالعات آتلیه"
+      },
+      "location": {
+        "en": "Tehran, Iran",
+        "fa": "تهران، ایران"
+      },
+      "status": "published",
+      "sortOrder": 2
+    },
+    {
+      "id": "edu-3",
+      "category": "education",
+      "year": 2019,
+      "title": {
+        "en": "Short Course: Material, Surface and the Painted Image",
+        "fa": "دوره کوتاه‌مدت: ماده، سطح و تصویر نقاشی‌شده"
+      },
+      "organization": {
+        "en": "Centre for Visual Inquiry",
+        "fa": "مرکز پژوهش‌های بصری"
+      },
+      "location": {
+        "en": "Online",
+        "fa": "آنلاین"
+      },
+      "status": "published",
+      "sortOrder": 3
+    },
+    {
+      "id": "ex-1",
+      "category": "group-exhibition",
+      "year": 2020,
+      "title": {
+        "en": "Quiet Arrangements",
+        "fa": "ترکیب‌های آرام"
+      },
+      "organization": {
+        "en": "The Rooms Project Space — Group Exhibition",
+        "fa": "فضای پروژه رومز — نمایشگاه گروهی"
+      },
+      "location": {
+        "en": "Tehran, Iran",
+        "fa": "تهران، ایران"
+      },
+      "status": "published",
+      "sortOrder": 4
+    },
+    {
+      "id": "ex-2",
+      "category": "solo-exhibition",
+      "year": 2021,
+      "title": {
+        "en": "Notes on Stillness",
+        "fa": "یادداشت‌هایی درباره سکون"
+      },
+      "organization": {
+        "en": "North Window Gallery — Solo Presentation",
+        "fa": "گالری پنجره شمالی — ارائه انفرادی"
+      },
+      "location": {
+        "en": "Tehran, Iran",
+        "fa": "تهران، ایران"
+      },
+      "status": "published",
+      "sortOrder": 5
+    },
+    {
+      "id": "ex-3",
+      "category": "group-exhibition",
+      "year": 2022,
+      "title": {
+        "en": "The Familiar, Reconsidered",
+        "fa": "بازنگری امر آشنا"
+      },
+      "organization": {
+        "en": "Field Notes Art Space — Curated Exhibition",
+        "fa": "فضای هنری فیلد نوتس — نمایشگاه با کیوریتوری"
+      },
+      "location": {
+        "en": "Berlin, Germany",
+        "fa": "برلین، آلمان"
+      },
+      "status": "published",
+      "sortOrder": 6
+    },
+    {
+      "id": "ex-4",
+      "category": "group-exhibition",
+      "year": 2023,
+      "title": {
+        "en": "Between Memory and Matter",
+        "fa": "میان خاطره و ماده"
+      },
+      "organization": {
+        "en": "The Pale Room — Two-Person Exhibition",
+        "fa": "فضای پل روم — نمایشگاه دونفره"
+      },
+      "location": {
+        "en": "Tehran, Iran",
+        "fa": "تهران، ایران"
+      },
+      "status": "published",
+      "sortOrder": 7
+    },
+    {
+      "id": "ex-5",
+      "category": "group-exhibition",
+      "year": 2024,
+      "title": {
+        "en": "A Small Weather",
+        "fa": "هوای کوچک"
+      },
+      "organization": {
+        "en": "Common Ground Studio — Group Exhibition",
+        "fa": "استودیوی کامن گراند — نمایشگاه گروهی"
+      },
+      "location": {
+        "en": "Vienna, Austria",
+        "fa": "وین، اتریش"
+      },
+      "status": "published",
+      "sortOrder": 8
+    },
+    {
+      "id": "ex-6",
+      "category": "solo-exhibition",
+      "year": 2025,
+      "title": {
+        "en": "Light Held in Layers",
+        "fa": "نور در لایه‌ها"
+      },
+      "organization": {
+        "en": "The Lantern Project — Solo Exhibition",
+        "fa": "پروژه لنترن — نمایشگاه انفرادی"
+      },
+      "location": {
+        "en": "Berlin, Germany",
+        "fa": "برلین، آلمان"
+      },
+      "status": "published",
+      "sortOrder": 9
+    },
+    {
+      "id": "ex-7",
+      "category": "group-exhibition",
+      "year": 2026,
+      "title": {
+        "en": "The Shape of an Afternoon",
+        "fa": "شکل یک بعدازظهر"
+      },
+      "organization": {
+        "en": "Stillroom — Curated Group Exhibition",
+        "fa": "استیل‌روم — نمایشگاه گروهی با کیوریتوری"
+      },
+      "location": {
+        "en": "Amsterdam, Netherlands",
+        "fa": "آمستردام، هلند"
+      },
+      "status": "published",
+      "sortOrder": 10
+    },
+    {
+      "id": "pub-1",
+      "category": "publication",
+      "year": 2021,
+      "title": {
+        "en": "A Small Atlas of Looking — Artist Feature",
+        "fa": "اطلس کوچک تماشا — معرفی هنرمند"
+      },
+      "organization": {
+        "en": "Paper & Pigment Journal",
+        "fa": "نشریه پیپر اَند پیگمنت"
+      },
+      "status": "published",
+      "sortOrder": 11
+    },
+    {
+      "id": "pub-2",
+      "category": "publication",
+      "year": 2023,
+      "title": {
+        "en": "The Painted Surface and Everyday Memory — Interview",
+        "fa": "سطح نقاشی‌شده و خاطره روزمره — گفت‌وگو"
+      },
+      "organization": {
+        "en": "The Looking Room Review",
+        "fa": "نشریه لوکینگ روم"
+      },
+      "status": "published",
+      "sortOrder": 12
+    },
+    {
+      "id": "pub-3",
+      "category": "publication",
+      "year": 2025,
+      "title": {
+        "en": "Between Layers — Exhibition Catalogue Essay",
+        "fa": "میان لایه‌ها — نوشتار کاتالوگ نمایشگاه"
+      },
+      "organization": {
+        "en": "Field Notes Editions",
+        "fa": "انتشارات فیلد نوتس"
+      },
+      "status": "published",
+      "sortOrder": 13
+    },
+    {
+      "id": "award-1",
+      "category": "award",
+      "year": 2022,
+      "title": {
+        "en": "Emerging Painter Commendation",
+        "fa": "تقدیر نقاش نوظهور"
+      },
+      "organization": {
+        "en": "The Meridian Arts Circle",
+        "fa": "انجمن هنر مریدین"
+      },
+      "status": "published",
+      "sortOrder": 14
+    },
+    {
+      "id": "award-2",
+      "category": "award",
+      "year": 2024,
+      "title": {
+        "en": "Material Studies Project Mention",
+        "fa": "تقدیر پروژه مطالعات ماده"
+      },
+      "organization": {
+        "en": "The Open Surface Initiative",
+        "fa": "ابتکار سطح گشوده"
+      },
+      "status": "published",
+      "sortOrder": 15
+    },
+    {
+      "id": "practice-1",
+      "category": "other",
+      "period": {
+        "en": "2020–2026",
+        "fa": "۲۰۲۰–۲۰۲۶"
+      },
+      "title": {
+        "en": "Ongoing Independent Studio Practice",
+        "fa": "فعالیت مستمر مستقل در آتلیه"
+      },
+      "organization": {
+        "en": "Oil painting, mixed media, layered surfaces, observational drawing",
+        "fa": "نقاشی رنگ‌روغن، مواد ترکیبی، سطوح لایه‌لایه و طراحی مشاهده‌محور"
+      },
+      "status": "published",
+      "sortOrder": 16
     }
   ],
-  "document": null
+  "document": {
+    "src": "/api/cv.pdf",
+    "fileName": "ghazaleh-abdolahzade-nasoodi-cv.pdf",
+    "artistApproved": true,
+    "status": "published"
+  }
 }
