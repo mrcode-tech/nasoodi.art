@@ -70,6 +70,13 @@ export type JournalEntry = {
   event?: JournalEvent;
 };
 export type ArtistProfile = {
+  id?: string;
+  name?: Localized;
+  slug?: Localized;
+  discipline?: Localized;
+  shortIntroduction?: Localized;
+  artisticApproach?: Localized;
+  interests?: Partial<Record<Locale, string[]>>;
   statement: Localized;
   biography: Localized;
   portrait?: {
