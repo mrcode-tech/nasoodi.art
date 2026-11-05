@@ -93,7 +93,7 @@ For the responsive artwork discovery experience, add/verify tests for:
 - Persian RTL and English LTR direction, icon orientation, movement meaning, keyboard sequence, and unchanged artwork order.
 - Shared Artwork Viewer activation, context-scoped previous/next, browser history, close behavior, and focus restoration.
 - Artwork images retaining intrinsic proportions without crop/filter/mirroring; layout stability and lazy loading.
-- Homepage Journal preview selecting no more than two newest eligible published entries across article/event types, correct publication-date ordering, and Explore Journal destination.
+- Homepage Journal preview follows the current approved design contract for the single latest editorial item and Explore Journal destination; verify publication-date ordering across Journal and event types.
 - Journal archive/detail preserving their existing editorial structure.
 
 Do not mark the carousel component or visual design as implemented/verified merely because the specification and wireframes exist. Record actual CI run, viewport/locale screenshots, manual review, and owner approval separately.

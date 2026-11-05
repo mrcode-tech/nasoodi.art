@@ -36,7 +36,7 @@ The current application stores the artist profile and Contact configuration in t
 - An artist profile requires a published state, explicit artist approval, approved locale, and non-empty localized statement and factual biography before the About page becomes indexable.
 - An optional portrait is displayed only when its rights are confirmed, its dimensions are positive, and localized alternative text is supplied for the current locale. An invalid optional portrait is omitted without suppressing otherwise valid profile text.
 - Contact destinations are validated before rendering. Only owner-supplied methods are permitted; invalid external destinations are omitted. Contact indexability and sitemap eligibility follow the canonical localized Contact metadata.
-- About remains available with a truthful pending-content message while its content is absent. Contact remains available and noindex; it renders the owner-authorized demo fixture during the demo phase and remains excluded from the sitemap until real contact details replace the fixture.
+- About and CV render from their canonical localized JSON records in every environment; no pending-content or preview provider is used. Contact renders the canonical localized Contact record and only owner-supplied public destinations. Indexability follows the current metadata/publication rules, not a demo-phase fixture rule.
 - A locale alternate is emitted only when the corresponding profile/contact content is approved in the other locale. Never copy or machine-translate the source-language statement, biography, or contact text.
 
 The implementation contract uses these fields:
@@ -62,7 +62,7 @@ type ContactDetails = {
   instagramUrl?: string;
 };
 
-// Demo-phase fixtures are owner-authorized and are not gated by publication approvals.
+// Canonical Contact content is owner-maintained JSON; public destinations must be owner-supplied.
 ```
 
 ## 3. Artwork record

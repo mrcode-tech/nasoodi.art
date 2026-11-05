@@ -14,7 +14,7 @@ This document expands the existing SEO guidance. Before coding, inspect current 
 
 Only public, complete, approved, published content is indexable. Apply the same eligibility rule to page rendering, sitemap, internal links, hreflang, and structured data.
 
-Exclude drafts, needs-review, archived, private, placeholder, incomplete, untranslated, and internal routes. Preserve the existing rule that Contact routes using fictional demo destinations remain noindex and outside the sitemap until replaced with real owner-supplied details and explicitly authorized for indexing.
+Exclude drafts, needs-review, archived, private, incomplete, untranslated, and internal routes. Contact metadata and sitemap eligibility are derived from the canonical Contact JSON and its owner-supplied public destinations; do not retain obsolete demo-fixture noindex behavior.
 
 Unknown slugs must return real 404 responses. Use permanent redirects only for genuine URL changes; avoid chains. Do not block a URL in robots.txt when crawlers need to see its noindex directive.
 
@@ -42,12 +42,12 @@ Every indexable page needs a unique, accurate localized title and description, c
 ## 5. Page-type rules
 
 - Home: identify the artist and actual practice using approved facts and introduction.
-- About/CV: distinguish artist-authored statement from factual biography; publish verified CV entries only.
+- About/CV: distinguish artist-authored statement from factual biography; publish factual CV entries only when supplied by the artist/owner. Do not add a parallel verification field or fabricate career history.
 - Galleries: describe the actual curated collection; exclude empty or thin collections.
 - Artwork: use stable identity, localized route mapping, approved title/image/description, and only known medium, support, year, dimensions, or series. Never infer missing facts.
 - Journal: use article semantics for genuine published editorial entries.
 - Events: dates, venue, attendance mode, and status must be accurate; do not describe past events as upcoming.
-- Contact: retain demo-phase noindex protection until genuine details replace fictional values and indexing is authorized.
+- Contact: use the canonical Contact JSON and owner-supplied destinations; apply ordinary localized metadata and indexability rules without a demo-phase exception.
 
 ## 6. Artwork and image SEO
 
