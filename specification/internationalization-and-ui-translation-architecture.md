@@ -116,3 +116,11 @@ Existing feature components should not need locale-specific edits.
 - Next.js internationalization: https://nextjs.org/docs/app/guides/internationalization
 - W3C language declarations: https://www.w3.org/International/questions/qa-html-language-declarations
 - Unicode Bidirectional Algorithm: https://www.unicode.org/reports/tr9/
+
+## Current UI literal audit contract — 2026-11-05
+
+The required `scripts/audit-i18n-messages.mjs` audit validates namespace parity, flattened key parity, duplicate keys, non-empty values, and interpolation placeholder parity. It also parses relevant `.tsx`, `.ts`, `.jsx`, and `.js` source files with the TypeScript AST and reports hardcoded user-facing JSX text, visible attributes, and common alert/confirm/prompt messages with file paths and line numbers.
+
+Comments and non-rendered code are not UI copy. Brand names, proper nouns, technical identifiers, CSS classes, URLs, route paths, editorial JSON, and tests are legitimate exceptions. A narrowly scoped inline `i18n-literal-ok` comment documents an intentional source-code literal exception. Do not use broad file-level exclusions to hide actual UI copy.
+
+Unsupported locale routes must return 404; do not silently render the default locale. Editorial fields required by a route must exist in the active locale. UI message fallback and editorial-content fallback are separate concerns: never substitute English editorial text into a Persian page.
