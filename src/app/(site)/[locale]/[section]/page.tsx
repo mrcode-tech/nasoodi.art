@@ -52,10 +52,11 @@ export async function generateMetadata({params}:Props):Promise<Metadata>{
  const firstWork=works[0];
  const firstGallery=sets[0];
  const firstJournal=journal[0];
- const socialImage=section==="about"&&profile?profile.portrait?.src:\n  section==="works"&&firstWork?primaryImageFor(firstWork)?.src:
+ const socialImage=section==="about"&&profile?profile.portrait?.src:
+  section==="works"&&firstWork?primaryImageFor(firstWork)?.src:
   section==="galleries"&&firstGallery?getGalleryCoverArtwork(firstGallery,artworks,locale)?.image.src:
   section==="journal"&&firstJournal?journalCoverImageFor(firstJournal,locale)?.src:undefined;
- const indexablePage=indexable&&section!=="about"&&section!=="contact";
+ const indexablePage=indexable&&section!=="contact";
 
  return createLocalizedMetadata({
   locale,
