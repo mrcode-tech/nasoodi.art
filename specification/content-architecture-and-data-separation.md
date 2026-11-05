@@ -200,12 +200,35 @@ Do not rewrite everything in one pass or change wording, URLs, artwork ordering,
 - international-seo-and-search-discovery-architecture.md defines search/indexing behavior.
 
 
-## Implementation checkpoint — 2026-11-05
+## Owner-approved unified JSON architecture — 2026-11-05
 
-The first content-record migration is complete on the feature branch. Canonical artwork and gallery records, Journal metadata, homepage selections, the demo Contact fixture, and intentionally empty artist/CV records now live in JSON. The eight existing Journal entries' English and Persian long-form bodies live in Markdown files and are adapted into the existing rich-text block model without changing the renderer.
+This section supersedes earlier proposals in this document that place editorial bodies in Markdown files, split one content domain across preview fixtures, or require separate sample/verified records.
 
-The TypeScript modules under `src/content/` are now typed adapters, not duplicate editorial sources. Artwork image dimensions continue to come from the generated approved-asset inventory; Journal cover references resolve through stable artwork IDs, preserving the existing temporary-placeholder labels and rights gate. Next.js output tracing includes the localized Markdown files for server deployment.
+### Canonical localized records
 
-No artist biography, CV facts, contact channels, translations, or event information were invented during migration. The original stable IDs, localized slugs, publication approvals, dates, artwork/gallery order, and bilingual text are preserved.
+- `src/content/data/site.json`: localized site/archive metadata.
+- `src/content/data/artist-profile.json`: one artist identity record containing localized name, slug, discipline, short introduction, biography, artist statement, approach, and interests.
+- `src/content/data/cv.json`: one CV record containing ordered structured entries and an optional PDF reference.
+- `src/content/data/contact.json`: one Contact configuration with localized page title/description and owner-supplied destinations.
+- `src/content/data/artworks.json`: one collection of artwork records.
+- `src/content/data/galleries.json`: one collection of gallery records and stable artwork relationships.
+- `src/content/data/journal/index.json`: one collection of Journal/event records, with complete localized rich-text bodies embedded in each record.
+- `src/content/data/homepage-selection.json`: editorial selection by stable IDs.
 
-The remaining verification gate is to validate JSON and Markdown source integrity, run the existing content/SEO unit suite, production build, and browser checks, and compare the resulting routes and metadata against the previous implementation.
+Use stable IDs for identity and locale-keyed fields for translations. Localized slugs may differ; relationships always use stable IDs. Missing Persian editorial content must not silently fall back to English.
+
+### Journal body representation
+
+Journal bodies are JSON arrays of typed blocks (paragraph, heading, quote, list, or safe link) under `body.en` and `body.fa`. Do not add Markdown body files, generated TypeScript mirrors, build-time content generation, or filesystem parsing to render editorial prose.
+
+### About and CV
+
+Homepage and About resolve biography and artist statement from the same artist-profile record. CV entries and optional download metadata resolve from the same `cv.json` record. There is no About preview fixture, sample-CV endpoint, production suppression, or environment-specific provider. Do not introduce `isFictional`, `isPlaceholder`, `isVerified`, `isTemporary`, `contentSource`, or `verificationStatus` fields. A CV entry may have a year or localized period; do not require a separate verification flag.
+
+### Factual safeguards
+
+Initial editorial prose may be authored as the site's normal editable content, but do not fabricate real-world education, awards, exhibitions, qualifications, institutions, dates, prices, or contact channels and present them as confirmed facts. Where factual CV details are unavailable, keep those record categories empty rather than manufacturing credentials. Preserve artwork asset rights and owner-supplied identity information.
+
+### Layer boundaries
+
+JSON contains editorial data only. TypeScript types and runtime validation define contracts. Repositories/adapters resolve records and relationships. Utilities own filtering, routing, validation, and metadata behavior. Route modules pass resolved data to presentation components; components never import JSON files directly.
