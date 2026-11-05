@@ -2,7 +2,7 @@ import { GalleryIndex } from "@/components/gallery-index";
 import { SiteBreadcrumbs } from "@/components/site-breadcrumbs";
 import { artworks } from "@/content/artworks";
 import { galleries } from "@/content/galleries";
-import { getPublicArtworks,getPublicGalleries } from "@/lib/content/publication";
+import { getPublicGalleries } from "@/lib/content/publication";
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { isLocale,pagePath } from "@/types/locale";
