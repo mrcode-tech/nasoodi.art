@@ -2,7 +2,7 @@
 
 **Status:** Proposed content contract
 
-This document defines the minimum structured content required to publish a trustworthy artist portfolio. It intentionally separates verified facts from optional or unknown fields.
+This document defines the structured editorial content required for the artist portfolio. Factual claims must be owner-supplied; unknown facts remain absent rather than being replaced with invented credentials.
 
 ## 1. Content principles
 
@@ -27,11 +27,11 @@ This document defines the minimum structured content required to publish a trust
 | Portrait/studio image | No | Only if supplied and approved |
 | Instagram URL | Yes if social link displayed | Supplied profile URL |
 | Contact email | Required only if email contact is offered | Must be confirmed |
-| CV/exhibitions | Optional | Publish only verified entries |
+| CV/exhibitions | Optional | Add only owner-supplied factual entries |
 
 ## 2.1 Runtime artist profile and contact publication contracts
 
-The current application models the artist profile and public contact destinations separately from artwork and Journal records. Real public contact details require owner approval. Owner-authorized demo-phase exception (2026-11-03): centralized fictional email, Telegram, and Instagram values may be rendered without approval gates on the homepage and localized Contact routes; they are placeholders, not artist facts or verified/monitored channels.
+The current application stores the artist profile and Contact configuration in their own canonical localized JSON records. Contact destinations must be supplied by the owner. Do not create demo email, Telegram, or social destinations.
 
 - An artist profile requires a published state, explicit artist approval, approved locale, and non-empty localized statement and factual biography before the About page becomes indexable.
 - An optional portrait is displayed only when its rights are confirmed, its dimensions are positive, and localized alternative text is supplied for the current locale. An invalid optional portrait is omitted without suppressing otherwise valid profile text.
@@ -52,9 +52,8 @@ type ArtistProfile = {
     height: number;
     rightsConfirmed: boolean;
   };
-  status: PublicationStatus;
-  approvedLocales: Array<"fa" | "en">;
-  artistApproved: boolean;
+  // Artist identity, biography, and statement are required localized editorial values.
+
 };
 
 type ContactDetails = {
