@@ -5,13 +5,13 @@ import { ArtworkExperience } from "@/components/artwork-experience";
 import { CollectionCarousel } from "@/components/collection-carousel";
 import { BiographyDisclosure } from "@/components/biography-disclosure";
 import { ContactExperience } from "@/components/contact-experience";
-import { getPublicContactDetails } from "@/lib/content/publication";
+import { getPublicContactDetails, getPublicArtistProfile } from "@/lib/content/publication";
 import { contactDetails } from "@/content/contact";
 import { artworks } from "@/content/artworks";
 import { galleries } from "@/content/galleries";
 import { journalEntries } from "@/content/journal";
 import { homepageSelection } from "@/content/homepage";
-import { aboutPreviewFixture } from "@/lib/about-preview-fixtures";
+import { artistProfile } from "@/content/artist";
 import { Button } from "@/components/ui/button";
 import type { Metadata } from "next";
 import Link from "next/link";
@@ -27,19 +27,21 @@ export async function generateMetadata({params}:Props):Promise<Metadata>{
  if(!isLocale(locale))return {};
  setRequestLocale(locale);
  const t=await getTranslations({ locale });
+ const profile=getPublicArtistProfile(artistProfile,locale);
+ if(!profile)return {};
  const hero=getHomepageHero(artworks,homepageSelection,locale);
  const image=hero?primaryImageFor(hero):undefined;
  return createLocalizedMetadata({
   locale,
   path:"",
-  title:t("artistName"),
-  description:t("homeDescription"),
+  title:profile.name?.[locale]??t("artistName"),
+  description:profile.shortIntroduction?.[locale]??profile.statement[locale],
   alternatePaths:Object.fromEntries(locales.filter(target=>target!==locale).map(target=>[target,pagePath(target)])) as Partial<Record<Locale,string>>,
   indexable:true,
   images:image?[image.src]:undefined,
  });
 }
-export default async function Home({params}:Props){const {locale}=await params;if(!isLocale(locale))notFound();setRequestLocale(locale);const t=await getTranslations({ locale });const biography=aboutPreviewFixture.biography[locale];
+export default async function Home({params}:Props){const {locale}=await params;if(!isLocale(locale))notFound();setRequestLocale(locale);const t=await getTranslations({ locale });const profile=getPublicArtistProfile(artistProfile,locale);if(!profile)notFound();const biography=profile.biography[locale]??"";
  const hero=getHomepageHero(artworks,homepageSelection,locale),heroImage=hero?primaryImageFor(hero):undefined;
  const heroAlt=heroImage?.alt[locale] ?? (t("heroAlt"));
  const works=getHomepageFeaturedArtworks(artworks,homepageSelection,locale),sets=getHomepageFeaturedGalleries(galleries,artworks,homepageSelection,locale);
@@ -55,7 +57,7 @@ export default async function Home({params}:Props){const {locale}=await params;i
    </figure>
    <div className="home-intro-copy">
     <p className="eyebrow">{t("portfolio")}</p>
-    <h1 id="home-title">{t("artistName")}</h1>
+    <h1 id="home-title">{profile.name?.[locale]??t("artistName")}</h1>
     <section className="home-biography" aria-label={t("biography")}>
       <BiographyDisclosure biography={biography} readMoreLabel={t("readMore")} showLessLabel={t("showLess")} lines={4}/>
     </section>
