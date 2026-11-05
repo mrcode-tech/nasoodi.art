@@ -40,13 +40,15 @@ export async function generateMetadata({params}:Props):Promise<Metadata>{
   section==="galleries"?sets.length>0:
   section==="journal"?journal.length>0:
   section==="cv"?cv.length>0:
-  section==="about"?Boolean(profile):false;
+  section==="about"?Boolean(profile):
+  section==="contact"?Boolean(getPublicContactDetails(contactDetails)&&contactDetails.title?.[locale]&&contactDetails.description?.[locale]):false;
  const equivalentFor=(target:Locale)=>{
   if(section==="works")return hasEquivalentContentSet(works,getPublicArtworks(artworks,target));
   if(section==="galleries")return hasEquivalentContentSet(sets,getPublicGalleries(galleries,artworks,target));
   if(section==="journal")return hasEquivalentContentSet(journal,getPublicJournal(journalEntries,target));
   if(section==="cv")return hasEquivalentContentSet(cv,getPublicCvEntries(cvEntries,target));
   if(section==="about")return Boolean(profile&&getPublicArtistProfile(artistProfile,target));
+  if(section==="contact")return Boolean(getPublicContactDetails(contactDetails)&&contactDetails.title?.[target]&&contactDetails.description?.[target]);
   return false;
  };
  const alternatePaths=Object.fromEntries(locales.filter(target=>target!==locale&&equivalentFor(target)).map(target=>[target,pagePath(target,section)])) as Partial<Record<Locale,string>>;
@@ -54,7 +56,8 @@ export async function generateMetadata({params}:Props):Promise<Metadata>{
   section==="galleries"?t("galleriesDescription"):
   section==="journal"?t("journalDescription"):
   section==="cv"?t("cvDescription"):
-  section==="about"?profile?.statement[locale]:undefined;
+  section==="about"?profile?.shortIntroduction?.[locale]??profile?.statement[locale]:
+  section==="contact"?contactDetails.description?.[locale]:undefined;
  const firstWork=works[0];
  const firstGallery=sets[0];
  const firstJournal=journal[0];
@@ -62,12 +65,14 @@ export async function generateMetadata({params}:Props):Promise<Metadata>{
   section==="works"&&firstWork?primaryImageFor(firstWork)?.src:
   section==="galleries"&&firstGallery?getGalleryCoverArtwork(firstGallery,artworks,locale)?.image.src:
   section==="journal"&&firstJournal?journalCoverImageFor(firstJournal,locale)?.src:undefined;
- const indexablePage=indexable&&section!=="contact";
+ const indexablePage=indexable;
 
  return createLocalizedMetadata({
   locale,
   path:section,
-  title:t(section),
+  title:section==="about"&&profile?.name?.[locale]?profile.name[locale]+" — "+t("about"):
+   section==="cv"&&profile?.name?.[locale]?t("cv")+" — "+profile.name[locale]:
+   section==="contact"?contactDetails.title?.[locale]??t("contact"):t(section),
   description,
   alternatePaths:indexablePage?alternatePaths:undefined,
   indexable:indexablePage,
