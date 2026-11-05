@@ -58,3 +58,16 @@ Bilingual design is a first-class visual requirement under design-engineering-sk
 The CI message audit is a required gate, not a translation approval mechanism. It validates matching namespace files, recursively flattened message keys, duplicate keys across namespaces, missing keys in either locale, non-empty values, and matching interpolation placeholders. It also rejects Persian UI literals in application/component TSX so localized interface copy remains in message resources.
 
 Human review remains mandatory for Persian grammar, English terminology, artist-facing tone, context, and semantic equivalence. A passing audit proves structural consistency only; it does not prove translation quality or artist approval. New UI copy must be added to both locale resources, reviewed in context, and covered by the existing route/component tests. Editorial artist content remains in the content layer, not in UI messages.
+
+## Unified JSON content and locale governance — 2026-11-05
+
+The owner-approved content policy for this implementation supersedes previous demo-fixture and separate About/CV preview rules.
+
+- Store editorial copy in canonical JSON records with localized fields. UI messages alone belong in next-intl resources.
+- Use stable entity IDs across locales and explicit localized slugs. Relationships use IDs, not translated titles or slug equality.
+- Do not create a second record/provider for verified, unverified, sample, fictional, temporary, or preview content. Do not add status flags solely to label initial copy.
+- Homepage and About use the same canonical artist profile. CV uses one canonical JSON record. Journal body text lives in localized JSON rich-text blocks.
+- Initial descriptive editorial copy can be authored as the website's normal editable content. Do not fabricate external credentials, education, exhibitions, awards, dates, institutions, or contact channels.
+- Missing localized editorial content is an explicit incomplete record, not permission to silently fall back to English. Keep routes from rendering another language as a fallback.
+- Contact destinations must be owner-supplied. Preserve the artist's actual Instagram identity and do not retain invented demo email/Telegram destinations.
+- Content changes should require JSON edits and validation, not React component changes.
