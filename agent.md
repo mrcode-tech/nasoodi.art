@@ -5,6 +5,8 @@
 **Branch:** `feature` only  
 **Complete implementation prompt:** `specification/site-wide-navigation-spacing-and-contact-implementation-prompt.md`
 
+**Implementation checkpoint — 2026-11-05:** The current cross-site refinement is implemented on `feature`. Shared breadcrumb current-page semantics, the homepage-to-Contact destination, semantic spacing tokens, scoped editorial justification, compact narrow-screen Journal controls, and bilingual desktop/mobile Contact navigation are covered by regression tests. GitHub Actions [run #889](https://github.com/mrcode-tech/nasoodi.art/actions/runs/41993382170) passed against commit `01c00996c60313088e06478df4cca7aea47d3569`: lint, i18n audit, TypeScript, content tests, production build, asset audit, SVG validation, 135 Playwright tests, and production smoke test. Rendered English/Persian homepage, Contact, and Journal archive screenshots were inspected from the CI artifact. See the task-specific specification for detailed evidence and remaining owner/publication gates.
+
 ## Global typography guardrail — 2026-11-03
 
 All future UI work must follow specification/shared-responsive-typography-system.md and the shared design authorities. Reuse its semantic fluid type tokens across routes; respect Persian and English font metrics and RTL/LTR behavior; preserve natural heading wrapping; and do not add isolated oversized heading values or global no-wrap rules. The Persian homepage artist name and homepage Contact heading are single-line targets only at the reference widths defined by the specification. Update the shared specification before changing the typography system.
