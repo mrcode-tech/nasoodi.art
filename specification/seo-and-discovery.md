@@ -73,3 +73,9 @@ The application emits the global Person/WebSite graph and now adds page-level st
 Published gallery detail pages emit `CollectionPage` JSON-LD with a nested `ItemList`. The list follows the gallery's curated artwork membership order and includes only artwork records that pass the same publication, rights, primary-image, and locale gates as the visible page. Each list item links to its canonical localized artwork detail route and uses only the approved localized artwork title and primary image. Empty, draft, incomplete, or untranslated gallery records remain excluded by the existing route and sitemap gates.
 
 The helper is unit-tested with published and unpublished synthetic artwork records. Validate rendered structured data against populated artist-approved gallery content before launch.
+
+## JSON-backed bilingual metadata — 2026-11-05
+
+The current content architecture is authoritative for metadata: artist/About from `artist-profile.json`; archive titles/descriptions from `site.json`; Contact metadata from `contact.json`; CV metadata from the canonical CV/site record; and detail metadata from each artwork, gallery, or Journal entity. All localized alternatives are matched by stable content ID, never by slug equality.
+
+The Contact page may be indexed only when the canonical localized title and description and an owner-supplied public contact destination exist for that locale. Do not retain the old demo Contact noindex rule after demo destinations have been removed and replaced by owner-supplied data. Verify actual rendered HTML and sitemap output for each supported locale.
