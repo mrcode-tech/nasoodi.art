@@ -116,3 +116,11 @@ export type HomepageSelection = {
   featuredArtworkIds: string[];
   featuredGalleryIds: string[];
 };
+
+export type SiteContent = {
+  id: string;
+  pages: Record<"works" | "galleries" | "journal" | "cv", {
+    title: Record<Locale, string>;
+    description: Record<Locale, string>;
+  }>;
+};

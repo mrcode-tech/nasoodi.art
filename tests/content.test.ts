@@ -6,6 +6,8 @@ import { journalEntries } from "../src/content/journal";
 import { homepageSelection } from "../src/content/homepage";
 import { artistProfile } from "../src/content/artist";
 import { cvDocument, cvEntries } from "../src/content/cv";
+import { contactDetails } from "../src/content/contact";
+import { siteContent } from "../src/content/site";
 import { getEvents } from "../src/content/repositories/event.repository";
 import { getHomepageContent } from "../src/content/repositories/homepage.repository";
 import { getPortfolioStructuredData } from "../src/content/portfolio-structured-data";
@@ -442,7 +444,7 @@ test("a missing localized slug never falls back to another locale and fails cont
  assert.equal(getLocalizedSlug(localized,"en"),"english-only");
  assert.equal(getLocalizedSlug(localized,"fa"),"");
  const issues=validatePortfolioContent({
-  artworks:[localized],galleries,journalEntries,cvEntries,homepageSelection,artistProfile,cvDocument,
+  artworks:[localized],galleries,journalEntries,cvEntries,homepageSelection,artistProfile,cvDocument,contactDetails,siteContent,
  });
  assert.ok(issues.some(issue=>issue.path.endsWith(".localizedSlugs.fa")));
 });
@@ -475,7 +477,7 @@ test("published Journal records require a complete localized JSON body",()=>{
  const entry=journalEntries[0];
  const issues=validatePortfolioContent({
   artworks,galleries,journalEntries:[{...entry,body:{en:entry.body?.en}}],
-  cvEntries,homepageSelection,artistProfile,cvDocument,
+  cvEntries,homepageSelection,artistProfile,cvDocument,contactDetails,siteContent,
  });
  assert.ok(issues.some((issue)=>issue.path.endsWith(".body.fa")));
 });
@@ -489,6 +491,8 @@ test("canonical portfolio registry passes cross-record validation", () => {
   homepageSelection,
   artistProfile,
   cvDocument,
+  contactDetails,
+  siteContent,
  });
  assert.deepEqual(issues, []);
 });
@@ -504,6 +508,8 @@ test("portfolio validation reports duplicate routes and broken content relations
   homepageSelection: { ...homepageSelection, featuredArtworkIds: [...homepageSelection.featuredArtworkIds, "missing-artwork"] },
   artistProfile,
   cvDocument,
+  contactDetails,
+  siteContent,
  });
  assert.ok(issues.some((issue) => issue.path.endsWith(".id") && issue.message.includes("Duplicate artworks ID")));
  assert.ok(issues.some((issue) => issue.path.includes("artworkIds") && issue.message.includes("Unknown artwork ID")));
@@ -535,6 +541,8 @@ test("CV identifiers are validated independently from URL slugs", () => {
   homepageSelection,
   artistProfile,
   cvDocument,
+  contactDetails,
+  siteContent,
  });
  assert.deepEqual(issues, []);
 });

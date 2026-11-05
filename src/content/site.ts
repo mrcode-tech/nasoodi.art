@@ -1,12 +1,4 @@
 import site from "./data/site.json";
-import type { Locale } from "../types/locale";
+import type { SiteContent } from "../types/content";
 
-type LocalizedPageMetadata = {
-  title: Record<Locale, string>;
-  description: Record<Locale, string>;
-};
-
-export const siteContent = site as {
-  id: string;
-  pages: Record<"works" | "galleries" | "journal" | "cv", LocalizedPageMetadata>;
-};
+export const siteContent: SiteContent = site;

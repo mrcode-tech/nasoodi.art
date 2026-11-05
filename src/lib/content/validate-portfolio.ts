@@ -24,8 +24,10 @@ export type PortfolioContentSource = {
   journalEntries: readonly JournalEntry[];
   cvEntries: readonly CvEntry[];
   homepageSelection: HomepageSelection;
-  artistProfile?: ArtistProfile;
+  artistProfile: ArtistProfile;
   cvDocument?: CvDocument;
+  contactDetails: ContactDetails;
+  siteContent: SiteContent;
 };
 
 function validateRouteIdentity(
@@ -112,10 +114,19 @@ export function validatePortfolioContent(source: PortfolioContentSource): Conten
       issues.push({ path: path + ".images", message: "A published artwork must have exactly one primary image." });
     }
     work.images.forEach((image, imageIndex) => validateImage(image, path + ".images[" + imageIndex + "]", issues));
+    for (const locale of locales) {
+      if (!work.title[locale]?.trim()) issues.push({ path: path + ".title." + locale, message: "Published artwork requires a localized title." });
+      if (!work.description?.[locale]?.trim()) issues.push({ path: path + ".description." + locale, message: "Published artwork requires a localized description." });
+      if (!primaryImages[0]?.alt[locale]?.trim()) issues.push({ path: path + ".images.primary.alt." + locale, message: "Published artwork requires localized primary-image alt text." });
+    }
   });
 
   source.galleries.forEach((gallery, index) => {
     const path = "galleries[" + index + "]";
+    for (const locale of locales) {
+      if (!gallery.title[locale]?.trim()) issues.push({ path: path + ".title." + locale, message: "Published gallery requires a localized title." });
+      if (!gallery.description[locale]?.trim()) issues.push({ path: path + ".description." + locale, message: "Published gallery requires a localized description." });
+    }
     if (new Set(gallery.artworkIds).size !== gallery.artworkIds.length) {
       issues.push({ path: path + ".artworkIds", message: "Gallery artwork references must be unique." });
     }
@@ -134,6 +145,11 @@ export function validatePortfolioContent(source: PortfolioContentSource): Conten
     const path = "journalEntries[" + index + "]";
     if (entry.status === "published" && entry.approvedLocales.length === 0) {
       issues.push({ path: path + ".approvedLocales", message: "A published Journal entry must be approved for at least one locale." });
+    }
+    if (entry.status === "published") {
+      for (const locale of locales) {
+        if (!entry.approvedLocales.includes(locale)) issues.push({ path: path + ".approvedLocales", message: "Published Journal entries require locale approval for " + locale + "." });
+      }
     }
     if (new Set(entry.approvedLocales).size !== entry.approvedLocales.length) {
       issues.push({ path: path + ".approvedLocales", message: "Approved locales must be unique." });
@@ -209,18 +225,60 @@ export function validatePortfolioContent(source: PortfolioContentSource): Conten
   validateSelection("featuredArtworkIds", source.homepageSelection.featuredArtworkIds, artworkIds);
   validateSelection("featuredGalleryIds", source.homepageSelection.featuredGalleryIds, galleryIds);
 
-  if (source.artistProfile) {
+  {
     const profile = source.artistProfile;
     if (!profile.id?.trim()) issues.push({ path: "artistProfile.id", message: "A stable artist profile ID is required." });
     for (const locale of locales) {
       if (!profile.name?.[locale]?.trim()) issues.push({ path: "artistProfile.name." + locale, message: "Artist name is required in every supported locale." });
       if (!profile.statement[locale]?.trim()) issues.push({ path: "artistProfile.statement." + locale, message: "Artist statement is required in every supported locale." });
       if (!profile.biography[locale]?.trim()) issues.push({ path: "artistProfile.biography." + locale, message: "Artist biography is required in every supported locale." });
-      if (profile.slug?.[locale] && !isSafeContentSlug(profile.slug[locale]!)) {
-        issues.push({ path: "artistProfile.slug." + locale, message: "Artist profile slug must be one safe URL segment." });
-      }
+      if (!profile.slug?.[locale]?.trim()) issues.push({ path: "artistProfile.slug." + locale, message: "Artist profile requires a localized slug in every supported locale." });
+      else if (!isSafeContentSlug(profile.slug[locale]!)) issues.push({ path: "artistProfile.slug." + locale, message: "Artist profile slug must be one safe URL segment." });
+      if (!profile.discipline?.[locale]?.trim()) issues.push({ path: "artistProfile.discipline." + locale, message: "Artist discipline is required in every supported locale." });
+      if (!profile.shortIntroduction?.[locale]?.trim()) issues.push({ path: "artistProfile.shortIntroduction." + locale, message: "Artist introduction is required in every supported locale." });
+      if (!profile.artisticApproach?.[locale]?.trim()) issues.push({ path: "artistProfile.artisticApproach." + locale, message: "Artist approach is required in every supported locale." });
+      if (!profile.interests?.[locale]?.length || profile.interests[locale]!.some((interest) => !interest.trim())) issues.push({ path: "artistProfile.interests." + locale, message: "Artist interests require non-empty localized entries." });
     }
     if (profile.portrait) validateImage(profile.portrait, "artistProfile.portrait", issues);
+  }
+
+  {
+    const site = source.siteContent;
+    if (!site.id?.trim()) issues.push({ path: "siteContent.id", message: "A stable site metadata ID is required." });
+    for (const page of ["works", "galleries", "journal", "cv"] as const) {
+      for (const locale of locales) {
+        if (!site.pages?.[page]?.title?.[locale]?.trim()) issues.push({ path: "siteContent.pages." + page + ".title." + locale, message: "Localized page title is required." });
+        if (!site.pages?.[page]?.description?.[locale]?.trim()) issues.push({ path: "siteContent.pages." + page + ".description." + locale, message: "Localized page description is required." });
+      }
+    }
+  }
+
+  {
+    const contact = source.contactDetails;
+    for (const locale of locales) {
+      if (!contact.title?.[locale]?.trim()) issues.push({ path: "contactDetails.title." + locale, message: "Localized Contact title is required." });
+      if (!contact.description?.[locale]?.trim()) issues.push({ path: "contactDetails.description." + locale, message: "Localized Contact description is required." });
+    }
+    let validDestination = false;
+    if (contact.email) {
+      if (/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(contact.email)) validDestination = true;
+      else issues.push({ path: "contactDetails.email", message: "Contact email must be a valid email address." });
+    }
+    if (contact.telegramHandle) {
+      if (/^[A-Za-z0-9_]{5,32}$/.test(contact.telegramHandle)) validDestination = true;
+      else issues.push({ path: "contactDetails.telegramHandle", message: "Telegram handle must be a valid public handle." });
+    }
+    if (contact.instagramUrl) {
+      try {
+        const url = new URL(contact.instagramUrl);
+        const segments = url.pathname.split("/").filter(Boolean);
+        if (url.protocol === "https:" && ["instagram.com", "www.instagram.com"].includes(url.hostname) && segments.length === 1 && /^[A-Za-z0-9._]{1,30}$/.test(segments[0])) validDestination = true;
+        else issues.push({ path: "contactDetails.instagramUrl", message: "Instagram destination must be a valid HTTPS profile URL." });
+      } catch {
+        issues.push({ path: "contactDetails.instagramUrl", message: "Instagram destination must be a valid HTTPS profile URL." });
+      }
+    }
+    if (!validDestination) issues.push({ path: "contactDetails", message: "At least one owner-supplied public Contact destination is required." });
   }
 
   if (source.cvDocument) {
