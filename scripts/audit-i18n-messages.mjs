@@ -1,8 +1,27 @@
 import { readdirSync, readFileSync } from "node:fs";
-import { resolve, extname } from "node:path";
+import { resolve, extname, relative } from "node:path";
+import ts from "typescript";
 
 const messageRoot = resolve("src/i18n/messages");
 const sourceRoots = [resolve("src/app"), resolve("src/components")];
+const sourceExtensions = new Set([".tsx", ".ts", ".jsx", ".js"]);
+const visibleAttributes = new Set([
+  "alt", "aria-label", "aria-description", "aria-roledescription",
+  "placeholder", "title", "label", "value", "emptytext", "description",
+]);
+const technicalAttributes = new Set([
+  "className", "class", "id", "key", "name", "type", "role", "href",
+  "src", "target", "rel", "method", "action", "slot", "part",
+  "data-testid", "suppressHydrationWarning",
+]);
+const knownBrandAndProperNames = new Set([
+  "Nasoodi.art", "Instagram", "GitHub", "Next.js", "React", "TypeScript",
+  "Vercel", "Radix", "Embla", "shadcn/ui",
+]);
+const uiMessagePropertyNames = new Set([
+  "label", "title", "description", "placeholder", "emptyMessage",
+  "helperText", "errorMessage", "successMessage", "ariaLabel",
+]);
 
 function flatten(value, prefix = "", output = {}) {
   if (typeof value === "string") {
@@ -52,8 +71,82 @@ function load(locale) {
 function walk(directory) {
   return readdirSync(directory, { withFileTypes: true }).flatMap((entry) => {
     const path = resolve(directory, entry.name);
-    return entry.isDirectory() ? walk(path) : extname(entry.name) === ".tsx" ? [path] : [];
+    return entry.isDirectory() ? walk(path) : sourceExtensions.has(extname(entry.name)) ? [path] : [];
   });
+}
+
+function hasUserFacingText(value, jsxText = false) {
+  const text = value.trim();
+  if (!text || knownBrandAndProperNames.has(text)) return false;
+  if (!/[A-Za-z\u0600-\u06FF]/u.test(text)) return false;
+  if (/[\u0600-\u06FF]/u.test(text)) return true;
+  return jsxText || /\s|[!?.,:;()[\]{}]/u.test(text);
+}
+
+function hasExceptionComment(sourceText, node) {
+  const leading = sourceText.slice(node.getFullStart(), node.getStart());
+  return /i18n-literal-ok/u.test(leading);
+}
+
+function auditSource(file) {
+  const sourceText = readFileSync(file, "utf8");
+  const scriptKind = file.endsWith(".tsx") ? ts.ScriptKind.TSX
+    : file.endsWith(".jsx") ? ts.ScriptKind.JSX
+    : ts.ScriptKind.TS;
+  const source = ts.createSourceFile(file, sourceText, ts.ScriptTarget.Latest, true, scriptKind);
+  const violations = [];
+  const report = (node, value) => {
+    if (!hasUserFacingText(value) || hasExceptionComment(sourceText, node)) return;
+    const position = source.getLineAndCharacterOfPosition(node.getStart(source));
+    violations.push({
+      line: position.line + 1,
+      text: value.trim().replace(/\s+/gu, " ").slice(0, 100),
+    });
+  };
+
+  function visit(node) {
+    if (ts.isJsxText(node)) {
+      if (hasUserFacingText(node.getText(source), true) && !hasExceptionComment(sourceText, node)) {
+        const position = source.getLineAndCharacterOfPosition(node.getStart(source));
+        violations.push({
+          line: position.line + 1,
+          text: node.getText(source).trim().replace(/\s+/gu, " ").slice(0, 100),
+        });
+      }
+    }
+
+    if (ts.isJsxAttribute(node) && node.initializer) {
+      const name = node.name.getText(source);
+      if (!technicalAttributes.has(name) && visibleAttributes.has(name.toLowerCase())) {
+        if (ts.isStringLiteral(node.initializer)) report(node.initializer, node.initializer.text);
+        if (ts.isJsxExpression(node.initializer) && node.initializer.expression &&
+            (ts.isStringLiteral(node.initializer.expression) || ts.isNoSubstitutionTemplateLiteral(node.initializer.expression))) {
+          report(node.initializer.expression, node.initializer.expression.text);
+        }
+      }
+    }
+
+    if (ts.isPropertyAssignment(node) && ts.isIdentifier(node.name) &&
+        uiMessagePropertyNames.has(node.name.text) &&
+        (ts.isStringLiteral(node.initializer) || ts.isNoSubstitutionTemplateLiteral(node.initializer))) {
+      report(node.initializer, node.initializer.text);
+    }
+
+    if (ts.isCallExpression(node) && ts.isIdentifier(node.expression) &&
+        ["alert", "confirm", "prompt"].includes(node.expression.text)) {
+      for (const argument of node.arguments) {
+        if (ts.isStringLiteral(argument) || ts.isNoSubstitutionTemplateLiteral(argument)) report(argument, argument.text);
+      }
+    }
+
+    ts.forEachChild(node, visit);
+  }
+
+  visit(source);
+  return violations.map((violation) => ({
+    file: relative(process.cwd(), file).replaceAll("\\", "/"),
+    ...violation,
+  }));
 }
 
 const english = load("en");
@@ -75,17 +168,10 @@ if (missingInEnglish.length) errors.push("Missing in en: " + missingInEnglish.jo
 if (namespaceMismatch.length) errors.push("Namespace file mismatch: " + [...new Set(namespaceMismatch)].join(", "));
 if (placeholderMismatches.length) errors.push("Placeholder mismatches: " + placeholderMismatches.join(", "));
 
-const hardcodedPersian = [];
-for (const root of sourceRoots) {
-  for (const file of walk(root)) {
-    const source = readFileSync(file, "utf8")
-      .replace(/\/\*[\s\S]*?\*\//g, "")
-      .replace(/(^|\s)\/\/.*$/gm, "$1");
-    if (/[\u0600-\u06FF]/u.test(source)) hardcodedPersian.push(file.replace(process.cwd() + "/", ""));
-  }
-}
-if (hardcodedPersian.length) {
-  errors.push("Persian UI literals must live in locale message resources: " + hardcodedPersian.join(", "));
+const hardcodedUiLiterals = sourceRoots.flatMap((root) => walk(root)).flatMap(auditSource);
+if (hardcodedUiLiterals.length) {
+  errors.push("Hardcoded user-facing UI literals must live in locale message resources:");
+  for (const item of hardcodedUiLiterals) errors.push("  " + item.file + ":" + item.line + " — " + item.text);
 }
 
 if (errors.length) {
@@ -96,6 +182,6 @@ if (errors.length) {
   console.log(
     "Validated " + englishKeys.length +
     " bilingual message keys across " + english.files.length +
-    " matching namespaces; placeholders, non-empty values, and component translation boundaries are consistent."
+    " matching namespaces; placeholders, non-empty values, and AST-based UI literal boundaries are consistent."
   );
 }
