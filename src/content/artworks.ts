@@ -1,21 +1,22 @@
+import artworkRecords from "./data/artworks.json";
 import { approvedArtworkImageDimensions } from "../lib/approved-artwork-image-dimensions";
 import type { Artwork } from "../types/content";
 
-// The five source photographs were explicitly approved by the site owner for public portfolio use.
-// Public derivatives are copied from specification/assets/gallery by scripts/copy-approved-gallery-assets.mjs.
-// Intrinsic dimensions are generated from each source JPEG before dev/build, preserving its exact aspect ratio.
-export const approvedArtworkImages = [
-  { src: "/images/approved-artwork-1.jpg", alt: { en: "Painting titled A Quiet Place Between Seasons", fa: "تابلوی نقاشی با عنوان «آرامش میان فصل‌ها»" }, role: "primary" as const, width: approvedArtworkImageDimensions[0].width, height: approvedArtworkImageDimensions[0].height },
-  { src: "/images/approved-artwork-2.jpg", alt: { en: "Painting titled The Shape of Remembering", fa: "تابلوی نقاشی با عنوان «شکلِ خاطره»" }, role: "primary" as const, width: approvedArtworkImageDimensions[1].width, height: approvedArtworkImageDimensions[1].height },
-  { src: "/images/approved-artwork-3.jpg", alt: { en: "Painting titled Where Light Rests", fa: "تابلوی نقاشی با عنوان «جایی که نور می‌آرامد»" }, role: "primary" as const, width: approvedArtworkImageDimensions[2].width, height: approvedArtworkImageDimensions[2].height },
-  { src: "/images/approved-artwork-4.jpg", alt: { en: "Painting titled A Garden of Small Moments", fa: "تابلوی نقاشی با عنوان «باغ لحظه‌های کوچک»" }, role: "primary" as const, width: approvedArtworkImageDimensions[3].width, height: approvedArtworkImageDimensions[3].height },
-  { src: "/images/approved-artwork-5.jpg", alt: { en: "Painting titled The Blue Hour Within", fa: "تابلوی نقاشی با عنوان «ساعت آبی درون»" }, role: "primary" as const, width: approvedArtworkImageDimensions[4].width, height: approvedArtworkImageDimensions[4].height },
-];
+// Dimensions are generated from the approved source JPEGs before dev/build.
+// Editorial fields and image references remain owner-editable JSON data.
+export const approvedArtworkImages = artworkRecords.flatMap((record, index) =>
+  record.images.map((image) => ({
+    ...image,
+    width: approvedArtworkImageDimensions[index].width,
+    height: approvedArtworkImageDimensions[index].height,
+  })),
+);
 
-export const artworks: Artwork[] = [
-  { id: "artwork-quiet-place", slug: "a-quiet-place-between-seasons", localizedSlugs: { en: "a-quiet-place-between-seasons", fa: "a-quiet-place-between-seasons" }, title: { en: "A Quiet Place Between Seasons", fa: "آرامش میان فصل‌ها" }, description: { en: "A visual pause shaped around stillness and the quiet rhythm of looking. Its open-ended title leaves room for a personal reading.", fa: "مکثی تصویری در فضایی از سکون و تماشای آرام؛ عنوانی گشوده که به هر بیننده فرصت می‌دهد برداشت شخصی خود را از اثر داشته باشد." }, images: [approvedArtworkImages[0]], rightsConfirmed: true, status: "published", sortOrder: 1 },
-  { id: "artwork-shape-of-remembering", slug: "the-shape-of-remembering", localizedSlugs: { en: "the-shape-of-remembering", fa: "the-shape-of-remembering" }, title: { en: "The Shape of Remembering", fa: "شکلِ خاطره" }, description: { en: "A reflection on the way memory gathers fragments into something felt rather than fully explained.", fa: "تأملی درباره‌ی شیوه‌ای که خاطره، تکه‌های پراکنده را کنار هم می‌نشاند و حسی فراتر از توضیح به وجود می‌آورد." }, images: [approvedArtworkImages[1]], rightsConfirmed: true, status: "published", sortOrder: 2 },
-  { id: "artwork-where-light-rests", slug: "where-light-rests", localizedSlugs: { en: "where-light-rests", fa: "where-light-rests" }, title: { en: "Where Light Rests", fa: "جایی که نور می‌آرامد" }, description: { en: "An invitation to slow down and notice the delicate relationship between light, atmosphere, and attention.", fa: "دعوتی به آهسته‌تر دیدن و توجه به رابطه‌ی ظریف میان نور، فضا و نگاه." }, images: [approvedArtworkImages[2]], rightsConfirmed: true, status: "published", sortOrder: 3 },
-  { id: "artwork-garden-small-moments", slug: "a-garden-of-small-moments", localizedSlugs: { en: "a-garden-of-small-moments", fa: "a-garden-of-small-moments" }, title: { en: "A Garden of Small Moments", fa: "باغ لحظه‌های کوچک" }, description: { en: "A gentle meditation on the small moments that accumulate into a larger sense of presence.", fa: "نگاهی آرام به لحظه‌های کوچکی که در کنار هم، معنای گسترده‌تری از حضور و زندگی می‌سازند." }, images: [approvedArtworkImages[3]], rightsConfirmed: true, status: "published", sortOrder: 4 },
-  { id: "artwork-blue-hour-within", slug: "the-blue-hour-within", localizedSlugs: { en: "the-blue-hour-within", fa: "the-blue-hour-within" }, title: { en: "The Blue Hour Within", fa: "ساعت آبی درون" }, description: { en: "A contemplative title for a work that invites an inward journey and an unhurried encounter.", fa: "عنوانی تأمل‌برانگیز برای اثری که مخاطب را به سفری درونی و مواجهه‌ای بی‌شتاب دعوت می‌کند." }, images: [approvedArtworkImages[4]], rightsConfirmed: true, status: "published", sortOrder: 5 },
-];
+export const artworks: Artwork[] = artworkRecords.map((record, index) => ({
+  ...record,
+  images: record.images.map((image) => ({
+    ...image,
+    width: approvedArtworkImageDimensions[index].width,
+    height: approvedArtworkImageDimensions[index].height,
+  })),
+})) as unknown as Artwork[];

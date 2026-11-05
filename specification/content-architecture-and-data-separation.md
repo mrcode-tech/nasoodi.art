@@ -202,8 +202,10 @@ Do not rewrite everything in one pass or change wording, URLs, artwork ordering,
 
 ## Implementation checkpoint — 2026-11-05
 
-The first consumer migration is complete: application routes, sitemap generation, language-switch resolution, and content tests import explicit domain modules. The former aggregate `src/content/portfolio.ts` and broad compatibility `src/lib/site.ts` barrels are removed. This makes ownership visible and prevents new consumers from depending on a cross-domain export surface.
+The first content-record migration is complete on the feature branch. Canonical artwork and gallery records, Journal metadata, homepage selections, the demo Contact fixture, and intentionally empty artist/CV records now live in JSON. The eight existing Journal entries' English and Persian long-form bodies live in Markdown files and are adapted into the existing rich-text block model without changing the renderer.
 
-**Content-format decision:** new structured editorial records should use JSON; long-form prose should use Markdown; TypeScript remains appropriate for domain contracts, validation/behavior, generated image dimensions, and small code-owned configuration. Existing typed artwork and Journal records remain in place until a record-family migration can preserve generated dimensions, rich-text block semantics, IDs, localized slugs, approvals, order, and rendered parity. This is an incremental migration boundary, not a claim that every existing record has already moved to JSON/Markdown.
+The TypeScript modules under `src/content/` are now typed adapters, not duplicate editorial sources. Artwork image dimensions continue to come from the generated approved-asset inventory; Journal cover references resolve through stable artwork IDs, preserving the existing temporary-placeholder labels and rights gate. Next.js output tracing includes the localized Markdown files for server deployment.
 
-Exit checks for the remaining data-format migration are: one canonical record source per domain, no duplicate data, build-time schema validation, unchanged published routes and ordering, and bilingual rendered/SEO parity.
+No artist biography, CV facts, contact channels, translations, or event information were invented during migration. The original stable IDs, localized slugs, publication approvals, dates, artwork/gallery order, and bilingual text are preserved.
+
+The remaining verification gate is to validate JSON and Markdown source integrity, run the existing content/SEO unit suite, production build, and browser checks, and compare the resulting routes and metadata against the previous implementation.

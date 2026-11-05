@@ -487,3 +487,23 @@ test("CV identifiers are validated independently from URL slugs", () => {
  });
  assert.deepEqual(issues, []);
 });
+
+
+test("JSON and Markdown editorial sources preserve bilingual records and rich-text semantics", () => {
+ assert.equal(artworks.length, 5);
+ assert.equal(galleries.length, 4);
+ assert.equal(journalEntries.length, 8);
+ const first = journalEntries.find((entry) => entry.id === "journal-studio-notes-november-2026");
+ assert.ok(first?.body?.en && first.body.fa);
+ assert.equal(first.body.en[0].type, "paragraph");
+ assert.equal(first.body.en[0].type === "paragraph" ? first.body.en[0].text : "", "The studio has been full of unfinished conversations between colour and surface. Some passages are built slowly, with thin layers that allow earlier marks to remain present; others ask for a more decisive gesture.");
+ assert.deepEqual(first.body.en[1], { type: "heading", level: 2, text: "Leaving room for the painting" });
+ assert.deepEqual(first.body.en[3], { type: "quote", text: "Sometimes the most important decision is to leave a little space untouched." });
+ assert.equal(first.body.fa[0].type === "paragraph" ? first.body.fa[0].text : "", "این روزها آتلیه پر از گفت‌وگوهای ناتمام میان رنگ و سطح است. بعضی بخش‌ها با لایه‌های نازک و آرام شکل می‌گیرند تا ردّ رنگ‌های پیشین باقی بماند؛ بخش‌های دیگر به حرکتی قاطع‌تر نیاز دارند.");
+ assert.equal(journalEntries.find((entry) => entry.id === "journal-exhibition-open-studio-2026")?.event?.startsAt, "2026-11-14T14:00:00+00:00");
+ for (const entry of journalEntries) {
+  assert.ok(entry.body?.en?.length, entry.id + " must have English Markdown content");
+  assert.ok(entry.body?.fa?.length, entry.id + " must have Persian Markdown content");
+  assert.ok(entry.coverImage?.rightsConfirmed, entry.id + " must resolve an approved artwork cover");
+ }
+});
