@@ -6,6 +6,7 @@ import { journalEntries } from "../src/content/journal";
 import { homepageSelection } from "../src/content/homepage";
 import { artistProfile } from "../src/content/artist";
 import { cvDocument, cvEntries } from "../src/content/cv";
+import { getEvents } from "../src/content/repositories/event.repository";
 import { portfolioStructuredData } from "../src/content/portfolio-structured-data";
 import {
   getPublicArtworks,
@@ -55,6 +56,13 @@ test("event entries require a valid time zone and occurrence time",()=>{
  assert.equal(getPublicJournal([{...valid,event:{...valid.event!,timeZone:"Not/AZone"}}],"en").length,0);
  assert.equal(getPublicJournal([{...valid,event:{...valid.event!,startsAt:"2026-11-12T18:00:00"}}],"en").length,0);
 });
+test("event repository returns only published Journal event and exhibition records",()=>{
+ const events=getEvents("en");
+ assert.ok(events.length>0);
+ assert.ok(events.every((entry)=>entry.type==="event"||entry.type==="exhibition"));
+ assert.ok(events.every((entry)=>entry.body?.en?.length));
+});
+
 test("CV entries resolve from localized editorial content without verification flags",()=>{
  const entry:CvEntry={id:"cv1",category:"group-exhibition",title:{en:"Group exhibition",fa:"نمایشگاه گروهی"},year:2024,status:"published"};
  assert.equal(getPublicCvEntries([entry],"en").length,1);
