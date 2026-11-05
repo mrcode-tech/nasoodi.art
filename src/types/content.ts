@@ -86,9 +86,6 @@ export type ArtistProfile = {
     height: number;
     rightsConfirmed: boolean;
   };
-  status: Status;
-  approvedLocales: Locale[];
-  artistApproved: boolean;
 };
 export type ContactDetails = {
   title?: Localized;
