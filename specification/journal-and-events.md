@@ -168,9 +168,9 @@ When a date-time and time zone are provided, keep the representation explicit (I
 - Venue address or public location description.
 - Online/physical/hybrid attendance mode.
 - Registration or official event-information URL.
-- Cover image/poster with usage approval.
+- Optional cover image or poster.
 - Related gallery, exhibition, and artwork references.
-- Organizer/partner details only when confirmed and approved.
+- Optional organizer and partner details.
 
 Use the event and exhibition details in the canonical JSON as the initial editable content; the owner can revise them directly.
 
@@ -415,7 +415,7 @@ Responsive rules:
 Automated and manual verification must cover:
 
 ### Content and publication
-- Valid article and event records pass schema validation.
+- Article and event records render from the canonical Journal JSON, including records with optional event fields.
 - Invalid slugs, duplicate IDs/slugs, missing required localized content, unapproved assets, and unresolved relations block publication.
 - Draft, scheduled, and archived-unpublished entries are absent from public routes, lists, sitemap, metadata, and social previews.
 - Published locale output includes only approved translations.
