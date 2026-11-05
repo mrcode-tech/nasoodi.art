@@ -5,6 +5,10 @@
 **Task:** Complete the owner-provided unified JSON content, About/CV, next-intl, route architecture, and international SEO implementation prompt.  
 **Audit:** `specification/internationalization-content-seo-completion-audit.md`
 
+## Explicit owner authorization — feature branch only
+
+The owner has authorized the AI agent to make code and documentation changes, create commits, push updates, and run GitHub Actions on the existing `feature` branch. This authorization is active; do not pause for another commit/push confirmation. Work only on `feature`, preserve unrelated work, and use normal non-destructive commits. Do not create or switch branches, force-push, rewrite history, merge into `stage` or `main`, deploy, publish, or change external services. Those actions are outside this authorization and require separate explicit approval.
+
 ## Current architecture decisions — 2026-11-05
 
 - Editorial content is canonical localized JSON. UI translations remain in `src/i18n/messages/{en,fa}/`.
@@ -82,7 +86,7 @@ Inspect the current implementation and route hierarchy before editing. Do not as
 
 Run the complete relevant test suite and CI, inspect actual logs and final tested SHA, and capture/inspect English and Persian desktop/tablet/mobile screenshots. Verify breadcrumb clickability, RTL reading and keyboard order, no overflow, spacing, text measure, Journal controls, copyright fit, and Contact navigation/content.
 
-Work only on the existing `feature` branch. Preserve unrelated work. Do not merge to `stage` or `main`, deploy, publish, change external services, or commit/push without the required separate authorization.
+Work only on the existing `feature` branch. The owner has authorized commits and pushes to this branch; no further confirmation is required. Preserve unrelated work. Do not merge to `stage` or `main`, deploy, publish, change external services, or push any other branch.
 
 ---
 
@@ -121,7 +125,7 @@ Before coding, read in full:
 
 The proposal is approved in principle and implementation may proceed. The initial hand-authored torn-edge SVG study is a candidate, not final approval. Review the CI-generated PNG and responsive screenshots with the owner; refine the vector paths directly if requested. Build the functional experience and prepare visual comparisons. The CI-generated PNG is a review artifact, not a final approved asset; do not commit it or declare the visual variant final until the owner selects it. Inspect the real shell, locale-aware sidebar/menu geometry, Journal data model, routes, existing pagination, assets, and CI before coding.
 
-Use `specification/journal-announcement-implementation-prompt.md` as the complete task brief and `specification/journal-announcement-agent-instructions.md` as the concise execution checklist. Preserve all repository safety rules in `AGENTS.md`: work on the existing feature branch, preserve unrelated changes, do not merge to stage/main, do not deploy, and do not push or commit without the required separate authorization. Run the repository's actual tests and CI, inspect logs, and capture reviewed English/Persian desktop/tablet/mobile screenshots before reporting completion.
+Use `specification/journal-announcement-implementation-prompt.md` as the complete task brief and `specification/journal-announcement-agent-instructions.md` as the concise execution checklist. Preserve all repository safety rules in `AGENTS.md`: work on the existing feature branch, preserve unrelated changes, commit and push to `feature` after verification, do not merge to stage/main, and do not deploy or publish. Run the repository's actual tests and CI, inspect logs, and capture reviewed English/Persian desktop/tablet/mobile screenshots before reporting completion.
 
 ---
 
@@ -191,9 +195,9 @@ Also inspect any existing About, artist-profile, CV, hero, sidebar, locale, and 
 - Do not create, switch, reset, rename, or delete branches.
 - Preserve unrelated and uncommitted user work. Never overwrite unrelated changes.
 - Do not merge into `stage` or `main`.
-- Do not push to an unauthorized destination.
+- Push only to the owner-authorized existing `feature` branch; pushes to every other branch are unauthorized.
 - Do not deploy, publish, change DNS, alter Vercel settings, modify secrets, or change external services.
-- Do not commit until implementation, relevant tests, build, and verification are complete. If no commit is explicitly requested, leave changes uncommitted and report that.
+- The owner has explicitly requested and authorized commits and pushes to `feature`. Commit after implementation, relevant tests, build, and verification are complete; leave changes uncommitted only if the owner later revokes this authorization.
 - Do not use force push or destructive Git commands.
 - Do not change the branch's existing history or rewrite commits.
 
@@ -437,7 +441,7 @@ The proposed file-based content layout is a starting point only. First inspect t
 
 For SEO research, the owner mentioned the community AgriciDaniel/claude-seo skill: https://github.com/AgriciDaniel/claude-seo. It may inform audit workflow, but is not a project dependency or authority. Inspect and pin/review its SKILL.md before using it. Validate claims against primary Google Search Central, Next.js, Schema.org, and web.dev documentation and actual production-rendered output. Do not install the full plugin, connect Search Console/analytics, use paid API extensions, or change production without explicit authorization.
 
-These architecture documents are specifications, not authorization to begin this work automatically. The current task at the top of this file remains the active implementation task unless the owner explicitly changes priority. Work on feature only; do not merge, deploy, or publish without separate authorization.
+These architecture documents are specifications, not authorization to begin this work automatically. The current task at the top of this file remains the active implementation task unless the owner explicitly changes priority. Work on `feature` only; commits and pushes to `feature` are authorized. Do not merge, deploy, or publish without separate authorization.
 
 
 ## Unified JSON implementation update — 2026-11-05

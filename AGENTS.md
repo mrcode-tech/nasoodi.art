@@ -91,10 +91,10 @@ Do not start implementation based only on a prompt summary or this file. Read th
 ## Engineering and repository workflow
 
 - Inspect the current branch, worktree, latest commit, package scripts, route structure, and CI workflows before changing code. Preserve unrelated work.
-- Keep work on the existing `feature` branch unless the owner explicitly authorizes a different branch.
-- Do not create, switch, reset, or delete branches unless explicitly authorized.
-- Do not merge to `main`, push to an unauthorized destination, or deploy without separate explicit authorization.
-- Do not commit until implementation, relevant tests, and verification are complete, unless the owner explicitly requests an earlier checkpoint.
+- The owner has explicitly authorized the AI agent to edit, commit, and push changes to the existing `feature` branch. This is standing authorization for this repository task; no additional confirmation is required for commits or pushes to `feature`.
+- Work only on the existing `feature` branch. Do not create, switch, reset, rename, or delete branches.
+- Do not merge to `stage` or `main`, push to any branch other than `feature`, deploy, publish, or change external services. Those actions remain unauthorized and require separate explicit approval.
+- Preserve unrelated work. Complete the relevant tests and verification before committing; push only the resulting commits to `feature`.
 - Prefer focused, maintainable changes and strict TypeScript. Keep dependencies minimal and use stable releases.
 - Update relevant specifications when implementation reveals a reusable design decision or when approved behavior changes. Keep `specification/README.md`, wireframes, roadmap, and related contracts consistent.
 
