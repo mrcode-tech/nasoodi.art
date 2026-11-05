@@ -87,3 +87,81 @@ GitHub Actions run `41899192403` completed successfully for commit `dc1e40c97c0f
 - SVG sticker validation and asset inventory: passed
 
 This CI run verifies the listed automated checks only. It does not establish manual screen-reader/real-device review, artist approval of editorial copy, Search Console indexing, or production deployment behavior.
+
+
+> **Reading this report:** The architecture audit and confirmed facts above preserve the original baseline at `dc1e40c`. The implementation status and verification below supersede baseline findings where they differ.
+
+## Implementation progress — feature branch
+
+**Implementation snapshot:** \`294aa803ab5ebf8f7cc5bf73affe1db56cd5a609\`
+
+### Implemented
+
+**Internationalization**
+- Split English and Persian UI resources into domain files under \`src/i18n/messages/{en,fa}/\`: navigation, common, home, artwork, galleries, Journal, About, and Contact.
+- Compose each locale's domains through its \`index.ts\` while retaining the existing flat next-intl key API and inferred message types.
+- Load the locale-specific domain catalog from \`src/i18n/request.ts\`.
+- Extend the catalog audit to compare both key sets and interpolation placeholders.
+- Set locale explicitly at localized route boundaries and pass it to \`NextIntlClientProvider\`. This corrected the regression where English URLs rendered Persian messages.
+
+**Content and application boundaries**
+- Extracted safe localized-slug and same-origin asset-path behavior into \`src/lib/content/paths.ts\`.
+- Extracted stable identity comparisons into \`src/lib/content/identity.ts\`. Archive hreflang now requires the same complete set of published content IDs in both locales; a partial overlap is insufficient.
+- Moved publication eligibility, artwork/gallery/CV/profile/contact resolution, and homepage selections into \`src/lib/content/publication.ts\`.
+- Moved Journal publication, event/time-zone validation, category selection, and upcoming-event resolution into \`src/lib/content/journal.ts\`.
+- Added \`src/lib/content/validate-portfolio.ts\` for registry-wide ID/slug uniqueness, image-path and dimension checks, gallery/artwork references, Journal event dates/time zones, CV records, and homepage references.
+- Reduced \`src/lib/site.ts\` to a backwards-compatible export barrel. Existing consumers can migrate incrementally; new tests import focused modules directly.
+- The About route now prefers the canonical approved \`ArtistProfile\` and verified CV records when they exist. The existing fictional preview fixture is used only while the canonical profile is absent and remains noindex. No artist facts were fabricated or added.
+
+**International SEO**
+- Added \`src/lib/seo/metadata.ts\` to build localized canonical URLs, reciprocal hreflang links, Open Graph, Twitter cards, and robots policy consistently.
+- Home, archive, and detail routes use the shared metadata builder and resolved canonical records. Social images are selected from approved local content images.
+- Archive hreflang and sitemap alternates use exact published identity-set equivalence. Detail alternates use stable record IDs and localized slugs.
+- Noindex pages explicitly clear inherited social metadata from the locale layout. About preview and Contact remain noindex; empty CV remains unavailable and outside the sitemap.
+- Moved VisualArtwork, CollectionPage/ItemList, Article, and Event JSON-LD generation to \`src/lib/seo/structured-data.ts\`.
+
+**Testing**
+- Added registry validation and malformed-record tests.
+- Added unit tests for canonical metadata, locale alternates, article timestamps, social image URLs, and noindex metadata.
+- Added Playwright assertions against rendered English/Persian archive and detail HTML, including canonical, hreflang, descriptions, Open Graph/Twitter fields, and noindex About/Contact pages.
+
+### Content-domain migration status
+
+| Domain | Current status | Publication/approval handling |
+|---|---|---|
+| Artist profile / About | Canonical profile resolver and rendering path implemented; no canonical profile record has been supplied yet. | Preview fixture remains visibly identified as fictional and noindex. Approved profile content will become indexable. |
+| Artwork | Central typed records, stable IDs, localized slugs, image metadata, and publication resolver. | Requires published status, confirmed image rights, and locale-specific title/alt. |
+| Galleries | Central records with stable IDs, ordered artwork references, and cover relationships. | Published only when all members and the cover resolve to public locale-ready artworks. |
+| Journal / events | Central records and shared publication/event resolver. | Requires publication, artist approval, locale approval, valid occurrence/time-zone data, and safe registration links. Existing editorial copy and placeholder-image mappings still need owner/editorial review; technical refactoring did not rewrite or reapprove them. |
+| CV | Typed entry/document models and publication filters are implemented. | No verified CV entries or artist-approved PDF currently exist; the empty CV route remains unavailable. |
+| Contact | Contact data is centralized and validated by method. | Current demo destinations remain noindex and excluded from the sitemap until replaced with real owner-supplied details and indexing is authorized. |
+
+### Verification snapshot
+
+GitHub Actions run [41949722751](https://github.com/mrcode-tech/nasoodi.art/actions/runs/41949722751) completed successfully for commit \`294aa803ab5ebf8f7cc5bf73affe1db56cd5a609\`. At verification time, this SHA matched the \`feature\` branch HEAD.
+
+- ESLint: passed
+- Bilingual catalog key and placeholder audit: passed
+- TypeScript: passed
+- Content and metadata unit tests: passed
+- Production build: passed
+- SVG sticker validation and asset inventory: passed
+- Playwright Chromium: **130 passed**
+- Production smoke test: passed for the root redirect and both localized routes
+
+No merge to \`stage\` or \`main\`, production deployment, or external service change was performed.
+
+### Remaining technical debt and recommendations
+
+1. **Content formats:** editorial records remain typed TypeScript modules. This preserves current computed asset-dimension behavior and typed data, but simple structured records could move to JSON and long-form Journal/artist prose to Markdown after editorial review. Do not bulk-convert placeholder copy or alter publication status as part of that migration.
+2. **Consumer migration:** \`src/lib/site.ts\` is now a compatibility barrel, but some route/component consumers still import through it. Move imports to focused modules gradually, then remove the barrel only after reference and regression checks.
+3. **Message governance:** key/placeholder parity is enforced, but unused-key detection and a reliable scan for embedded UI literals are not yet implemented.
+4. **Sitemap freshness:** no meaningful \`updatedAt\` field exists on the current content model. \`lastModified\` is therefore omitted rather than populated with a misleading build timestamp. Add it only when editorial updates can supply a real value.
+5. **SEO coverage:** rendered HTML tests cover representative homepage, archive, detail, About, and Contact cases. Expand the route matrix for every page type and test sitemap alternate pairs for records with genuinely different localized slugs.
+6. **Editorial approval:** confirm the current Journal copy and temporary Journal image mappings with the owner. Existing approval flags were preserved; passing technical tests does not replace artist/editorial/rights approval.
+7. **Manual QA:** automated Chromium checks do not establish manual screen-reader, keyboard-only, real-device, Safari/Firefox, contrast, or production Core Web Vitals verification. These remain release checks.
+8. **Search monitoring:** Search Console/Bing verification and indexing monitoring require explicit launch authorization and are not part of this branch-only refactor.
+
+### Skills usage clarification
+
+The installed skill registry did not expose the requested named skills. Relevant Vercel React, React architecture, and Next.js i18n guidance was applied manually from accessible source material. The Patterns and Refactoring skill source could not be retrieved and is not claimed as used. No third-party skill was installed or executed.
