@@ -1773,4 +1773,9 @@ test("localized SEO metadata is rendered from canonical content for archives and
   await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", /noindex/);
   await expect(page.locator('meta[property="og:title"]')).toHaveCount(0);
   await expect(page.locator('meta[name="twitter:card"]')).toHaveCount(0);
+
+  await page.goto("/en/about");
+  await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", /noindex/);
+  await expect(page.locator('meta[property="og:title"]')).toHaveCount(0);
+  await expect(page.locator('meta[name="twitter:card"]')).toHaveCount(0);
 });
