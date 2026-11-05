@@ -27,5 +27,5 @@ export const otherLocale = (locale: Locale): Locale => localeAlternates[locale];
 
 export const pagePath = (locale: Locale, path = "") => {
   const normalizedPath = path.replace(/^\/+/, "");
-  return \`/\${locale}\${normalizedPath ? \`/\${normalizedPath}\` : ""}\`;
+  return "/" + locale + (normalizedPath ? "/" + normalizedPath : "");
 };
