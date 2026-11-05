@@ -60,7 +60,7 @@ Implement the cross-site refinement as one coherent experience:
 3. Minimal one-line Journal page-size and pagination controls on common mobile widths.
 4. One-line desktop sidebar copyright in English and Persian.
 5. Consistent justified long-form editorial text that uses the available content width without harming mobile readability or Persian shaping.
-6. A homepage Contact section and dedicated bilingual Contact page, using the centralized owner-authorized fictional demo contact details. Render them normally in both locales without approval/confirmation gates; keep the routes noindex until real details replace the fixtures.
+6. A homepage Contact section and dedicated bilingual Contact page, using only the canonical owner-supplied Contact JSON. Generate localized metadata and sitemap eligibility from that same record.
 
 Before coding, read in full:
 - `AGENTS.md`
@@ -78,7 +78,7 @@ Before coding, read in full:
 
 Inspect the current implementation and route hierarchy before editing. Do not assume a breadcrumb parent based only on browser history. Test direct entry, refresh, contextual artwork navigation, and fallback paths. Reuse the installed shadcn primitives and shared navigation architecture. Apply spacing changes through shared tokens/layout primitives before page-specific overrides. Preserve the quiet editorial gallery identity and all approved artwork/content.
 
-**Contact demo-data authorization (owner-confirmed 2026-11-03):** the site is in a demo phase and the owner explicitly authorizes fictional email and social destinations. Render the centralized fictional Contact fixture normally on the homepage and both localized Contact pages. Do not require owner approval, locale approval, confirmation flags, environment variables, or production-mode conditions to show the values. Do not add a visible disclaimer or claim demo accounts are real, verified, or monitored. Keep Contact routes noindex and excluded from the sitemap while these fictional values are in use. Replace the fixture with real owner-supplied details or remove the methods before public launch. Preserve the actual artist Instagram identity @ghazalenasoodi outside the demo Contact fixture.
+**Contact content rule — 2026-11-05:** the canonical Contact JSON contains only owner-supplied public destinations and localized Contact metadata. Do not add invented email addresses, Telegram handles, or social profiles. The current configured destination is the artist's supplied Instagram identity @ghazalenasoodi. Contact indexability and sitemap eligibility follow the canonical localized title/description and valid owner-supplied destination.
 
 Run the complete relevant test suite and CI, inspect actual logs and final tested SHA, and capture/inspect English and Persian desktop/tablet/mobile screenshots. Verify breadcrumb clickability, RTL reading and keyboard order, no overflow, spacing, text measure, Journal controls, copyright fit, and Contact navigation/content.
 
@@ -429,7 +429,7 @@ The owner requires three separate but coordinated concerns:
 2. UI internationalization through a centralized i18n library (evaluate/adopt next-intl after compatibility audit), with no scattered Persian/English literals or conditional copy in components.
 3. Editable artist/portfolio content separated from UI messages, domain types, general utilities, and application logic. Artist profile, artwork, galleries, Journal, events, CV, and contact data belong in a clear content layer; generic utilities must not be content databases.
 
-Treat content as data, types as contracts, utilities/services as behavior, and components as presentation. Adding an artwork/gallery/Journal record should not require editing page or carousel components. Use stable content identity across locales and explicit localized slug mapping. Preserve editorial approval, asset rights, route behavior, ordering, and the existing demo Contact noindex safeguard.
+Treat content as data, types as contracts, utilities/services as behavior, and components as presentation. Adding an artwork/gallery/Journal record should not require editing page or carousel components. Use stable content identity across locales and explicit localized slug mapping. Preserve editorial approval, asset rights, route behavior, ordering, and canonical Contact JSON metadata/sitemap eligibility.
 
 The proposed file-based content layout is a starting point only. First inspect the actual repository, including current util.ts/utils.ts and JSX data, classify each value, and map existing behavior. Choose JSON for structured records and Markdown for long-form prose where useful. Keep TypeScript for types, schemas, and logic. Do not adopt a CMS or database without a demonstrated requirement. Migrate incrementally with route/content/metadata parity tests; never perform a blind wholesale rewrite.
 
