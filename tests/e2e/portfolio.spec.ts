@@ -1069,8 +1069,8 @@ test("About and CV routes render canonical bilingual JSON content without previe
     await expect(page.locator(".artist-portrait")).toHaveAttribute("src", /homepage-hero/);
     await expect(page.locator(".about-statement")).toBeVisible();
     await expect(page.locator(".about-biography-copy")).toBeVisible();
-    await expect(page.locator(".cv-category")).toHaveCount(1);
-    await expect(page.locator(".cv-list li")).toHaveCount(1);
+    await expect(page.locator(".cv-category")).toHaveCount(5);
+    await expect(page.locator(".cv-list li")).toHaveCount(16);
     await expect(page.getByRole("heading", { name: locale === "en" ? "Ghazaleh Abdolahzade Nasoodi" : "غزاله عبداله زاده نسودی" })).toBeVisible();
     const overflow = await page.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth);
     expect(overflow).toBe(false);
@@ -1079,7 +1079,8 @@ test("About and CV routes render canonical bilingual JSON content without previe
     const cvResponse = await request.get(`/${locale}/cv`);
     expect(cvResponse.status()).toBe(200);
     await page.goto(`/${locale}/cv`);
-    await expect(page.locator(".cv-list li")).toHaveCount(1);
+    await expect(page.locator(".cv-list li")).toHaveCount(16);
+    await expect(page.locator('a[href="/api/cv.pdf"]')).toBeVisible();
     await expect(page.locator(".sample-content-notice")).toHaveCount(0);
   }
 });
@@ -1304,9 +1305,9 @@ test("localized Contact surfaces render centralized demo details without approva
   const home=page.locator(".homepage-contact");
   await expect(home).toBeVisible();
   await expect(home).toHaveAttribute("dir", locale === "fa" ? "rtl" : "ltr");
-  await expect(home.locator('a[href^="mailto:"]')).toHaveCount(0);
+  await expect(home.locator('a[href^="mailto:"]')).toHaveAttribute("href", "mailto:g.nasoodi@gmail.com");
   await expect(home.getByRole("link",{name:"@ghazalenasoodi"})).toHaveAttribute("href","https://www.instagram.com/ghazalenasoodi/");
-  await expect(home.getByRole("link",{name:/@nasoodi_contact_demo|@nasoodi\\.demo/})).toHaveCount(0);
+  await expect(home.getByRole("link",{name:"@nasoodi"})).toHaveAttribute("href", "https://t.me/nasoodi");
   const contactLink=home.locator(".contact-page-link");
   await expect(contactLink).toHaveAttribute("href",`/${locale}/contact`);
   await contactLink.click();
@@ -1314,9 +1315,9 @@ test("localized Contact surfaces render centralized demo details without approva
   const contactPage=page.locator(".contact-experience-page");
   await expect(contactPage).toBeVisible();
   await expect(contactPage).toHaveAttribute("dir", locale === "fa" ? "rtl" : "ltr");
-  await expect(contactPage.locator('a[href^="mailto:"]')).toHaveCount(0);
+  await expect(contactPage.locator('a[href^="mailto:"]')).toHaveAttribute("href", "mailto:g.nasoodi@gmail.com");
   await expect(contactPage.getByRole("link",{name:"@ghazalenasoodi"})).toHaveAttribute("href","https://www.instagram.com/ghazalenasoodi/");
-  await expect(contactPage.getByRole("link",{name:/@nasoodi_contact_demo|@nasoodi\\.demo/})).toHaveCount(0);
+  await expect(contactPage.getByRole("link",{name:"@nasoodi"})).toHaveAttribute("href", "https://t.me/nasoodi");
   const breadcrumb=page.getByRole("navigation",{name:locale==="fa"?"مسیر صفحه":"Breadcrumb"});
   await expect(breadcrumb).toBeVisible();
   await expect(breadcrumb.locator("[aria-current=\"page\"]")).toHaveText(locale==="fa"?"تماس":"Contact");
@@ -1590,17 +1591,17 @@ test("Contact experience is editorial, bilingual, responsive, and displays the o
     const homepageContact = page.locator(".contact-experience-home");
     await expect(homepageContact).toBeVisible();
     await expect(homepageContact.getByRole("heading", { name: locale.heading })).toBeVisible();
-    await expect(homepageContact.locator('a[href^="mailto:"]')).toHaveCount(0);
+    await expect(homepageContact.locator('a[href^="mailto:"]')).toHaveAttribute("href", "mailto:g.nasoodi@gmail.com");
     await expect(homepageContact.getByRole("link", { name: "@ghazalenasoodi" })).toHaveAttribute("href", "https://www.instagram.com/ghazalenasoodi/");
-    await expect(homepageContact.getByRole("link", { name: /@nasoodi_contact_demo|@nasoodi\\.demo/ })).toHaveCount(0);
+    await expect(homepageContact.getByRole("link", { name: "@nasoodi" })).toHaveAttribute("href", "https://t.me/nasoodi");
 
     await page.goto(`/${locale.code}/contact`);
     await expect(page.locator("html")).toHaveAttribute("dir", locale.dir);
     const contactPage = page.locator(".contact-experience-page");
     await expect(contactPage.getByRole("heading", { name: locale.heading })).toBeVisible();
-    await expect(contactPage.locator('a[href^="mailto:"]')).toHaveCount(0);
+    await expect(contactPage.locator('a[href^="mailto:"]')).toHaveAttribute("href", "mailto:g.nasoodi@gmail.com");
     await expect(contactPage.getByRole("link", { name: "@ghazalenasoodi" })).toHaveAttribute("href", "https://www.instagram.com/ghazalenasoodi/");
-    await expect(contactPage.getByRole("link", { name: /@nasoodi_contact_demo|@nasoodi\\.demo/ })).toHaveCount(0);
+    await expect(contactPage.getByRole("link", { name: "@nasoodi" })).toHaveAttribute("href", "https://t.me/nasoodi");
     const desktopColumns = await contactPage.locator(".contact-composition").evaluate((element) =>
       getComputedStyle(element).gridTemplateColumns.split(" ").length
     );

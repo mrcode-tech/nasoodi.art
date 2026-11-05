@@ -12,7 +12,7 @@ This directory is the product, design, content, and implementation source of tru
 6. Read content-model.md, artwork-imaging-and-asset-pipeline.md, and localization-and-editorial-governance.md before adding content or images.
 7. Read the relevant technical contracts for SEO, accessibility, performance, privacy, security, and testing.
 8. Follow implementation-roadmap.md for sequencing and phase exit criteria.
-9. Treat artist/site-owner approval as a required content and visual gate; do not infer missing facts.
+9. Use canonical owner-authorized JSON content directly; do not impose editorial verification or approval gates. Keep technical safety and visual-quality checks.
 
 ## Journal event announcement design package
 
@@ -59,9 +59,9 @@ Read these documents together with [Journal, Articles, and Events](./journal-and
 - [Website implementation prompt](./website-implementation-prompt.md) — end-to-end coding-agent prompt that enforces the repository, content, design, testing, and release constraints.
 
 ## Content and assets
-- [Content and artwork model](./content-model.md) — artist, artwork, series, galleries, homepage selections, CV, approval states, and localized fields.
+- [Content and artwork model](./content-model.md) — canonical artist, artwork, galleries, CV, Journal, Contact, and localized JSON records.
 - [Artwork imaging and asset pipeline](./artwork-imaging-and-asset-pipeline.md) — capture, provenance, rights, derivatives, fidelity, alt text, and image delivery.
-- [Localization and editorial governance](./localization-and-editorial-governance.md) — Persian/English rules, translation parity, content approval, and writing standards.
+- [Localization and editorial governance](./localization-and-editorial-governance.md) — Persian/English rules, translation parity, and writing standards.
 
 ### AI-assisted engineering and code quality
 
@@ -70,7 +70,7 @@ Read these documents together with [Journal, Articles, and Events](./journal-and
 ### Technical quality
 - [SEO and discovery](./seo-and-discovery.md) — metadata, canonicals, hreflang, sitemap, robots, structured data, and measurement.
 - [Accessibility, performance, privacy, and security](./accessibility-performance-security.md) — WCAG 2.2 AA target, motion, Core Web Vitals, privacy, and security.
-- [Testing, visual QA, and release acceptance](./testing-qa-and-release.md) — test layers, screenshots, CI, artist approval, and release gates.
+- [Testing, visual QA, and release acceptance](./testing-qa-and-release.md) — application regression tests, screenshots, and CI evidence.
 - [Implementation roadmap](./implementation-roadmap.md) — compatibility pointer to the canonical phased blueprint.
 
 ## Confirmed project context
@@ -90,8 +90,8 @@ These supplied facts do not confirm an artist statement, biography, education, e
 - The repository-level AGENTS.md governs engineering workflow and quality commands.
 - If two documents conflict, proposal.md defines product intent; site-wide-design-system-and-section-specification.md defines page/component design; specialized contracts define their named domains. Record and resolve conflicts rather than silently choosing.
 - The implementation roadmap is a plan, not evidence that a feature or CI check already exists.
-- Distinguish proposed, implemented, verified, artist-approved, and published states.
-- Never publish invented real-world facts, unapproved assets, fake testimonials, fake CV entries, or placeholder artwork. Initial editorial prose may be authored as normal site content, but education, awards, exhibitions, qualifications, institutional affiliations, event dates/venues, rights claims, and contact destinations must not be fabricated or presented as confirmed facts.
+- Distinguish implemented, tested, and visually reviewed work; editorial verification states are not used to gate canonical JSON content.
+- Use the canonical JSON content as the owner-authorized initial site content. Do not add editorial verification, factuality, or artist-approval gates that hide entries. The owner may revise content after launch. Keep technical asset-path and safe-link protections.
 - The studio-process photograph and layered scene are not finished artwork reproductions. Actual paintings must be presented separately in Works.
 - The site is a portfolio, not an e-commerce store by default. Sales, pricing, availability, commissions, and enquiry forms require explicit decisions and real operational support.
 
@@ -118,7 +118,7 @@ Read these before changing any visual surface. Page-specific specifications rema
 - [Phased implementation blueprint](./phased-implementation-blueprint.md) — canonical phase order, dependencies, exit criteria, evidence, and current implementation progress.
 - [Asset review register](./asset-review-register.md) — source-asset classification, inspection, rights, and public-use approval gates.
 
-The blueprint's progress snapshot is the current status authority. Do not treat proposed specifications or empty content records as evidence of publication approval.
+The blueprint's progress snapshot is the current implementation-status reference. Canonical JSON content is rendered as stored; editorial approval states are not used as data gates.
 
 
 ## Artwork discovery and editorial presentation refinement — 2026-10-31
@@ -133,7 +133,7 @@ Read it together with:
 - [Wireframes and interaction design](./wireframes.md)
 - [shadcn/ui component reuse](./shadcn-component-reuse-and-bilingual-ui.md)
 
-**Conflict resolution:** the new contract supersedes earlier grid-first artwork presentation guidance for the homepage Selected Works section and collection-detail primary browsing surface. It does not replace the static artwork-led Hero, the gallery-index editorial collection-preview role, the canonical artwork viewer, content/approval rules, or the Journal editorial layout. The Journal homepage preview is limited to the single newest eligible published entry. Existing routes and the unified Journal information architecture remain unchanged.
+**Conflict resolution:** the new contract supersedes earlier grid-first artwork presentation guidance for the homepage Selected Works section and collection-detail primary browsing surface. It does not replace the static artwork-led Hero, the gallery-index editorial collection-preview role, the canonical artwork viewer or the Journal editorial layout. The Journal homepage preview is limited to the single newest eligible published entry. Existing routes and the unified Journal information architecture remain unchanged.
 
 
 ## Next implementation task — Journal and event announcement sticker
@@ -159,7 +159,7 @@ The next cross-site UX refinement is defined in [Unified breadcrumbs, editorial 
 
 This task introduces a shared shadcn/ui breadcrumb system with clickable intermediate paths (including artwork and Journal detail navigation), refines site-wide editorial spacing, compacts Journal pagination controls on mobile, keeps sidebar copyright on one desktop line, standardizes justified long-form text, and adds a bilingual Contact section/page.
 
-The current Contact configuration uses only owner-supplied public destinations from canonical JSON. Do not add invented email addresses, Telegram handles, or social profiles. Contact metadata and sitemap eligibility follow the localized canonical Contact record. Preserve the artist Instagram handle @ghazalenasoodi. The unified JSON content and SEO completion audit supersedes the former demo-fixture instruction.
+The Contact configuration uses canonical JSON destinations: g.nasoodi@gmail.com, @nasoodi, and @ghazalenasoodi. Render all three without approval or verification gates. Contact metadata and localized routes use the canonical Contact record.
 
 ## Shared light and dark theme system — Midnight Gallery
 
@@ -180,7 +180,7 @@ Three complementary architecture contracts define the next maintainability and d
 
 - [International SEO and Search Discovery Architecture](./international-seo-and-search-discovery-architecture.md) — indexability, page metadata, canonical URLs, hreflang, sitemap/robots, artwork SEO, structured data, Persian/English search quality, monitoring, and CI verification.
 - [Internationalization and UI Translation Architecture](./internationalization-and-ui-translation-architecture.md) — next-intl evaluation/adoption, centralized locale message bundles, App Router integration, localized navigation, server/client boundaries, RTL/LTR, and translation parity.
-- [Content Architecture and Separation from Application Logic](./content-architecture-and-data-separation.md) — separate artist-editable portfolio content from UI messages, TypeScript types, general utilities, and React presentation; file-based records, validation, editorial workflow, and incremental migration.
+- [Content Architecture and Separation from Application Logic](./content-architecture-and-data-separation.md) — separate artist-editable portfolio content from UI messages, TypeScript types, general utilities, and React presentation; file-based records, repository boundaries, and incremental migration.
 
 Read these together with [SEO and discovery](./seo-and-discovery.md), [Localization and editorial governance](./localization-and-editorial-governance.md), and [Content and artwork model](./content-model.md). The new documents are proposed architecture contracts, not evidence that the refactor or SEO improvements have been implemented. Audit current code before choosing exact paths or moving existing data. Preserve artwork rights safeguards and use owner-supplied Contact data; follow the unified JSON content contract and current SEO eligibility rules.
 

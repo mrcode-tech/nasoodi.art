@@ -55,7 +55,7 @@ Artwork is primary content. Provide meaningful localized alt text for informativ
 
 ## 7. Structured data
 
-Use JSON-LD only when it accurately describes visible, verified content. Candidate types include Person, WebSite, WebPage, VisualArtwork, CollectionPage, ItemList, Article, Event, and BreadcrumbList.
+Use JSON-LD to describe visible content using values present in canonical JSON; do not require verification flags. Candidate types include Person, WebSite, WebPage, VisualArtwork, CollectionPage, ItemList, Article, Event, and BreadcrumbList.
 
 Use stable entity identifiers and consistent creator/author references. Never invent awards, address, organization, reviews, ratings, prices, offers, availability, dates, venues, or affiliations. Avoid duplicate/conflicting graphs and serialize safely. Validate JSON-LD syntax and Google eligibility separately; valid markup does not guarantee rich results.
 
@@ -113,7 +113,7 @@ Prioritize by impact, confidence, effort, and dependency. Recheck both locales a
 - [ ] Sitemap contains only canonical eligible URLs.
 - [ ] robots.txt does not block required rendering resources.
 - [ ] Demo Contact routes remain noindex and outside sitemap.
-- [ ] Structured data matches visible verified facts.
+- [ ] Structured data matches the content rendered on the page.
 - [ ] Missing content returns correct status and is not indexed.
 - [ ] English and Persian production HTML are tested.
 - [ ] CI validates invariants without external credentials.

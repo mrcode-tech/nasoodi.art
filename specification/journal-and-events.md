@@ -154,25 +154,25 @@ An Event is a structured Journal entry, not merely an article with a date in its
 
 ### 6.1 Event information
 
-Required for a public event:
+Recommended event fields (render the values available in the canonical Journal JSON):
 - Localized title.
 - Localized short description.
 - Main content or sufficient event information.
-- Confirmed start date/time or an explicitly defined all-day event date.
-- Confirmed time zone or location context sufficient to interpret the time.
-- Publication state and artist approval.
+- Optional start/end date or date-time values.
+- Optional time-zone and location context.
 
-Event `startsAt` and `endsAt` values must be unambiguous ISO 8601 instants with an explicit `Z` or numeric UTC offset, alongside the required IANA `timeZone`. Do not store a timezone-less local timestamp: server and visitor environments may interpret it differently.\n\nRecommended when applicable:
+
+When a date-time and time zone are provided, keep the representation explicit (ISO 8601 with offset or an IANA time zone) so display formatting is predictable. Date-only and partial event details may be stored and displayed as supplied.\n\nRecommended when applicable:
 - End date/time.
 - Venue name.
 - Venue address or public location description.
 - Online/physical/hybrid attendance mode.
 - Registration or official event-information URL.
-- Cover image/poster with usage approval.
+- Optional cover image or poster.
 - Related gallery, exhibition, and artwork references.
-- Organizer/partner details only when confirmed and approved.
+- Optional organizer and partner details.
 
-Never fabricate dates, time zones, venues, registration links, admission details, participating artists, or event status.
+Use the event and exhibition details in the canonical JSON as the initial editable content; the owner can revise them directly.
 
 ### 6.2 Event states
 
@@ -276,21 +276,21 @@ type JournalEntry = ArticleEntry | EventEntry;
 Model notes:
 - `LocalizedRichText` must be a defined, constrained schema; it is not an unrestricted HTML string.
 - Date/time values should use a consistent ISO 8601 representation with explicit offset or IANA time-zone handling. Do not store ambiguous local timestamps.
-- The example permits optional event fields for drafts; publication validation must enforce the required event details.
+- Optional event fields remain optional. Do not require editorial completeness, verification, or approval flags before rendering.
 - Stable IDs are internal references; slugs are public route identifiers.
-- Related artwork/gallery links must resolve to published, approved records.
+- Related artwork/gallery links should use the corresponding canonical record IDs when available.
 - Avoid duplicate event and article records for the same exhibition. A single exhibition announcement can be an exhibition-type Journal entry linked to the relevant Gallery and, when needed, a structured Event record or event-type entry. Choose one canonical public entry and link related records rather than copying content.
 
 ## 8. Localization and editorial governance
 
 - Persian and English are independently reviewed content values, not machine-generated fallbacks.
-- A route should be publicly indexable only in locales with approved, complete content for that entry.
+- Render localized content from the canonical record; do not gate it on editorial approval flags.
 - Locale switching preserves the equivalent Journal entry when an approved translation exists; otherwise follow the site's documented locale fallback.
 - Titles, excerpts, rich text, event venue information, date labels, CTA labels, metadata, and alt text must be localized as applicable.
 - Format dates using the entry's event time zone for event information and the site's locale formatting conventions for publication dates.
 - Preserve proper names and official venue names unless an approved localized form exists.
 - Draft, scheduled, and archived-unpublished entries must never leak through public lists, route metadata, sitemap, or social previews.
-- Provide an editorial checklist for factual accuracy, image rights, translations, links, dates, and final artist approval.
+- Keep translations readable and links technically safe. These checks do not block content based on an approval/verification field.
 
 ## 9. Image and media rules
 
@@ -415,7 +415,7 @@ Responsive rules:
 Automated and manual verification must cover:
 
 ### Content and publication
-- Valid article and event records pass schema validation.
+- Article and event records render from the canonical Journal JSON, including records with optional event fields.
 - Invalid slugs, duplicate IDs/slugs, missing required localized content, unapproved assets, and unresolved relations block publication.
 - Draft, scheduled, and archived-unpublished entries are absent from public routes, lists, sitemap, metadata, and social previews.
 - Published locale output includes only approved translations.
