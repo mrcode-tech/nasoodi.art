@@ -1,0 +1,207 @@
+import type {
+  Artwork,
+  ArtistProfile,
+  CvDocument,
+  CvEntry,
+  Gallery,
+  HomepageSelection,
+  JournalEntry,
+} from "../../types/content";
+import type { Locale } from "../../types/locale";
+import { getLocalizedSlug, isSafeContentSlug, isSafeLocalImagePath } from "./paths";
+
+const locales = ["en", "fa"] as const;
+
+export type ContentValidationIssue = {
+  path: string;
+  message: string;
+};
+
+export type PortfolioContentSource = {
+  artworks: readonly Artwork[];
+  galleries: readonly Gallery[];
+  journalEntries: readonly JournalEntry[];
+  cvEntries: readonly CvEntry[];
+  homepageSelection: HomepageSelection;
+  artistProfile?: ArtistProfile;
+  cvDocument?: CvDocument;
+};
+
+function validateRouteIdentity(
+  kind: string,
+  records: readonly { id: string; slug: string; localizedSlugs?: Partial<Record<Locale, string>> }[],
+  issues: ContentValidationIssue[],
+) {
+  const ids = new Set<string>();
+  const slugs = new Map<Locale, Set<string>>([
+    ["en", new Set<string>()],
+    ["fa", new Set<string>()],
+  ]);
+
+  records.forEach((record, index) => {
+    const path = kind + "[" + index + "]";
+    if (!record.id.trim()) issues.push({ path: path + ".id", message: "A stable content ID is required." });
+    else if (ids.has(record.id)) issues.push({ path: path + ".id", message: "Duplicate " + kind + " ID " + record.id + "." });
+    ids.add(record.id);
+
+    if (!isSafeContentSlug(record.slug)) {
+      issues.push({ path: path + ".slug", message: "The fallback slug must be one safe URL segment." });
+    }
+
+    for (const locale of locales) {
+      const localizedSlug = record.localizedSlugs?.[locale];
+      if (localizedSlug !== undefined && !isSafeContentSlug(localizedSlug)) {
+        issues.push({ path: path + ".localizedSlugs." + locale, message: "The localized slug must be one safe URL segment." });
+      }
+
+      const resolvedSlug = getLocalizedSlug(record, locale);
+      const localeSlugs = slugs.get(locale)!;
+      if (localeSlugs.has(resolvedSlug)) {
+        issues.push({ path: path + ".localizedSlugs." + locale, message: "Duplicate " + locale + " route slug " + resolvedSlug + " in " + kind + "." });
+      }
+      localeSlugs.add(resolvedSlug);
+    }
+  });
+}
+
+function isValidExplicitDate(value: string): boolean {
+  return /(?:Z|[+-]\d{2}:\d{2})$/i.test(value) && Number.isFinite(Date.parse(value));
+}
+
+function isSafeExternalOrLocalHref(value: string): boolean {
+  if (!value || value.includes("\\") || /[\u0000-\u001f]/.test(value)) return false;
+  if (value.startsWith("/") && !value.startsWith("//")) {
+    try {
+      return new URL(value, "https://nasoodi.art").origin === "https://nasoodi.art";
+    } catch {
+      return false;
+    }
+  }
+  try {
+    const url = new URL(value);
+    return url.protocol === "https:" && !url.username && !url.password;
+  } catch {
+    return false;
+  }
+}
+
+function validateImage(
+  image: { src: string; width: number; height: number; alt: Partial<Record<Locale, string>> },
+  path: string,
+  issues: ContentValidationIssue[],
+) {
+  if (!isSafeLocalImagePath(image.src)) issues.push({ path: path + ".src", message: "Image paths must be safe same-origin public paths." });
+  if (!Number.isSafeInteger(image.width) || image.width < 1) issues.push({ path: path + ".width", message: "Image width must be a positive integer." });
+  if (!Number.isSafeInteger(image.height) || image.height < 1) issues.push({ path: path + ".height", message: "Image height must be a positive integer." });
+  for (const [locale, alt] of Object.entries(image.alt)) {
+    if (!locales.includes(locale as Locale) || typeof alt !== "string") {
+      issues.push({ path: path + ".alt." + locale, message: "Image alt text must use a supported locale and string value." });
+    }
+  }
+}
+
+export function validatePortfolioContent(source: PortfolioContentSource): ContentValidationIssue[] {
+  const issues: ContentValidationIssue[] = [];
+  validateRouteIdentity("artworks", source.artworks, issues);
+  validateRouteIdentity("galleries", source.galleries, issues);
+  validateRouteIdentity("journalEntries", source.journalEntries, issues);
+
+  const artworkIds = new Set(source.artworks.map((item) => item.id));
+  const galleryIds = new Set(source.galleries.map((item) => item.id));
+
+  source.artworks.forEach((work, index) => {
+    const path = "artworks[" + index + "]";
+    const primaryImages = work.images.filter((image) => image.role === "primary");
+    if (work.status === "published" && primaryImages.length !== 1) {
+      issues.push({ path: path + ".images", message: "A published artwork must have exactly one primary image." });
+    }
+    work.images.forEach((image, imageIndex) => validateImage(image, path + ".images[" + imageIndex + "]", issues));
+  });
+
+  source.galleries.forEach((gallery, index) => {
+    const path = "galleries[" + index + "]";
+    if (new Set(gallery.artworkIds).size !== gallery.artworkIds.length) {
+      issues.push({ path: path + ".artworkIds", message: "Gallery artwork references must be unique." });
+    }
+    if (!gallery.artworkIds.includes(gallery.coverArtworkId)) {
+      issues.push({ path: path + ".coverArtworkId", message: "The cover artwork must belong to the gallery." });
+    }
+    gallery.artworkIds.forEach((id, artworkIndex) => {
+      if (!artworkIds.has(id)) issues.push({ path: path + ".artworkIds[" + artworkIndex + "]", message: "Unknown artwork ID " + id + "." });
+    });
+    if (gallery.status === "published" && gallery.artworkIds.length === 0) {
+      issues.push({ path: path + ".artworkIds", message: "A published gallery must contain at least one artwork." });
+    }
+  });
+
+  source.journalEntries.forEach((entry, index) => {
+    const path = "journalEntries[" + index + "]";
+    if (new Set(entry.approvedLocales).size !== entry.approvedLocales.length) {
+      issues.push({ path: path + ".approvedLocales", message: "Approved locales must be unique." });
+    }
+    entry.approvedLocales.forEach((locale, localeIndex) => {
+      if (!locales.includes(locale)) issues.push({ path: path + ".approvedLocales[" + localeIndex + "]", message: "Unsupported locale " + locale + "." });
+    });
+    if (entry.event) {
+      const event = entry.event;
+      if (!isValidExplicitDate(event.startsAt)) issues.push({ path: path + ".event.startsAt", message: "Event start must include an explicit UTC offset or Z." });
+      if (event.endsAt && (!isValidExplicitDate(event.endsAt) || Date.parse(event.endsAt) < Date.parse(event.startsAt))) {
+        issues.push({ path: path + ".event.endsAt", message: "Event end must be valid and cannot precede its start." });
+      }
+      if (!event.timeZone) issues.push({ path: path + ".event.timeZone", message: "An IANA time zone is required for events." });
+      else {
+        try { new Intl.DateTimeFormat("en", { timeZone: event.timeZone }); }
+        catch { issues.push({ path: path + ".event.timeZone", message: "Invalid IANA time zone " + event.timeZone + "." }); }
+      }
+      if (event.registrationUrl && !isSafeExternalOrLocalHref(event.registrationUrl)) {
+        issues.push({ path: path + ".event.registrationUrl", message: "Registration links must use HTTPS or a same-origin path." });
+      }
+    }
+    if (entry.coverImage) validateImage(entry.coverImage, path + ".coverImage", issues);
+  });
+
+  validateRouteIdentity("cvEntries", source.cvEntries.map((entry) => ({ id: entry.id, slug: entry.id })), issues);
+  source.cvEntries.forEach((entry, index) => {
+    if (!Number.isSafeInteger(entry.year) || entry.year < 1) {
+      issues.push({ path: "cvEntries[" + index + "].year", message: "CV year must be a positive integer." });
+    }
+    if (entry.status === "published" && !entry.verified) {
+      issues.push({ path: "cvEntries[" + index + "].verified", message: "A published CV entry must be verified." });
+    }
+  });
+
+  const validateSelection = (kind: "featuredArtworkIds" | "featuredGalleryIds", ids: readonly string[], available: Set<string>) => {
+    if (new Set(ids).size !== ids.length) issues.push({ path: "homepageSelection." + kind, message: "Homepage selection IDs must be unique." });
+    ids.forEach((id, index) => {
+      if (!available.has(id)) issues.push({ path: "homepageSelection." + kind + "[" + index + "]", message: "Unknown content ID " + id + "." });
+    });
+  };
+  validateSelection("featuredArtworkIds", source.homepageSelection.featuredArtworkIds, artworkIds);
+  validateSelection("featuredGalleryIds", source.homepageSelection.featuredGalleryIds, galleryIds);
+
+  if (source.artistProfile) {
+    const profile = source.artistProfile;
+    if (new Set(profile.approvedLocales).size !== profile.approvedLocales.length) {
+      issues.push({ path: "artistProfile.approvedLocales", message: "Approved locales must be unique." });
+    }
+    if (profile.status === "published") {
+      for (const locale of profile.approvedLocales) {
+        if (!profile.statement[locale]?.trim()) issues.push({ path: "artistProfile.statement." + locale, message: "Published profile statement is required for each approved locale." });
+        if (!profile.biography[locale]?.trim()) issues.push({ path: "artistProfile.biography." + locale, message: "Published profile biography is required for each approved locale." });
+      }
+    }
+    if (profile.portrait) validateImage(profile.portrait, "artistProfile.portrait", issues);
+  }
+
+  if (source.cvDocument) {
+    const document = source.cvDocument;
+    if (!isSafeLocalImagePath(document.src) || !/\.pdf$/i.test(document.src)) {
+      issues.push({ path: "cvDocument.src", message: "CV document must be a same-origin PDF path." });
+    }
+    if (!/^[A-Za-z0-9][A-Za-z0-9._-]*\.pdf$/i.test(document.fileName)) {
+      issues.push({ path: "cvDocument.fileName", message: "CV filename must be a safe PDF filename." });
+    }
+  }
+
+  return issues;
+}
