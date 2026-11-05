@@ -91,6 +91,8 @@ export type ArtistProfile = {
   artistApproved: boolean;
 };
 export type ContactDetails = {
+  title?: Localized;
+  description?: Localized;
   email?: string;
   telegramHandle?: string;
   instagramUrl?: string;
