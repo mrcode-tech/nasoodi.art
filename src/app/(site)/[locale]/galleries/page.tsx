@@ -1,8 +1,6 @@
 import { GalleryIndex } from "@/components/gallery-index";
 import { SiteBreadcrumbs } from "@/components/site-breadcrumbs";
-import { artworks } from "@/content/artworks";
-import { galleries } from "@/content/galleries";
-import { getPublicGalleries } from "@/lib/content/publication";
+import { getGalleryIndexData } from "@/content/repositories/gallery.repository";
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
@@ -19,5 +17,5 @@ export default async function GalleriesPage({params}:Props){
  if(!isLocale(locale))notFound();
  setRequestLocale(locale);
  const t=await getTranslations({locale});
- const items=getPublicGalleries(galleries,artworks,locale);return <div className="page-content"><SiteBreadcrumbs locale={locale} items={[{label:t("home"),href:pagePath(locale)},{label:t("galleries")}]}/><header className="page-heading"><p className="eyebrow">{t("portfolio")}</p><h1>{t("galleries")}</h1><p>{t("discover")}</p></header>{items.length===0?<p className="empty-note">{t("emptyGalleries")}</p>:<GalleryIndex galleries={items} artworks={artworks} locale={locale} labels={{itemsPerPage:t("itemsPerPage"),previous:t("previousPage"),next:t("nextPage"),page:t("galleryPage"),showing:t("showingGalleries")}} />}</div>;
+ const {galleries:items,artworks}=getGalleryIndexData(locale);return <div className="page-content"><SiteBreadcrumbs locale={locale} items={[{label:t("home"),href:pagePath(locale)},{label:t("galleries")}]}/><header className="page-heading"><p className="eyebrow">{t("portfolio")}</p><h1>{t("galleries")}</h1><p>{t("discover")}</p></header>{items.length===0?<p className="empty-note">{t("emptyGalleries")}</p>:<GalleryIndex galleries={items} artworks={artworks} locale={locale} labels={{itemsPerPage:t("itemsPerPage"),previous:t("previousPage"),next:t("nextPage"),page:t("galleryPage"),showing:t("showingGalleries")}} />}</div>;
 }
