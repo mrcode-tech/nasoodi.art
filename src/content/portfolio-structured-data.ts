@@ -1,8 +1,8 @@
-import { artistProfile } from "./artist";
+import { getArtist } from "./repositories/artist.repository";
 import type { Locale } from "../types/locale";
 
 export function getPortfolioStructuredData(locale: Locale) {
-  const profile = artistProfile;
+  const profile = getArtist(locale);
   const alternateLocale: Locale = locale === "en" ? "fa" : "en";
   const name = profile?.name?.[locale];
   const alternateName = profile?.name?.[alternateLocale];

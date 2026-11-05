@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { createLocalizedMetadata } from "@/lib/seo/metadata";
-import { artworks } from "@/content/artworks";
 import { getArtist } from "@/content/repositories/artist.repository";
 import { getCv } from "@/content/repositories/cv.repository";
 import { getContact } from "@/content/repositories/contact.repository";
@@ -53,7 +52,7 @@ export async function getSectionMetadata(section: Section, locale: Locale): Prom
  const firstJournal=journal[0];
  const socialImage=section==="about"&&profile?profile.portrait?.src:
   section==="works"&&firstWork?primaryImageFor(firstWork)?.src:
-  section==="galleries"&&firstGallery?getGalleryCoverArtwork(firstGallery,artworks,locale)?.image.src:
+  section==="galleries"&&firstGallery?getGalleryCoverArtwork(firstGallery,works,locale)?.image.src:
   section==="journal"&&firstJournal?journalCoverImageFor(firstJournal,locale)?.src:undefined;
  const indexablePage=indexable;
 
