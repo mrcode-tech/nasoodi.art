@@ -7,6 +7,7 @@ import { homepageSelection } from "../src/content/homepage";
 import { artistProfile } from "../src/content/artist";
 import { cvDocument, cvEntries } from "../src/content/cv";
 import { getEvents } from "../src/content/repositories/event.repository";
+import { getHomepageContent } from "../src/content/repositories/homepage.repository";
 import { getPortfolioStructuredData } from "../src/content/portfolio-structured-data";
 import {
   getPublicArtworks,
@@ -331,6 +332,18 @@ test("canonical CV record contains localized editable entries",()=>{
   assert.ok(entry.title.fa?.trim());
   assert.ok(entry.period?.en?.trim() || entry.year);
   assert.ok(entry.period?.fa?.trim() || entry.year);
+ }
+});
+
+test("homepage content is composed through canonical localized repositories",()=>{
+ for(const locale of ["en","fa"] as const){
+  const home=getHomepageContent(locale);
+  assert.ok(home.artist?.biography[locale]);
+  assert.ok(home.artist?.statement[locale]);
+  assert.equal(home.artworks.length,5);
+  assert.equal(home.galleries.length,4);
+  assert.equal(home.journalPreview.length,1);
+  assert.equal(home.contact?.instagramUrl,"https://www.instagram.com/ghazalenasoodi/");
  }
 });
 

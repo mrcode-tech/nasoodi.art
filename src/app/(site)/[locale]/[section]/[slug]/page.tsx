@@ -6,11 +6,12 @@ import { SiteBreadcrumbs } from "@/components/site-breadcrumbs";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { artworks } from "@/content/artworks";
-import { galleries } from "@/content/galleries";
-import { journalEntries } from "@/content/journal";
-import { getPublicArtworks,getPublicGalleries,getGalleryCoverArtwork,primaryImageFor } from "@/lib/content/publication";
-import { getPublicJournal,getUpcomingJournalEvents,journalCoverImageFor,isSafeJournalHref } from "@/lib/content/journal";
+import { getArtworkById, getArtworkBySlug, getArtworks } from "@/content/repositories/artwork.repository";
+import { getGalleryById, getGalleryBySlug, getGalleries } from "@/content/repositories/gallery.repository";
+import { getJournalEntryById, getJournalEntryBySlug, getJournalEntries } from "@/content/repositories/journal.repository";
+import { getEvents } from "@/content/repositories/event.repository";
+import { getGalleryCoverArtwork, primaryImageFor } from "@/lib/content/publication";
+import { getUpcomingJournalEvents, journalCoverImageFor, isSafeJournalHref } from "@/lib/content/journal";
 import { isLocale,pagePath,locales,type Locale } from "@/types/locale";
 import { getLocalizedSlug } from "@/lib/content/paths";
 import { getArtworkStructuredData,getGalleryStructuredData,getJournalStructuredData,serializeJsonLd } from "@/lib/seo/structured-data";
@@ -21,11 +22,11 @@ export async function generateMetadata({params}:DetailProps):Promise<Metadata>{
  setRequestLocale(locale);
  const path=section+"/"+slug;
  if(section==="works"){
-  const work=getPublicArtworks(artworks,locale).find(item=>getLocalizedSlug(item,locale)===slug);
+  const work=getArtworkBySlug(slug,locale);
   if(!work)return {robots:{index:false,follow:true}};
   const image=primaryImageFor(work);
   const alternatePaths=Object.fromEntries(locales.filter(target=>target!==locale).flatMap(target=>{
-   const translated=getPublicArtworks(artworks,target).find(item=>item.id===work.id);
+   const translated=getArtworkById(work.id,target);
    return translated?[[target,pagePath(target,"works/"+getLocalizedSlug(translated,target))]]:[];
   })) as Partial<Record<Locale,string>>;
   return createLocalizedMetadata({
@@ -40,13 +41,13 @@ export async function generateMetadata({params}:DetailProps):Promise<Metadata>{
   });
  }
  if(section==="galleries"){
-  const gallery=getPublicGalleries(galleries,artworks,locale).find(item=>getLocalizedSlug(item,locale)===slug);
+  const gallery=getGalleryBySlug(slug,locale);
   if(!gallery)return {robots:{index:false,follow:true}};
   const alternatePaths=Object.fromEntries(locales.filter(target=>target!==locale).flatMap(target=>{
-   const translated=getPublicGalleries(galleries,artworks,target).find(item=>item.id===gallery.id);
+   const translated=getGalleryById(gallery.id,target);
    return translated?[[target,pagePath(target,"galleries/"+getLocalizedSlug(translated,target))]]:[];
   })) as Partial<Record<Locale,string>>;
-  const cover=getGalleryCoverArtwork(gallery,artworks,locale)?.image;
+  const cover=getGalleryCoverArtwork(gallery,getArtworks(locale),locale)?.image;
   return createLocalizedMetadata({
    locale,
    path,
@@ -58,10 +59,10 @@ export async function generateMetadata({params}:DetailProps):Promise<Metadata>{
   });
  }
  if(section==="journal"){
-  const entry=getPublicJournal(journalEntries,locale).find(item=>getLocalizedSlug(item,locale)===slug);
+  const entry=getJournalEntryBySlug(slug,locale);
   if(!entry)return {robots:{index:false,follow:true}};
   const alternatePaths=Object.fromEntries(locales.filter(target=>target!==locale).flatMap(target=>{
-   const translated=getPublicJournal(journalEntries,target).find(item=>item.id===entry.id);
+   const translated=getJournalEntryById(entry.id,target);
    return translated?[[target,pagePath(target,"journal/"+getLocalizedSlug(translated,target))]]:[];
   })) as Partial<Record<Locale,string>>;
   const cover=journalCoverImageFor(entry,locale);
@@ -82,17 +83,17 @@ export async function generateMetadata({params}:DetailProps):Promise<Metadata>{
 export const revalidate = 60;
 export default async function Detail({params,searchParams}:DetailProps){
  const [{locale,section,slug},query]=await Promise.all([params,searchParams]);if(!isLocale(locale))notFound();setRequestLocale(locale);const t=await getTranslations({ locale });
- if(section==="works"){const w=getPublicArtworks(artworks,locale).find(x=>getLocalizedSlug(x,locale)===slug);if(!w)notFound();const img=primaryImageFor(w);if(!img)notFound();
- const originGallery=typeof query.fromGallery==="string"?getPublicGalleries(galleries,artworks,locale).find(gallery=>getLocalizedSlug(gallery,locale)===query.fromGallery&&gallery.artworkIds.includes(w.id)):undefined;
+ if(section==="works"){const w=getArtworks(locale).find(x=>getLocalizedSlug(x,locale)===slug);if(!w)notFound();const img=primaryImageFor(w);if(!img)notFound();
+ const originGallery=typeof query.fromGallery==="string"?getGalleries(locale).find(gallery=>getLocalizedSlug(gallery,locale)===query.fromGallery&&gallery.artworkIds.includes(w.id)):undefined;
  const breadcrumbItems=originGallery?[{label:t("home"),href:pagePath(locale)},{label:t("galleries"),href:pagePath(locale,"galleries")},{label:originGallery.title[locale]??originGallery.slug,href:pagePath(locale,`galleries/${getLocalizedSlug(originGallery,locale)}`)},{label:w.title[locale]??w.slug}]:[{label:t("home"),href:pagePath(locale)},{label:t("selected"),href:pagePath(locale,"works")},{label:w.title[locale]??w.slug}];
  return <><script type="application/ld+json" dangerouslySetInnerHTML={{__html:serializeJsonLd(getArtworkStructuredData(w,locale))}}/><div className="page-content"><SiteBreadcrumbs locale={locale} items={breadcrumbItems}/><article className="artwork-detail"><div className="artwork-detail-image"><Image sizes="(max-width: 600px) 100vw, (max-width: 900px) 90vw, 50vw" src={img.src} alt={img.alt[locale]??""} width={img.width} height={img.height}/></div><div className="artwork-detail-copy"><h1>{w.title[locale]}</h1>{w.medium?.[locale]&&<p>{w.medium[locale]}</p>}{w.year&&<p>{w.year}</p>}{w.description?.[locale]&&<p>{w.description[locale]}</p>}</div></article></div></>;}
  if(section==="galleries"){
-  const g=getPublicGalleries(galleries,artworks,locale).find(x=>getLocalizedSlug(x,locale)===slug);
+  const g=getGalleries(locale).find(x=>getLocalizedSlug(x,locale)===slug);
   if(!g)notFound();
-  const publicWorks=getPublicArtworks(artworks,locale);
+  const publicWorks=getArtworks(locale);
   const members=g.artworkIds.map(id=>publicWorks.find(w=>w.id===id)).filter((w):w is (typeof publicWorks)[number]=>w!==undefined);
-  const cover=getGalleryCoverArtwork(g,artworks,locale);
-  return <><script type="application/ld+json" dangerouslySetInnerHTML={{__html:serializeJsonLd(getGalleryStructuredData(g,artworks,locale,`https://nasoodi.art${pagePath(locale,`galleries/${getLocalizedSlug(g,locale)}`)}`))}}/><div className="page-content">
+  const cover=getGalleryCoverArtwork(g,getArtworks(locale),locale);
+  return <><script type="application/ld+json" dangerouslySetInnerHTML={{__html:serializeJsonLd(getGalleryStructuredData(g,getArtworks(locale),locale,`https://nasoodi.art${pagePath(locale,`galleries/${getLocalizedSlug(g,locale)}`)}`))}}/><div className="page-content">
    <SiteBreadcrumbs locale={locale} items={[{label:t("home"),href:pagePath(locale)},{label:t("galleries"),href:pagePath(locale,"galleries")},{label:g.title[locale] ?? g.slug}]}/>
    <header className="page-heading"><p className="eyebrow">{t("galleries")}</p><h1>{g.title[locale]}</h1><p>{g.description[locale]}</p></header>
    {cover&&<figure className="gallery-detail-cover"><Image sizes="(max-width: 800px) 90vw, 54vw" src={cover.image.src} alt={cover.image.alt[locale]??""} width={cover.image.width} height={cover.image.height}/></figure>}
@@ -100,12 +101,12 @@ export default async function Detail({params,searchParams}:DetailProps){
   </div></>;
  }
  if(section==="journal"){
-  const entry=getPublicJournal(journalEntries,locale).find(x=>getLocalizedSlug(x,locale)===slug);if(!entry)notFound();
-  const relatedEntries=getPublicJournal(journalEntries,locale).filter(item=>item.id!==entry.id).slice(0,3);
+  const entry=getJournalEntries(locale).find(x=>getLocalizedSlug(x,locale)===slug);if(!entry)notFound();
+  const relatedEntries=getJournalEntries(locale).filter(item=>item.id!==entry.id).slice(0,3);
   const dateLabel=(value:string,timeZone?:string)=>new Intl.DateTimeFormat(locale,{dateStyle:"long",...(timeZone?{timeStyle:"short" as const,timeZone}:{})}).format(new Date(value));
   const event=entry.event;
   const cover=journalCoverImageFor(entry,locale);
-  const registrationStillRelevant=Boolean(event?.registrationUrl&&getUpcomingJournalEvents(journalEntries,locale).some(item=>item.id===entry.id));
+  const registrationStillRelevant=Boolean(event?.registrationUrl&&getUpcomingJournalEvents(getEvents(locale),locale).some(item=>item.id===entry.id));
   const typeLabel=entry.type==="event"?t("journalEvents"):entry.type==="exhibition"?t("journalExhibitions"):entry.type==="studio-update"?t("journalStudio"):t("journalStories");
   return <><script type="application/ld+json" dangerouslySetInnerHTML={{__html:serializeJsonLd(getJournalStructuredData(entry,locale,`https://nasoodi.art${pagePath(locale,`journal/${getLocalizedSlug(entry,locale)}`)}`))}}/>
    <article className="page-content article-page journal-detail">

@@ -126,7 +126,7 @@ export function SiteShell({ locale, children, announcement }: { locale: Locale; 
                 <div className="drawer-setting-row"><span className="language-label">{labels.language}</span><LanguageSelector locale={locale} alternates={alternatePaths} pathname={pathname} label={labels.language} onNavigate={() => setMobileOpen(false)}/></div>
                 <div className="drawer-setting-row"><span className="language-label">{labels.appearance}</span><ThemeSelector locale={locale}/></div>
               </div>
-              <div className="drawer-copyright" dir="ltr"><span>nasoodi.art</span><span>© {new Date().getFullYear()}</span></div>
+              <div className="drawer-copyright" dir="ltr"><span>{"nasoodi.art"}</span><span>© {new Date().getFullYear()}</span></div>
             </div>
           </ScrollArea>
         </SheetContent>
