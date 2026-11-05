@@ -264,7 +264,7 @@ If the actual code conflicts with the specification, inspect the source and rele
 - Render the full localized biography from the canonical source.
 - Keep statement and biography distinct if both are present.
 - Place the CV section after the biography and before the global footer.
-- Reuse the existing CV content model and display verified entries only.
+- Reuse the canonical CV JSON record and display only owner-supplied factual entries; do not add a separate verification flag.
 - Add the PDF download action only for a real, valid, approved public PDF.
 - Use a safe local public asset path and descriptive filename.
 - If the PDF is missing/unapproved/invalid, omit the link and report the blocker. Never render a broken link.
