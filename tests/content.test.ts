@@ -24,6 +24,7 @@ import {
 } from "../src/lib/content/journal";
 import { getLocalizedSlug, isSafeLocalImagePath, isSafeContentSlug } from "../src/lib/content/paths";
 import { hasEquivalentContentSet } from "../src/lib/content/identity";
+import { alternatePathFor } from "../src/lib/routing/alternate-path";
 import {
   getArtworkStructuredData,
   getGalleryStructuredData,
@@ -112,7 +113,6 @@ test("portfolio JSON-LD describes only confirmed artist and website facts",()=>{
 });
 
 test("locale switching preserves available localized sections and falls back for unavailable content", async () => {
- const { alternatePathFor } = await import("../src/lib/site");
  assert.equal(alternatePathFor("/fa", "fa"), "/en");
  assert.equal(alternatePathFor("/fa/about", "fa"), "/en/about");
  assert.equal(alternatePathFor("/fa/works", "fa"), "/en/works");
@@ -400,7 +400,6 @@ test("localized content slugs are validated and unique independently per locale"
 
 
 test("localized slugs are unique per locale and alternate links follow stable content ids",async()=>{
- const {alternatePathFor}=await import("../src/lib/site");
  const localizedWork:Artwork={...artworks[0],id:"localized-route-work",slug:"legacy-work",localizedSlugs:{en:"english-work",fa:"persian-work"}};
  const localizedGallery:Gallery={id:"localized-route-gallery",slug:"legacy-gallery",localizedSlugs:{en:"english-gallery",fa:"persian-gallery"},title:{en:"Gallery",fa:"گالری"},description:{en:"Description",fa:"توضیح"},coverArtworkId:localizedWork.id,artworkIds:[localizedWork.id],status:"published",sortOrder:99};
  const localizedJournal:JournalEntry={id:"localized-route-journal",slug:"legacy-journal",localizedSlugs:{en:"english-journal",fa:"persian-journal"},type:"story",title:{en:"Story",fa:"داستان"},summary:{en:"Summary",fa:"خلاصه"},status:"published",approvedLocales:["en","fa"],artistApproved:true};
