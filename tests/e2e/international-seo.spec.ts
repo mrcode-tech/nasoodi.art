@@ -33,6 +33,12 @@ test("indexable archive routes render localized document metadata and reciprocal
   }
 });
 
+test("unsupported locale prefixes return 404 instead of rendering the default language", async ({ request }) => {
+  for (const path of ["/de", "/de/about", "/fr/works"]) {
+    expect((await request.get(path)).status(), path).toBe(404);
+  }
+});
+
 test("published artwork, gallery, and Journal detail alternates resolve to the same content identity", async ({ page, request }) => {
   const pairs = [
     ["/en/works/a-quiet-place-between-seasons", "/fa/works/a-quiet-place-between-seasons"],
@@ -76,9 +82,6 @@ test("sitemap lists canonical localized archives and excludes demo or unpublishe
     "https://nasoodi.art/fa/contact",
   ]) expect(xml).toContain(url);
 
-  for (const forbidden of []) {
-    expect(xml).not.toContain("https://nasoodi.art" + forbidden);
-  }
 });
 
 test("canonical Contact, About, and CV pages are indexable with localized alternates", async ({ page }) => {
