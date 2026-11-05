@@ -32,7 +32,7 @@ Before planning, designing, implementing, or refactoring any user-facing page, c
    - `specification/testing-qa-and-release.md`
    - `specification/implementation-roadmap.md`
 5. Inspect the actual implementation, existing design tokens, shared components, route conventions, dependencies, and relevant image assets before deciding whether to reuse, extend, replace, or add anything.
-6. If a requirement is ambiguous, contradictory, unsupported by repository evidence, or depends on artist approval, record the issue and ask for clarification rather than inventing a decision.
+6. If a requirement is ambiguous, contradictory, or unsupported by repository evidence, record the issue and ask for clarification rather than inventing a decision. Do not ask for editorial verification or approval as a prerequisite for rendering canonical JSON content.
 
 For the artist About/CV and homepage hero biography/mobile-order task, also read the task-specific execution prompt in root `agent.md` and the full `specification/artist-about-page-and-mobile-hero.md` contract.
 
@@ -43,8 +43,8 @@ Do not start implementation based only on a prompt summary or this file. Read th
 - `specification/design-engineering-skills.md` defines the mandatory design workflow, purposeful interaction and motion decisions, component craft, responsive behavior, and visual QA. Its principles are adapted from Emil Kowalski's design-engineering/animation approach and Impeccable's frontend design refinement approach; do not claim the upstream tools are installed or executed unless that is verified.
 - `specification/design-direction-and-system-refinement.md` defines the shared creative direction, semantic palette, typography roles, spacing, image composition, navigation, motion language, and page-level composition contracts.
 - Specialized page specifications remain authoritative for the unique content, structure, and behavior of their named feature, but must conform to the shared design authorities.
-- Preserve factual/editorial constraints, artwork fidelity, accessibility, and privacy requirements when resolving visual conflicts. Do not silently choose between conflicting documents. Identify the conflict, update the relevant specification through the approved workflow, and keep the index/related documents consistent.
-- Treat proposals as proposals until verified or approved. Distinguish proposed, implemented, tested, visually verified, artist-approved, and published states.
+- Preserve artwork fidelity, accessibility, privacy, and the owner's requested content behavior when resolving visual conflicts. Do not silently choose between conflicting documents. Identify the conflict, update the relevant specification, and keep the index/related documents consistent.
+- Distinguish implementation and test evidence from visual review, but do not impose editorial verification or artist-approval gates on canonical JSON content.
 
 ## Mandatory visual and interaction principles
 
@@ -55,7 +55,7 @@ Do not start implementation based only on a prompt summary or this file. Read th
 - Finished paintings are the primary visual content. Preserve original color, brush texture, aspect ratio, orientation, and signature. Do not crop, filter, recolor, mirror, distort, overlay, or AI-enhance artwork unless the artist explicitly approves the exact treatment. Never use generated or stock paintings as portfolio content.
 - The homepage primary hero must be an artist-approved finished painting. Studio/process photography is supporting material and must not replace or be misrepresented as finished artwork.
 - Explicit initial-Hero exception: the site owner selected `specification/assets/artwork.JPG` for the feature-branch Hero. It is a studio/process photograph, not a finished painting; describe it factually, do not register it as artwork, and retain the rights/artist-approval release gate. An approved finished painting remains the preferred production Hero when selected.
-- Do not invent artwork titles, dates, dimensions, medium, gallery groupings, prices, availability, qualifications, awards, exhibition history, contact destinations, or rights claims and present them as confirmed external facts. Initial editorial copy may be authored as the site's normal replaceable content, but must not fabricate real-world credentials or claim artist approval that has not occurred. Store artist profile, biography, statement, CV, artwork, gallery, Journal, event, site metadata, and Contact content in canonical localized JSON records; do not create parallel sample, preview, verified/unverified, or environment-specific content stores. About and CV must read the same canonical JSON records in every environment. UI translations remain in next-intl message resources. Contact destinations must be supplied by the owner; preserve the actual artist Instagram identity @ghazalenasoodi and do not invent email or social handles. Keep artwork rights and asset safeguards intact.
+- Use the canonical JSON content as the owner-authorized initial website content. The owner may edit it after launch. Do not add editorial verification, factuality, provenance, artist-approval, completeness, or status gates that hide content from the site. Do not require fields such as `isVerified`, `artistApproved`, `verificationStatus`, `isFictional`, `isPlaceholder`, or `contentSource`. Do not maintain parallel sample, preview, verified/unverified, or environment-specific content stores. About and CV use the same canonical JSON records in every environment; UI translations remain in next-intl message resources. Display the owner-provided Contact methods `g.nasoodi@gmail.com`, `@nasoodi`, and `@ghazalenasoodi`.
 - Persian must use correct RTL behavior and English correct LTR behavior. The physical-left sidebar remains left in both locales where the navigation specification requires it; do not mirror artwork or decorative assets as a shortcut.
 - Design and test real content states: long Persian and English titles, missing optional metadata, empty archives, no upcoming events, one or many works, unusual image ratios, loading, error, and unavailable states.
 
@@ -80,7 +80,7 @@ Do not start implementation based only on a prompt summary or this file. Read th
 
 ## Content, localization, privacy, and SEO
 
-- Treat artist/site-owner approval as mandatory for public-facing artwork selection, imagery, copy, translations, metadata, gallery membership, and factual claims.
+- Use the canonical editorial records as supplied by the owner. Do not gate rendering or indexing on editorial approval/verification fields. Preserve technical asset-path and safe-link protections.
 - Keep Persian and English content semantically equivalent where translations are approved; do not assume literal machine translation is publishable.
 - Follow the content model and editorial governance. Keep Journal as the unified editorial section; do not add a separate top-level Events section unless the owner changes the specification.
 - Follow the artwork asset pipeline and document source, rights, approval, master, and derivative relationships.
