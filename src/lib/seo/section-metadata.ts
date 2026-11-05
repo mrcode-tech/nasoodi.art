@@ -4,12 +4,15 @@ import { createLocalizedMetadata } from "@/lib/seo/metadata";
 import { artworks } from "@/content/artworks";
 import { galleries } from "@/content/galleries";
 import { journalEntries } from "@/content/journal";
-import { cvEntries } from "@/content/cv";
-import { artistProfile } from "@/content/artist";
-import { contactDetails } from "@/content/contact";
-import { siteContent } from "@/content/site";
-import { getPublicArtistProfile,getPublicContactDetails,getPublicArtworks,getPublicGalleries,getPublicCvEntries,getGalleryCoverArtwork,primaryImageFor } from "@/lib/content/publication";
-import { getPublicJournal,journalCoverImageFor } from "@/lib/content/journal";
+import { getArtist } from "@/content/repositories/artist.repository";
+import { getCv } from "@/content/repositories/cv.repository";
+import { getContact } from "@/content/repositories/contact.repository";
+import { getArtworks } from "@/content/repositories/artwork.repository";
+import { getGalleries } from "@/content/repositories/gallery.repository";
+import { getJournalEntries } from "@/content/repositories/journal.repository";
+import { getSitePageMetadata } from "@/content/repositories/site.repository";
+import { getGalleryCoverArtwork,primaryImageFor } from "@/lib/content/publication";
+import { journalCoverImageFor } from "@/lib/content/journal";
 import { hasEquivalentContentSet } from "@/lib/content/identity";
 import { pagePath,locales,type Locale } from "@/types/locale";
 
@@ -18,34 +21,35 @@ export type Section = "works" | "galleries" | "journal" | "about" | "contact" | 
 export async function getSectionMetadata(section: Section, locale: Locale): Promise<Metadata> {
  setRequestLocale(locale);
  const t=await getTranslations({ locale });
- const works=getPublicArtworks(artworks,locale);
- const sets=getPublicGalleries(galleries,artworks,locale);
- const journal=getPublicJournal(journalEntries,locale);
- const cv=getPublicCvEntries(cvEntries,locale);
- const profile=getPublicArtistProfile(artistProfile,locale);
+ const works=getArtworks(locale);
+ const sets=getGalleries(locale);
+ const journal=getJournalEntries(locale);
+ const cv=getCv(locale).entries;
+ const profile=getArtist(locale);
+ const contact=getContact(locale);
 
  const indexable=section==="works"?works.length>0:
   section==="galleries"?sets.length>0:
   section==="journal"?journal.length>0:
   section==="cv"?cv.length>0:
   section==="about"?Boolean(profile):
-  section==="contact"?Boolean(getPublicContactDetails(contactDetails)&&contactDetails.title?.[locale]&&contactDetails.description?.[locale]):false;
+  section==="contact"?Boolean(Boolean(contact)):false;
  const equivalentFor=(target:Locale)=>{
-  if(section==="works")return hasEquivalentContentSet(works,getPublicArtworks(artworks,target));
-  if(section==="galleries")return hasEquivalentContentSet(sets,getPublicGalleries(galleries,artworks,target));
-  if(section==="journal")return hasEquivalentContentSet(journal,getPublicJournal(journalEntries,target));
-  if(section==="cv")return hasEquivalentContentSet(cv,getPublicCvEntries(cvEntries,target));
-  if(section==="about")return Boolean(profile&&getPublicArtistProfile(artistProfile,target));
-  if(section==="contact")return Boolean(getPublicContactDetails(contactDetails)&&contactDetails.title?.[target]&&contactDetails.description?.[target]);
+  if(section==="works")return hasEquivalentContentSet(works,getArtworks(target));
+  if(section==="galleries")return hasEquivalentContentSet(sets,getGalleries(target));
+  if(section==="journal")return hasEquivalentContentSet(journal,getJournalEntries(target));
+  if(section==="cv")return hasEquivalentContentSet(cv,getCv(target).entries);
+  if(section==="about")return Boolean(profile&&getArtist(target));
+  if(section==="contact")return Boolean(Boolean(getContact(target)));
   return false;
  };
  const alternatePaths=Object.fromEntries(locales.filter(target=>target!==locale&&equivalentFor(target)).map(target=>[target,pagePath(target,section)])) as Partial<Record<Locale,string>>;
- const description=section==="works"?siteContent.pages.works.description[locale]:
-  section==="galleries"?siteContent.pages.galleries.description[locale]:
-  section==="journal"?siteContent.pages.journal.description[locale]:
-  section==="cv"?siteContent.pages.cv.description[locale]:
+ const description=section==="works"?getSitePageMetadata("works",locale).description:
+  section==="galleries"?getSitePageMetadata("galleries",locale).description:
+  section==="journal"?getSitePageMetadata("journal",locale).description:
+  section==="cv"?getSitePageMetadata("cv",locale).description:
   section==="about"?profile?.shortIntroduction?.[locale]??profile?.statement[locale]:
-  section==="contact"?contactDetails.description?.[locale]:undefined;
+  section==="contact"?contact?.description:undefined;
  const firstWork=works[0];
  const firstGallery=sets[0];
  const firstJournal=journal[0];
@@ -59,11 +63,11 @@ export async function getSectionMetadata(section: Section, locale: Locale): Prom
   locale,
   path:section,
   title:section==="about"&&profile?.name?.[locale]?profile.name[locale]+" — "+t("about"):
-   section==="cv"?siteContent.pages.cv.title[locale]:
-   section==="contact"?contactDetails.title?.[locale]??t("contact"):
-   section==="works"?siteContent.pages.works.title[locale]:
-   section==="galleries"?siteContent.pages.galleries.title[locale]:
-   section==="journal"?siteContent.pages.journal.title[locale]:t(section),
+   section==="cv"?getSitePageMetadata("cv",locale).title:
+   section==="contact"?contact?.title??t("contact"):
+   section==="works"?getSitePageMetadata("works",locale).title:
+   section==="galleries"?getSitePageMetadata("galleries",locale).title:
+   section==="journal"?getSitePageMetadata("journal",locale).title:t(section),
   description,
   alternatePaths:indexablePage?alternatePaths:undefined,
   indexable:indexablePage,
