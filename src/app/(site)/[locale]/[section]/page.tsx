@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { getTranslations } from "next-intl/server";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 import { GalleryIndex } from "@/components/gallery-index";
 import { ContactExperience } from "@/components/contact-experience";
 import { aboutPreviewFixture } from "@/lib/about-preview-fixtures";
@@ -15,7 +15,7 @@ type Props={params:Promise<{locale:string;section:string}>;searchParams:Promise<
 const names=["works","galleries","journal","about","contact","cv"] as const;
 type Section=typeof names[number];
 const valid=(s:string):s is Section=>names.includes(s as Section);
-export async function generateMetadata({params}:Props):Promise<Metadata>{const {locale,section}=await params;if(!isLocale(locale)||!valid(section))return {};const t=await getTranslations({ locale });
+export async function generateMetadata({params}:Props):Promise<Metadata>{const {locale,section}=await params;if(!isLocale(locale)||!valid(section))return {};setRequestLocale(locale);const t=await getTranslations({ locale });
  const indexable = section==="works" ? getPublicArtworks(artworks,locale).length>0 :
   section==="galleries" ? getPublicGalleries(galleries,artworks,locale).length>0 :
   section==="journal" ? getPublicJournal(journalEntries,locale).length>0 :
@@ -29,7 +29,7 @@ export async function generateMetadata({params}:Props):Promise<Metadata>{const {
   section==="about" ? Boolean(getPublicArtistProfile(artistProfile,other)) : false;
  const profile=section==="about"?getPublicArtistProfile(artistProfile,locale):undefined;
  return {title:t(section),...(profile?{description:profile.statement[locale]}:{}),alternates:{canonical:pagePath(locale,section),...(indexable&&translated?{languages:{[locale]:pagePath(locale,section),[other]:pagePath(other,section)}}:{})},robots:{index:section==="about"||section==="contact"?false:indexable,follow:true}};}
-export default async function SectionPage({params,searchParams}:Props){const [{locale,section},{category:rawCategory,page:rawPage,pageSize:rawPageSize}]=await Promise.all([params,searchParams]);if(!isLocale(locale)||!valid(section))notFound();const t=await getTranslations({ locale });
+export default async function SectionPage({params,searchParams}:Props){const [{locale,section},{category:rawCategory,page:rawPage,pageSize:rawPageSize}]=await Promise.all([params,searchParams]);if(!isLocale(locale)||!valid(section))notFound();setRequestLocale(locale);const t=await getTranslations({ locale });
  if(section==="about"){
   const biography=aboutPreviewFixture.biography[locale];
   const statement=aboutPreviewFixture.statement[locale];
