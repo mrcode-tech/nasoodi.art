@@ -1810,7 +1810,7 @@ test("localized SEO metadata is rendered from canonical content for archives and
   await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", "https://nasoodi.art/en/works/a-quiet-place-between-seasons");
   await expect(page.locator('link[rel="alternate"][hreflang="fa"]')).toHaveAttribute("href", "https://nasoodi.art/fa/works/a-quiet-place-between-seasons");
   await expect(page.locator('meta[property="og:type"]')).toHaveAttribute("content", "article");
-  await expect(page.locator('meta[property="og:image"]')).toHaveAttribute("content", "https://nasoodi.art/images/approved-artwork-1.jpg");
+  await expect(page.locator('meta[property="og:image"]')).toHaveAttribute("content", "https://nasoodi.art/images/artworks/artwork-quiet-place.jpg");
 
   for (const section of ["contact", "about", "cv"]) {
     await page.goto("/en/" + section);
