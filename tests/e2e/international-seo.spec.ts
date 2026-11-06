@@ -41,7 +41,7 @@ test("unsupported locale prefixes return 404 instead of rendering the default la
 
 test("published artwork, gallery, and Journal detail alternates resolve to the same content identity", async ({ page, request }) => {
   const pairs = [
-    ["/en/works/a-quiet-place-between-seasons", "/fa/works/a-quiet-place-between-seasons"],
+    ["/en/works/a-first-light", "/fa/works/" + encodeURIComponent("نخستین-روشنایی")],
     ["/en/galleries/quiet-intervals", "/fa/galleries/quiet-intervals"],
     ["/en/journal/between-layers-studio-notes", "/fa/journal/between-layers-studio-notes"],
   ];
@@ -117,8 +117,8 @@ test("rendered HTML serves localized editorial content and metadata for every ca
     { path: "/fa/galleries", locale: "fa", structuredType: "Person" },
     { path: "/en/works", locale: "en", structuredType: "Person" },
     { path: "/fa/works", locale: "fa", structuredType: "Person" },
-    { path: "/en/works/a-quiet-place-between-seasons", locale: "en", structuredType: "VisualArtwork" },
-    { path: "/fa/works/a-quiet-place-between-seasons", locale: "fa", structuredType: "VisualArtwork" },
+    { path: "/en/works/a-first-light", locale: "en", structuredType: "VisualArtwork" },
+    { path: "/fa/works/" + encodeURIComponent("نخستین-روشنایی"), locale: "fa", structuredType: "VisualArtwork" },
     { path: "/en/journal", locale: "en", structuredType: "Person" },
     { path: "/fa/journal", locale: "fa", structuredType: "Person" },
     { path: "/en/journal/between-layers-studio-notes", locale: "en", structuredType: "Article" },
