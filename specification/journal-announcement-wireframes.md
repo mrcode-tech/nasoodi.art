@@ -1,3 +1,5 @@
+> **Contract update:** These wireframes preserve the established shell placements and paper-sticker concept. Any event-only assumptions in older diagrams or annotations are superseded by [the JSON-configured content announcement contract](./journal-announcement-specification.md). The sticker now displays the single active configuration and can link to artwork, gallery, Journal, or event content. Its destination is derived from type and content ID. When inactive, no sticker or reserved space is rendered.
+
 # Journal Event Announcement — Responsive Wireframes
 
 **Status:** Structural wireframes for review  
