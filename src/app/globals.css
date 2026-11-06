@@ -1784,32 +1784,33 @@ html[lang="fa"] .artwork-viewer-info h2 {
   gap: clamp(2rem, 4vw, 3.5rem);
 }
 .about-portrait-statement {
-  display: grid;
-  grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr);
+  display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: clamp(1.5rem, 4vw, 4rem);
-  direction: inherit;
+  gap: clamp(1.25rem, 2.5vw, 2rem);
+  width: 100%;
 }
 .about-portrait-statement .artist-portrait-frame {
-  width: 100%;
+  width: min(100%, 31rem);
   max-width: 31rem;
   aspect-ratio: 4 / 5;
-  margin: 0;
-  justify-self: stretch;
+  margin-inline: auto;
 }
 .about-portrait-statement .artist-portrait {
   object-fit: contain;
   object-position: center;
 }
-.about-portrait-statement .about-statement {
-  max-width: 42rem;
+.about-page .about-statement {
+  width: 100%;
+  max-width: 58rem;
   min-width: 0;
+  margin-inline: auto;
 }
-.about-portrait-statement .about-statement h2 {
+.about-page .about-statement h2 {
   margin: 0 0 .8rem;
   font-size: var(--type-subsection-title, 1.45rem);
 }
-.about-portrait-statement .about-statement p,
+.about-page .about-statement p,
 .about-short-introduction {
   margin: .65rem 0 0;
   color: var(--muted);
@@ -1819,8 +1820,9 @@ html[lang="fa"] .artwork-viewer-info h2 {
   text-justify: inter-word;
 }
 .about-short-introduction {
-  max-width: 48rem;
-  margin: -.5rem 0 0;
+  width: 100%;
+  max-width: 58rem;
+  margin: 0 auto;
 }
 .about-page .about-biography,
 .about-page .about-cv-section {
@@ -1837,16 +1839,12 @@ html[lang="fa"] .artwork-viewer-info h2 {
     gap: 1.2rem;
   }
   .about-portrait-statement {
-    grid-template-columns: minmax(0, 1fr);
     gap: 1.25rem;
   }
   .about-portrait-statement .artist-portrait-frame {
-    width: 100%;
-    max-width: none;
-    aspect-ratio: 5 / 4;
-  }
-  .about-portrait-statement .about-statement {
-    max-width: none;
+    width: min(100%, 31rem);
+    max-width: 31rem;
+    aspect-ratio: 4 / 5;
   }
 }
 @media (max-width: 600px) {
