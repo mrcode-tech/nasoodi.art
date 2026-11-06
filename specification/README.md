@@ -40,7 +40,8 @@ This directory documents application architecture, interface behavior, design sy
 - Gallery collections and artwork detail: gallery-collections-and-artwork-detail.md
 - About and CV layout: artist-about-page-and-mobile-hero.md
 - Journal and events: journal-and-events.md
-- Journal announcement component: journal-announcement-specification.md
+- Configurable content announcement sticker: journal-announcement-specification.md
+- Single announcement configuration: src/content/announcement.json
 - Contact experience: contact-experience-proposal.md
 
 ### Engineering, quality, and release
