@@ -504,7 +504,7 @@ for (const locale of ["en", "fa"] as const) {
       await page.goto(`/${locale}`);
       await expect(page.locator("html")).toHaveAttribute("lang", locale);
       await expect(page.locator("html")).toHaveAttribute("dir", locale === "fa" ? "rtl" : "ltr");
-      await expect(page.getByRole("heading", { level: 1, name: locale === "fa" ? "غزاله عبداله زاده نسودی" : "Ghazaleh Abdolahzade Nasoodi" })).toBeVisible();
+      await expect(page.getByRole("heading", { level: 1, name: locale === "fa" ? "غزاله عبداله زاده نسودی" : "Ghazale Abdolahzade Nasoodi" })).toBeVisible();
       const heroImage = page.locator(".hero-artwork img");
       await expect(heroImage).toBeVisible();
       await expect(heroImage).toHaveJSProperty("complete", true);
@@ -751,7 +751,7 @@ test("collection discovery displays the four published curated collections in bo
 test("unpublished artwork viewer query state cannot expose an unpublished artwork", async ({ page }) => {
   await page.goto("/en?artwork=not-published&viewerContext=home");
   await expect(page.getByRole("dialog")).toHaveCount(0);
-  await expect(page.getByRole("heading", { name: "Ghazaleh Abdolahzade Nasoodi" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Ghazale Abdolahzade Nasoodi" })).toBeVisible();
   await page.goto("/en?artwork=a-quiet-place-between-seasons&viewerContext=gallery:quiet-intervals");
   await expect(page.getByRole("dialog")).toHaveCount(0);
   const response = await page.request.get("/en/works/not-published");
@@ -971,7 +971,7 @@ test("About is a localized primary navigation destination on desktop and mobile"
   const desktopAbout = page.locator(".desktop-sidebar").getByRole("link", { name: "About", exact: true });
   await expect(desktopAbout).toHaveAttribute("href", "/en/about");
   await expect(desktopAbout).toHaveAttribute("aria-current", "page");
-  await expect(page.getByRole("heading", { name: "Ghazaleh Abdolahzade Nasoodi" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Ghazale Abdolahzade Nasoodi" })).toBeVisible();
   await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", /index/);
   await expect(page.locator(".about-statement")).toBeVisible();
   await expect(page.locator(".about-biography-copy")).toBeVisible();
@@ -1071,7 +1071,7 @@ test("About and CV routes render canonical bilingual JSON content without previe
     await expect(page.locator(".about-biography-copy")).toBeVisible();
     await expect(page.locator(".cv-category")).toHaveCount(5);
     await expect(page.locator(".cv-list li")).toHaveCount(16);
-    await expect(page.getByRole("heading", { name: locale === "en" ? "Ghazaleh Abdolahzade Nasoodi" : "غزاله عبداله زاده نسودی" })).toBeVisible();
+    await expect(page.getByRole("heading", { name: locale === "en" ? "Ghazale Abdolahzade Nasoodi" : "غزاله عبداله زاده نسودی" })).toBeVisible();
     const overflow = await page.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth);
     expect(overflow).toBe(false);
     await page.screenshot({ path: test.info().outputPath("about-" + locale + "-desktop.png"), fullPage: true });
