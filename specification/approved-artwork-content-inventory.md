@@ -1,61 +1,65 @@
-# Approved artwork and curated gallery content
+# Canonical artwork and gallery inventory
 
-**Status:** Implemented on `feature`; automated verification pending.
-**Approval basis:** The site owner explicitly approved the five photographs in `specification/assets/gallery/` for public portfolio use and authorized editorial titles, descriptions, and multiple overlapping collections.
+**Status:** Current canonical content contract for the feature branch.
+**Source of truth:** `src/content/data/artworks.json`, `src/content/data/galleries.json`, and `src/content/data/homepage-selection.json`.
 
-## Asset delivery
+## Current inventory
 
-Each published image lives once in its final public location. The former specification-to-public copy step is retired. The five artwork JPEGs were moved byte-for-byte into `public/images/artworks/`; the artist-at-work hero photograph lives in `public/images/artist/`. Galleries, homepage selections, and Journal entries reuse canonical artwork IDs and do not duplicate image files.
+The canonical JSON currently contains **25 published artwork records**, organized into **eight year-based galleries**. The records cover Persian calendar years 1388, 1392, 1393, 1395, 1398, 1399, 1401, and 1403.
 
-| Canonical artwork ID | Public image path | Intended use |
-|---|---|---|
-| `artwork-quiet-place` | `/images/artworks/artwork-quiet-place.jpg` | Homepage, viewer, galleries, Journal references |
-| `artwork-shape-of-remembering` | `/images/artworks/artwork-shape-of-remembering.jpg` | Homepage, viewer, galleries, Journal references |
-| `artwork-where-light-rests` | `/images/artworks/artwork-where-light-rests.jpg` | Homepage, viewer, galleries, Journal references |
-| `artwork-garden-small-moments` | `/images/artworks/artwork-garden-small-moments.jpg` | Homepage, viewer, galleries, Journal references |
-| `artwork-blue-hour-within` | `/images/artworks/artwork-blue-hour-within.jpg` | Homepage, viewer, galleries, Journal references |
+The inventory is data-driven. Do not hardcode an earlier five-image inventory, a four-gallery inventory, or a fixed list of image filenames in application logic or tests. When the owner adds, replaces, or removes artwork, update the canonical JSON and its related references; then update this document's counts and summary table in the same change.
 
-The studio/process hero image is stored at `/images/artist/artist-at-work.jpg`; it is not registered as a finished artwork. The editable Journal sticker SVG lives at `/images/journal/journal-announcement-sticker.svg`.
+| Gallery year | Gallery title (English) | Slug | Artwork count | Cover artwork |
+|---:|---|---|---:|---|
+| 1403 | A Season of Light | `a-season-of-light` | 6 | `artwork-1403-1` |
+| 1401 | A New Rhythm | `a-new-rhythm` | 2 | `artwork-1401-1` |
+| 1399 | After the Moment | `after-the-moment` | 1 | `artwork-1399-1` |
+| 1398 | Impressions That Remain | `impressions-that-remain` | 8 | `artwork-1398-1` |
+| 1395 | A Quiet Interval | `a-quiet-interval` | 1 | `artwork-1395-1` |
+| 1393 | The Held Space | `the-held-space` | 2 | `artwork-1393-1` |
+| 1392 | Figures and Interior Light | `figures-and-interior-light` | 4 | `artwork-1392-1` |
+| 1388 | First Light | `first-light` | 1 | `artwork-1388-1` |
+| **Total** | **8 galleries** |  | **25 artworks** |  |
 
-The local generator `scripts/generate-image-metadata.mjs` discovers raster images in `public/images/` and writes the path-keyed `src/content/data/image-metadata.json`. `npm run dev` runs it automatically through `predev`. Commit the generated JSON with image changes. `prebuild` runs the same script with `--check`, which verifies committed JSON against the actual files and content JSON references without modifying it. No image copying, approval inference, or fixed five-image list remains.
+The canonical gallery JSON is stored oldest-to-newest for editorial chronology. Public archive and homepage selections are presented newest-to-oldest. Each gallery's `artworkIds` array is its canonical editorial order.
 
-## Canonical artwork records
+## Content and relationship rules
 
-| Artwork ID | Slug | English title | Persian title |
-|---|---|---|---|
-| `artwork-quiet-place` | `a-quiet-place-between-seasons` | A Quiet Place Between Seasons | آرامش میان فصل‌ها |
-| `artwork-shape-of-remembering` | `the-shape-of-remembering` | The Shape of Remembering | شکلِ خاطره |
-| `artwork-where-light-rests` | `where-light-rests` | Where Light Rests | جایی که نور می‌آرامد |
-| `artwork-garden-small-moments` | `a-garden-of-small-moments` | A Garden of Small Moments | باغ لحظه‌های کوچک |
-| `artwork-blue-hour-within` | `the-blue-hour-within` | The Blue Hour Within | ساعت آبی درون |
+- Artwork records have stable IDs, localized titles and descriptions, explicit localized slugs, and one primary image in the current inventory.
+- Image paths must be safe, same-origin public paths. Committed image metadata is generated from actual files by `scripts/generate-image-metadata.mjs`; `npm run images:check` verifies it without rewriting it.
+- Artwork publication requires the existing publication and rights checks, localized fields, a valid primary image, dimensions, and localized alternative text.
+- The eight galleries are year-based groupings, not overlapping thematic collections. Every current artwork belongs to exactly one gallery.
+- A gallery's `coverArtworkId` must equal the first item in its ordered `artworkIds` list. Do not choose a cover by filename sorting or by an unrelated artwork ID.
+- Gallery memberships reference canonical artwork IDs. Never duplicate an artwork record or image file to place it in a gallery.
+- `homepage-selection.json` contains eight featured gallery IDs and eight featured artwork IDs. Each featured artwork is the first artwork (cover) of the corresponding featured gallery, and the selection is ordered newest-first.
+- Keep the artist's studio/process portrait separate from finished artwork records. Do not register a portrait or process photograph as an artwork.
+- Journal entries may reuse canonical artwork images. Their localized alt text is context-specific editorial metadata and does not have to be identical to the artwork page's alt text; it must remain accurate, meaningful, localized, and rights-cleared.
 
-All five records are published, rights-confirmed according to the owner's explicit approval, have English/Persian titles, descriptions, and alt text, and use one primary local image. The descriptions are concise editorial interpretations; they avoid claims about identifiable depicted subjects or unverified materials and dates. Titles and collection names are website editorial labels, not claims that the artist historically named or exhibited these series.
+## Public routes and presentation
 
-## Curated collections and ordered membership
+- Works archives: `/[locale]/works`; detail routes: `/[locale]/works/[localizedSlug]`.
+- Gallery index: `/[locale]/galleries`. It uses static poster cards, not the homepage carousel.
+- Gallery details: `/[locale]/galleries/[localizedSlug]`.
+- Homepage Selected Works and featured Galleries retain their own carousel behavior and use the explicit homepage selection.
+- Public artwork and gallery archives are ordered newest year first. The first artwork in each gallery is its cover.
+- Persian routes and localized slugs must resolve correctly under RTL; English routes use LTR.
 
-| Gallery ID | Slug | English / Persian title | Ordered artwork IDs |
-|---|---|---|---|
-| `gallery-quiet-intervals` | `quiet-intervals` | Quiet Intervals / فاصله‌های آرام | quiet-place → where-light-rests → garden-small-moments |
-| `gallery-color-conversation` | `color-in-conversation` | Color in Conversation / گفت‌وگوی رنگ‌ها | where-light-rests → shape-of-remembering → blue-hour-within |
-| `gallery-fragments-memory` | `fragments-of-memory` | Fragments of Memory / پاره‌های خاطره | shape-of-remembering → garden-small-moments → blue-hour-within |
-| `gallery-selected-works` | `selected-works` | Selected Works / گزیده آثار | quiet-place → shape-of-remembering → where-light-rests → garden-small-moments → blue-hour-within |
+## Validation contract
 
-The shortened IDs in the table correspond to the full `artwork-...` IDs in the content model. Membership is stored as references to canonical artwork IDs; artworks are not duplicated. Each gallery's cover is a member of its own ordered sequence. The four collections are editorial navigation groupings created for this portfolio.
+Automated tests should validate invariants rather than preserve obsolete inventory assumptions:
 
-## Public routes and experience
+1. Stable artwork IDs and slugs are unique.
+2. Current published artwork records have localized content and valid primary image metadata.
+3. Gallery IDs and slugs are unique; every gallery is published, localized, and has at least one artwork.
+4. Gallery membership IDs resolve to canonical artworks, contain no duplicates, and partition the current artwork inventory exactly once.
+5. Each gallery cover is its first artwork.
+6. Homepage featured gallery/artwork selections contain eight current records, are newest-first, and pair each gallery with its first artwork.
+7. Public records are available in both locales and route slugs are safe.
+8. Journal cover images are safe and rights-cleared; localized Journal alt text is validated independently from artwork-page alt text.
+9. CI's image metadata check, content tests, route tests, and production build pass against the same feature-branch commit.
 
-- Homepage Selected Works uses all five canonical artwork IDs in their explicit order.
-- Collection index: `/en/galleries` and `/fa/galleries`.
-- Collection details: `/[locale]/galleries/quiet-intervals`, `/[locale]/galleries/color-in-conversation`, `/[locale]/galleries/fragments-of-memory`, and `/[locale]/galleries/selected-works`.
-- Canonical artwork details: `/[locale]/works/[artworkSlug]`.
-- The shared viewer remains `src/components/artwork-experience.tsx`; homepage and collection contexts pass their own ordered artwork arrays.
+Avoid tests that assert stale image filenames, old five/four inventory sizes in unrelated code, fixed thematic overlap, or the existence of an upcoming event. Tests for repositories should verify their filtering and ordering contracts; a valid empty event result is allowed when the canonical Journal contains no published event/exhibition records.
 
-## Validation
+## Editorial and approval boundary
 
-- Content tests assert exactly five unique published artworks, all five approved source-to-public mappings, localized content, four unique published galleries, valid covers/memberships, overlap, and homepage selection.
-- Browser tests cover populated English/Persian collection indexes, homepage artwork viewer opening and navigation, viewer history, collection-scoped navigation, canonical artwork detail routes, and mobile/short-height viewer visibility.
-- The build pre-step copies source images before Next.js collects public assets. CI's asset audit and production route smoke test run after the build.
-
-## Verification boundary
-
-Automated publication and route checks can establish that the source files exist, are copied byte-for-byte, and render at the configured paths. They do not substitute for the site owner's visual review of each painting, editorial title/description, and final gallery grouping. The owner should inspect the populated pages before considering the editorial presentation finally accepted.
+The canonical data currently marks the published artwork records as rights-confirmed and supplies localized editorial text. Automated checks verify data consistency and asset availability; they do not independently establish legal ownership, artist approval of every title/translation, or final visual acceptance. Keep owner review distinct from technical publication validation and do not infer new approval from the existence of a JSON record.
