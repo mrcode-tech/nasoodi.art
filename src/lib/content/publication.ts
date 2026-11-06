@@ -46,7 +46,7 @@ export function getPublicArtworks(items: readonly Artwork[], locale: Locale): Ar
   return keepUniqueBy(
     keepUniqueBy(visible, (work) => work.id),
     (work) => getLocalizedSlug(work, locale),
-  ).sort((a, b) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0));
+  ).sort((a, b) => (b.year ?? 0) - (a.year ?? 0) || (b.sortOrder ?? 0) - (a.sortOrder ?? 0) || b.id.localeCompare(a.id));
 }
 
 export function getPublicGalleries(items: readonly Gallery[], works: readonly Artwork[], locale: Locale): Gallery[] {
@@ -66,7 +66,12 @@ export function getPublicGalleries(items: readonly Gallery[], works: readonly Ar
   return keepUniqueBy(
     keepUniqueBy(visible, (gallery) => gallery.id),
     (gallery) => getLocalizedSlug(gallery, locale),
-  ).sort((a, b) => a.sortOrder - b.sortOrder);
+  ).sort((a, b) =>
+    (works.find((work) => work.id === b.coverArtworkId)?.year ?? 0) -
+      (works.find((work) => work.id === a.coverArtworkId)?.year ?? 0) ||
+    b.sortOrder - a.sortOrder ||
+    b.id.localeCompare(a.id),
+  );
 }
 
 export function getGalleryCoverArtwork(gallery: Gallery, works: readonly Artwork[], locale: Locale) {
