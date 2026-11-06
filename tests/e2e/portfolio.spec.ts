@@ -74,7 +74,7 @@ test("desktop navigation exposes the current route and navigates between section
   const navigation = page.getByRole("navigation").first();
   await expect(navigation).toBeVisible();
   await expect(navigation.locator('a[aria-current="page"]')).toHaveAttribute("href", "/en/works");
-  await navigation.getByRole("link", { name: "Galleries" }).click();
+  await navigation.locator('a[href="/en/galleries"]').click();
   await expect(page).toHaveURL((url) => url.pathname === "/en/galleries");
 });
 
