@@ -1711,7 +1711,7 @@ html[lang="fa"] .artwork-viewer-info h2 {
   object-fit: contain;
   object-position: center;
   padding: clamp(.4rem, 1vw, .85rem);
-  background: var(--surface);
+  background: var(--paper);
 }
 .artwork-grid > .artwork-item {
   min-width: 0;
