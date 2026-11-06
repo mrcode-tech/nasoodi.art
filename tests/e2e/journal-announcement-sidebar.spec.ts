@@ -104,6 +104,22 @@ for (const locale of ["en", "fa"] as const) {
     await expect(language.locator(".language-code-icon")).toHaveText(locale.toUpperCase());
     await expect(language.locator(".selector-chevron")).toHaveCount(1);
     await expect(appearance.locator(".selector-chevron")).toHaveCount(1);
+    for (const trigger of [language, appearance]) {
+      const chevron = trigger.locator(".selector-chevron");
+      await expect(chevron).toBeVisible();
+      const fitsInsideTrigger = await trigger.evaluate((node) => {
+        const arrow = node.querySelector(".selector-chevron");
+        if (!arrow) return false;
+        const triggerRect = node.getBoundingClientRect();
+        const arrowRect = arrow.getBoundingClientRect();
+        const style = getComputedStyle(arrow);
+        return style.display !== "none" && style.visibility === "visible" &&
+          arrowRect.width > 0 && arrowRect.height > 0 &&
+          arrowRect.left >= triggerRect.left && arrowRect.right <= triggerRect.right &&
+          arrowRect.top >= triggerRect.top && arrowRect.bottom <= triggerRect.bottom;
+      });
+      expect(fitsInsideTrigger).toBe(true);
+    }
 
     const languageBox = await language.evaluate((node) => {
       const style = getComputedStyle(node);
