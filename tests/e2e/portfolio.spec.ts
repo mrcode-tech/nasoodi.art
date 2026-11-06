@@ -1920,3 +1920,31 @@ test("Works archive presents every artwork in a consistent uncropped 4:3 frame i
     }
   }
 });
+
+
+test("Works archive paginates five artworks by default and supports 5, 10, and 20 per page in both locales", async ({ page }) => {
+  for (const locale of ["en", "fa"] as const) {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await page.goto(`/${locale}/works`);
+    const cards = page.locator(".artwork-grid > .artwork-item");
+    await expect(cards).toHaveCount(5);
+    const pagination = page.locator(".artwork-pagination");
+    await expect(pagination).toBeVisible();
+    const pageSize = pagination.locator(".gallery-page-size select");
+    await expect(pageSize).toHaveValue("5");
+    await expect(pagination.locator(".gallery-page-nav .is-current")).toHaveText(locale === "fa" ? "۱" : "1");
+    await page.getByRole("button", { name: locale === "fa" ? /صفحه ۲/ : /Page 2/ }).click();
+    await expect(page).toHaveURL(/page=2/);
+    await expect(cards).toHaveCount(5);
+    await pageSize.selectOption("10");
+    await expect(page).toHaveURL(/pageSize=10/);
+    await expect(cards).toHaveCount(10);
+    await pageSize.selectOption("20");
+    await expect(page).toHaveURL(/pageSize=20/);
+    await expect(cards).toHaveCount(20);
+    await pageSize.selectOption("5");
+    await expect(page).not.toHaveURL(/pageSize=/);
+    await expect(page).not.toHaveURL(/page=/);
+    await expect(cards).toHaveCount(5);
+  }
+});
