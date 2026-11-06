@@ -10,6 +10,24 @@ export function getLocalizedSlug(record: LocalizedSlugRecord, locale: Locale): s
   return record.localizedSlugs ? (record.localizedSlugs[locale]?.trim() ?? "") : record.slug;
 }
 
+/** Normalize a route segment before comparing it with a localized content slug.
+ * Next.js normally decodes route params, but links and proxies can preserve
+ * percent-encoded or canonically equivalent Unicode forms.
+ */
+export function normalizeContentRouteSlug(value: string): string {
+  let decoded = value;
+  try {
+    decoded = decodeURIComponent(value);
+  } catch {
+    // Keep the original value; malformed encodings will not match a valid slug.
+  }
+  return decoded.normalize("NFC");
+}
+
+export function matchesLocalizedSlug(record: LocalizedSlugRecord, locale: Locale, routeSlug: string): boolean {
+  return normalizeContentRouteSlug(getLocalizedSlug(record, locale)) === normalizeContentRouteSlug(routeSlug);
+}
+
 /** Accept one safe URL segment with native-script letters, combining marks, and Persian ZWNJ. */
 export function isSafeContentSlug(slug: string): boolean {
   return /^[\p{L}\p{N}](?:[\p{L}\p{N}\p{M}]|\u200c(?=[\p{L}\p{M}]))*(?:-[\p{L}\p{N}](?:[\p{L}\p{N}\p{M}]|\u200c(?=[\p{L}\p{M}]))*)*$/u.test(slug);
