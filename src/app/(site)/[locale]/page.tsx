@@ -88,7 +88,7 @@ export default async function Home({ params }: Props) {
       <section className="editorial-section" aria-labelledby="featured-works">
         <div className="section-heading">
           <div><p className="eyebrow">{t("portfolio")}</p><h2 id="featured-works">{t("selected")}</h2></div>
-          <Link className="text-link" href={pagePath(locale, "galleries")}>{t("exploreCollections")} ↗</Link>
+          <Link className="text-link" href={pagePath(locale, "works")}>{t("exploreCollections")} ↗</Link>
         </div>
         {works.length === 0 ? <p className="empty-note">{t("emptyWorks")}</p> : <ArtworkExperience artworks={works.slice(0, 6)} locale={locale} context="home" />}
       </section>
