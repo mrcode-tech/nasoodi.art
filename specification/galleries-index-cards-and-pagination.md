@@ -229,7 +229,7 @@ Persian (`fa`):
 - Grid reading order follows the Persian editorial order.
 - Pagination labels and accessible names are Persian.
 - Previous/next visual placement and movement semantics must be tested in RTL; do not assume a left/right icon direction without verifying its meaning.
-- Page numbers may remain Western numerals if that matches the site's existing numeral policy; use one consistent policy across the control and do not mix formats.
+- Localize every visible pagination number to the page locale: Persian digits (`۰۱۲۳۴۵۶۷۸۹`) on `fa` routes and Western digits (`0123456789`) on `en` routes. This applies to page buttons, page-size options, result ranges, totals, and accessible page labels. Keep URL query parameters and internal numeric values in canonical ASCII/number form.
 
 English (`en`):
 - Page direction is LTR.
