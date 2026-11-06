@@ -172,10 +172,10 @@ test("portfolio JSON-LD resolves localized artist identity from canonical profil
  assert.equal(personEn["@type"],"Person");
  assert.equal(personEn.name,"Ghazaleh Abdolahzade Nasoodi");
  assert.equal(personEn.alternateName,"غزاله عبداله‌زاده نسودی");
- assert.equal(personEn.jobTitle,"Oil painter");
+ assert.equal(personEn.jobTitle,"Painter");
  assert.equal(personFa.name,"غزاله عبداله‌زاده نسودی");
  assert.equal(personFa.alternateName,"Ghazaleh Abdolahzade Nasoodi");
- assert.equal(personFa.jobTitle,"نقاش رنگ‌روغن");
+ assert.equal(personFa.jobTitle,"نقاش");
  assert.equal(website["@type"],"WebSite");
  assert.deepEqual(website.inLanguage,["fa","en"]);
  assert.deepEqual(website.publisher,{"@id":"https://nasoodi.art/#artist"});
