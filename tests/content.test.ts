@@ -353,9 +353,11 @@ test("homepage content is composed through canonical localized repositories",()=
 
 test("site shell renders artist identity from the canonical artist repository",()=>{
  const source=readFileSync("src/components/site-shell.tsx","utf8");
- assert.match(source,/getArtist\\(locale\\)/);
+ assert.ok(source.includes("getArtist(locale)"));
  assert.match(source,/artistBrand/);
- assert.doesNotMatch(source,/Ghazale|Abdolahzade Nasoodi|Nasoodi\\.art/);
+ assert.ok(!source.includes("Ghazale"));
+ assert.ok(!source.includes("Abdolahzade Nasoodi"));
+ assert.ok(!source.includes("Nasoodi.art"));
 });
 
 test("canonical artist profile is populated in both locales",()=>{
