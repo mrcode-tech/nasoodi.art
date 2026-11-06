@@ -62,7 +62,7 @@ test("mobile language switching navigates to the alternate locale", async ({ pag
   await expect(page.locator("html")).toHaveAttribute("dir", "rtl");
 });
 
-test("archive links navigate to valid published detail routes", async ({ page }) => {
+test("archive links navigate to valid published detail routes", async ({ page, request }) => {
   for (const locale of locales) {
     for (const section of ["works", "galleries", "journal"] as const) {
       await page.goto("/" + locale + "/" + section);
@@ -73,7 +73,7 @@ test("archive links navigate to valid published detail routes", async ({ page })
       }
       const href = await links.first().getAttribute("href");
       expect(href).toMatch(new RegExp("^/" + locale + "/" + section + "/[^/?]+"));
-      expect((await page.request.get(href!)).status()).toBe(200);
+      expect((await request.get(href!)).status()).toBe(200);
     }
   }
 });
