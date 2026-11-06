@@ -2,19 +2,19 @@
   "id": "artist-cv",
   "entries": [
     {
-      "id": "edu-1",
+      "id": "edu-ma-painting",
       "category": "education",
       "period": {
-        "en": "2012–2016",
-        "fa": "۲۰۱۲–۲۰۱۶"
+        "en": "2015",
+        "fa": "۱۳۹۴"
       },
       "title": {
-        "en": "Bachelor of Fine Arts, Painting",
-        "fa": "کارشناسی هنرهای تجسمی، نقاشی"
+        "en": "M.A. in Painting",
+        "fa": "کارشناسی ارشد نقاشی"
       },
       "organization": {
-        "en": "Meridian School of Art",
-        "fa": "مدرسه هنر مریدین"
+        "en": "Alzahra University",
+        "fa": "دانشگاه الزهرا"
       },
       "location": {
         "en": "Tehran, Iran",
@@ -24,19 +24,19 @@
       "sortOrder": 1
     },
     {
-      "id": "edu-2",
+      "id": "edu-ba-painting",
       "category": "education",
       "period": {
-        "en": "2017–2018",
-        "fa": "۲۰۱۷–۲۰۱۸"
+        "en": "2011",
+        "fa": "۱۳۹۰"
       },
       "title": {
-        "en": "Independent Studies in Colour and Composition",
-        "fa": "مطالعات آزاد رنگ و ترکیب‌بندی"
+        "en": "B.A. in Painting",
+        "fa": "کارشناسی نقاشی"
       },
       "organization": {
-        "en": "Atelier Studies Programme",
-        "fa": "برنامه مطالعات آتلیه"
+        "en": "University of Science and Culture",
+        "fa": "دانشگاه علم و فرهنگ"
       },
       "location": {
         "en": "Tehran, Iran",
@@ -46,254 +46,341 @@
       "sortOrder": 2
     },
     {
-      "id": "edu-3",
-      "category": "education",
-      "year": 2019,
+      "id": "membership-iranian-painters",
+      "category": "membership",
+      "period": {
+        "en": "",
+        "fa": ""
+      },
       "title": {
-        "en": "Short Course: Material, Surface and the Painted Image",
-        "fa": "دوره کوتاه‌مدت: ماده، سطح و تصویر نقاشی‌شده"
+        "en": "Member",
+        "fa": "عضو"
       },
       "organization": {
-        "en": "Centre for Visual Inquiry",
-        "fa": "مرکز پژوهش‌های بصری"
+        "en": "Iranian Painters Association",
+        "fa": "انجمن نقاشان ایران"
+      },
+      "status": "published",
+      "sortOrder": 1
+    },
+    {
+      "id": "membership-visual-arts",
+      "category": "membership",
+      "period": {
+        "en": "",
+        "fa": ""
+      },
+      "title": {
+        "en": "Member",
+        "fa": "عضو"
+      },
+      "organization": {
+        "en": "Institute for the Development of Contemporary Visual Arts",
+        "fa": "مؤسسه توسعه هنری"
+      },
+      "status": "published",
+      "sortOrder": 2
+    },
+    {
+      "id": "teaching-soore",
+      "category": "teaching",
+      "period": {
+        "en": "2016–2022",
+        "fa": "۱۳۹۵ تا ۱۴۰۱"
+      },
+      "title": {
+        "en": "Lecturer",
+        "fa": "مدرس"
+      },
+      "organization": {
+        "en": "Soore University",
+        "fa": "دانشگاه سوره"
       },
       "location": {
-        "en": "Online",
-        "fa": "آنلاین"
+        "en": "Tehran, Iran",
+        "fa": "تهران، ایران"
+      },
+      "status": "published",
+      "sortOrder": 1
+    },
+    {
+      "id": "teaching-private",
+      "category": "teaching",
+      "period": {
+        "en": "2013–present",
+        "fa": "از ۱۳۹۲ تاکنون"
+      },
+      "title": {
+        "en": "Painting and Drawing Instructor",
+        "fa": "آموزش نقاشی و طراحی"
+      },
+      "organization": {
+        "en": "Private and institute-based instruction",
+        "fa": "به‌صورت خصوصی و در آموزشگاه‌ها"
+      },
+      "status": "published",
+      "sortOrder": 2
+    },
+    {
+      "id": "publication-qajar-reliefs",
+      "category": "publication",
+      "period": {
+        "en": "Summer 2023",
+        "fa": "تابستان ۱۴۰۲"
+      },
+      "title": {
+        "en": "Investigating the Influence of Fath-Ali Shah Qajar Reliefs on the Sassanid Period",
+        "fa": "تأثیرپذیری نقش‌برجسته‌های دوره فتحعلی‌شاه قاجار از دوره ساسانی"
+      },
+      "organization": {
+        "en": "Visual Arts Studies Journal, University of Sistan and Baluchestan",
+        "fa": "فصلنامه علمی‌تخصصی مطالعات هنرهای تجسمی، دانشگاه سیستان و بلوچستان"
+      },
+      "status": "published",
+      "sortOrder": 1
+    },
+    {
+      "id": "publication-nima-petgar",
+      "category": "publication",
+      "period": {
+        "en": "May 2016",
+        "fa": "اردیبهشت ۱۳۹۵"
+      },
+      "title": {
+        "en": "My Teacher: Nima Petgar",
+        "fa": "استادم: نیما پتگر"
+      },
+      "organization": {
+        "en": "Tandis Biweekly Magazine, Special Issue No. 324",
+        "fa": "دوهفته‌نامه تندیس، ویژه‌نامه شماره ۳۲۴"
+      },
+      "status": "published",
+      "sortOrder": 2
+    },
+    {
+      "id": "exhibition-in-silence-1404",
+      "category": "group-exhibition",
+      "period": {
+        "en": "2025",
+        "fa": "۱۴۰۴"
+      },
+      "title": {
+        "en": "In Silence",
+        "fa": "در سکوت"
+      },
+      "organization": {
+        "en": "Azad Art Gallery",
+        "fa": "گالری طراحان آزاد"
+      },
+      "location": {
+        "en": "Tehran, Iran",
+        "fa": "تهران، ایران"
+      },
+      "status": "published",
+      "sortOrder": 1
+    },
+    {
+      "id": "exhibition-grand-prize-3",
+      "category": "group-exhibition",
+      "period": {
+        "en": "2025",
+        "fa": "۱۴۰۴"
+      },
+      "title": {
+        "en": "The Third Grand Prize of Iran Contemporary Painting",
+        "fa": "سومین رویداد جایزه بزرگ نقاشی معاصر ایران"
+      },
+      "organization": {
+        "en": "Competition",
+        "fa": "مسابقه"
+      },
+      "status": "published",
+      "sortOrder": 2
+    },
+    {
+      "id": "exhibition-97-03",
+      "category": "group-exhibition",
+      "period": {
+        "en": "2024",
+        "fa": "۱۴۰۳"
+      },
+      "title": {
+        "en": "Ninety Seven – Zero Three",
+        "fa": "نود و هفت – صفر سه"
+      },
+      "organization": {
+        "en": "Iranian Painters Association — Members’ Exhibition",
+        "fa": "نمایش آثار اعضای پیوسته انجمن هنرمندان نقاش ایران"
       },
       "status": "published",
       "sortOrder": 3
     },
     {
-      "id": "ex-1",
+      "id": "exhibition-grand-prize-2",
       "category": "group-exhibition",
-      "year": 2020,
+      "period": {
+        "en": "2024",
+        "fa": "۱۴۰۲"
+      },
       "title": {
-        "en": "Quiet Arrangements",
-        "fa": "ترکیب‌های آرام"
+        "en": "The Second Grand Prize of Iran Contemporary Painting",
+        "fa": "دومین رویداد جایزه بزرگ نقاشی معاصر ایران"
       },
       "organization": {
-        "en": "The Rooms Project Space — Group Exhibition",
-        "fa": "فضای پروژه رومز — نمایشگاه گروهی"
-      },
-      "location": {
-        "en": "Tehran, Iran",
-        "fa": "تهران، ایران"
+        "en": "Competition",
+        "fa": "مسابقه"
       },
       "status": "published",
       "sortOrder": 4
     },
     {
-      "id": "ex-2",
-      "category": "solo-exhibition",
-      "year": 2021,
+      "id": "exhibition-in-quarantine",
+      "category": "group-exhibition",
+      "period": {
+        "en": "2020",
+        "fa": "۱۳۹۹"
+      },
       "title": {
-        "en": "Notes on Stillness",
-        "fa": "یادداشت‌هایی درباره سکون"
+        "en": "In Quarantine",
+        "fa": "در قرنطینه"
       },
       "organization": {
-        "en": "North Window Gallery — Solo Presentation",
-        "fa": "گالری پنجره شمالی — ارائه انفرادی"
-      },
-      "location": {
-        "en": "Tehran, Iran",
-        "fa": "تهران، ایران"
+        "en": "Elahe and Sheiss Gallery — Online Exhibition; Award Recipient",
+        "fa": "گالری الهی و شیث — نمایشگاه مجازی؛ برنده جایزه فراخوان"
       },
       "status": "published",
       "sortOrder": 5
     },
     {
-      "id": "ex-3",
+      "id": "exhibition-the-silence",
       "category": "group-exhibition",
-      "year": 2022,
+      "period": {
+        "en": "2019",
+        "fa": "۱۳۹۸"
+      },
       "title": {
-        "en": "The Familiar, Reconsidered",
-        "fa": "بازنگری امر آشنا"
+        "en": "The Silence",
+        "fa": "سکوت"
       },
       "organization": {
-        "en": "Field Notes Art Space — Curated Exhibition",
-        "fa": "فضای هنری فیلد نوتس — نمایشگاه با کیوریتوری"
-      },
-      "location": {
-        "en": "Berlin, Germany",
-        "fa": "برلین، آلمان"
+        "en": "Sheiss Gallery",
+        "fa": "گالری شیث"
       },
       "status": "published",
       "sortOrder": 6
     },
     {
-      "id": "ex-4",
+      "id": "exhibition-infinity",
       "category": "group-exhibition",
-      "year": 2023,
+      "period": {
+        "en": "2019",
+        "fa": "۱۳۹۸"
+      },
       "title": {
-        "en": "Between Memory and Matter",
-        "fa": "میان خاطره و ماده"
+        "en": "Infinity",
+        "fa": "بیکران"
       },
       "organization": {
-        "en": "The Pale Room — Two-Person Exhibition",
-        "fa": "فضای پل روم — نمایشگاه دونفره"
-      },
-      "location": {
-        "en": "Tehran, Iran",
-        "fa": "تهران، ایران"
+        "en": "Haft Samar Gallery",
+        "fa": "گالری هفت ثمر"
       },
       "status": "published",
       "sortOrder": 7
     },
     {
-      "id": "ex-5",
+      "id": "exhibition-amin",
       "category": "group-exhibition",
-      "year": 2024,
+      "period": {
+        "en": "2016",
+        "fa": "۱۳۹۵"
+      },
       "title": {
-        "en": "A Small Weather",
-        "fa": "هوای کوچک"
+        "en": "Group Exhibition",
+        "fa": "نمایشگاه گروهی"
       },
       "organization": {
-        "en": "Common Ground Studio — Group Exhibition",
-        "fa": "استودیوی کامن گراند — نمایشگاه گروهی"
-      },
-      "location": {
-        "en": "Vienna, Austria",
-        "fa": "وین، اتریش"
+        "en": "Amin Gallery",
+        "fa": "گالری امین"
       },
       "status": "published",
       "sortOrder": 8
     },
     {
-      "id": "ex-6",
-      "category": "solo-exhibition",
-      "year": 2025,
+      "id": "exhibition-heat-minus-37",
+      "category": "group-exhibition",
+      "period": {
+        "en": "2015",
+        "fa": "۱۳۹۴"
+      },
       "title": {
-        "en": "Light Held in Layers",
-        "fa": "نور در لایه‌ها"
+        "en": "Heat of Minus 37 Degrees",
+        "fa": "گرمای منفی ۳۷ درجه"
       },
       "organization": {
-        "en": "The Lantern Project — Solo Exhibition",
-        "fa": "پروژه لنترن — نمایشگاه انفرادی"
-      },
-      "location": {
-        "en": "Berlin, Germany",
-        "fa": "برلین، آلمان"
+        "en": "Tree Art Gallery",
+        "fa": "گالری درخت"
       },
       "status": "published",
       "sortOrder": 9
     },
     {
-      "id": "ex-7",
+      "id": "exhibition-that-other-that",
       "category": "group-exhibition",
-      "year": 2026,
+      "period": {
+        "en": "2014",
+        "fa": "۱۳۹۳"
+      },
       "title": {
-        "en": "The Shape of an Afternoon",
-        "fa": "شکل یک بعدازظهر"
+        "en": "That Other That",
+        "fa": "آن دیگر آن"
       },
       "organization": {
-        "en": "Stillroom — Curated Group Exhibition",
-        "fa": "استیل‌روم — نمایشگاه گروهی با کیوریتوری"
-      },
-      "location": {
-        "en": "Amsterdam, Netherlands",
-        "fa": "آمستردام، هلند"
+        "en": "Iranian Artists Forum",
+        "fa": "خانه هنرمندان ایران"
       },
       "status": "published",
       "sortOrder": 10
     },
     {
-      "id": "pub-1",
-      "category": "publication",
-      "year": 2021,
+      "id": "exhibition-haft-samar-2014",
+      "category": "group-exhibition",
+      "period": {
+        "en": "2014",
+        "fa": "۱۳۹۳"
+      },
       "title": {
-        "en": "A Small Atlas of Looking — Artist Feature",
-        "fa": "اطلس کوچک تماشا — معرفی هنرمند"
+        "en": "Group Exhibition",
+        "fa": "نمایشگاه گروهی"
       },
       "organization": {
-        "en": "Paper & Pigment Journal",
-        "fa": "نشریه پیپر اَند پیگمنت"
+        "en": "Haft Samar Gallery",
+        "fa": "گالری هفت ثمر"
       },
       "status": "published",
       "sortOrder": 11
     },
     {
-      "id": "pub-2",
-      "category": "publication",
-      "year": 2023,
+      "id": "exhibition-mind-variations",
+      "category": "group-exhibition",
+      "period": {
+        "en": "2014",
+        "fa": "۱۳۹۳"
+      },
       "title": {
-        "en": "The Painted Surface and Everyday Memory — Interview",
-        "fa": "سطح نقاشی‌شده و خاطره روزمره — گفت‌وگو"
+        "en": "Mind Variations",
+        "fa": "واریاسیون ذهنی"
       },
       "organization": {
-        "en": "The Looking Room Review",
-        "fa": "نشریه لوکینگ روم"
+        "en": "Negah Gallery",
+        "fa": "گالری نگاه"
       },
       "status": "published",
       "sortOrder": 12
-    },
-    {
-      "id": "pub-3",
-      "category": "publication",
-      "year": 2025,
-      "title": {
-        "en": "Between Layers — Exhibition Catalogue Essay",
-        "fa": "میان لایه‌ها — نوشتار کاتالوگ نمایشگاه"
-      },
-      "organization": {
-        "en": "Field Notes Editions",
-        "fa": "انتشارات فیلد نوتس"
-      },
-      "status": "published",
-      "sortOrder": 13
-    },
-    {
-      "id": "award-1",
-      "category": "award",
-      "year": 2022,
-      "title": {
-        "en": "Emerging Painter Commendation",
-        "fa": "تقدیر نقاش نوظهور"
-      },
-      "organization": {
-        "en": "The Meridian Arts Circle",
-        "fa": "انجمن هنر مریدین"
-      },
-      "status": "published",
-      "sortOrder": 14
-    },
-    {
-      "id": "award-2",
-      "category": "award",
-      "year": 2024,
-      "title": {
-        "en": "Material Studies Project Mention",
-        "fa": "تقدیر پروژه مطالعات ماده"
-      },
-      "organization": {
-        "en": "The Open Surface Initiative",
-        "fa": "ابتکار سطح گشوده"
-      },
-      "status": "published",
-      "sortOrder": 15
-    },
-    {
-      "id": "practice-1",
-      "category": "other",
-      "period": {
-        "en": "2020–2026",
-        "fa": "۲۰۲۰–۲۰۲۶"
-      },
-      "title": {
-        "en": "Ongoing Independent Studio Practice",
-        "fa": "فعالیت مستمر مستقل در آتلیه"
-      },
-      "organization": {
-        "en": "Oil painting, mixed media, layered surfaces, observational drawing",
-        "fa": "نقاشی رنگ‌روغن، مواد ترکیبی، سطوح لایه‌لایه و طراحی مشاهده‌محور"
-      },
-      "status": "published",
-      "sortOrder": 16
     }
   ],
   "document": {
     "src": "/api/cv.pdf",
-    "fileName": "ghazale-abdolahzade-nasoodi-cv.pdf",
+    "fileName": "ghazaleh-abdolahzade-nasoodi-cv.pdf",
     "artistApproved": true,
     "status": "published"
   }
