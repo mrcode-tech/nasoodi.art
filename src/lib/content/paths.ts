@@ -10,9 +10,9 @@ export function getLocalizedSlug(record: LocalizedSlugRecord, locale: Locale): s
   return record.localizedSlugs ? (record.localizedSlugs[locale]?.trim() ?? "") : record.slug;
 }
 
-/** Accept a single safe URL segment, including Unicode letters and numbers. */
+/** Accept one safe URL segment with native-script letters, combining marks, and Persian ZWNJ. */
 export function isSafeContentSlug(slug: string): boolean {
-  return /^[\p{L}\p{N}]+(?:-[\p{L}\p{N}]+)*$/u.test(slug);
+  return /^[\p{L}\p{N}](?:[\p{L}\p{N}\p{M}]|\u200c(?=[\p{L}\p{M}]))*(?:-[\p{L}\p{N}](?:[\p{L}\p{N}\p{M}]|\u200c(?=[\p{L}\p{M}]))*)*$/u.test(slug);
 }
 
 /** Content images must be same-origin public paths, never remote or traversal paths. */
