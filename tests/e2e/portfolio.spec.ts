@@ -283,3 +283,30 @@ test("public utility endpoints respond successfully", async ({ request }) => {
   expect(sitemap.status()).toBe(200);
   expect(await sitemap.text()).toContain("<urlset");
 });
+
+
+for (const viewportWidth of [320, 360, 390, 430] as const) {
+  test("Persian mobile layout has no horizontal page overflow at " + viewportWidth + "px", async ({ page }) => {
+    await page.setViewportSize({ width: viewportWidth, height: 844 });
+
+    for (const route of ["/fa", "/fa/works", "/fa/galleries", "/fa/journal", "/fa/about", "/fa/contact", "/fa/cv"]) {
+      await page.goto(route);
+      const closedOverflow = await page.evaluate(() => ({
+        viewport: document.documentElement.clientWidth,
+        document: document.documentElement.scrollWidth,
+      }));
+      expect(closedOverflow.document, route + " with navigation closed").toBeLessThanOrEqual(closedOverflow.viewport);
+
+      const trigger = page.locator(".menu-trigger");
+      await trigger.click();
+      await expect(page.getByRole("dialog")).toBeVisible();
+      const openOverflow = await page.evaluate(() => ({
+        viewport: document.documentElement.clientWidth,
+        document: document.documentElement.scrollWidth,
+      }));
+      expect(openOverflow.document, route + " with navigation open").toBeLessThanOrEqual(openOverflow.viewport);
+      await page.keyboard.press("Escape");
+      await expect(page.getByRole("dialog")).toBeHidden();
+    }
+  });
+}
