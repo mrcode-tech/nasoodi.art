@@ -544,7 +544,7 @@ test("main content has no duplicate footer and the mobile drawer ends with copyr
   await page.goto("/fa");
   await page.getByRole("button", { name: "باز کردن راهبری" }).click();
   const drawer = page.getByRole("dialog", { name: "باز کردن راهبری" });
-  await expect(drawer.locator(".drawer-copyright")).toContainText("nasoodi.art");
+  await expect(drawer.locator(".drawer-copyright")).toContainText("Nasoodi.art");
   await expect(drawer.locator(".drawer-copyright")).toContainText(/©\s*\d{4}/);
   const copyright = await drawer.locator(".drawer-copyright").boundingBox();
   const settings = await drawer.locator(".drawer-settings").boundingBox();
