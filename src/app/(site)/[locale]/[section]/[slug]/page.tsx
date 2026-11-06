@@ -84,7 +84,7 @@ export async function generateMetadata({params}:DetailProps):Promise<Metadata>{
 export const revalidate = 60;
 export default async function Detail({params,searchParams}:DetailProps){
  const [{locale,section,slug},query]=await Promise.all([params,searchParams]);if(!isLocale(locale))notFound();setRequestLocale(locale);const t=await getTranslations({ locale });
- if(section==="works"){const w=getArtworkBySlug(slug,locale);if(!w)notFound();const localizedSlug=getLocalizedSlug(w,locale);if(slug!==localizedSlug)redirect(pagePath(locale,`works/${localizedSlug}`));const img=primaryImageFor(w);if(!img)notFound();
+ if(section==="works"){const w=getArtworkBySlug(slug,locale);if(!w)notFound();const localizedSlug=getLocalizedSlug(w,locale);if(!matchesLocalizedSlug(w,locale,slug))redirect(pagePath(locale,`works/${encodeURIComponent(localizedSlug)}`));const img=primaryImageFor(w);if(!img)notFound();
  const originGallery=typeof query.fromGallery==="string"?getGalleries(locale).find(gallery=>matchesLocalizedSlug(gallery,locale,query.fromGallery!)&&gallery.artworkIds.includes(w.id)):undefined;
  const breadcrumbItems=originGallery?[{label:t("home"),href:pagePath(locale)},{label:t("galleries"),href:pagePath(locale,"galleries")},{label:originGallery.title[locale]??originGallery.slug,href:pagePath(locale,`galleries/${getLocalizedSlug(originGallery,locale)}`)},{label:w.title[locale]??w.slug}]:[{label:t("home"),href:pagePath(locale)},{label:t("selected"),href:pagePath(locale,"works")},{label:w.title[locale]??w.slug}];
  return <><script type="application/ld+json" dangerouslySetInnerHTML={{__html:serializeJsonLd(getArtworkStructuredData(w,locale))}}/><div className="page-content"><SiteBreadcrumbs locale={locale} items={breadcrumbItems}/><article className="artwork-detail"><div className="artwork-detail-image"><Image sizes="(max-width: 600px) 100vw, (max-width: 900px) 90vw, 50vw" src={img.src} alt={img.alt[locale]??""} width={img.width} height={img.height}/></div><div className="artwork-detail-copy"><h1>{w.title[locale]}</h1>{w.medium?.[locale]&&<p>{w.medium[locale]}</p>}{w.year&&<p>{formatLocaleNumber(w.year,locale)}</p>}{w.description?.[locale]&&<p>{w.description[locale]}</p>}</div></article></div></>;}
@@ -102,7 +102,7 @@ export default async function Detail({params,searchParams}:DetailProps){
   </div></>;
  }
  if(section==="journal"){
-  const entry=getJournalEntryBySlug(slug,locale);if(!entry)notFound();const localizedSlug=getLocalizedSlug(entry,locale);if(slug!==localizedSlug)redirect(pagePath(locale,`journal/${localizedSlug}`));
+  const entry=getJournalEntryBySlug(slug,locale);if(!entry)notFound();const localizedSlug=getLocalizedSlug(entry,locale);if(!matchesLocalizedSlug(entry,locale,slug))redirect(pagePath(locale,`journal/${encodeURIComponent(localizedSlug)}`));
   const relatedEntries=getJournalEntries(locale).filter(item=>item.id!==entry.id).slice(0,3);
   const dateLabel=(value:string,timeZone?:string)=>new Intl.DateTimeFormat(locale,{dateStyle:"long",...(timeZone?{timeStyle:"short" as const,timeZone}:{})}).format(new Date(value));
   const event=entry.event;
