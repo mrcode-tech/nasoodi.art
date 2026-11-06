@@ -102,7 +102,7 @@ export default async function Detail({params,searchParams}:DetailProps){
   </div></>;
  }
  if(section==="journal"){
-  const entry=getJournalEntries(locale).find(x=>getLocalizedSlug(x,locale)===slug);if(!entry)notFound();
+  const entry=getJournalEntryBySlug(slug,locale);if(!entry)notFound();
   const relatedEntries=getJournalEntries(locale).filter(item=>item.id!==entry.id).slice(0,3);
   const dateLabel=(value:string,timeZone?:string)=>new Intl.DateTimeFormat(locale,{dateStyle:"long",...(timeZone?{timeStyle:"short" as const,timeZone}:{})}).format(new Date(value));
   const event=entry.event;
