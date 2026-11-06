@@ -1975,5 +1975,5 @@ test("legacy English artwork and Journal slugs redirect to Persian canonical URL
 
   await page.goto("/fa/journal/first-light-a-beginning-in-paint");
   expect(decodeURIComponent(new URL(page.url()).pathname)).toBe("/fa/journal/نخستین-روشنایی-آغاز-یک-مسیر");
-  await expect(page.locator("main h1")).toHaveText("نخستین روشنایی، آغاز یک مسیر");
+  await expect(page.locator("main h1")).toHaveText("نخستین روشنایی: آغازی در نقاشی");
 });
