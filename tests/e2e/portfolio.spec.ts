@@ -133,16 +133,16 @@ test("Persian announcement is localized, right-anchored, and dismissible", async
   await expect(sticker).toBeHidden();
 });
 
-test("Journal archive paginates five entries by default and supports 5, 10, and 20 per page", async ({ page }) => {
+test("Journal archive paginates six entries by default and supports 6, 10, and 20 per page", async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 900 });
   await page.goto("/en/journal");
-  await expect(page.locator(".journal-card")).toHaveCount(5);
-  await expect(page.getByRole("status").filter({ hasText: "Showing 1–5 of 8 Journal entries" })).toBeVisible();
+  await expect(page.locator(".journal-card")).toHaveCount(6);
+  await expect(page.getByRole("status").filter({ hasText: "Showing 1–6 of 8 Journal entries" })).toBeVisible();
   const pageSize = page.locator(".journal-pagination .gallery-page-size select");
-  await expect(pageSize).toHaveValue("5");
+  await expect(pageSize).toHaveValue("6");
   await page.getByRole("button", { name: "Journal pages 2" }).click();
   await expect(page).toHaveURL(/page=2/);
-  await expect(page.locator(".journal-card")).toHaveCount(3);
+  await expect(page.locator(".journal-card")).toHaveCount(2);
   await pageSize.selectOption("10");
   await expect(page).toHaveURL(/pageSize=10/);
   await expect(page.locator(".journal-card")).toHaveCount(8);
@@ -151,6 +151,9 @@ test("Journal archive paginates five entries by default and supports 5, 10, and 
   await expect(page).toHaveURL(/pageSize=20/);
   await expect(page.locator(".journal-card")).toHaveCount(8);
   await expect(page.locator(".journal-pagination .gallery-page-size select")).toHaveValue("20");
+  await page.locator(".journal-pagination .gallery-page-size select").selectOption("6");
+  await expect(page).not.toHaveURL(/pageSize=/);
+  await expect(page.locator(".journal-card")).toHaveCount(6);
 });
 
 test("filtered Journal URLs canonicalize to the localized archive and published Journal entries are indexable", async ({ page }) => {
@@ -1883,7 +1886,7 @@ test("Persian Galleries and Journal pagination render all visible numbers in Per
   await expect(galleryPagination.getByRole("status")).toContainText(/[۰-۹]/);
   await expect(galleryPagination.getByRole("status")).not.toContainText(/[0-9]/);
   const galleryPageSizes = await galleryPagination.locator(".gallery-page-size option").allTextContents();
-  expect(galleryPageSizes).toEqual(["۵", "۱۰", "۲۰"]);
+  expect(galleryPageSizes).toEqual(["۶", "۱۰", "۲۰"]);
   await expect(galleryPagination.locator(".gallery-page-nav .is-current")).toHaveText("۱");
   await page.goto("/fa/journal");
   const journalPagination = page.locator(".journal-pagination");
@@ -1891,7 +1894,7 @@ test("Persian Galleries and Journal pagination render all visible numbers in Per
   await expect(journalPagination.getByRole("status")).toContainText(/[۰-۹]/);
   await expect(journalPagination.getByRole("status")).not.toContainText(/[0-9]/);
   const journalPageSizes = await journalPagination.locator(".gallery-page-size option").allTextContents();
-  expect(journalPageSizes).toEqual(["۵", "۱۰", "۲۰"]);
+  expect(journalPageSizes).toEqual(["۶", "۱۰", "۲۰"]);
   await expect(journalPagination.locator(".gallery-page-nav .is-current")).toHaveText("۱");
 });
 
@@ -1922,30 +1925,30 @@ test("Works archive presents every artwork in a consistent uncropped 4:3 frame i
 });
 
 
-test("Works archive paginates five artworks by default and supports 5, 10, and 20 per page in both locales", async ({ page }) => {
+test("Works archive paginates six artworks by default and supports 6, 10, and 20 per page in both locales", async ({ page }) => {
   for (const locale of ["en", "fa"] as const) {
     await page.setViewportSize({ width: 1280, height: 900 });
     await page.goto(`/${locale}/works`);
     const cards = page.locator(".artwork-grid > .artwork-item");
-    await expect(cards).toHaveCount(5);
+    await expect(cards).toHaveCount(6);
     const pagination = page.locator(".artwork-pagination");
     await expect(pagination).toBeVisible();
     const pageSize = pagination.locator(".gallery-page-size select");
-    await expect(pageSize).toHaveValue("5");
+    await expect(pageSize).toHaveValue("6");
     await expect(pagination.locator(".gallery-page-nav .is-current")).toHaveText(locale === "fa" ? "۱" : "1");
     await pagination.locator(".gallery-page-nav button").last().click();
     await expect(page).toHaveURL(/page=2/);
-    await expect(cards).toHaveCount(5);
+    await expect(cards).toHaveCount(6);
     await pageSize.selectOption("10");
     await expect(page).toHaveURL(/pageSize=10/);
     await expect(cards).toHaveCount(10);
     await pageSize.selectOption("20");
     await expect(page).toHaveURL(/pageSize=20/);
     await expect(cards).toHaveCount(20);
-    await pageSize.selectOption("5");
+    await pageSize.selectOption("6");
     await expect(page).not.toHaveURL(/pageSize=/);
     await expect(page).not.toHaveURL(/page=/);
-    await expect(cards).toHaveCount(5);
+    await expect(cards).toHaveCount(6);
   }
 });
 
