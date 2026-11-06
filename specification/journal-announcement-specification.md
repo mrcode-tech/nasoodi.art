@@ -1,254 +1,104 @@
-# Journal Event Announcement — Detailed UI/UX and Implementation Specification
+# Content Announcement Sticker — Technical Specification
 
-**Status:** Refined implementation contract — overall direction owner-approved; SVG is the canonical sticker asset  
-**Working branch:** feature  
-**Design proposal:** journal-announcement-proposal.md  
-**Wireframes:** journal-announcement-wireframes.md  
-**Existing authorities:** journal-and-events.md, content-model.md, navigation-and-mobile-sidebar.md, localization-and-editorial-governance.md
+**Status:** Approved implementation contract  
+**Locales:** English (`en`) and Persian (`fa`)  
+**Primary implementation prompt:** [General-Purpose JSON-Configured Content Announcement](./journal-announcement-implementation-prompt.md)  
+**Visual asset:** `public/images/journal/journal-announcement-sticker.svg`
 
-## 1. Scope
+## 1. Purpose
 
-The complete execution brief is [Journal and Sticker Implementation Prompt](./journal-announcement-implementation-prompt.md). That prompt is the coding-agent task package; this document remains the detailed product and technical acceptance contract. Read both, and resolve any discrepancy in favor of this specification plus the repository-wide authorities.
+The announcement sticker is a small, dismissible editorial discovery element attached to the edge of the artist portfolio. It can feature one configured artwork, gallery, Journal post, or event. It is not an exhibition-only feature and does not automatically select upcoming events.
 
-Specify the homepage event announcement sticker, homepage Journal preview, Journal archive integration, event-specific Journal detail presentation, and the decorative paper SVG source served directly by the website.
+There is at most one configured announcement. If it is inactive, the sticker is absent and reserves no layout space.
 
-The owner has approved the overall Journal/sticker direction. The exact sticker treatment remains a visual review gate. The coding agent may implement Journal behavior and prepare the announcement using the hand-authored SVG study, and refine it based on rendered website screenshots when needed.
+## 2. Single source of truth
 
-Read journal-announcement-sticker-visual-design.md for the normative vector design and generation contract.
+The only editorial configuration is `src/content/announcement.json`:
 
-## 2. Mandatory repository discovery
+- `active`: required boolean visibility switch.
+- `type`: required supported content type (`artwork`, `gallery`, `journal`, `event`).
+- `contentId`: required stable ID of the referenced record.
+- `title`: required non-empty English and Persian strings.
+- `description`: required non-empty English and Persian strings.
+- `metadata`: optional localized supporting text.
 
-Before implementation, read repository AGENTS.md, specification/README.md, design-engineering-skills.md, design-direction-and-system-refinement.md, journal-and-events.md, content-model.md, navigation-and-mobile-sidebar.md, localization-and-editorial-governance.md, accessibility-performance-security.md, seo-and-discovery.md, testing-qa-and-release.md, and the implementation roadmap.
+No array or collection is used. Do not add an announcement repository, separate destination URL, automatic selection rule, or second active flag.
 
-Inspect actual App Router routes, Journal schema and data source, publication validation, event selection, locale dictionaries, shared sidebar and mobile menu, breakpoints, semantic tokens, z-index layers, preference utilities, and test/CI commands. Reconcile every integration point with real code. Do not invent paths, components, hooks, APIs, or commands.
+## 3. Visibility and validation
 
-## 3. Canonical content and eligibility
+The configuration schema is validated in every build/test state. When inactive, do not resolve the referenced record and do not render the sticker. When active, resolve the record and validate that it is public, published, available in the active locale, and has a safe localized slug. An invalid active reference must fail the content validation/build path and must not create a broken public link.
 
-Use canonical Journal records. Never create a parallel event registry or duplicate an exhibition/event record.
+No automatic fallback is permitted. New content publication never changes the selected announcement unless the JSON is edited. Dismissal is visitor state only and never mutates the configuration.
 
-An announcement candidate must:
-- Be an eligible event or an exhibition entry with structured event dates, as permitted by the actual Journal schema.
-- Have Published editorial status at the current time.
-- Have explicit artist approval.
-- Include the active locale in approvedLocales and provide a non-empty localized title.
-- Have valid event date semantics and sufficient timezone context under journal-and-events.md.
-- Be Upcoming, not ongoing or past.
-- Not be archived, withdrawn, expired, or otherwise unavailable.
-- Resolve to a canonical localized detail route.
+## 4. Content resolution and localized route
 
-Select the nearest upcoming start time. Define deterministic tie-breaking in code and tests. Do not use unapproved translation fallbacks. If no eligible candidate exists, return null and render nothing.
+Reuse existing content access functions:
+- Artwork: published artwork by stable ID.
+- Gallery: published gallery by stable ID, including its existing publication/member checks.
+- Journal: public Journal entry by stable ID.
+- Event: public event/exhibition Journal entry by stable ID.
 
-The existing Journal specification distinguishes publication status from event temporal status. Preserve that distinction. Do not automatically unpublish a past event.
+Derive the destination from the content type and the record's localized slug:
+- artwork → localized `works` detail route.
+- gallery → localized `galleries` detail route.
+- journal → localized `journal` detail route.
+- event → canonical localized Journal detail route.
 
-## 4. Announcement content
+Use existing route/slug utilities and URL encoding. English is LTR; Persian is RTL. The UI component receives only resolved title, description, optional metadata, href, and locale. It does not read JSON or resolve records.
 
-Required:
-- Localized category eyebrow.
-- Localized event title.
-- Link to canonical localized detail route.
-- Separate dismiss button.
+## 5. Component behavior
 
-Optional:
-- Confirmed event date/date range, formatted with the event timezone and project locale conventions.
-- Small directional cue.
+The generic content announcement:
+- Shows optional metadata, title, and description from the configuration.
+- Uses a semantic link for the main content area.
+- Navigates to the resolved localized destination.
+- Has an independent accessible close button, outside the link.
+- Dismisses without navigation or focus theft.
+- Retains session-scoped dismissal behavior and synchronizes duplicate placement surfaces where appropriate.
+- Scopes dismissal to the configured destination/content so a newly selected item is not unintentionally dismissed.
+- Supports keyboard operation, visible focus, accessible labels, long copy, and reduced motion.
 
-Exclude venue, long description, registration form, poster, ticket price, multiple events, and marketing language from the compact tab. Do not show ambiguous local timestamps.
+## 6. Placement and visual design
 
-## 5. Component and rendering architecture
+Preserve the existing decorative paper SVG and established placement model:
+1. Homepage desktop viewport-edge placement.
+2. Desktop sidebar placement on non-homepage routes.
+3. Mobile navigation drawer placement after navigation and before settings.
 
-- Follow current Next.js App Router conventions.
-- Prefer server-side selection and validation; pass only a minimal localized view model to the interactive dismissal surface.
-- Keep the component server-rendered where possible. Isolate client behavior to dismissal/persistence only.
-- Reuse existing Button, Link, icon, typography, tokens, and preference utilities.
-- Avoid dependencies for this small feature.
-- Integrate at the actual homepage/shared-shell boundary discovered in code; do not assume a file path.
-- Do not render the component on unrelated routes unless separately approved.
-- Do not add layout padding or placeholder space when the component is absent.
+English attaches to the physical left edge; Persian attaches to the physical right edge. Mirror only the decorative SVG. Do not mirror text or controls. Use logical CSS properties, preserve the current responsive breakpoint model, and avoid covering navigation, artwork, skip links, or focused controls.
 
-## 6. Visual design and positioning
+The SVG is decorative only. All content and controls remain HTML. Preserve the quiet, minimal, gallery-paper identity; do not introduce marketing-banner styling. The inactive or dismissed component must reserve no layout space.
 
-Baseline for the first visual review: the hand-authored torn-edge exhibition slip in public/images/journal/journal-announcement-sticker.svg. The SVG is a candidate study, not final owner approval. Follow journal-announcement-sticker-visual-design.md for its vector, palette, dimensions, and mirroring rules. The SVG is served directly; no conversion pipeline is used.
+## 7. Test contract
 
-- English: physical-left outer edge flush; inward/right edge free.
-- Persian: physical-right outer edge flush; inward/left edge free.
-- Mobile: below the hamburger/menu trigger with a clear gap and safe-area offset.
-- Desktop: align with the sidebar/identity zone; desktop may not display a hamburger.
-- Tablet/compact: inspect the real navigation transition and choose a non-obstructive anchor.
-- Fixed to viewport and independent of document scroll and hero geometry.
-- Never span the viewport.
-- Avoid covering wordmark, navigation rows, artwork, easel decoration, skip link, focused controls, or essential content.
-- Use CSS logical properties where possible, but map the required physical edge explicitly from locale.
-- Keep shape detail subtle; no raster texture, image generation, screenshot tracing, or image-processing workflow. The SVG is authored directly as vector paths.
-- No attention animation. Respect reduced motion.
+### Always-running tests
+- JSON/schema validation for active and inactive configurations.
+- Required localized title/description and optional metadata validation.
+- Synthetic destination mapping tests for all four types.
+- Synthetic component tests for active/inactive rendering, content, navigation, dismissal, accessibility, RTL/LTR, responsive placements, long text, and themes.
+- Content-integrity checks that apply to the configured state.
 
-The exact offset, dimensions, and z-index must be derived from the real shell and token system and verified at all supported breakpoints.
+### Branch-aware Playwright tests
+Playwright reads the actual JSON in the current branch checkout.
 
-### 6.1 Responsive presentation contexts
+When active, run UI tests for configured copy, visibility, destination, navigation, dismissal, all placements, localization, and accessibility. Derive expected values from JSON and the referenced published record.
 
-The announcement has three deliberately composed placements. They share one localized event view model, canonical Journal destination, and event-specific session dismissal, but do not share a single scaled-down layout.
+When inactive, skip only tests requiring a visible active sticker, with a clear reason. Still run inactive visibility, schema validation, synthetic activation-state tests, and all unrelated tests. Skips must be reported as skipped, not passed.
 
-1. **Homepage desktop announcement (`viewport`)** — fixed to the physical outer edge, with the decorative paper attachment edge flush to the viewport. It is shown on the homepage at desktop widths and is suppressed at short desktop heights when the existing layout rule requires it.
-2. **Desktop navigation sidebar (`desktop-sidebar`)** — on non-homepage desktop routes, place the compact paper treatment after the final navigation link and before the sidebar's bottom identity/footer area. It must fit the actual inner sidebar width; do not reuse the viewport dimensions or allow it to cover navigation.
-3. **Mobile navigation drawer (`mobile-sidebar`)** — place the sticker after the final navigation item and immediately before the language/settings area. It must retain its intrinsic width and height, remain a non-shrinking flex item, and allow the drawer itself to scroll on short screens.
+Always validate JSON structure. Resolve and validate the content reference only when active. Never use production editorial strings, IDs, counts, or the existence of an upcoming event as brittle test assumptions.
 
-Only the placement appropriate to the current shell breakpoint is visible. The desktop homepage uses the viewport placement rather than duplicating the same announcement in the desktop sidebar. On mobile, the drawer placement is the announcement presentation; do not also display a second floating copy below the closed menu trigger.
+## 8. Non-goals
 
-For all three placements:
-- Keep the SVG as a decorative background only and mirror only that background for Persian.
-- Keep the close control inside the sticker's own containing block, with a square, unfilled, non-circular appearance and a minimum 44 × 44 CSS-pixel target.
-- Reserve a clear text area that does not overlap the close control or torn-paper edge.
-- Allow long titles to wrap naturally; do not line-clamp or clip the title to preserve an arbitrary fixed height.
-- Use a clear type hierarchy: quiet eyebrow, prominent title, and secondary date.
-- Use logical inline positioning for the close control and content padding so the control remains at the correct visual edge in LTR and RTL.
-- Keep each placement's geometry independent; the compact sidebar compositions must not be produced by scaling the desktop viewport sticker.
+This component does not select the nearest upcoming event, manage multiple announcements, own Journal publication logic, create an event registry, or replace the Journal archive. Journal events and their routes remain part of the canonical Journal system.
 
-## 7. Dismissal behavior
+## 9. Acceptance criteria
 
-- The event link and dismiss button are separate semantic controls.
-- Dismissal hides the tab without navigation, page reflow, or focus theft.
-- Default proposal is session-scoped dismissal. Inspect and reuse the existing preference mechanism if appropriate.
-- Key dismissal to the selected event's stable ID or slug.
-- Dismissing event A must not suppress event B.
-- An ineligible event is removed even if its dismissal state exists.
-- No analytics or new tracking mechanism.
-- No dialog, toast, assertive live region, sound, or repeated reappearance in the same session.
-
-## 8. Homepage Journal section
-
-Follow both journal-and-events.md and the newer artwork-discovery-carousel-and-editorial-experience.md contract. The homepage preview contains **exactly one newest eligible published Journal entry across article and event types**. Preserve the established editorial/post-style presentation; do not redesign it as an event-led dashboard or add a third card.
-
-- Section heading and approved introduction, if available.
-- Show exactly one newest eligible published entry, ordered by publication date descending with deterministic tie-breaking.
-- A clear localized link to the complete Journal archive.
-- If no eligible entry exists, omit the section according to the existing Journal contract.
-- Do not independently pin an older upcoming event into this preview. The upcoming event appears in this preview only when it is itself the newest published entry.
-
-The fixed announcement sticker independently selects the nearest eligible upcoming event. Dismissing the sticker never hides or changes the in-flow Journal preview.
-
-## 9. Journal archive and pagination
-
-Preserve the existing unified Journal destination, route, taxonomy, filters, and editorial entry presentation defined by journal-and-events.md. Do not create a separate Events page or duplicate content model.
-
-Where the actual archive size justifies pagination, use the requested page-size choices of 5, 10, and 20, with five as the default. Use the existing shadcn select pattern. Preserve filters and page size in URL state where supported; reset to a valid page after filter/page-size changes; provide accessible previous/next controls and current-page indication. Hide pagination when all results fit on one page. Default ordering remains publication date descending with deterministic tie-breaking. Reconcile with any already-implemented archive behavior before changing it; do not introduce a second pagination system.
-
-## 10. Event detail page
-
-Use the existing canonical Journal detail route and shared editorial shell.
-
-Event-specific hierarchy:
-1. Return-to-Journal breadcrumb/link.
-2. Event/exhibition type label.
-3. Localized title and optional summary.
-4. Publication date.
-5. Event information panel.
-6. Approved cover image/poster, if available.
-7. Main editorial content.
-8. Related published gallery/artwork links.
-9. More-from-Journal links.
-
-Event information panel may show:
-- Event start/end date and time, with timezone.
-- Temporal state only when reliably derived.
-- Confirmed venue/location.
-- Confirmed online/in-person/hybrid attendance mode.
-- Registration/official-information URL only when supplied and valid.
-
-Do not render empty metadata rows. Clearly distinguish publication date from event date. Do not leave a stale registration action active after its deadline. Past events can remain published as archive entries.
-
-## 11. Localization and RTL
-
-- English uses lang=en and dir=ltr.
-- Persian uses lang=fa and dir=rtl.
-- Physical announcement anchor follows the locale-aware sidebar: left in English, right in Persian.
-- Use approved Persian and English strings; no machine-generated runtime fallback.
-- Isolate Latin names, URLs, and numeric values with existing bidi conventions.
-- Validate long titles, date formatting, punctuation, and close-control order in both locales.
-- Artwork, paintings, and photographs are never mirrored.
-- Avoid hydration flash when locale changes.
-
-## 12. Accessibility
-
-- Use anchor for navigation and button for dismissal.
-- Do not nest the button inside the anchor.
-- Provide localized accessible names and visible focus indicators.
-- Maintain WCAG 2.2 AA contrast.
-- Touch targets meet project accessibility standards.
-- Keep logical reading and keyboard order.
-- Do not announce appearance as an assertive alert.
-- Respect prefers-reduced-motion and forced-colors where supported.
-- Test keyboard-only operation, screen-reader semantics, 320px width, short viewport heights, and 200% zoom.
-- No horizontal overflow, clipped focus rings, or obstruction of essential controls.
-
-## 13. SEO, privacy, and content governance
-
-- The announcement is not a separate indexable page.
-- Canonical event detail pages follow Journal SEO rules.
-- Draft, scheduled, archived, unapproved, or locale-incomplete records must not be exposed or indexed.
-- Do not add tracking, fingerprinting, or new personal-data collection.
-- Do not invent events or publish sample fixtures.
-- Any development fixture must be explicitly fictional, non-publishable, noindex, and excluded from sitemap and structured data.
-
-## 14. Failure and empty states
-
-- No eligible event: render nothing.
-- Missing translation: render nothing for that locale.
-- Expired/past/unpublished/unapproved event: render nothing.
-- Dismissed current event: hide for the configured session.
-- New event: may appear even if a different event was dismissed.
-- Long title: wrap safely; omit optional date before truncating title.
-- Unavailable image: omit image; do not show broken-image placeholder.
-- Missing venue/registration: omit those rows/actions.
-
-## 15. Acceptance criteria
-
-1. One canonical Journal event record drives the announcement.
-2. The nearest eligible upcoming event is selected deterministically.
-3. Unapproved, unpublished, past, archived, or untranslated content never appears.
-4. Announcement is fixed during scroll and does not move the hero or page layout.
-5. English anchors physically left; Persian anchors physically right.
-6. Mobile placement does not cover menu trigger or safe areas.
-7. Desktop placement does not cover sidebar identity or navigation.
-8. Link and dismissal are independent and keyboard accessible.
-9. Dismissal is event-specific and follows the agreed persistence policy.
-10. Homepage Journal preview remains visible independently.
-11. Archive pagination is accessible and preserves filters when present.
-12. Event detail separates publication date from event date and omits unknown metadata.
-13. No horizontal overflow or clipping at supported breakpoints and zoom.
-14. Tests cover selection, locale eligibility, temporal state, dismissal, responsive geometry, and accessibility.
-15. CI passes all required repository workflows.
-
-## 16. Required verification evidence
-
-Provide:
-- Unit tests for event eligibility, nearest-event selection, tie-breaking, locale readiness, and temporal boundaries.
-- Component tests for link/dismiss separation, hidden state, empty state, and long titles.
-- Integration tests for homepage selection and localized Journal detail navigation.
-- E2E coverage for English and Persian at desktop, tablet, and mobile.
-- Accessibility checks for keyboard, names/roles, contrast, and reduced motion.
-- Screenshots for both visual variants and all target breakpoints, including a short-height viewport.
-- CI workflow run links and actual results. Do not claim success without a completed run.
-
-## 17. Canonical SVG asset
-
-- Keep `public/images/journal/journal-announcement-sticker.svg` as the single maintained sticker asset.
-- Serve and reference the SVG directly from the website. Do not generate, commit, upload, or use a PNG derivative.
-- Keep the SVG decorative: no event title, category, date, logo, close control, or other text/interactive content is baked into it. Render all content and controls as accessible localized HTML.
-- CI verifies that the SVG exists and is non-empty. Browser tests verify that the asset is requested and rendered in the relevant announcement states.
-- Inspect the actual localized, responsive website screenshots when reviewing the silhouette. A generated raster artifact is not part of the review process.
-
-## 18. Implementation sequence
-
-Follow the detailed phase plan in `journal-announcement-implementation-prompt.md`. The minimum required order is:
-
-1. **Repository and specification audit:** inspect instructions, branch/worktree, current Journal implementation, content model, routes, localization, shared shell, tests, and CI. Record actual gaps and conflicts before editing.
-2. **SVG authoring and direct usage:** refine or author the SVG immediately during implementation; verify that the file exists and inspect it in the rendered website. Do not add a raster renderer or generated PNG review artifact.
-3. **Canonical event selection:** implement or reuse a pure deterministic selector using publication approval, locale readiness, event temporal state, timezone semantics, and stable tie-breaking.
-4. **Journal experience:** implement the homepage preview, existing unified archive, event-specific detail presentation, and pagination/page-size behavior only where justified and not already implemented.
-5. **Announcement component:** implement server-selected event data, accessible localized DOM content, event-specific dismissal, fixed responsive placement, and decorative SVG integration.
-6. **Quality and regression:** add unit, component, integration, E2E, accessibility, localization, and responsive tests; protect existing homepage, gallery, artwork, and navigation behavior.
-7. **CI and visual QA:** run repository-required checks and complete GitHub Actions; inspect logs and final tested SHA; capture and inspect English/Persian desktop, tablet, mobile, and short-height screenshots plus the rendered website screenshots.
-8. **Owner review and handoff:** present the actual rendered website screenshots and browser screenshots. Record any visual decisions still awaiting owner approval. Do not merge, push, deploy, or publish without the required separate authorization.
-
-## 19. Owner review and release gate
-
-The overall Journal/sticker direction is approved in principle. The exact paper silhouette, torn-edge character, tape detail, sizing, and final Persian microcopy remain subject to owner review. A successful renderer, build, or test suite is not visual approval. Do not merge, deploy, or publish without separate authorization.
+- One JSON file and one active flag control the sticker.
+- Four content types are supported without a new repository.
+- Destinations are derived from type and localized content ID.
+- The initial configuration explicitly features the newest published gallery.
+- Active references are validated; inactive configuration hides the sticker.
+- Existing design, placements, dismissal, and accessibility are preserved.
+- Playwright behavior is conditional on the actual branch JSON.
+- Both activation states have always-running synthetic tests.
+- CI validates configuration regardless of activation state.
