@@ -1,147 +1,752 @@
 [
   {
-    "id": "artwork-quiet-place",
-    "slug": "a-quiet-place-between-seasons",
+    "id": "artwork-1388-1",
+    "slug": "a-first-light",
     "localizedSlugs": {
-      "en": "a-quiet-place-between-seasons",
-      "fa": "a-quiet-place-between-seasons"
+      "en": "a-first-light",
+      "fa": "نخستینروشنایی"
     },
     "title": {
-      "en": "A Quiet Place Between Seasons",
-      "fa": "آرامش میان فصل‌ها"
+      "en": "A First Light",
+      "fa": "نخستین روشنایی"
     },
     "description": {
-      "en": "A visual pause shaped around stillness and the quiet rhythm of looking. Its open-ended title leaves room for a personal reading.",
-      "fa": "مکثی تصویری در فضایی از سکون و تماشای آرام؛ عنوانی گشوده که به هر بیننده فرصت می‌دهد برداشت شخصی خود را از اثر داشته باشد."
+      "en": "A quiet study in atmosphere and presence, carrying the feeling of an early chapter in an evolving visual language.",
+      "fa": "مطالعه‌ای آرام از فضا و حضور که حال‌وهوای فصل‌های آغازین یک زبان تصویری در حال شکل‌گیری را در خود دارد."
     },
     "images": [
       {
-        "src": "/images/artworks/artwork-quiet-place.jpg",
+        "src": "/images/artworks/1388-1.jpg",
         "alt": {
-          "en": "Painting titled A Quiet Place Between Seasons",
-          "fa": "تابلوی نقاشی با عنوان «آرامش میان فصل‌ها»"
+          "en": "Oil painting titled \"A First Light\"",
+          "fa": "تابلوی نقاشی با عنوان «نخستین روشنایی»"
         },
         "role": "primary"
       }
     ],
     "rightsConfirmed": true,
     "status": "published",
+    "year": 1388,
     "sortOrder": 1
   },
   {
-    "id": "artwork-shape-of-remembering",
-    "slug": "the-shape-of-remembering",
+    "id": "artwork-1392-1",
+    "slug": "the-weight-of-silence",
     "localizedSlugs": {
-      "en": "the-shape-of-remembering",
-      "fa": "the-shape-of-remembering"
+      "en": "the-weight-of-silence",
+      "fa": "سنگینیسکوت"
     },
     "title": {
-      "en": "The Shape of Remembering",
-      "fa": "شکلِ خاطره"
+      "en": "The Weight of Silence",
+      "fa": "سنگینی سکوت"
     },
     "description": {
-      "en": "A reflection on the way memory gathers fragments into something felt rather than fully explained.",
-      "fa": "تأملی درباره‌ی شیوه‌ای که خاطره، تکه‌های پراکنده را کنار هم می‌نشاند و حسی فراتر از توضیح به وجود می‌آورد."
+      "en": "A solitary figure occupies one side of a divided space. The contrast between the still figure and the broad red ground gives the scene a strong sense of distance and introspection.",
+      "fa": "پیکره‌ای تنها در یک سوی فضایی دوپاره قرار گرفته است. تقابل پیکره‌ی ساکن با گستره‌ی سرخ‌رنگ، حسی از فاصله و درون‌نگری به صحنه می‌بخشد."
     },
     "images": [
       {
-        "src": "/images/artworks/artwork-shape-of-remembering.jpg",
+        "src": "/images/artworks/1392-1.jpg",
         "alt": {
-          "en": "Painting titled The Shape of Remembering",
-          "fa": "تابلوی نقاشی با عنوان «شکلِ خاطره»"
+          "en": "Oil painting titled \"The Weight of Silence\"",
+          "fa": "تابلوی نقاشی با عنوان «سنگینی سکوت»"
         },
         "role": "primary"
       }
     ],
     "rightsConfirmed": true,
     "status": "published",
+    "year": 1392,
     "sortOrder": 2
   },
   {
-    "id": "artwork-where-light-rests",
-    "slug": "where-light-rests",
+    "id": "artwork-1392-2",
+    "slug": "a-moment-by-the-window",
     "localizedSlugs": {
-      "en": "where-light-rests",
-      "fa": "where-light-rests"
+      "en": "a-moment-by-the-window",
+      "fa": "لحظه-ایکنارپنجره"
     },
     "title": {
-      "en": "Where Light Rests",
-      "fa": "جایی که نور می‌آرامد"
+      "en": "A Moment by the Window",
+      "fa": "لحظه‌ای کنار پنجره"
     },
     "description": {
-      "en": "An invitation to slow down and notice the delicate relationship between light, atmosphere, and attention.",
-      "fa": "دعوتی به آهسته‌تر دیدن و توجه به رابطه‌ی ظریف میان نور، فضا و نگاه."
+      "en": "A seated figure turns toward the light and the quiet world beyond. Soft, restrained colors hold the moment between stillness and thought.",
+      "fa": "پیکره‌ای نشسته رو به روشنایی و جهان آرامِ بیرون دارد. رنگ‌های ملایم و کنترل‌شده، لحظه را میان سکون و اندیشه نگه می‌دارند."
     },
     "images": [
       {
-        "src": "/images/artworks/artwork-where-light-rests.jpg",
+        "src": "/images/artworks/1392-2.jpg",
         "alt": {
-          "en": "Painting titled Where Light Rests",
-          "fa": "تابلوی نقاشی با عنوان «جایی که نور می‌آرامد»"
+          "en": "Oil painting titled \"A Moment by the Window\"",
+          "fa": "تابلوی نقاشی با عنوان «لحظه‌ای کنار پنجره»"
         },
         "role": "primary"
       }
     ],
     "rightsConfirmed": true,
     "status": "published",
+    "year": 1392,
     "sortOrder": 3
   },
   {
-    "id": "artwork-garden-small-moments",
-    "slug": "a-garden-of-small-moments",
+    "id": "artwork-1392-3",
+    "slug": "the-quiet-of-looking",
     "localizedSlugs": {
-      "en": "a-garden-of-small-moments",
-      "fa": "a-garden-of-small-moments"
+      "en": "the-quiet-of-looking",
+      "fa": "آرامشِنگریستن"
     },
     "title": {
-      "en": "A Garden of Small Moments",
-      "fa": "باغ لحظه‌های کوچک"
+      "en": "The Quiet of Looking",
+      "fa": "آرامشِ نگریستن"
     },
     "description": {
-      "en": "A gentle meditation on the small moments that accumulate into a larger sense of presence.",
-      "fa": "نگاهی آرام به لحظه‌های کوچکی که در کنار هم، معنای گسترده‌تری از حضور و زندگی می‌سازند."
+      "en": "A contemplative pause shaped by the relationship between figure, space, and light. The scene leaves its story open to the viewer.",
+      "fa": "مکثی تأمل‌برانگیز که از رابطه‌ی میان پیکره، فضا و نور شکل گرفته است. روایت صحنه برای برداشت شخصی بیننده گشوده می‌ماند."
     },
     "images": [
       {
-        "src": "/images/artworks/artwork-garden-small-moments.jpg",
+        "src": "/images/artworks/1392-3.jpg",
         "alt": {
-          "en": "Painting titled A Garden of Small Moments",
-          "fa": "تابلوی نقاشی با عنوان «باغ لحظه‌های کوچک»"
+          "en": "Oil painting titled \"The Quiet of Looking\"",
+          "fa": "تابلوی نقاشی با عنوان «آرامشِ نگریستن»"
         },
         "role": "primary"
       }
     ],
     "rightsConfirmed": true,
     "status": "published",
+    "year": 1392,
     "sortOrder": 4
   },
   {
-    "id": "artwork-blue-hour-within",
-    "slug": "the-blue-hour-within",
+    "id": "artwork-1392-4",
+    "slug": "between-presence-and-absence",
     "localizedSlugs": {
-      "en": "the-blue-hour-within",
-      "fa": "the-blue-hour-within"
+      "en": "between-presence-and-absence",
+      "fa": "میانحضوروغیاب"
     },
     "title": {
-      "en": "The Blue Hour Within",
-      "fa": "ساعت آبی درون"
+      "en": "Between Presence and Absence",
+      "fa": "میان حضور و غیاب"
     },
     "description": {
-      "en": "A contemplative title for a work that invites an inward journey and an unhurried encounter.",
-      "fa": "عنوانی تأمل‌برانگیز برای اثری که مخاطب را به سفری درونی و مواجهه‌ای بی‌شتاب دعوت می‌کند."
+      "en": "A reflective composition that invites attention to what is shown and what remains just beyond the frame of the moment.",
+      "fa": "ترکیبی تأمل‌برانگیز که نگاه را به آنچه آشکار است و آنچه در حاشیه‌ی لحظه پنهان می‌ماند دعوت می‌کند."
     },
     "images": [
       {
-        "src": "/images/artworks/artwork-blue-hour-within.jpg",
+        "src": "/images/artworks/1392-4.jpg",
         "alt": {
-          "en": "Painting titled The Blue Hour Within",
-          "fa": "تابلوی نقاشی با عنوان «ساعت آبی درون»"
+          "en": "Oil painting titled \"Between Presence and Absence\"",
+          "fa": "تابلوی نقاشی با عنوان «میان حضور و غیاب»"
         },
         "role": "primary"
       }
     ],
     "rightsConfirmed": true,
     "status": "published",
+    "year": 1392,
     "sortOrder": 5
+  },
+  {
+    "id": "artwork-1393-1",
+    "slug": "a-held-moment",
+    "localizedSlugs": {
+      "en": "a-held-moment",
+      "fa": "لحظه-ایدرنگ-کرده"
+    },
+    "title": {
+      "en": "A Held Moment",
+      "fa": "لحظه‌ای درنگ‌کرده"
+    },
+    "description": {
+      "en": "A study of a moment held in time, where the arrangement of forms and the balance of the composition guide a slower way of looking.",
+      "fa": "مطالعه‌ای از لحظه‌ای متوقف در زمان؛ جایی که چیدمان فرم‌ها و تعادل ترکیب‌بندی، نگاهی آهسته‌تر را پیش می‌کشد."
+    },
+    "images": [
+      {
+        "src": "/images/artworks/1393-1.jpg",
+        "alt": {
+          "en": "Oil painting titled \"A Held Moment\"",
+          "fa": "تابلوی نقاشی با عنوان «لحظه‌ای درنگ‌کرده»"
+        },
+        "role": "primary"
+      }
+    ],
+    "rightsConfirmed": true,
+    "status": "published",
+    "year": 1393,
+    "sortOrder": 6
+  },
+  {
+    "id": "artwork-1393-2",
+    "slug": "the-space-between",
+    "localizedSlugs": {
+      "en": "the-space-between",
+      "fa": "فاصله-یمیان"
+    },
+    "title": {
+      "en": "The Space Between",
+      "fa": "فاصله‌ی میان"
+    },
+    "description": {
+      "en": "An open-ended composition that gives equal importance to presence and surrounding space, allowing the viewer to complete the encounter.",
+      "fa": "ترکیبی گشوده که برای حضور و فضای پیرامون اهمیت یکسانی قائل است و ادامه‌ی مواجهه را به نگاه بیننده می‌سپارد."
+    },
+    "images": [
+      {
+        "src": "/images/artworks/1393-2.jpg",
+        "alt": {
+          "en": "Oil painting titled \"The Space Between\"",
+          "fa": "تابلوی نقاشی با عنوان «فاصله‌ی میان»"
+        },
+        "role": "primary"
+      }
+    ],
+    "rightsConfirmed": true,
+    "status": "published",
+    "year": 1393,
+    "sortOrder": 7
+  },
+  {
+    "id": "artwork-1395-1",
+    "slug": "a-quiet-interval",
+    "localizedSlugs": {
+      "en": "a-quiet-interval",
+      "fa": "فاصله-ایآرام"
+    },
+    "title": {
+      "en": "A Quiet Interval",
+      "fa": "فاصله‌ای آرام"
+    },
+    "description": {
+      "en": "A restrained visual moment shaped by pauses, subtle relationships, and the atmosphere that gathers between forms.",
+      "fa": "لحظه‌ای تصویری و کم‌ادعا که از مکث‌ها، رابطه‌های ظریف و فضایی که میان فرم‌ها شکل می‌گیرد ساخته شده است."
+    },
+    "images": [
+      {
+        "src": "/images/artworks/1395-1.jpg",
+        "alt": {
+          "en": "Oil painting titled \"A Quiet Interval\"",
+          "fa": "تابلوی نقاشی با عنوان «فاصله‌ای آرام»"
+        },
+        "role": "primary"
+      }
+    ],
+    "rightsConfirmed": true,
+    "status": "published",
+    "year": 1395,
+    "sortOrder": 8
+  },
+  {
+    "id": "artwork-1398-1",
+    "slug": "traces-of-a-day",
+    "localizedSlugs": {
+      "en": "traces-of-a-day",
+      "fa": "ردهاییکروز"
+    },
+    "title": {
+      "en": "Traces of a Day",
+      "fa": "ردهای یک روز"
+    },
+    "description": {
+      "en": "A personal meditation on the impressions that remain after an ordinary moment has passed.",
+      "fa": "تأملی شخصی درباره‌ی اثرهایی که پس از گذشتن لحظه‌ای روزمره در ذهن باقی می‌مانند."
+    },
+    "images": [
+      {
+        "src": "/images/artworks/1398-1.jpg",
+        "alt": {
+          "en": "Oil painting titled \"Traces of a Day\"",
+          "fa": "تابلوی نقاشی با عنوان «ردهای یک روز»"
+        },
+        "role": "primary"
+      }
+    ],
+    "rightsConfirmed": true,
+    "status": "published",
+    "year": 1398,
+    "sortOrder": 9
+  },
+  {
+    "id": "artwork-1398-2",
+    "slug": "a-passing-thought",
+    "localizedSlugs": {
+      "en": "a-passing-thought",
+      "fa": "اندیشه-ایگذرا"
+    },
+    "title": {
+      "en": "A Passing Thought",
+      "fa": "اندیشه‌ای گذرا"
+    },
+    "description": {
+      "en": "A contemplative study that gives a fleeting impression room to settle and become part of a larger visual memory.",
+      "fa": "مطالعه‌ای تأمل‌برانگیز که به یک دریافت گذرا فرصت می‌دهد آرام بگیرد و به بخشی از خاطره‌ای تصویری بدل شود."
+    },
+    "images": [
+      {
+        "src": "/images/artworks/1398-2.jpg",
+        "alt": {
+          "en": "Oil painting titled \"A Passing Thought\"",
+          "fa": "تابلوی نقاشی با عنوان «اندیشه‌ای گذرا»"
+        },
+        "role": "primary"
+      }
+    ],
+    "rightsConfirmed": true,
+    "status": "published",
+    "year": 1398,
+    "sortOrder": 10
+  },
+  {
+    "id": "artwork-1398-3",
+    "slug": "the-shape-of-stillness",
+    "localizedSlugs": {
+      "en": "the-shape-of-stillness",
+      "fa": "شکلِسکون"
+    },
+    "title": {
+      "en": "The Shape of Stillness",
+      "fa": "شکلِ سکون"
+    },
+    "description": {
+      "en": "An exploration of stillness as something felt through the balance and rhythm of a painted composition.",
+      "fa": "کاوشی در سکون؛ حالتی که از تعادل و ریتم یک ترکیب نقاشانه احساس می‌شود."
+    },
+    "images": [
+      {
+        "src": "/images/artworks/1398-3.jpg",
+        "alt": {
+          "en": "Oil painting titled \"The Shape of Stillness\"",
+          "fa": "تابلوی نقاشی با عنوان «شکلِ سکون»"
+        },
+        "role": "primary"
+      }
+    ],
+    "rightsConfirmed": true,
+    "status": "published",
+    "year": 1398,
+    "sortOrder": 11
+  },
+  {
+    "id": "artwork-1398-4",
+    "slug": "light-in-between",
+    "localizedSlugs": {
+      "en": "light-in-between",
+      "fa": "روشناییدرفاصله-ها"
+    },
+    "title": {
+      "en": "Light in Between",
+      "fa": "روشنایی در فاصله‌ها"
+    },
+    "description": {
+      "en": "A quiet reflection on the subtle transitions that give a scene its atmosphere and emotional tone.",
+      "fa": "تأملی آرام درباره‌ی گذارهای ظریفی که به یک صحنه فضا و حال‌وهوای عاطفی می‌بخشند."
+    },
+    "images": [
+      {
+        "src": "/images/artworks/1398-4.jpg",
+        "alt": {
+          "en": "Oil painting titled \"Light in Between\"",
+          "fa": "تابلوی نقاشی با عنوان «روشنایی در فاصله‌ها»"
+        },
+        "role": "primary"
+      }
+    ],
+    "rightsConfirmed": true,
+    "status": "published",
+    "year": 1398,
+    "sortOrder": 12
+  },
+  {
+    "id": "artwork-1398-5",
+    "slug": "an-inner-landscape",
+    "localizedSlugs": {
+      "en": "an-inner-landscape",
+      "fa": "چشم-اندازیدرونی"
+    },
+    "title": {
+      "en": "An Inner Landscape",
+      "fa": "چشم‌اندازی درونی"
+    },
+    "description": {
+      "en": "A title for an inward-looking encounter, where the painted image becomes a space for personal reflection.",
+      "fa": "عنوانی برای مواجهه‌ای درون‌نگر؛ جایی که تصویر نقاشی‌شده به فضایی برای تأمل شخصی تبدیل می‌شود."
+    },
+    "images": [
+      {
+        "src": "/images/artworks/1398-5.jpg",
+        "alt": {
+          "en": "Oil painting titled \"An Inner Landscape\"",
+          "fa": "تابلوی نقاشی با عنوان «چشم‌اندازی درونی»"
+        },
+        "role": "primary"
+      }
+    ],
+    "rightsConfirmed": true,
+    "status": "published",
+    "year": 1398,
+    "sortOrder": 13
+  },
+  {
+    "id": "artwork-1398-6",
+    "slug": "the-memory-of-color",
+    "localizedSlugs": {
+      "en": "the-memory-of-color",
+      "fa": "خاطره-یرنگ"
+    },
+    "title": {
+      "en": "The Memory of Color",
+      "fa": "خاطره‌ی رنگ"
+    },
+    "description": {
+      "en": "A reflection on how color can hold an impression long after the moment that first inspired it has passed.",
+      "fa": "تأملی درباره‌ی اینکه رنگ چگونه می‌تواند اثری از یک لحظه را، حتی پس از گذشت آن، در خود نگه دارد."
+    },
+    "images": [
+      {
+        "src": "/images/artworks/1398-6.jpg",
+        "alt": {
+          "en": "Oil painting titled \"The Memory of Color\"",
+          "fa": "تابلوی نقاشی با عنوان «خاطره‌ی رنگ»"
+        },
+        "role": "primary"
+      }
+    ],
+    "rightsConfirmed": true,
+    "status": "published",
+    "year": 1398,
+    "sortOrder": 14
+  },
+  {
+    "id": "artwork-1398-7",
+    "slug": "a-pause-in-time",
+    "localizedSlugs": {
+      "en": "a-pause-in-time",
+      "fa": "مکثیدرزمان"
+    },
+    "title": {
+      "en": "A Pause in Time",
+      "fa": "مکثی در زمان"
+    },
+    "description": {
+      "en": "A quiet visual pause that invites the eye to linger rather than move quickly toward a conclusion.",
+      "fa": "مکثی تصویری و آرام که چشم را به ماندن و تماشا دعوت می‌کند، نه رسیدن شتاب‌زده به نتیجه."
+    },
+    "images": [
+      {
+        "src": "/images/artworks/1398-7.jpg",
+        "alt": {
+          "en": "Oil painting titled \"A Pause in Time\"",
+          "fa": "تابلوی نقاشی با عنوان «مکثی در زمان»"
+        },
+        "role": "primary"
+      }
+    ],
+    "rightsConfirmed": true,
+    "status": "published",
+    "year": 1398,
+    "sortOrder": 15
+  },
+  {
+    "id": "artwork-1398-8",
+    "slug": "fragments-of-presence",
+    "localizedSlugs": {
+      "en": "fragments-of-presence",
+      "fa": "پاره-هایحضور"
+    },
+    "title": {
+      "en": "Fragments of Presence",
+      "fa": "پاره‌های حضور"
+    },
+    "description": {
+      "en": "An open-ended study of the impressions through which a sense of presence takes shape.",
+      "fa": "مطالعه‌ای گشوده از دریافت‌هایی که در کنار هم، حس حضور را شکل می‌دهند."
+    },
+    "images": [
+      {
+        "src": "/images/artworks/1398-8.jpg",
+        "alt": {
+          "en": "Oil painting titled \"Fragments of Presence\"",
+          "fa": "تابلوی نقاشی با عنوان «پاره‌های حضور»"
+        },
+        "role": "primary"
+      }
+    ],
+    "rightsConfirmed": true,
+    "status": "published",
+    "year": 1398,
+    "sortOrder": 16
+  },
+  {
+    "id": "artwork-1399-1",
+    "slug": "after-the-moment",
+    "localizedSlugs": {
+      "en": "after-the-moment",
+      "fa": "پسازلحظه"
+    },
+    "title": {
+      "en": "After the Moment",
+      "fa": "پس از لحظه"
+    },
+    "description": {
+      "en": "A meditation on what remains: a mood, an impression, or a memory that continues beyond the moment itself.",
+      "fa": "تأملی درباره‌ی آنچه باقی می‌ماند؛ حال‌وهوا، دریافتی گذرا یا خاطره‌ای که از خودِ لحظه فراتر می‌رود."
+    },
+    "images": [
+      {
+        "src": "/images/artworks/1399-1.jpg",
+        "alt": {
+          "en": "Oil painting titled \"After the Moment\"",
+          "fa": "تابلوی نقاشی با عنوان «پس از لحظه»"
+        },
+        "role": "primary"
+      }
+    ],
+    "rightsConfirmed": true,
+    "status": "published",
+    "year": 1399,
+    "sortOrder": 17
+  },
+  {
+    "id": "artwork-1401-1",
+    "slug": "a-new-rhythm",
+    "localizedSlugs": {
+      "en": "a-new-rhythm",
+      "fa": "ریتمیتازه"
+    },
+    "title": {
+      "en": "A New Rhythm",
+      "fa": "ریتمی تازه"
+    },
+    "description": {
+      "en": "A study in visual rhythm and balance, marking another point in the continuing development of the artist’s practice.",
+      "fa": "مطالعه‌ای در ریتم و تعادل بصری که نقطه‌ای دیگر در مسیر پیوسته‌ی تجربه و کار هنرمند را نشان می‌دهد."
+    },
+    "images": [
+      {
+        "src": "/images/artworks/1401-1.jpg",
+        "alt": {
+          "en": "Oil painting titled \"A New Rhythm\"",
+          "fa": "تابلوی نقاشی با عنوان «ریتمی تازه»"
+        },
+        "role": "primary"
+      }
+    ],
+    "rightsConfirmed": true,
+    "status": "published",
+    "year": 1401,
+    "sortOrder": 18
+  },
+  {
+    "id": "artwork-1401-2",
+    "slug": "the-unspoken",
+    "localizedSlugs": {
+      "en": "the-unspoken",
+      "fa": "ناگفته"
+    },
+    "title": {
+      "en": "The Unspoken",
+      "fa": "ناگفته"
+    },
+    "description": {
+      "en": "A contemplative image whose meaning is not fixed by a single reading, leaving space for quiet attention and personal response.",
+      "fa": "تصویری تأمل‌برانگیز که معنایش به یک برداشت محدود نمی‌شود و برای توجه آرام و دریافت شخصی فضا باقی می‌گذارد."
+    },
+    "images": [
+      {
+        "src": "/images/artworks/1401-2.jpg",
+        "alt": {
+          "en": "Oil painting titled \"The Unspoken\"",
+          "fa": "تابلوی نقاشی با عنوان «ناگفته»"
+        },
+        "role": "primary"
+      }
+    ],
+    "rightsConfirmed": true,
+    "status": "published",
+    "year": 1401,
+    "sortOrder": 19
+  },
+  {
+    "id": "artwork-1403-1",
+    "slug": "a-new-season",
+    "localizedSlugs": {
+      "en": "a-new-season",
+      "fa": "فصلیتازه"
+    },
+    "title": {
+      "en": "A New Season",
+      "fa": "فصلی تازه"
+    },
+    "description": {
+      "en": "A recent chapter in an ongoing visual exploration, approached through attention to mood, form, and the act of seeing.",
+      "fa": "فصلی تازه در کاوشی تصویری و پیوسته که با توجه به حال‌وهوا، فرم و تجربه‌ی دیدن شکل گرفته است."
+    },
+    "images": [
+      {
+        "src": "/images/artworks/1403-1.jpg",
+        "alt": {
+          "en": "Oil painting titled \"A New Season\"",
+          "fa": "تابلوی نقاشی با عنوان «فصلی تازه»"
+        },
+        "role": "primary"
+      }
+    ],
+    "rightsConfirmed": true,
+    "status": "published",
+    "year": 1403,
+    "sortOrder": 20
+  },
+  {
+    "id": "artwork-1403-2",
+    "slug": "the-quiet-beyond",
+    "localizedSlugs": {
+      "en": "the-quiet-beyond",
+      "fa": "آرامشِآن-سوتر"
+    },
+    "title": {
+      "en": "The Quiet Beyond",
+      "fa": "آرامشِ آن‌سوتر"
+    },
+    "description": {
+      "en": "An invitation to look beyond the immediate impression and spend time with the atmosphere of the image.",
+      "fa": "دعوتی به عبور از دریافت نخستین و ماندن در فضای اثر برای زمانی طولانی‌تر."
+    },
+    "images": [
+      {
+        "src": "/images/artworks/1403-2.jpg",
+        "alt": {
+          "en": "Oil painting titled \"The Quiet Beyond\"",
+          "fa": "تابلوی نقاشی با عنوان «آرامشِ آن‌سوتر»"
+        },
+        "role": "primary"
+      }
+    ],
+    "rightsConfirmed": true,
+    "status": "published",
+    "year": 1403,
+    "sortOrder": 21
+  },
+  {
+    "id": "artwork-1403-3",
+    "slug": "a-place-to-return",
+    "localizedSlugs": {
+      "en": "a-place-to-return",
+      "fa": "جاییبرایبازگشت"
+    },
+    "title": {
+      "en": "A Place to Return",
+      "fa": "جایی برای بازگشت"
+    },
+    "description": {
+      "en": "A reflective title for an image that can be revisited, allowing its details and atmosphere to unfold gradually.",
+      "fa": "عنوانی تأمل‌برانگیز برای تصویری که می‌توان بارها به آن بازگشت و گذاشت جزئیات و فضای آن به‌آرامی آشکار شوند."
+    },
+    "images": [
+      {
+        "src": "/images/artworks/1403-3.jpg",
+        "alt": {
+          "en": "Oil painting titled \"A Place to Return\"",
+          "fa": "تابلوی نقاشی با عنوان «جایی برای بازگشت»"
+        },
+        "role": "primary"
+      }
+    ],
+    "rightsConfirmed": true,
+    "status": "published",
+    "year": 1403,
+    "sortOrder": 22
+  },
+  {
+    "id": "artwork-1403-4",
+    "slug": "the-passing-light",
+    "localizedSlugs": {
+      "en": "the-passing-light",
+      "fa": "نورِگذرا"
+    },
+    "title": {
+      "en": "The Passing Light",
+      "fa": "نورِ گذرا"
+    },
+    "description": {
+      "en": "A meditation on transience and the changing impressions through which a moment is remembered.",
+      "fa": "تأملی درباره‌ی گذرایی و دریافت‌های متغیری که یک لحظه از خلال آن‌ها به یاد سپرده می‌شود."
+    },
+    "images": [
+      {
+        "src": "/images/artworks/1403-4.jpg",
+        "alt": {
+          "en": "Oil painting titled \"The Passing Light\"",
+          "fa": "تابلوی نقاشی با عنوان «نورِ گذرا»"
+        },
+        "role": "primary"
+      }
+    ],
+    "rightsConfirmed": true,
+    "status": "published",
+    "year": 1403,
+    "sortOrder": 23
+  },
+  {
+    "id": "artwork-1403-5",
+    "slug": "within-the-woodland",
+    "localizedSlugs": {
+      "en": "within-the-woodland",
+      "fa": "دردلِبیشه"
+    },
+    "title": {
+      "en": "Within the Woodland",
+      "fa": "در دلِ بیشه"
+    },
+    "description": {
+      "en": "A wooded scene draws the eye into layers of trunks, shadow, and scattered light. Its deep greens and earthy tones create an atmosphere of quiet immersion.",
+      "fa": "منظره‌ای جنگلی نگاه را به میان لایه‌هایی از تنه‌ی درختان، سایه و روشنایی پراکنده می‌برد. سبزهای عمیق و رنگ‌های خاکی، فضایی از غوطه‌وری و آرامش می‌سازند."
+    },
+    "images": [
+      {
+        "src": "/images/artworks/1403-5.jpg",
+        "alt": {
+          "en": "Oil painting titled \"Within the Woodland\"",
+          "fa": "تابلوی نقاشی با عنوان «در دلِ بیشه»"
+        },
+        "role": "primary"
+      }
+    ],
+    "rightsConfirmed": true,
+    "status": "published",
+    "year": 1403,
+    "sortOrder": 24
+  },
+  {
+    "id": "artwork-1403-6",
+    "slug": "a-continuing-journey",
+    "localizedSlugs": {
+      "en": "a-continuing-journey",
+      "fa": "مسیرِادامه-دار"
+    },
+    "title": {
+      "en": "A Continuing Journey",
+      "fa": "مسیرِ ادامه‌دار"
+    },
+    "description": {
+      "en": "A recent work presented as part of an evolving journey, open to the artist’s future revisions and the viewer’s own interpretation.",
+      "fa": "اثری تازه در امتداد مسیری در حال تحول که برای بازنگری‌های آینده‌ی هنرمند و تفسیر شخصی بیننده گشوده می‌ماند."
+    },
+    "images": [
+      {
+        "src": "/images/artworks/1403-6.jpg",
+        "alt": {
+          "en": "Oil painting titled \"A Continuing Journey\"",
+          "fa": "تابلوی نقاشی با عنوان «مسیرِ ادامه‌دار»"
+        },
+        "role": "primary"
+      }
+    ],
+    "rightsConfirmed": true,
+    "status": "published",
+    "year": 1403,
+    "sortOrder": 25
   }
 ]
