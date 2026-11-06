@@ -239,10 +239,10 @@ test("artist portrait is omitted unless rights, dimensions, and localized alt ar
  assert.equal(getPublicArtistProfile({...profile,portrait:{...profile.portrait!,width:0}},"en")?.portrait,undefined);
 });
 test("canonical Contact record exposes only the artist-supplied Instagram destination",()=>{
- const details:ContactDetails={instagramUrl:"https://www.instagram.com/sample-profile/"};
+ const details:ContactDetails={instagramUrl:"https://www.instagram.com/sampleprofile/"};
  assert.deepEqual(getPublicContactDetails(details),{
-  instagramUrl:"https://www.instagram.com/sample-profile/",
-  instagramHandle:"sample-profile",
+  instagramUrl:"https://www.instagram.com/sampleprofile/",
+  instagramHandle:"sampleprofile",
  });
  assert.equal(getPublicContactDetails({email:"not-an-email",telegramHandle:"x",instagramUrl:"https://example.org/"}),undefined);
 });
