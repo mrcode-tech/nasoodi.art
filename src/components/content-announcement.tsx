@@ -12,6 +12,7 @@ const DISMISS_EVENT = "nasoodi:content-announcement:dismissed";
 
 export function ContentAnnouncement({
   locale,
+  id,
   title,
   description,
   metadata,
@@ -21,6 +22,7 @@ export function ContentAnnouncement({
   onNavigate,
 }: {
   locale: Locale;
+  id: string;
   title: string;
   description: string;
   metadata?: string;
@@ -30,7 +32,7 @@ export function ContentAnnouncement({
   onNavigate?: () => void;
 }) {
   const [visibility, setVisibility] = useState<"pending" | "visible" | "dismissed">("pending");
-  const storageKey = `nasoodi:content-announcement:dismissed:${href}`;
+  const storageKey = `nasoodi:content-announcement:dismissed:${id}`;
 
   useEffect(() => {
     const syncVisibility = () => {
