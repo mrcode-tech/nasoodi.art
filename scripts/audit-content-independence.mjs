@@ -10,6 +10,7 @@ const contentFiles = [
   "src/content/data/galleries.json",
   "src/content/data/journal/index.json",
   "src/content/data/homepage-selection.json",
+  "src/content/announcement.json",
 ];
 
 const editorialKeys = new Set([
