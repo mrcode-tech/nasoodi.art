@@ -1721,3 +1721,128 @@ html[lang="fa"] .artwork-viewer-info h2 {
   min-height: 1.5em;
   line-height: 1.5;
 }
+
+
+/* Minimal artist introductions: photograph and essential text share one
+   editorial row. Grid direction mirrors the selected locale (English LTR,
+   Persian RTL), so the portrait sits on the reading-start side. */
+.home-page .home-intro.has-hero {
+  direction: inherit;
+  grid-template-columns: minmax(0, .95fr) minmax(0, 1.05fr);
+  gap: clamp(1.5rem, 4vw, 4rem);
+}
+.home-page .home-intro-copy {
+  max-width: 38rem;
+  align-self: center;
+}
+.home-page .home-intro-copy > .eyebrow {
+  margin-bottom: .7rem;
+  font-size: .68rem;
+}
+.home-page .home-intro-copy > h1 {
+  margin-bottom: 1rem;
+}
+.home-page .home-biography {
+  max-width: 34rem;
+  margin-top: .5rem;
+}
+.home-page .home-biography p {
+  margin-block: .55rem;
+  color: var(--muted);
+  font-size: .94rem;
+  line-height: 1.9;
+}
+.home-page .hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .65rem;
+  margin-top: 1.25rem;
+}
+.about-page .about-heading {
+  margin-bottom: clamp(1.5rem, 3vw, 2.5rem);
+}
+.about-page .about-heading h1 {
+  font-size: clamp(2rem, 4vw, 3.4rem);
+}
+.about-page .about-heading .artist-discipline {
+  margin-top: .6rem;
+  font-size: .9rem;
+}
+.about-page .profile-content {
+  display: grid;
+  max-width: 100%;
+  gap: clamp(2rem, 4vw, 3.5rem);
+}
+.about-portrait-statement {
+  display: grid;
+  grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr);
+  align-items: center;
+  gap: clamp(1.5rem, 4vw, 4rem);
+  direction: inherit;
+}
+.about-portrait-statement .artist-portrait-frame {
+  width: 100%;
+  max-width: 31rem;
+  aspect-ratio: 4 / 5;
+  margin: 0;
+  justify-self: stretch;
+}
+.about-portrait-statement .artist-portrait {
+  object-fit: contain;
+  object-position: center;
+}
+.about-portrait-statement .about-statement {
+  max-width: 42rem;
+  min-width: 0;
+}
+.about-portrait-statement .about-statement h2 {
+  margin: 0 0 .8rem;
+  font-size: var(--type-subsection-title, 1.45rem);
+}
+.about-portrait-statement .about-statement p,
+.about-short-introduction {
+  margin: .65rem 0 0;
+  color: var(--muted);
+  font-size: .94rem;
+  line-height: 1.95;
+  text-align: justify;
+  text-justify: inter-word;
+}
+.about-short-introduction {
+  max-width: 48rem;
+  margin: -.5rem 0 0;
+}
+.about-page .about-biography,
+.about-page .about-cv-section {
+  max-width: 58rem;
+}
+.about-page .about-biography h2,
+.about-page .about-cv-section h2 {
+  margin-bottom: .7rem;
+}
+@media (max-width: 900px) {
+  .home-page .home-intro.has-hero {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1.2rem;
+  }
+  .about-portrait-statement {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1.25rem;
+  }
+  .about-portrait-statement .artist-portrait-frame {
+    width: 100%;
+    max-width: none;
+    aspect-ratio: 5 / 4;
+  }
+  .about-portrait-statement .about-statement {
+    max-width: none;
+  }
+}
+@media (max-width: 600px) {
+  .about-page .about-heading h1 {
+    font-size: clamp(1.8rem, 8vw, 2.5rem);
+  }
+  .about-portrait-statement .artist-portrait-frame {
+    aspect-ratio: 4 / 5;
+  }
+}
