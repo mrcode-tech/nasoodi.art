@@ -241,7 +241,7 @@ Provide:
 Follow the detailed phase plan in `journal-announcement-implementation-prompt.md`. The minimum required order is:
 
 1. **Repository and specification audit:** inspect instructions, branch/worktree, current Journal implementation, content model, routes, localization, shared shell, tests, and CI. Record actual gaps and conflicts before editing.
-2. **SVG authoring and CI rendering:** refine or author the SVG immediately during implementation; validate it locally; run the existing GitHub Actions renderer; inspect the generated PNG. Do not postpone vector authoring until feature work is otherwise complete.
+2. **SVG authoring and direct usage:** refine or author the SVG immediately during implementation; verify that the file exists and inspect it in the rendered website. Do not add a raster renderer or generated PNG review artifact.
 3. **Canonical event selection:** implement or reuse a pure deterministic selector using publication approval, locale readiness, event temporal state, timezone semantics, and stable tie-breaking.
 4. **Journal experience:** implement the homepage preview, existing unified archive, event-specific detail presentation, and pagination/page-size behavior only where justified and not already implemented.
 5. **Announcement component:** implement server-selected event data, accessible localized DOM content, event-specific dismissal, fixed responsive placement, and decorative SVG integration.
