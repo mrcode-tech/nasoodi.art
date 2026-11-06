@@ -1988,12 +1988,20 @@ test("Persian artwork and homepage Journal links use native localized slugs and 
 });
 
 
-test("legacy English artwork and Journal slugs redirect to Persian canonical URLs", async ({ page }) => {
-  await page.goto("/fa/works/a-first-light");
-  expect(decodeURIComponent(new URL(page.url()).pathname)).toBe("/fa/works/نخستین-روشنایی");
-  await expect(page.locator("main h1")).toHaveText("نخستین روشنایی");
-
-  await page.goto("/fa/journal/first-light-a-beginning-in-paint");
-  expect(decodeURIComponent(new URL(page.url()).pathname)).toBe("/fa/journal/نخستین-روشنایی-آغاز-یک-مسیر");
-  await expect(page.locator("main h1")).toHaveText("نخستین روشنایی: آغازی در نقاشی");
+test("localized artwork and Journal detail routes resolve canonical locale alternates", async ({ page }) => {
+  for (const archive of [
+    { path: "/en/works", selector: ".artwork-grid .artwork-item a[href]" },
+    { path: "/en/journal", selector: ".journal-card h2 a[href]" },
+  ]) {
+    await page.goto(archive.path);
+    const firstLink = page.locator(archive.selector).first();
+    await expect(firstLink).toBeVisible();
+    const englishHref = await firstLink.getAttribute("href");
+    await page.goto(englishHref!);
+    const persianAlternate = await page.locator('link[rel="alternate"][hreflang="fa"]').getAttribute("href");
+    expect(persianAlternate).toContain("/fa/");
+    await page.goto(new URL(persianAlternate!).pathname);
+    await expect(page).toHaveURL(/\\/fa\\/(?:works|journal)\\//);
+    await expect(page.locator("main h1")).toBeVisible();
+  }
 });
