@@ -1698,3 +1698,26 @@ html[lang="fa"] .artwork-viewer-info h2 {
     aspect-ratio: 1 / 1;
   }
 }
+
+
+/* Artwork archive: give every painting the same calm 4:3 presentation frame.
+   The complete image remains visible (contain), so portrait and panoramic
+   works align without cropping or distorting the original artwork. */
+.artwork-grid > .artwork-item > img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 3;
+  object-fit: contain;
+  object-position: center;
+  padding: clamp(.4rem, 1vw, .85rem);
+  background: var(--surface);
+}
+.artwork-grid > .artwork-item {
+  min-width: 0;
+  align-items: stretch;
+}
+.artwork-grid > .artwork-item > span {
+  min-height: 1.5em;
+  line-height: 1.5;
+}
