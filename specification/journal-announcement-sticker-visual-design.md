@@ -4,7 +4,7 @@
 **Project:** Nasoodi.art  
 **Branch:** feature  
 **Primary specification:** journal-announcement-specification.md  
-**Source asset:** public/images/journal/journal-announcement-sticker.svg
+**Canonical website asset:** `public/images/journal/journal-announcement-sticker.svg`
 
 ## 1. Design intent
 
@@ -26,7 +26,7 @@ The initial vector study uses a narrow landscape paper slip with:
 
 The straight outer edge is the attachment edge. The torn edge faces inward toward page content. For English, the attachment edge sits flush against the physical left viewport edge and the torn edge faces right. For Persian, reflect only the decorative silhouette horizontally so the attachment edge sits flush against the physical right edge and the torn edge faces left. Never mirror artwork or photography.
 
-This is a design study, not final approval of the torn-paper variant. Review the rendered PNG at actual intended display size before approval.
+This is a design study, not final approval of the torn-paper variant. Review the SVG at its actual intended display size in the rendered website.
 
 ## 3. Composition and geometry
 
@@ -65,14 +65,7 @@ Use project typography and semantic color tokens for all HTML content. The SVG p
 
 The checked-in SVG is the single editable source of truth. It is authored directly as vector XML; no image generation, screenshot tracing, raster painting, or image-processing workflow is permitted or required.
 
-GitHub Actions converts the SVG into a PNG review artifact using CairoSVG. The conversion:
-- Runs on the existing Nasoodi.art CI workflow.
-- Installs minimal system/runtime requirements in the CI runner.
-- Renders at 3× dimensions to artifacts/journal-announcement-sticker.png.
-- Verifies RGBA output, expected dimensions, transparent canvas, non-empty paper pixels, and absence of embedded text/raster image elements in the SVG.
-- Uploads the PNG with the existing visual-QA artifact bundle.
-
-The PNG is a generated CI artifact, not a separately hand-edited source file. Do not check in a generated PNG until the owner has reviewed the artifact and explicitly approves the selected variant. After approval, decide whether PNG is needed at runtime; if CSS/SVG is sharper and sufficient, keep SVG as the production asset and omit PNG from the application bundle.
+The website serves the SVG directly. No PNG conversion, Python renderer, generated artifact, or raster runtime derivative is maintained. CI checks that the SVG exists and is non-empty; browser tests verify that it loads in the actual interface. Review the visual treatment in localized, responsive website screenshots.
 
 ## 7. Review states
 
@@ -92,8 +85,8 @@ Do not call the study approved until the owner reviews the rendered artifact.
 - [ ] Source SVG is valid, editable vector XML with transparent outer canvas.
 - [ ] SVG contains no text, logos, event facts, links, or controls.
 - [ ] SVG contains no embedded raster images.
-- [ ] PNG is rendered by GitHub Actions from the checked-in SVG.
-- [ ] PNG is RGBA at 1260 × 840 and has transparent pixels outside the silhouette.
+- [ ] The canonical SVG exists and is served directly by the website.
+- [ ] The SVG remains vector-based and has no baked-in text or controls.
 - [ ] Palette conforms to the existing warm-paper design direction.
 - [ ] Inward torn edge and outer attachment edge are unambiguous.
 - [ ] English and Persian edge attachment are represented in review screenshots.
@@ -110,7 +103,7 @@ The component uses three explicit placement variants. They share one localized e
 - The close control is inset from the component edge to account for the SVG's transparent side margins, keeping the full target visibly on the paper in both LTR and RTL.
 - All placements use logical block/inline spacing. The decorative SVG alone is mirrored for Persian; the content and controls are not transformed.
 - The component exposes stable `data-part` hooks for visual/behavioral browser tests. Tests must not target CSS-module implementation class names.
-- The paper SVG remains a provisional first study pending owner review. Responsive screenshots and the CI PNG are technical review evidence, not visual approval.
+- The paper SVG remains a provisional first study pending owner review. Responsive screenshots and the website screenshot are technical review evidence, not visual approval.
 
 If the actual sidebar/drawer geometry changes, update the relevant variant and its screenshot evidence rather than applying global scale or transform fixes.
 
@@ -128,7 +121,7 @@ The browser contract checks:
 
 The previous CI runs exposed real title/control geometry issues and a mobile height excess. Those findings were used to refine the CSS and strengthen the assertions. A successful latest full CI run is still required before marking this responsive matrix verified. Do not claim visual verification solely because screenshots were generated; inspect the uploaded screenshots at actual display size.
 
-The PNG and responsive screenshots are technical review evidence only. They do not constitute owner approval of the final paper silhouette or tape detail.
+Responsive website screenshots are review evidence. They do not constitute owner approval of the final paper silhouette or tape detail.
 
 ## 11. Compact editorial treatment and mobile event navigation — 2026-11-01
 
