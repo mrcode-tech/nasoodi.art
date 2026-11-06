@@ -1554,14 +1554,14 @@ html[lang="fa"] .artwork-viewer-info h2 {
   .mobile-drawer .drawer-setting-row .theme-selector {
     display: inline-flex;
     width: auto;
-    min-width: 5.5rem;
+    min-width: 7rem;
     align-items: center;
     justify-content: flex-end;
   }
   .mobile-drawer .drawer-setting-row .language-trigger,
   .mobile-drawer .drawer-setting-row .theme-trigger {
-    width: 5.5rem;
-    min-width: 5.5rem;
+    width: 7rem;
+    min-width: 7rem;
     min-height: 2.5rem;
     box-sizing: border-box;
     justify-content: space-between;
