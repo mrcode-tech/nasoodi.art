@@ -1589,3 +1589,56 @@ html[lang="fa"] .artwork-viewer-info h2 {
   text-align-last: start;
   text-justify: inter-word;
 }
+
+/* Homepage featured galleries: keep the artwork frame and card rhythm consistent
+   without cropping paintings or changing gallery-detail image sizing. */
+.home-page .collection-carousel .gallery-card {
+  height: 100%;
+  min-width: 0;
+}
+.home-page .collection-carousel .gallery-card > img {
+  display: block;
+  width: 100%;
+  height: clamp(15rem, 24vw, 22rem);
+  max-height: none;
+  flex: 0 0 auto;
+  object-fit: contain;
+  object-position: center;
+  background: var(--surface);
+}
+.home-page .collection-carousel .gallery-card-copy {
+  flex: 1;
+  min-width: 0;
+  align-items: stretch;
+  gap: .6rem;
+  padding-top: .9rem;
+}
+.home-page .collection-carousel .gallery-card-copy > strong {
+  display: -webkit-box;
+  min-height: 2.7em;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+.home-page .collection-carousel .gallery-card-copy > span:not(.gallery-card-action) {
+  display: -webkit-box;
+  min-height: 5.4em;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+}
+.home-page .collection-carousel .gallery-card-action {
+  margin-top: auto;
+  align-self: flex-start;
+}
+@media (max-width: 900px) {
+  .home-page .collection-carousel .gallery-card > img {
+    height: clamp(16rem, 38vw, 21rem);
+  }
+}
+@media (max-width: 600px) {
+  .home-page .collection-carousel .gallery-card > img {
+    height: clamp(17rem, 70vw, 23rem);
+  }
+}
+
