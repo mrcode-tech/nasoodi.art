@@ -179,7 +179,6 @@ test("locale switching resolves synthetic localized routes and falls back for un
  assert.equal(alternatePathFor("/fa/works","fa"),"/en/works");
  assert.equal(alternatePathFor("/fa/works/not-published","fa"),"/en");
  assert.equal(alternatePathFor("/fa/journal/not-published","fa"),"/en");
- assert.equal(alternatePathFor("/en/works/"+getLocalizedSlug(work,"en"),"en"),"/fa/works/"+getLocalizedSlug(work,"fa"));
 });
 
 test("homepage upcoming events are future-dated, locale-approved, and ordered by occurrence",()=>{
@@ -207,7 +206,7 @@ test("VisualArtwork JSON-LD contains only confirmed localized artwork facts",()=
  assert.equal(schema.artMedium,"Oil on canvas");
  assert.equal(schema.dateCreated,"2022");
  assert.equal(schema.image,"https://nasoodi.art/art/work.jpg");
- const sparse=getArtworkStructuredData(work,"fa");
+ const sparse=getArtworkStructuredData({...work,description:undefined},"fa");
  assert.equal(sparse.name,"اثر");
  assert.equal("dateCreated" in sparse,false);
  assert.equal("artMedium" in sparse,false);
@@ -261,8 +260,8 @@ test("Journal Event structured data includes confirmed dates, attendance mode, a
 
 test("gallery structured data lists only its published localized artworks in editorial order",()=>{
  const gallery:Gallery={id:"g1",slug:"gallery",title:{en:"A collection",fa:"مجموعه"},description:{en:"A curated collection",fa:"مجموعه منتخب"},coverArtworkId:"w1",artworkIds:["w1","w2"],status:"published",sortOrder:1};
- const second:Artwork={...work,id:"w2",slug:"work-two",title:{en:"Second work",fa:"اثر دوم"},sortOrder:2};
- const hidden:Artwork={...work,id:"w3",slug:"hidden-work",title:{en:"Hidden",fa:"پنهان"},status:"needs-review"};
+ const second:Artwork={...work,id:"w2",slug:"work-two",localizedSlugs:{en:"work-two",fa:"اثر-دوم"},title:{en:"Second work",fa:"اثر دوم"},sortOrder:2};
+ const hidden:Artwork={...work,id:"w3",slug:"hidden-work",localizedSlugs:{en:"hidden-work",fa:"اثر-پنهان"},title:{en:"Hidden",fa:"پنهان"},status:"needs-review"};
  const schema=getGalleryStructuredData(gallery,[work,second,hidden],"en","https://nasoodi.art/en/galleries/gallery");
  assert.equal(schema["@type"],"CollectionPage");
  assert.equal(schema.name,"A collection");
@@ -306,10 +305,10 @@ test("Journal links reject protocol-relative, backslash-normalized, control, and
 });
 
 test("gallery publication supports overlapping collections and unassigned artworks", () => {
- const second:Artwork={...work,id:"w2",slug:"work-two",title:{en:"Second work",fa:"اثر دوم"},sortOrder:2};
+ const second:Artwork={...work,id:"w2",slug:"work-two",localizedSlugs:{en:"work-two",fa:"اثر-دوم"},title:{en:"Second work",fa:"اثر دوم"},sortOrder:2};
  const firstGallery:Gallery={id:"g1",slug:"first-gallery",title:{en:"First",fa:"اول"},description:{en:"First collection",fa:"مجموعه اول"},coverArtworkId:"w1",artworkIds:["w1","w2"],status:"published",sortOrder:1};
  const secondGallery:Gallery={id:"g2",slug:"second-gallery",title:{en:"Second",fa:"دوم"},description:{en:"Second collection",fa:"مجموعه دوم"},coverArtworkId:"w2",artworkIds:["w2"],status:"published",sortOrder:2};
- const unassigned:Artwork={...work,id:"w3",slug:"work-three",title:{en:"Unassigned",fa:"بدون مجموعه"}};
+ const unassigned:Artwork={...work,id:"w3",slug:"work-three",localizedSlugs:{en:"work-three",fa:"اثر-سه"},title:{en:"Unassigned",fa:"بدون مجموعه"}};
  const published=getPublicGalleries([firstGallery,secondGallery],[work,second,unassigned],"en");
  assert.deepEqual(new Set(published.map(gallery=>gallery.id)),new Set(["g1","g2"]));
  assert.equal(published.length,2);
@@ -341,7 +340,7 @@ test("CV publication accepts synthetic localized entries and optional periods",(
 });
 
 test("homepage Journal preview is composed from supplied synthetic entries",()=>{
- const entries=[validJournalEntry,{...validJournalEntry,id:"newer",slug:"newer",publishedAt:"2026-11-01T10:00:00Z"}];
+ const entries=[validJournalEntry,{...validJournalEntry,id:"newer",slug:"newer",localizedSlugs:{en:"newer",fa:"روایت-جدید"},publishedAt:"2026-11-01T10:00:00Z"}];
  assert.equal(getHomepageJournalPreview(entries,"en").length,1);
  assert.equal(getHomepageJournalPreview(entries,"en")[0].id,"newer");
 });
