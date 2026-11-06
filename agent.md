@@ -100,43 +100,26 @@ Work only on the existing `feature` branch. The owner has authorized commits and
 
 ---
 
-## Previous task prompt — Journal and event announcement sticker
+## Current implementation contract — JSON-configured content announcement
 
-The previous Journal/sticker task prompt and implementation history are retained below for traceability. It is not the next task unless the owner explicitly reopens it.
+The current approved announcement implementation is the general-purpose content sticker described in:
 
-# NEXT IMPLEMENTATION TASK — JOURNAL AND EVENT ANNOUNCEMENT STICKER
-
-**Priority:** Next feature implementation; this Journal/sticker task supersedes the previous About/CV task prompt below.  
-**Repository:** `mrcode-tech/nasoodi.art`  
-**Branch:** `feature` only  
-**Primary specification:** `specification/journal-announcement-specification.md`  
-**Complete implementation prompt:** `specification/journal-announcement-implementation-prompt.md`  
-**Supporting documents:** proposal, wireframes, and task instructions listed below.
-
-The next implementation task is the approved Journal and event-announcement experience. Implement both connected parts as one coherent feature:
-
-1. **Journal experience:** homepage Journal preview, existing unified Journal archive, event-specific detail presentation, and accessible pagination/page-size behavior where the existing archive requires it.
-2. **Event announcement sticker:** use the hand-authored restrained paper-sticker SVG (decorative only) and generate a transparent PNG review artifact through GitHub Actions and implement the fixed, dismissible, locale-aware announcement that links to the nearest eligible upcoming Journal event.
-
-Before coding, read in full:
-- `specification/README.md`
-- `specification/journal-announcement-proposal.md`
-- `specification/journal-announcement-wireframes.md`
+- `specification/journal-announcement-implementation-prompt.md`
 - `specification/journal-announcement-specification.md`
 - `specification/journal-announcement-agent-instructions.md`
 - `specification/journal-announcement-sticker-visual-design.md`
-- `specification/journal-and-events.md`
-- `specification/artwork-discovery-carousel-and-editorial-experience.md`
-- All mandatory design, content, localization, navigation, SEO, accessibility, testing, and roadmap authorities referenced by `AGENTS.md` and the primary specification.
 
-**Important reconciled homepage rule:** the in-flow homepage Journal preview is limited to the single newest eligible published entry across article and event types. Do not add a third card or pin an older upcoming event into this preview. The fixed sticker independently selects the nearest eligible upcoming event. Dismissing the sticker must not hide the Journal preview.
+The sticker is controlled by one `src/content/announcement.json` file. Its `active` boolean controls visibility; `type` and `contentId` select one artwork, gallery, Journal entry, or event. The title and description are localized in the JSON. Optional metadata is supported. The localized destination is derived from the record's localized slug; do not store a separate URL.
 
-**Sticker asset rule:** the checked-in SVG is the editable source of truth and contains only a decorative paper silhouette/edge treatment with transparent background. Do not bake event text, dates, labels, arrows, or controls into the image. Keep all copy and interactions as accessible localized DOM content. Do not use image generation, screenshot tracing, raster painting, or image processing. GitHub Actions must convert the SVG to PNG and verify RGBA transparency, dimensions, and absence of baked text/raster imagery. Do not commit generated PNG until owner review; SVG/CSS may be used directly at runtime. Do not invent an event or imply fictional sample content is real.
+There is at most one configured announcement. Do not add an announcement repository, collection, automatic selection, or upcoming-event requirement. Reuse existing content access functions and preserve the existing paper SVG and viewport/sidebar/mobile-drawer placements.
 
-The proposal is approved in principle and implementation may proceed. The initial hand-authored torn-edge SVG study is a candidate, not final approval. Review the CI-generated PNG and responsive screenshots with the owner; refine the vector paths directly if requested. Build the functional experience and prepare visual comparisons. The CI-generated PNG is a review artifact, not a final approved asset; do not commit it or declare the visual variant final until the owner selects it. Inspect the real shell, locale-aware sidebar/menu geometry, Journal data model, routes, existing pagination, assets, and CI before coding.
+**Initial state:** the JSON is configured active and explicitly references the latest published gallery found in current content data. Publishing newer content must not automatically change the selected item.
 
-Use `specification/journal-announcement-implementation-prompt.md` as the complete task brief and `specification/journal-announcement-agent-instructions.md` as the concise execution checklist. Preserve all repository safety rules in `AGENTS.md`: work on the existing feature branch, preserve unrelated changes, commit and push to `feature` after verification, do not merge to stage/main, and do not deploy or publish. Run the repository's actual tests and CI, inspect logs, and capture reviewed English/Persian desktop/tablet/mobile screenshots before reporting completion.
+**Testing contract:** Playwright reads `active` from the actual JSON checked out in the current branch. Active-only UI tests run only when true; when false, skip only those UI tests with a clear reason. Configuration validation, inactive visibility behavior, synthetic active/inactive tests, content-integrity checks, and unrelated tests always run. Report skips as skipped, never as passed.
 
+Keep the Journal as the canonical home for Journal entries and events. The sticker is a separate configurable discovery mechanism; it does not alter Journal publication, the homepage Journal preview, or event eligibility.
+
+Follow all repository safety rules: work on `feature` only, preserve unrelated changes, do not merge to `stage` or `main`, and do not deploy. Inspect CI logs and report success only after the latest complete workflow passes.
 ---
 
 ## Previous task prompt — Artist About experience, CV, and mobile Hero
