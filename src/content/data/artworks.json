@@ -511,10 +511,10 @@
   },
   {
     "id": "artwork-1401-1",
-    "slug": "untitled-1400-1",
+    "slug": "untitled-1398-9",
     "localizedSlugs": {
-      "en": "untitled-1400-1",
-      "fa": "بدون-عنوان-1400-1"
+      "en": "untitled-1398-9",
+      "fa": "بدون-عنوان-1398-9"
     },
     "title": {
       "en": "Untitled",
@@ -528,23 +528,23 @@
       {
         "src": "/images/artworks/1401-1.jpg",
         "alt": {
-          "en": "Oil painting titled \"untitled 1400\"",
-          "fa": "تابلوی نقاشی با عنوان «بدون عتوان 1400"
+          "en": "Oil painting titled \"untitled 1398\"",
+          "fa": "تابلوی نقاشی با عنوان «بدون عتوان 1398"
         },
         "role": "primary"
       }
     ],
     "rightsConfirmed": true,
     "status": "published",
-    "year": 1400,
+    "year": 1398,
     "sortOrder": 18
   },
   {
     "id": "artwork-1401-2",
-    "slug": "untitled-1400-2",
+    "slug": "untitled-1400-1",
     "localizedSlugs": {
-      "en": "untitled-1400-2",
-      "fa": "بدون-عنوان-1400-2"
+      "en": "untitled-1400-1",
+      "fa": "بدون-عنوان-1400-1"
     },
     "title": {
       "en": "Untitled",

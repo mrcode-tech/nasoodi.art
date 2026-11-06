@@ -1,14 +1,14 @@
 {
   "active": true,
   "type": "gallery",
-  "contentId": "gallery-a-season-of-light",
+  "contentId": "gallery-the-desolate",
   "title": {
-    "en": "A Season of Light",
-    "fa": "فصلی از روشنایی"
+    "en": "The Desolate",
+    "fa": "برهوت"
   },
   "description": {
-    "en": "The six works from 1403 gather around renewal, transience, return, and the experience of looking.",
-    "fa": "شش اثر سال ۱۴۰۳ حول تازگی، گذرایی، بازگشت و تجربه‌ی دیدن گرد آمده‌اند."
+    "en": "Where silence stretches to the distant horizon and traces of life dissolve into emptiness",
+    "fa": "جایی که سکوت تا دوردست افق امتداد می‌یابد و ردّ زندگی در خلأ محو می‌شود"
   },
   "metadata": {
     "en": "Featured Gallery",
