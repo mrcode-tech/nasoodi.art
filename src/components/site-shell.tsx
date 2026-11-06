@@ -17,13 +17,30 @@ import { getArtist } from "@/content/repositories/artist.repository";
 function LanguageSelector({ locale, alternates, pathname, label, onNavigate }: { locale: Locale; alternates: Partial<Record<Locale, string>>; pathname: string; label: string; onNavigate?: () => void }) {
   const t = useTranslations();
   const router = useRouter();
-  const preserveGalleryState = (event: React.MouseEvent<HTMLAnchorElement>, targetHref: string) => {
-    if (!locales.some((candidate) => pathname === pagePath(candidate, "galleries"))) return;
+  const preserveArchiveState = (event: React.MouseEvent<HTMLAnchorElement>, targetHref: string) => {
+    const keys = pathname === pagePath(locale, "galleries")
+      ? ["page", "pageSize"]
+      : pathname === pagePath(locale, "journal")
+        ? ["category", "page", "pageSize"]
+        : [];
+    if (keys.length === 0) return;
+
     const current = new URLSearchParams(window.location.search);
     const query = new URLSearchParams();
-    for (const key of ["page", "pageSize"]) { const value = current.get(key); if (value) query.set(key, value); }
+    for (const key of keys) {
+      const value = current.get(key);
+      if (!value) continue;
+      if (key === "category" && !["exhibition", "event", "studio-update", "story"].includes(value)) continue;
+      if (key === "page" && (!/^[1-9]\\d*$/.test(value) || value === "1")) continue;
+      if (key === "pageSize" && !["10", "20"].includes(value)) continue;
+      query.set(key, value);
+    }
     const suffix = query.toString();
-    if (suffix) { event.preventDefault(); router.push(targetHref + "?" + suffix); onNavigate?.(); }
+    if (suffix) {
+      event.preventDefault();
+      router.push(targetHref + "?" + suffix);
+      onNavigate?.();
+    }
   };
   return <div className="theme-selector language-selector">
     <DropdownMenu>
@@ -31,7 +48,7 @@ function LanguageSelector({ locale, alternates, pathname, label, onNavigate }: {
     <DropdownMenuContent align={getLocaleDirection(locale) === "rtl" ? "start" : "end"} dir={getLocaleDirection(locale)} aria-label={label}>
       {locales.map((target) => {
         const href = target === locale ? pathname : alternates[target] ?? pagePath(target);
-        return <DropdownMenuItem asChild key={target}><Link href={href} hrefLang={target} lang={target} aria-current={locale === target ? "page" : undefined} onClick={(event) => { preserveGalleryState(event, href); onNavigate?.(); }}>{getLocaleName(target)}{locale === target ? " · " + t("current") : ""}</Link></DropdownMenuItem>;
+        return <DropdownMenuItem asChild key={target}><Link href={href} hrefLang={target} lang={target} aria-current={locale === target ? "page" : undefined} onClick={(event) => { preserveArchiveState(event, href); onNavigate?.(); }}>{getLocaleName(target)}{locale === target ? " · " + t("current") : ""}</Link></DropdownMenuItem>;
       })}
     </DropdownMenuContent>
     </DropdownMenu>
