@@ -168,6 +168,46 @@ test("artwork viewer supports opening, moving, browser history, and dismissal", 
   await expect(viewer).toBeHidden();
 });
 
+for (const locale of locales) {
+  test("mobile " + locale + " artwork viewer stays within the viewport", async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto("/" + locale);
+    const card = page.locator(".artwork-experience-card").first();
+    await expect(card).toBeVisible();
+    await card.click();
+
+    const viewer = page.getByRole("dialog");
+    await expect(viewer).toBeVisible();
+    const frame = await viewer.evaluate((node) => {
+      const rect = node.getBoundingClientRect();
+      const image = node.querySelector(".artwork-viewer-figure img");
+      const imageRect = image?.getBoundingClientRect();
+      return {
+        left: rect.left,
+        top: rect.top,
+        right: rect.right,
+        bottom: rect.bottom,
+        width: rect.width,
+        height: rect.height,
+        viewportWidth: window.innerWidth,
+        viewportHeight: window.innerHeight,
+        imageInsideFrame: Boolean(imageRect && imageRect.width > 0 && imageRect.height > 0 &&
+          imageRect.left >= rect.left && imageRect.top >= rect.top &&
+          imageRect.right <= rect.right && imageRect.bottom <= rect.bottom),
+      };
+    });
+    expect(frame.left).toBeGreaterThanOrEqual(0);
+    expect(frame.top).toBeGreaterThanOrEqual(0);
+    expect(frame.right).toBeLessThanOrEqual(frame.viewportWidth);
+    expect(frame.bottom).toBeLessThanOrEqual(frame.viewportHeight);
+    expect(frame.width).toBe(frame.viewportWidth);
+    expect(frame.height).toBe(frame.viewportHeight);
+    expect(frame.imageInsideFrame).toBe(true);
+    await page.keyboard.press("Escape");
+    await expect(viewer).toBeHidden();
+  });
+}
+
 test("artwork viewer detail action opens the canonical detail route", async ({ page }) => {
   await page.goto("/en");
   const card = page.locator(".artwork-experience-card").first();
