@@ -1948,3 +1948,21 @@ test("Works archive paginates five artworks by default and supports 5, 10, and 2
     await expect(cards).toHaveCount(5);
   }
 });
+
+
+test("Persian artwork and homepage Journal links use native localized slugs and open successfully", async ({ page, request }) => {
+  await page.goto("/fa/works");
+  const artworkLink = page.locator(".artwork-grid .artwork-item").first();
+  const artworkHref = await artworkLink.getAttribute("href");
+  expect(artworkHref).toMatch(/^\\/fa\\/works\\/[\\u0600-\\u06ff\\u200c\\u200e\\u200f-]+$/u);
+  expect((await request.get(artworkHref!)).status()).toBe(200);
+
+  await page.goto("/fa");
+  const journalLink = page.locator(".journal-preview-item h3 a").first();
+  const journalHref = await journalLink.getAttribute("href");
+  expect(journalHref).toMatch(/^\\/fa\\/journal\\/[\\u0600-\\u06ff\\u200c\\u200e\\u200f-]+$/u);
+  expect((await request.get(journalHref!)).status()).toBe(200);
+  await journalLink.click();
+  await expect(page).toHaveURL(new RegExp(journalHref!.replace(/[.*+?^${}()|[\\]\\\\]/g, "\\\\$&") + "$"));
+  await expect(page.locator("main h1")).toBeVisible();
+});
