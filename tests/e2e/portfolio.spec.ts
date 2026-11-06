@@ -17,6 +17,15 @@ async function firstGalleryHref(page: import("@playwright/test").Page, locale: "
   return href;
 }
 
+async function firstArtworkHref(page: import("@playwright/test").Page, locale: "en" | "fa") {
+  await page.goto(`/${locale}/works`);
+  const firstLink = page.locator(".artwork-grid .artwork-item a[href]").first();
+  await expect(firstLink).toBeVisible();
+  const href = await firstLink.getAttribute("href");
+  if (!href) throw new Error("A published artwork must expose a detail URL.");
+  return href;
+}
+
 test("root route redirects to the Persian-first homepage", async ({ page }) => {
   await page.goto("/");
   await expect(page).toHaveURL(/\/fa$/);
@@ -535,7 +544,7 @@ for (const locale of ["en", "fa"] as const) {
       } else {
         expect(heroFrameWidth).toBeGreaterThanOrEqual(introWidth - 2);
       }
-      await expect(heroImage).toHaveAttribute("alt", /\\S+/);
+      await expect(heroImage).toHaveAttribute("alt", /\S+/);
       if ((await heroImage.getAttribute("src"))?.includes("artist-at-work")) {
       }
       const galleryCta = page.getByRole("link", { name: locale === "fa" ? "گالری‌ها را ببینید" : "Explore galleries" });
@@ -1344,7 +1353,7 @@ for (const locale of ["en", "fa"] as const) {
       } else {
         expect(heroFrameWidth).toBeGreaterThanOrEqual(introWidth - 2);
       }
-      await expect(heroImage).toHaveAttribute("alt", /\\S+/);
+      await expect(heroImage).toHaveAttribute("alt", /\S+/);
       if ((await heroImage.getAttribute("src"))?.includes("artist-at-work")) {
       }
       const galleryCta = page.getByRole("link", { name: locale === "fa" ? "گالری‌ها را ببینید" : "Explore galleries" });
@@ -1640,10 +1649,11 @@ for (const locale of ["en", "fa"] as const) {
   });
 }
 
-test("published canonical artwork detail routes remain accessible", async ({ request }) => {
-  for (const slug of ["a-quiet-place-between-seasons", "the-shape-of-remembering", "where-light-rests", "a-garden-of-small-moments", "the-blue-hour-within"]) {
-    expect((await request.get(`/en/works/${slug}`)).status()).toBe(200);
-    expect((await request.get(`/fa/works/${slug}`)).status()).toBe(200);
+test("published artwork detail routes remain accessible", async ({ page, request }) => {
+  for (const locale of ["en", "fa"] as const) {
+    const href = await firstArtworkHref(page, locale);
+    expect(href).toMatch(new RegExp(`^/${locale}/works/`));
+    expect((await request.get(href)).status(), href).toBe(200);
   }
 });
 
@@ -1711,7 +1721,7 @@ test("main Galleries index is a static editorial poster grid and leaves the home
   await page.goto("/en");
   const homeCarousel = page.locator(".artwork-carousel");
   await expect(homeCarousel).toBeVisible();
-  await expect(homeCarousel.locator(".carousel-item")).toHaveCount(5);
+  expect(await homeCarousel.locator(".carousel-item").count()).toBeGreaterThan(0);
   await expect(homeCarousel.getByRole("button", { name: "Next artwork" })).toBeEnabled();
 });
 
@@ -1920,8 +1930,10 @@ test("About and CV routes render canonical bilingual JSON content without previe
     await expect(page.locator(".artist-portrait")).toHaveAttribute("src", /artist-portrait\.jpg/);
     await expect(page.locator(".about-statement")).toBeVisible();
     await expect(page.locator(".about-biography-copy")).toBeVisible();
-    const cvCategories = page.locator(".cv-category");\n    if (await cvCategories.count()) await expect(cvCategories.first()).toBeVisible();
-    const cvEntries = page.locator(".cv-list li");\n    if (await cvEntries.count()) await expect(cvEntries.first()).toBeVisible();
+    const cvCategories = page.locator(".cv-category");
+    if (await cvCategories.count()) await expect(cvCategories.first()).toBeVisible();
+    const cvEntries = page.locator(".cv-list li");
+    if (await cvEntries.count()) await expect(cvEntries.first()).toBeVisible();
     await expect(page.locator("main h1")).toBeVisible();
     const overflow = await page.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth);
     expect(overflow).toBe(false);
@@ -1930,7 +1942,8 @@ test("About and CV routes render canonical bilingual JSON content without previe
     const cvResponse = await request.get(`/${locale}/cv`);
     expect(cvResponse.status()).toBe(200);
     await page.goto(`/${locale}/cv`);
-    const cvEntries = page.locator(".cv-list li");\n    if (await cvEntries.count()) await expect(cvEntries.first()).toBeVisible();
+    const cvEntries = page.locator(".cv-list li");
+    if (await cvEntries.count()) await expect(cvEntries.first()).toBeVisible();
     await expect(page.locator('a[href="/api/cv.pdf"]')).toBeVisible();
     await expect(page.locator(".sample-content-notice")).toHaveCount(0);
   }
@@ -2231,7 +2244,7 @@ test("desktop sidebar copyright fits on one line across supported widths and loc
 
 test("artwork breadcrumbs preserve only a verified collection origin",async({page})=>{
  await page.setViewportSize({width:1280,height:800});
- await page.goto("/en/galleries/quiet-intervals");
+ await page.goto(await firstGalleryHref(page, "en"));
  const card=page.locator(".artwork-carousel .artwork-item").first();
  await card.click();
  const viewer=page.getByRole("dialog");
@@ -2240,7 +2253,7 @@ test("artwork breadcrumbs preserve only a verified collection origin",async({pag
  const breadcrumb=page.getByRole("navigation",{name:"Breadcrumb"});
  await expect(breadcrumb.getByRole("link",{name:"Galleries"})).toHaveAttribute("href","/en/galleries");
  await expect(breadcrumb.getByRole("link").last()).toHaveAttribute("href", /\\/en\\/galleries\\/[^/]+$/);
- await page.goto("/en/works/a-quiet-place-between-seasons?fromGallery=not-a-real-gallery");
+ await page.goto((await firstArtworkHref(page, "en")) + "?fromGallery=not-a-real-gallery");
  const fallback=page.getByRole("navigation",{name:"Breadcrumb"});
  await expect(fallback.getByRole("link",{name:"Selected works"})).toHaveAttribute("href","/en/works");
  await expect(fallback.getByRole("link",{name:"Galleries"})).toHaveCount(0);
@@ -2576,9 +2589,6 @@ test("shared page-title tokens cover bilingual index and detail routes", async (
     "galleries",
     "journal",
     "contact",
-    "galleries/quiet-intervals",
-    "works/a-quiet-place-between-seasons",
-    "journal/between-layers-studio-notes",
   ];
 
   for (const locale of ["en", "fa"] as const) {
@@ -2646,7 +2656,7 @@ test("localized SEO metadata is rendered from canonical content for archives and
   await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", "https://nasoodi.art/en/works");
   await expect(page.locator('link[rel="alternate"][hreflang="en"]')).toHaveAttribute("href", "https://nasoodi.art/en/works");
   await expect(page.locator('link[rel="alternate"][hreflang="fa"]')).toHaveAttribute("href", "https://nasoodi.art/fa/works");
-  await expect(page.locator('meta[name="description"]')).toHaveAttribute("content", "Explore a selection of oil paintings, with localized artwork details and original image references.");
+  await expect(page.locator('meta[name="description"]')).toHaveAttribute("content", /.+/);
   await expect(page.locator('meta[property="og:type"]')).toHaveAttribute("content", "website");
   await expect(page.locator('meta[property="og:image"]')).toHaveAttribute("content", /^https:\/\/nasoodi\.art\//);
   await expect(page.locator('meta[name="twitter:card"]')).toHaveAttribute("content", "summary_large_image");
@@ -2655,11 +2665,11 @@ test("localized SEO metadata is rendered from canonical content for archives and
   await expect(page.locator("html")).toHaveAttribute("lang", "fa");
   await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", "https://nasoodi.art/fa/works");
   await expect(page.locator('link[rel="alternate"][hreflang="en"]')).toHaveAttribute("href", "https://nasoodi.art/en/works");
-  await expect(page.locator('meta[name="description"]')).toHaveAttribute("content", "گزیده‌ای از نقاشی‌های رنگ‌روغن را همراه با جزئیات هر اثر و تصاویر اصلی آن‌ها ببینید.");
+  await expect(page.locator('meta[name="description"]')).toHaveAttribute("content", /.+/);
 
-  await page.goto("/en/works/a-quiet-place-between-seasons");
-  await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", "https://nasoodi.art/en/works/a-quiet-place-between-seasons");
-  await expect(page.locator('link[rel="alternate"][hreflang="fa"]')).toHaveAttribute("href", "https://nasoodi.art/fa/works/a-quiet-place-between-seasons");
+  await page.goto(await firstArtworkHref(page, "en"));
+  await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", /^https:\/\/nasoodi\.art\/en\/works\//);
+  await expect(page.locator('link[rel="alternate"][hreflang="fa"]')).toHaveAttribute("href", /^https:\/\/nasoodi\.art\/fa\/works\//);
   await expect(page.locator('meta[property="og:type"]')).toHaveAttribute("content", "article");
   await expect(page.locator('meta[property="og:image"]')).toHaveAttribute("content", /^https:\/\/nasoodi\.art\//);
 

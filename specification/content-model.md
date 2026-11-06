@@ -1,75 +1,68 @@
-# Content Model and Runtime Data Contracts
+# Nasoodi.art — Content Model
 
-## 1. Purpose
+**Owner decision, 2026-11-05:** Content is editorial data. Do not impose factual verification, artist-approval, provenance, or content-validation gates before displaying records supplied or authorized by the owner. The owner wants the current editable content to populate the site and will revise the JSON after launch.
 
-Define the technical shape and lifecycle of content records consumed by the application. This document describes data boundaries and invariants only; editorial copy and production records belong exclusively in canonical data files.
+## 1. Canonical content sources
 
-## 2. Canonical content domains
+Use one canonical JSON source for each content domain:
 
-Use one canonical source per domain. Domain records are stored under `src/content/data/`:
-
-| Domain | Technical responsibility |
+| Domain | Source |
 |---|---|
-| Profile | Localized profile fields consumed by homepage and profile routes |
-| CV | Structured, optionally categorized entries and optional document reference |
-| Contact | Configurable contact labels, values, and safe destinations |
-| Artwork | Stable identity, localized fields, asset references, dimensions, and publication state |
-| Collection | Stable identity, localized fields, ordered artwork references, and cover reference |
-| Journal | Unified localized stream supporting multiple entry types and optional media |
-| Site metadata | Localized archive titles and descriptions |
-| Homepage selection | Stable references to records selected for homepage presentation |
+| Artist profile, biography, statement, About | `src/content/data/artist-profile.json` |
+| CV, education, activities, exhibitions, awards, publications | `src/content/data/cv.json` |
+| Contact details | `src/content/data/contact.json` |
+| Artworks | `src/content/data/artworks.json` |
+| Galleries | `src/content/data/galleries.json` |
+| Journal articles, events, exhibitions and news | `src/content/data/journal/index.json` |
+| Site metadata | `src/content/data/site.json` |
+| Homepage selections | `src/content/data/homepage-selection.json` |
 
-Do not create parallel demo, preview, fictional, temporary, verified, or production-only content providers.
+Do not create parallel verified/unverified, approved/pending, sample/real, preview/production, temporary/permanent, or environment-specific content stores. The homepage, About, CV, Contact, gallery, and Journal views must read the canonical records.
 
-## 3. Localization and identity
+## 2. Content fields and localization
 
-- Stable record IDs are independent of localized titles and slugs.
-- Localized editorial fields are stored with their owning record.
-- UI labels and interface messages belong in `src/i18n/messages/{en,fa}/`.
-- Shared technical facts such as dates, dimensions, ordering, asset references, and publication state remain structured fields.
-- Route resolution uses stable record identity and the requested locale's localized slug.
-- Do not silently substitute unrelated prose when a localized editorial value is missing; follow the localization contract and render available content safely.
+- Keep stable record IDs.
+- Store English and Persian editorial copy in the same record using `en` and `fa` localized values.
+- Store UI labels and interface messages in `src/i18n/messages/{en,fa}/`.
+- Keep shared facts such as dates, dimensions, medium, ordering, and image paths in structured fields.
+- Use structured JSON blocks for long-form Journal content.
+- Keep content separate from React components and application logic.
+- Missing optional fields may simply be omitted. Do not create artificial placeholder values to satisfy a content rule.
 
-## 4. Record relationships
+## 3. Artist profile and About
 
-- Collection records reference artwork IDs; they do not duplicate artwork records.
-- A collection cover reference must resolve to a member of that collection.
-- Where the cover contract specifies the first ordered member, the cover reference must equal the first member of that ordered list.
-- Journal records may reference reusable media assets without duplicating domain records.
-- Homepage selections reference canonical records and are resolved through repositories.
-- Derived views must reuse their canonical source rather than maintain a second dataset.
+The homepage biography and About page use the same artist-profile record. The record may contain the artist's name, biography, statement, discipline, and portrait reference. Do not maintain a second About fixture or environment-specific provider.
 
-## 5. Publication and optional fields
+## 4. CV and activities
 
-- Publication state controls public route eligibility.
-- Unpublished records must not become publicly indexable or appear in public navigation.
-- Optional fields may be absent and must be handled gracefully.
-- Missing optional values must not be replaced with invented editorial text.
-- Technical validation protects runtime safety, route correctness, data shape, and asset references.
-- Do not introduce factuality, personal approval, provenance, or editorial-completeness gates as prerequisites for rendering canonical records.
+The CV is one editable collection. It can contain education, training, professional activities, solo/group exhibitions, publications, awards, collections, workshops, and other relevant activities. Display the entries currently present in the canonical JSON. Do not suppress entries because they lack a separate verification, approval, or provenance flag. The owner may edit or remove entries directly in JSON.
 
-## 6. Repository and component boundaries
+The CV page and About CV preview use the same CV repository/source. The downloadable PDF is generated from or served using the same canonical CV data/document configured in that record.
 
-- Domain types describe the data contract.
-- Repositories resolve records, locale-specific fields, ordering, publication eligibility, and relationships.
-- Utilities handle pure operations such as pagination, sorting, URL safety, and formatting.
-- Routes orchestrate data and metadata.
-- Components present resolved data and must not import canonical editorial JSON directly.
+## 5. Contact
 
-## 7. Validation requirements
+Use the single Contact record for the homepage Contact section and dedicated Contact page. Current owner-provided methods are:
+- Email: `g.nasoodi@gmail.com`
+- Telegram: `@nasoodi`
+- Instagram: `@ghazalenasoodi`
 
-Validate technical invariants:
-- Required structural fields and supported types.
-- Unique stable IDs and localized route keys.
-- Safe asset paths and supported image metadata.
-- Valid references and no duplicate membership references.
-- Valid date representation where dates drive sorting or publication.
-- Correct publication filtering.
-- Graceful handling of missing optional fields.
-- No unsafe external destinations or malformed route segments.
+Do not hide these methods behind approval-state or verification flags. Render email as a `mailto:` link and Telegram as `https://t.me/nasoodi`.
 
-Do not validate the truth, quality, or personal meaning of editorial statements, biography, achievements, titles, or descriptions.
+## 6. Artwork, galleries, Journal and events
+
+- Artwork records describe the artwork and point to repository assets.
+- Galleries reference artwork IDs rather than duplicating artwork records.
+- Journal is the unified editorial stream for articles, studio notes, exhibitions, events, and news, including events involving other artists.
+- The event repository is a filtered view of Journal records, not a second data store.
+- The homepage Journal preview shows one newest eligible item; the full Journal page uses pagination.
+- Keep existing visual presentation, route structure, and localized content behavior.
+
+## 7. Technical integrity (not editorial approval)
+
+Application code may retain technical checks needed to prevent runtime errors or unsafe behavior, such as TypeScript shape checks, safe URL/path handling, route collision handling, and correct rendering of optional fields. These checks must not judge whether an artist fact is true, whether an entry is verified, whether the artist has approved it, or whether editorial content is sufficiently complete to be shown.
+
+Do not add editorial validation rules, verification flags, factuality checks, approval gates, or data-quality thresholds as prerequisites for rendering, indexing, or showing CV/Contact/Journal content. A missing optional value should be omitted gracefully rather than blocking the record.
 
 ## 8. Editing workflow
 
-Ordinary editorial changes should be made in canonical data files without changing React components or technical specifications. Technical tests must continue to pass when editorial values or record counts change.
+To change site content, edit the corresponding canonical JSON file. No React component change should be needed for ordinary content edits. Preserve the current IDs and structure when updating existing entries. Run the normal application and regression tests to ensure the site still builds and renders; tests must not encode editorial approval or factual verification requirements.
