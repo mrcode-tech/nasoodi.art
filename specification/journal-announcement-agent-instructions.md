@@ -1,76 +1,49 @@
-# Coding Agent Task — Journal Events and Homepage Announcement
+# Coding Agent Instructions — Configurable Content Announcement
 
-**Task type:** Implementation of the owner-approved direction; final sticker visual selection remains a review gate  
-**Repository:** mrcode-tech/nasoodi.art  
-**Working branch:** feature  
-**Primary specification:** journal-announcement-specification.md  
-**Complete implementation prompt:** journal-announcement-implementation-prompt.md
-**Visual asset:** hand-authored SVG served directly by the website; governed by journal-announcement-sticker-visual-design.md
+**Repository:** `mrcode-tech/nasoodi.art`  
+**Branch:** `feature` only  
+**Primary prompt:** [journal-announcement-implementation-prompt.md](./journal-announcement-implementation-prompt.md)  
+**Technical contract:** [journal-announcement-specification.md](./journal-announcement-specification.md)
 
 ## Objective
 
-Read and follow [journal-announcement-implementation-prompt.md](./journal-announcement-implementation-prompt.md) as the complete implementation task brief. This file is the concise execution checklist; the detailed specification and repository authorities remain binding.
-
-Implement the approved Journal event experience described by the proposal, wireframes, and detailed specification. The feature includes the fixed homepage event announcement, the in-flow homepage Journal preview, event-specific Journal detail presentation, and archive pagination where justified.
+Implement the general-purpose announcement sticker controlled by one JSON configuration. Read the complete implementation prompt and technical contract before changing code.
 
 ## Mandatory preflight
 
-1. Read AGENTS.md, root agent.md, and specification/README.md.
-2. Read specification/journal-announcement-implementation-prompt.md and specification/journal-announcement-sticker-visual-design.md before implementation or touching the sticker asset.
-3. Read every mandatory design and technical authority listed in journal-announcement-specification.md.
-4. Inspect current branch, worktree, latest commit, existing changes, and CI configuration.
-5. Confirm the active branch is feature. Do not create, switch, reset, delete, or rename branches.
-6. Inspect the actual Journal schema, routes, data, validators, locale strings, shell, breakpoints, design tokens, and test utilities.
-7. Reconcile specification assumptions with implementation. If a conflict changes behavior or scope, stop and report it rather than silently inventing a solution.
+1. Read repository agent instructions and `specification/README.md`.
+2. Confirm the existing branch is `feature`; do not create or switch branches.
+3. Inspect current code, routes, content models, repositories, locale messages, tests, and CI.
+4. Preserve unrelated work and editorial content.
+5. Reconcile specifications with the actual repository before implementation.
 
-## Implementation requirements
+## Implementation rules
 
-- Treat the Journal as the sole canonical content system for events and articles.
-- Do not add a top-level Events navigation destination or duplicate content model.
-- Render the announcement only for one eligible, published, artist-approved, locale-ready upcoming event.
-- Anchor the announcement to physical left in English and physical right in Persian.
-- Keep it fixed during scroll and independent of hero/layout geometry.
-- Keep the menu trigger, sidebar, artwork, focus, and essential content unobstructed.
-- Refine or author the decorative SVG during the early implementation phase; the checked-in torn-edge study is a starting point, not a finished asset. Implement the announcement with the resulting SVG as a provisional visual until owner review. Review the treatment in the actual responsive website screenshots.
-- Keep event link and dismissal as separate controls.
-- Use event-specific session dismissal unless an existing approved project preference contract supersedes it.
-- Preserve the independent homepage Journal preview, limited to the two newest eligible published entries across all Journal types, and canonical Journal detail routes.
-- Show confirmed event metadata only; never fabricate title, date, timezone, venue, participants, or registration details.
-- Use approved translations only.
-- Treat public/images/journal/journal-announcement-sticker.svg as the editable source of truth. Do not use image generation, screenshot tracing, raster painting, or image processing.
-- Do not create a PNG derivative or a sticker-rendering pipeline. CI verifies that the SVG exists and is non-empty; browser tests verify it renders.
-- Do not generate, commit, or bundle a PNG derivative. The canonical SVG is used directly.
-- Reuse project components, semantic tokens, shadcn-style controls, and existing utilities.
-- Avoid unnecessary dependencies, tracking, or new personal-data collection.
-- Follow the repository's SEO, accessibility, privacy, performance, and content-governance contracts.
+- One JSON file: `src/content/announcement.json`.
+- One `active` boolean; no announcement array, repository, or automatic selection.
+- Supported types: artwork, gallery, journal, event.
+- Resolve active references using existing content access functions.
+- Do not resolve content while inactive.
+- Derive localized href from type and the referenced record's localized slug.
+- Do not store destination URLs in JSON.
+- Configure the initial sticker to the newest published gallery found in the current data.
+- Pass only resolved display data to the component.
+- Preserve existing paper SVG, viewport/sidebar/mobile-drawer placements, session dismissal, RTL/LTR behavior, and accessibility.
+- Keep event repository and Journal event behavior where used elsewhere; remove only the sticker's dependency on upcoming-event selection.
+- Update translations to generic announcement wording.
+- Update specifications and remove contradictory exhibition-only requirements.
 
-## Testing and verification
+## Testing rules
 
-Follow the full test matrix and phase exit criteria in journal-announcement-implementation-prompt.md and journal-announcement-specification.md.
+- Validate configuration structure regardless of activation.
+- Validate active content references and localized destinations.
+- Always test both active and inactive states with synthetic fixtures.
+- Playwright reads the actual branch JSON. Run active-only UI tests only when active is true; when false, skip only those tests with an explicit reason.
+- Inactive visibility, schema validation, synthetic tests, and unrelated site tests always run.
+- Report skipped tests as skipped.
+- Do not hardcode production titles, IDs, counts, or event assumptions in UI tests.
+- Do not skip, weaken, or delete meaningful tests to make CI pass.
 
-Add or update tests for:
-- Eligible event selection and nearest upcoming event.
-- Publication approval, locale completeness, timezone boundaries, expired/past events, and deterministic tie-breaking.
-- Dismissal and event-specific persistence.
-- Link and close-control semantics.
-- Empty, missing-translation, long-title, and missing-metadata states.
-- English LTR and Persian RTL placement.
-- Desktop, tablet, mobile, short-height, 320px, and 200% zoom behavior.
-- Homepage integration, event detail metadata, and archive pagination/filter preservation.
-- Keyboard, screen-reader semantics, reduced motion, and focus visibility.
+## Delivery
 
-Run repository-prescribed lint, formatting, typecheck, unit, component, integration, E2E, build, and CI workflows as applicable. Do not invent command names. Capture desktop/tablet/mobile and both-locale screenshots. Inspect CI logs and fix failures before reporting.
-
-## Git and release boundaries
-
-- Work only on the existing feature branch.
-- Preserve unrelated work and existing user changes.
-- Do not merge into stage or main.
-- Do not deploy.
-- Do not push unless separately authorized.
-- Do not commit until implementation and verification are complete and the owner has approved the commit.
-- Report exact changed files, test commands/results, CI run links, screenshots, remaining risks, and any decision required from the owner.
-
-## Completion definition
-
-The task is complete only when the approved behavior is implemented, the SVG source is validated and its website rendering is verified, required tests pass, CI is inspected, responsive/locale screenshots are reviewed, and unresolved visual decisions are clearly reported. Owner review is still required before the sticker is called final. A code change or successful build alone is not completion.
+Run available lint, typecheck, unit, build, and Playwright checks. Inspect the latest GitHub Actions workflow and failed logs. Fix root causes. Commit only to `feature`; do not merge, deploy, or modify unrelated editorial content. Report exact commit and workflow evidence. Never claim CI passed unless the latest complete run is successful.

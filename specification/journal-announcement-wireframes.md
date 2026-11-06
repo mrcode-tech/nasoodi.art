@@ -1,4 +1,6 @@
-# Journal Event Announcement — Responsive Wireframes
+> **Contract update:** These wireframes preserve the established shell placements and paper-sticker concept. Any event-only assumptions in older diagrams or annotations are superseded by [the JSON-configured content announcement contract](./journal-announcement-specification.md). The sticker now displays the single active configuration and can link to artwork, gallery, Journal, or event content. Its destination is derived from type and content ID. When inactive, no sticker or reserved space is rendered.
+
+# Journal and Content Announcement — Responsive Wireframes
 
 **Status:** Structural wireframes for review  
 **Related:** journal-announcement-proposal.md and journal-announcement-specification.md
@@ -62,7 +64,7 @@ The menu trigger stays unobstructed. The notice sits below it with a clear gap a
 
 ~~~text
 ┌──────────────────────────────────┐
-│ NASOODI                    [MENU]│
+│ ARTIST_NAME                    [MENU]│
 │                                  │
 │ ┌───────────────────────────┐    │
 │ │ UPCOMING EXHIBITION    ×  │    │
@@ -179,24 +181,24 @@ The actual event date/time must be visually distinct from the Journal publicatio
 ## 8. Interaction states
 
 ~~~text
-ANNOUNCEMENT VISIBLE
-- One eligible event selected.
-- Link opens the localized canonical event detail route.
-- Close button dismisses only the announcement.
+ANNOUNCEMENT ACTIVE
+- The single JSON configuration resolves one published item of its configured content type.
+- The main link opens the localized canonical destination derived from type and content ID.
+- Close button dismisses only the configured content announcement.
 
 DISMISSED
 - Announcement disappears without page reflow.
 - No toast, dialog, or focus movement.
 
-NO ELIGIBLE EVENT
+ANNOUNCEMENT INACTIVE
 - No announcement component or reserved gap.
 
-NEW EVENT SELECTED
-- Dismissal of a different event does not suppress this event.
+CONTENT CONFIGURATION CHANGED
+- Dismissal of a different content item does not suppress the newly configured item.
 
-LONG TITLE / NARROW VIEWPORT
-- Title wraps safely.
-- Optional date is removed before title is clipped.
+LONG TITLE OR DESCRIPTION / NARROW VIEWPORT
+- Copy wraps safely.
+- Optional metadata is omitted before required title or description is clipped.
 - If the tab cannot fit safely, reposition or suppress at that breakpoint.
 ~~~
 
@@ -211,9 +213,9 @@ LONG TITLE / NARROW VIEWPORT
 - The announcement does not reserve layout space and never changes hero geometry.
 
 
-## 10. Sticker visual close-up — first vector study
+## 10. Sticker visual close-up — paper asset
 
-The first review candidate is a small warm-ivory exhibition slip. Its straight outer edge is attached flush to the viewport; its irregular torn edge faces inward. A small muted paper-tape strip suggests physical attachment. The vector is a decorative silhouette only; all event copy and controls remain HTML.
+The paper treatment is a small warm-ivory editorial slip that can accompany any configured content type. Its straight outer edge is attached flush to the viewport; its irregular torn edge faces inward. A small muted paper-tape strip suggests physical attachment. The vector is a decorative silhouette only; all announcement copy and controls remain HTML.
 
 - English: straight attachment edge on physical left, torn edge on right.
 - Persian: reflect only the decorative silhouette horizontally; straight attachment edge on physical right, torn edge on left. Do not mirror text or artwork.

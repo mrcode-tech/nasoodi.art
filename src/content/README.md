@@ -13,6 +13,7 @@ This directory separates owner-editable editorial JSON from TypeScript domain co
 - `data/artist-profile.json`: the single localized artist profile, including biography, statement, identity, and profile copy.
 - `data/cv.json`: the single CV record, containing ordered entries and the optional downloadable document reference.
 - `data/contact.json`: the single Contact configuration. Only owner-supplied contact destinations may be published; do not invent addresses or handles.
+- `announcement.json`: the single optional announcement configuration. Its `active` flag controls visibility; `type` and `contentId` reference one published content record, and localized destinations are derived by the application.
 
 ## TypeScript adapters and services
 

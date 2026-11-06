@@ -4,39 +4,35 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { getLocaleDirection, type Locale } from "@/types/locale";
-import styles from "./journal-announcement.module.css";
-
-export type AnnouncementEvent = {
-  id: string;
-  slug: string;
-  title: string;
-  startsAt: string;
-  timeZone: string;
-};
+import styles from "./content-announcement.module.css";
 
 type Placement = "viewport" | "desktop-sidebar" | "mobile-sidebar";
 
-const DISMISS_EVENT = "nasoodi:journal-announcement:dismissed";
+const DISMISS_EVENT = "nasoodi:content-announcement:dismissed";
 
-export function JournalAnnouncement({
+export function ContentAnnouncement({
   locale,
-  event,
-  eyebrow,
+  id,
+  title,
+  description,
+  metadata,
   dismissLabel,
   href,
   placement = "viewport",
   onNavigate,
 }: {
   locale: Locale;
-  event: AnnouncementEvent;
-  eyebrow: string;
+  id: string;
+  title: string;
+  description: string;
+  metadata?: string;
   dismissLabel: string;
   href: string;
   placement?: Placement;
   onNavigate?: () => void;
 }) {
   const [visibility, setVisibility] = useState<"pending" | "visible" | "dismissed">("pending");
-  const storageKey = `nasoodi:journal-announcement:dismissed:${event.id}`;
+  const storageKey = `nasoodi:content-announcement:dismissed:${id}`;
 
   useEffect(() => {
     const syncVisibility = () => {
@@ -59,18 +55,13 @@ export function JournalAnnouncement({
     try {
       window.sessionStorage.setItem(storageKey, "1");
     } catch {
-      // Dismissal still applies to the current component when storage is unavailable.
+      // Dismissal still applies to this component when storage is unavailable.
     }
     setVisibility("dismissed");
     window.dispatchEvent(new Event(DISMISS_EVENT));
   };
 
   if (visibility !== "visible") return null;
-
-  const date = new Intl.DateTimeFormat(locale, {
-    dateStyle: "medium",
-    timeZone: event.timeZone,
-  }).format(new Date(event.startsAt));
 
   const containerClass = {
     viewport: styles.container,
@@ -82,7 +73,7 @@ export function JournalAnnouncement({
     <aside
       className={containerClass}
       data-placement={placement}
-      aria-label={eyebrow}
+      aria-label={metadata || title}
       dir={getLocaleDirection(locale)}
     >
       <span
@@ -91,13 +82,11 @@ export function JournalAnnouncement({
         aria-hidden="true"
       />
       <Link className={styles.link} href={href} data-part="link" onClick={onNavigate}>
-        <span className={styles.eyebrow} data-part="eyebrow">{eyebrow}</span>
+        {metadata && <span className={styles.eyebrow} data-part="metadata">{metadata}</span>}
         <span className={`${styles.title} ${locale === "fa" ? styles.persianTitle : ""}`} data-part="title">
-          {event.title}
+          {title}
         </span>
-        <time className={styles.date} dateTime={event.startsAt} data-part="date">
-          {date}
-        </time>
+        <span className={styles.description} data-part="description">{description}</span>
       </Link>
       <Button
         className={styles.dismiss}

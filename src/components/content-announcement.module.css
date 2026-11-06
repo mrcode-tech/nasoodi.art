@@ -32,9 +32,7 @@
   pointer-events: none;
 }
 
-.paperRtl {
-  transform: scaleX(-1);
-}
+.paperRtl { transform: scaleX(-1); }
 
 .link {
   position: relative;
@@ -45,7 +43,7 @@
   flex-direction: column;
   justify-content: center;
   gap: 0.18rem;
-  padding-block: 1.65rem 1.1rem;
+  padding-block: 1.5rem 1.05rem;
   padding-inline: 1.3rem 4rem;
   color: inherit;
   text-align: start;
@@ -70,13 +68,14 @@
   text-wrap: pretty;
 }
 
-.date {
+.description {
   display: block;
-  margin-top: 0.08rem;
+  max-width: 100%;
   color: var(--muted);
-  font-size: 0.69rem;
-  line-height: 1.5;
-  font-variant-numeric: tabular-nums;
+  font-size: 0.72rem;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+  text-wrap: pretty;
 }
 
 .dismiss {
@@ -126,32 +125,20 @@
 
 .desktopSidebarContainer .link {
   gap: 0.18rem;
-  padding-block: 1.6rem 1.05rem;
+  padding-block: 1.5rem 1rem;
   padding-inline: 1.3rem 4rem;
 }
 
-.desktopSidebarContainer .eyebrow {
-  font-size: 0.61rem;
-  letter-spacing: 0.035em;
-}
-
-.desktopSidebarContainer .title {
-  font-size: 0.96rem;
-  line-height: 1.28;
-}
-
-.desktopSidebarContainer .date {
-  font-size: 0.68rem;
-}
+.desktopSidebarContainer .eyebrow { font-size: 0.61rem; letter-spacing: 0.035em; }
+.desktopSidebarContainer .title { font-size: 0.96rem; line-height: 1.28; }
+.desktopSidebarContainer .description { font-size: 0.66rem; line-height: 1.4; }
 
 .desktopSidebarContainer .dismiss {
   inset-block-start: 0.6rem;
   inset-inline-end: 1.1rem;
 }
 
-.mobileSidebarContainer {
-  display: none;
-}
+.mobileSidebarContainer { display: none; }
 
 .persianTitle {
   font-family: "IranianSerifRegular", Tahoma, serif;
@@ -159,15 +146,11 @@
   letter-spacing: 0;
 }
 
-:dir(rtl) .eyebrow {
-  letter-spacing: 0;
-}
+:dir(rtl) .eyebrow { letter-spacing: 0; }
 
 @media (max-width: 900px) {
   .container,
-  .desktopSidebarContainer {
-    display: none;
-  }
+  .desktopSidebarContainer { display: none; }
 
   .mobileSidebarContainer {
     display: block;
@@ -179,23 +162,13 @@
 
   .mobileSidebarContainer .link {
     gap: 0.2rem;
-    padding-block: 1.55rem 1rem;
+    padding-block: 1.5rem 1rem;
     padding-inline: 1.3rem 4rem;
   }
 
-  .mobileSidebarContainer .eyebrow {
-    font-size: 0.6rem;
-  }
-
-  .mobileSidebarContainer .title {
-    font-size: clamp(0.88rem, 3.5vw, 0.98rem);
-    line-height: 1.2;
-  }
-
-  .mobileSidebarContainer .date {
-    font-size: 0.7rem;
-    line-height: 1.35;
-  }
+  .mobileSidebarContainer .eyebrow { font-size: 0.6rem; }
+  .mobileSidebarContainer .title { font-size: clamp(0.88rem, 3.5vw, 0.98rem); line-height: 1.25; }
+  .mobileSidebarContainer .description { font-size: 0.68rem; line-height: 1.35; }
 
   .mobileSidebarContainer .dismiss {
     inset-block-start: 0.6rem;
@@ -204,9 +177,7 @@
 }
 
 @media (max-height: 760px) and (min-width: 901px) {
-  .container {
-    display: none;
-  }
+  .container { display: none; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -215,14 +186,7 @@
   .mobileSidebarContainer,
   .container *,
   .desktopSidebarContainer *,
-  .mobileSidebarContainer * {
-    transition: none !important;
-  }
+  .mobileSidebarContainer * { transition: none !important; }
 }
 
-
-/* Dark mode turns the paper itself into a deep gallery-slate surface while keeping
-   announcement copy on the normal semantic foreground tokens for clear contrast. */
-:global(.dark) .paper {
-  filter: brightness(0.38) saturate(0.72);
-}
+:global(.dark) .paper { filter: brightness(0.38) saturate(0.72); }

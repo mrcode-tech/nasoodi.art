@@ -1,206 +1,74 @@
-# Nasoodi.art — Professional Oil Painter Portfolio Specification
-
-This directory is the product, design, content, and implementation source of truth for nasoodi.art. It defines a bilingual (Persian/English) professional portfolio for oil painter Ghazaleh Abdolahzade Nasoodi (غزاله عبداله زاده نسودی).
-
-## How to use this specification
-
-1. Read this index and repository-level AGENTS.md.
-2. Before any user-facing UI or interaction work, read design-engineering-skills.md and design-direction-and-system-refinement.md.
-3. Read proposal.md for product scope and binding principles.
-4. Read visual-identity-and-photo-direction.md and site-wide-design-system-and-section-specification.md before broad UI implementation.
-5. Read the relevant page-specific specification: easel-scroll-background.md, navigation-and-mobile-sidebar.md, gallery-collections-and-artwork-detail.md, homepage-artwork-hero-and-featured-works.md, or journal-and-events.md.
-6. Read content-model.md, artwork-imaging-and-asset-pipeline.md, and localization-and-editorial-governance.md before adding content or images.
-7. Read the relevant technical contracts for SEO, accessibility, performance, privacy, security, and testing.
-8. Follow implementation-roadmap.md for sequencing and phase exit criteria.
-9. Use canonical owner-authorized JSON content directly; do not impose editorial verification or approval gates. Keep technical safety and visual-quality checks.
-
-## Journal event announcement design package
-
-The following task-specific documents define the proposed homepage event announcement and the related Journal event experience:
-
-- [Journal event announcement proposal](./journal-announcement-proposal.md) — product decisions, visual direction, variants, placement, interaction, content safeguards, and review gates.
-- [Journal event announcement wireframes](./journal-announcement-wireframes.md) — English/Persian desktop and mobile placement, homepage Journal section, archive, event detail, and interaction states.
-- [Journal event announcement specification](./journal-announcement-specification.md) — detailed UI/UX, data eligibility, component architecture, localization, accessibility, SEO, acceptance criteria, tests, and implementation phases.
-- [Journal and sticker implementation prompt](./journal-announcement-implementation-prompt.md) — comprehensive, executable coding-agent prompt covering Journal, the SVG sticker asset, direct asset usage, testing, visual QA, and delivery gates.
-- [Journal event announcement agent instructions](./journal-announcement-agent-instructions.md) — concise coding-agent preflight, implementation checklist, verification, and Git/release boundaries.
-- [Journal announcement sticker visual design](./journal-announcement-sticker-visual-design.md) — editorial art direction, edge attachment, and the hand-authored SVG used directly by the website.
-
-Read these documents together with [Journal, Articles, and Events](./journal-and-events.md). The existing Journal specification remains authoritative for the canonical content model and routes. The owner approved the overall direction in principle on 2026-11-01. The refined implementation contract is now the next feature specification; the hand-authored torn-edge SVG is the canonical website asset; visual review is performed on the rendered website.
-
-## Document map
-
-### Product and experience
-- [Product proposal](./proposal.md) — goals, audiences, non-goals, routes, page content, functionality, and open decisions.
-- [Wireframes and interaction design](./wireframes.md) — page structure, responsive behavior, gallery, lightbox, and RTL interaction.
-- [Site-wide design system and section specification](./site-wide-design-system-and-section-specification.md) — semantic tokens, typography, global shell, homepage, Works, artwork detail, About, CV, Contact, components, and responsive design.
-- [Shared Light and Dark Theme System](./shared-light-dark-theme-system.md) — shared semantic token architecture, Midnight Gallery palette, Light/Dark/System preferences, shadcn integration, bilingual behavior, accessibility, and visual QA.
-- [Visual identity and photo direction](./visual-identity-and-photo-direction.md) — reference-photo analysis, palette, studio-image use, crop rules, and visual QA.
-- [Full-page easel scroll background](./easel-scroll-background.md) — left-edge document-length easel composition, scroll-linked reveal, responsive rules, reduced motion, and acceptance criteria.
-- [Responsive sidebar navigation, language, and theme](./navigation-and-mobile-sidebar.md) — persistent desktop left sidebar, desktop top-bar settings, mobile off-canvas menu, bottom-of-menu selectors, RTL, accessibility, and responsive acceptance criteria.
-- [Gallery collections and artwork detail](./gallery-collections-and-artwork-detail.md) — multiple curated galleries, gallery index/detail pages, artwork membership, validation, editorial workflow, SEO, and testing.
-- [Galleries index cards and pagination](./galleries-index-cards-and-pagination.md) — static poster-card grid for the main Galleries index, six-item default, 6/10/20 page-size selector, URL-backed pagination, RTL/LTR behavior, accessibility, and homepage-carousel regression protection.
-- [Homepage artwork hero and featured works](./homepage-artwork-hero-and-featured-works.md) — approved painting-led hero, middle-page selected works, featured gallery previews, responsive layout, and acceptance criteria.
-- [Selected Works three-level experience](./selected-works-three-level-experience.md)
-- [Approved artwork and gallery content inventory](./approved-artwork-content-inventory.md) — current canonical inventory of 25 localized artwork records and eight year-based galleries, cover and membership invariants, and homepage selection rules.
-- [Bilingual homepage hero, CTAs, and showcase](./homepage-hero-cta-and-showcase.md) — implementation-ready English/Persian hero and CTA design, responsive wireframes, sample asset mapping, homepage showcase rules, and complete test scenarios.
-- [Design engineering skills and operating contract](./design-engineering-skills.md) — Emil Kowalski and Impeccable-inspired project rules for design workflow, interaction, motion, component craft, and visual QA.
-- [Refined design direction and unified design system](./design-direction-and-system-refinement.md) — the artist's quiet gallery direction, semantic tokens, typography, layout, image composition, navigation, and page-level design contracts.
-- [Shared responsive typography system](./shared-responsive-typography-system.md) — authoritative fluid type tokens, Persian/English metrics, natural heading wrapping, and responsive typography acceptance tests.
-- [Journal, articles, and events](./journal-and-events.md) — unified Journal archive, article/event content model, homepage latest entries, sidebar navigation, event lifecycle, SEO, and QA.
-- [Studio hero implementation prompt](./hero-implementation-prompt.md) — supporting studio-scene implementation brief; the artwork-led homepage hero specification takes precedence for the primary hero.
-
-#
-- [Shadcn/ui component reuse and bilingual shared UI](./shadcn-component-reuse-and-bilingual-ui.md) — component discovery, reuse, Sidebar/Sheet/Dropdown composition, RTL/LTR behavior, and new-component policy.
-
-- [Artist About experience, CV, and mobile hero](./artist-about-page-and-mobile-hero.md) — homepage biography preview/expansion, About navigation and page, approved CV PDF, responsive hero order, localization, accessibility, and acceptance criteria.
-
-### Implementation execution
-- [Phased implementation blueprint](./phased-implementation-blueprint.md) — dependency-aware phases, deliverables, tests, exit gates, and evidence requirements; use as the execution sequence.
-- [Website implementation prompt](./website-implementation-prompt.md) — end-to-end coding-agent prompt that enforces the repository, content, design, testing, and release constraints.
-
-## Content and assets
-- [Content and artwork model](./content-model.md) — canonical artist, artwork, galleries, CV, Journal, Contact, and localized JSON records.
-- [Artwork imaging and asset pipeline](./artwork-imaging-and-asset-pipeline.md) — capture, provenance, rights, derivatives, fidelity, alt text, and image delivery.
-- [Localization and editorial governance](./localization-and-editorial-governance.md) — Persian/English rules, translation parity, and writing standards.
-
-### AI-assisted engineering and code quality
-
-- [AI-assisted development and code quality contract](./ai-assisted-development-and-code-quality.md) — reviewed external Agent Skills for React/Next.js best practices, frontend architecture, safe refactoring, and Next.js i18n; mandatory agent workflow, compatibility caveats, and skill security/maintenance rules.
-
-### Technical quality
-- [SEO and discovery](./seo-and-discovery.md) — metadata, canonicals, hreflang, sitemap, robots, structured data, and measurement.
-- [Accessibility, performance, privacy, and security](./accessibility-performance-security.md) — WCAG 2.2 AA target, motion, Core Web Vitals, privacy, and security.
-- [Testing, visual QA, and release acceptance](./testing-qa-and-release.md) — application regression tests, screenshots, and CI evidence.
-- [Implementation roadmap](./implementation-roadmap.md) — compatibility pointer to the canonical phased blueprint.
-
-## Confirmed project context
-
-- Domain: nasoodi.art.
-- Artist name supplied by the site owner: Ghazaleh Abdolahzade Nasoodi.
-- Persian name supplied by the site owner: غزاله عبداله زاده نسودی.
-- Practice: oil painting.
-- Location supplied by the owner: Iran.
-- Instagram handle supplied by the owner: @ghazalenasoodi.
-
-These supplied facts do not confirm an artist statement, biography, education, exhibitions, artwork titles, years, dimensions, exact medium/substrate per work, prices, availability, commissions, contact details, or image rights. Those require artist/owner confirmation.
-
-## Source-of-truth and status rules
-
-- This folder is the source of truth for portfolio product/design/content requirements.
-- The repository-level AGENTS.md governs engineering workflow and quality commands.
-- If two documents conflict, proposal.md defines product intent; site-wide-design-system-and-section-specification.md defines page/component design; specialized contracts define their named domains. Record and resolve conflicts rather than silently choosing.
-- The implementation roadmap is a plan, not evidence that a feature or CI check already exists.
-- Distinguish implemented, tested, and visually reviewed work; editorial verification states are not used to gate canonical JSON content.
-- Use the canonical JSON content as the owner-authorized initial site content. Do not add editorial verification, factuality, or artist-approval gates that hide entries. The owner may revise content after launch. Keep technical asset-path and safe-link protections.
-- The studio-process photograph and layered scene are not finished artwork reproductions. Actual paintings must be presented separately in Works.
-- The site is a portfolio, not an e-commerce store by default. Sales, pricing, availability, commissions, and enquiry forms require explicit decisions and real operational support.
-
-## Working agreement
-
-- Working branch: feature.
-- Keep changes on feature unless explicitly authorized otherwise.
-- Do not merge to main, deploy, or change branch strategy without separate explicit authorization.
-- Preserve existing work and inspect actual repository state before implementation.
-- No claim of test, visual review, asset inspection, artist approval, or deployment is valid without evidence.
-
-## Design quality authority
-
-The following documents are mandatory for all UI design and implementation work:
-
-- [Design engineering skills and operating contract](./design-engineering-skills.md) — project-specific Emil Kowalski and Impeccable-inspired workflow, motion decision gate, component craftsmanship, responsive behavior, and visual QA.
-- [Refined design direction and unified design system](./design-direction-and-system-refinement.md) — the artist's quiet gallery direction, semantic palette, typography roles, spacing, image composition, navigation, motion language, and page-specific composition contracts.
-
-Read these before changing any visual surface. Page-specific specifications remain authoritative for their unique content and behavior, but must conform to the shared design direction and quality contract. If a conflict exists, preserve factual/content constraints and artwork fidelity first, then reconcile the visual treatment in the relevant page specification.
-
-## Implementation execution and evidence
-
-- [Website implementation prompt](./website-implementation-prompt.md) — complete coding-agent execution instructions.
-- [Phased implementation blueprint](./phased-implementation-blueprint.md) — canonical phase order, dependencies, exit criteria, evidence, and current implementation progress.
-- [Asset review register](./asset-review-register.md) — source-asset classification, inspection, rights, and public-use approval gates.
-
-The blueprint's progress snapshot is the current implementation-status reference. Canonical JSON content is rendered as stored; editorial approval states are not used as data gates.
-
-
-## Artwork discovery and editorial presentation refinement — 2026-10-31
-
-The current authoritative contract for responsive artwork carousels and homepage Journal preview is [Artwork discovery, responsive carousels, and editorial Journal experience](./artwork-discovery-carousel-and-editorial-experience.md).
-
-Read it together with:
-- [Homepage artwork hero and featured works](./homepage-artwork-hero-and-featured-works.md)
-- [Selected Works three-level experience](./selected-works-three-level-experience.md)
-- [Gallery collections and artwork detail](./gallery-collections-and-artwork-detail.md)
-- [Journal, articles, and events](./journal-and-events.md)
-- [Wireframes and interaction design](./wireframes.md)
-- [shadcn/ui component reuse](./shadcn-component-reuse-and-bilingual-ui.md)
-
-**Conflict resolution:** the new contract supersedes earlier grid-first artwork presentation guidance for the homepage Selected Works section and collection-detail primary browsing surface. It does not replace the static artwork-led Hero, the gallery-index editorial collection-preview role, the canonical artwork viewer or the Journal editorial layout. The Journal homepage preview is limited to the single newest eligible published entry. Existing routes and the unified Journal information architecture remain unchanged.
-
-
-## Next implementation task — Journal and event announcement sticker
-
-The next feature to implement on `feature` is the combined Journal and announcement-sticker experience. Start with [the refined detailed specification](./journal-announcement-specification.md) and follow [the coding-agent instructions](./journal-announcement-agent-instructions.md).
-
-Implementation scope:
-- Complete the homepage Journal preview, existing unified archive, event detail presentation, and pagination behavior where required.
-- Use the hand-authored SVG paper asset directly from `public/images/journal/`. Keep it decorative only; event text and controls remain localized HTML. Do not generate or upload a PNG derivative.
-- Preserve the current homepage preview rule: exactly one newest eligible published Journal entry across all entry types. The sticker independently selects the nearest eligible upcoming event.
-- Preserve the canonical Journal content model and routes; do not add a separate Events navigation destination.
-
-The overall proposal is approved in principle. The first hand-authored torn-edge vector study is available for review. Review the sticker in the actual rendered website screenshots and refine the SVG source when needed; no PNG conversion artifact is part of the workflow. This task is the next implementation priority; it does not authorize merge, deployment, or publication.
-
-
-## Contact experience proposal
-
-- [Contact experience design proposal](./contact-experience-proposal.md) — Quiet Editorial direction for the homepage Contact section and dedicated bilingual Contact page, including responsive composition, RTL/LTR, contact-data safeguards, accessibility, and acceptance criteria.
-
-## Next implementation task — site-wide navigation, spacing, typography, and Contact
-
-The next cross-site UX refinement is defined in [Unified breadcrumbs, editorial spacing, and Contact implementation prompt](./site-wide-navigation-spacing-and-contact-implementation-prompt.md).
-
-This task introduces a shared shadcn/ui breadcrumb system with clickable intermediate paths (including artwork and Journal detail navigation), refines site-wide editorial spacing, compacts Journal pagination controls on mobile, keeps sidebar copyright on one desktop line, standardizes justified long-form text, and adds a bilingual Contact section/page.
-
-The Contact configuration uses canonical JSON destinations: g.nasoodi@gmail.com, @nasoodi, and @ghazalenasoodi. Render all three without approval or verification gates. Contact metadata and localized routes use the canonical Contact record.
-
-## Shared light and dark theme system — Midnight Gallery
-
-The owner approved the Midnight Gallery direction and requested a comprehensive, shared design-system specification. Read [Shared Light and Dark Theme System](./shared-light-dark-theme-system.md) together with the design-engineering, refined design direction, site-wide design system, navigation, shadcn reuse, localization, accessibility, and testing authorities. The specification preserves the current light theme, defines the dark palette and semantic token architecture, and governs Light/Dark/System behavior, shared shadcn integration, RTL/LTR, artwork fidelity, the paper Journal sticker, contrast validation, responsive QA, and implementation boundaries. It is a design/implementation contract, not evidence that theme support is already implemented.
-
-
-## Shared Light/Dark theme system — implementation committed
-
-Implement the approved shared theme system defined in [Shared Light and Dark Theme System](./shared-light-dark-theme-system.md). Preserve the existing light design, introduce the Midnight Gallery palette, centralize semantic tokens, and integrate the theme selector into the existing desktop utility and mobile Sheet using shadcn/ui. Support Light, Dark, and System preferences across all routes and locales. Complete contrast checks, responsive/RTL/LTR visual QA, artwork-fidelity checks, and the full CI workflow. Work on `feature` only; do not merge to `stage` or `main`, deploy, or publish.
-
-
-Implementation on `feature` is committed in `470c0228cfe4b8171d32fbf212378c35c52eba8f` and subsequent documentation updates. The shared `next-themes` provider, Midnight Gallery semantic tokens, localized shadcn radio-menu selector, desktop/mobile placement, and Playwright coverage are in the application. Automated CI and rendered visual QA remain verification gates; do not mark this feature fully verified until those results are inspected.
-
-
-## International SEO, i18n, and content architecture — 2026-11-04
-
-Three complementary architecture contracts define the next maintainability and discoverability work:
-
-- [International SEO and Search Discovery Architecture](./international-seo-and-search-discovery-architecture.md) — indexability, page metadata, canonical URLs, hreflang, sitemap/robots, artwork SEO, structured data, Persian/English search quality, monitoring, and CI verification.
-- [Internationalization and UI Translation Architecture](./internationalization-and-ui-translation-architecture.md) — next-intl evaluation/adoption, centralized locale message bundles, App Router integration, localized navigation, server/client boundaries, RTL/LTR, and translation parity.
-- [Content Architecture and Separation from Application Logic](./content-architecture-and-data-separation.md) — separate artist-editable portfolio content from UI messages, TypeScript types, general utilities, and React presentation; file-based records, repository boundaries, and incremental migration.
-
-Read these together with [SEO and discovery](./seo-and-discovery.md), [Localization and editorial governance](./localization-and-editorial-governance.md), and [Content and artwork model](./content-model.md). The new documents are proposed architecture contracts, not evidence that the refactor or SEO improvements have been implemented. Audit current code before choosing exact paths or moving existing data. Preserve artwork rights safeguards and use owner-supplied Contact data; follow the unified JSON content contract and current SEO eligibility rules.
-
-The owner also identified the community [Claude SEO skill](https://github.com/AgriciDaniel/claude-seo) as a useful reference. Treat it as an optional, reviewed assistant workflow—not an authoritative source or mandatory dependency. Verify recommendations against Google Search Central, current Next.js documentation, Schema.org, and the rendered site. Do not install optional extensions, connect accounts, or use external APIs without authorization.
-
-
-## Site-wide breadcrumbs, spacing, and Contact — implementation verified 2026-11-05
-
-The cross-site refinement defined in [Unified breadcrumbs, editorial spacing, and Contact implementation prompt](./site-wide-navigation-spacing-and-contact-implementation-prompt.md) is implemented on the existing `feature` branch. The shared breadcrumb, responsive editorial spacing, justified long-form text scope, Journal pagination fallback, desktop copyright, and bilingual Contact destinations are covered by automated regression tests. GitHub Actions [run #889](https://github.com/mrcode-tech/nasoodi.art/actions/runs/41993382170) passed against `01c00996c60313088e06478df4cca7aea47d3569`, including 135 Playwright tests. CI screenshot evidence was inspected for English/Persian desktop home and Contact pages and mobile Contact/Journal archive layouts. This is historical implementation and technical/visual QA evidence, not authorization to merge, deploy, or publish. The current Contact JSON now uses the owner-supplied artist Instagram identity and no invented email or Telegram destination.
-
-
-## Current internationalization, JSON content, and SEO implementation
-
-The owner-provided implementation contract is tracked in [Internationalization, Content, and SEO Completion Audit](./internationalization-content-seo-completion-audit.md). It supersedes older preview-fixture and Markdown-body decisions where they conflict. Editorial content is canonical localized JSON; UI translations remain in next-intl messages. The artist profile, CV, Contact, artworks, galleries, Journal/events, and site metadata each have one canonical source. About and homepage biography use the same artist profile. Read the audit before continuing implementation and keep its findings current.
-undefined
-
-## Unified JSON editorial architecture — implementation contract (2026-11-05)
-
-The owner-approved implementation contract is `internationalization-content-seo-completion-audit.md`. Canonical editorial sources are `src/content/data/site.json`, `artist-profile.json`, `cv.json`, `contact.json`, `artworks.json`, `galleries.json`, `journal/index.json`, and `homepage-selection.json`. Long-form Journal bodies are localized JSON rich-text blocks; do not reintroduce Markdown editorial sources or separate preview/sample/verified content providers. UI strings remain in `src/i18n/messages/{en,fa}/`.
-
-All route-level content resolution should use `src/content/repositories/`. About and homepage share `getArtist`/`getAbout`; CV uses `getCv`; homepage composition uses `getHomepageContent`; detail routes, sitemap, metadata, and structured data consume the same repositories. Stable IDs establish cross-locale identity; each published artwork, gallery, and Journal record must have a safe localized slug for every supported locale. Missing locale slugs or editorial text are unavailable, never borrowed from English.
-
-Run `npm test`, `npm run audit:i18n`, `npm run lint`, `npm run typecheck`, `npm run build`, and `npm run test:e2e`. Content-only changes should normally touch canonical JSON and tests—not React components or application logic.
+# Nasoodi.art — Technical Specification Index
+
+This directory documents application architecture, interface behavior, design systems, localization, accessibility, content schemas, SEO, testing, and release processes. It is not an editorial source of truth.
+
+## Documentation rules
+
+- Describe stable technical contracts and observable behavior.
+- Do not include personal identity, biography, family details, contact destinations, CV entries, artwork or collection titles, Journal copy, production content IDs, production slugs, image filenames, or current editorial record counts.
+- Use generic placeholders such as ARTWORK_ID, COLLECTION_ID, JOURNAL_ENTRY_ID, CONTENT_TITLE, and LOCALIZED_SLUG.
+- Keep editorial records in canonical content data files and UI translations in locale message resources.
+- Use synthetic examples in tests and documentation.
+- Update acceptance criteria and tests when a technical contract changes.
+- Mark obsolete specifications clearly and remove conflicting requirements from the active document map.
+
+## Technical document map
+
+### Architecture and content boundaries
+- Content model: content-model.md
+- Content architecture and data separation: content-architecture-and-data-separation.md
+- Artwork imaging and asset pipeline: artwork-imaging-and-asset-pipeline.md
+- Localization and editorial governance: localization-and-editorial-governance.md
+
+### Routing, localization, and discovery
+- Internationalization and UI translation architecture: internationalization-and-ui-translation-architecture.md
+- International SEO and search discovery architecture: international-seo-and-search-discovery-architecture.md
+- SEO and discovery: seo-and-discovery.md
+
+### Design system and interaction
+- Site-wide design system: site-wide-design-system-and-section-specification.md
+- Shared light and dark theme system: shared-light-dark-theme-system.md
+- Shared responsive typography: shared-responsive-typography-system.md
+- Navigation and mobile sidebar: navigation-and-mobile-sidebar.md
+- shadcn/ui component reuse: shadcn-component-reuse-and-bilingual-ui.md
+- Accessibility, performance, and security: accessibility-performance-security.md
+
+### Page and component behavior
+- Homepage artwork hero and featured content: homepage-artwork-hero-and-featured-works.md
+- Artwork discovery and responsive carousels: artwork-discovery-carousel-and-editorial-experience.md
+- Gallery index and pagination: galleries-index-cards-and-pagination.md
+- Gallery collections and artwork detail: gallery-collections-and-artwork-detail.md
+- About and CV layout: artist-about-page-and-mobile-hero.md
+- Journal and events: journal-and-events.md
+- Configurable content announcement sticker: journal-announcement-specification.md
+- Single announcement configuration: src/content/announcement.json
+- Contact experience: contact-experience-proposal.md
+
+### Engineering, quality, and release
+- AI-assisted development and code quality: ai-assisted-development-and-code-quality.md
+- Testing, visual QA, and release acceptance: testing-qa-and-release.md
+- Content-independent functional E2E testing strategy: e2e-testing-strategy.md
+- Phased implementation blueprint: phased-implementation-blueprint.md
+- Website implementation prompt: website-implementation-prompt.md
+
+## Repository conventions
+
+- Localized routes use explicit /en and /fa prefixes.
+- English pages use LTR; Persian pages use RTL.
+- The default locale is Persian.
+- Stable content IDs are independent of localized slugs.
+- Canonical content is stored under src/content/data/.
+- UI translations are stored under src/i18n/messages/{en,fa}/.
+- Components consume repository-layer data rather than importing editorial JSON directly.
+- Pagination defaults to 6 and supports 10 and 20.
+- Pagination, sorting, routing, and metadata must work for arbitrary valid dataset sizes.
+- The collection index uses its specified static-card layout; carousel behavior is scoped to components that require it.
+- Preserve design tokens, accessibility, responsive behavior, and RTL/LTR contracts.
+
+## Specification authority
+
+The most specific active technical specification governs its domain. Shared architecture, localization, design-system, accessibility, and testing contracts apply across the application. Resolve conflicts explicitly and update superseded documents rather than leaving contradictory active requirements.
+
+## Change and release boundaries
+
+Work only on the explicitly authorized branch. Inspect repository state before editing, keep changes focused, run relevant checks and the complete CI workflow, and report exact commit and CI evidence. CI completion does not authorize merging, deployment, or publication.

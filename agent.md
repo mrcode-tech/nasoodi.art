@@ -43,6 +43,16 @@ This checkpoint is **not a completion claim**. Run and inspect GitHub Actions ag
 
 All future UI work must follow specification/shared-responsive-typography-system.md and the shared design authorities. Reuse its semantic fluid type tokens across routes; respect Persian and English font metrics and RTL/LTR behavior; preserve natural heading wrapping; and do not add isolated oversized heading values or global no-wrap rules. The Persian homepage artist name and homepage Contact heading are single-line targets only at the reference widths defined by the specification. Update the shared specification before changing the typography system.
 
+## Technical specification and content-independent test policy
+
+All files under specification/ are technical documentation. Do not include actual personal identity, biography, family details, contact destinations, CV entries, artwork or collection titles, Journal copy, production record IDs, production slugs, image filenames, or current editorial record counts. Use generic placeholders and synthetic examples. Canonical editorial content belongs only in the content data layer.
+
+Automated tests validate stable technical behavior, not the current production dataset. Use synthetic fixture factories based on production domain types for deterministic unit and integration tests. Browser tests may discover a currently published record dynamically through a semantic archive link when a real route transition must be exercised, but must not assert its editorial values. Production-backed browser smoke tests may assert route availability and structural behavior, but must not hardcode editorial names, titles, dates, slugs, IDs, image paths, ordering assumptions, or record counts. Test exact pagination slices and boundary cases with generated datasets at unit level; browser tests verify URL state and distinct slices. If a browser scenario requires a minimum number of published records, check that precondition and skip only that integration scenario with a clear reason; synthetic unit tests must still cover the behavior.
+
+Keep content integrity tests separate from application behavior tests. Integrity tests validate schema, types, stable ID uniqueness, references, safe asset paths, publication mechanics, and optional-field handling. They must not judge editorial truth, quality, completeness, or approval. Never remove meaningful coverage, skip failing tests, or weaken assertions just to make CI green.
+
+Before changing specs or tests, audit the complete specification/ tree and test suite. Replace content examples with placeholders, remove obsolete/conflicting requirements, and preserve all active technical contracts. Maintain a CI audit that detects production editorial values and brittle fixed content counts in technical documentation and tests.
+
 ## AI-assisted engineering and refactoring requirements
 
 Before any non-trivial React, Next.js, TypeScript, i18n, content-architecture, or refactoring work, read `specification/ai-assisted-development-and-code-quality.md` in full.
@@ -90,43 +100,26 @@ Work only on the existing `feature` branch. The owner has authorized commits and
 
 ---
 
-## Previous task prompt — Journal and event announcement sticker
+## Current implementation contract — JSON-configured content announcement
 
-The previous Journal/sticker task prompt and implementation history are retained below for traceability. It is not the next task unless the owner explicitly reopens it.
+The current approved announcement implementation is the general-purpose content sticker described in:
 
-# NEXT IMPLEMENTATION TASK — JOURNAL AND EVENT ANNOUNCEMENT STICKER
-
-**Priority:** Next feature implementation; this Journal/sticker task supersedes the previous About/CV task prompt below.  
-**Repository:** `mrcode-tech/nasoodi.art`  
-**Branch:** `feature` only  
-**Primary specification:** `specification/journal-announcement-specification.md`  
-**Complete implementation prompt:** `specification/journal-announcement-implementation-prompt.md`  
-**Supporting documents:** proposal, wireframes, and task instructions listed below.
-
-The next implementation task is the approved Journal and event-announcement experience. Implement both connected parts as one coherent feature:
-
-1. **Journal experience:** homepage Journal preview, existing unified Journal archive, event-specific detail presentation, and accessible pagination/page-size behavior where the existing archive requires it.
-2. **Event announcement sticker:** use the hand-authored restrained paper-sticker SVG (decorative only) and generate a transparent PNG review artifact through GitHub Actions and implement the fixed, dismissible, locale-aware announcement that links to the nearest eligible upcoming Journal event.
-
-Before coding, read in full:
-- `specification/README.md`
-- `specification/journal-announcement-proposal.md`
-- `specification/journal-announcement-wireframes.md`
+- `specification/journal-announcement-implementation-prompt.md`
 - `specification/journal-announcement-specification.md`
 - `specification/journal-announcement-agent-instructions.md`
 - `specification/journal-announcement-sticker-visual-design.md`
-- `specification/journal-and-events.md`
-- `specification/artwork-discovery-carousel-and-editorial-experience.md`
-- All mandatory design, content, localization, navigation, SEO, accessibility, testing, and roadmap authorities referenced by `AGENTS.md` and the primary specification.
 
-**Important reconciled homepage rule:** the in-flow homepage Journal preview is limited to the single newest eligible published entry across article and event types. Do not add a third card or pin an older upcoming event into this preview. The fixed sticker independently selects the nearest eligible upcoming event. Dismissing the sticker must not hide the Journal preview.
+The sticker is controlled by one `src/content/announcement.json` file. Its `active` boolean controls visibility; `type` and `contentId` select one artwork, gallery, Journal entry, or event. The title and description are localized in the JSON. Optional metadata is supported. The localized destination is derived from the record's localized slug; do not store a separate URL.
 
-**Sticker asset rule:** the checked-in SVG is the editable source of truth and contains only a decorative paper silhouette/edge treatment with transparent background. Do not bake event text, dates, labels, arrows, or controls into the image. Keep all copy and interactions as accessible localized DOM content. Do not use image generation, screenshot tracing, raster painting, or image processing. GitHub Actions must convert the SVG to PNG and verify RGBA transparency, dimensions, and absence of baked text/raster imagery. Do not commit generated PNG until owner review; SVG/CSS may be used directly at runtime. Do not invent an event or imply fictional sample content is real.
+There is at most one configured announcement. Do not add an announcement repository, collection, automatic selection, or upcoming-event requirement. Reuse existing content access functions and preserve the existing paper SVG and viewport/sidebar/mobile-drawer placements.
 
-The proposal is approved in principle and implementation may proceed. The initial hand-authored torn-edge SVG study is a candidate, not final approval. Review the CI-generated PNG and responsive screenshots with the owner; refine the vector paths directly if requested. Build the functional experience and prepare visual comparisons. The CI-generated PNG is a review artifact, not a final approved asset; do not commit it or declare the visual variant final until the owner selects it. Inspect the real shell, locale-aware sidebar/menu geometry, Journal data model, routes, existing pagination, assets, and CI before coding.
+**Initial state:** the JSON is configured active and explicitly references the latest published gallery found in current content data. Publishing newer content must not automatically change the selected item.
 
-Use `specification/journal-announcement-implementation-prompt.md` as the complete task brief and `specification/journal-announcement-agent-instructions.md` as the concise execution checklist. Preserve all repository safety rules in `AGENTS.md`: work on the existing feature branch, preserve unrelated changes, commit and push to `feature` after verification, do not merge to stage/main, and do not deploy or publish. Run the repository's actual tests and CI, inspect logs, and capture reviewed English/Persian desktop/tablet/mobile screenshots before reporting completion.
+**Testing contract:** Playwright reads `active` from the actual JSON checked out in the current branch. Active-only UI tests run only when true; when false, skip only those UI tests with a clear reason. Configuration validation, inactive visibility behavior, synthetic active/inactive tests, content-integrity checks, and unrelated tests always run. Report skips as skipped, never as passed.
 
+Keep the Journal as the canonical home for Journal entries and events. The sticker is a separate configurable discovery mechanism; it does not alter Journal publication, the homepage Journal preview, or event eligibility.
+
+Follow all repository safety rules: work on `feature` only, preserve unrelated changes, do not merge to `stage` or `main`, and do not deploy. Inspect CI logs and report success only after the latest complete workflow passes.
 ---
 
 ## Previous task prompt — Artist About experience, CV, and mobile Hero

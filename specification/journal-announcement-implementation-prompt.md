@@ -1,380 +1,248 @@
-# Implementation Prompt — Journal Experience and SVG Exhibition Announcement Sticker
+# Implementation Prompt — General-Purpose JSON-Configured Content Announcement
 
-**Project:** Nasoodi.art  
 **Repository:** `mrcode-tech/nasoodi.art`  
-**Working branch:** existing `feature` branch only  
-**Task type:** Full implementation, automated verification, and visual QA  
-**Primary contract:** [Journal Event Announcement Specification](./journal-announcement-specification.md)  
-**Supporting product contract:** [Journal, Articles, and Events](./journal-and-events.md)  
-**SVG authority:** [Sticker Visual Design and SVG Asset Contract](./journal-announcement-sticker-visual-design.md)  
-**Execution checklist:** [Journal Announcement Agent Instructions](./journal-announcement-agent-instructions.md)
-
-## 1. Mission and expected result
-
-Implement the connected Journal and exhibition-announcement experience as one coherent feature. This is an implementation task, not a documentation-only exercise.
-
-Deliver:
-1. The homepage Journal preview, showing exactly one newest eligible published entry across all Journal types.
-2. The existing unified Journal archive and its established filters/taxonomy, without creating a separate Events destination or duplicate content model.
-3. Event-specific presentation on the canonical Journal detail route.
-4. Accessible archive pagination with a default of 5 entries per page and page-size choices of 5, 10, and 20.
-5. A fixed, dismissible, locale-aware exhibition announcement sticker that independently selects the nearest eligible upcoming event.
-6. An SVG decorative paper asset authored or refined during this implementation.
-7. The canonical SVG served directly by the website; no raster derivative is required.
-8. Automated tests, completed CI evidence, and inspected English/Persian responsive screenshots.
-
-The overall product direction is approved in principle. The exact sticker silhouette, torn edge, tape detail, sizing, and final localized microcopy remain subject to owner review. Do not represent a successful build or SVG render as visual approval.
-
-## 2. Non-negotiable product decisions
-
-- Journal remains the single editorial destination for articles, exhibitions, events, studio updates, and stories.
-- Do not add a top-level Events navigation item, separate Events archive, parallel event registry, or duplicate event record.
-- Use the canonical Journal content model, publication workflow, route structure, and approval state.
-- The homepage in-flow Journal preview shows **at most the single newest eligible published entry across article and event types**, sorted by publication date descending with deterministic tie-breaking.
-- Do not add a third entry or pin an older upcoming event into the single-entry preview.
-- The fixed sticker independently selects the nearest eligible upcoming event. It remains separate from the in-flow Journal preview.
-- Dismissing the sticker must not hide, reorder, or change the Journal preview.
-- With no eligible upcoming event, render no sticker and reserve no layout space.
-- Keep all Journal records in the canonical content model, with internally consistent event dates, time zones, venues, and localized copy. Content can be replaced by editing the canonical Journal data without changing routes or components.
-- Only approved, published, locale-ready content may appear publicly.
-- Past events may remain published as Journal archive entries; temporal state and editorial publication state are separate.
-
-## 3. Repository safety and operating rules
-
-Before editing:
-1. Read `AGENTS.md`, root `agent.md`, `specification/README.md`, this prompt, the primary specification, the proposal, wireframes, concise agent instructions, SVG visual-design contract, and all mandatory referenced design/content/technical authorities.
-2. Inspect current branch, HEAD SHA, worktree status, latest commits, package scripts, route structure, existing Journal implementation, content data, and CI workflow.
-3. Confirm the current branch is the already-existing `feature` branch.
-4. Record unrelated and uncommitted changes; preserve them.
-
-Rules:
-- Do not create, switch, reset, rename, or delete branches.
-- Do not merge into `stage` or `main`.
-- Do not push, deploy, publish, change DNS, modify Vercel settings, or change secrets without separate explicit authorization.
-- Do not overwrite unrelated work or use destructive Git operations.
-- Do not commit until implementation, tests, build, and verification are complete and the owner has separately authorized the commit.
-- Do not expand scope into unrelated About, Works, Galleries, artwork, or navigation redesigns.
-- Do not invent file paths, route names, components, hooks, commands, or APIs. Discover them in the repository.
-- If the branch or repository state is unsafe or materially different from the expected state, stop and report the evidence.
-
-## 4. Mandatory discovery and reconciliation
-
-Inspect the actual implementation rather than treating conceptual examples as literal paths.
-
-Discover:
-- App Router locale route structure and canonical Journal index/detail routes.
-- Journal schema, data source, validators, publication status, artist approval, approved locales, and content fixtures.
-- Existing article/event types and structured event date/timezone semantics.
-- Existing homepage Journal section and selection logic.
-- Existing archive filters, sort order, pagination, page-size state, and URL behavior.
-- Event detail rendering and related artwork/gallery link conventions.
-- Shared sidebar, mobile drawer, locale switcher, shell geometry, breakpoints, safe-area handling, z-index tokens, and skip link.
-- Existing button/link/icon/typography primitives, shadcn components, CSS tokens, and RTL utilities.
-- Existing preference/session persistence utility and current dismissal conventions.
-- Existing tests, Playwright setup, screenshot artifacts, and GitHub Actions workflow.
-
-Produce a short evidence-based gap matrix: requirement, current implementation evidence, status (implemented/partial/missing/conflicting/unverified), proposed minimal change, and tests needed.
-
-Resolve conflicts using this precedence:
-1. `AGENTS.md` and mandatory repository-wide safety/design authorities.
-2. This feature's detailed `journal-announcement-specification.md`.
-3. `journal-and-events.md` for canonical content model and Journal semantics, as reconciled by the newer single-entry homepage rule.
-4. The approved proposal and wireframes.
-5. Existing code conventions, where they do not contradict the contracts.
-
-Do not silently weaken product rules to fit an existing implementation. If an unresolved conflict changes public behavior, ask the owner before coding that part.
-
-## 5. Phase 1 — Author/refine the SVG immediately
-
-**Do this during the early implementation phase. Do not leave SVG creation until the end.**
-
-The existing `public/images/journal/journal-announcement-sticker.svg` is a hand-authored design study and starting point. Inspect it, then refine its vector paths or replace its artwork with a better-authored SVG that satisfies the visual-design contract. Merely copying the existing study without assessment does not satisfy this task.
-
-### SVG requirements
-
-- Author the illustration directly in SVG/XML using editable paths, shapes, and strokes.
-- Keep a transparent canvas outside the paper silhouette.
-- Retain the quiet, tactile, warm-paper editorial direction; the sticker must look like a small exhibition paper slip attached to a gallery edge, not a sale badge, ad, toast, or promotional banner.
-- Create a subtle irregular inward-facing torn edge and a restrained attachment/tape detail only if it improves the result.
-- Keep the vector clean and maintainable; avoid unnecessary path complexity, heavy filters, raster texture, or harsh shadows.
-- Keep text, date, category label, arrow, close icon, links, and all interactive controls out of the SVG.
-- Do not embed `<text>` or `<image>` elements.
-- Add suitable SVG title/description metadata only if it remains decorative and does not create redundant screen-reader announcements when used by the component.
-- Do not use image generation, screenshot tracing, raster painting, or image-processing tools.
-
-### Physical direction
+**Target branch:** `feature` only  
+**Stack:** Next.js, React, TypeScript, Tailwind CSS, shadcn/ui, next-intl, Playwright  
+**Priority:** High
 
-- English/LTR: attachment edge on the physical left; torn/inward edge faces right.
-- Persian/RTL: attachment edge on the physical right; torn/inward edge faces left.
-- Mirror only the decorative silhouette or its isolated asset wrapper. Never mirror announcement text, controls, dates, icons with directional meaning, artwork, or photographs.
-- Keep content DOM order and keyboard order correct in both locales.
+**Approved architecture:** One JSON configuration, at most one active announcement, configuration-aware tests, and automatically resolved localized destinations.
 
-### Asset source of truth
+This document is the complete implementation contract for the announcement sticker. It supersedes the former exhibition-only announcement implementation instructions. The Journal and event content model remains unchanged; this sticker is now a general content-discovery affordance.
 
-- Keep `public/images/journal/journal-announcement-sticker.svg` as the canonical editable source unless repository discovery reveals a stronger existing asset convention; document any deliberate path change.
-- If a runtime asset copy is necessary, define a deterministic source/copy strategy or use the source directly. Avoid multiple independently editable SVG copies.
-- Do not generate or add a PNG derivative; serve the canonical SVG directly.
+## 1. Objective
 
-## 6. SVG asset and CI validation
+Refactor the exhibition-specific sticker into a reusable content announcement that can feature exactly one configured item of one of these types:
 
-- Keep `public/images/journal/journal-announcement-sticker.svg` as the canonical, editable source and serve it directly in the website.
-- Do not add a Python renderer, CairoSVG/Pillow dependencies, PNG generation, or sticker-specific artifact upload steps.
-- CI verifies that the canonical SVG exists and is non-empty. The browser suite verifies that the relevant UI loads and renders the SVG.
-- Review visual refinements using actual English/Persian responsive website screenshots. Keep text and controls in localized HTML, not inside the SVG.
+- `artwork`
+- `gallery`
+- `journal`
+- `event`
 
-## 7. Phase 3 — Canonical event eligibility and selection
+There is no announcement list, collection, announcement repository, automatic selection, or fallback selection. A single JSON file controls visibility and content.
 
-Use existing canonical Journal records. Never create a separate announcement/event registry.
+The site owner can show or hide the sticker with `active`, select content with `type` and `contentId`, and edit localized title and description without changing React code.
 
-An event is eligible for the sticker only when all applicable conditions hold:
-- It is a canonical event or an exhibition entry with structured event dates, as allowed by the actual schema.
-- Editorial publication status is Published at the current time.
-- Explicit artist approval is true.
-- The active locale is included in approved locales and has a non-empty approved title and the required localized content.
-- Required event date and timezone semantics are valid and unambiguous under `journal-and-events.md`.
-- Its temporal state is Upcoming; ongoing and past events do not qualify.
-- It is not archived, withdrawn, expired, or otherwise unavailable.
-- It resolves to the canonical localized Journal detail route.
+**Destination URLs must be derived from the content type and the referenced record's localized slug. Never store a separately maintained URL in the JSON.**
 
-Select the nearest upcoming event by start instant. Define deterministic tie-breaking using stable data fields and cover it with tests. Never rely on filesystem ordering or incidental array order. Missing translation must not silently fall back to unapproved copy. If no candidate qualifies, return `null`.
+## 2. Single configuration
 
-Keep publication status distinct from temporal status. Do not automatically unpublish an event just because its date has passed.
-
-## 8. Phase 4 — Implement the Journal experience
-
-Implement the existing unified Journal contract, not a generic blog template.
-
-### Homepage preview
+Create `src/content/announcement.json` (or use the existing canonical content directory if repository conventions require another path).
 
-- Preserve the existing homepage composition and editorial/post-style presentation.
-- Show zero or one entry according to eligible published content.
-- Select the single newest eligible entry across article and event types by publication date descending, with deterministic tie-breaking.
-- Never add a pinned older upcoming event as an extra item.
-- Include the approved localized heading/introduction only when available and a clear localized link to the full archive.
-- Omit the section when there are no eligible entries if required by the current homepage contract.
-- Keep this section independent from sticker visibility and dismissal.
-
-### Archive
-
-- Preserve the existing canonical localized Journal index route, content taxonomy, filters, and entry presentation.
-- Do not create a separate Events page or duplicate route/content model.
-- Default ordering remains publication date descending with deterministic tie-breaking.
-- Reuse existing filters and URL state. Do not implement a second filtering or pagination system.
-- Add/adjust pagination only if the actual archive size and current specification justify it.
-- Where page-size selection is required, offer 5, 10, and 20 entries per page, default 5, using the existing shadcn select pattern.
-- Preserve active filters and page size in URL state where supported; reset to a valid page after changes.
-- Hide pagination when all results fit on one page.
-- Keep controls keyboard accessible and correctly localized.
+The configuration shape is:
 
-### Event detail
+```json
+{
+  "active": true,
+  "type": "gallery",
+  "contentId": "CONTENT_ID",
+  "title": {
+    "en": "CONTENT_TITLE",
+    "fa": "عنوان محتوا"
+  },
+  "description": {
+    "en": "A short description of the featured content.",
+    "fa": "توضیح کوتاهی درباره محتوای منتخب."
+  },
+  "metadata": {
+    "en": "Featured content",
+    "fa": "محتوای منتخب"
+  }
+}
+```
 
-Use the existing canonical Journal detail route and shared editorial shell. Present event-specific information without duplicating the content model:
-1. Return-to-Journal breadcrumb/link.
-2. Event/exhibition type label.
-3. Localized title and optional summary.
-4. Publication date.
-5. Event information panel.
-6. Approved cover/poster, if available.
-7. Main editorial content.
-8. Related published gallery/artwork links.
-9. More-from-Journal links where useful.
-
-Show only confirmed information: event start/end date and time with timezone, reliably derived temporal state, confirmed venue/location, attendance mode, and valid approved registration/official-information URL. Clearly distinguish publication date from event date. Omit unknown metadata and stale registration actions. Past events may remain published in the archive.
-
-Do not add unapproved filters, new routes, or editorial fields merely because they appear in a conceptual example.
-
-## 9. Phase 5 — Implement the announcement component
-
-The sticker is a small, fixed, edge-attached editorial object. It is not a full-width banner, toast, modal, or generic notification.
-
-### Content and structure
-
-- Localized category eyebrow.
-- Localized event title.
-- Optional confirmed event date/date range, formatted using event timezone and locale conventions.
-- Content link to the canonical localized event detail route.
-- Separate dismiss button with localized accessible name.
-- Optional restrained directional cue if approved by the design.
-
-All text and controls are live DOM content. The decorative SVG must not contain the content.
-
-### Position and responsive safety
-
-- Fixed to the viewport, independent of page scroll and hero geometry.
-- English physical-left edge; Persian physical-right edge.
-- Mobile: below the actual menu trigger and safe-area inset, with a clear gap.
-- Desktop: align with the real sidebar/identity zone without covering wordmark or navigation.
-- Tablet/compact layouts: derive placement from the real shell transition, not assumptions.
-- Never cover artwork, easel decoration, skip links, focused controls, navigation, or essential content.
-- Never create horizontal overflow or cause page reflow when appearing/dismissing.
-- If there is no safe position at a breakpoint/short viewport, suppress the sticker rather than overlap important content.
-- Use actual measured shell geometry, project tokens, and z-index conventions. Do not guess offsets from SVG dimensions.
-- Do not add attention-seeking animation; respect reduced motion.
-
-### Dismissal
-
-- Link and dismiss button are separate semantic controls; do not nest the button inside the anchor.
-- Dismissal hides the sticker without navigation, page reflow, or focus theft.
-- Default behavior is session-scoped and event-specific unless an existing approved preference contract supersedes it.
-- Key dismissal to the event's stable ID/slug. Dismissing event A must not suppress event B.
-- An event that becomes ineligible disappears regardless of stored dismissal.
-- No analytics, tracking, sound, toast, modal, assertive live region, or repeated reappearance in the same session.
-
-## 10. Phase 6 — Localization, accessibility, SEO, and performance
-
-### Localization
-
-- English uses `lang=en`, `dir=ltr`; Persian uses `lang=fa`, `dir=rtl`.
-- Use approved Persian and English strings only; no machine-generated runtime fallback.
-- Localize navigation, headings, filters, page-size controls, dates, event labels, links, close controls, metadata, and accessible names.
-- Use existing bidi isolation for Latin names, URLs, and numeric values.
-- Never mirror paintings, photos, or announcement text.
-
-### Accessibility
-
-Target WCAG 2.2 AA and follow repository-wide accessibility contracts:
-- Semantic headings, links, and buttons.
-- Independent event link and close button.
-- Localized accessible names and visible focus indicators.
-- Correct keyboard order and focus behavior after dismissal.
-- Adequate touch targets and text contrast.
-- Decorative SVG hidden from assistive technology when appropriate.
-- No assertive live-region announcement on appearance.
-- Reduced-motion and forced-colors support where the project requires it.
-- Test keyboard-only behavior, 320px width, short-height screens, and 200% zoom.
-
-### SEO and privacy
-
-- The sticker itself is not an indexable page.
-- Canonical Journal detail pages follow existing localized SEO rules.
-- Draft, scheduled, archived-unpublished, unapproved, or locale-incomplete records must not appear in public lists, metadata, sitemap, or social previews.
-- Do not create structured data from unknown or unsupported facts.
-- No tracking, fingerprinting, new personal-data collection, or unnecessary third-party dependencies.
-- Use approved content only. Any fixture used for tests must be clearly fictional, non-publishable, and excluded from production metadata/sitemap.
-
-### Performance
-
-- Prefer server components and server-side selection; isolate client behavior to dismissal.
-- Reuse existing primitives, tokens, and utilities.
-- Avoid unnecessary dependencies and duplicate client bundles.
-- Avoid layout shift and reserve no space when no sticker exists.
-- Preserve image dimensions and established lazy-loading/prioritization behavior.
-
-## 11. Phase 7 — Automated tests
-
-Inspect the actual test architecture and add tests at the correct existing layers.
-
-### Unit tests
-
-Cover:
-- Publication status and artist approval.
-- Locale readiness and missing translations.
-- Event date/timezone validity and temporal boundaries.
-- Upcoming versus ongoing/past classification.
-- Nearest upcoming event selection.
-- Deterministic tie-breaking.
-- Homepage newest-two selection across all entry types.
-- Exclusion of older upcoming event from the homepage preview when it is not in newest-two.
-- Event-specific dismissal identity and state.
-- Optional metadata formatting and omission.
-
-### Component tests
-
-Cover:
-- Journal preview with zero, one, and two eligible entries.
-- Archive filters/pagination/page-size behavior where implemented.
-- Event detail metadata and omission of unknown fields.
-- Sticker content and canonical localized link.
-- Separate link and close button semantics.
-- Dismissal state and no page reflow.
-- Long English/Persian titles and missing optional date.
-- LTR/RTL decorative direction without mirrored content.
-- No sticker when no eligible event exists.
-
-### Integration/E2E tests
-
-Cover:
-1. Homepage Journal preview shows only the newest eligible record.
-2. Sticker selects the nearest upcoming event independently.
-3. Dismissing sticker does not change the preview.
-4. Sticker link opens the correct localized Journal detail.
-5. Event A dismissal does not suppress event B.
-6. Expired, unpublished, unapproved, archived, and untranslated records are excluded.
-7. Journal archive filters and pagination preserve valid URL state.
-8. Event detail distinguishes publication date from event date.
-9. English LTR and Persian RTL placement is correct.
-10. Desktop, tablet, mobile, short-height, 320px width, and 200% zoom do not introduce obstruction or overflow.
-11. Keyboard navigation, focus visibility, and dismissal work.
-12. Existing homepage, galleries, artwork viewer, sidebar, and locale switching regressions remain clear.
-
-### SVG renderer tests
-
-Validate missing/invalid SVG, missing/invalid viewBox, embedded text/image elements, renderer failure, incorrect dimensions, missing alpha channel, empty output, and transparent-canvas preservation. Assert actual output properties, not only process exit status.
-
-## 12. Phase 8 — CI and visual verification
-
-Inspect `package.json` and workflow definitions; use real project commands rather than guessing. Run applicable lint, formatting, typecheck, unit, component, integration, E2E, accessibility, localization, and production build checks.
-
-Run/inspect GitHub Actions when authorized and available:
-- Verify the workflow belongs to the exact final feature HEAD SHA.
-- Wait for completion; queued/in-progress is not a pass.
-- Inspect every relevant job and logs.
-- Confirm SVG renderer/validation passed.
-- Confirm the rendered website screenshots was uploaded and can be retrieved.
-- Fix actual failures and rerun.
-
-Capture actual browser screenshots for:
-- English and Persian.
-- Desktop, tablet, mobile, and short-height viewport.
-- Sticker visible and dismissed.
-- No eligible event.
-- Long event title.
-- Journal preview with 0/1/2 entries.
-- Archive and event detail.
-- Keyboard focus state where practical.
-
-Inspect the screenshots and rendered website screenshots. Record viewport, locale, state, artifact location, and findings. A screenshot that has not been opened/inspected is not visual verification.
-
-## 13. Phase 9 — Owner review and handoff
-
-Present:
-- The rendered website screenshots artifact.
-- Sticker close-up and actual display-size screenshots.
-- English/Persian desktop/tablet/mobile screenshots.
-- Any alternative vector treatment if the current torn-edge/tape design needs comparison.
-- Remaining decisions: silhouette/torn-edge subtlety, tape detail, proportions, safe placement, and final localized microcopy.
-
-The owner may request vector-path refinements. Apply requested changes directly to the SVG source and rerun CI; do not edit the PNG manually.
-
-Do not call the visual treatment final or artist-approved until the owner explicitly approves it. Do not generate or commit a PNG derivative.
-
-## 14. Definition of done
-
-The task is complete only when:
-- All unblocked requirements in the primary specification are implemented.
-- Canonical Journal content and event data are reused without duplication.
-- Homepage newest-two preview and independent nearest-upcoming sticker rules are both verified.
-- SVG artwork has been authored/refined during implementation.
-- GitHub Actions renders and validates the transparent rendered website screenshots.
-- Sticker behavior, dismissal, LTR/RTL, responsive placement, and accessibility are implemented.
-- Required tests, lint, typecheck, and production build pass.
-- The completed CI run matches the final tested feature SHA and its logs are inspected.
-- Actual responsive/localized screenshots and PNG are reviewed.
-- Remaining owner approvals and known gaps are clearly reported.
-- No merge, deployment, publication, or unauthorized push/commit has occurred.
-
-## 15. Final report format
-
-1. Branch and final HEAD SHA.
-2. Requirement-by-requirement implementation status.
-3. Files created/modified.
-4. SVG authoring changes and canonical source path.
-5. Renderer validation and rendered website screenshots artifact link.
-6. Test commands and exact pass/fail results.
-7. GitHub Actions run URL, conclusion, and tested SHA.
-8. Visual QA locales, viewports, states, and artifact references.
-9. Owner approvals obtained and still required.
-10. Known issues, blockers, and next actions.
-11. Explicit confirmation that no merge or deployment occurred.
-
-**Do not stop after a plan or documentation update. Implement the working Journal and sticker experience, author the SVG early, render it through CI, test the complete behavior, inspect the browser output, and report only what the evidence proves.**
+Required fields:
+- `active`: boolean.
+- `type`: `artwork | gallery | journal | event`.
+- `contentId`: non-empty stable content ID.
+- `title.en` and `title.fa`: non-empty localized strings.
+- `description.en` and `description.fa`: non-empty localized strings.
+
+Optional:
+- `metadata`: localized short supporting text, such as a category, year, or exhibition date. It is not required for every type.
+
+Do not add event-specific date fields to this general model. Metadata is plain optional display copy, not a substitute for structured event data.
+
+## 3. Visibility and validation
+
+`active` is the only visibility switch:
+- `true`: validate the reference, resolve the public content, derive the localized destination, and render the sticker.
+- `false`: do not render the sticker and do not resolve the content reference.
+- Missing configuration may be treated as inactive only if this is compatible with existing content-loading conventions.
+- Invalid JSON or invalid field types must fail configuration validation and CI.
+
+Always validate configuration structure, even when inactive. When active, additionally validate that the referenced item exists, is published, locale-ready, and has a safe localized slug. An active invalid reference must produce a clear error and must never render a broken link.
+
+Do not automatically select a different item if the configured item is missing, unpublished, or unavailable. Do not automatically activate the sticker when new content is published. Dismissal must never modify the JSON file or `active`.
+
+## 4. Content resolution and destinations
+
+Reuse the existing artwork, gallery, Journal, and event content access functions. Do not create an announcement repository.
+
+Resolve by `type` and `contentId`:
+- artwork → `/[locale]/works/[localized-slug]`
+- gallery → `/[locale]/galleries/[localized-slug]`
+- journal → `/[locale]/journal/[localized-slug]`
+- event → the canonical localized Journal detail route for the event/exhibition record.
+
+For `event`, only accept an existing public Journal event/exhibition record. Reuse the current event repository or canonical Journal filtering. Do not create a parallel event registry.
+
+Use the existing localized slug and route utilities, including URL encoding and Persian route normalization. English is LTR and Persian is RTL. Never manually duplicate route construction in the component.
+
+The layout/server boundary should read the JSON, validate it, skip resolution when inactive, resolve active content, and pass a small localized view model to the component. The component must not import JSON or access content repositories.
+
+## 5. Initial configuration
+
+Set the initial configuration to active and reference the newest published gallery according to the repository's actual artwork-year/gallery ordering. Use that gallery's stable ID and suitable localized title and short description.
+
+This selection is explicit configuration, not runtime auto-selection. Publishing a newer gallery must not change the sticker until the owner edits the JSON.
+
+Do not hardcode the selected gallery ID, title, or description in React or UI tests.
+
+## 6. Component contract
+
+Refactor the exhibition-only component into a generic content announcement component, following existing naming conventions. It receives only resolved presentation data:
+
+```ts
+interface ContentAnnouncementProps {
+  title: string;
+  description: string;
+  metadata?: string;
+  href: string;
+  locale: Locale;
+}
+```
+
+Include the localized dismiss label and existing placement/navigation callbacks as needed.
+
+Responsibilities:
+- Render metadata only when supplied.
+- Render title and description.
+- Link the main content area to the resolved `href`.
+- Provide a separate close button.
+- Dismiss without navigation.
+- Preserve the existing session-scoped dismissal behavior and event synchronization where functional.
+- Scope dismissal to the configured destination/content so changing the featured item does not inherit an unrelated dismissal.
+- Support keyboard operation, visible focus, accessible names, and long localized text without clipping or overlap.
+
+Do not create per-type components or put content-selection logic in the UI component.
+
+## 7. Visual design and placement
+
+Preserve the existing quiet paper-sticker identity and the canonical hand-authored SVG at `public/images/journal/journal-announcement-sticker.svg`. The SVG is decorative only; all text and controls remain HTML. Do not create a PNG derivative or image conversion pipeline.
+
+The sticker should remain minimal, editorial, paper-like, and visually secondary to the artwork. Avoid advertising banners, sale aesthetics, loud colors, large cards, excessive shadows, and unnecessary decoration.
+
+Content hierarchy:
+1. Optional metadata/category label.
+2. Title.
+3. Short description.
+4. Separate close button.
+
+Preserve the existing three placements:
+- Homepage desktop: viewport-edge placement.
+- Other desktop routes: compact placement in the desktop sidebar.
+- Mobile: placement in the mobile navigation drawer, after navigation and before settings.
+
+Keep the existing breakpoint and placement behavior unless a verified defect requires a minimal correction. Respect safe areas and avoid covering navigation, artwork, skip links, or focused controls. Do not reserve layout space when inactive or dismissed.
+
+Use logical CSS properties and preserve physical attachment direction: English attaches on the left; Persian attaches on the right. Mirror only the decorative SVG, never text or controls. Verify light/dark themes, RTL/LTR, and responsive behavior.
+
+The main content is a semantic link. The close button must be separate and must not trigger navigation. Preserve the existing 44×44px minimum dismissal target and reduced-motion behavior.
+
+## 8. Technical specifications
+
+Update the existing announcement specification, implementation prompt, agent instructions, visual design contract, and README document map. Remove contradictory exhibition-only assumptions, including:
+- Upcoming-event lookup controlling sticker visibility.
+- Requirement for an upcoming event before showing the sticker.
+- Automatic nearest-event selection for this sticker.
+- Multiple announcements or announcement collections.
+- An announcement repository.
+- A destination URL stored separately in JSON.
+
+Keep Journal's event model, archive, event eligibility, and event-detail functionality intact. This change only generalizes the sticker.
+
+Specifications must describe technical behavior, not current production titles, descriptions, artwork names, gallery IDs, Journal copy, personal biography, or current editorial counts.
+
+## 9. Tests and CI
+
+### Configuration tests — always run
+Validate active and inactive configurations, required fields, booleans, supported types, non-empty content IDs, both required locales, and optional metadata structure.
+
+### Content-resolution tests
+Use synthetic fixtures to cover artwork, gallery, journal, and event destinations. Verify missing and unpublished records fail safely, event destinations resolve to Journal, and localized slugs are encoded correctly.
+
+### Component tests — always run
+Use synthetic active and inactive props to verify rendering and hiding, title/description/metadata, links, dismissal without navigation, keyboard/focus behavior, RTL/LTR, long text, responsive placements, and themes. Cover both activation states independently of production JSON.
+
+### Configuration-aware Playwright tests — mandatory
+Read and validate the actual `src/content/announcement.json` checked out in the current CI branch. Do not hardcode its activation state or use a separate test configuration to decide whether production UI tests run.
+
+When `active: true`, run UI tests for visibility, configured localized copy, optional metadata, derived destination, navigation, dismissal, desktop/sidebar/mobile placement, and accessibility. Expected content and destination must be derived from the JSON and corresponding published record.
+
+When `active: false`, skip only UI tests that require an active sticker, using a clear reason such as:
+
+```ts
+test.skip(
+  !announcementConfig.active,
+  "Announcement is inactive in the current branch configuration."
+);
+```
+
+Still run inactive-visibility checks, configuration/schema validation, inactive-state unit/component tests, content-integrity checks that apply, and all unrelated site tests. Report conditional skips as skipped, not passed. Do not skip the entire announcement suite.
+
+Configuration structure is validated regardless of activation. Content reference and destination validation is required when active; an inactive reference does not need to resolve for rendering.
+
+Tests must not depend on production titles, gallery counts, journal counts, current content IDs, or the existence of an upcoming exhibition. Do not weaken or delete meaningful tests to get green CI.
+
+## 10. Migration and cleanup
+
+- Remove the old event-only component and obsolete event/date props.
+- Remove `getUpcomingJournalEvent()` from the sticker configuration flow.
+- Retain event repository and upcoming-event utilities where used elsewhere.
+- Reuse existing content access functions.
+- Remove obsolete translations or change their copy to generic announcement language.
+- Remove unused imports and obsolete tests.
+- Do not change unrelated Journal, artwork, gallery, About, or navigation behavior.
+
+## 11. Implementation sequence
+
+1. Inspect the current branch, component, layout, repositories, routes, messages, tests, and CI.
+2. Confirm the target is the existing `feature` branch.
+3. Determine the newest published gallery from current content data.
+4. Add and validate the single JSON configuration.
+5. Resolve active content using existing access functions.
+6. Derive localized destinations from type and localized slug.
+7. Refactor the sticker component and integrate it into the existing shell placements.
+8. Preserve the paper SVG, dismissal, localization, and accessibility.
+9. Update specifications and translations.
+10. Refactor unit and Playwright tests, including branch-aware activation.
+11. Run available lint, typecheck, unit tests, build, and Playwright checks.
+12. Inspect every failed CI job and its logs; fix root causes.
+13. Commit only to `feature`, after verification.
+14. Inspect the latest complete GitHub Actions workflow. Do not claim success until it is completed successfully.
+
+## 12. Acceptance criteria
+
+- One JSON file is the only announcement configuration.
+- No announcement repository or collection exists.
+- `active: true` shows the configured content; `false` hides it.
+- Artwork, gallery, journal, and event are supported.
+- The initial active configuration references the newest published gallery.
+- Destination is derived from type and content ID; no URL is stored in JSON.
+- Active references must resolve to published, locale-ready content.
+- Localized title and description render correctly; metadata is optional.
+- Main sticker click navigates; close dismisses without navigation.
+- Existing visual identity, placements, and dismissal behavior are preserved.
+- English LTR, Persian RTL, mobile, desktop, and both themes work.
+- Specs and tests describe the general-purpose model.
+- Playwright reads the actual branch JSON and conditionally skips only active-only UI tests.
+- Configuration and synthetic activation-state tests always run.
+- No unrelated editorial content or functionality is changed.
+- All changes remain on `feature`.
+- Latest complete CI passes.
+
+## 13. Strict constraints
+
+Work on `feature` only. Do not merge to `stage` or `main`, deploy, alter unrelated editorial content, invent production events, create a repository/collection, store duplicate URLs, hardcode production content in tests, weaken tests, or report unverified CI success.
+
+**Final deliverable:** A minimal JSON-configured content announcement, initially featuring the latest published gallery, with automatically resolved localized navigation, configuration-aware tests, updated specifications, and a verified passing CI workflow.

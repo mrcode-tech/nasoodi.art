@@ -518,7 +518,7 @@ The portfolio supports multiple curated galleries, each with a title, short arti
 ### 22.1 Homepage hero painting
 
 - The homepage hero must prominently show one approved finished painting, not only a studio scene or decorative canvas layer.
-- Initial candidate source: `public/images/artist/artist-at-work.jpg`. Inspect the actual image and confirm its intended role and public-use approval before implementation; do not infer suitability or title from its filename.
+- Initial candidate source: `HERO_IMAGE_PATH`. Inspect the actual image and confirm its intended role and public-use approval before implementation; do not infer suitability or title from its filename.
 - Preserve full image ratio, orientation, color, texture, and canvas edges. No unapproved crop, filter, mirroring, or simulated brush movement.
 - Place artist identity and clear Works/Galleries actions beside or below the image; avoid obscuring the painting with copy.
 - Use a static image by default. Any subtle entrance effect must be optional and respect reduced motion.

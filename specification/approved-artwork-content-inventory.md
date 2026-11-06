@@ -1,65 +1,36 @@
-# Canonical artwork and gallery inventory
+# Content Relationship and Integrity Contracts
 
-**Status:** Current canonical content contract for the feature branch.
-**Source of truth:** `src/content/data/artworks.json`, `src/content/data/galleries.json`, and `src/content/data/homepage-selection.json`.
+This document defines technical invariants for artwork, collection, and homepage-selection records. It intentionally contains no current titles, IDs, dates, image filenames, or editorial record counts.
 
-## Current inventory
+## 1. Canonical records
 
-The canonical JSON currently contains **25 published artwork records**, organized into **eight year-based galleries**. The records cover Persian calendar years 1388, 1392, 1393, 1395, 1398, 1399, 1401, and 1403.
+- Artwork records have stable IDs, localized fields, publication state, and safe asset references.
+- Collection records have stable IDs, localized fields, an ordered list of artwork references, and an optional cover reference.
+- Homepage selections contain references to canonical records; they do not duplicate records.
+- Journal records may reference shared assets through stable identifiers or safe public paths.
+- All records are loaded through the content repository layer.
 
-The inventory is data-driven. Do not hardcode an earlier five-image inventory, a four-gallery inventory, or a fixed list of image filenames in application logic or tests. When the owner adds, replaces, or removes artwork, update the canonical JSON and its related references; then update this document's counts and summary table in the same change.
+## 2. Relationship invariants
 
-| Gallery year | Gallery title (English) | Slug | Artwork count | Cover artwork |
-|---:|---|---|---:|---|
-| 1403 | A Season of Light | `a-season-of-light` | 6 | `artwork-1403-1` |
-| 1401 | A New Rhythm | `a-new-rhythm` | 2 | `artwork-1401-1` |
-| 1399 | After the Moment | `after-the-moment` | 1 | `artwork-1399-1` |
-| 1398 | Impressions That Remain | `impressions-that-remain` | 8 | `artwork-1398-1` |
-| 1395 | A Quiet Interval | `a-quiet-interval` | 1 | `artwork-1395-1` |
-| 1393 | The Held Space | `the-held-space` | 2 | `artwork-1393-1` |
-| 1392 | Figures and Interior Light | `figures-and-interior-light` | 4 | `artwork-1392-1` |
-| 1388 | First Light | `first-light` | 1 | `artwork-1388-1` |
-| **Total** | **8 galleries** |  | **25 artworks** |  |
+- Every referenced artwork ID must resolve to an existing canonical record.
+- A collection must not contain duplicate artwork references.
+- A configured cover reference must resolve to a member of the collection.
+- Where the cover contract specifies the first ordered member, the cover reference must equal the first member of that ordered list.
+- Removing a record must not leave dangling references.
+- Empty collections and optional cover fields must be handled according to the domain contract without crashing the application.
+- Homepage selections must reference eligible canonical records and preserve explicitly configured order.
 
-The canonical gallery JSON is stored oldest-to-newest for editorial chronology. Public archive and homepage selections are presented newest-to-oldest. Each gallery's `artworkIds` array is its canonical editorial order.
+## 3. Route and presentation contracts
 
-## Content and relationship rules
+- Archive routes are locale-prefixed and resolve records using localized slugs.
+- Localized slugs are not stable identifiers and must not be used as foreign keys.
+- Public archive ordering is derived from the domain's configured sort key.
+- The collection index uses its specified static-card layout and pagination contract.
+- Homepage and detail-page carousel behavior remains scoped to the components that require it.
+- Images preserve intended fidelity and use the component's defined contain/crop behavior.
 
-- Artwork records have stable IDs, localized titles and descriptions, explicit localized slugs, and one primary image in the current inventory.
-- Image paths must be safe, same-origin public paths. Committed image metadata is generated from actual files by `scripts/generate-image-metadata.mjs`; `npm run images:check` verifies it without rewriting it.
-- Artwork publication requires the existing publication and rights checks, localized fields, a valid primary image, dimensions, and localized alternative text.
-- The eight galleries are year-based groupings, not overlapping thematic collections. Every current artwork belongs to exactly one gallery.
-- A gallery's `coverArtworkId` must equal the first item in its ordered `artworkIds` list. Do not choose a cover by filename sorting or by an unrelated artwork ID.
-- Gallery memberships reference canonical artwork IDs. Never duplicate an artwork record or image file to place it in a gallery.
-- `homepage-selection.json` contains eight featured gallery IDs and eight featured artwork IDs. Each featured artwork is the first artwork (cover) of the corresponding featured gallery, and the selection is ordered newest-first.
-- Keep the artist's studio/process portrait separate from finished artwork records. Do not register a portrait or process photograph as an artwork.
-- Journal entries may reuse canonical artwork images. Their localized alt text is context-specific editorial metadata and does not have to be identical to the artwork page's alt text; it must remain accurate, meaningful, localized, and rights-cleared.
+## 4. Validation
 
-## Public routes and presentation
+Automated tests use generated records to validate uniqueness, reference integrity, ordering, cover selection, pagination, localized route resolution, and safe asset paths.
 
-- Works archives: `/[locale]/works`; detail routes: `/[locale]/works/[localizedSlug]`.
-- Gallery index: `/[locale]/galleries`. It uses static poster cards, not the homepage carousel.
-- Gallery details: `/[locale]/galleries/[localizedSlug]`.
-- Homepage Selected Works and featured Galleries retain their own carousel behavior and use the explicit homepage selection.
-- Public artwork and gallery archives are ordered newest year first. The first artwork in each gallery is its cover.
-- Persian routes and localized slugs must resolve correctly under RTL; English routes use LTR.
-
-## Validation contract
-
-Automated tests should validate invariants rather than preserve obsolete inventory assumptions:
-
-1. Stable artwork IDs and slugs are unique.
-2. Current published artwork records have localized content and valid primary image metadata.
-3. Gallery IDs and slugs are unique; every gallery is published, localized, and has at least one artwork.
-4. Gallery membership IDs resolve to canonical artworks, contain no duplicates, and partition the current artwork inventory exactly once.
-5. Each gallery cover is its first artwork.
-6. Homepage featured gallery/artwork selections contain eight current records, are newest-first, and pair each gallery with its first artwork.
-7. Public records are available in both locales and route slugs are safe.
-8. Journal cover images are safe and rights-cleared; localized Journal alt text is validated independently from artwork-page alt text.
-9. CI's image metadata check, content tests, route tests, and production build pass against the same feature-branch commit.
-
-Avoid tests that assert stale image filenames, old five/four inventory sizes in unrelated code, fixed thematic overlap, or the existence of an upcoming event. Tests for repositories should verify their filtering and ordering contracts; a valid empty event result is allowed when the canonical Journal contains no published event/exhibition records.
-
-## Editorial and approval boundary
-
-The canonical data currently marks the published artwork records as rights-confirmed and supplies localized editorial text. Automated checks verify data consistency and asset availability; they do not independently establish legal ownership, artist approval of every title/translation, or final visual acceptance. Keep owner review distinct from technical publication validation and do not infer new approval from the existence of a JSON record.
+Do not assert a fixed number of records, actual editorial titles, specific production IDs, image filenames, or a particular production record being first/latest. A content change must update rendered output without requiring test or specification edits unless a technical contract itself changes.

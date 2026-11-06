@@ -362,7 +362,7 @@ Do not claim compliance from palette inspection alone; record measured contrast 
 - Keep theme state local to the visitor's browser preference mechanism; do not add analytics or remote tracking.
 - Do not change page metadata, canonical URLs, hreflang, robots, sitemap, or structured data.
 - Do not change artist facts, artwork records, translations, rights, approval state, or publication eligibility.
-- Do not change the exact artist name: **Ghazaleh Abdolahzade Nasoodi**.
+- Do not change the exact artist name: **ARTIST_NAME**.
 
 ## 12. Implementation workflow
 
