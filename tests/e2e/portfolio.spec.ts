@@ -510,6 +510,14 @@ for (const locale of ["en", "fa"] as const) {
       await expect(heroImage).toHaveJSProperty("complete", true);
       await expect(heroImage).not.toHaveJSProperty("naturalWidth", 0);
       await expect(heroImage).toHaveAttribute("src", /artist-at-work/);
+      const heroFrameWidth = await page.locator(".artist-hero-carousel").evaluate((element) => element.getBoundingClientRect().width);
+      const introWidth = await page.locator(".home-intro.has-hero").evaluate((element) => element.getBoundingClientRect().width);
+      if (viewport.width > 900) {
+        const mainContentWidth = viewport.width - 264;
+        expect(heroFrameWidth).toBeGreaterThanOrEqual(mainContentWidth / 3);
+      } else {
+        expect(heroFrameWidth).toBeGreaterThanOrEqual(introWidth - 2);
+      }
       await expect(heroImage).toHaveAttribute("alt", locale === "fa" ? "هنرمند در آتلیه، روبه‌روی بوم نقاشی ایستاده است." : "The artist standing before a canvas in her studio.");
       if ((await heroImage.getAttribute("src"))?.includes("artist-at-work")) {
       }
