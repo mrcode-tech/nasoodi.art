@@ -156,7 +156,7 @@ test("Journal archive pagination respects the configured page-size contract", as
   await page.goto("/en/journal");
   const cards = page.locator(".journal-card");
   const statusText = await page.getByRole("status").first().innerText();
-  const total = Number(statusText.match(/of\\s+(\\d+)/i)?.[1] ?? await cards.count());
+  const total = Number(statusText.match(/of\s+(\d+)/i)?.[1] ?? await cards.count());
   const pageSize = page.locator(".journal-pagination .gallery-page-size select");
 
   await expect(pageSize).toHaveValue("6");
@@ -965,7 +965,7 @@ test("Journal archive pagination respects the configured page-size contract", as
   await page.goto("/en/journal");
   const cards = page.locator(".journal-card");
   const statusText = await page.getByRole("status").first().innerText();
-  const total = Number(statusText.match(/of\\s+(\\d+)/i)?.[1] ?? await cards.count());
+  const total = Number(statusText.match(/of\s+(\d+)/i)?.[1] ?? await cards.count());
   const pageSize = page.locator(".journal-pagination .gallery-page-size select");
 
   await expect(pageSize).toHaveValue("6");
@@ -2252,7 +2252,7 @@ test("artwork breadcrumbs preserve only a verified collection origin",async({pag
  await expect(page).toHaveURL(/fromGallery=[^&]+/);
  const breadcrumb=page.getByRole("navigation",{name:"Breadcrumb"});
  await expect(breadcrumb.getByRole("link",{name:"Galleries"})).toHaveAttribute("href","/en/galleries");
- await expect(breadcrumb.getByRole("link").last()).toHaveAttribute("href", /\\/en\\/galleries\\/[^/]+$/);
+ await expect(breadcrumb.getByRole("link").last()).toHaveAttribute("href", new RegExp("^/en/galleries/[^/]+$"));
  await page.goto((await firstArtworkHref(page, "en")) + "?fromGallery=not-a-real-gallery");
  const fallback=page.getByRole("navigation",{name:"Breadcrumb"});
  await expect(fallback.getByRole("link",{name:"Selected works"})).toHaveAttribute("href","/en/works");
