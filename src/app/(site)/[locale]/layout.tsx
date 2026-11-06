@@ -5,7 +5,7 @@ import { notFound } from "next/navigation";
 import { SiteShell } from "@/components/site-shell";
 import { ThemeProvider } from "@/components/providers/theme-provider";
 import announcementConfig from "@/content/announcement.json";
-import { assertAnnouncementConfig } from "@/lib/content/announcement-config";
+import { assertAnnouncementConfig, getAnnouncementHref } from "@/lib/content/announcement-config";
 import { getLocalizedSlug } from "@/lib/content/paths";
 import { pagePath, isLocale, locales, getLocaleDirection, type Locale } from "@/types/locale";
 import { getArtworkById } from "@/content/repositories/artwork.repository";
@@ -47,22 +47,22 @@ function resolveAnnouncement(locale: Locale): ResolvedAnnouncement | undefined {
   switch (announcementConfig.type) {
     case "artwork": {
       const artwork = getArtworkById(announcementConfig.contentId, locale);
-      if (artwork) href = pagePath(locale, "works/" + encodeURIComponent(getLocalizedSlug(artwork, locale)));
+      if (artwork) href = getAnnouncementHref("artwork", getLocalizedSlug(artwork, locale), locale);
       break;
     }
     case "gallery": {
       const gallery = getGalleryById(announcementConfig.contentId, locale);
-      if (gallery) href = pagePath(locale, "galleries/" + encodeURIComponent(getLocalizedSlug(gallery, locale)));
+      if (gallery) href = getAnnouncementHref("gallery", getLocalizedSlug(gallery, locale), locale);
       break;
     }
     case "journal": {
       const entry = getJournalEntryById(announcementConfig.contentId, locale);
-      if (entry) href = pagePath(locale, "journal/" + encodeURIComponent(getLocalizedSlug(entry, locale)));
+      if (entry) href = getAnnouncementHref("journal", getLocalizedSlug(entry, locale), locale);
       break;
     }
     case "event": {
       const event = getEvents(locale).find((entry) => entry.id === announcementConfig.contentId);
-      if (event) href = pagePath(locale, "journal/" + encodeURIComponent(getLocalizedSlug(event, locale)));
+      if (event) href = getAnnouncementHref("event", getLocalizedSlug(event, locale), locale);
       break;
     }
   }
