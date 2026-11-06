@@ -1933,7 +1933,7 @@ test("Works archive paginates five artworks by default and supports 5, 10, and 2
     const pageSize = pagination.locator(".gallery-page-size select");
     await expect(pageSize).toHaveValue("5");
     await expect(pagination.locator(".gallery-page-nav .is-current")).toHaveText(locale === "fa" ? "۱" : "1");
-    await page.getByRole("button", { name: locale === "fa" ? /صفحه ۲/ : /Page 2/ }).click();
+    await pagination.locator(".gallery-page-nav button").last().click();
     await expect(page).toHaveURL(/page=2/);
     await expect(cards).toHaveCount(5);
     await pageSize.selectOption("10");
