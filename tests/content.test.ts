@@ -650,7 +650,7 @@ test("the active production announcement references a published localized record
   assertAnnouncementConfig(announcementConfig);
   if (!announcementConfig.active) return;
   for (const locale of ["en", "fa"] as const) {
-    const valid =
+    const valid: boolean =
       announcementConfig.type === "artwork"
         ? getPublicArtworks(artworks, locale).some((item) => item.id === announcementConfig.contentId)
         : announcementConfig.type === "gallery"
