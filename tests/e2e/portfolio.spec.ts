@@ -86,14 +86,14 @@ for (const section of ["works", "galleries", "journal"] as const) {
     const pagination = archivePagination(page, section);
 
     // Synthetic unit tests cover pagination independently of editorial record counts.
-    if (await pagination.count() === 0) {
+    const next = pagination.locator(".gallery-page-nav button").last();
+    if (await next.count() === 0) {
       test.skip(true, "This archive currently has fewer than two pages.");
       return;
     }
 
     await expect(pagination.locator("select")).toHaveValue("6");
     const firstHref = await items.first().getAttribute("href");
-    const next = pagination.locator(".gallery-page-nav button").last();
     await expect(next).toBeEnabled();
     await next.click();
     await expect(page).toHaveURL((url) => url.searchParams.get("page") === "2");
