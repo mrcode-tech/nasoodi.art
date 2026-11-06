@@ -1830,7 +1830,7 @@ test("localized SEO metadata is rendered from canonical content for archives and
   await expect(page.locator('link[rel="alternate"][hreflang="fa"]')).toHaveAttribute("href", "https://nasoodi.art/fa/works");
   await expect(page.locator('meta[name="description"]')).toHaveAttribute("content", /.+/);
   await expect(page.locator('meta[property="og:type"]')).toHaveAttribute("content", "website");
-  await expect(page.locator('meta[property="og:image"]')).toHaveAttribute("content", /^https://nasoodi.art//);
+  await expect(page.locator('meta[property="og:image"]')).toHaveAttribute("content", new RegExp("^https://nasoodi\\.art/"));
   await expect(page.locator('meta[name="twitter:card"]')).toHaveAttribute("content", "summary_large_image");
 
   await page.goto("/fa/works");
@@ -1844,7 +1844,7 @@ test("localized SEO metadata is rendered from canonical content for archives and
   await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", /^https:\/\/nasoodi\.art\/en\/works\//);
   await expect(page.locator('link[rel="alternate"][hreflang="fa"]')).toHaveAttribute("href", /^https:\/\/nasoodi\.art\/fa\/works\//);
   await expect(page.locator('meta[property="og:type"]')).toHaveAttribute("content", "article");
-  await expect(page.locator('meta[property="og:image"]')).toHaveAttribute("content", /^https://nasoodi.art//);
+  await expect(page.locator('meta[property="og:image"]')).toHaveAttribute("content", new RegExp("^https://nasoodi\\.art/"));
 
   for (const section of ["contact", "about", "cv"]) {
     await page.goto("/en/" + section);
