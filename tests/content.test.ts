@@ -46,6 +46,25 @@ import { validatePortfolioContent } from "../src/lib/content/validate-portfolio"
 const work:Artwork={id:"w1",slug:"work-one",title:{en:"Work",fa:"اثر"},images:[{src:"/art/work.jpg",alt:{en:"Painting",fa:"نقاشی"},role:"primary",width:1200,height:900}],rightsConfirmed:true,status:"published"};
 test("artwork stays private until published and rights-cleared",()=>{assert.equal(getPublicArtworks([{...work,status:"needs-review"}],"en").length,0);assert.equal(getPublicArtworks([{...work,rightsConfirmed:false}],"en").length,0);assert.equal(getPublicArtworks([work],"en").length,1);});
 test("artwork requires localized title and primary image alt",()=>{assert.equal(getPublicArtworks([{...work,title:{en:"Work"}}],"fa").length,0);assert.equal(getPublicArtworks([{...work,images:[{...work.images[0],alt:{en:""}}]}],"en").length,0);});
+
+test("Persian content slugs accept combining marks and ZWNJ while rejecting unsafe separators",()=>{
+ assert.equal(isSafeContentSlug("لحظه‌ای-کنار-پنجره"),true);
+ assert.equal(isSafeContentSlug("آرامشِ-نگریستن"),true);
+ assert.equal(isSafeContentSlug("فاصله‌ی-میان"),true);
+ assert.equal(isSafeContentSlug("safe--slug"),false);
+ assert.equal(isSafeContentSlug("-unsafe"),false);
+ assert.equal(isSafeContentSlug("unsafe-"),false);
+ assert.equal(isSafeContentSlug("unsafe/segment"),false);
+ assert.equal(isSafeContentSlug("unsafe?query"),false);
+});
+
+test("all 25 current artworks remain publicly available with Persian localized slugs",()=>{
+ const publicWorks=getPublicArtworks(artworks,"fa");
+ assert.equal(publicWorks.length,25);
+ assert.ok(publicWorks.every(item=>isSafeContentSlug(getLocalizedSlug(item,"fa"))));
+ assert.equal(publicWorks.find(item=>item.id==="artwork-1392-2")?.localizedSlugs?.fa,"لحظه‌ای-کنار-پنجره");
+ assert.equal(publicWorks.find(item=>item.id==="artwork-1392-3")?.localizedSlugs?.fa,"آرامشِ-نگریستن");
+});
 test("gallery requires unique published artwork members and member cover",()=>{const g:Gallery={id:"g1",slug:"gallery",title:{en:"Gallery",fa:"گالری"},description:{en:"Description",fa:"توضیح"},coverArtworkId:work.id,artworkIds:[work.id],status:"published",sortOrder:1};assert.equal(getPublicGalleries([g],[work],"en").length,1);assert.equal(getPublicGalleries([g],[],"en").length,0);assert.equal(getPublicGalleries([{...g,artworkIds:["w1","w1"]}],[work],"en").length,0);assert.equal(getPublicGalleries([{...g,coverArtworkId:"x"}],[work],"en").length,0);});
 test("journal only exposes published entries with localized title and summary",()=>{const j:JournalEntry={id:"j1",slug:"story",type:"story",title:{en:"Story",fa:"داستان"},summary:{en:"Summary",fa:"خلاصه"},status:"published",approvedLocales:["en","fa"],artistApproved:true};assert.equal(getPublicJournal([j],"en").length,1);assert.equal(getPublicJournal([{...j,status:"draft"}],"en").length,0);assert.equal(getPublicJournal([j],"fa").length,1);});
 
@@ -141,6 +160,7 @@ test("locale switching preserves available localized sections and falls back for
  assert.equal(alternatePathFor("/fa/works", "fa"), "/en/works");
  assert.equal(alternatePathFor("/fa/works/not-published", "fa"), "/en");
  assert.equal(alternatePathFor("/fa/journal/not-published", "fa"), "/en");
+ assert.equal(alternatePathFor("/en/works/a-first-light", "en"), "/fa/works/نخستین-روشنایی");
 });
 
 test("homepage upcoming events are future-dated, locale-approved, and ordered by occurrence",()=>{
