@@ -286,27 +286,102 @@ test("public utility endpoints respond successfully", async ({ request }) => {
 
 
 for (const viewportWidth of [320, 360, 390, 430] as const) {
-  test("Persian mobile layout has no horizontal page overflow at " + viewportWidth + "px", async ({ page }) => {
+  test("localized mobile layouts have no horizontal page overflow at " + viewportWidth + "px", async ({ page }) => {
     await page.setViewportSize({ width: viewportWidth, height: 844 });
 
-    for (const route of ["/fa", "/fa/works", "/fa/galleries", "/fa/journal", "/fa/about", "/fa/contact", "/fa/cv"]) {
-      await page.goto(route);
-      const closedOverflow = await page.evaluate(() => ({
-        viewport: document.documentElement.clientWidth,
-        document: document.documentElement.scrollWidth,
-      }));
-      expect(closedOverflow.document, route + " with navigation closed").toBeLessThanOrEqual(closedOverflow.viewport);
+    for (const locale of locales) {
+      for (const section of ["", ...sections]) {
+        const route = "/" + locale + (section ? "/" + section : "");
+        await page.goto(route);
+        const diagnoseOverflow = () => page.evaluate(() => {
+          const viewport = document.documentElement.clientWidth;
+          const hero = document.querySelector(".artist-hero-carousel");
+          const ancestorChain = [];
+          for (let node = hero; node && ancestorChain.length < 8; node = node.parentElement) {
+            const rect = node.getBoundingClientRect();
+            const style = getComputedStyle(node);
+            ancestorChain.push({
+              tag: node.tagName.toLowerCase(),
+              className: typeof node.className === "string" ? node.className : "",
+              left: Math.round(rect.left * 10) / 10,
+              right: Math.round(rect.right * 10) / 10,
+              width: Math.round(rect.width * 10) / 10,
+              direction: style.direction,
+              display: style.display,
+              boxSizing: style.boxSizing,
+              marginInlineStart: style.marginInlineStart,
+              marginInlineEnd: style.marginInlineEnd,
+              paddingInlineStart: style.paddingInlineStart,
+              paddingInlineEnd: style.paddingInlineEnd,
+              gridTemplateColumns: style.gridTemplateColumns,
+              overflowX: style.overflowX,
+            });
+          }
+          const offenders = Array.from(document.querySelectorAll("body *"))
+            .map((element) => {
+              const rect = element.getBoundingClientRect();
+              const style = getComputedStyle(element);
+              return {
+                tag: element.tagName.toLowerCase(),
+                className: typeof element.className === "string" ? element.className : "",
+                left: Math.round(rect.left * 10) / 10,
+                right: Math.round(rect.right * 10) / 10,
+                width: Math.round(rect.width * 10) / 10,
+                position: style.position,
+                transform: style.transform,
+                overflowX: style.overflowX,
+              };
+            })
+            .filter((item) => item.width > 0 && (item.left < -1 || item.right > viewport + 1))
+            .slice(0, 12);
+          return {
+            viewport,
+            document: document.documentElement.scrollWidth,
+            body: document.body.scrollWidth,
+            direction: getComputedStyle(document.documentElement).direction,
+            activeElement: document.activeElement instanceof HTMLElement
+              ? document.activeElement.tagName.toLowerCase() + "." + document.activeElement.className
+              : null,
+            ancestorChain,
+            offenders,
+          };
+        });
 
-      const trigger = page.locator(".menu-trigger");
-      await trigger.click();
-      await expect(page.getByRole("dialog")).toBeVisible();
-      const openOverflow = await page.evaluate(() => ({
-        viewport: document.documentElement.clientWidth,
-        document: document.documentElement.scrollWidth,
-      }));
-      expect(openOverflow.document, route + " with navigation open").toBeLessThanOrEqual(openOverflow.viewport);
-      await page.keyboard.press("Escape");
-      await expect(page.getByRole("dialog")).toBeHidden();
+        const closedOverflow = await diagnoseOverflow();
+        expect(closedOverflow.document, route + " with navigation closed: " + JSON.stringify(closedOverflow)).toBeLessThanOrEqual(closedOverflow.viewport);
+
+        if (locale === "fa") {
+          const contentSpacing = await page.locator(".page-content").first().evaluate((element) => {
+            const rect = element.getBoundingClientRect();
+            const style = getComputedStyle(element);
+            return {
+              left: rect.left,
+              right: rect.right,
+              width: rect.width,
+              paddingLeft: parseFloat(style.paddingLeft),
+              paddingRight: parseFloat(style.paddingRight),
+              boxSizing: style.boxSizing,
+            };
+          });
+          expect(contentSpacing.boxSizing, route + " page content must include its gutters in its width").toBe("border-box");
+          expect(contentSpacing.left, route + " page content must stay inside the viewport").toBeGreaterThanOrEqual(-0.5);
+          expect(contentSpacing.right, route + " page content must stay inside the viewport").toBeLessThanOrEqual(viewportWidth + 0.5);
+          expect(Math.abs(contentSpacing.paddingLeft - contentSpacing.paddingRight), route + " Persian mobile content gutters must be balanced: " + JSON.stringify(contentSpacing)).toBeLessThanOrEqual(0.5);
+          expect(contentSpacing.paddingLeft, route + " Persian mobile content needs a deliberate side gutter").toBeGreaterThanOrEqual(16);
+        }
+
+        const trigger = page.locator(".menu-trigger");
+        await trigger.focus();
+        const focusedOverflow = await diagnoseOverflow();
+        expect(focusedOverflow.document, route + " with menu trigger focused: " + JSON.stringify(focusedOverflow)).toBeLessThanOrEqual(focusedOverflow.viewport);
+
+        await trigger.click();
+        await expect(page.getByRole("dialog")).toBeVisible();
+        const openOverflow = await diagnoseOverflow();
+        expect(openOverflow.document, route + " with navigation open: " + JSON.stringify(openOverflow)).toBeLessThanOrEqual(openOverflow.viewport);
+        await page.keyboard.press("Escape");
+        await expect(page.getByRole("dialog")).toBeHidden();
+      }
     }
   });
 }

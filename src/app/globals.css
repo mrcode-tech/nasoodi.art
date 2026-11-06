@@ -1979,3 +1979,96 @@ html[lang="fa"] .contact-method-label {
     clip-path: inset(0);
   }
 }
+
+
+/* Keep the RTL homepage grid inside its mobile content box. The grid's
+   intrinsic sizing can otherwise let the hero figure extend past the
+   inline-start edge and enlarge the document's scrollable width. */
+@media (max-width: 900px) {
+  .home-page {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    margin-inline: 0;
+  }
+
+  .home-page .home-intro.has-hero {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    margin-inline: 0;
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .home-page .home-intro.has-hero > .artist-hero-carousel,
+  .home-page .home-intro.has-hero > .home-intro-copy {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+  }
+}
+
+
+/* Persian mobile content uses a balanced, viewport-safe gutter. The RTL
+   homepage portrait must not retain the desktop float's inline margin after
+   the layout stacks vertically. */
+@media (max-width: 900px) {
+  html[lang="fa"] .page-content {
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    margin-inline: 0;
+    padding-inline: clamp(1rem, 4vw, 1.25rem);
+  }
+
+  html[dir="rtl"] .home-intro.has-hero > .hero-artwork {
+    float: none;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    margin: 0 0 1.25rem;
+  }
+}
+
+
+/* Keep shared archive pagination shrinkable on the narrowest mobile viewport.
+   Long result labels and form controls must not impose an intrinsic min-width
+   larger than the page content column. */
+@media (max-width: 600px) {
+  .gallery-pagination,
+  .gallery-pagination-controls,
+  .gallery-results-status,
+  .gallery-page-size,
+  .gallery-page-nav {
+    box-sizing: border-box;
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .gallery-pagination {
+    width: 100%;
+  }
+
+  .gallery-results-status {
+    overflow-wrap: anywhere;
+  }
+
+  .gallery-pagination-controls {
+    width: 100%;
+  }
+
+  .gallery-page-size {
+    width: 100%;
+  }
+
+  .gallery-page-size select {
+    max-width: 100%;
+  }
+
+  .gallery-page-nav {
+    width: 100%;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+}
