@@ -23,7 +23,7 @@ type Props = {
   galleries: Gallery[];
   artworks: Artwork[];
   locale: Locale;
-  labels: { itemsPerPage: string; previous: string; next: string; page: string; showing: string };
+  labels: { itemsPerPage: string; previous: string; next: string; page: string };
 };
 
 export function GalleryIndex({ galleries, artworks, locale, labels }: Props) {
@@ -42,10 +42,11 @@ export function GalleryIndex({ galleries, artworks, locale, labels }: Props) {
   }, [pathname, queryString, router, state.page, state.pageSize]);
 
   const visible = paginateItems(galleries, state);
-  const range = state.totalItems === 0 ? "" : labels.showing
-    .replace("{start}", formatLocaleNumber(state.startIndex + 1, locale))
-    .replace("{end}", formatLocaleNumber(state.endIndex, locale))
-    .replace("{total}", formatLocaleNumber(state.totalItems, locale));
+  const range = state.totalItems === 0 ? "" : t("showingGalleries", {
+    start: formatLocaleNumber(state.startIndex + 1, locale),
+    end: formatLocaleNumber(state.endIndex, locale),
+    total: formatLocaleNumber(state.totalItems, locale),
+  });
 
   const navigate = (nextPage: number, nextSize: GalleryPageSize = state.pageSize) => {
     router.push(galleryPaginationHref(pathname, queryString, nextPage, nextSize), { scroll: false });
