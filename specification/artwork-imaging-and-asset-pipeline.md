@@ -109,7 +109,7 @@ Publishable images live directly in their final `public/images/` folders. The ap
 - `npm run dev` invokes the generator through `predev`. Run `npm run images:generate` manually after changing images while the development server is already running.
 - Commit the generated JSON together with image additions, replacements, or removals.
 - `prebuild` invokes the same script with `--check`. CI verifies that committed metadata exactly matches the current raster files and that root-relative image references in content JSON resolve to existing files. Check mode never writes or regenerates metadata.
-- SVG files are served directly and are not included in raster dimension metadata. The Journal sticker remains a canonical SVG under `public/images/journal/`; CI renders a separate PNG review artifact from that source.
+- SVG files are served directly and are not included in raster dimension metadata. The Journal sticker remains a canonical SVG under `public/images/journal/` and is used directly by the website; no PNG derivative is generated.
 - The generator performs no copying, image transformation, rights assessment, artist approval, or publication decision.
 
 This replaces both `audit-portfolio-assets.mjs` and `copy-approved-gallery-assets.mjs`. The former hardcoded candidate inventory and five-entry positional TypeScript dimensions array are retired. Metadata is keyed by public image path, so an artwork or artist image can be reused by multiple content records without duplicate files or index coupling.
