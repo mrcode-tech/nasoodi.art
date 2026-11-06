@@ -505,7 +505,7 @@ for (const locale of ["en", "fa"] as const) {
       await expect(page.locator("html")).toHaveAttribute("lang", locale);
       await expect(page.locator("html")).toHaveAttribute("dir", locale === "fa" ? "rtl" : "ltr");
       await expect(page.getByRole("heading", { level: 1, name: locale === "fa" ? "غزاله عبداله زاده نسودی" : "Ghazale Abdolahzade Nasoodi" })).toBeVisible();
-      const heroImage = page.locator(".hero-artwork img");
+      const heroImage = page.locator(".hero-artwork img.is-active");
       await expect(heroImage).toBeVisible();
       await expect(heroImage).toHaveJSProperty("complete", true);
       await expect(heroImage).not.toHaveJSProperty("naturalWidth", 0);
@@ -1039,11 +1039,27 @@ test("homepage hero layout is responsive and renders the bilingual biography", a
   }
 });
 
+
+test("homepage hero rotates from the studio photo to the portrait after five seconds in the same frame", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/en");
+  const figure = page.locator(".artist-hero-carousel");
+  const activeImage = figure.locator("img.is-active");
+  await expect(activeImage).toHaveAttribute("src", /artist-at-work/);
+  const initialFrame = await figure.boundingBox();
+  await expect(activeImage).toHaveJSProperty("complete", true);
+  await expect(activeImage).not.toHaveJSProperty("naturalWidth", 0);
+  await expect.poll(async () => figure.locator("img.is-active").getAttribute("src"), { timeout: 8000 }).toMatch(/artist-portrait/);
+  const nextFrame = await figure.boundingBox();
+  expect(nextFrame?.width).toBe(initialFrame?.width);
+  expect(nextFrame?.height).toBe(initialFrame?.height);
+});
+
 test("homepage biography expands in place without replacing the hero image or moving the viewport", async ({ page }) => {
   for (const locale of ["en", "fa"] as const) {
     await page.setViewportSize({ width: 390, height: 844 });
     await page.goto(`/${locale}`);
-    const image = page.locator(".hero-artwork img");
+    const image = page.locator(".hero-artwork img.is-active");
     const imageSource = await image.getAttribute("src");
     const imageCurrentSource = await image.evaluate((element: HTMLImageElement) => element.currentSrc);
     const readMore = page.getByRole("button", { name: locale === "fa" ? "ادامه مطلب" : "Read more" });
@@ -1108,7 +1124,7 @@ test("desktop homepage biography expands around a fixed locale-aligned hero imag
     await page.setViewportSize({ width: 1440, height: 900 });
     await page.goto(`/${locale}`);
     const figure = page.locator(".home-intro > .hero-artwork");
-    const image = figure.locator("img");
+    const image = figure.locator("img.is-active");
     const biography = page.locator(".home-biography .biography-copy");
     const readMore = page.getByRole("button", { name: locale === "fa" ? "ادامه مطلب" : "Read more" });
     await expect(image).toBeVisible();
