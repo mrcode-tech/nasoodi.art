@@ -5,7 +5,7 @@
 **Working branch:** feature  
 **Primary specification:** journal-announcement-specification.md  
 **Complete implementation prompt:** journal-announcement-implementation-prompt.md
-**Visual asset:** hand-authored SVG source with a GitHub Actions-generated PNG review artifact; governed by journal-announcement-sticker-visual-design.md
+**Visual asset:** hand-authored SVG served directly by the website; governed by journal-announcement-sticker-visual-design.md
 
 ## Objective
 
@@ -31,15 +31,15 @@ Implement the approved Journal event experience described by the proposal, wiref
 - Anchor the announcement to physical left in English and physical right in Persian.
 - Keep it fixed during scroll and independent of hero/layout geometry.
 - Keep the menu trigger, sidebar, artwork, focus, and essential content unobstructed.
-- Refine or author the decorative SVG during the early implementation phase; the checked-in torn-edge study is a starting point, not a finished asset. Implement the announcement with the resulting SVG as a provisional visual until owner review. Do not declare the treatment final until the owner reviews the CI-generated PNG and responsive screenshots.
+- Refine or author the decorative SVG during the early implementation phase; the checked-in torn-edge study is a starting point, not a finished asset. Implement the announcement with the resulting SVG as a provisional visual until owner review. Review the treatment in the actual responsive website screenshots.
 - Keep event link and dismissal as separate controls.
 - Use event-specific session dismissal unless an existing approved project preference contract supersedes it.
 - Preserve the independent homepage Journal preview, limited to the two newest eligible published entries across all Journal types, and canonical Journal detail routes.
 - Show confirmed event metadata only; never fabricate title, date, timezone, venue, participants, or registration details.
 - Use approved translations only.
-- Treat specification/assets/journal-announcement-sticker.svg as the editable source of truth. Do not use image generation, screenshot tracing, raster painting, or image processing.
-- Use the existing CI workflow to render the SVG into a transparent 1260 × 840 PNG review artifact and verify alpha transparency and dimensions.
-- Do not commit a generated PNG or copy it into the application bundle before owner review. If SVG/CSS is sufficient for production, retain the vector and omit the raster runtime asset.
+- Treat public/images/journal/journal-announcement-sticker.svg as the editable source of truth. Do not use image generation, screenshot tracing, raster painting, or image processing.
+- Do not create a PNG derivative or a sticker-rendering pipeline. CI verifies that the SVG exists and is non-empty; browser tests verify it renders.
+- Do not generate, commit, or bundle a PNG derivative. The canonical SVG is used directly.
 - Reuse project components, semantic tokens, shadcn-style controls, and existing utilities.
 - Avoid unnecessary dependencies, tracking, or new personal-data collection.
 - Follow the repository's SEO, accessibility, privacy, performance, and content-governance contracts.
@@ -73,4 +73,4 @@ Run repository-prescribed lint, formatting, typecheck, unit, component, integrat
 
 ## Completion definition
 
-The task is complete only when the approved behavior is implemented, the SVG source and CI PNG conversion are verified, required tests pass, CI is inspected, responsive/locale screenshots are reviewed, and unresolved visual decisions are clearly reported. Owner review is still required before the sticker is called final. A code change or successful build alone is not completion.
+The task is complete only when the approved behavior is implemented, the SVG source is validated and its website rendering is verified, required tests pass, CI is inspected, responsive/locale screenshots are reviewed, and unresolved visual decisions are clearly reported. Owner review is still required before the sticker is called final. A code change or successful build alone is not completion.

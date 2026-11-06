@@ -5,7 +5,7 @@ import { ArtworkExperience } from "@/components/artwork-experience";
 import { SiteBreadcrumbs } from "@/components/site-breadcrumbs";
 import type { Metadata } from "next";
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { getArtworkById, getArtworkBySlug, getArtworks } from "@/content/repositories/artwork.repository";
 import { getGalleryById, getGalleryBySlug, getGalleries } from "@/content/repositories/gallery.repository";
 import { getJournalEntryById, getJournalEntryBySlug, getJournalEntries } from "@/content/repositories/journal.repository";
@@ -13,7 +13,8 @@ import { getEvents } from "@/content/repositories/event.repository";
 import { getGalleryCoverArtwork, primaryImageFor } from "@/lib/content/publication";
 import { getUpcomingJournalEvents, journalCoverImageFor, isSafeJournalHref } from "@/lib/content/journal";
 import { isLocale,pagePath,locales,type Locale } from "@/types/locale";
-import { getLocalizedSlug } from "@/lib/content/paths";
+import { getLocalizedSlug, matchesLocalizedSlug } from "@/lib/content/paths";
+import { formatLocaleNumber } from "@/lib/locale-number";
 import { getArtworkStructuredData,getGalleryStructuredData,getJournalStructuredData,serializeJsonLd } from "@/lib/seo/structured-data";
 type DetailProps={params:Promise<{locale:string;section:string;slug:string}>;searchParams:Promise<{fromGallery?:string}>};
 export async function generateMetadata({params}:DetailProps):Promise<Metadata>{
@@ -83,12 +84,12 @@ export async function generateMetadata({params}:DetailProps):Promise<Metadata>{
 export const revalidate = 60;
 export default async function Detail({params,searchParams}:DetailProps){
  const [{locale,section,slug},query]=await Promise.all([params,searchParams]);if(!isLocale(locale))notFound();setRequestLocale(locale);const t=await getTranslations({ locale });
- if(section==="works"){const w=getArtworks(locale).find(x=>getLocalizedSlug(x,locale)===slug);if(!w)notFound();const img=primaryImageFor(w);if(!img)notFound();
- const originGallery=typeof query.fromGallery==="string"?getGalleries(locale).find(gallery=>getLocalizedSlug(gallery,locale)===query.fromGallery&&gallery.artworkIds.includes(w.id)):undefined;
+ if(section==="works"){const w=getArtworkBySlug(slug,locale);if(!w)notFound();const localizedSlug=getLocalizedSlug(w,locale);if(!matchesLocalizedSlug(w,locale,slug))redirect(pagePath(locale,`works/${encodeURIComponent(localizedSlug)}`));const img=primaryImageFor(w);if(!img)notFound();
+ const originGallery=typeof query.fromGallery==="string"?getGalleries(locale).find(gallery=>matchesLocalizedSlug(gallery,locale,query.fromGallery!)&&gallery.artworkIds.includes(w.id)):undefined;
  const breadcrumbItems=originGallery?[{label:t("home"),href:pagePath(locale)},{label:t("galleries"),href:pagePath(locale,"galleries")},{label:originGallery.title[locale]??originGallery.slug,href:pagePath(locale,`galleries/${getLocalizedSlug(originGallery,locale)}`)},{label:w.title[locale]??w.slug}]:[{label:t("home"),href:pagePath(locale)},{label:t("selected"),href:pagePath(locale,"works")},{label:w.title[locale]??w.slug}];
- return <><script type="application/ld+json" dangerouslySetInnerHTML={{__html:serializeJsonLd(getArtworkStructuredData(w,locale))}}/><div className="page-content"><SiteBreadcrumbs locale={locale} items={breadcrumbItems}/><article className="artwork-detail"><div className="artwork-detail-image"><Image sizes="(max-width: 600px) 100vw, (max-width: 900px) 90vw, 50vw" src={img.src} alt={img.alt[locale]??""} width={img.width} height={img.height}/></div><div className="artwork-detail-copy"><h1>{w.title[locale]}</h1>{w.medium?.[locale]&&<p>{w.medium[locale]}</p>}{w.year&&<p>{w.year}</p>}{w.description?.[locale]&&<p>{w.description[locale]}</p>}</div></article></div></>;}
+ return <><script type="application/ld+json" dangerouslySetInnerHTML={{__html:serializeJsonLd(getArtworkStructuredData(w,locale))}}/><div className="page-content"><SiteBreadcrumbs locale={locale} items={breadcrumbItems}/><article className="artwork-detail"><div className="artwork-detail-image"><Image sizes="(max-width: 600px) 100vw, (max-width: 900px) 90vw, 50vw" src={img.src} alt={img.alt[locale]??""} width={img.width} height={img.height}/></div><div className="artwork-detail-copy"><h1>{w.title[locale]}</h1>{w.medium?.[locale]&&<p>{w.medium[locale]}</p>}{w.year&&<p>{formatLocaleNumber(w.year,locale)}</p>}{w.description?.[locale]&&<p>{w.description[locale]}</p>}</div></article></div></>;}
  if(section==="galleries"){
-  const g=getGalleries(locale).find(x=>getLocalizedSlug(x,locale)===slug);
+  const g=getGalleryBySlug(slug,locale);
   if(!g)notFound();
   const publicWorks=getArtworks(locale);
   const members=g.artworkIds.map(id=>publicWorks.find(w=>w.id===id)).filter((w):w is (typeof publicWorks)[number]=>w!==undefined);
@@ -101,7 +102,7 @@ export default async function Detail({params,searchParams}:DetailProps){
   </div></>;
  }
  if(section==="journal"){
-  const entry=getJournalEntries(locale).find(x=>getLocalizedSlug(x,locale)===slug);if(!entry)notFound();
+  const entry=getJournalEntryBySlug(slug,locale);if(!entry)notFound();const localizedSlug=getLocalizedSlug(entry,locale);if(!matchesLocalizedSlug(entry,locale,slug))redirect(pagePath(locale,`journal/${encodeURIComponent(localizedSlug)}`));
   const relatedEntries=getJournalEntries(locale).filter(item=>item.id!==entry.id).slice(0,3);
   const dateLabel=(value:string,timeZone?:string)=>new Intl.DateTimeFormat(locale,{dateStyle:"long",...(timeZone?{timeStyle:"short" as const,timeZone}:{})}).format(new Date(value));
   const event=entry.event;

@@ -29,3 +29,11 @@ Record the exact commit SHA, workflow URL, conclusion, and failed step details. 
 ## 6. Release workflow
 
 Work only on the authorized branch and follow the repository's branch/deployment permissions. CI completion does not itself authorize merging or deployment.
+
+## Image metadata verification
+
+- Local `npm run dev` generates `src/content/data/image-metadata.json` from raster images in `public/images/`.
+- Commit generated JSON with the corresponding image files.
+- The `prebuild` lifecycle runs the generator with `--check`; CI must fail if an image is missing, unsupported/corrupt, metadata is stale, or a content JSON image reference points to a missing public file.
+- Check mode is read-only. CI must not copy images, regenerate metadata, or alter the working tree.
+- The generator validates technical file properties and references only. It does not determine ownership, rights, image identity, or editorial approval.

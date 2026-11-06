@@ -4,12 +4,12 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { ArtworkExperience } from "@/components/artwork-experience";
+import { ArtistHeroCarousel } from "@/components/artist-hero-carousel";
 import { BiographyDisclosure } from "@/components/biography-disclosure";
 import { CollectionCarousel } from "@/components/collection-carousel";
 import { ContactExperience } from "@/components/contact-experience";
 import { Button } from "@/components/ui/button";
 import { getHomepageContent } from "@/content/repositories/homepage.repository";
-import { primaryImageFor } from "@/lib/content/publication";
 import { journalCoverImageFor } from "@/lib/content/journal";
 import { getLocalizedSlug } from "@/lib/content/paths";
 import { createLocalizedMetadata } from "@/lib/seo/metadata";
@@ -27,7 +27,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const profile = home.artist;
   if (!profile) return {};
 
-  const image = home.hero ? primaryImageFor(home.hero) : undefined;
   return createLocalizedMetadata({
     locale,
     path: "",
@@ -37,7 +36,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       locales.filter((target) => target !== locale).map((target) => [target, pagePath(target)]),
     ) as Partial<Record<Locale, string>>,
     indexable: true,
-    images: image ? [image.src] : undefined,
+    images: ["/images/artist/artist-at-work.jpg"],
   });
 }
 
@@ -52,8 +51,7 @@ export default async function Home({ params }: Props) {
   if (!profile) notFound();
 
   const biography = profile.biography[locale] ?? "";
-  const heroImage = home.hero ? primaryImageFor(home.hero) : undefined;
-  const heroAlt = heroImage?.alt[locale] ?? t("heroAlt");
+  const heroAlt = t("heroAlt");
   const works = home.featuredArtworks;
   const sets = home.featuredGalleries;
   const hasSelectedWorks = home.artworks.length > 0;
@@ -63,28 +61,7 @@ export default async function Home({ params }: Props) {
   return (
     <div className="page-content home-page">
       <section className="home-intro has-hero" aria-labelledby="home-title">
-        <figure className="hero-artwork">
-          {heroImage ? (
-            <Image
-              sizes="(max-width: 900px) 100vw, 58vw"
-              src={heroImage.src}
-              alt={heroAlt}
-              width={heroImage.width}
-              height={heroImage.height}
-              priority
-            />
-          ) : (
-            <Image
-              sizes="(max-width: 900px) 100vw, 58vw"
-              src="/images/homepage-hero.jpg"
-              alt={heroAlt}
-              width={4032}
-              height={3024}
-              priority
-            />
-          )}
-          {home.hero?.title[locale] && <figcaption>{home.hero.title[locale]}</figcaption>}
-        </figure>
+        <ArtistHeroCarousel locale={locale} alt={heroAlt} />
         <div className="home-intro-copy">
           <p className="eyebrow">{t("portfolio")}</p>
           <h1 id="home-title">{profile.name?.[locale] ?? t("artistName")}</h1>

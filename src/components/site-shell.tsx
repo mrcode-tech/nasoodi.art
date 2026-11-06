@@ -12,17 +12,35 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { JournalAnnouncement, type AnnouncementEvent } from "@/components/journal-announcement";
 import { ThemeSelector } from "@/components/theme-selector";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { getArtist } from "@/content/repositories/artist.repository";
 
 function LanguageSelector({ locale, alternates, pathname, label, onNavigate }: { locale: Locale; alternates: Partial<Record<Locale, string>>; pathname: string; label: string; onNavigate?: () => void }) {
   const t = useTranslations();
   const router = useRouter();
-  const preserveGalleryState = (event: React.MouseEvent<HTMLAnchorElement>, targetHref: string) => {
-    if (!locales.some((candidate) => pathname === pagePath(candidate, "galleries"))) return;
+  const preserveArchiveState = (event: React.MouseEvent<HTMLAnchorElement>, targetHref: string) => {
+    const keys = pathname === pagePath(locale, "galleries")
+      ? ["page", "pageSize"]
+      : pathname === pagePath(locale, "journal")
+        ? ["category", "page", "pageSize"]
+        : [];
+    if (keys.length === 0) return;
+
     const current = new URLSearchParams(window.location.search);
     const query = new URLSearchParams();
-    for (const key of ["page", "pageSize"]) { const value = current.get(key); if (value) query.set(key, value); }
+    for (const key of keys) {
+      const value = current.get(key);
+      if (!value) continue;
+      if (key === "category" && !["exhibition", "event", "studio-update", "story"].includes(value)) continue;
+      if (key === "page" && (!/^[1-9]\d*$/.test(value) || value === "1")) continue;
+      if (key === "pageSize" && !["10", "20"].includes(value)) continue;
+      query.set(key, value);
+    }
     const suffix = query.toString();
-    if (suffix) { event.preventDefault(); router.push(targetHref + "?" + suffix); onNavigate?.(); }
+    if (suffix) {
+      event.preventDefault();
+      router.push(targetHref + "?" + suffix);
+      onNavigate?.();
+    }
   };
   return <div className="theme-selector language-selector">
     <DropdownMenu>
@@ -30,7 +48,7 @@ function LanguageSelector({ locale, alternates, pathname, label, onNavigate }: {
     <DropdownMenuContent align={getLocaleDirection(locale) === "rtl" ? "start" : "end"} dir={getLocaleDirection(locale)} aria-label={label}>
       {locales.map((target) => {
         const href = target === locale ? pathname : alternates[target] ?? pagePath(target);
-        return <DropdownMenuItem asChild key={target}><Link href={href} hrefLang={target} lang={target} aria-current={locale === target ? "page" : undefined} onClick={(event) => { preserveGalleryState(event, href); onNavigate?.(); }}>{getLocaleName(target)}{locale === target ? " · " + t("current") : ""}</Link></DropdownMenuItem>;
+        return <DropdownMenuItem asChild key={target}><Link href={href} hrefLang={target} lang={target} aria-current={locale === target ? "page" : undefined} onClick={(event) => { preserveArchiveState(event, href); onNavigate?.(); }}>{getLocaleName(target)}{locale === target ? " · " + t("current") : ""}</Link></DropdownMenuItem>;
       })}
     </DropdownMenuContent>
     </DropdownMenu>
@@ -38,6 +56,10 @@ function LanguageSelector({ locale, alternates, pathname, label, onNavigate }: {
 }
 export function SiteShell({ locale, children, announcement }: { locale: Locale; children: React.ReactNode; announcement?: AnnouncementEvent }) {
   const t = useTranslations();
+  const artist = getArtist(locale);
+  const artistName = artist?.name?.[locale] ?? "";
+  const [artistGivenName, ...artistFamilyNames] = artistName.split(/\s+/u);
+  const artistBrand = artist?.brand ?? "";
   const labels = {
     home: t("home"), about: t("about"), works: t("works"), galleries: t("galleries"),
     journal: t("journal"), contact: t("contact"), skip: t("skip"),
@@ -80,9 +102,9 @@ export function SiteShell({ locale, children, announcement }: { locale: Locale; 
         placement="viewport"
       />
     )}
-    <Sidebar className="desktop-sidebar" dir={getLocaleDirection(locale)} aria-label="Nasoodi.art">
+    <Sidebar className="desktop-sidebar" dir={getLocaleDirection(locale)} aria-label={artistBrand}>
       <SidebarHeader><Link className="artist-wordmark" href={pagePath(locale)} aria-label={labels.home}>
-        <span className="wordmark-name" dir="ltr">Ghazaleh</span><span className="wordmark-surname" dir="ltr">Abdolahzade Nasoodi</span><span className="wordmark-role" dir="auto">{labels.discipline}</span>
+        <span className="wordmark-name" dir="ltr">{artistGivenName}</span><span className="wordmark-surname" dir="ltr">{artistFamilyNames.join(" ")}</span><span className="wordmark-role" dir="auto">{labels.discipline}</span>
       </Link></SidebarHeader>
       <SidebarContent>
         <ScrollArea dir={getLocaleDirection(locale)} className="sidebar-scroll-area">
@@ -98,17 +120,17 @@ export function SiteShell({ locale, children, announcement }: { locale: Locale; 
             />
           )}
           <div className="sidebar-flex-spacer" aria-hidden="true" />
-          <div className="sidebar-bottom" dir="ltr"><span>{"nasoodi.art"} · © {new Date().getFullYear()}</span></div>
+          <div className="sidebar-bottom" dir="ltr"><span>{artistBrand} · © {new Date().getFullYear()}</span></div>
         </ScrollArea>
       </SidebarContent>
     </Sidebar>
     <header className={`mobile-header mobile-header-${locale}`} data-locale={locale}>
-      <Link className="mobile-wordmark" dir="ltr" href={pagePath(locale)}>Nasoodi<span>.</span></Link>
+      <Link className="mobile-wordmark" dir="ltr" href={pagePath(locale)}>{artistBrand.split(".")[0]}<span>{artistBrand.includes(".") ? "." + artistBrand.split(".").slice(1).join(".") : ""}</span></Link>
       <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
         <SheetTrigger asChild><Button className="menu-trigger" variant="ghost" size="sm" aria-label={mobileOpen ? labels.close : labels.menu} aria-controls="mobile-navigation" aria-expanded={mobileOpen}><span className="menu-trigger-lines" aria-hidden="true"><span/><span/></span></Button></SheetTrigger>
         <SheetContent id="mobile-navigation" side={getLocaleDirection(locale) === "rtl" ? "right" : "left"} className="mobile-drawer" dir={getLocaleDirection(locale)} aria-describedby={undefined} onOpenAutoFocus={(event) => { event.preventDefault(); drawerHomeRef.current?.focus(); }}>
           <SheetTitle className="sr-only">{labels.menu}</SheetTitle>
-          <div className="drawer-heading"><Link ref={drawerHomeRef} className="mobile-wordmark" dir="ltr" href={pagePath(locale)}>Nasoodi<span>.</span></Link><SheetClose asChild><Button className="drawer-close" variant="ghost" size="sm" aria-label={labels.close}>×</Button></SheetClose></div>
+          <div className="drawer-heading"><Link ref={drawerHomeRef} className="mobile-wordmark" dir="ltr" href={pagePath(locale)}>{artistBrand.split(".")[0]}<span>{artistBrand.includes(".") ? "." + artistBrand.split(".").slice(1).join(".") : ""}</span></Link><SheetClose asChild><Button className="drawer-close" variant="ghost" size="sm" aria-label={labels.close}>×</Button></SheetClose></div>
           <ScrollArea dir={getLocaleDirection(locale)} className="mobile-drawer-scroll">
             {navigation(true)}
             {announcement && (
@@ -128,7 +150,7 @@ export function SiteShell({ locale, children, announcement }: { locale: Locale; 
                 <div className="drawer-setting-row"><span className="language-label">{labels.language}</span><LanguageSelector locale={locale} alternates={alternatePaths} pathname={pathname} label={labels.language} onNavigate={() => setMobileOpen(false)}/></div>
                 <div className="drawer-setting-row"><span className="language-label">{labels.appearance}</span><ThemeSelector locale={locale}/></div>
               </div>
-              <div className="drawer-copyright" dir="ltr"><span>{"nasoodi.art"}</span><span>© {new Date().getFullYear()}</span></div>
+              <div className="drawer-copyright" dir="ltr"><span>{artistBrand}</span><span>© {new Date().getFullYear()}</span></div>
             </div>
           </ScrollArea>
         </SheetContent>

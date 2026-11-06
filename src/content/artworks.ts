@@ -1,22 +1,19 @@
 import artworkRecords from "./data/artworks.json";
-import { approvedArtworkImageDimensions } from "../lib/approved-artwork-image-dimensions";
+import { getImageMetadata } from "../lib/image-metadata";
 import type { Artwork } from "../types/content";
 
-// Dimensions are generated from the approved source JPEGs before dev/build.
-// Editorial fields and image references remain owner-editable JSON data.
-export const approvedArtworkImages = artworkRecords.flatMap((record, index) =>
-  record.images.map((image) => ({
-    ...image,
-    width: approvedArtworkImageDimensions[index].width,
-    height: approvedArtworkImageDimensions[index].height,
-  })),
+function withImageMetadata<T extends { src: string }>(image: T) {
+  const { width, height } = getImageMetadata(image.src);
+  return { ...image, width, height };
+}
+
+// Artwork records own semantic image references; generated metadata supplies
+// intrinsic file dimensions shared by every context that reuses each image.
+export const approvedArtworkImages = artworkRecords.flatMap((record) =>
+  record.images.map(withImageMetadata),
 );
 
-export const artworks: Artwork[] = artworkRecords.map((record, index) => ({
+export const artworks: Artwork[] = artworkRecords.map((record) => ({
   ...record,
-  images: record.images.map((image) => ({
-    ...image,
-    width: approvedArtworkImageDimensions[index].width,
-    height: approvedArtworkImageDimensions[index].height,
-  })),
+  images: record.images.map(withImageMetadata),
 })) as unknown as Artwork[];

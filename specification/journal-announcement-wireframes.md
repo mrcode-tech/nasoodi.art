@@ -218,4 +218,4 @@ The first review candidate is a small warm-ivory exhibition slip. Its straight o
 - English: straight attachment edge on physical left, torn edge on right.
 - Persian: reflect only the decorative silhouette horizontally; straight attachment edge on physical right, torn edge on left. Do not mirror text or artwork.
 - The paper remains compact and does not become a full-width banner.
-- See journal-announcement-sticker-visual-design.md and the SVG source for the visual study. The PNG is produced by CI for review, not hand-edited.
+- See journal-announcement-sticker-visual-design.md and the SVG source for the visual study. The SVG is served directly by the website; review it in the rendered interface.

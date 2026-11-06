@@ -6,6 +6,7 @@ import { useTranslations } from "next-intl";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious, CarouselStatus } from "@/components/ui/carousel";
 import { getGalleryCoverArtwork } from "@/lib/content/publication";
 import { getLocalizedSlug } from "@/lib/content/paths";
+import { formatLocaleNumber } from "@/lib/locale-number";
 import { pagePath, getLocaleDirection, type Locale } from "@/types/locale";
 import type { Artwork, Gallery } from "@/types/content";
 
@@ -37,13 +38,13 @@ export function CollectionCarousel({ galleries, artworks, locale, label }: Props
     <Carousel dir={direction} label={label} roleDescription={t("carouselRole")} opts={{ slidesToScroll: 1 }} className="collection-carousel">
       <CarouselContent>
         {galleries.map((gallery, index) => (
-          <CarouselItem key={gallery.id} aria-label={`${index + 1} ${t("of")} ${galleries.length}`}>
+          <CarouselItem key={gallery.id} aria-label={`${formatLocaleNumber(index + 1, locale)} ${t("of")} ${formatLocaleNumber(galleries.length, locale)}`}>
             <CollectionLink gallery={gallery} artworks={artworks} locale={locale} />
           </CarouselItem>
         ))}
       </CarouselContent>
       <div className="carousel-footer">
-        <CarouselStatus label={t("collectionPosition")} />
+        <CarouselStatus label={t("collectionPosition")} locale={locale} />
         <div className="carousel-controls">
           <CarouselPrevious label={t("previousCollection")} />
           <CarouselNext label={t("nextCollection")} />

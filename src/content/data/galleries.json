@@ -1,100 +1,195 @@
 [
   {
-    "id": "gallery-quiet-intervals",
-    "slug": "quiet-intervals",
+    "id": "gallery-first-light",
+    "slug": "first-light",
     "localizedSlugs": {
-      "en": "quiet-intervals",
-      "fa": "quiet-intervals"
+      "en": "first-light",
+      "fa": "نخستین-روشنایی"
     },
     "title": {
-      "en": "Quiet Intervals",
-      "fa": "فاصله‌های آرام"
+      "en": "First Light",
+      "fa": "نخستین روشنایی"
     },
     "description": {
-      "en": "A considered sequence of works for an unhurried encounter with stillness, reflection, and the spaces between moments.",
-      "fa": "چیدمانی برای مواجهه‌ای بی‌شتاب با سکون، تأمل و فاصله‌هایی که میان لحظه‌ها شکل می‌گیرند."
+      "en": "This gallery presents a single painting from 1388, marking an early point in the artist’s visual journey. Its focus on atmosphere and presence gives the work room to stand on its own, without being folded into a later year or a broader thematic grouping. Encountered as an individual collection, the painting offers a concise beginning to the chronology of the works.",
+      "fa": "این مجموعه به یک نقاشی از سال ۱۳۸۸ اختصاص دارد؛ اثری که نقطه‌ای آغازین در مسیر تصویری هنرمند را نشان می‌دهد. توجه به فضا و حضور، فرصتی فراهم می‌کند تا نقاشی به‌تنهایی دیده شود و در کنار آثار سال‌های بعد قرار نگیرد. این اثر در جایگاه مجموعه‌ای مستقل، آغازی موجز برای مرور زمانی آثار فراهم می‌آورد."
     },
-    "coverArtworkId": "artwork-quiet-place",
+    "coverArtworkId": "artwork-1388-1",
     "artworkIds": [
-      "artwork-quiet-place",
-      "artwork-where-light-rests",
-      "artwork-garden-small-moments"
+      "artwork-1388-1"
     ],
     "status": "published",
     "sortOrder": 1
   },
   {
-    "id": "gallery-color-conversation",
-    "slug": "color-in-conversation",
+    "id": "gallery-figures-and-interior-light",
+    "slug": "figures-and-interior-light",
     "localizedSlugs": {
-      "en": "color-in-conversation",
-      "fa": "color-in-conversation"
+      "en": "figures-and-interior-light",
+      "fa": "پیکره‌ها-و-روشنایی-درون"
     },
     "title": {
-      "en": "Color in Conversation",
-      "fa": "گفت‌وگوی رنگ‌ها"
+      "en": "Figures and Interior Light",
+      "fa": "پیکره‌ها و روشنایی درون"
     },
     "description": {
-      "en": "A visual route through selected works, inviting attention to the mood and relationships that emerge when paintings are viewed together.",
-      "fa": "مسیر دیداری‌ای میان چند اثر منتخب که با کنار هم دیدن آن‌ها می‌توان به حال‌وهوا و رابطه‌های تازه میان نقاشی‌ها توجه کرد."
+      "en": "The four paintings from 1392 bring together solitary figures, interior space, and the changing presence of light. A figure set against a broad red ground sits alongside quieter scenes shaped by a window, a gaze, and the space around a person. Seen together, the works move between strong contrast and restrained observation, while keeping the human figure and its surrounding atmosphere in focus.",
+      "fa": "چهار نقاشی سال ۱۳۹۲ در این مجموعه، پیکره‌های تنها، فضای درونی و حضور متغیر نور را کنار هم می‌آورند. پیکره‌ای در برابر گستره‌ای سرخ‌رنگ، در کنار صحنه‌هایی آرام‌تر قرار می‌گیرد که با پنجره، نگاه و فضای پیرامون انسان شکل گرفته‌اند. این آثار میان تضاد پررنگ و مشاهده‌ای سنجیده حرکت می‌کنند و پیکره و حال‌وهوای پیرامونش را در مرکز توجه نگه می‌دارند."
     },
-    "coverArtworkId": "artwork-where-light-rests",
+    "coverArtworkId": "artwork-1392-1",
     "artworkIds": [
-      "artwork-where-light-rests",
-      "artwork-shape-of-remembering",
-      "artwork-blue-hour-within"
+      "artwork-1392-1",
+      "artwork-1392-2",
+      "artwork-1392-3",
+      "artwork-1392-4"
     ],
     "status": "published",
     "sortOrder": 2
   },
   {
-    "id": "gallery-fragments-memory",
-    "slug": "fragments-of-memory",
+    "id": "gallery-the-held-space",
+    "slug": "the-held-space",
     "localizedSlugs": {
-      "en": "fragments-of-memory",
-      "fa": "fragments-of-memory"
+      "en": "the-held-space",
+      "fa": "فضای-درنگ"
     },
     "title": {
-      "en": "Fragments of Memory",
-      "fa": "پاره‌های خاطره"
+      "en": "The Held Space",
+      "fa": "فضای درنگ"
     },
     "description": {
-      "en": "A small collection arranged around recollection, personal association, and the poetry of details.",
-      "fa": "مجموعه‌ای کوچک با محوریت یادآوری، تداعی‌های شخصی و شاعرانگی جزئیات."
+      "en": "The two works from 1393 explore the relationship between a held moment and the space that surrounds it. Their compositions give presence and emptiness comparable weight, allowing forms to settle without closing down the viewer’s interpretation. Together, they create a measured encounter with time, balance, and the quiet intervals that emerge within a carefully arranged image.",
+      "fa": "دو اثر سال ۱۳۹۳ رابطه‌ی میان لحظه‌ای درنگ‌کرده و فضای پیرامون آن را بررسی می‌کنند. در ترکیب‌بندی این نقاشی‌ها، حضور و فضای خالی اهمیتی هم‌سنگ دارند و فرم‌ها بی‌آنکه راه برداشت بیننده را ببندند، در جای خود آرام می‌گیرند. این دو اثر در کنار هم مواجهه‌ای سنجیده با زمان، تعادل و فاصله‌های آرام درون تصویر پدید می‌آورند."
     },
-    "coverArtworkId": "artwork-shape-of-remembering",
+    "coverArtworkId": "artwork-1393-1",
     "artworkIds": [
-      "artwork-shape-of-remembering",
-      "artwork-garden-small-moments",
-      "artwork-blue-hour-within"
+      "artwork-1393-1",
+      "artwork-1393-2"
     ],
     "status": "published",
     "sortOrder": 3
   },
   {
-    "id": "gallery-selected-works",
-    "slug": "selected-works",
+    "id": "gallery-a-quiet-interval",
+    "slug": "a-quiet-interval",
     "localizedSlugs": {
-      "en": "selected-works",
-      "fa": "selected-works"
+      "en": "a-quiet-interval",
+      "fa": "فاصله‌ای-آرام"
     },
     "title": {
-      "en": "Selected Works",
-      "fa": "گزیده آثار"
+      "en": "A Quiet Interval",
+      "fa": "فاصله‌ای آرام"
     },
     "description": {
-      "en": "Five paintings brought together as an introduction to this selection of the artist’s work.",
-      "fa": "پنج نقاشی در کنار هم؛ آشنایی‌ای کوتاه با این گزیده از آثار هنرمند."
+      "en": "This gallery is devoted to one painting from 1395. Its restrained visual language is described through pauses, subtle relationships, and the atmosphere gathering between forms. Keeping the work in a collection of its own respects its date and gives this particular interval room to be encountered without implying a connection to paintings from another year.",
+      "fa": "این مجموعه به یک نقاشی از سال ۱۳۹۵ اختصاص دارد. زبان بصری کم‌ادعای اثر از خلال مکث‌ها، رابطه‌های ظریف و فضایی که میان فرم‌ها شکل می‌گیرد توصیف می‌شود. قرار گرفتن این نقاشی در مجموعه‌ای مستقل، سال خلق آن را حفظ می‌کند و به این لحظه‌ی تصویری فرصت می‌دهد بی‌آنکه به آثار سالی دیگر پیوند داده شود، دیده شود."
     },
-    "coverArtworkId": "artwork-quiet-place",
+    "coverArtworkId": "artwork-1395-1",
     "artworkIds": [
-      "artwork-quiet-place",
-      "artwork-shape-of-remembering",
-      "artwork-where-light-rests",
-      "artwork-garden-small-moments",
-      "artwork-blue-hour-within"
+      "artwork-1395-1"
     ],
     "status": "published",
     "sortOrder": 4
+  },
+  {
+    "id": "gallery-impressions-that-remain",
+    "slug": "impressions-that-remain",
+    "localizedSlugs": {
+      "en": "impressions-that-remain",
+      "fa": "دریافت‌هایی-که-می‌مانند"
+    },
+    "title": {
+      "en": "Impressions That Remain",
+      "fa": "دریافت‌هایی که می‌مانند"
+    },
+    "description": {
+      "en": "The eight paintings from 1398 consider the impressions that persist after an experience has passed. Their titles move through memory, fleeting thought, stillness, light, and inward-looking space. Rather than forcing these works into separate year-crossing collections, this gallery keeps the full body of work from 1398 together, allowing its recurring concerns with atmosphere, color, and presence to be read as a sustained chapter.",
+      "fa": "هشت نقاشی سال ۱۳۹۸ به دریافت‌هایی می‌پردازند که پس از گذشت یک تجربه در ذهن باقی می‌مانند. عنوان‌های آثار از خاطره و اندیشه‌ی گذرا تا سکون، روشنایی و فضای درون‌نگر امتداد پیدا می‌کنند. این مجموعه همه‌ی آثار این سال را کنار هم نگه می‌دارد تا دغدغه‌های تکرارشونده‌ی آن‌ها درباره‌ی حال‌وهوا، رنگ و حضور، همچون فصلی پیوسته دیده شوند."
+    },
+    "coverArtworkId": "artwork-1398-1",
+    "artworkIds": [
+      "artwork-1398-1",
+      "artwork-1398-2",
+      "artwork-1398-3",
+      "artwork-1398-4",
+      "artwork-1398-5",
+      "artwork-1398-6",
+      "artwork-1398-7",
+      "artwork-1398-8"
+    ],
+    "status": "published",
+    "sortOrder": 5
+  },
+  {
+    "id": "gallery-after-the-moment",
+    "slug": "after-the-moment",
+    "localizedSlugs": {
+      "en": "after-the-moment",
+      "fa": "پس-از-لحظه"
+    },
+    "title": {
+      "en": "After the Moment",
+      "fa": "پس از لحظه"
+    },
+    "description": {
+      "en": "This gallery contains the single published painting from 1399. Its focus is what continues after an instant has passed: a mood, an impression, or a memory that outlasts the event itself. Presented separately, the work retains its place in the chronology and gives this reflective subject a clear, self-contained setting.",
+      "fa": "این مجموعه شامل تنها نقاشی منتشرشده از سال ۱۳۹۹ است. موضوع اثر به آن چیزی بازمی‌گردد که پس از گذشت یک لحظه ادامه پیدا می‌کند: حال‌وهوا، دریافت یا خاطره‌ای که از خودِ رویداد ماندگارتر است. نمایش مستقل این نقاشی، جایگاه زمانی آن را حفظ می‌کند و به مضمون تأمل‌برانگیزش فضایی روشن و خودبسنده می‌دهد."
+    },
+    "coverArtworkId": "artwork-1399-1",
+    "artworkIds": [
+      "artwork-1399-1"
+    ],
+    "status": "published",
+    "sortOrder": 6
+  },
+  {
+    "id": "gallery-a-new-rhythm",
+    "slug": "a-new-rhythm",
+    "localizedSlugs": {
+      "en": "a-new-rhythm",
+      "fa": "ریتمی-تازه"
+    },
+    "title": {
+      "en": "A New Rhythm",
+      "fa": "ریتمی تازه"
+    },
+    "description": {
+      "en": "The two paintings from 1401 bring visual rhythm and open interpretation into conversation. One attends to balance and the development of a visual language; the other leaves its meaning deliberately unresolved, making room for quiet attention and personal response. Together, they form a concise chapter shaped by structure, ambiguity, and the space left for the viewer.",
+      "fa": "دو نقاشی سال ۱۴۰۱ ریتم بصری و امکان برداشت‌های گوناگون را در کنار هم قرار می‌دهند. یکی به تعادل و گسترش زبان تصویری توجه دارد و دیگری معنای خود را گشوده باقی می‌گذارد تا برای توجه آرام و دریافت شخصی فضا فراهم شود. این دو اثر در کنار هم فصلی موجز می‌سازند که با ساختار، ابهام و جایگاه نگاه بیننده شکل گرفته است."
+    },
+    "coverArtworkId": "artwork-1401-1",
+    "artworkIds": [
+      "artwork-1401-1",
+      "artwork-1401-2"
+    ],
+    "status": "published",
+    "sortOrder": 7
+  },
+  {
+    "id": "gallery-a-season-of-light",
+    "slug": "a-season-of-light",
+    "localizedSlugs": {
+      "en": "a-season-of-light",
+      "fa": "فصلی-از-روشنایی"
+    },
+    "title": {
+      "en": "A Season of Light",
+      "fa": "فصلی از روشنایی"
+    },
+    "description": {
+      "en": "The six works from 1403 gather around renewal, transience, return, and the experience of looking. Their subjects range from changing impressions and open-ended encounters to a woodland scene layered with trunks, shadow, and scattered light. Keeping the year's works together makes visible the variety within this recent chapter, while atmosphere and the passage of time provide a thread between them.",
+      "fa": "شش اثر سال ۱۴۰۳ حول تازگی، گذرایی، بازگشت و تجربه‌ی دیدن گرد آمده‌اند. موضوع آن‌ها از دریافت‌های متغیر و مواجهه‌های گشوده تا منظره‌ای جنگلی با لایه‌هایی از تنه‌ی درختان، سایه و روشنایی پراکنده امتداد دارد. کنار هم ماندن آثار این سال، تنوع این فصل تازه را آشکار می‌کند و در عین حال، حال‌وهوا و گذر زمان رشته‌ی پیوند میان آن‌هاست."
+    },
+    "coverArtworkId": "artwork-1403-1",
+    "artworkIds": [
+      "artwork-1403-1",
+      "artwork-1403-2",
+      "artwork-1403-3",
+      "artwork-1403-4",
+      "artwork-1403-5",
+      "artwork-1403-6"
+    ],
+    "status": "published",
+    "sortOrder": 8
   }
 ]

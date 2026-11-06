@@ -5,7 +5,7 @@ export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
 
 function escapePdf(value: string) {
-  return value.replace(/\\/g, "\\\\").replace(/\(/g, "\\(").replace(/\)/g, "\\)").replace(/[^\x20-\x7e]/g, "?");
+  return value.replace(/[–—]/g, "-").replace(/[’‘]/g, "'").replace(/[“”]/g, '"' ).replace(/\\/g, "\\\\").replace(/\(/g, "\\(").replace(/\)/g, "\\)").replace(/[^\x20-\x7e]/g, "?");
 }
 
 function wrap(value: string, max = 88): string[] {
@@ -23,7 +23,9 @@ function wrap(value: string, max = 88): string[] {
 
 function createPdf() {
   const headings: Record<string, string> = {
-    education: "EDUCATION & TRAINING",
+    education: "EDUCATION",
+    membership: "MEMBERSHIPS",
+    teaching: "TEACHING EXPERIENCE",
     "solo-exhibition": "SOLO EXHIBITIONS",
     "group-exhibition": "GROUP EXHIBITIONS",
     award: "AWARDS & RECOGNITION",
@@ -31,7 +33,7 @@ function createPdf() {
     collection: "COLLECTIONS",
     other: "ARTISTIC PRACTICE",
   };
-  const groups = ["education", "solo-exhibition", "group-exhibition", "publication", "award", "collection", "other"];
+  const groups = ["education", "membership", "teaching", "group-exhibition", "publication", "solo-exhibition", "award", "collection", "other"];
   const lines: Array<{ text: string; size: number; indent: number; gap: number }> = [];
   const add = (text: string, size = 9, indent = 54, gap = size + 3) => lines.push({ text, size, indent, gap });
   add("GHAZALEH ABDOLAHZADE NASOODI", 18, 54, 26);
@@ -44,7 +46,7 @@ function createPdf() {
     if (!entries.length) continue;
     add(headings[category], 11, 54, 18);
     for (const entry of entries) {
-      const date = entry.year ? String(entry.year) : entry.period?.en ?? "";
+      const date = entry.period?.en ?? (entry.year ? String(entry.year) : "");
       for (const part of wrap([date, entry.title.en].filter(Boolean).join("  —  "))) add(part, 9, 62, 12);
       if (entry.organization?.en) for (const part of wrap(entry.organization.en)) add(part, 8, 76, 10);
       if (entry.location?.en) add(entry.location.en, 8, 76, 12);

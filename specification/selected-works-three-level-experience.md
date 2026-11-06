@@ -380,16 +380,16 @@ Validation:
 The following repository images are included as **design-reference samples** for the wireframes. They are not yet verified artwork identities, collection memberships, final covers, public-use rights, or approved content.
 
 Candidate gallery images:
-- `specification/assets/gallery/1.jpg`
-- `specification/assets/gallery/2.jpg`
-- `specification/assets/gallery/3.jpg`
-- `specification/assets/gallery/4.jpg`
-- `specification/assets/gallery/5.jpg`
+- `public/images/artworks/artwork-quiet-place.jpg`
+- `public/images/artworks/artwork-shape-of-remembering.jpg`
+- `public/images/artworks/artwork-where-light-rests.jpg`
+- `public/images/artworks/artwork-garden-small-moments.jpg`
+- `public/images/artworks/artwork-blue-hour-within.jpg`
 
 Embed these relative assets in the wireframes to make the proposed compositions concrete. Preserve the original files. Do not rename, crop, edit, move, publish, or map them to real collection/artwork metadata based only on their filenames. Before implementation uses them as actual site content, inspect each image and complete `asset-review-register.md` with dimensions, orientation, file size, source/provenance, rights, artwork identity, approved title/description/alt text, and artist approval.
 
 Other existing assets have different known/unknown roles:
-- `specification/assets/artwork.JPG`: previously identified as a studio/process photograph, not a clean finished-artwork reproduction. Do not use it as an artwork card or viewer painting.
+- `public/images/artist/artist-at-work.jpg`: previously identified as a studio/process photograph, not a clean finished-artwork reproduction. Do not use it as an artwork card or viewer painting.
 - `specification/assets/artist.png`: process/studio cutout, not a painting or conventional portrait.
 - `specification/assets/easel.png` and `oil-paint-brush.png`: studio props/decorative candidates, not artwork.
 - `specification/assets/canvase.png`: role remains unverified; do not classify as finished artwork without inspection and approval.

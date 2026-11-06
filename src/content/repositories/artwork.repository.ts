@@ -1,6 +1,6 @@
 import { artworks } from "../artworks";
 import { getPublicArtworks } from "../../lib/content/publication";
-import { getLocalizedSlug } from "../../lib/content/paths";
+import { matchesLocalizedSlug } from "../../lib/content/paths";
 import type { Locale } from "../../types/locale";
 
 export function getArtworks(locale: Locale) {
@@ -12,5 +12,5 @@ export function getArtworkById(id: string, locale: Locale) {
 }
 
 export function getArtworkBySlug(slug: string, locale: Locale) {
-  return getArtworks(locale).find((artwork) => getLocalizedSlug(artwork, locale) === slug);
+  return getArtworks(locale).find((artwork) => matchesLocalizedSlug(artwork, locale, slug) || artwork.slug === slug);
 }

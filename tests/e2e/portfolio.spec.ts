@@ -133,16 +133,16 @@ test("Persian announcement is localized, right-anchored, and dismissible", async
   await expect(sticker).toBeHidden();
 });
 
-test("Journal archive paginates five entries by default and supports 5, 10, and 20 per page", async ({ page }) => {
+test("Journal archive paginates six entries by default and supports 6, 10, and 20 per page", async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 900 });
   await page.goto("/en/journal");
-  await expect(page.locator(".journal-card")).toHaveCount(5);
-  await expect(page.getByRole("status").filter({ hasText: "Showing 1–5 of 8 Journal entries" })).toBeVisible();
+  await expect(page.locator(".journal-card")).toHaveCount(6);
+  await expect(page.getByRole("status").filter({ hasText: "Showing 1–6 of 8 Journal entries" })).toBeVisible();
   const pageSize = page.locator(".journal-pagination .gallery-page-size select");
-  await expect(pageSize).toHaveValue("5");
+  await expect(pageSize).toHaveValue("6");
   await page.getByRole("button", { name: "Journal pages 2" }).click();
   await expect(page).toHaveURL(/page=2/);
-  await expect(page.locator(".journal-card")).toHaveCount(3);
+  await expect(page.locator(".journal-card")).toHaveCount(2);
   await pageSize.selectOption("10");
   await expect(page).toHaveURL(/pageSize=10/);
   await expect(page.locator(".journal-card")).toHaveCount(8);
@@ -151,6 +151,9 @@ test("Journal archive paginates five entries by default and supports 5, 10, and 
   await expect(page).toHaveURL(/pageSize=20/);
   await expect(page.locator(".journal-card")).toHaveCount(8);
   await expect(page.locator(".journal-pagination .gallery-page-size select")).toHaveValue("20");
+  await page.locator(".journal-pagination .gallery-page-size select").selectOption("6");
+  await expect(page).not.toHaveURL(/pageSize=/);
+  await expect(page.locator(".journal-card")).toHaveCount(6);
 });
 
 test("filtered Journal URLs canonicalize to the localized archive and published Journal entries are indexable", async ({ page }) => {
@@ -504,13 +507,22 @@ for (const locale of ["en", "fa"] as const) {
       await page.goto(`/${locale}`);
       await expect(page.locator("html")).toHaveAttribute("lang", locale);
       await expect(page.locator("html")).toHaveAttribute("dir", locale === "fa" ? "rtl" : "ltr");
-      await expect(page.getByRole("heading", { level: 1, name: locale === "fa" ? "غزاله عبداله زاده نسودی" : "Ghazaleh Abdolahzade Nasoodi" })).toBeVisible();
-      const heroImage = page.locator(".hero-artwork img");
+      await expect(page.getByRole("heading", { level: 1, name: locale === "fa" ? "غزاله عبداله زاده نسودی" : "Ghazale Abdolahzade Nasoodi" })).toBeVisible();
+      const heroImage = page.locator(".hero-artwork img.is-active");
       await expect(heroImage).toBeVisible();
       await expect(heroImage).toHaveJSProperty("complete", true);
       await expect(heroImage).not.toHaveJSProperty("naturalWidth", 0);
-      if ((await heroImage.getAttribute("src"))?.includes("homepage-hero")) {
-        await expect(heroImage).toHaveAttribute("alt", locale === "fa" ? "هنرمند در آتلیه، روبه‌روی بوم نقاشی ایستاده است." : "The artist standing before a canvas in her studio.");
+      await expect(heroImage).toHaveAttribute("src", /artist-at-work/);
+      const heroFrameWidth = await page.locator(".artist-hero-carousel").evaluate((element) => element.getBoundingClientRect().width);
+      const introWidth = await page.locator(".home-intro.has-hero").evaluate((element) => element.getBoundingClientRect().width);
+      if (viewport.width > 900) {
+        const mainContentWidth = viewport.width - 264;
+        expect(heroFrameWidth).toBeGreaterThanOrEqual(mainContentWidth / 3);
+      } else {
+        expect(heroFrameWidth).toBeGreaterThanOrEqual(introWidth - 2);
+      }
+      await expect(heroImage).toHaveAttribute("alt", locale === "fa" ? "هنرمند در آتلیه، روبه‌روی بوم نقاشی ایستاده است." : "The artist standing before a canvas in her studio.");
+      if ((await heroImage.getAttribute("src"))?.includes("artist-at-work")) {
       }
       const galleryCta = page.getByRole("link", { name: locale === "fa" ? "گالری‌ها را ببینید" : "Explore galleries" });
       const worksCta = page.getByRole("link", { name: locale === "fa" ? "گزیده آثار را ببینید" : "View selected works" });
@@ -544,7 +556,7 @@ test("main content has no duplicate footer and the mobile drawer ends with copyr
   await page.goto("/fa");
   await page.getByRole("button", { name: "باز کردن راهبری" }).click();
   const drawer = page.getByRole("dialog", { name: "باز کردن راهبری" });
-  await expect(drawer.locator(".drawer-copyright")).toContainText("nasoodi.art");
+  await expect(drawer.locator(".drawer-copyright")).toContainText("Nasoodi.art");
   await expect(drawer.locator(".drawer-copyright")).toContainText(/©\s*\d{4}/);
   const copyright = await drawer.locator(".drawer-copyright").boundingBox();
   const settings = await drawer.locator(".drawer-settings").boundingBox();
@@ -751,7 +763,7 @@ test("collection discovery displays the four published curated collections in bo
 test("unpublished artwork viewer query state cannot expose an unpublished artwork", async ({ page }) => {
   await page.goto("/en?artwork=not-published&viewerContext=home");
   await expect(page.getByRole("dialog")).toHaveCount(0);
-  await expect(page.getByRole("heading", { name: "Ghazaleh Abdolahzade Nasoodi" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Ghazale Abdolahzade Nasoodi" })).toBeVisible();
   await page.goto("/en?artwork=a-quiet-place-between-seasons&viewerContext=gallery:quiet-intervals");
   await expect(page.getByRole("dialog")).toHaveCount(0);
   const response = await page.request.get("/en/works/not-published");
@@ -971,7 +983,7 @@ test("About is a localized primary navigation destination on desktop and mobile"
   const desktopAbout = page.locator(".desktop-sidebar").getByRole("link", { name: "About", exact: true });
   await expect(desktopAbout).toHaveAttribute("href", "/en/about");
   await expect(desktopAbout).toHaveAttribute("aria-current", "page");
-  await expect(page.getByRole("heading", { name: "Ghazaleh Abdolahzade Nasoodi" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Ghazale Abdolahzade Nasoodi" })).toBeVisible();
   await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", /index/);
   await expect(page.locator(".about-statement")).toBeVisible();
   await expect(page.locator(".about-biography-copy")).toBeVisible();
@@ -1038,11 +1050,27 @@ test("homepage hero layout is responsive and renders the bilingual biography", a
   }
 });
 
+
+test("homepage hero rotates from the studio photo to the portrait after five seconds in the same frame", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/en");
+  const figure = page.locator(".artist-hero-carousel");
+  const activeImage = figure.locator("img.is-active");
+  await expect(activeImage).toHaveAttribute("src", /artist-at-work/);
+  const initialFrame = await figure.boundingBox();
+  await expect(activeImage).toHaveJSProperty("complete", true);
+  await expect(activeImage).not.toHaveJSProperty("naturalWidth", 0);
+  await expect.poll(async () => figure.locator("img.is-active").getAttribute("src"), { timeout: 8000 }).toMatch(/artist-portrait/);
+  const nextFrame = await figure.boundingBox();
+  expect(nextFrame?.width).toBe(initialFrame?.width);
+  expect(nextFrame?.height).toBe(initialFrame?.height);
+});
+
 test("homepage biography expands in place without replacing the hero image or moving the viewport", async ({ page }) => {
   for (const locale of ["en", "fa"] as const) {
     await page.setViewportSize({ width: 390, height: 844 });
     await page.goto(`/${locale}`);
-    const image = page.locator(".hero-artwork img");
+    const image = page.locator(".hero-artwork img.is-active");
     const imageSource = await image.getAttribute("src");
     const imageCurrentSource = await image.evaluate((element: HTMLImageElement) => element.currentSrc);
     const readMore = page.getByRole("button", { name: locale === "fa" ? "ادامه مطلب" : "Read more" });
@@ -1066,12 +1094,12 @@ test("About and CV routes render canonical bilingual JSON content without previe
     await page.goto(`/${locale}/about`);
     await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", /index/);
     await expect(page.locator(".sample-content-notice")).toHaveCount(0);
-    await expect(page.locator(".artist-portrait")).toHaveAttribute("src", /homepage-hero/);
+    await expect(page.locator(".artist-portrait")).toHaveAttribute("src", /artist-portrait\.jpg/);
     await expect(page.locator(".about-statement")).toBeVisible();
     await expect(page.locator(".about-biography-copy")).toBeVisible();
     await expect(page.locator(".cv-category")).toHaveCount(5);
     await expect(page.locator(".cv-list li")).toHaveCount(16);
-    await expect(page.getByRole("heading", { name: locale === "en" ? "Ghazaleh Abdolahzade Nasoodi" : "غزاله عبداله زاده نسودی" })).toBeVisible();
+    await expect(page.getByRole("heading", { name: locale === "en" ? "Ghazale Abdolahzade Nasoodi" : "غزاله عبداله زاده نسودی" })).toBeVisible();
     const overflow = await page.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth);
     expect(overflow).toBe(false);
     await page.screenshot({ path: test.info().outputPath("about-" + locale + "-desktop.png"), fullPage: true });
@@ -1107,7 +1135,7 @@ test("desktop homepage biography expands around a fixed locale-aligned hero imag
     await page.setViewportSize({ width: 1440, height: 900 });
     await page.goto(`/${locale}`);
     const figure = page.locator(".home-intro > .hero-artwork");
-    const image = figure.locator("img");
+    const image = figure.locator("img.is-active");
     const biography = page.locator(".home-biography .biography-copy");
     const readMore = page.getByRole("button", { name: locale === "fa" ? "ادامه مطلب" : "Read more" });
     await expect(image).toBeVisible();
@@ -1797,7 +1825,7 @@ test("localized SEO metadata is rendered from canonical content for archives and
   await expect(page.locator('link[rel="alternate"][hreflang="fa"]')).toHaveAttribute("href", "https://nasoodi.art/fa/works");
   await expect(page.locator('meta[name="description"]')).toHaveAttribute("content", "Explore a selection of oil paintings, with localized artwork details and original image references.");
   await expect(page.locator('meta[property="og:type"]')).toHaveAttribute("content", "website");
-  await expect(page.locator('meta[property="og:image"]')).toHaveAttribute("content", "https://nasoodi.art/images/approved-artwork-1.jpg");
+  await expect(page.locator('meta[property="og:image"]')).toHaveAttribute("content", "https://nasoodi.art/images/artworks/artwork-quiet-place.jpg");
   await expect(page.locator('meta[name="twitter:card"]')).toHaveAttribute("content", "summary_large_image");
 
   await page.goto("/fa/works");
@@ -1810,7 +1838,7 @@ test("localized SEO metadata is rendered from canonical content for archives and
   await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", "https://nasoodi.art/en/works/a-quiet-place-between-seasons");
   await expect(page.locator('link[rel="alternate"][hreflang="fa"]')).toHaveAttribute("href", "https://nasoodi.art/fa/works/a-quiet-place-between-seasons");
   await expect(page.locator('meta[property="og:type"]')).toHaveAttribute("content", "article");
-  await expect(page.locator('meta[property="og:image"]')).toHaveAttribute("content", "https://nasoodi.art/images/approved-artwork-1.jpg");
+  await expect(page.locator('meta[property="og:image"]')).toHaveAttribute("content", "https://nasoodi.art/images/artworks/artwork-quiet-place.jpg");
 
   for (const section of ["contact", "about", "cv"]) {
     await page.goto("/en/" + section);
@@ -1818,4 +1846,139 @@ test("localized SEO metadata is rendered from canonical content for archives and
     await expect(page.locator('meta[property="og:title"]')).toHaveAttribute("content", /.+/);
     await expect(page.locator('meta[name="twitter:card"]')).toHaveAttribute("content", /summary/);
   }
+});
+
+
+test("artwork and gallery indexes show newest entries first and Persian artwork links resolve", async ({ page }) => {
+  await page.goto("/fa/works");
+  const firstArtwork = page.locator(".artwork-grid .artwork-item").first();
+  await expect(firstArtwork).toBeVisible();
+  await expect(firstArtwork).toContainText("مسیرِ ادامه‌دار");
+  await firstArtwork.click();
+  await expect(page).toHaveURL(/\/fa\/works\//);
+  await expect(page.getByRole("heading", { level: 1, name: "مسیرِ ادامه‌دار" })).toBeVisible();
+
+  await page.goto("/fa/galleries");
+  const firstGallery = page.locator(".gallery-index-card-link").first();
+  await expect(firstGallery).toBeVisible();
+  await expect(firstGallery).toContainText("فصلی از روشنایی");
+  await firstGallery.click();
+  await expect(page).toHaveURL(/\/fa\/galleries\//);
+  await expect(page.getByRole("heading", { level: 1, name: "فصلی از روشنایی" })).toBeVisible();
+});
+
+test("Persian homepage artwork and gallery carousel positions use Persian digits", async ({ page }) => {
+  await page.goto("/fa");
+  const artworkPosition = page.locator(".home-page .artwork-experience .carousel-status");
+  const galleryPosition = page.locator(".home-page .collection-carousel .carousel-status");
+  await expect(artworkPosition).toBeVisible();
+  await expect(galleryPosition).toBeVisible();
+  await expect(artworkPosition).toHaveText(/^[۰-۹]+ \/ [۰-۹]+$/);
+  await expect(galleryPosition).toHaveText(/^[۰-۹]+ \/ [۰-۹]+$/);
+  await page.locator(".artwork-experience-card").first().click();
+  await expect(page.locator(".artwork-viewer-status")).toHaveText(/^[۰-۹]+ از [۰-۹]+$/);
+});
+
+test("Persian Galleries and Journal pagination render all visible numbers in Persian digits", async ({ page }) => {
+  await page.goto("/fa/galleries");
+  const galleryPagination = page.locator(".gallery-pagination");
+  await expect(galleryPagination).toBeVisible();
+  await expect(page.locator(".gallery-index-card")).toHaveCount(6);
+  await expect(galleryPagination.locator(".gallery-page-size select")).toHaveValue("6");
+  await expect(galleryPagination.getByRole("status")).toContainText(/[۰-۹]/);
+  await expect(galleryPagination.getByRole("status")).not.toContainText(/[0-9]/);
+  const galleryPageSizes = await galleryPagination.locator(".gallery-page-size option").allTextContents();
+  expect(galleryPageSizes).toEqual(["۶", "۱۰", "۲۰"]);
+  await expect(galleryPagination.locator(".gallery-page-nav .is-current")).toHaveText("۱");
+  await page.goto("/fa/journal");
+  const journalPagination = page.locator(".journal-pagination");
+  await expect(journalPagination).toBeVisible();
+  await expect(journalPagination.getByRole("status")).toContainText(/[۰-۹]/);
+  await expect(journalPagination.getByRole("status")).not.toContainText(/[0-9]/);
+  const journalPageSizes = await journalPagination.locator(".gallery-page-size option").allTextContents();
+  expect(journalPageSizes).toEqual(["۶", "۱۰", "۲۰"]);
+  await expect(journalPagination.locator(".gallery-page-nav .is-current")).toHaveText("۱");
+});
+
+
+test("Works archive presents every artwork in a consistent uncropped 4:3 frame in both locales", async ({ page }) => {
+  for (const locale of ["en", "fa"] as const) {
+    await page.setViewportSize({ width: 1440, height: 960 });
+    await page.goto(`/${locale}/works`);
+    const artworkImages = page.locator(".artwork-grid > .artwork-item > img");
+    await expect(artworkImages.first()).toBeVisible();
+    const frames = await artworkImages.evaluateAll((images) => images.map((image) => {
+      const rect = image.getBoundingClientRect();
+      const style = getComputedStyle(image);
+      return { width: rect.width, height: rect.height, aspectRatio: style.aspectRatio, objectFit: style.objectFit };
+    }));
+    expect(frames.length).toBeGreaterThan(1);
+    for (const frame of frames) {
+      expect(frame.width).toBeGreaterThan(0);
+      expect(frame.height).toBeGreaterThan(0);
+      expect(frame.width / frame.height).toBeCloseTo(4 / 3, 2);
+      expect(frame.objectFit).toBe("contain");
+    }
+    const firstFrame = frames[0];
+    for (const frame of frames.slice(1)) {
+      expect(frame.height).toBeCloseTo(firstFrame.height, 0);
+    }
+  }
+});
+
+
+test("Works archive paginates six artworks by default and supports 6, 10, and 20 per page in both locales", async ({ page }) => {
+  for (const locale of ["en", "fa"] as const) {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await page.goto(`/${locale}/works`);
+    const cards = page.locator(".artwork-grid > .artwork-item");
+    await expect(cards).toHaveCount(6);
+    const pagination = page.locator(".artwork-pagination");
+    await expect(pagination).toBeVisible();
+    const pageSize = pagination.locator(".gallery-page-size select");
+    await expect(pageSize).toHaveValue("6");
+    await expect(pagination.locator(".gallery-page-nav .is-current")).toHaveText(locale === "fa" ? "۱" : "1");
+    await pagination.locator(".gallery-page-nav button").last().click();
+    await expect(page).toHaveURL(/page=2/);
+    await expect(cards).toHaveCount(6);
+    await pageSize.selectOption("10");
+    await expect(page).toHaveURL(/pageSize=10/);
+    await expect(cards).toHaveCount(10);
+    await pageSize.selectOption("20");
+    await expect(page).toHaveURL(/pageSize=20/);
+    await expect(cards).toHaveCount(20);
+    await pageSize.selectOption("6");
+    await expect(page).not.toHaveURL(/pageSize=/);
+    await expect(page).not.toHaveURL(/page=/);
+    await expect(cards).toHaveCount(6);
+  }
+});
+
+
+test("Persian artwork and homepage Journal links use native localized slugs and open successfully", async ({ page, request }) => {
+  await page.goto("/fa/works");
+  const artworkLink = page.locator(".artwork-grid .artwork-item").first();
+  const artworkHref = await artworkLink.getAttribute("href");
+  expect(decodeURIComponent(artworkHref!)).toMatch(/^\\/fa\\/works\\/[\\u0600-\\u06ff\\u200c\\u200e\\u200f-]+$/u);
+  expect((await request.get(artworkHref!)).status()).toBe(200);
+
+  await page.goto("/fa");
+  const journalLink = page.locator(".journal-preview-item h3 a").first();
+  const journalHref = await journalLink.getAttribute("href");
+  expect(decodeURIComponent(journalHref!)).toMatch(/^\\/fa\\/journal\\/[\\u0600-\\u06ff\\u200c\\u200e\\u200f-]+$/u);
+  expect((await request.get(journalHref!)).status()).toBe(200);
+  await journalLink.click();
+  await expect(page).toHaveURL(new RegExp("/fa/journal/"));
+  await expect(page.locator("main h1")).toBeVisible();
+});
+
+
+test("legacy English artwork and Journal slugs redirect to Persian canonical URLs", async ({ page }) => {
+  await page.goto("/fa/works/a-first-light");
+  expect(decodeURIComponent(new URL(page.url()).pathname)).toBe("/fa/works/نخستین-روشنایی");
+  await expect(page.locator("main h1")).toHaveText("نخستین روشنایی");
+
+  await page.goto("/fa/journal/first-light-a-beginning-in-paint");
+  expect(decodeURIComponent(new URL(page.url()).pathname)).toBe("/fa/journal/نخستین-روشنایی-آغاز-یک-مسیر");
+  await expect(page.locator("main h1")).toHaveText("نخستین روشنایی: آغازی در نقاشی");
 });

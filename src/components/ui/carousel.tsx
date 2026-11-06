@@ -4,6 +4,8 @@ import * as React from "react";
 import useEmblaCarousel, { type UseEmblaCarouselType } from "embla-carousel-react";
 import type { EmblaCarouselType, EmblaOptionsType } from "embla-carousel";
 import { Button } from "@/components/ui/button";
+import { formatLocaleNumber } from "@/lib/locale-number";
+import type { Locale } from "@/types/locale";
 
 type CarouselContextValue = {
   carouselRef: UseEmblaCarouselType[0];
@@ -80,7 +82,7 @@ export function CarouselNext({ label, className }: ControlProps) {
   const { api, canScrollNext, dir } = useCarousel();
   return <Button type="button" variant="outline" size="sm" className={["carousel-control", className].filter(Boolean).join(" ")} aria-label={label} disabled={!canScrollNext} onClick={() => api?.scrollNext()}><span aria-hidden="true">{dir === "rtl" ? "←" : "→"}</span></Button>;
 }
-export function CarouselStatus({ label }: { label: string }) {
+export function CarouselStatus({ label, locale }: { label: string; locale: Locale }) {
   const { selectedSlide, slideCount } = useCarousel();
-  return <span className="carousel-status" aria-live="polite" aria-atomic="true" aria-label={label}>{slideCount ? `${selectedSlide + 1} / ${slideCount}` : "0 / 0"}</span>;
+  return <span className="carousel-status" aria-live="polite" aria-atomic="true" aria-label={label}>{formatLocaleNumber(slideCount ? selectedSlide + 1 : 0, locale)} / {formatLocaleNumber(slideCount, locale)}</span>;
 }

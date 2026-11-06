@@ -72,6 +72,7 @@ export type JournalEntry = {
 export type ArtistProfile = {
   id?: string;
   name?: Localized;
+  brand?: string;
   slug?: Localized;
   discipline?: Localized;
   shortIntroduction?: Localized;
@@ -96,7 +97,7 @@ export type ContactDetails = {
 };
 export type CvEntry = {
   id: string;
-  category: "education" | "solo-exhibition" | "group-exhibition" | "award" | "publication" | "collection" | "other";
+  category: "education" | "membership" | "teaching" | "solo-exhibition" | "group-exhibition" | "award" | "publication" | "collection" | "other";
   title: Localized;
   organization?: Localized;
   location?: Localized;

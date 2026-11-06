@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
+import { readFileSync } from "node:fs";
 import { artworks } from "../src/content/artworks";
 import { galleries } from "../src/content/galleries";
 import { journalEntries } from "../src/content/journal";
@@ -31,7 +32,7 @@ import {
   journalCoverImageFor,
   hasExplicitTimeZone,
 } from "../src/lib/content/journal";
-import { getLocalizedSlug, isSafeLocalImagePath, isSafeContentSlug } from "../src/lib/content/paths";
+import { getLocalizedSlug, isSafeLocalImagePath, isSafeContentSlug, matchesLocalizedSlug } from "../src/lib/content/paths";
 import { hasEquivalentContentSet } from "../src/lib/content/identity";
 import { alternatePathFor } from "../src/lib/routing/alternate-path";
 import {
@@ -45,6 +46,52 @@ import { validatePortfolioContent } from "../src/lib/content/validate-portfolio"
 const work:Artwork={id:"w1",slug:"work-one",title:{en:"Work",fa:"اثر"},images:[{src:"/art/work.jpg",alt:{en:"Painting",fa:"نقاشی"},role:"primary",width:1200,height:900}],rightsConfirmed:true,status:"published"};
 test("artwork stays private until published and rights-cleared",()=>{assert.equal(getPublicArtworks([{...work,status:"needs-review"}],"en").length,0);assert.equal(getPublicArtworks([{...work,rightsConfirmed:false}],"en").length,0);assert.equal(getPublicArtworks([work],"en").length,1);});
 test("artwork requires localized title and primary image alt",()=>{assert.equal(getPublicArtworks([{...work,title:{en:"Work"}}],"fa").length,0);assert.equal(getPublicArtworks([{...work,images:[{...work.images[0],alt:{en:""}}]}],"en").length,0);});
+
+test("Persian content slugs accept combining marks and ZWNJ while rejecting unsafe separators",()=>{
+ assert.equal(isSafeContentSlug("لحظه‌ای-کنار-پنجره"),true);
+ assert.equal(isSafeContentSlug("آرامشِ-نگریستن"),true);
+ assert.equal(isSafeContentSlug("فاصله‌ی-میان"),true);
+ assert.equal(isSafeContentSlug("safe--slug"),false);
+ assert.equal(isSafeContentSlug("-unsafe"),false);
+ assert.equal(isSafeContentSlug("unsafe-"),false);
+ assert.equal(isSafeContentSlug("unsafe/segment"),false);
+ assert.equal(isSafeContentSlug("unsafe?query"),false);
+});
+
+test("all 25 current artworks remain publicly available with Persian localized slugs",()=>{
+ const publicWorks=getPublicArtworks(artworks,"fa");
+ assert.equal(publicWorks.length,25);
+ assert.ok(publicWorks.every(item=>isSafeContentSlug(getLocalizedSlug(item,"fa"))));
+ assert.equal(publicWorks.find(item=>item.id==="artwork-1392-2")?.localizedSlugs?.fa,"لحظه‌ای-کنار-پنجره");
+ assert.equal(publicWorks.find(item=>item.id==="artwork-1392-3")?.localizedSlugs?.fa,"آرامشِ-نگریستن");
+});
+test("artwork and gallery archives are ordered newest year first, then newest editorial order",()=>{
+ const orderedWorks=getPublicArtworks(artworks,"en");
+ assert.equal(orderedWorks[0].year,1403);
+ assert.equal(orderedWorks[0].sortOrder,25);
+ assert.equal(orderedWorks.at(-1)?.year,1388);
+ for(let index=1;index<orderedWorks.length;index++){
+  const previous=orderedWorks[index-1];
+  const current=orderedWorks[index];
+  assert.ok((previous.year??0)>(current.year??0) || ((previous.year??0)===(current.year??0) && (previous.sortOrder??0)>=(current.sortOrder??0)));
+ }
+ const orderedGalleries=getPublicGalleries(galleries,artworks,"en");
+ assert.equal(artworks.find(item=>item.id===orderedGalleries[0].coverArtworkId)?.year,1403);
+ assert.equal(artworks.find(item=>item.id===orderedGalleries.at(-1)?.coverArtworkId)?.year,1388);
+ for(let index=1;index<orderedGalleries.length;index++){
+  const previousYear=artworks.find(item=>item.id===orderedGalleries[index-1].coverArtworkId)?.year??0;
+  const currentYear=artworks.find(item=>item.id===orderedGalleries[index].coverArtworkId)?.year??0;
+  assert.ok(previousYear>=currentYear);
+ }
+});
+
+test("localized artwork route matching accepts percent-encoded and canonically equivalent Persian slugs",()=>{
+ const record={slug:"a-moment-by-the-window",localizedSlugs:{en:"a-moment-by-the-window",fa:"لحظه‌ای-کنار-پنجره"}};
+ assert.equal(matchesLocalizedSlug(record,"fa","لحظه‌ای-کنار-پنجره"),true);
+ assert.equal(matchesLocalizedSlug(record,"fa",encodeURIComponent("لحظه‌ای-کنار-پنجره")),true);
+ assert.equal(matchesLocalizedSlug(record,"fa","لحظهٔ‌ای-کنار-پنجره"),false);
+});
+
 test("gallery requires unique published artwork members and member cover",()=>{const g:Gallery={id:"g1",slug:"gallery",title:{en:"Gallery",fa:"گالری"},description:{en:"Description",fa:"توضیح"},coverArtworkId:work.id,artworkIds:[work.id],status:"published",sortOrder:1};assert.equal(getPublicGalleries([g],[work],"en").length,1);assert.equal(getPublicGalleries([g],[],"en").length,0);assert.equal(getPublicGalleries([{...g,artworkIds:["w1","w1"]}],[work],"en").length,0);assert.equal(getPublicGalleries([{...g,coverArtworkId:"x"}],[work],"en").length,0);});
 test("journal only exposes published entries with localized title and summary",()=>{const j:JournalEntry={id:"j1",slug:"story",type:"story",title:{en:"Story",fa:"داستان"},summary:{en:"Summary",fa:"خلاصه"},status:"published",approvedLocales:["en","fa"],artistApproved:true};assert.equal(getPublicJournal([j],"en").length,1);assert.equal(getPublicJournal([{...j,status:"draft"}],"en").length,0);assert.equal(getPublicJournal([j],"fa").length,1);});
 
@@ -122,11 +169,11 @@ test("portfolio JSON-LD resolves localized artist identity from canonical profil
  const website=english[1] as Record<string,unknown>;
  assert.equal(english.length,2);
  assert.equal(personEn["@type"],"Person");
- assert.equal(personEn.name,"Ghazaleh Abdolahzade Nasoodi");
+ assert.equal(personEn.name,"Ghazale Abdolahzade Nasoodi");
  assert.equal(personEn.alternateName,"غزاله عبداله زاده نسودی");
  assert.equal(personEn.jobTitle,"Oil painter");
  assert.equal(personFa.name,"غزاله عبداله زاده نسودی");
- assert.equal(personFa.alternateName,"Ghazaleh Abdolahzade Nasoodi");
+ assert.equal(personFa.alternateName,"Ghazale Abdolahzade Nasoodi");
  assert.equal(personFa.jobTitle,"نقاش رنگ‌روغن");
  assert.equal(website["@type"],"WebSite");
  assert.deepEqual(website.inLanguage,["fa","en"]);
@@ -140,6 +187,7 @@ test("locale switching preserves available localized sections and falls back for
  assert.equal(alternatePathFor("/fa/works", "fa"), "/en/works");
  assert.equal(alternatePathFor("/fa/works/not-published", "fa"), "/en");
  assert.equal(alternatePathFor("/fa/journal/not-published", "fa"), "/en");
+ assert.equal(alternatePathFor("/en/works/a-first-light", "en"), "/fa/works/نخستین-روشنایی");
 });
 
 test("homepage upcoming events are future-dated, locale-approved, and ordered by occurrence",()=>{
@@ -273,7 +321,8 @@ test("the five owner-approved gallery assets are represented by five unique publ
   assert.equal(item.status,"published");
   assert.equal(item.rightsConfirmed,true);
   assert.equal(item.images.length,1);
-  assert.equal(item.images[0].src,`/images/approved-artwork-${index+1}.jpg`);
+  const expectedImagePaths = ["/images/artworks/artwork-quiet-place.jpg", "/images/artworks/artwork-shape-of-remembering.jpg", "/images/artworks/artwork-where-light-rests.jpg", "/images/artworks/artwork-garden-small-moments.jpg", "/images/artworks/artwork-blue-hour-within.jpg"];
+  assert.equal(item.images[0].src, expectedImagePaths[index]);
   assert.equal(item.images[0].role,"primary");
   assert.ok(item.images[0].width>0 && item.images[0].height>0);
   for (const locale of ["en","fa"] as const) {
@@ -349,9 +398,20 @@ test("homepage content is composed through canonical localized repositories",()=
  }
 });
 
+test("site shell renders artist identity from the canonical artist repository",()=>{
+ const source=readFileSync("src/components/site-shell.tsx","utf8");
+ assert.ok(source.includes("getArtist(locale)"));
+ assert.match(source,/artistBrand/);
+ assert.ok(!source.includes("Ghazale"));
+ assert.ok(!source.includes("Abdolahzade Nasoodi"));
+ assert.ok(!source.includes("Nasoodi.art"));
+});
+
 test("canonical artist profile is populated in both locales",()=>{
  assert.ok(artistProfile);
  assert.equal(artistProfile?.id,"artist-profile");
+ assert.equal(artistProfile?.name?.en,"Ghazale Abdolahzade Nasoodi");
+ assert.equal(artistProfile?.brand,"Nasoodi.art");
  assert.ok(artistProfile?.name?.en?.trim());
  assert.ok(artistProfile?.name?.fa?.trim());
  assert.ok(artistProfile?.biography.en?.trim());

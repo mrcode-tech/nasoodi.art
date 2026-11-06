@@ -6,7 +6,7 @@
 - Application routes and layouts live under `src/app/`.
 - Use strict TypeScript and prefer server components unless client-side interactivity is required.
 - Keep dependencies minimal and use stable releases.
-- The website is the bilingual Persian/English portfolio of oil painter Ghazaleh Abdolahzade Nasoodi. Finished artworks are the primary content; the interface must frame the work rather than compete with it.
+- The website is the bilingual Persian/English portfolio of oil painter Ghazale Abdolahzade Nasoodi. Finished artworks are the primary content; the interface must frame the work rather than compete with it.
 
 ## Mandatory specification-first workflow
 
@@ -54,7 +54,7 @@ Do not start implementation based only on a prompt summary or this file. Read th
 - Use semantic color and typography tokens. Verify real foreground/background combinations against WCAG 2.2 AA. Confirm font licensing, Persian shaping, Latin rendering, weights, and responsive wrapping before treating a font choice as final.
 - Finished paintings are the primary visual content. Preserve original color, brush texture, aspect ratio, orientation, and signature. Do not crop, filter, recolor, mirror, distort, overlay, or AI-enhance artwork unless the artist explicitly approves the exact treatment. Never use generated or stock paintings as portfolio content.
 - The homepage primary hero must be an artist-approved finished painting. Studio/process photography is supporting material and must not replace or be misrepresented as finished artwork.
-- Explicit initial-Hero exception: the site owner selected `specification/assets/artwork.JPG` for the feature-branch Hero. It is a studio/process photograph, not a finished painting; describe it factually, do not register it as artwork, and retain the rights/artist-approval release gate. An approved finished painting remains the preferred production Hero when selected.
+- Explicit initial-Hero exception: the site owner selected `public/images/artist/artist-at-work.jpg` for the feature-branch Hero. It is a studio/process photograph, not a finished painting; describe it factually, do not register it as artwork, and retain the rights/artist-approval release gate. An approved finished painting remains the preferred production Hero when selected.
 - Use the canonical JSON content as the owner-authorized initial website content. The owner may edit it after launch. Do not add editorial verification, factuality, provenance, artist-approval, completeness, or status gates that hide content from the site. Do not require fields such as `isVerified`, `artistApproved`, `verificationStatus`, `isFictional`, `isPlaceholder`, or `contentSource`. Do not maintain parallel sample, preview, verified/unverified, or environment-specific content stores. About and CV use the same canonical JSON records in every environment; UI translations remain in next-intl message resources. Display the owner-provided Contact methods `g.nasoodi@gmail.com`, `@nasoodi`, and `@ghazalenasoodi`.
 - Persian must use correct RTL behavior and English correct LTR behavior. The physical-left sidebar remains left in both locales where the navigation specification requires it; do not mirror artwork or decorative assets as a shortcut.
 - Design and test real content states: long Persian and English titles, missing optional metadata, empty archives, no upcoming events, one or many works, unusual image ratios, loading, error, and unavailable states.
@@ -137,6 +137,18 @@ A task is not complete merely because code was written or the build passes. Comp
 - A documentation-only task must not modify application source, dependencies, routes, or CI. A later implementation task must follow the component, responsive, RTL, accessibility, visual QA, and test requirements in the new experience specification.
 
 
-## Journal announcement sticker vector asset and CI contract
+## Journal announcement sticker vector asset contract
 
-For the Journal/sticker implementation, read specification/journal-announcement-sticker-visual-design.md and follow it as the visual asset authority. The paper sticker must be authored directly as editable SVG paths/strokes. Do not use image generation, screenshot tracing, raster painting, or image-processing tools. GitHub Actions converts the checked-in SVG into a transparent PNG review artifact and validates its dimensions/alpha channel. Keep event text and controls in accessible localized HTML. Do not check in a generated PNG or treat the visual study as owner-approved until the owner reviews it.
+- The canonical Journal sticker is a hand-authored SVG stored directly at `public/images/journal/journal-announcement-sticker.svg` and served by the website as SVG.
+- Keep the SVG as the only maintained sticker asset. Do not add a PNG conversion pipeline, Python renderer, generated PNG, visual-review artifact upload, or raster runtime derivative.
+- CI must verify that the canonical SVG file exists and is non-empty. Browser tests should verify that the sticker asset loads in the relevant Journal/announcement UI. SVG visual refinement is reviewed through the actual website screenshots, not a generated PNG artifact.
+- Keep event text and controls in accessible localized HTML; the SVG contains decorative paths only.
+
+## Public image storage and generated metadata
+
+- Keep publishable website images directly under `public/images/`, grouped by purpose: `artworks/`, `artist/`, `exhibitions/`, `journal/`, and `decorative/`.
+- Store each physical image once. Galleries, homepage selections, and Journal entries should reference canonical artwork/content IDs rather than duplicate image files.
+- `npm run dev` runs `predev`, which generates `src/content/data/image-metadata.json` from raster files in `public/images/`. The generator supports JPEG/JPG, PNG, and WebP and records actual format, width, height, and aspect ratio.
+- Commit generated metadata together with added, replaced, or removed image files. `prebuild` and CI run the generator in check-only mode; they must never rewrite committed metadata.
+- Use `npm run images:generate` after changing images while the dev server is already running. Use `npm run images:check` to verify the committed manifest without modifying it.
+- Do not restore the old portfolio audit or asset-copy scripts. The metadata generator never copies or transforms images and does not make rights/approval decisions.

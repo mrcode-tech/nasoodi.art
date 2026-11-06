@@ -14,10 +14,6 @@ const technicalAttributes = new Set([
   "src", "target", "rel", "method", "action", "slot", "part",
   "data-testid", "suppressHydrationWarning",
 ]);
-const knownBrandAndProperNames = new Set([
-  "Nasoodi.art", "Nasoodi", "Ghazaleh", "Abdolahzade Nasoodi", "Instagram", "GitHub", "Next.js", "React", "TypeScript",
-  "Vercel", "Radix", "Embla", "shadcn/ui",
-]);
 const uiMessagePropertyNames = new Set([
   "label", "title", "description", "placeholder", "emptyMessage",
   "helperText", "errorMessage", "successMessage", "ariaLabel",
@@ -77,7 +73,7 @@ function walk(directory) {
 
 function hasUserFacingText(value, jsxText = false) {
   const text = value.trim();
-  if (!text || knownBrandAndProperNames.has(text)) return false;
+  if (!text) return false;
   if (!/[A-Za-z\u0600-\u06FF]/u.test(text)) return false;
   if (/[\u0600-\u06FF]/u.test(text)) return true;
   return jsxText || /\s|[!?.,:;()[\]{}]/u.test(text);

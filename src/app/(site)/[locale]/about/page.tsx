@@ -34,7 +34,6 @@ export default async function AboutPage({ params }: Props) {
     { id: "collections", categories: ["collection"], label: t("collections") },
     { id: "other", categories: ["other"], label: t("otherActivities") },
   ];
-  const portrait = profile.portrait;
 
   return (
     <div className="page-content about-page">
@@ -42,32 +41,26 @@ export default async function AboutPage({ params }: Props) {
         { label: t("home"), href: pagePath(locale) },
         { label: t("about") },
       ]} />
-      <header className="page-heading">
+      <header className="page-heading about-heading">
         <p className="eyebrow">{t("about")}</p>
         <h1>{profile.name?.[locale] ?? t("artistName")}</h1>
         <p className="artist-discipline">{profile.discipline?.[locale] ?? t("discipline")}</p>
-        {profile.shortIntroduction?.[locale] && <p>{profile.shortIntroduction[locale]}</p>}
       </header>
       <div className="profile-content">
-        {portrait ? (
-          <Image
-            className="artist-portrait"
-            src={portrait.src}
-            alt={portrait.alt[locale] ?? ""}
-            width={portrait.width}
-            height={portrait.height}
-            sizes="(max-width: 700px) 100vw, 34rem"
-          />
-        ) : (
-          <Image
-            className="artist-portrait"
-            src="/images/homepage-hero.jpg"
-            alt={t("heroAlt")}
-            width={4032}
-            height={3024}
-            sizes="(max-width: 700px) 100vw, 34rem"
-          />
+        {profile.shortIntroduction?.[locale] && (
+          <p className="about-short-introduction">{profile.shortIntroduction[locale]}</p>
         )}
+        <div className="about-portrait-statement">
+          <div className="artist-portrait-frame">
+            <Image
+              className="artist-portrait"
+              src="/images/artist/artist-portrait.jpg"
+              alt={locale === "fa" ? "پرتره غزاله عبداله‌زاده نسودی" : "Portrait of Ghazaleh Abdolahzade Nasoodi"}
+              fill
+              sizes="(max-width: 700px) 100vw, (max-width: 1100px) 48vw, 34rem"
+            />
+          </div>
+        </div>
         <section className="about-statement">
           <h2>{t("statement")}</h2>
           {about.statement.split(/\n{2,}/).map((paragraph, index) => <p key={index}>{paragraph}</p>)}
