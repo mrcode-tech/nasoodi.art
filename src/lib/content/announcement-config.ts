@@ -28,6 +28,10 @@ function requireLocalizedText(value: unknown, field: string): asserts value is R
 /** Validate the single editorial announcement configuration without resolving its content reference. */
 export function assertAnnouncementConfig(value: unknown): asserts value is AnnouncementConfig {
   if (!isRecord(value)) throw new Error("Announcement configuration must be a JSON object.");
+  const allowedKeys = new Set(["active", "type", "contentId", "title", "description", "metadata"]);
+  for (const key of Object.keys(value)) {
+    if (!allowedKeys.has(key)) throw new Error("Announcement configuration: unsupported field " + key + ".");
+  }
   if (typeof value.active !== "boolean") throw new Error("Announcement configuration: active must be a boolean.");
   if (typeof value.type !== "string" || !announcementTypes.includes(value.type as AnnouncementType)) {
     throw new Error("Announcement configuration: type must be artwork, gallery, journal, or event.");
