@@ -3,7 +3,7 @@
 **Status:** Proposed structural wireframes  
 **Visual direction:** Quiet contemporary gallery; artwork-led
 
-These are layout contracts, not final visual designs. Final spacing, typography, palette, and image sequence must be evaluated against Ghazale's actual paintings.
+These are layout contracts, not final visual designs. Final spacing, typography, palette, and image sequence must be evaluated against the artist's actual paintings.
 
 ## 1. Global shell
 
@@ -173,7 +173,7 @@ Use a simple chronological editorial list grouped by category. Include only cate
 │ A short artist-approved invitation                                 │
 │                                                                    │
 │ Email / approved contact method                                    │
-│ Instagram @ghazalenasoodi                                          │
+│ Instagram CONTACT_HANDLE                                          │
 │                                                                    │
 │ Optional enquiry form: name, email, subject, message              │
 │ [Send enquiry]                                                     │

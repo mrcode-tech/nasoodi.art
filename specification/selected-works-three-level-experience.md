@@ -382,9 +382,9 @@ The following repository images are included as **design-reference samples** for
 Candidate gallery images:
 - `public/images/artworks/artwork-quiet-place.jpg`
 - `public/images/artworks/artwork-shape-of-remembering.jpg`
-- `public/images/artworks/artwork-where-light-rests.jpg`
+- `ARTWORK_IMAGE_PATH`
 - `public/images/artworks/artwork-garden-small-moments.jpg`
-- `public/images/artworks/artwork-blue-hour-within.jpg`
+- `ARTWORK_IMAGE_PATH`
 
 Embed these relative assets in the wireframes to make the proposed compositions concrete. Preserve the original files. Do not rename, crop, edit, move, publish, or map them to real collection/artwork metadata based only on their filenames. Before implementation uses them as actual site content, inspect each image and complete `asset-review-register.md` with dimensions, orientation, file size, source/provenance, rights, artwork identity, approved title/description/alt text, and artist approval.
 

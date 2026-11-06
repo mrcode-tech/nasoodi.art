@@ -3,16 +3,16 @@
 **Status:** Proposed  
 **Working branch:** `feature`  
 **Site:** `https://nasoodi.art`  
-**Artist:** Ghazaleh Abdolahzade Nasoodi — غزاله عبداله زاده نسودی  
+**Artist:** ARTIST_NAME — ARTIST_NAME_FA  
 **Practice:** Oil painting  
 **Location:** Iran  
-**Social profile supplied by owner:** [Instagram @ghazalenasoodi](https://www.instagram.com/ghazalenasoodi/)
+**Social profile supplied by owner:** [Instagram CONTACT_HANDLE](CONTACT_PROFILE_URL)
 
 ---
 
 ## 1. Executive summary
 
-Transform nasoodi.art from a generic starter landing page into a refined, artwork-led professional portfolio for oil painter Ghazaleh Abdolahzade Nasoodi.
+Transform nasoodi.art from a generic starter landing page into a refined, artwork-led professional portfolio for oil painter ARTIST_NAME.
 
 The website should feel like a carefully curated digital gallery: calm, confident, visually precise, and respectful of the paintings. It should make it possible to discover the artist's work quickly, explore coherent bodies of work, understand the artist's practice, review verified professional information, and make a direct enquiry.
 
@@ -24,11 +24,11 @@ The site is not intended to imitate a social-media feed or an online marketplace
 
 ### 2.1 Facts supplied by the site owner
 
-- The site represents Ghazaleh Abdolahzade Nasoodi.
-- Her Persian name is غزاله عبداله زاده نسودی.
+- The site represents ARTIST_NAME.
+- Her Persian name is ARTIST_NAME_FA.
 - She is an oil painter.
 - She lives in Iran.
-- Her Instagram handle is @ghazalenasoodi.
+- Her Instagram handle is CONTACT_HANDLE.
 
 The supplied English spelling should be used provisionally. Confirm the artist's preferred English transliteration, capitalization, and whether she prefers a shorter public-facing name before final publication.
 
@@ -53,7 +53,7 @@ Missing content is a content dependency, not a reason to create fictional copy.
 
 ### Primary goals
 
-1. Present a strong, curated selection of Ghazaleh's oil paintings with accurate color, scale, and detail.
+1. Present a strong, curated selection of the artist's oil paintings with accurate color, scale, and detail.
 2. Establish a credible professional identity for gallery owners, curators, collectors, and art professionals.
 3. Communicate the artist's practice through a concise artist statement and factual biography.
 4. Make artwork details and contact/enquiry actions easy to find.
@@ -235,7 +235,7 @@ If supplied, present entries in reverse chronological order and separate categor
 
 ### 7.6 Social integration
 
-- Link to the exact supplied profile: `https://www.instagram.com/ghazalenasoodi/`.
+- Link to the exact supplied profile: `CONTACT_PROFILE_URL`.
 - Open external links safely and label them accessibly.
 - Do not embed a live Instagram feed in the initial release: it adds third-party dependency, privacy/performance cost, and may fail or change.
 - Do not scrape, mirror, or download Instagram content without permission and a reliable rights basis.
@@ -364,7 +364,7 @@ Do not introduce a CMS before the artist's update frequency, content volume, and
 
 The initial professional portfolio is acceptable when:
 
-- The homepage clearly identifies Ghazaleh as an oil painter and shows real, approved artwork immediately.
+- The homepage clearly identifies the artist as an oil painter and shows real, approved artwork immediately.
 - The visual system is gallery-led and no longer resembles the generic starter landing page.
 - Work can be browsed by approved series or as selected works.
 - Each published artwork has accurate available metadata and descriptive alt text.
@@ -383,7 +383,7 @@ The initial professional portfolio is acceptable when:
 
 These decisions should be collected before final visual/content sign-off:
 
-1. Preferred public English spelling: “Ghazaleh Abdolahzade Nasoodi”, “Ghazale Abdolahzade Nasoodi”, or another artist-approved form?
+1. Preferred public English spelling: “ARTIST_NAME”, “ARTIST_NAME”, or another artist-approved form?
 2. Should Persian or English be the default homepage language?
 3. Which paintings and series should be featured first, and which original high-resolution files may be published?
 4. Does the artist have official titles, dates, dimensions, and medium details for each work?

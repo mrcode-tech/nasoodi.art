@@ -141,9 +141,9 @@ Use a restrained editorial layout with generous outer margins and a clear distin
 
 ~~~text
 ┌──────────────────────────────────────────────────────────────────────┐
-│ Ghazaleh NASOODI       WORKS  GALLERIES  JOURNAL  ABOUT   فارسی | EN │
+│ the artist NASOODI       WORKS  GALLERIES  JOURNAL  ABOUT   فارسی | EN │
 ├──────────────────────────────────────────────────────────────────────┤
-│ Ghazaleh ABDOLAHZADE NASOODI       ┌──────────────────────────────┐ │
+│ the artist ABDOLAHZADE NASOODI       ┌──────────────────────────────┐ │
 │ Oil Painter                        │                              │ │
 │ [Approved short introduction]      │    FINISHED PAINTING         │ │
 │ Explore works →                    │    full composition          │ │

@@ -436,7 +436,7 @@ Before coding:
 
 - Repository inspection confirmed the localized route is composed through `src/app/(site)/[locale]/[section]/page.tsx`, gallery publication/order are provided by `getPublicGalleries`, and the canonical dataset currently contains four published collections in both locales.
 - The homepage Selected Works carousel is rendered separately through `ArtworkExperience` on the homepage. The Galleries index implementation must not change `src/components/ui/carousel.tsx`, `src/components/artwork-experience.tsx`, or homepage composition.
-- Implementation and CI evidence will be recorded only after the final feature commit has been tested. The current canonical dataset contains eight year-based galleries. The static index must render all eight records and expose pagination controls only when the selected page size creates multiple pages.
+- Implementation and CI evidence will be recorded only after the final feature commit has been tested. The static index must render all eligible records and expose pagination controls only when the selected page size creates multiple pages.
 
 
 ## Implementation and verification evidence — 2026-10-31

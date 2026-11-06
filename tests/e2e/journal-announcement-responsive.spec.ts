@@ -5,13 +5,13 @@ const locales = [
     locale: "en",
     menuLabel: "Open navigation",
     dismissLabel: "Dismiss exhibition announcement",
-    title: "Open Studio: Colour and Stillness",
+    title: "Fixture Event A",
   },
   {
     locale: "fa",
     menuLabel: "باز کردن راهبری",
     dismissLabel: "بستن اطلاعیه نمایشگاه",
-    title: "آتلیه باز: رنگ و سکون",
+    title: "رویداد آزمایشی الف",
   },
 ] as const;
 
@@ -114,8 +114,8 @@ test.describe("Journal announcement responsive placements", () => {
 
     test(`long and short event titles fit all sticker placements in ${item.locale}`, async ({ page }) => {
       const stressTitles = item.locale === "en"
-        ? ["An Exhibition of Quiet Colour, Memory, and the Spaces Between Seasons", "Open Studio"]
-        : ["نمایشگاهی درباره رنگ، خاطره و فاصله‌های میان فصل‌ها و لحظه‌های آرام", "آتلیه باز"];
+        ? ["A synthetic exhibition description", "Fixture Event"]
+        : ["توضیح نمونه برای رویداد آزمایشی", "رویداد آزمایشی"];
 
       const placements = [
         { kind: "viewport", width: 1920, height: 1080, route: `/${item.locale}` },

@@ -110,9 +110,9 @@ Do not render an empty section solely to preserve a fixed sequence. If a section
 | Hero artwork | `public/images/artist/artist-at-work.jpg` | Designated hero candidate and primary hero reference. Inspect before implementation. Do not rename or assume rights from filename. |
 | Sample artwork 01 | `public/images/artworks/artwork-quiet-place.jpg` | Design fixture for a Featured Works item and reusable gallery artwork reference. |
 | Sample artwork 02 | `public/images/artworks/artwork-shape-of-remembering.jpg` | Design fixture for a Featured Works item and reusable gallery artwork reference. |
-| Sample artwork 03 | `public/images/artworks/artwork-where-light-rests.jpg` | Design fixture for a Featured Works item and Journal-related visual example. |
+| Sample artwork 03 | `ARTWORK_IMAGE_PATH` | Design fixture for a Featured Works item and Journal-related visual example. |
 | Sample artwork 04 | `public/images/artworks/artwork-garden-small-moments.jpg` | Design fixture for a Featured Works item and a gallery cover/reference. |
-| Sample artwork 05 | `public/images/artworks/artwork-blue-hour-within.jpg` | Design fixture for a gallery cover/reference and Journal-related visual example. |
+| Sample artwork 05 | `ARTWORK_IMAGE_PATH` | Design fixture for a gallery cover/reference and Journal-related visual example. |
 
 Exact filename casing matters. These assets are repository specification assets, not automatically public runtime assets.
 
@@ -180,7 +180,7 @@ This is a semantic illustration, not a demand to copy the exact markup. Reconcil
 | Element | English | Persian | Source/condition |
 |---|---|---|---|
 | Portfolio eyebrow | Artist portfolio | پورتفولیوی هنرمند | Existing localized UI copy; owner-approved wording |
-| H1 | Ghazale Abdolahzade Nasoodi | غزاله عبداله زاده نسودی | Supplied artist identity; preserve spelling exactly unless owner updates it |
+| H1 | ARTIST_NAME | ARTIST_NAME_FA | Supplied artist identity; preserve spelling exactly unless owner updates it |
 | Discipline | Oil painter | نقاش رنگ‌روغن | Confirmed practice |
 | Optional introduction | Artist-approved English sentence | Artist-approved Persian sentence | Render only when approved for that locale |
 | Primary CTA | Explore galleries | گالری‌ها را ببینید | Link to localized Galleries index |
@@ -286,7 +286,7 @@ Wireframes are structural, not pixel-perfect. All text shown is proposed UI copy
 │ Nasoodi.art             ┌────────────────────────────┬─────────────────────┐ │
 │ Home                   │                            │ ARTIST PORTFOLIO    │ │
 │ Works                  │                            │                     │ │
-│ Galleries              │   artwork.JPG               │ Ghazale            │ │
+│ Galleries              │   artwork.JPG               │ the artist            │ │
 │ Journal                │   full image                │ Abdolahzade Nasoodi │ │
 │ About                  │   uncropped                 │ Oil painter         │ │
 │ Contact                │                            │                     │ │
@@ -368,7 +368,7 @@ The content flow is RTL, while the desktop sidebar remains physically on the lef
 │ mobile/tablet header and navigation behavior per shared spec  │
 ├───────────────────────────────────────────────────────────────┤
 │ ARTIST PORTFOLIO                                               │
-│ Ghazale Abdolahzade Nasoodi                                   │
+│ ARTIST_NAME                                   │
 │ Oil painter                                                    │
 │                                                               │
 │ ┌───────────────────────────────────────────────────────────┐ │
@@ -397,7 +397,7 @@ The content flow is RTL, while the desktop sidebar remains physically on the lef
 │ سربرگ و منوی تبلت مطابق قرارداد مشترک                         │
 ├───────────────────────────────────────────────────────────────┤
 │ پورتفولیوی هنرمند                                              │
-│ غزاله عبداله زاده نسودی                                        │
+│ ARTIST_NAME_FA                                        │
 │ نقاش رنگ‌روغن                                                   │
 │                                                               │
 │ ┌───────────────────────────────────────────────────────────┐ │
@@ -426,7 +426,7 @@ The content flow is RTL, while the desktop sidebar remains physically on the lef
 │ ☰                         Nasoodi.art│
 ├─────────────────────────────────────┤
 │ ARTIST PORTFOLIO                    │
-│ Ghazale Abdolahzade                 │
+│ the artist Abdolahzade                 │
 │ Nasoodi                              │
 │ Oil painter                          │
 │                                     │
@@ -472,7 +472,7 @@ The content flow is RTL, while the desktop sidebar remains physically on the lef
 │ Nasoodi.art                    ☰    │
 ├─────────────────────────────────────┤
 │ پورتفولیوی هنرمند                   │
-│ غزاله عبداله زاده نسودی             │
+│ ARTIST_NAME_FA             │
 │ نقاش رنگ‌روغن                        │
 │                                     │
 │ ┌─────────────────────────────────┐ │
