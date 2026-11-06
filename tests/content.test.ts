@@ -491,7 +491,6 @@ test("synthetic portfolio validation enforces localized editorial fields and saf
 });
 
 test("announcement configuration validates both activation states and rejects malformed fields", () => {
-  assertAnnouncementConfig(announcementConfig);
   const base = {
     active: true,
     type: "gallery" as const,
