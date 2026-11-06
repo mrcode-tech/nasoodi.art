@@ -151,7 +151,8 @@ if (checkOnly) {
   const unexpected = committedPaths.filter((path) => !Object.hasOwn(images, path));
   const changed = expectedPaths.filter((path) => Object.hasOwn(committedImages, path) && JSON.stringify(committedImages[path]) !== JSON.stringify(images[path]));
   if (committed.schemaVersion !== 1 || missing.length || unexpected.length || changed.length) {
-    throw new Error("Image metadata is stale. Missing: [" + missing.join(", ") + "]; unexpected: [" + unexpected.join(", ") + "]; changed: [" + changed.join(", ") + "]. Run npm run images:generate and commit the result.");
+    const details = changed.map((path) => path + " committed=" + JSON.stringify(committedImages[path]) + " actual=" + JSON.stringify(images[path]));
+    throw new Error("Image metadata is stale. Missing: [" + missing.join(", ") + "]; unexpected: [" + unexpected.join(", ") + "]; changed: [" + details.join("; ") + "]. Run npm run images:generate and commit the result.");
   }
   process.stdout.write("Validated " + Object.keys(images).length + " raster images and " + references.size + " content image references.\n");
 } else {
