@@ -166,11 +166,11 @@ test("portfolio JSON-LD resolves localized artist identity from canonical profil
  const website=english[1] as Record<string,unknown>;
  assert.equal(english.length,2);
  assert.equal(personEn["@type"],"Person");
-  assert.equal(personEn.name,artistProfile?.name.en);
-  assert.equal(personEn.alternateName,artistProfile?.name.fa);
+  assert.equal(personEn.name,artistProfile?.name?.en);
+  assert.equal(personEn.alternateName,artistProfile?.name?.fa);
  assert.equal(personEn.jobTitle,"Painter");
-  assert.equal(personFa.name,artistProfile?.name.fa);
-  assert.equal(personFa.alternateName,artistProfile?.name.en);
+  assert.equal(personFa.name,artistProfile?.name?.fa);
+  assert.equal(personFa.alternateName,artistProfile?.name?.en);
  assert.equal(personFa.jobTitle,"نقاش");
  assert.equal(website["@type"],"WebSite");
  assert.deepEqual(website.inLanguage,["fa","en"]);
