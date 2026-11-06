@@ -1,4 +1,8 @@
 import { expect, test, type Locator } from "@playwright/test";
+import announcementConfig from "../../src/content/announcement.json";
+import { assertAnnouncementConfig } from "../../src/lib/content/announcement-config";
+
+assertAnnouncementConfig(announcementConfig);
 
 /** Wait for the drawer's real CSS transition; geometry is meaningful only at rest. */
 async function waitForDrawerToSettle(drawer: Locator) {
@@ -105,32 +109,47 @@ test("robots and sitemap endpoints are available", async ({ request }) => {
 });
 
 
-test("homepage shows exactly the latest Journal entry and the independent event sticker", async ({ page }) => {
-  await page.setViewportSize({ width: 1440, height: 960 });
-  await page.goto("/en");
-  await expect(page.locator(".journal-preview-item")).toHaveCount(1);
-  await expect(page.locator(".journal-preview-item").getByRole("heading")).toBeVisible();
-  const sticker = page.getByRole("complementary", { name: "UPCOMING EXHIBITION" });
-  await expect(sticker).toBeVisible();
-  expect((await sticker.innerText()).trim().length).toBeGreaterThan(0);
-  const stickerBounds = await sticker.boundingBox();
-  expect(stickerBounds?.x).toBe(0);
-  await page.getByRole("button", { name: "Dismiss exhibition announcement" }).click();
-  await expect(sticker).toBeHidden();
-  await expect(page.locator(".journal-preview-item")).toHaveCount(1);
+test.describe("Configured announcement on the homepage", () => {
+  test.skip(!announcementConfig.active, "Announcement is inactive in the current branch configuration.");
+
+  test("English homepage shows the latest Journal preview and configured announcement", async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 960 });
+    await page.goto("/en");
+    await expect(page.locator(".journal-preview-item")).toHaveCount(1);
+    await expect(page.locator(".journal-preview-item").getByRole("heading")).toBeVisible();
+    const sticker = page.locator('[data-placement="viewport"]');
+    await expect(sticker).toBeVisible();
+    await expect(sticker.locator('[data-part="title"]')).toHaveText(announcementConfig.title.en);
+    await expect(sticker.locator('[data-part="description"]')).toHaveText(announcementConfig.description.en);
+    if (announcementConfig.metadata?.en) await expect(sticker.locator('[data-part="metadata"]')).toHaveText(announcementConfig.metadata.en);
+    const stickerBounds = await sticker.boundingBox();
+    expect(stickerBounds?.x).toBe(0);
+    await page.getByRole("button", { name: "Dismiss announcement" }).click();
+    await expect(sticker).toBeHidden();
+    await expect(page.locator(".journal-preview-item")).toHaveCount(1);
+  });
+
+  test("Persian announcement is localized, right-anchored, and dismissible", async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 960 });
+    await page.goto("/fa");
+    await expect(page.locator(".journal-preview-item")).toHaveCount(1);
+    const sticker = page.locator('[data-placement="viewport"]');
+    await expect(sticker).toBeVisible();
+    await expect(sticker.locator('[data-part="title"]')).toHaveText(announcementConfig.title.fa);
+    await expect(sticker.locator('[data-part="description"]')).toHaveText(announcementConfig.description.fa);
+    if (announcementConfig.metadata?.fa) await expect(sticker.locator('[data-part="metadata"]')).toHaveText(announcementConfig.metadata.fa);
+    const bounds = await sticker.boundingBox();
+    expect((bounds?.x ?? 0) + (bounds?.width ?? 0)).toBe(1440);
+    await page.getByRole("button", { name: "بستن اعلان" }).click();
+    await expect(sticker).toBeHidden();
+  });
 });
 
-test("Persian announcement is localized, right-anchored, and dismissible", async ({ page }) => {
+test("inactive branch configuration does not render a homepage announcement", async ({ page }) => {
+  test.skip(announcementConfig.active, "The branch announcement is active; inactive rendering is covered by configuration tests.");
   await page.setViewportSize({ width: 1440, height: 960 });
-  await page.goto("/fa");
-  await expect(page.locator(".journal-preview-item")).toHaveCount(1);
-  const sticker = page.getByRole("complementary", { name: "نمایشگاه پیشِ رو" });
-  await expect(sticker).toBeVisible();
-  expect((await sticker.innerText()).trim().length).toBeGreaterThan(0);
-  const bounds = await sticker.boundingBox();
-  expect((bounds?.x ?? 0) + (bounds?.width ?? 0)).toBe(1440);
-  await page.getByRole("button", { name: "بستن اطلاعیه نمایشگاه" }).click();
-  await expect(sticker).toBeHidden();
+  await page.goto("/en");
+  await expect(page.locator('[data-placement="viewport"]')).toHaveCount(0);
 });
 
 test("Journal archive paginates six entries by default and supports 6, 10, and 20 per page", async ({ page }) => {
@@ -1178,11 +1197,12 @@ test("desktop homepage biography expands around a fixed locale-aligned hero imag
   }
 });
 
-test("homepage suppresses the event sticker on short viewports without changing Journal flow", async ({ page }) => {
+test("homepage suppresses the viewport sticker on short mobile widths without changing Journal flow", async ({ page }) => {
+ test.skip(!announcementConfig.active, "Announcement is inactive in the current branch configuration.");
  for (const locale of ["en", "fa"] as const) {
   await page.setViewportSize({ width: 390, height: 700 });
   await page.goto(`/${locale}`);
-  await expect(page.locator(`aside[aria-label="${locale === "en" ? "UPCOMING EXHIBITION" : "نمایشگاه پیشِ رو"}"]`)).toBeHidden();
+  await expect(page.locator('[data-placement="viewport"]')).toBeHidden();
   await expect(page.locator(".journal-preview-item")).toHaveCount(1);
   const overflow=await page.evaluate(()=>document.documentElement.scrollWidth>document.documentElement.clientWidth);
   expect(overflow).toBe(false);
