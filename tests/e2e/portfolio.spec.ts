@@ -291,20 +291,49 @@ for (const viewportWidth of [320, 360, 390, 430] as const) {
 
     for (const route of ["/fa", "/fa/works", "/fa/galleries", "/fa/journal", "/fa/about", "/fa/contact", "/fa/cv"]) {
       await page.goto(route);
-      const closedOverflow = await page.evaluate(() => ({
-        viewport: document.documentElement.clientWidth,
-        document: document.documentElement.scrollWidth,
-      }));
-      expect(closedOverflow.document, route + " with navigation closed").toBeLessThanOrEqual(closedOverflow.viewport);
+      const diagnoseOverflow = () => page.evaluate(() => {
+        const viewport = document.documentElement.clientWidth;
+        const offenders = Array.from(document.querySelectorAll("body *"))
+          .map((element) => {
+            const rect = element.getBoundingClientRect();
+            const style = getComputedStyle(element);
+            return {
+              tag: element.tagName.toLowerCase(),
+              className: typeof element.className === "string" ? element.className : "",
+              left: Math.round(rect.left * 10) / 10,
+              right: Math.round(rect.right * 10) / 10,
+              width: Math.round(rect.width * 10) / 10,
+              position: style.position,
+              transform: style.transform,
+              overflowX: style.overflowX,
+              outline: style.outlineStyle + " " + style.outlineWidth + " offset " + style.outlineOffset,
+            };
+          })
+          .filter((item) => item.width > 0 && (item.left < -1 || item.right > viewport + 1))
+          .slice(0, 20);
+        return {
+          viewport,
+          document: document.documentElement.scrollWidth,
+          body: document.body.scrollWidth,
+          activeElement: document.activeElement instanceof HTMLElement
+            ? document.activeElement.tagName.toLowerCase() + "." + document.activeElement.className
+            : null,
+          offenders,
+        };
+      });
+
+      const closedOverflow = await diagnoseOverflow();
+      expect(closedOverflow.document, route + " with navigation closed: " + JSON.stringify(closedOverflow)).toBeLessThanOrEqual(closedOverflow.viewport);
 
       const trigger = page.locator(".menu-trigger");
+      await trigger.focus();
+      const focusedOverflow = await diagnoseOverflow();
+      expect(focusedOverflow.document, route + " with menu trigger focused: " + JSON.stringify(focusedOverflow)).toBeLessThanOrEqual(focusedOverflow.viewport);
+
       await trigger.click();
       await expect(page.getByRole("dialog")).toBeVisible();
-      const openOverflow = await page.evaluate(() => ({
-        viewport: document.documentElement.clientWidth,
-        document: document.documentElement.scrollWidth,
-      }));
-      expect(openOverflow.document, route + " with navigation open").toBeLessThanOrEqual(openOverflow.viewport);
+      const openOverflow = await diagnoseOverflow();
+      expect(openOverflow.document, route + " with navigation open: " + JSON.stringify(openOverflow)).toBeLessThanOrEqual(openOverflow.viewport);
       await page.keyboard.press("Escape");
       await expect(page.getByRole("dialog")).toBeHidden();
     }
