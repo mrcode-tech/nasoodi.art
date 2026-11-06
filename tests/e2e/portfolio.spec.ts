@@ -1966,3 +1966,14 @@ test("Persian artwork and homepage Journal links use native localized slugs and 
   await expect(page).toHaveURL(new RegExp("/fa/journal/"));
   await expect(page.locator("main h1")).toBeVisible();
 });
+
+
+test("legacy English artwork and Journal slugs redirect to Persian canonical URLs", async ({ page }) => {
+  await page.goto("/fa/works/a-first-light");
+  expect(decodeURIComponent(new URL(page.url()).pathname)).toBe("/fa/works/نخستین-روشنایی");
+  await expect(page.locator("main h1")).toHaveText("نخستین روشنایی");
+
+  await page.goto("/fa/journal/first-light-a-beginning-in-paint");
+  expect(decodeURIComponent(new URL(page.url()).pathname)).toBe("/fa/journal/نخستین-روشنایی-آغاز-یک-مسیر");
+  await expect(page.locator("main h1")).toHaveText("نخستین روشنایی، آغاز یک مسیر");
+});
