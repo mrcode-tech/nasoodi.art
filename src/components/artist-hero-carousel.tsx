@@ -43,7 +43,7 @@ export function ArtistHeroCarousel({ locale, alt }: Props) {
           key={portrait.src}
           className={`artist-hero-image${activeIndex === index ? " is-active" : ""}`}
           src={portrait.src}
-          alt={portrait.alt[locale]}
+          alt={activeIndex === index ? (index === 0 ? alt : portrait.alt[locale]) : ""}
           fill
           sizes="(max-width: 900px) 100vw, 58vw"
           priority={index === 0}
