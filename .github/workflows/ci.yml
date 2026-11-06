@@ -49,12 +49,8 @@ jobs:
         run: npm run typecheck
       - name: Run content publication tests
         run: npm test
-      - name: Build production application
+      - name: Build production application (prebuild validates committed image metadata)
         run: npm run build
-      - name: Inventory candidate portfolio assets
-        run: |
-          mkdir -p asset-audit
-          npm run audit:assets -- --output=asset-audit/manifest.json
       - name: Install Playwright Chromium
         run: npx playwright install --with-deps chromium
       - name: Run browser and responsive tests
@@ -66,7 +62,6 @@ jobs:
           name: nasoodi-visual-qa-${{ github.sha }}
           path: |
             test-results/
-            asset-audit/manifest.json
             artifacts/journal-announcement-sticker.png
           if-no-files-found: ignore
           retention-days: 14

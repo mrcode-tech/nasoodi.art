@@ -33,7 +33,7 @@ npm test          # Content publication and governance tests
 npm run build     # Production build
 npm run start     # Production server
 npm run test:e2e  # Playwright browser and responsive tests
-npm run audit:assets # Inventory candidate image dimensions, sizes, and checksums
+npm run images:generate # Generate metadata from public/images\nnpm run images:check    # Verify committed image metadata
 ```
 
 ## Route structure
@@ -63,4 +63,4 @@ No deployment is performed by the implementation workflow. Publishing requires a
 
 ## Continuous integration
 
-GitHub Actions verifies every push to `feature`, `stage`, and `main` with dependency installation, linting, TypeScript checks, content tests, a production build, responsive browser tests, asset inventory, and localized-route smoke tests. Responsive navigation coverage checks fixed desktop utility placement, RTL ordering, keyboard focus, and the portaled language menu.
+GitHub Actions verifies every push to `feature`, `stage`, and `main` with dependency installation, linting, TypeScript checks, content tests, a production build, responsive browser tests, image-metadata validation, and localized-route smoke tests. Responsive navigation coverage checks fixed desktop utility placement, RTL ordering, keyboard focus, and the portaled language menu.

@@ -8,7 +8,7 @@ import cairosvg
 from PIL import Image
 
 ROOT = Path(__file__).resolve().parents[1]
-SOURCE = ROOT / "specification/assets/journal-announcement-sticker.svg"
+SOURCE = ROOT / "public/images/journal/journal-announcement-sticker.svg"
 OUTPUT = ROOT / "artifacts/journal-announcement-sticker.png"
 WIDTH, HEIGHT = 1260, 840
 EXPECTED_VIEWBOX = "0 0 420 280"

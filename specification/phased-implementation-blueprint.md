@@ -53,7 +53,7 @@ Phases may proceed in parallel only where dependencies are satisfied and changes
 - Inspect branch, HEAD, worktree, routes, layouts, components, tokens, dependencies, scripts, tests, workflows, and hosting configuration.
 - Read all mandatory specifications and reconcile conflicts, especially the homepage hero direction and the unified Journal information architecture.
 - Inventory all image assets. Inspect actual visual content, dimensions, orientation, color profile, file size, source/provenance, rights, approval, and derivative status.
-- Inspect `specification/assets/artwork.JPG` and every file in `specification/assets/gallery/`; filenames alone do not establish grouping or suitability.
+- Inspect `public/images/artist/artist-at-work.jpg` and every file in `specification/assets/gallery/`; filenames alone do not establish grouping or suitability.
 - Create an asset manifest linking source master, canonical content ID, intended use, approval state, and derivative paths.
 - Confirm artist identity spelling, locale priorities, hero painting, selected works, gallery names/membership/order/covers, artwork metadata, biography/statement, CV, exhibitions, Journal entries, event facts, contact route, and any sales/commission scope.
 - Record all missing facts and approval dependencies.
@@ -166,7 +166,7 @@ Phases may proceed in parallel only where dependencies are satisfied and changes
 **Objective:** Create a memorable, painting-first introduction to the artist.
 
 **Work**
-- Use one artist-approved finished painting as the dominant hero; `specification/assets/artwork.JPG` is only a candidate until inspected and approved.
+- Use one artist-approved finished painting as the dominant hero; `public/images/artist/artist-at-work.jpg` is only a candidate until inspected and approved.
 - Establish artist identity and a concise approved introduction without invented biography or claims.
 - Provide a clear Works path and meaningful exploration actions.
 - Add a Featured Works section with deterministic selection of 3–6 approved artwork IDs where enough content exists.
@@ -698,7 +698,7 @@ Apply the following requirements within the existing phase sequence; do not crea
 - **Phase 4 — Artwork-led homepage:** Selected Works is a curated set of individual artworks. Artwork selection opens the shared Artwork Viewer with visible title and approved description. The Explore Works/Collections action navigates to the collection index. Viewer close restores homepage scroll and focus.
 - **Phase 5 — Works catalogue and artwork detail:** preserve the canonical artwork detail route as a real, directly addressable fallback. Implement the shared Artwork Viewer, route/history behavior, metadata/description presentation, keyboard/touch navigation, focus restoration, loading/error states, and viewer accessibility.
 - **Phase 6 — Multiple curated galleries:** the collection index is the discovery page; each collection has a dedicated detail page with its complete approved artwork set in curated order. The shared viewer's Previous/Next sequence is scoped to the originating collection. Collection cards, cover membership, localized copy, rights, and publication validation remain mandatory.
-- **Cross-phase design QA:** inspect the actual candidate images in specification/assets/gallery/1.jpg through 5.jpg before mapping them to a card, cover, or collection. They may be used in specification wireframes as visual samples, but are not approved public content. Complete the asset review register and obtain artist/site-owner approval before publication.
+- **Cross-phase design QA:** inspect the actual candidate images in public/images/artworks/artwork-quiet-place.jpg through 5.jpg before mapping them to a card, cover, or collection. They may be used in specification wireframes as visual samples, but are not approved public content. Complete the asset review register and obtain artist/site-owner approval before publication.
 - **Route compatibility:** the currently documented canonical routes are localized /[locale]/galleries and /[locale]/galleries/[gallerySlug] for collection discovery/detail, and /[locale]/works/[artworkSlug] for artwork detail. Do not repurpose the artwork route for collection detail. Any route migration requires an explicit mapping, redirects, canonical/sitemap updates, and regression tests.
 - **Exit evidence:** unit/component tests for collection ordering and viewer context; browser tests for homepage → viewer, homepage → collection index → collection detail → viewer; Back/Forward and direct route tests; Persian RTL/English LTR; desktop/tablet/mobile/short-height screenshots that are actually inspected; accessibility and reduced-motion checks; image-fidelity review; full CI evidence; and recorded artist/site-owner approval before publication.
 
@@ -786,3 +786,17 @@ No merge, deployment, or public content publication was performed.
 | Phase 11 — Full QA/release readiness | **Pending CI and owner review** | Run full CI, inspect populated screenshots, and obtain site-owner acceptance. |
 
 No merge or deployment is authorized or performed by this update.
+
+## Incremental implementation update — public image folders and generated metadata
+
+Publishable raster images live directly in purpose-based folders under `public/images/`; the application no longer copies approved files from the specification directory.
+
+- Five existing artwork JPEGs are moved byte-for-byte to `public/images/artworks/` and canonical artwork JSON records reference those permanent paths.
+- The existing studio/process hero image is moved to `public/images/artist/artist-at-work.jpg`; homepage and About fallback references are updated.
+- The Journal sticker SVG is moved to `public/images/journal/journal-announcement-sticker.svg`. The SVG renderer reads that canonical file directly; no copy step is required.
+- Empty `exhibitions/` and `decorative/` folders are retained with placeholders for future assets.
+- `scripts/generate-image-metadata.mjs` replaces the fixed candidate audit and copy script. It scans raster images, records format/dimensions/aspect ratio in path-keyed JSON, and validates content image references.
+- `predev` generates metadata locally. `prebuild` uses check-only mode so production builds and CI verify committed metadata without rewriting it.
+- CI no longer uploads the obsolete candidate asset-audit manifest. The Journal sticker PNG remains a generated CI review artifact.
+
+This is an asset-structure and technical-metadata change only. It does not add new artwork, alter image pixels, create new editorial records, merge branches, deploy, or publish to production.

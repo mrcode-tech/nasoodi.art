@@ -16,7 +16,7 @@
     },
     "images": [
       {
-        "src": "/images/approved-artwork-1.jpg",
+        "src": "/images/artworks/artwork-quiet-place.jpg",
         "alt": {
           "en": "Painting titled A Quiet Place Between Seasons",
           "fa": "تابلوی نقاشی با عنوان «آرامش میان فصل‌ها»"
@@ -45,7 +45,7 @@
     },
     "images": [
       {
-        "src": "/images/approved-artwork-2.jpg",
+        "src": "/images/artworks/artwork-shape-of-remembering.jpg",
         "alt": {
           "en": "Painting titled The Shape of Remembering",
           "fa": "تابلوی نقاشی با عنوان «شکلِ خاطره»"
@@ -74,7 +74,7 @@
     },
     "images": [
       {
-        "src": "/images/approved-artwork-3.jpg",
+        "src": "/images/artworks/artwork-where-light-rests.jpg",
         "alt": {
           "en": "Painting titled Where Light Rests",
           "fa": "تابلوی نقاشی با عنوان «جایی که نور می‌آرامد»"
@@ -103,7 +103,7 @@
     },
     "images": [
       {
-        "src": "/images/approved-artwork-4.jpg",
+        "src": "/images/artworks/artwork-garden-small-moments.jpg",
         "alt": {
           "en": "Painting titled A Garden of Small Moments",
           "fa": "تابلوی نقاشی با عنوان «باغ لحظه‌های کوچک»"
@@ -132,7 +132,7 @@
     },
     "images": [
       {
-        "src": "/images/approved-artwork-5.jpg",
+        "src": "/images/artworks/artwork-blue-hour-within.jpg",
         "alt": {
           "en": "Painting titled The Blue Hour Within",
           "fa": "تابلوی نقاشی با عنوان «ساعت آبی درون»"

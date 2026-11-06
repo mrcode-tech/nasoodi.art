@@ -37,7 +37,7 @@ Implement the approved Journal event experience described by the proposal, wiref
 - Preserve the independent homepage Journal preview, limited to the two newest eligible published entries across all Journal types, and canonical Journal detail routes.
 - Show confirmed event metadata only; never fabricate title, date, timezone, venue, participants, or registration details.
 - Use approved translations only.
-- Treat specification/assets/journal-announcement-sticker.svg as the editable source of truth. Do not use image generation, screenshot tracing, raster painting, or image processing.
+- Treat public/images/journal/journal-announcement-sticker.svg as the editable source of truth. Do not use image generation, screenshot tracing, raster painting, or image processing.
 - Use the existing CI workflow to render the SVG into a transparent 1260 × 840 PNG review artifact and verify alpha transparency and dimensions.
 - Do not commit a generated PNG or copy it into the application bundle before owner review. If SVG/CSS is sufficient for production, retain the vector and omit the raster runtime asset.
 - Reuse project components, semantic tokens, shadcn-style controls, and existing utilities.

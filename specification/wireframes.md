@@ -405,7 +405,7 @@ For each wireframe:
 
 The authoritative interaction and implementation contract is [Selected Works: Three-Level Experience](./selected-works-three-level-experience.md). These wireframes make the requested homepage → collection index → collection detail journey concrete. They are structural design references, not permission to publish candidate artwork or invent collection content.
 
-**Image-reference rule:** the five images below are existing candidate samples from specification/assets/gallery/. They are embedded to help evaluate image scale, ratio, and editorial composition. Their identity, rights, title, collection membership, metadata, and artist approval remain unverified. Do not use them as public artwork records until the asset review and artist approval gates are complete.
+**Image-reference rule:** the five images below are existing candidate samples from public/images/artworks/. They are embedded to help evaluate image scale, ratio, and editorial composition. Their identity, rights, title, collection membership, metadata, and artist approval remain unverified. Do not use them as public artwork records until the asset review and artist approval gates are complete.
 
 ## 15.1 Repository artwork samples for layout evaluation
 

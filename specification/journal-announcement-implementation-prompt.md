@@ -88,7 +88,7 @@ Do not silently weaken product rules to fit an existing implementation. If an un
 
 **Do this during the early implementation phase. Do not leave SVG creation until the end.**
 
-The existing `specification/assets/journal-announcement-sticker.svg` is a hand-authored design study and starting point. Inspect it, then refine its vector paths or replace its artwork with a better-authored SVG that satisfies the visual-design contract. Merely copying the existing study without assessment does not satisfy this task.
+The existing `public/images/journal/journal-announcement-sticker.svg` is a hand-authored design study and starting point. Inspect it, then refine its vector paths or replace its artwork with a better-authored SVG that satisfies the visual-design contract. Merely copying the existing study without assessment does not satisfy this task.
 
 ### SVG requirements
 
@@ -111,7 +111,7 @@ The existing `specification/assets/journal-announcement-sticker.svg` is a hand-a
 
 ### Asset source of truth
 
-- Keep `specification/assets/journal-announcement-sticker.svg` as the canonical editable source unless repository discovery reveals a stronger existing asset convention; document any deliberate path change.
+- Keep `public/images/journal/journal-announcement-sticker.svg` as the canonical editable source unless repository discovery reveals a stronger existing asset convention; document any deliberate path change.
 - If a runtime asset copy is necessary, define a deterministic source/copy strategy or use the source directly. Avoid multiple independently editable SVG copies.
 - Do not add a generated PNG to the application bundle before owner approval.
 

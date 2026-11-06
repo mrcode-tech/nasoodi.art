@@ -5,17 +5,19 @@
 
 ## Asset delivery
 
-The source masters remain unchanged in the specification folder. `scripts/copy-approved-gallery-assets.mjs` copies them into `public/images/` before development and production builds. The copied files are exact byte-for-byte copies; no crop, recolor, filter, or derivative is applied.
+Each published image lives once in its final public location. The former specification-to-public copy step is retired. The five artwork JPEGs were moved byte-for-byte into `public/images/artworks/`; the artist-at-work hero photograph lives in `public/images/artist/`. Galleries, homepage selections, and Journal entries reuse canonical artwork IDs and do not duplicate image files.
 
-| Source master | Canonical artwork ID | Public image path | Intended use |
-|---|---|---|---|
-| `specification/assets/gallery/1.jpg` | `artwork-quiet-place` | `/images/approved-artwork-1.jpg` | Homepage, viewer, galleries |
-| `specification/assets/gallery/2.jpg` | `artwork-shape-of-remembering` | `/images/approved-artwork-2.jpg` | Homepage, viewer, galleries |
-| `specification/assets/gallery/3.jpg` | `artwork-where-light-rests` | `/images/approved-artwork-3.jpg` | Homepage, viewer, galleries |
-| `specification/assets/gallery/4.jpg` | `artwork-garden-small-moments` | `/images/approved-artwork-4.jpg` | Homepage, viewer, galleries |
-| `specification/assets/gallery/5.jpg` | `artwork-blue-hour-within` | `/images/approved-artwork-5.jpg` | Homepage, viewer, galleries |
+| Canonical artwork ID | Public image path | Intended use |
+|---|---|---|
+| `artwork-quiet-place` | `/images/artworks/artwork-quiet-place.jpg` | Homepage, viewer, galleries, Journal references |
+| `artwork-shape-of-remembering` | `/images/artworks/artwork-shape-of-remembering.jpg` | Homepage, viewer, galleries, Journal references |
+| `artwork-where-light-rests` | `/images/artworks/artwork-where-light-rests.jpg` | Homepage, viewer, galleries, Journal references |
+| `artwork-garden-small-moments` | `/images/artworks/artwork-garden-small-moments.jpg` | Homepage, viewer, galleries, Journal references |
+| `artwork-blue-hour-within` | `/images/artworks/artwork-blue-hour-within.jpg` | Homepage, viewer, galleries, Journal references |
 
-The copy command checks that all five source files exist, are non-empty, and that copied byte counts match. It reads each JPEG's intrinsic dimensions and generates `src/lib/approved-artwork-image-dimensions.ts` before dev/build; the artwork records consume those measured dimensions so Next.js uses each image's actual aspect ratio. The CI asset audit independently records source dimensions, aspect ratio, and SHA-256. No medium, year, dimensions, provenance, exhibition history, or other unprovided artwork metadata is asserted in the content records.
+The studio/process hero image is stored at `/images/artist/artist-at-work.jpg`; it is not registered as a finished artwork. The editable Journal sticker SVG lives at `/images/journal/journal-announcement-sticker.svg`.
+
+The local generator `scripts/generate-image-metadata.mjs` discovers raster images in `public/images/` and writes the path-keyed `src/content/data/image-metadata.json`. `npm run dev` runs it automatically through `predev`. Commit the generated JSON with image changes. `prebuild` runs the same script with `--check`, which verifies committed JSON against the actual files and content JSON references without modifying it. No image copying, approval inference, or fixed five-image list remains.
 
 ## Canonical artwork records
 

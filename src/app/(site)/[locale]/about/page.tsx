@@ -61,7 +61,7 @@ export default async function AboutPage({ params }: Props) {
         ) : (
           <Image
             className="artist-portrait"
-            src="/images/homepage-hero.jpg"
+            src="/images/artist/artist-at-work.jpg"
             alt={t("heroAlt")}
             width={4032}
             height={3024}

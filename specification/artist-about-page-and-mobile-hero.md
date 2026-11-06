@@ -531,7 +531,7 @@ The site owner explicitly authorized temporary fictional About-page content on t
 - Render sample content directly through the existing `/[locale]/about` route and existing About components. Do not add a preview route, query parameter, alternative page, or parallel rendering pipeline.
 - Keep the fixture clearly labelled as fictional and not artist-approved.
 - The sample CV must contain multiple entries across education, exhibitions, publications, awards, and artistic practice.
-- Reuse the existing homepage hero image at `/images/homepage-hero.jpg`; do not generate, duplicate, or modify the asset.
+- Reuse the existing homepage hero image at `/images/artist/artist-at-work.jpg`; do not generate, duplicate, or modify the asset.
 - Keep the About page noindex while sample content is present and exclude sample facts from structured data and sitemap publication.
 - The sample CV download must be derived from the same fixture records displayed on the page and must carry a visible fictional-sample notice.
 - Replace the fixture with artist-authored and artist-approved material before any release merge or deployment.

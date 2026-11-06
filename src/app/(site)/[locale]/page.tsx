@@ -76,7 +76,7 @@ export default async function Home({ params }: Props) {
           ) : (
             <Image
               sizes="(max-width: 900px) 100vw, 58vw"
-              src="/images/homepage-hero.jpg"
+              src="/images/artist/artist-at-work.jpg"
               alt={heroAlt}
               width={4032}
               height={3024}

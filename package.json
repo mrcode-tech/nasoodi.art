@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "predev": "node scripts/copy-approved-gallery-assets.mjs",
+    "predev": "npm run images:generate",
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
@@ -11,9 +11,10 @@
     "typecheck": "tsc --noEmit",
     "test": "tsc --resolveJsonModule --module commonjs --target es2022 --moduleResolution node --strict --esModuleInterop --skipLibCheck --outDir .test-build tests/content.test.ts tests/gallery-pagination.test.ts tests/seo.test.ts src/lib/gallery-pagination.ts && node --test .test-build/tests/content.test.js .test-build/tests/gallery-pagination.test.js .test-build/tests/seo.test.js && node scripts/verify-vercel-deployment-policy.mjs",
     "test:e2e": "playwright test",
-    "audit:assets": "node scripts/audit-portfolio-assets.mjs",
-    "prebuild": "node scripts/copy-approved-gallery-assets.mjs",
-    "audit:i18n": "node scripts/audit-i18n-messages.mjs"
+    "prebuild": "npm run images:check",
+    "audit:i18n": "node scripts/audit-i18n-messages.mjs",
+    "images:generate": "node scripts/generate-image-metadata.mjs",
+    "images:check": "node scripts/generate-image-metadata.mjs --check"
   },
   "dependencies": {
     "@radix-ui/react-dialog": "^1.1.15",

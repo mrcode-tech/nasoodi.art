@@ -16,7 +16,7 @@ The approved design direction is **artwork-led, quiet, editorial, and bilingual 
 
 ### 1.1 Hero decisions
 
-1. Use `specification/assets/artwork.JPG` as the designated hero artwork candidate and visual source for this design.
+1. Use `public/images/artist/artist-at-work.jpg` as the designated hero artwork candidate and visual source for this design.
 2. Inspect the actual image before implementation: intrinsic dimensions, orientation, full canvas/frame bounds, color profile, resolution, visible content, and suitability for the target display sizes.
 3. Do not infer artwork title, date, medium details, subject, or interpretation from the filename or image. Use only artist-approved text and metadata.
 4. Preserve the entire artwork. The default rendering is uncropped, undistorted, unfiltered, unmirrored, and color-faithful.
@@ -27,7 +27,7 @@ The approved design direction is **artwork-led, quiet, editorial, and bilingual 
 7. Do not repeat the hero action labels in the Featured Works heading. Its action is **View all works**.
 8. The hero painting is a single static image. No carousel, simulated brush movement, parallax, zoom-on-scroll, or text overlay.
 
-> **Owner-directed initial Hero asset clarification:** `specification/assets/artwork.JPG` is a studio/process photograph of the artist facing a canvas, not a standalone finished painting. Use it as the initial artist-at-work Hero visual on the feature branch, with factual alt text. Do not describe it as a finished artwork, create an artwork record for it, or use it to populate Works/Galleries. Production publication remains subject to the rights and artist-approval gate in `asset-review-register.md`. Replace it with an approved finished painting if/when one is selected for the artwork-led production Hero.
+> **Owner-directed initial Hero asset clarification:** `public/images/artist/artist-at-work.jpg` is a studio/process photograph of the artist facing a canvas, not a standalone finished painting. Use it as the initial artist-at-work Hero visual on the feature branch, with factual alt text. Do not describe it as a finished artwork, create an artwork record for it, or use it to populate Works/Galleries. Production publication remains subject to the rights and artist-approval gate in `asset-review-register.md`. Replace it with an approved finished painting if/when one is selected for the artwork-led production Hero.
 
 ### 1.2 Content-readiness decisions
 
@@ -107,12 +107,12 @@ Do not render an empty section solely to preserve a fixed sequence. If a section
 
 | Purpose | Exact repository path | Contract |
 |---|---|---|
-| Hero artwork | `specification/assets/artwork.JPG` | Designated hero candidate and primary hero reference. Inspect before implementation. Do not rename or assume rights from filename. |
-| Sample artwork 01 | `specification/assets/gallery/1.jpg` | Design fixture for a Featured Works item and reusable gallery artwork reference. |
-| Sample artwork 02 | `specification/assets/gallery/2.jpg` | Design fixture for a Featured Works item and reusable gallery artwork reference. |
-| Sample artwork 03 | `specification/assets/gallery/3.jpg` | Design fixture for a Featured Works item and Journal-related visual example. |
-| Sample artwork 04 | `specification/assets/gallery/4.jpg` | Design fixture for a Featured Works item and a gallery cover/reference. |
-| Sample artwork 05 | `specification/assets/gallery/5.jpg` | Design fixture for a gallery cover/reference and Journal-related visual example. |
+| Hero artwork | `public/images/artist/artist-at-work.jpg` | Designated hero candidate and primary hero reference. Inspect before implementation. Do not rename or assume rights from filename. |
+| Sample artwork 01 | `public/images/artworks/artwork-quiet-place.jpg` | Design fixture for a Featured Works item and reusable gallery artwork reference. |
+| Sample artwork 02 | `public/images/artworks/artwork-shape-of-remembering.jpg` | Design fixture for a Featured Works item and reusable gallery artwork reference. |
+| Sample artwork 03 | `public/images/artworks/artwork-where-light-rests.jpg` | Design fixture for a Featured Works item and Journal-related visual example. |
+| Sample artwork 04 | `public/images/artworks/artwork-garden-small-moments.jpg` | Design fixture for a Featured Works item and a gallery cover/reference. |
+| Sample artwork 05 | `public/images/artworks/artwork-blue-hour-within.jpg` | Design fixture for a gallery cover/reference and Journal-related visual example. |
 
 Exact filename casing matters. These assets are repository specification assets, not automatically public runtime assets.
 
@@ -861,7 +861,7 @@ Do not mark the hero/homepage design complete until:
 
 The following remain owner/artist gates, not implementation assumptions:
 
-1. Confirm that `specification/assets/artwork.JPG` is the intended public hero painting and approve its use.
+1. Confirm that `public/images/artist/artist-at-work.jpg` is the intended public hero painting and approve its use.
 2. Approve the English and Persian CTA wording, especially «گالری‌ها را ببینید» and «گزیده آثار را ببینید».
 3. Approve localized hero alt text based on the actual visible content of the painting.
 4. Approve any artist-written introductory sentence; otherwise omit it.

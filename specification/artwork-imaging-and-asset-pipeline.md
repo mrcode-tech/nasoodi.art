@@ -62,10 +62,11 @@ Adapt to the repository's real conventions; do not move existing assets without 
 
 ~~~text
 public/images/
-  studio/
-  artworks/<stable-artwork-id>/
-  artist/
-  social/
+  artworks/       # Canonical painting images, keyed by stable artwork ID
+  artist/         # Portraits and studio/process photographs
+  exhibitions/    # Exhibition posters, venues, and installation photographs
+  journal/        # Journal-specific images and editable sticker SVG
+  decorative/     # Non-editorial decorative assets
 ~~~
 
 Use stable IDs independent of artist-facing titles. Avoid ambiguous names such as final-final2.jpg.
@@ -99,8 +100,16 @@ The image pipeline must support the visual quality contract in design-engineerin
 Published artwork image records must resolve to root-relative paths served by the Nasoodi.art application. Remote absolute/protocol-relative URLs, path traversal, encoded separators, backslashes, query strings, fragments, and control characters are not valid image sources. The runtime publication gate enforces this for the primary image; derivative generation and source-to-derivative comparison must continue to use the approved local master. This validation does not establish image rights or artist approval.
 
 
-## Automated source-asset inventory
+## Local image metadata generation and CI verification
 
-The repository now includes `scripts/audit-portfolio-assets.mjs`, exposed as `npm run audit:assets`. It inventories the candidate files listed in `specification/asset-review-register.md`, reads PNG/JPEG dimensions, records byte size and SHA-256, and writes a JSON manifest. The CI workflow uploads `asset-audit/manifest.json` with the visual-QA artifacts. Missing or unsupported/corrupt candidate files fail the audit.
+Publishable images live directly in their final `public/images/` folders. The application does not copy image files from `specification/assets/` during development or builds.
 
-This is technical intake evidence only. Every manifest record remains `approval-required` with `publicationAllowed: false`; the audit does not infer artwork identity, rights, artist approval, color accuracy, EXIF orientation, or crop permission. It does not create derivatives or copy any candidate into public delivery paths. Derivative generation remains gated on confirmed master selection and written presentation/use approval.
+- `scripts/generate-image-metadata.mjs` recursively discovers JPEG/JPG, PNG, and WebP files under `public/images/`.
+- It reads actual image headers and generates deterministic, path-keyed `src/content/data/image-metadata.json` containing format, width, height, and aspect ratio.
+- `npm run dev` invokes the generator through `predev`. Run `npm run images:generate` manually after changing images while the development server is already running.
+- Commit the generated JSON together with image additions, replacements, or removals.
+- `prebuild` invokes the same script with `--check`. CI verifies that committed metadata exactly matches the current raster files and that root-relative image references in content JSON resolve to existing files. Check mode never writes or regenerates metadata.
+- SVG files are served directly and are not included in raster dimension metadata. The Journal sticker remains a canonical SVG under `public/images/journal/`; CI renders a separate PNG review artifact from that source.
+- The generator performs no copying, image transformation, rights assessment, artist approval, or publication decision.
+
+This replaces both `audit-portfolio-assets.mjs` and `copy-approved-gallery-assets.mjs`. The former hardcoded candidate inventory and five-entry positional TypeScript dimensions array are retired. Metadata is keyed by public image path, so an artwork or artist image can be reused by multiple content records without duplicate files or index coupling.

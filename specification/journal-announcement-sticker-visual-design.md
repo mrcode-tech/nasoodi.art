@@ -4,7 +4,7 @@
 **Project:** Nasoodi.art  
 **Branch:** feature  
 **Primary specification:** journal-announcement-specification.md  
-**Source asset:** assets/journal-announcement-sticker.svg
+**Source asset:** public/images/journal/journal-announcement-sticker.svg
 
 ## 1. Design intent
 

@@ -67,7 +67,7 @@ Exclude venue, long description, registration form, poster, ticket price, multip
 
 ## 6. Visual design and positioning
 
-Baseline for the first visual review: the hand-authored torn-edge exhibition slip in specification/assets/journal-announcement-sticker.svg. The SVG is a candidate study, not final owner approval. Follow journal-announcement-sticker-visual-design.md for its exact vector, palette, dimensions, mirroring, and CI conversion rules.
+Baseline for the first visual review: the hand-authored torn-edge exhibition slip in public/images/journal/journal-announcement-sticker.svg. The SVG is a candidate study, not final owner approval. Follow journal-announcement-sticker-visual-design.md for its exact vector, palette, dimensions, mirroring, and CI conversion rules.
 
 - English: physical-left outer edge flush; inward/right edge free.
 - Persian: physical-right outer edge flush; inward/left edge free.
@@ -230,7 +230,7 @@ Provide:
 
 ## 17. SVG source and CI-rendered PNG requirements
 
-The SVG is the editable source of truth. The checked-in study at `specification/assets/journal-announcement-sticker.svg` is a starting point, not a reason to skip artwork authoring or visual refinement during implementation.
+The SVG is the editable source of truth. The checked-in study at `public/images/journal/journal-announcement-sticker.svg` is a starting point, not a reason to skip artwork authoring or visual refinement during implementation.
 
 Mandatory requirements:
 - Inspect and refine or replace the SVG paths during the implementation; do not merely copy the existing study into the application and call the artwork complete.
