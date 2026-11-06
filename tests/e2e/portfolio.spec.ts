@@ -1883,6 +1883,8 @@ test("Persian Galleries and Journal pagination render all visible numbers in Per
   await page.goto("/fa/galleries");
   const galleryPagination = page.locator(".gallery-pagination");
   await expect(galleryPagination).toBeVisible();
+  await expect(page.locator(".gallery-index-card")).toHaveCount(6);
+  await expect(galleryPagination.locator(".gallery-page-size select")).toHaveValue("6");
   await expect(galleryPagination.getByRole("status")).toContainText(/[۰-۹]/);
   await expect(galleryPagination.getByRole("status")).not.toContainText(/[0-9]/);
   const galleryPageSizes = await galleryPagination.locator(".gallery-page-size option").allTextContents();
