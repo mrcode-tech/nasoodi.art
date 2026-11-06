@@ -1,0 +1,17 @@
+{
+  "active": true,
+  "type": "gallery",
+  "contentId": "gallery-a-season-of-light",
+  "title": {
+    "en": "A Season of Light",
+    "fa": "فصلی از روشنایی"
+  },
+  "description": {
+    "en": "The six works from 1403 gather around renewal, transience, return, and the experience of looking.",
+    "fa": "شش اثر سال ۱۴۰۳ حول تازگی، گذرایی، بازگشت و تجربه‌ی دیدن گرد آمده‌اند."
+  },
+  "metadata": {
+    "en": "Featured Gallery",
+    "fa": "گالری منتخب"
+  }
+}

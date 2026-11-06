@@ -13,7 +13,7 @@ The two explicit Persian visual references are:
 
 **Homepage artist identity**
 
-# غزاله عبداله زاده نسودی
+# ARTIST_NAME_FA
 
 Target: one line at the reference widths where the content column provides sufficient room.
 

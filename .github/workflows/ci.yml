@@ -36,6 +36,8 @@ jobs:
         run: npm run lint
       - name: Audit bilingual message catalogs
         run: npm run audit:i18n
+      - name: Audit technical specs and tests for production editorial coupling
+        run: npm run audit:content-independence
       - name: Check TypeScript
         run: npm run typecheck
       - name: Run content publication tests

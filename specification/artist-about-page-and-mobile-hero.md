@@ -24,7 +24,7 @@ This is a specialized contract for the artist introduction and About/CV experien
 - `AGENTS.md` remains the repository-wide engineering and design authority.
 - `design-engineering-skills.md` and `design-direction-and-system-refinement.md` remain mandatory project-wide design authorities.
 - `navigation-and-mobile-sidebar.md` remains authoritative for the global sidebar/drawer mechanics, locale-dependent placement, focus management, language/theme controls, and mobile navigation behavior. This document adds About as a required destination; it does not replace the navigation system.
-- `content-model.md` remains authoritative for artist profile fields, localized statement/biography, CV entries, and the canonical JSON source. This document adds the PDF asset and download contract without creating a competing artist-profile model.
+- `content-model.md` remains authoritative for artist profile fields, localized statement/biography, CV entries, and the canonical JSON source. This document adds the PDF asset and download contract without creating a competing profile data model.
 - `homepage-artwork-hero-and-featured-works.md` remains authoritative for artwork fidelity, the finished-artwork hero requirement, and the image treatment of paintings. This document changes the order and behavior of the artist identity/biography/actions within the existing hero content area; it does not authorize changing, cropping, filtering, or replacing the hero artwork.
 - Where older homepage or site-wide prose places a separate Artist Introduction after Selected Works, do not duplicate the same biography. The short biography belongs directly under the artist's name in the hero as requested here. A later introduction section may remain only when it contains distinct, approved material and has a clear purpose.
 - The existing site-wide navigation model already includes About and conditionally includes CV/Exhibitions. This specification makes About a first-class route/navigation item and defines the CV as a section at the end of About. Do not add a separate CV navigation item unless the owner separately approves it and the route/content are ready.
@@ -185,8 +185,8 @@ A real artist-approved PDF is required before the download action can be publish
 
 Asset contract:
 
-- Use a stable, repository-managed public asset path consistent with the existing asset conventions (candidate pattern: `public/documents/artist-cv.pdf`; inspect repository conventions before choosing the actual path).
-- Use a descriptive, stable filename. The preferred display/download name is `artist-cv.pdf` unless the artist supplies a preferred filename.
+- Use a stable, repository-managed public asset path consistent with the existing asset conventions (candidate pattern: `public/documents/CV_DOCUMENT_PATH`; inspect repository conventions before choosing the actual path).
+- Use a descriptive, stable filename. The preferred display/download name is `CV_DOCUMENT_PATH` unless the artist supplies a preferred filename.
 - Do not commit a placeholder PDF, generated résumé, empty PDF, or a PDF with invented details.
 - Do not generate the artist's CV from inferred profile information.
 - Confirm that the file is a valid PDF, readable, non-empty, and the exact artist-approved version.
