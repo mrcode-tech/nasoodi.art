@@ -41,26 +41,30 @@ export default async function AboutPage({ params }: Props) {
         { label: t("home"), href: pagePath(locale) },
         { label: t("about") },
       ]} />
-      <header className="page-heading">
+      <header className="page-heading about-heading">
         <p className="eyebrow">{t("about")}</p>
         <h1>{profile.name?.[locale] ?? t("artistName")}</h1>
         <p className="artist-discipline">{profile.discipline?.[locale] ?? t("discipline")}</p>
-        {profile.shortIntroduction?.[locale] && <p>{profile.shortIntroduction[locale]}</p>}
       </header>
       <div className="profile-content">
-        <div className="artist-portrait-frame">
-          <Image
-            className="artist-portrait"
-            src="/images/artist/artist-portrait.jpg"
-            alt={locale === "fa" ? "پرتره غزاله عبداله‌زاده نسودی" : "Portrait of Ghazaleh Abdolahzade Nasoodi"}
-            fill
-            sizes="(max-width: 700px) 100vw, 34rem"
-          />
+        <div className="about-portrait-statement">
+          <div className="artist-portrait-frame">
+            <Image
+              className="artist-portrait"
+              src="/images/artist/artist-portrait.jpg"
+              alt={locale === "fa" ? "پرتره غزاله عبداله‌زاده نسودی" : "Portrait of Ghazaleh Abdolahzade Nasoodi"}
+              fill
+              sizes="(max-width: 700px) 100vw, (max-width: 1100px) 48vw, 34rem"
+            />
+          </div>
+          <section className="about-statement">
+            <h2>{t("statement")}</h2>
+            {about.statement.split(/\n{2,}/).map((paragraph, index) => <p key={index}>{paragraph}</p>)}
+          </section>
         </div>
-        <section className="about-statement">
-          <h2>{t("statement")}</h2>
-          {about.statement.split(/\n{2,}/).map((paragraph, index) => <p key={index}>{paragraph}</p>)}
-        </section>
+        {profile.shortIntroduction?.[locale] && (
+          <p className="about-short-introduction">{profile.shortIntroduction[locale]}</p>
+        )}
         <section className="about-biography">
           <h2>{t("biography")}</h2>
           {about.biography.split(/\n{2,}/).map((paragraph, index) => (
