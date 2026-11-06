@@ -54,7 +54,7 @@ function LanguageSelector({ locale, alternates, pathname, label, onNavigate }: {
     </DropdownMenu>
   </div>;
 }
-export function SiteShell({ locale, children, announcement }: { locale: Locale; children: React.ReactNode; announcement?: { title: string; description: string; metadata?: string; href: string } }) {
+export function SiteShell({ locale, children, announcement }: { locale: Locale; children: React.ReactNode; announcement?: { id: string; title: string; description: string; metadata?: string; href: string } }) {
   const t = useTranslations();
   const artist = getArtist(locale);
   const artistName = artist?.name?.[locale] ?? "";
@@ -95,6 +95,7 @@ export function SiteShell({ locale, children, announcement }: { locale: Locale; 
     {announcement && isHomePage && (
       <ContentAnnouncement
         locale={locale}
+        id={announcement.id}
         title={announcement.title}
         description={announcement.description}
         metadata={announcement.metadata}
@@ -113,6 +114,7 @@ export function SiteShell({ locale, children, announcement }: { locale: Locale; 
           {announcement && !isHomePage && (
             <ContentAnnouncement
               locale={locale}
+              id={announcement.id}
               title={announcement.title}
         description={announcement.description}
         metadata={announcement.metadata}
@@ -138,6 +140,7 @@ export function SiteShell({ locale, children, announcement }: { locale: Locale; 
             {announcement && (
               <ContentAnnouncement
                 locale={locale}
+                id={announcement.id}
                 title={announcement.title}
         description={announcement.description}
         metadata={announcement.metadata}
