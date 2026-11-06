@@ -158,7 +158,7 @@ The design is ready for implementation review when:
 
 ## 14. Sticker asset production contract
 
-The announcement is a UI component, not a flattened image containing event copy. The SVG must be a decorative paper silhouette/edge treatment only; title, category, date, close control, and directional affordance remain real localized HTML text and controls for accessibility, responsiveness, and translation. Prefer CSS/SVG for the shape where it produces a cleaner and sharper result; use the PNG only for the approved paper material/edge artwork. Do not use a raster image for text, controls, or layout. Review the SVG in the actual rendered website screenshots. The SVG itself is the maintained source asset and website asset. Do not commit it or use it as a production asset until the owner approves the visual variant. Store the approved source asset in the specification asset area and document dimensions, transparency, intended display size, and provenance. The asset must not contain a real event name/date or imply a real exhibition.
+The announcement is a UI component, not a flattened image containing event copy. The SVG must be a decorative paper silhouette/edge treatment only; title, category, date, close control, and directional affordance remain real localized HTML text and controls for accessibility, responsiveness, and translation. Use the canonical SVG directly as the maintained website asset. Do not generate or use a PNG derivative. Do not bake text, controls, or layout into the SVG. Review the silhouette in actual rendered website screenshots and refine the SVG source as needed. The SVG is already stored at `public/images/journal/journal-announcement-sticker.svg`; do not duplicate it under `specification/assets/`. The asset must not contain a real event name/date or imply a real exhibition.
 
 ## 15. Decisions intentionally deferred
 
@@ -167,4 +167,4 @@ The announcement is a UI component, not a flattened image containing event copy.
 - Final approved Persian microcopy.
 - Whether session dismissal should be replaced by an existing project-standard persistence strategy.
 - Owner approval of the hand-authored torn-edge SVG study, including whether to retain the tape detail and exact paper silhouette.
-- Whether a PNG is needed at runtime. GitHub Actions generates a transparent PNG review artifact from the SVG; do not commit a generated PNG before owner approval.
+- Whether the SVG silhouette, edge treatment, and tape detail need refinement after review in the rendered website.
