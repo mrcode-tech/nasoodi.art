@@ -350,10 +350,10 @@ Use the same structure with RTL reading order and Persian labels. The desktop si
 
 ### Data and pagination unit tests
 - Page size defaults to 6.
-- Only 5, 10, and 20 are accepted.
-- Unsupported page size falls back to 5.
+- Only 6, 10, and 20 are accepted.
+- Unsupported page size falls back to 6.
 - Missing, malformed, zero, negative, decimal, and non-numeric page values normalize to page 1.
-- Total page count is correct for 0, 1, 5, 6, 10, 11, 20, 21, and larger gallery counts.
+- Total page count is correct for 0, 1, 5, 6, 7, 10, 11, 12, 13, 20, 21, and larger gallery counts.
 - Current-page slice has no duplicate or missing records.
 - Final page contains only remaining records.
 - Page beyond final page normalizes to the last valid page.
@@ -364,10 +364,10 @@ Use the same structure with RTL reading order and Persian labels. The desktop si
 
 ### Component and route tests
 - Main Galleries index renders poster cards, never a carousel component.
-- With 5 or fewer galleries, no pagination region is rendered.
-- With 6 published galleries and page size 5, page 1 shows exactly 5 and page 2 shows 1.
+- With 6 or fewer galleries, no pagination region is rendered.
+- With 7 published galleries and the default page size 6, page 1 shows exactly 6 and page 2 shows 1.
 - Page size 10 renders up to 10; page size 20 renders up to 20.
-- Selector exposes exactly 5, 10, and 20.
+- Selector exposes exactly 6, 10, and 20.
 - Previous/Next enabled/disabled states are correct.
 - Numbered controls select the correct page.
 - Direct URL with `page` and `pageSize` renders the matching slice.
@@ -473,3 +473,8 @@ GitHub Actions: [Run 41219572380](https://github.com/mrcode-tech/nasoodi.art/act
 - Homepage carousel regression assertions passed, including its five artwork items, navigation controls, viewer integration, keyboard navigation, locale direction, and responsive behavior.
 - The canonical published dataset currently contains **four** galleries in each locale. Therefore the live page shows four cards and correctly hides pagination and the page-size selector under the approved one-page rule. The 5/10/20 pagination calculations and slices are covered by synthetic unit fixtures; real multi-page interaction cannot be demonstrated until more than five approved galleries are published.
 - Artist/site-owner approval is not inferred from CI or this engineering review and remains a separate visual/content release gate.
+
+
+## Pagination update — 2026-11-06
+
+The owner-approved pagination default is now **6 items per page**, with exactly **6, 10, and 20** as the supported page sizes. This supersedes the earlier five-item default and selector values in the original implementation history above. The same shared pagination behavior applies to Works, Galleries, and Journal archives; homepage carousels are unaffected.
