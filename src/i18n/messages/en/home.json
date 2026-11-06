@@ -7,8 +7,7 @@
   "discover": "Discover the galleries",
   "latest": "From the journal",
   "upcoming": "Upcoming event",
-  "announcementEyebrow": "UPCOMING EXHIBITION",
-  "dismissAnnouncement": "Dismiss exhibition announcement",
+  "dismissAnnouncement": "Dismiss announcement"
   "emptyWorks": "Selected paintings will appear here once their images and details are approved for publication.",
   "emptyGalleries": "Curated galleries will appear here when their titles, selections, and cover works are approved.",
   "emptyJournal": "Journal stories and event announcements will appear here when they are ready to publish.",
