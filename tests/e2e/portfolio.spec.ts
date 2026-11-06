@@ -350,6 +350,26 @@ for (const viewportWidth of [320, 360, 390, 430] as const) {
         const closedOverflow = await diagnoseOverflow();
         expect(closedOverflow.document, route + " with navigation closed: " + JSON.stringify(closedOverflow)).toBeLessThanOrEqual(closedOverflow.viewport);
 
+        if (locale === "fa") {
+          const contentSpacing = await page.locator(".page-content").first().evaluate((element) => {
+            const rect = element.getBoundingClientRect();
+            const style = getComputedStyle(element);
+            return {
+              left: rect.left,
+              right: rect.right,
+              width: rect.width,
+              paddingLeft: parseFloat(style.paddingLeft),
+              paddingRight: parseFloat(style.paddingRight),
+              boxSizing: style.boxSizing,
+            };
+          });
+          expect(contentSpacing.boxSizing, route + " page content must include its gutters in its width").toBe("border-box");
+          expect(contentSpacing.left, route + " page content must stay inside the viewport").toBeGreaterThanOrEqual(-0.5);
+          expect(contentSpacing.right, route + " page content must stay inside the viewport").toBeLessThanOrEqual(viewportWidth + 0.5);
+          expect(Math.abs(contentSpacing.paddingLeft - contentSpacing.paddingRight), route + " Persian mobile content gutters must be balanced: " + JSON.stringify(contentSpacing)).toBeLessThanOrEqual(0.5);
+          expect(contentSpacing.paddingLeft, route + " Persian mobile content needs a deliberate side gutter").toBeGreaterThanOrEqual(16);
+        }
+
         const trigger = page.locator(".menu-trigger");
         await trigger.focus();
         const focusedOverflow = await diagnoseOverflow();
