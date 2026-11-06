@@ -13,6 +13,7 @@ import {
   type GalleryPageSize,
 } from "@/lib/gallery-pagination";
 import { formatLocaleNumber } from "@/lib/locale-number";
+import { getLocalizedSlug } from "@/lib/content/paths";
 import { getLocaleDirection, pagePath, type Locale } from "@/types/locale";
 import type { Artwork } from "@/types/content";
 
@@ -72,7 +73,7 @@ export function ArtworkIndex({ artworks, locale, labels }: Props) {
           );
           if (!image) return null;
           return (
-            <Link className="artwork-item" role="listitem" key={artwork.id} href={pagePath(locale, `works/${artwork.slug}`)}>
+            <Link className="artwork-item" role="listitem" key={artwork.id} href={pagePath(locale, `works/${getLocalizedSlug(artwork, locale)}`)}>
               <Image sizes="(max-width: 600px) 100vw, (max-width: 900px) 90vw, 50vw"
                 src={image.src} alt={image.alt[locale] ?? ""} width={image.width} height={image.height} />
               <span>{artwork.title[locale]}</span>
