@@ -66,7 +66,7 @@ The homepage preview is limited to **exactly one newest eligible published Journ
 - Include a clear localized link to the complete Journal archive.
 - If only one eligible entry exists, show one. If none exist, omit the section according to the homepage content contract.
 - Keep the editorial/post-style presentation; do not turn the section into an event dashboard or artwork carousel.
-- The fixed announcement sticker is a separate discovery mechanism. It independently selects the nearest eligible upcoming event and does not change the Journal preview.
+- The fixed content announcement sticker is a separate discovery mechanism controlled by the single JSON configuration at `src/content/announcement.json`. It may feature an artwork, gallery, Journal entry, or event and does not change the Journal preview.
 - Dismissing the sticker must never hide, reorder, or otherwise alter the in-flow Journal preview.
 
 On mobile, preserve the section's document order, readable text, artwork fidelity, and a visible, reachable archive link. Do not fabricate content to fill a fixed count.
