@@ -1855,3 +1855,83 @@ html[lang="fa"] .artwork-viewer-info h2 {
     aspect-ratio: 4 / 5;
   }
 }
+
+/* About page: align introductory and statement copy to the content column,
+   while keeping the artist portrait optically centered between them. */
+.about-page .profile-content {
+  width: 100%;
+  max-width: none;
+  gap: clamp(1.25rem, 2.2vw, 2rem);
+}
+
+.about-page .about-short-introduction,
+.about-page .about-statement {
+  width: 100%;
+  max-width: none;
+  margin-inline: 0;
+  text-align: start;
+  text-align-last: start;
+  text-justify: auto;
+  hyphens: manual;
+}
+
+.about-page .about-short-introduction {
+  margin-block: 0;
+}
+
+.about-page .about-portrait-statement {
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  margin-inline: auto;
+}
+
+.about-page .about-portrait-statement .artist-portrait-frame {
+  width: min(100%, 31rem);
+  margin-inline: auto;
+}
+
+.about-page .about-statement {
+  justify-self: stretch;
+}
+
+.about-page .about-statement p {
+  text-align: start;
+  text-align-last: start;
+  text-justify: auto;
+  margin-block: .5rem 0;
+}
+
+@media (max-width: 900px) {
+  .about-page .profile-content {
+    gap: 1.5rem;
+  }
+
+  .about-page .about-portrait-statement {
+    gap: 1rem;
+  }
+
+  .about-page .about-portrait-statement .artist-portrait-frame {
+    width: min(100%, 28rem);
+  }
+}
+
+@media (max-width: 600px) {
+  .about-page .profile-content {
+    gap: 1.25rem;
+  }
+
+  .about-page .about-short-introduction,
+  .about-page .about-statement {
+    text-align: start;
+    text-align-last: start;
+  }
+
+  .about-page .about-portrait-statement .artist-portrait-frame {
+    width: min(100%, 25rem);
+  }
+
+  .about-page .about-statement p {
+    margin-block-start: .45rem;
+  }
+}
