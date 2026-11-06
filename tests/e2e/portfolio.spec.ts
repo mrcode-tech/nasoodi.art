@@ -39,7 +39,7 @@ for (const route of ["/fa", "/fa/contact"] as const) {
       }
 
       const alignment = await section.locator(".contact-details").evaluate((details) => {
-        const detailLeft = details.getBoundingClientRect().left;
+        const detailRect = details.getBoundingClientRect();
         const rows = Array.from(details.querySelectorAll(".contact-method"));
         return rows.map((row) => {
           const link = row.querySelector("a");
@@ -47,7 +47,8 @@ for (const route of ["/fa", "/fa/contact"] as const) {
           const linkRect = link?.getBoundingClientRect();
           const labelRect = label?.getBoundingClientRect();
           return {
-            leftOffset: linkRect ? Math.abs(linkRect.left - detailLeft) : Number.POSITIVE_INFINITY,
+            valueLeftOffset: linkRect ? Math.abs(linkRect.left - detailRect.left) : Number.POSITIVE_INFINITY,
+            labelRightOffset: labelRect ? Math.abs(labelRect.right - detailRect.right) : Number.POSITIVE_INFINITY,
             stackedBelowLabel: Boolean(linkRect && labelRect && linkRect.top >= labelRect.bottom - 1),
             top: linkRect?.top ?? 0,
           };
@@ -56,7 +57,8 @@ for (const route of ["/fa", "/fa/contact"] as const) {
 
       expect(alignment.length).toBeGreaterThan(0);
       for (const row of alignment) {
-        expect(row.leftOffset).toBeLessThanOrEqual(1);
+        expect(row.valueLeftOffset).toBeLessThanOrEqual(1);
+        expect(row.labelRightOffset).toBeLessThanOrEqual(1);
         expect(row.stackedBelowLabel).toBe(true);
       }
       expect(alignment.map((row) => row.top)).toEqual(
