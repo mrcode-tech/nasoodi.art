@@ -71,7 +71,7 @@ Discover:
 - Shared sidebar, mobile drawer, locale switcher, shell geometry, breakpoints, safe-area handling, z-index tokens, and skip link.
 - Existing button/link/icon/typography primitives, shadcn components, CSS tokens, and RTL utilities.
 - Existing preference/session persistence utility and current dismissal conventions.
-- Existing tests, Playwright setup, screenshot artifacts, CI renderer, and GitHub Actions workflow.
+- Existing tests, Playwright setup, screenshot artifacts, and GitHub Actions workflow.
 
 Produce a short evidence-based gap matrix: requirement, current implementation evidence, status (implemented/partial/missing/conflicting/unverified), proposed minimal change, and tests needed.
 
@@ -113,12 +113,12 @@ The existing `public/images/journal/journal-announcement-sticker.svg` is a hand-
 
 - Keep `public/images/journal/journal-announcement-sticker.svg` as the canonical editable source unless repository discovery reveals a stronger existing asset convention; document any deliberate path change.
 - If a runtime asset copy is necessary, define a deterministic source/copy strategy or use the source directly. Avoid multiple independently editable SVG copies.
-- Do not add a generated PNG to the application bundle before owner approval.
+- Do not generate or add a PNG derivative; serve the canonical SVG directly.
 
 ## 6. SVG asset and CI validation
 
 - Keep `public/images/journal/journal-announcement-sticker.svg` as the canonical, editable source and serve it directly in the website.
-- Do not add a Python renderer, CairoSVG/Pillow dependencies, PNG generation, generated rendered website screenshotss, or PNG upload steps.
+- Do not add a Python renderer, CairoSVG/Pillow dependencies, PNG generation, or sticker-specific artifact upload steps.
 - CI verifies that the canonical SVG exists and is non-empty. The browser suite verifies that the relevant UI loads and renders the SVG.
 - Review visual refinements using actual English/Persian responsive website screenshots. Keep text and controls in localized HTML, not inside the SVG.
 
@@ -346,7 +346,7 @@ Present:
 
 The owner may request vector-path refinements. Apply requested changes directly to the SVG source and rerun CI; do not edit the PNG manually.
 
-Do not call the visual treatment final or artist-approved until the owner explicitly approves it. Do not commit the generated PNG before approval.
+Do not call the visual treatment final or artist-approved until the owner explicitly approves it. Do not generate or commit a PNG derivative.
 
 ## 14. Definition of done
 
