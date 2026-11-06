@@ -1959,6 +1959,7 @@ html[lang="fa"] .contact-method {
   align-items: flex-start;
 }
 html[lang="fa"] .contact-method-label {
+  width: 100%;
   direction: rtl;
-  text-align: left;
+  text-align: right;
 }
