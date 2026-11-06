@@ -185,7 +185,6 @@ test("collection cards navigate to their detail routes", async ({ page }) => {
     await page.goto("/" + locale + "/galleries");
     const cards = page.locator(".gallery-index-card-link");
     if (await cards.count() === 0) continue;
-    const href = await cards.first().getAttribute("href");
     await cards.first().click();
     await expect(page).toHaveURL((url) => url.pathname.startsWith("/" + locale + "/galleries/"));
     await expect(page.getByRole("main")).toBeVisible();
