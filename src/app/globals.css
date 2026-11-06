@@ -1727,9 +1727,19 @@ html[lang="fa"] .artwork-viewer-info h2 {
    editorial row. Grid direction mirrors the selected locale (English LTR,
    Persian RTL), so the portrait sits on the reading-start side. */
 .home-page .home-intro.has-hero {
+  display: grid;
   direction: inherit;
+  grid-template-areas: "copy image";
   grid-template-columns: minmax(0, .95fr) minmax(0, 1.05fr);
+  align-items: center;
   gap: clamp(1.5rem, 4vw, 4rem);
+}
+.home-page .home-intro.has-hero > .artist-hero-carousel {
+  grid-area: image;
+  min-width: 0;
+}
+.home-page .home-intro.has-hero > .home-intro-copy {
+  grid-area: copy;
 }
 .home-page .home-intro-copy {
   max-width: 38rem;
@@ -1822,6 +1832,7 @@ html[lang="fa"] .artwork-viewer-info h2 {
 }
 @media (max-width: 900px) {
   .home-page .home-intro.has-hero {
+    grid-template-areas: "image" "copy";
     grid-template-columns: minmax(0, 1fr);
     gap: 1.2rem;
   }
