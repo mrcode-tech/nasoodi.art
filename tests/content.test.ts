@@ -32,7 +32,7 @@ import {
   journalCoverImageFor,
   hasExplicitTimeZone,
 } from "../src/lib/content/journal";
-import { getLocalizedSlug, isSafeLocalImagePath, isSafeContentSlug } from "../src/lib/content/paths";
+import { getLocalizedSlug, isSafeLocalImagePath, isSafeContentSlug, matchesLocalizedSlug } from "../src/lib/content/paths";
 import { hasEquivalentContentSet } from "../src/lib/content/identity";
 import { alternatePathFor } from "../src/lib/routing/alternate-path";
 import {
@@ -65,6 +65,33 @@ test("all 25 current artworks remain publicly available with Persian localized s
  assert.equal(publicWorks.find(item=>item.id==="artwork-1392-2")?.localizedSlugs?.fa,"لحظه‌ای-کنار-پنجره");
  assert.equal(publicWorks.find(item=>item.id==="artwork-1392-3")?.localizedSlugs?.fa,"آرامشِ-نگریستن");
 });
+test("artwork and gallery archives are ordered newest year first, then newest editorial order",()=>{
+ const orderedWorks=getPublicArtworks(artworks,"en");
+ assert.equal(orderedWorks[0].year,1403);
+ assert.equal(orderedWorks[0].sortOrder,25);
+ assert.equal(orderedWorks.at(-1)?.year,1388);
+ for(let index=1;index<orderedWorks.length;index++){
+  const previous=orderedWorks[index-1];
+  const current=orderedWorks[index];
+  assert.ok((previous.year??0)>(current.year??0) || ((previous.year??0)===(current.year??0) && (previous.sortOrder??0)>=(current.sortOrder??0)));
+ }
+ const orderedGalleries=getPublicGalleries(galleries,artworks,"en");
+ assert.equal(artworks.find(item=>item.id===orderedGalleries[0].coverArtworkId)?.year,1403);
+ assert.equal(artworks.find(item=>item.id===orderedGalleries.at(-1)?.coverArtworkId)?.year,1388);
+ for(let index=1;index<orderedGalleries.length;index++){
+  const previousYear=artworks.find(item=>item.id===orderedGalleries[index-1].coverArtworkId)?.year??0;
+  const currentYear=artworks.find(item=>item.id===orderedGalleries[index].coverArtworkId)?.year??0;
+  assert.ok(previousYear>=currentYear);
+ }
+});
+
+test("localized artwork route matching accepts percent-encoded and canonically equivalent Persian slugs",()=>{
+ const record={slug:"a-moment-by-the-window",localizedSlugs:{en:"a-moment-by-the-window",fa:"لحظه‌ای-کنار-پنجره"}};
+ assert.equal(matchesLocalizedSlug(record,"fa","لحظه‌ای-کنار-پنجره"),true);
+ assert.equal(matchesLocalizedSlug(record,"fa",encodeURIComponent("لحظه‌ای-کنار-پنجره")),true);
+ assert.equal(matchesLocalizedSlug(record,"fa","لحظهٔ‌ای-کنار-پنجره"),false);
+});
+
 test("gallery requires unique published artwork members and member cover",()=>{const g:Gallery={id:"g1",slug:"gallery",title:{en:"Gallery",fa:"گالری"},description:{en:"Description",fa:"توضیح"},coverArtworkId:work.id,artworkIds:[work.id],status:"published",sortOrder:1};assert.equal(getPublicGalleries([g],[work],"en").length,1);assert.equal(getPublicGalleries([g],[],"en").length,0);assert.equal(getPublicGalleries([{...g,artworkIds:["w1","w1"]}],[work],"en").length,0);assert.equal(getPublicGalleries([{...g,coverArtworkId:"x"}],[work],"en").length,0);});
 test("journal only exposes published entries with localized title and summary",()=>{const j:JournalEntry={id:"j1",slug:"story",type:"story",title:{en:"Story",fa:"داستان"},summary:{en:"Summary",fa:"خلاصه"},status:"published",approvedLocales:["en","fa"],artistApproved:true};assert.equal(getPublicJournal([j],"en").length,1);assert.equal(getPublicJournal([{...j,status:"draft"}],"en").length,0);assert.equal(getPublicJournal([j],"fa").length,1);});
 
