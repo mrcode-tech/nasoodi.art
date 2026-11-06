@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { ArtworkExperience } from "@/components/artwork-experience";
+import { ArtistHeroCarousel } from "@/components/artist-hero-carousel";
 import { BiographyDisclosure } from "@/components/biography-disclosure";
 import { CollectionCarousel } from "@/components/collection-carousel";
 import { ContactExperience } from "@/components/contact-experience";
@@ -60,16 +61,7 @@ export default async function Home({ params }: Props) {
   return (
     <div className="page-content home-page">
       <section className="home-intro has-hero" aria-labelledby="home-title">
-        <figure className="hero-artwork">
-          <Image
-            sizes="(max-width: 900px) 100vw, 58vw"
-            src="/images/artist/artist-at-work.jpg"
-            alt={heroAlt}
-            width={4032}
-            height={3024}
-            priority
-          />
-        </figure>
+        <ArtistHeroCarousel locale={locale} alt={heroAlt} />
         <div className="home-intro-copy">
           <p className="eyebrow">{t("portfolio")}</p>
           <h1 id="home-title">{profile.name?.[locale] ?? t("artistName")}</h1>
