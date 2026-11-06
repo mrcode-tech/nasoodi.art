@@ -1066,7 +1066,7 @@ test("About and CV routes render canonical bilingual JSON content without previe
     await page.goto(`/${locale}/about`);
     await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", /index/);
     await expect(page.locator(".sample-content-notice")).toHaveCount(0);
-    await expect(page.locator(".artist-portrait")).toHaveAttribute("src", /homepage-hero/);
+    await expect(page.locator(".artist-portrait")).toHaveAttribute("src", /artist-at-work\.jpg/);
     await expect(page.locator(".about-statement")).toBeVisible();
     await expect(page.locator(".about-biography-copy")).toBeVisible();
     await expect(page.locator(".cv-category")).toHaveCount(5);
@@ -1797,7 +1797,7 @@ test("localized SEO metadata is rendered from canonical content for archives and
   await expect(page.locator('link[rel="alternate"][hreflang="fa"]')).toHaveAttribute("href", "https://nasoodi.art/fa/works");
   await expect(page.locator('meta[name="description"]')).toHaveAttribute("content", "Explore a selection of oil paintings, with localized artwork details and original image references.");
   await expect(page.locator('meta[property="og:type"]')).toHaveAttribute("content", "website");
-  await expect(page.locator('meta[property="og:image"]')).toHaveAttribute("content", "https://nasoodi.art/images/approved-artwork-1.jpg");
+  await expect(page.locator('meta[property="og:image"]')).toHaveAttribute("content", "https://nasoodi.art/images/artworks/artwork-quiet-place.jpg");
   await expect(page.locator('meta[name="twitter:card"]')).toHaveAttribute("content", "summary_large_image");
 
   await page.goto("/fa/works");
