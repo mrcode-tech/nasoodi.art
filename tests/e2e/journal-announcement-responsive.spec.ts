@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test";
 import announcementConfig from "../../src/content/announcement.json";
-import { assertAnnouncementConfig, getAnnouncementHref } from "../../src/lib/content/announcement-config";
+import { assertAnnouncementConfig, getAnnouncementHref, type AnnouncementConfig } from "../../src/lib/content/announcement-config";
 import { getArtworkById } from "../../src/content/repositories/artwork.repository";
 import { getGalleryById } from "../../src/content/repositories/gallery.repository";
 import { getJournalEntryById } from "../../src/content/repositories/journal.repository";
@@ -8,33 +8,34 @@ import { getEvents } from "../../src/content/repositories/event.repository";
 import { getLocalizedSlug } from "../../src/lib/content/paths";
 
 assertAnnouncementConfig(announcementConfig);
+const config: AnnouncementConfig = announcementConfig as AnnouncementConfig;
 
 function expectedHref(locale: "en" | "fa"): string {
   let slug: string | undefined;
-  switch (announcementConfig.type) {
+  switch (config.type) {
     case "artwork": {
-      const item = getArtworkById(announcementConfig.contentId, locale);
+      const item = getArtworkById(config.contentId, locale);
       if (item) slug = getLocalizedSlug(item, locale);
       break;
     }
     case "gallery": {
-      const item = getGalleryById(announcementConfig.contentId, locale);
+      const item = getGalleryById(config.contentId, locale);
       if (item) slug = getLocalizedSlug(item, locale);
       break;
     }
     case "journal": {
-      const item = getJournalEntryById(announcementConfig.contentId, locale);
+      const item = getJournalEntryById(config.contentId, locale);
       if (item) slug = getLocalizedSlug(item, locale);
       break;
     }
     case "event": {
-      const item = getEvents(locale).find((entry) => entry.id === announcementConfig.contentId);
+      const item = getEvents(locale).find((entry) => entry.id === config.contentId);
       if (item) slug = getLocalizedSlug(item, locale);
       break;
     }
   }
   if (!slug) throw new Error("Active announcement does not resolve to published content for " + locale);
-  return getAnnouncementHref(announcementConfig.type, slug, locale);
+  return getAnnouncementHref(config.type, slug, locale);
 }
 
 const locales = [
@@ -43,7 +44,7 @@ const locales = [
 ] as const;
 
 test.describe("Configured content announcement responsive behavior", () => {
-  test.skip(!announcementConfig.active, "Announcement is inactive in the current branch configuration.");
+  test.skip(!config.active, "Announcement is inactive in the current branch configuration.");
 
   for (const item of locales) {
     for (const viewport of [
@@ -57,10 +58,10 @@ test.describe("Configured content announcement responsive behavior", () => {
 
         const sticker = page.locator('[data-placement="viewport"]');
         await expect(sticker).toBeVisible();
-        await expect(sticker.locator('[data-part="title"]')).toHaveText(announcementConfig.title[item.locale]);
-        await expect(sticker.locator('[data-part="description"]')).toHaveText(announcementConfig.description[item.locale]);
-        if (announcementConfig.metadata?.[item.locale]) {
-          await expect(sticker.locator('[data-part="metadata"]')).toHaveText(announcementConfig.metadata[item.locale]!);
+        await expect(sticker.locator('[data-part="title"]')).toHaveText(config.title[item.locale]);
+        await expect(sticker.locator('[data-part="description"]')).toHaveText(config.description[item.locale]);
+        if (config.metadata?.[item.locale]) {
+          await expect(sticker.locator('[data-part="metadata"]')).toHaveText(config.metadata[item.locale]!);
         } else {
           await expect(sticker.locator('[data-part="metadata"]')).toHaveCount(0);
         }
@@ -83,8 +84,8 @@ test.describe("Configured content announcement responsive behavior", () => {
       const sticker = sidebar.locator('[data-placement="desktop-sidebar"]');
       await expect(sidebar).toBeVisible();
       await expect(sticker).toBeVisible();
-      await expect(sticker.locator('[data-part="title"]')).toHaveText(announcementConfig.title[item.locale]);
-      await expect(sticker.locator('[data-part="description"]')).toHaveText(announcementConfig.description[item.locale]);
+      await expect(sticker.locator('[data-part="title"]')).toHaveText(config.title[item.locale]);
+      await expect(sticker.locator('[data-part="description"]')).toHaveText(config.description[item.locale]);
       await expect(sticker.locator('[data-part="link"]')).toHaveAttribute("href", expectedHref(item.locale));
 
       const sidebarBox = await sidebar.boundingBox();
@@ -105,8 +106,8 @@ test.describe("Configured content announcement responsive behavior", () => {
       const sticker = drawer.locator('[data-placement="mobile-sidebar"]');
       await expect(drawer).toBeVisible();
       await expect(sticker).toBeVisible();
-      await expect(sticker.locator('[data-part="title"]')).toHaveText(announcementConfig.title[item.locale]);
-      await expect(sticker.locator('[data-part="description"]')).toHaveText(announcementConfig.description[item.locale]);
+      await expect(sticker.locator('[data-part="title"]')).toHaveText(config.title[item.locale]);
+      await expect(sticker.locator('[data-part="description"]')).toHaveText(config.description[item.locale]);
       await expect(sticker.locator('[data-part="link"]')).toHaveAttribute("href", expectedHref(item.locale));
 
       const close = sticker.getByRole("button", { name: item.dismissLabel });
@@ -124,7 +125,7 @@ test.describe("Configured content announcement responsive behavior", () => {
 });
 
 test("inactive branch configuration does not render an announcement", async ({ page }) => {
-  test.skip(announcementConfig.active, "The branch announcement is active; inactive rendering is covered by configuration unit tests.");
+  test.skip(config.active, "The branch announcement is active; inactive rendering is covered by configuration unit tests.");
   await page.setViewportSize({ width: 1280, height: 900 });
   await page.goto("/en");
   await expect(page.locator("[data-placement]")).toHaveCount(0);
