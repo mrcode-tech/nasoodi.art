@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious, CarouselStatus } from "@/components/ui/carousel";
 import { getLocalizedSlug } from "@/lib/content/paths";
+import { formatLocaleNumber } from "@/lib/locale-number";
 import { primaryImageFor } from "@/lib/content/publication";
 import { pagePath, getLocaleDirection, type Locale } from "@/types/locale";
 import type { Artwork } from "@/types/content";
@@ -102,10 +103,10 @@ export function ArtworkExperience({ artworks, locale, context }: Props) {
           <div className="artwork-experience">
             <Carousel dir={getLocaleDirection(locale)} label={labels.carousel} roleDescription={t("artworkCarouselRole")} opts={{ slidesToScroll: 1 }} className="artwork-carousel">
               <CarouselContent>
-                {sequence.map((work, index) => <CarouselItem key={work.id} aria-label={`${index + 1} ${labels.position} ${sequence.length}`}>{renderArtwork(work)}</CarouselItem>)}
+                {sequence.map((work, index) => <CarouselItem key={work.id} aria-label={`${formatLocaleNumber(index + 1, locale)} ${labels.position} ${formatLocaleNumber(sequence.length, locale)}`}>{renderArtwork(work)}</CarouselItem>)}
               </CarouselContent>
               <div className="carousel-footer">
-                <CarouselStatus label={labels.artworkPosition} />
+                <CarouselStatus label={labels.artworkPosition} locale={locale} />
                 <div className="carousel-controls">
                   <CarouselPrevious label={labels.previous} />
                   <CarouselNext label={labels.next} />
@@ -119,7 +120,7 @@ export function ArtworkExperience({ artworks, locale, context }: Props) {
         {activeArtwork && activeImage && (
           <DialogContent className="artwork-viewer-content" {...(activeArtwork.description?.[locale]?.trim() ? {} : { "aria-describedby": undefined })}>
             <div className="artwork-viewer-topbar">
-              <span className="artwork-viewer-status" aria-live="polite">{activeIndex + 1} {labels.position} {sequence.length}</span>
+              <span className="artwork-viewer-status" aria-live="polite">{formatLocaleNumber(activeIndex + 1, locale)} {labels.position} {formatLocaleNumber(sequence.length, locale)}</span>
               <DialogClose asChild><Button className="artwork-viewer-close" variant="ghost" aria-label={labels.close}>×</Button></DialogClose>
             </div>
             <div className="artwork-viewer-layout">
@@ -133,7 +134,7 @@ export function ArtworkExperience({ artworks, locale, context }: Props) {
                 <DialogTitle aria-live="polite" aria-atomic="true">{activeArtwork.title[locale]}</DialogTitle>
                 {activeArtwork.description?.[locale]?.trim() && <DialogDescription className="artwork-viewer-description">{activeArtwork.description[locale]}</DialogDescription>}
                 {(activeArtwork.year || activeArtwork.medium?.[locale]?.trim()) && (
-                  <p className="artwork-viewer-metadata">{activeArtwork.year && <span>{activeArtwork.year}</span>}{activeArtwork.medium?.[locale]?.trim() && <span>{activeArtwork.medium[locale]}</span>}</p>
+                  <p className="artwork-viewer-metadata">{activeArtwork.year && <span>{formatLocaleNumber(activeArtwork.year, locale)}</span>}{activeArtwork.medium?.[locale]?.trim() && <span>{activeArtwork.medium[locale]}</span>}</p>
                 )}
                 <div className="artwork-viewer-controls">
                   <Button variant="outline" size="sm" onClick={() => move(-1)} disabled={activeIndex <= 0} aria-label={labels.previous}>{getLocaleDirection(locale) === "rtl" ? "→" : "←"}</Button>
