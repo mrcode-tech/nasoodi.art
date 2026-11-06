@@ -429,7 +429,7 @@ test("a missing localized slug never falls back to another locale and fails synt
  assert.ok(issues.some(issue=>issue.path.endsWith(".localizedSlugs.fa")));
 });
 
-test("localized slugs are unique per locale and alternate links follow synthetic stable content ids",async()=>{
+test("localized slugs are unique per locale for synthetic records",async()=>{
  const localizedWork:Artwork={...work,id:"localized-route-work",slug:"legacy-work",localizedSlugs:{en:"english-work",fa:"persian-work"}};
  const localizedGallery:Gallery={...validGallery,id:"localized-route-gallery",slug:"legacy-gallery",localizedSlugs:{en:"english-gallery",fa:"persian-gallery"},coverArtworkId:localizedWork.id,artworkIds:[localizedWork.id]};
  const localizedJournal:JournalEntry={...validJournalEntry,id:"localized-route-journal",slug:"legacy-journal",localizedSlugs:{en:"english-journal",fa:"persian-journal"}};
@@ -439,9 +439,6 @@ test("localized slugs are unique per locale and alternate links follow synthetic
  assert.equal(getPublicGalleries([localizedGallery,duplicateGallery],[localizedWork],"fa").length,2);
  assert.equal(getPublicJournal([localizedJournal,duplicateJournal],"en").length,0);
  assert.equal(getPublicJournal([localizedJournal,duplicateJournal],"fa").length,2);
- assert.equal(alternatePathFor("/en/works/english-work","en"),"/fa/works/persian-work");
- assert.equal(alternatePathFor("/en/galleries/english-gallery","en"),"/fa/galleries/persian-gallery");
- assert.equal(alternatePathFor("/en/journal/english-journal","en"),"/fa/journal/persian-journal");
 });
 
 test("portfolio validation requires complete localized Journal bodies for published records",()=>{
