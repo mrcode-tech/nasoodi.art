@@ -48,5 +48,5 @@ export default async function JournalPage({params,searchParams}:PropsWithSearch)
      <Link className="text-link" href={pagePath(locale,`journal/${getLocalizedSlug(entry,locale)}`)}>{t("readMore")} ↗</Link>
     </div>
    </article>;
-  })}</div>}{visibleEntries.length>0&&<Suspense fallback={null}><JournalPagination totalItems={visibleEntries.length} locale={locale} labels={{itemsPerPage:t("itemsPerPage"),previous:t("previousPage"),next:t("nextPage"),page:t("journalPage"),showing:t("showingJournal")}} /></Suspense>}</div>;
+  })}</div>}{visibleEntries.length>0&&<Suspense fallback={null}><JournalPagination totalItems={visibleEntries.length} locale={locale} labels={{itemsPerPage:t("itemsPerPage"),previous:t("previousPage"),next:t("nextPage"),page:t("journalPage"),showing:t.raw("showingJournal")}} /></Suspense>}</div>;
 }
