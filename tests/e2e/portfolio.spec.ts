@@ -1836,3 +1836,35 @@ test("localized SEO metadata is rendered from canonical content for archives and
     await expect(page.locator('meta[name="twitter:card"]')).toHaveAttribute("content", /summary/);
   }
 });
+
+
+test("Persian homepage artwork and gallery carousel positions use Persian digits", async ({ page }) => {
+  await page.goto("/fa");
+  const artworkPosition = page.locator(".home-page .artwork-experience .carousel-status");
+  const galleryPosition = page.locator(".home-page .collection-carousel .carousel-status");
+  await expect(artworkPosition).toBeVisible();
+  await expect(galleryPosition).toBeVisible();
+  await expect(artworkPosition).toHaveText(/^[۰-۹]+ \/ [۰-۹]+$/);
+  await expect(galleryPosition).toHaveText(/^[۰-۹]+ \/ [۰-۹]+$/);
+  await page.locator(".artwork-experience-card").first().click();
+  await expect(page.locator(".artwork-viewer-status")).toHaveText(/^[۰-۹]+ از [۰-۹]+$/);
+});
+
+test("Persian Galleries and Journal pagination render all visible numbers in Persian digits", async ({ page }) => {
+  await page.goto("/fa/galleries");
+  const galleryPagination = page.locator(".gallery-pagination");
+  await expect(galleryPagination).toBeVisible();
+  await expect(galleryPagination.getByRole("status")).toContainText(/[۰-۹]/);
+  await expect(galleryPagination.getByRole("status")).not.toContainText(/[0-9]/);
+  const galleryPageSizes = await galleryPagination.locator(".gallery-page-size option").allTextContents();
+  expect(galleryPageSizes).toEqual(["۵", "۱۰", "۲۰"]);
+  await expect(galleryPagination.locator(".gallery-page-nav .is-current")).toHaveText("۱");
+  await page.goto("/fa/journal");
+  const journalPagination = page.locator(".journal-pagination");
+  await expect(journalPagination).toBeVisible();
+  await expect(journalPagination.getByRole("status")).toContainText(/[۰-۹]/);
+  await expect(journalPagination.getByRole("status")).not.toContainText(/[0-9]/);
+  const journalPageSizes = await journalPagination.locator(".gallery-page-size option").allTextContents();
+  expect(journalPageSizes).toEqual(["۵", "۱۰", "۲۰"]);
+  await expect(journalPagination.locator(".gallery-page-nav .is-current")).toHaveText("۱");
+});
