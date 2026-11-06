@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
+import { formatLocaleNumber } from "../src/lib/locale-number";
 import {
   getCompactPageNumbers,
   galleryPaginationHref,
@@ -54,4 +55,12 @@ test("changing page size is represented by a page-one URL and unrelated paramete
 test("compact page numbers remain bounded and include first, current, and last pages", () => {
   assert.deepEqual(getCompactPageNumbers(1, 5), [1, 2, 3, 4, 5]);
   assert.deepEqual(getCompactPageNumbers(8, 20), [1, "ellipsis", 7, 8, 9, "ellipsis", 20]);
+});
+
+
+test("locale number formatting uses Persian digits for fa and Western digits for en", () => {
+  assert.equal(formatLocaleNumber(1405, "fa"), "۱۴۰۵");
+  assert.equal(formatLocaleNumber(123, "fa"), "۱۲۳");
+  assert.equal(formatLocaleNumber(123, "en"), "123");
+  assert.equal(formatLocaleNumber(0, "fa"), "۰");
 });
