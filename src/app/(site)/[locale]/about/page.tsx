@@ -47,6 +47,9 @@ export default async function AboutPage({ params }: Props) {
         <p className="artist-discipline">{profile.discipline?.[locale] ?? t("discipline")}</p>
       </header>
       <div className="profile-content">
+        {profile.shortIntroduction?.[locale] && (
+          <p className="about-short-introduction">{profile.shortIntroduction[locale]}</p>
+        )}
         <div className="about-portrait-statement">
           <div className="artist-portrait-frame">
             <Image
@@ -57,14 +60,11 @@ export default async function AboutPage({ params }: Props) {
               sizes="(max-width: 700px) 100vw, (max-width: 1100px) 48vw, 34rem"
             />
           </div>
-          <section className="about-statement">
-            <h2>{t("statement")}</h2>
-            {about.statement.split(/\n{2,}/).map((paragraph, index) => <p key={index}>{paragraph}</p>)}
-          </section>
         </div>
-        {profile.shortIntroduction?.[locale] && (
-          <p className="about-short-introduction">{profile.shortIntroduction[locale]}</p>
-        )}
+        <section className="about-statement">
+          <h2>{t("statement")}</h2>
+          {about.statement.split(/\n{2,}/).map((paragraph, index) => <p key={index}>{paragraph}</p>)}
+        </section>
         <section className="about-biography">
           <h2>{t("biography")}</h2>
           {about.biography.split(/\n{2,}/).map((paragraph, index) => (
