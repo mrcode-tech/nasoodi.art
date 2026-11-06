@@ -15,6 +15,7 @@ import {
 } from "@/lib/gallery-pagination";
 import { getGalleryCoverArtwork } from "@/lib/content/publication";
 import { getLocalizedSlug } from "@/lib/content/paths";
+import { formatLocaleNumber } from "@/lib/locale-number";
 import { pagePath, getLocaleDirection, type Locale } from "@/types/locale";
 import type { Artwork, Gallery } from "@/types/content";
 
@@ -42,9 +43,9 @@ export function GalleryIndex({ galleries, artworks, locale, labels }: Props) {
 
   const visible = paginateItems(galleries, state);
   const range = state.totalItems === 0 ? "" : labels.showing
-    .replace("{start}", String(state.startIndex + 1))
-    .replace("{end}", String(state.endIndex))
-    .replace("{total}", String(state.totalItems));
+    .replace("{start}", formatLocaleNumber(state.startIndex + 1, locale))
+    .replace("{end}", formatLocaleNumber(state.endIndex, locale))
+    .replace("{total}", formatLocaleNumber(state.totalItems, locale));
 
   const navigate = (nextPage: number, nextSize: GalleryPageSize = state.pageSize) => {
     router.push(galleryPaginationHref(pathname, queryString, nextPage, nextSize), { scroll: false });
@@ -81,15 +82,15 @@ export function GalleryIndex({ galleries, artworks, locale, labels }: Props) {
             <label className="gallery-page-size">
               <span>{labels.itemsPerPage}</span>
               <select value={state.pageSize} onChange={(event) => navigate(1, Number(event.target.value) as GalleryPageSize)}>
-                {GALLERY_PAGE_SIZES.map((size) => <option key={size} value={size}>{size}</option>)}
+                {GALLERY_PAGE_SIZES.map((size) => <option key={size} value={size}>{formatLocaleNumber(size, locale)}</option>)}
               </select>
             </label>
             <nav className="gallery-page-nav" aria-label={labels.page}>
               <button type="button" onClick={() => navigate(state.page - 1)} disabled={state.page <= 1} aria-label={labels.previous}>{getLocaleDirection(locale) === "rtl" ? "→" : "←"}</button>
               {getCompactPageNumbers(state.page, state.totalPages).map((item, index) =>
                 item === "ellipsis" ? <span className="gallery-page-ellipsis" key={"ellipsis-" + index} aria-hidden="true">…</span> :
-                <button type="button" key={item} onClick={() => navigate(item)} aria-label={labels.page + " " + item}
-                  aria-current={item === state.page ? "page" : undefined} className={item === state.page ? "is-current" : undefined}>{item}</button>,
+                <button type="button" key={item} onClick={() => navigate(item)} aria-label={labels.page + " " + formatLocaleNumber(item, locale)}
+                  aria-current={item === state.page ? "page" : undefined} className={item === state.page ? "is-current" : undefined}>{formatLocaleNumber(item, locale)}</button>,
               )}
               <button type="button" onClick={() => navigate(state.page + 1)} disabled={state.page >= state.totalPages} aria-label={labels.next}>{getLocaleDirection(locale) === "rtl" ? "←" : "→"}</button>
             </nav>
