@@ -1894,3 +1894,29 @@ test("Persian Galleries and Journal pagination render all visible numbers in Per
   expect(journalPageSizes).toEqual(["۵", "۱۰", "۲۰"]);
   await expect(journalPagination.locator(".gallery-page-nav .is-current")).toHaveText("۱");
 });
+
+
+test("Works archive presents every artwork in a consistent uncropped 4:3 frame in both locales", async ({ page }) => {
+  for (const locale of ["en", "fa"] as const) {
+    await page.setViewportSize({ width: 1440, height: 960 });
+    await page.goto(`/${locale}/works`);
+    const artworkImages = page.locator(".artwork-grid > .artwork-item > img");
+    await expect(artworkImages.first()).toBeVisible();
+    const frames = await artworkImages.evaluateAll((images) => images.map((image) => {
+      const rect = image.getBoundingClientRect();
+      const style = getComputedStyle(image);
+      return { width: rect.width, height: rect.height, aspectRatio: style.aspectRatio, objectFit: style.objectFit };
+    }));
+    expect(frames.length).toBeGreaterThan(1);
+    for (const frame of frames) {
+      expect(frame.width).toBeGreaterThan(0);
+      expect(frame.height).toBeGreaterThan(0);
+      expect(frame.width / frame.height).toBeCloseTo(4 / 3, 2);
+      expect(frame.objectFit).toBe("contain");
+    }
+    const firstFrame = frames[0];
+    for (const frame of frames.slice(1)) {
+      expect(frame.height).toBeCloseTo(firstFrame.height, 0);
+    }
+  }
+});
