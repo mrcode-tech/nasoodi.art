@@ -4,7 +4,7 @@ import { galleries } from "../../content/galleries";
 import { journalEntries } from "../../content/journal";
 import { otherLocale, pagePath, type Locale } from "../../types/locale";
 import { getLocalizedSlug } from "../content/paths";
-import { hasSharedContentIdentity } from "../content/identity";
+import { hasEquivalentContentSet } from "../content/identity";
 import { getPublicArtworks, getPublicCvEntries, getPublicGalleries } from "../content/publication";
 import { getPublicJournal } from "../content/journal";
 
@@ -24,7 +24,7 @@ export function alternatePathFor(pathname: string, locale: Locale, targetLocale:
   if (section === "contact") return pagePath(target, "contact");
 
   if (section === "cv") {
-    return hasSharedContentIdentity(
+    return hasEquivalentContentSet(
       getPublicCvEntries(cvEntries, locale),
       getPublicCvEntries(cvEntries, target),
     ) ? pagePath(target, "cv") : pagePath(target);
@@ -33,7 +33,7 @@ export function alternatePathFor(pathname: string, locale: Locale, targetLocale:
   if (section === "works") {
     const sourceItems = getPublicArtworks(artworks, locale);
     const targetItems = getPublicArtworks(artworks, target);
-    if (!slug) return hasSharedContentIdentity(sourceItems, targetItems) ? pagePath(target, "works") : pagePath(target);
+    if (!slug) return hasEquivalentContentSet(sourceItems, targetItems) ? pagePath(target, "works") : pagePath(target);
     const source = sourceItems.find((item) => getLocalizedSlug(item, locale) === slug);
     const translated = source && targetItems.find((item) => item.id === source.id);
     return translated ? pagePath(target, "works/" + getLocalizedSlug(translated, target)) : pagePath(target);
@@ -42,7 +42,7 @@ export function alternatePathFor(pathname: string, locale: Locale, targetLocale:
   if (section === "galleries") {
     const sourceItems = getPublicGalleries(galleries, artworks, locale);
     const targetItems = getPublicGalleries(galleries, artworks, target);
-    if (!slug) return hasSharedContentIdentity(sourceItems, targetItems) ? pagePath(target, "galleries") : pagePath(target);
+    if (!slug) return hasEquivalentContentSet(sourceItems, targetItems) ? pagePath(target, "galleries") : pagePath(target);
     const source = sourceItems.find((item) => getLocalizedSlug(item, locale) === slug);
     const translated = source && targetItems.find((item) => item.id === source.id);
     return translated ? pagePath(target, "galleries/" + getLocalizedSlug(translated, target)) : pagePath(target);
@@ -51,7 +51,7 @@ export function alternatePathFor(pathname: string, locale: Locale, targetLocale:
   if (section === "journal") {
     const sourceItems = getPublicJournal(journalEntries, locale);
     const targetItems = getPublicJournal(journalEntries, target);
-    if (!slug) return hasSharedContentIdentity(sourceItems, targetItems) ? pagePath(target, "journal") : pagePath(target);
+    if (!slug) return hasEquivalentContentSet(sourceItems, targetItems) ? pagePath(target, "journal") : pagePath(target);
     const source = sourceItems.find((item) => getLocalizedSlug(item, locale) === slug);
     const translated = source && targetItems.find((item) => item.id === source.id);
     return translated ? pagePath(target, "journal/" + getLocalizedSlug(translated, target)) : pagePath(target);
