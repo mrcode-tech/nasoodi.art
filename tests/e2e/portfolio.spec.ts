@@ -509,8 +509,9 @@ for (const locale of ["en", "fa"] as const) {
       await expect(heroImage).toBeVisible();
       await expect(heroImage).toHaveJSProperty("complete", true);
       await expect(heroImage).not.toHaveJSProperty("naturalWidth", 0);
-      if ((await heroImage.getAttribute("src"))?.includes("homepage-hero")) {
-        await expect(heroImage).toHaveAttribute("alt", locale === "fa" ? "هنرمند در آتلیه، روبه‌روی بوم نقاشی ایستاده است." : "The artist standing before a canvas in her studio.");
+      await expect(heroImage).toHaveAttribute("src", /artist-at-work/);
+      await expect(heroImage).toHaveAttribute("alt", locale === "fa" ? "هنرمند در آتلیه، روبه‌روی بوم نقاشی ایستاده است." : "The artist standing before a canvas in her studio.");
+      if ((await heroImage.getAttribute("src"))?.includes("artist-at-work")) {
       }
       const galleryCta = page.getByRole("link", { name: locale === "fa" ? "گالری‌ها را ببینید" : "Explore galleries" });
       const worksCta = page.getByRole("link", { name: locale === "fa" ? "گزیده آثار را ببینید" : "View selected works" });
@@ -1066,7 +1067,7 @@ test("About and CV routes render canonical bilingual JSON content without previe
     await page.goto(`/${locale}/about`);
     await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", /index/);
     await expect(page.locator(".sample-content-notice")).toHaveCount(0);
-    await expect(page.locator(".artist-portrait")).toHaveAttribute("src", /artist-at-work\.jpg/);
+    await expect(page.locator(".artist-portrait")).toHaveAttribute("src", /artist-portrait\.jpg/);
     await expect(page.locator(".about-statement")).toBeVisible();
     await expect(page.locator(".about-biography-copy")).toBeVisible();
     await expect(page.locator(".cv-category")).toHaveCount(5);
