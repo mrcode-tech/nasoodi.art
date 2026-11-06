@@ -21,7 +21,7 @@ The following task-specific documents define the proposed homepage event announc
 - [Journal event announcement proposal](./journal-announcement-proposal.md) — product decisions, visual direction, variants, placement, interaction, content safeguards, and review gates.
 - [Journal event announcement wireframes](./journal-announcement-wireframes.md) — English/Persian desktop and mobile placement, homepage Journal section, archive, event detail, and interaction states.
 - [Journal event announcement specification](./journal-announcement-specification.md) — detailed UI/UX, data eligibility, component architecture, localization, accessibility, SEO, acceptance criteria, tests, and implementation phases.
-- [Journal and sticker implementation prompt](./journal-announcement-implementation-prompt.md) — comprehensive, executable coding-agent prompt covering Journal, event announcement sticker, SVG authoring, CI rendering, testing, visual QA, and delivery gates.
+- [Journal and sticker implementation prompt](./journal-announcement-implementation-prompt.md) — comprehensive, executable coding-agent prompt covering Journal, the SVG sticker asset, direct asset usage, testing, visual QA, and delivery gates.
 - [Journal event announcement agent instructions](./journal-announcement-agent-instructions.md) — concise coding-agent preflight, implementation checklist, verification, and Git/release boundaries.
 - [Journal announcement sticker visual design](./journal-announcement-sticker-visual-design.md) — editorial art direction, edge attachment, and the hand-authored SVG used directly by the website.
 
