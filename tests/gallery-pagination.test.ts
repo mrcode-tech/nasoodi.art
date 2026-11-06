@@ -27,6 +27,19 @@ test("all supported page sizes calculate their page counts and slices", () => {
   assert.deepEqual(paginateItems(items, last), ["item-25"]);
 });
 
+test("valid page query values select the requested page and corresponding item slice", () => {
+  const items = Array.from({ length: 25 }, (_, index) => `item-${index + 1}`);
+  const secondPage = resolveGalleryPagination(items.length, "2");
+  assert.equal(secondPage.page, 2);
+  assert.equal(secondPage.startIndex, 6);
+  assert.equal(secondPage.endIndex, 12);
+  assert.deepEqual(paginateItems(items, secondPage), items.slice(6, 12));
+
+  const fifthPage = resolveGalleryPagination(items.length, "5", "6");
+  assert.equal(fifthPage.page, 5);
+  assert.deepEqual(paginateItems(items, fifthPage), ["item-25"]);
+});
+
 test("invalid page values fall back to page one and oversized pages clamp to the last page", () => {
   for (const value of [undefined, "", "0", "-1", "1.5", "abc", "1e2", "999999999999999999999"]) {
     assert.equal(resolveGalleryPagination(25, value).page, 1, String(value));
