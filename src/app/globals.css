@@ -1963,3 +1963,19 @@ html[lang="fa"] .contact-method-label {
   direction: rtl;
   text-align: right;
 }
+
+
+/* A closed RTL drawer must stay inside the viewport's scrollable bounds.
+   Clip it at its right-edge anchor instead of translating the fixed panel
+   beyond the viewport, which can create document-level horizontal scrolling. */
+@media (max-width: 900px) {
+  html[lang="fa"] .mobile-drawer[data-state="closed"] {
+    transform: translateX(0);
+    clip-path: inset(0 0 0 100%);
+  }
+
+  html[lang="fa"] .mobile-drawer[data-state="open"] {
+    transform: translateX(0);
+    clip-path: inset(0);
+  }
+}
