@@ -3,7 +3,7 @@
 **Status:** Proposed structural wireframes  
 **Visual direction:** Quiet contemporary gallery; artwork-led
 
-These are layout contracts, not final visual designs. Final spacing, typography, palette, and image sequence must be evaluated against Ghazaleh's actual paintings.
+These are layout contracts, not final visual designs. Final spacing, typography, palette, and image sequence must be evaluated against Ghazale's actual paintings.
 
 ## 1. Global shell
 
@@ -11,13 +11,13 @@ These are layout contracts, not final visual designs. Final spacing, typography,
 
 ```text
 ┌────────────────────────────────────────────────────────────────────┐
-│ GHAZALEH NASOODI      WORKS   ABOUT   CV   CONTACT    فارسی | EN   │
+│ GHAZALE NASOODI      WORKS   ABOUT   CV   CONTACT    فارسی | EN   │
 ├────────────────────────────────────────────────────────────────────┤
 │                                                                    │
 │                       PRIMARY ARTWORK                              │
 │                  (large, accurate reproduction)                    │
 │                                                                    │
-│ GHAZALEH ABDOLAHZADE NASOODI                                       │
+│ GHAZALE ABDOLAHZADE NASOODI                                       │
 │ Oil Painter                                                        │
 │                                                                    │
 │ Explore selected works  →                                          │
@@ -41,12 +41,12 @@ The hero may use one strong painting or a carefully curated editorial compositio
 
 ```text
 ┌──────────────────────────────┐
-│ GHAZALEH NASOODI   MENU  FA/EN│
+│ GHAZALE NASOODI   MENU  FA/EN│
 ├──────────────────────────────┤
 │                              │
 │        PRIMARY ARTWORK       │
 │                              │
-│ GHAZALEH NASOODI             │
+│ GHAZALE NASOODI             │
 │ Oil Painter                  │
 │ Explore works  →             │
 ├──────────────────────────────┤

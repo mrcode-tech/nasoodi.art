@@ -34,7 +34,7 @@ function createPdf() {
   const groups = ["education", "solo-exhibition", "group-exhibition", "publication", "award", "collection", "other"];
   const lines: Array<{ text: string; size: number; indent: number; gap: number }> = [];
   const add = (text: string, size = 9, indent = 54, gap = size + 3) => lines.push({ text, size, indent, gap });
-  add("GHAZALEH ABDOLAHZADE NASOODI", 18, 54, 26);
+  add("GHAZALE ABDOLAHZADE NASOODI", 18, 54, 26);
   add("CURRICULUM VITAE", 10, 54, 20);
   const intro = artistProfile?.discipline?.en ?? "Oil Painter";
   add(intro.toUpperCase(), 9, 54, 18);
@@ -100,7 +100,7 @@ export async function GET() {
   return new Response(new Uint8Array(pdf), {
     headers: {
       "Content-Type": "application/pdf",
-      "Content-Disposition": 'attachment; filename="ghazaleh-abdolahzade-nasoodi-cv.pdf"',
+      "Content-Disposition": 'attachment; filename="ghazale-abdolahzade-nasoodi-cv.pdf"',
       "Content-Length": String(pdf.byteLength),
       "Cache-Control": "public, max-age=3600",
       "X-Content-Type-Options": "nosniff",

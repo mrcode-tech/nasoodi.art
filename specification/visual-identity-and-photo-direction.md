@@ -141,9 +141,9 @@ Use a restrained editorial layout with generous outer margins and a clear distin
 
 ~~~text
 ┌──────────────────────────────────────────────────────────────────────┐
-│ GHAZALEH NASOODI       WORKS  GALLERIES  JOURNAL  ABOUT   فارسی | EN │
+│ Ghazaleh NASOODI       WORKS  GALLERIES  JOURNAL  ABOUT   فارسی | EN │
 ├──────────────────────────────────────────────────────────────────────┤
-│ GHAZALEH ABDOLAHZADE NASOODI       ┌──────────────────────────────┐ │
+│ Ghazaleh ABDOLAHZADE NASOODI       ┌──────────────────────────────┐ │
 │ Oil Painter                        │                              │ │
 │ [Approved short introduction]      │    FINISHED PAINTING         │ │
 │ Explore works →                    │    full composition          │ │
@@ -160,9 +160,9 @@ The primary homepage hero must feature an artist-approved finished painting, as 
 
 ~~~text
 ┌────────────────────────────────┐
-│ GHAZALEH NASOODI    MENU  FA/EN │
+│ GHAZALE NASOODI    MENU  FA/EN │
 ├────────────────────────────────┤
-│ GHAZALEH ABDOLAHZADE NASOODI    │
+│ GHAZALE ABDOLAHZADE NASOODI    │
 │ Oil Painter                    │
 │ [Short approved introduction]  │
 │                                │

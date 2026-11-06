@@ -43,8 +43,8 @@ Edit `data/artist-profile.json`. The homepage biography and About page read this
 ```json
 {
   "id": "artist-profile",
-  "name": { "en": "Ghazaleh Abdolahzade Nasoodi", "fa": "غزاله عبداله زاده نسودی" },
-  "slug": { "en": "ghazaleh-abdolahzade-nasoodi", "fa": "غزاله-عبداله-زاده-نسودی" },
+  "name": { "en": "Ghazale Abdolahzade Nasoodi", "fa": "غزاله عبداله زاده نسودی" },
+  "slug": { "en": "ghazale-abdolahzade-nasoodi", "fa": "غزاله-عبداله-زاده-نسودی" },
   "shortIntroduction": { "en": "A concise introduction.", "fa": "معرفی کوتاه هنرمند." },
   "biography": { "en": "Biography paragraph.", "fa": "پاراگراف زندگی‌نامه." },
   "statement": { "en": "Artist statement.", "fa": "بیانیه هنری." }

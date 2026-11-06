@@ -6,7 +6,7 @@
 - Application routes and layouts live under `src/app/`.
 - Use strict TypeScript and prefer server components unless client-side interactivity is required.
 - Keep dependencies minimal and use stable releases.
-- The website is the bilingual Persian/English portfolio of oil painter Ghazaleh Abdolahzade Nasoodi. Finished artworks are the primary content; the interface must frame the work rather than compete with it.
+- The website is the bilingual Persian/English portfolio of oil painter Ghazale Abdolahzade Nasoodi. Finished artworks are the primary content; the interface must frame the work rather than compete with it.
 
 ## Mandatory specification-first workflow
 

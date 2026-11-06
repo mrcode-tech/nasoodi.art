@@ -180,7 +180,7 @@ This is a semantic illustration, not a demand to copy the exact markup. Reconcil
 | Element | English | Persian | Source/condition |
 |---|---|---|---|
 | Portfolio eyebrow | Artist portfolio | پورتفولیوی هنرمند | Existing localized UI copy; owner-approved wording |
-| H1 | Ghazaleh Abdolahzade Nasoodi | غزاله عبداله زاده نسودی | Supplied artist identity; preserve spelling exactly unless owner updates it |
+| H1 | Ghazale Abdolahzade Nasoodi | غزاله عبداله زاده نسودی | Supplied artist identity; preserve spelling exactly unless owner updates it |
 | Discipline | Oil painter | نقاش رنگ‌روغن | Confirmed practice |
 | Optional introduction | Artist-approved English sentence | Artist-approved Persian sentence | Render only when approved for that locale |
 | Primary CTA | Explore galleries | گالری‌ها را ببینید | Link to localized Galleries index |
@@ -286,7 +286,7 @@ Wireframes are structural, not pixel-perfect. All text shown is proposed UI copy
 │ Nasoodi.art             ┌────────────────────────────┬─────────────────────┐ │
 │ Home                   │                            │ ARTIST PORTFOLIO    │ │
 │ Works                  │                            │                     │ │
-│ Galleries              │   artwork.JPG               │ Ghazaleh            │ │
+│ Galleries              │   artwork.JPG               │ Ghazale            │ │
 │ Journal                │   full image                │ Abdolahzade Nasoodi │ │
 │ About                  │   uncropped                 │ Oil painter         │ │
 │ Contact                │                            │                     │ │
@@ -368,7 +368,7 @@ The content flow is RTL, while the desktop sidebar remains physically on the lef
 │ mobile/tablet header and navigation behavior per shared spec  │
 ├───────────────────────────────────────────────────────────────┤
 │ ARTIST PORTFOLIO                                               │
-│ Ghazaleh Abdolahzade Nasoodi                                   │
+│ Ghazale Abdolahzade Nasoodi                                   │
 │ Oil painter                                                    │
 │                                                               │
 │ ┌───────────────────────────────────────────────────────────┐ │
@@ -426,7 +426,7 @@ The content flow is RTL, while the desktop sidebar remains physically on the lef
 │ ☰                         Nasoodi.art│
 ├─────────────────────────────────────┤
 │ ARTIST PORTFOLIO                    │
-│ Ghazaleh Abdolahzade                 │
+│ Ghazale Abdolahzade                 │
 │ Nasoodi                              │
 │ Oil painter                          │
 │                                     │

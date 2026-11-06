@@ -2,7 +2,7 @@
 
 **Status:** Proposed execution blueprint; phase completion must be evidenced  
 **Working branch:** `feature`  
-**Product:** Bilingual Persian/English portfolio for oil painter Ghazaleh Abdolahzade Nasoodi  
+**Product:** Bilingual Persian/English portfolio for oil painter Ghazale Abdolahzade Nasoodi  
 **Primary design direction:** “The artist's quiet gallery”  
 **Companion execution prompt:** [website-implementation-prompt.md](./website-implementation-prompt.md)
 

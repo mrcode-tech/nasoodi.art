@@ -1,6 +1,6 @@
 # Nasoodi.art
 
-A bilingual Persian/English artist portfolio for oil painter Ghazaleh Abdolahzade Nasoodi. The visual direction is **the artist's quiet gallery**: warm paper, restrained mauve and taupe, editorial typography, and artwork-first composition.
+A bilingual Persian/English artist portfolio for oil painter Ghazale Abdolahzade Nasoodi. The visual direction is **the artist's quiet gallery**: warm paper, restrained mauve and taupe, editorial typography, and artwork-first composition.
 
 ## Stack
 
