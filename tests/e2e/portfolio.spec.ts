@@ -1846,6 +1846,24 @@ test("localized SEO metadata is rendered from canonical content for archives and
 });
 
 
+test("artwork and gallery indexes show newest entries first and Persian artwork links resolve", async ({ page }) => {
+  await page.goto("/fa/works");
+  const firstArtwork = page.locator(".artwork-grid .artwork-item").first();
+  await expect(firstArtwork).toBeVisible();
+  await expect(firstArtwork).toContainText("مسیرِ ادامه‌دار");
+  await firstArtwork.click();
+  await expect(page).toHaveURL(/\/fa\/works\//);
+  await expect(page.getByRole("heading", { level: 1, name: "مسیرِ ادامه‌دار" })).toBeVisible();
+
+  await page.goto("/fa/galleries");
+  const firstGallery = page.locator(".gallery-index-card-link").first();
+  await expect(firstGallery).toBeVisible();
+  await expect(firstGallery).toContainText("فصلی از روشنایی");
+  await firstGallery.click();
+  await expect(page).toHaveURL(/\/fa\/galleries\//);
+  await expect(page.getByRole("heading", { level: 1, name: "فصلی از روشنایی" })).toBeVisible();
+});
+
 test("Persian homepage artwork and gallery carousel positions use Persian digits", async ({ page }) => {
   await page.goto("/fa");
   const artworkPosition = page.locator(".home-page .artwork-experience .carousel-status");
