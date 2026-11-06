@@ -123,9 +123,11 @@ for (const reference of references) {
   if (reference.includes("?") || reference.includes("#") || reference.includes("\\") || reference.includes("%")) {
     throw new Error("Image references must be plain root-relative paths: " + reference);
   }
-  const target = resolve(root, "public", reference.slice(1));
-  const publicRoot = resolve(root, "public") + sep;
-  if (!target.startsWith(publicRoot)) throw new Error("Image reference escapes public/: " + reference);
+  const target = resolve(imageRoot, reference.slice("/images/".length));
+  const imageRootPrefix = imageRoot + sep;
+  if (!target.startsWith(imageRootPrefix)) throw new Error("Image reference escapes public/images/: " + reference);
+  const normalizedReference = "/" + relative(resolve(root, "public"), target).split(sep).join("/");
+  if (normalizedReference !== reference) throw new Error("Image reference is not normalized: " + reference);
   const file = await stat(target).catch(() => null);
   if (!file?.isFile()) throw new Error("Content references a missing public image: " + reference);
   if (supported.has(extname(target).toLowerCase()) && !Object.hasOwn(images, reference)) {
@@ -135,9 +137,21 @@ for (const reference of references) {
 
 const output = JSON.stringify({ schemaVersion: 1, images }, null, 2) + "\n";
 if (checkOnly) {
-  const existing = await readFile(outputPath, "utf8").catch(() => "");
-  if (existing !== output) {
-    throw new Error("Committed image metadata is missing or stale. Run npm run images:generate and commit src/content/data/image-metadata.json.");
+  const existingText = await readFile(outputPath, "utf8").catch(() => "");
+  let committed;
+  try {
+    committed = JSON.parse(existingText);
+  } catch {
+    throw new Error("Committed image metadata is missing or invalid JSON. Run npm run images:generate and commit src/content/data/image-metadata.json.");
+  }
+  const expectedPaths = Object.keys(images).sort();
+  const committedImages = committed && typeof committed.images === "object" && committed.images ? committed.images : {};
+  const committedPaths = Object.keys(committedImages).sort();
+  const missing = expectedPaths.filter((path) => !Object.hasOwn(committedImages, path));
+  const unexpected = committedPaths.filter((path) => !Object.hasOwn(images, path));
+  const changed = expectedPaths.filter((path) => Object.hasOwn(committedImages, path) && JSON.stringify(committedImages[path]) !== JSON.stringify(images[path]));
+  if (committed.schemaVersion !== 1 || missing.length || unexpected.length || changed.length) {
+    throw new Error("Image metadata is stale. Missing: [" + missing.join(", ") + "]; unexpected: [" + unexpected.join(", ") + "]; changed: [" + changed.join(", ") + "]. Run npm run images:generate and commit the result.");
   }
   process.stdout.write("Validated " + Object.keys(images).length + " raster images and " + references.size + " content image references.\n");
 } else {
