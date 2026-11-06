@@ -436,7 +436,7 @@ Before coding:
 
 - Repository inspection confirmed the localized route is composed through `src/app/(site)/[locale]/[section]/page.tsx`, gallery publication/order are provided by `getPublicGalleries`, and the canonical dataset currently contains four published collections in both locales.
 - The homepage Selected Works carousel is rendered separately through `ArtworkExperience` on the homepage. The Galleries index implementation must not change `src/components/ui/carousel.tsx`, `src/components/artwork-experience.tsx`, or homepage composition.
-- Implementation and CI evidence will be recorded only after the final feature commit has been tested. The current four-gallery dataset means the approved behavior is a four-card static grid with no page controls; pagination utilities are tested with synthetic fixtures so the 5/10/20 behavior is covered without inventing production galleries.
+- Implementation and CI evidence will be recorded only after the final feature commit has been tested. The current canonical dataset contains eight year-based galleries. The static index must render all eight records and expose pagination controls only when the selected page size creates multiple pages.
 
 
 ## Implementation and verification evidence — 2026-10-31
@@ -470,11 +470,11 @@ GitHub Actions: [Run 41219572380](https://github.com/mrcode-tech/nasoodi.art/act
 
 - Captured and visually spot-checked the English and Persian Galleries index at desktop (1440×900) and mobile (390×844); the grid is static, images retain their source proportions, card captions remain readable, and the tested pages have no horizontal overflow.
 - Browser coverage also exercises 320×568, 768×1024, 1024×768, 1920×1080, and mobile landscape (844×390) for both locales.
-- Homepage carousel regression assertions passed, including its five artwork items, navigation controls, viewer integration, keyboard navigation, locale direction, and responsive behavior.
-- The canonical published dataset currently contains **four** galleries in each locale. Therefore the live page shows four cards and correctly hides pagination and the page-size selector under the approved one-page rule. The 5/10/20 pagination calculations and slices are covered by synthetic unit fixtures; real multi-page interaction cannot be demonstrated until more than five approved galleries are published.
+- Homepage carousel regression assertions passed, including its current featured artwork selection, navigation controls, viewer integration, keyboard navigation, locale direction, and responsive behavior.
+- The canonical published dataset currently contains **eight** galleries in each locale. With the current six-item default, the live index has multiple pages and must show the page-size selector and pagination controls. Unit tests cover 6/10/20 calculations, URL parsing, page clamping, and stable slices; browser tests cover the actual archive interaction.
 - Artist/site-owner approval is not inferred from CI or this engineering review and remains a separate visual/content release gate.
 
 
 ## Pagination update — 2026-11-06
 
-The owner-approved pagination default is now **6 items per page**, with exactly **6, 10, and 20** as the supported page sizes. This supersedes the earlier five-item default and selector values in the original implementation history above. The same shared pagination behavior applies to Works, Galleries, and Journal archives; homepage carousels are unaffected.
+The current pagination default is **6 items per page**, with exactly **6, 10, and 20** as the supported page sizes. This supersedes earlier five-item defaults and selector values in the original implementation history above. The same shared pagination behavior applies to Works, Galleries, and Journal archives; homepage carousels are unaffected.

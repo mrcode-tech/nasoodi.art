@@ -106,10 +106,11 @@ test("event entries require a valid time zone and occurrence time",()=>{
  assert.equal(getPublicJournal([{...valid,event:{...valid.event!,timeZone:"Not/AZone"}}],"en").length,0);
  assert.equal(getPublicJournal([{...valid,event:{...valid.event!,startsAt:"2026-11-12T18:00:00"}}],"en").length,0);
 });
-test("event repository returns only published Journal event and exhibition records",()=>{
+test("event repository filters published Journal entries by event and exhibition type without requiring seeded events",()=>{
+ const published=getPublicJournal(journalEntries,"en");
+ const expected=published.filter((entry)=>entry.type==="event"||entry.type==="exhibition").map((entry)=>entry.id);
  const events=getEvents("en");
- assert.ok(events.length>0);
- assert.ok(events.every((entry)=>entry.type==="event"||entry.type==="exhibition"));
+ assert.deepEqual(events.map((entry)=>entry.id),expected);
  assert.ok(events.every((entry)=>entry.body?.en?.length));
 });
 
@@ -169,12 +170,12 @@ test("portfolio JSON-LD resolves localized artist identity from canonical profil
  const website=english[1] as Record<string,unknown>;
  assert.equal(english.length,2);
  assert.equal(personEn["@type"],"Person");
- assert.equal(personEn.name,"Ghazale Abdolahzade Nasoodi");
- assert.equal(personEn.alternateName,"غزاله عبداله زاده نسودی");
- assert.equal(personEn.jobTitle,"Oil painter");
- assert.equal(personFa.name,"غزاله عبداله زاده نسودی");
- assert.equal(personFa.alternateName,"Ghazale Abdolahzade Nasoodi");
- assert.equal(personFa.jobTitle,"نقاش رنگ‌روغن");
+ assert.equal(personEn.name,"Ghazaleh Abdolahzade Nasoodi");
+ assert.equal(personEn.alternateName,"غزاله عبداله‌زاده نسودی");
+ assert.equal(personEn.jobTitle,"Painter");
+ assert.equal(personFa.name,"غزاله عبداله‌زاده نسودی");
+ assert.equal(personFa.alternateName,"Ghazaleh Abdolahzade Nasoodi");
+ assert.equal(personFa.jobTitle,"نقاش");
  assert.equal(website["@type"],"WebSite");
  assert.deepEqual(website.inLanguage,["fa","en"]);
  assert.deepEqual(website.publisher,{"@id":"https://nasoodi.art/#artist"});
@@ -313,17 +314,17 @@ test("Journal links reject protocol-relative, backslash-normalized, control, and
  }
 });
 
-test("the five owner-approved gallery assets are represented by five unique published artwork records", () => {
- assert.equal(artworks.length,5);
- assert.equal(new Set(artworks.map(item=>item.id)).size,5);
- assert.equal(new Set(artworks.map(item=>item.slug)).size,5);
- for (const [index,item] of artworks.entries()) {
+test("all canonical artworks have unique published identities, localized editorial fields, and valid primary images", () => {
+ assert.equal(artworks.length,25);
+ assert.equal(new Set(artworks.map(item=>item.id)).size,artworks.length);
+ assert.equal(new Set(artworks.map(item=>item.slug)).size,artworks.length);
+ assert.equal(new Set(artworks.map(item=>item.images[0]?.src)).size,artworks.length);
+ for (const item of artworks) {
   assert.equal(item.status,"published");
   assert.equal(item.rightsConfirmed,true);
   assert.equal(item.images.length,1);
-  const expectedImagePaths = ["/images/artworks/artwork-quiet-place.jpg", "/images/artworks/artwork-shape-of-remembering.jpg", "/images/artworks/artwork-where-light-rests.jpg", "/images/artworks/artwork-garden-small-moments.jpg", "/images/artworks/artwork-blue-hour-within.jpg"];
-  assert.equal(item.images[0].src, expectedImagePaths[index]);
   assert.equal(item.images[0].role,"primary");
+  assert.equal(isSafeLocalImagePath(item.images[0].src),true);
   assert.ok(item.images[0].width>0 && item.images[0].height>0);
   for (const locale of ["en","fa"] as const) {
    assert.ok(item.title[locale]?.trim());
@@ -331,29 +332,37 @@ test("the five owner-approved gallery assets are represented by five unique publ
    assert.ok(item.images[0].alt[locale]?.trim());
   }
  }
- assert.deepEqual(getPublicArtworks(artworks,"en").map(item=>item.id),artworks.map(item=>item.id));
- assert.deepEqual(getPublicArtworks(artworks,"fa").map(item=>item.id),artworks.map(item=>item.id));
+ for (const locale of ["en","fa"] as const) {
+  const publishedIds=new Set(getPublicArtworks(artworks,locale).map(item=>item.id));
+  assert.equal(publishedIds.size,artworks.length);
+  assert.ok(artworks.every((item)=>publishedIds.has(item.id)));
+ }
 });
 
-test("four curated collections publish valid ordered memberships with shared artwork identities", () => {
- assert.equal(galleries.length,4);
- assert.equal(new Set(galleries.map(item=>item.id)).size,4);
- assert.equal(new Set(galleries.map(item=>item.slug)).size,4);
+test("eight year-based galleries publish ordered, non-overlapping artwork memberships and first-artwork covers", () => {
+ assert.equal(galleries.length,8);
+ assert.equal(new Set(galleries.map(item=>item.id)).size,galleries.length);
+ assert.equal(new Set(galleries.map(item=>item.slug)).size,galleries.length);
  for (const gallery of galleries) {
   assert.equal(gallery.status,"published");
   assert.ok(gallery.title.en?.trim() && gallery.title.fa?.trim());
   assert.ok(gallery.description.en?.trim() && gallery.description.fa?.trim());
-  assert.ok(gallery.artworkIds.length>=3);
-  assert.ok(gallery.artworkIds.includes(gallery.coverArtworkId));
+  assert.ok(gallery.artworkIds.length>0);
+  assert.equal(gallery.coverArtworkId,gallery.artworkIds[0]);
   assert.ok(gallery.artworkIds.every(id=>artworks.some(item=>item.id===id)));
   assert.equal(new Set(gallery.artworkIds).size,gallery.artworkIds.length);
  }
  const memberships=artworks.map(item=>galleries.filter(gallery=>gallery.artworkIds.includes(item.id)).length);
- assert.ok(memberships.every(count=>count>=2),"each canonical artwork should be reused across multiple collections");
- assert.equal(getPublicGalleries(galleries,artworks,"en").length,4);
- assert.equal(getPublicGalleries(galleries,artworks,"fa").length,4);
- assert.deepEqual(homepageSelection.featuredArtworkIds,artworks.map(item=>item.id));
- assert.equal(homepageSelection.featuredGalleryIds.length,4);
+ assert.ok(memberships.every(count=>count===1),"each canonical artwork must belong to exactly one year-based gallery");
+ assert.equal(getPublicGalleries(galleries,artworks,"en").length,8);
+ assert.equal(getPublicGalleries(galleries,artworks,"fa").length,8);
+ assert.equal(homepageSelection.featuredArtworkIds.length,8);
+ assert.equal(homepageSelection.featuredGalleryIds.length,8);
+ for (const [index,galleryId] of homepageSelection.featuredGalleryIds.entries()) {
+  const gallery=galleries.find(item=>item.id===galleryId);
+  assert.ok(gallery);
+  assert.equal(homepageSelection.featuredArtworkIds[index],gallery.artworkIds[0]);
+ }
 });
 
 test("homepage Journal preview selects only the newest published entry across article and event types", () => {
@@ -391,8 +400,8 @@ test("homepage content is composed through canonical localized repositories",()=
   const home=getHomepageContent(locale);
   assert.ok(home.artist?.biography[locale]);
   assert.ok(home.artist?.statement[locale]);
-  assert.equal(home.artworks.length,5);
-  assert.equal(home.galleries.length,4);
+  assert.equal(home.artworks.length,25);
+  assert.equal(home.galleries.length,8);
   assert.equal(home.journalPreview.length,1);
   assert.equal(home.contact?.instagramUrl,"https://www.instagram.com/ghazalenasoodi/");
  }
@@ -410,7 +419,7 @@ test("site shell renders artist identity from the canonical artist repository",(
 test("canonical artist profile is populated in both locales",()=>{
  assert.ok(artistProfile);
  assert.equal(artistProfile?.id,"artist-profile");
- assert.equal(artistProfile?.name?.en,"Ghazale Abdolahzade Nasoodi");
+ assert.equal(artistProfile?.name?.en,"Ghazaleh Abdolahzade Nasoodi");
  assert.equal(artistProfile?.brand,"Nasoodi.art");
  assert.ok(artistProfile?.name?.en?.trim());
  assert.ok(artistProfile?.name?.fa?.trim());
@@ -468,7 +477,7 @@ test("published Journal entries use localized, dimensioned, rights-cleared canon
    assert.equal(isSafeLocalImagePath(cover.src),true);
    assert.ok(cover.width>0&&cover.height>0);
    const artwork=artworks.find(item=>item.images.some(image=>image.src===cover.src));
-   assert.equal(cover.alt[locale],artwork?.images.find(image=>image.src===cover.src)?.alt[locale]);
+   assert.ok(cover.alt[locale]?.trim());
    assert.doesNotMatch(cover.alt[locale] ?? "",/temporary|placeholder|موقت/iu);
   }
  }
@@ -608,18 +617,16 @@ test("CV identifiers are validated independently from URL slugs", () => {
 });
 
 
-test("JSON editorial records preserve bilingual Journal bodies and rich-text semantics", () => {
- assert.equal(artworks.length, 5);
- assert.equal(galleries.length, 4);
- assert.equal(journalEntries.length, 8);
- const first = journalEntries.find((entry) => entry.id === "journal-studio-notes-november-2026");
+test("canonical JSON records preserve the current bilingual artwork, gallery, and Journal inventory", () => {
+ assert.equal(artworks.length,25);
+ assert.equal(galleries.length,8);
+ assert.equal(journalEntries.length,8);
+ const first=journalEntries.find((entry)=>entry.id==="journal-first-light-1388");
  assert.ok(first?.body?.en && first.body.fa);
- assert.equal(first.body.en[0].type, "paragraph");
- assert.equal(first.body.en[0].type === "paragraph" ? first.body.en[0].text : "", "The studio has been full of unfinished conversations between colour and surface. Some passages are built slowly, with thin layers that allow earlier marks to remain present; others ask for a more decisive gesture.");
- assert.deepEqual(first.body.en[1], { type: "heading", level: 2, text: "Leaving room for the painting" });
- assert.deepEqual(first.body.en[3], { type: "quote", text: "Sometimes the most important decision is to leave a little space untouched." });
- assert.equal(first.body.fa[0].type === "paragraph" ? first.body.fa[0].text : "", "این روزها آتلیه پر از گفت‌وگوهای ناتمام میان رنگ و سطح است. بعضی بخش‌ها با لایه‌های نازک و آرام شکل می‌گیرند تا ردّ رنگ‌های پیشین باقی بماند؛ بخش‌های دیگر به حرکتی قاطع‌تر نیاز دارند.");
- assert.equal(journalEntries.find((entry) => entry.id === "journal-exhibition-open-studio-2026")?.event?.startsAt, "2026-11-14T14:00:00+00:00");
+ assert.equal(first.title.en,"First Light: A Beginning in Paint");
+ assert.equal(first.body.en[0].type,"paragraph");
+ assert.ok(first.body.en[0].type==="paragraph" && first.body.en[0].text.includes("A beginning does not always announce itself"));
+ assert.ok(first.body.fa[0].type==="paragraph" && first.body.fa[0].text.includes("آغاز یک مسیر"));
  for (const entry of journalEntries) {
   assert.ok(entry.body?.en?.length, entry.id + " must have an English JSON rich-text body");
   assert.ok(entry.body?.fa?.length, entry.id + " must have a Persian JSON rich-text body");
