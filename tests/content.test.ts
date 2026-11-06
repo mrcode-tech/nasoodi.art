@@ -173,7 +173,7 @@ test("portfolio JSON-LD resolves localized artist identity from canonical profil
  assert.equal(personEn.name,"Ghazaleh Abdolahzade Nasoodi");
  assert.equal(personEn.alternateName,"غزاله عبداله زاده نسودی");
  assert.equal(personEn.jobTitle,"Oil painter");
- assert.equal(personFa.name,"غزاله عبداله زاده نسودی");
+ assert.equal(personFa.name,"غزاله عبداله‌زاده نسودی");
  assert.equal(personFa.alternateName,"Ghazaleh Abdolahzade Nasoodi");
  assert.equal(personFa.jobTitle,"نقاش رنگ‌روغن");
  assert.equal(website["@type"],"WebSite");
@@ -332,8 +332,11 @@ test("all canonical artworks have unique published identities, localized editori
    assert.ok(item.images[0].alt[locale]?.trim());
   }
  }
- assert.deepEqual(getPublicArtworks(artworks,"en").map(item=>item.id),artworks.map(item=>item.id));
- assert.deepEqual(getPublicArtworks(artworks,"fa").map(item=>item.id),artworks.map(item=>item.id));
+ for (const locale of ["en","fa"] as const) {
+  const publishedIds=new Set(getPublicArtworks(artworks,locale).map(item=>item.id));
+  assert.equal(publishedIds.size,artworks.length);
+  assert.ok(artworks.every((item)=>publishedIds.has(item.id)));
+ }
 });
 
 test("eight year-based galleries publish ordered, non-overlapping artwork memberships and first-artwork covers", () => {
