@@ -12,5 +12,5 @@ export function getArtworkById(id: string, locale: Locale) {
 }
 
 export function getArtworkBySlug(slug: string, locale: Locale) {
-  return getArtworks(locale).find((artwork) => matchesLocalizedSlug(artwork, locale, slug));
+  return getArtworks(locale).find((artwork) => matchesLocalizedSlug(artwork, locale, slug) || artwork.slug === slug);
 }
