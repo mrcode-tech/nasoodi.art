@@ -47,6 +47,7 @@ This directory documents application architecture, interface behavior, design sy
 ### Engineering, quality, and release
 - AI-assisted development and code quality: ai-assisted-development-and-code-quality.md
 - Testing, visual QA, and release acceptance: testing-qa-and-release.md
+- Content-independent functional E2E testing strategy: e2e-testing-strategy.md
 - Phased implementation blueprint: phased-implementation-blueprint.md
 - Website implementation prompt: website-implementation-prompt.md
 
