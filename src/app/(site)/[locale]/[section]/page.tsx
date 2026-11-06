@@ -8,6 +8,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { artworks,galleries,journalEntries,cvEntries,artistProfile,contactDetails,getPublicArtistProfile,getPublicContactDetails,getPublicArtworks,getPublicGalleries,getPublicJournal,getPublicCvEntries,getJournalEntriesForCategory,journalCategories,journalCoverImageFor,primaryImageFor,type JournalCategory } from "@/lib/site";
 import { paginateItems, resolveGalleryPagination } from "@/lib/gallery-pagination";
+import { getLocalizedSlug } from "@/lib/content/paths";
 import { JournalPagination } from "@/components/journal-pagination";
 import { SiteBreadcrumbs } from "@/components/site-breadcrumbs";
 import { copyFor,isLocale,pagePath,otherLocale } from "@/lib/site";
@@ -77,7 +78,7 @@ export default async function SectionPage({params,searchParams}:Props){const [{l
     {cover&&<Image className="journal-cover-image" src={cover.src} alt={cover.alt[locale] ?? entry.title[locale] ?? entry.slug} width={cover.width} height={cover.height} sizes="(max-width: 700px) 100vw, (max-width: 1100px) 40vw, 24rem" />}
     <div className="journal-card-copy">
      <div className="journal-card-meta"><span>{filters.find(([, ,value])=>value===(entry.type))?.[1]}</span>{entry.publishedAt&&Number.isFinite(Date.parse(entry.publishedAt))&&<time dateTime={entry.publishedAt}>{t.published}: {dateLabel(entry.publishedAt)}</time>}</div>
-     <h2><Link href={pagePath(locale,`journal/${entry.slug}`)}>{entry.title[locale]}</Link></h2><p>{entry.summary[locale]}</p>
+     <h2><Link href={pagePath(locale,`journal/${getLocalizedSlug(entry,locale)}`)}>{entry.title[locale]}</Link></h2><p>{entry.summary[locale]}</p>
      {entry.type==="event"&&entry.event&&<><p className="journal-event-date"><time dateTime={entry.event.startsAt}>{dateLabel(entry.event.startsAt,entry.event.timeZone,true)}</time> <span dir="ltr">{entry.event.timeZone}</span></p>{entry.event.venue?.[locale]&&<p className="journal-event-date">{entry.event.venue[locale]}</p>}</>}
      <Link className="text-link" href={pagePath(locale,`journal/${entry.slug}`)}>{t.readMore} ↗</Link>
     </div>
