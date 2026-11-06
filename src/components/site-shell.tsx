@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Sidebar, SidebarContent, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar";
 import { Sheet, SheetClose, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { JournalAnnouncement, type AnnouncementEvent } from "@/components/journal-announcement";
+import { ContentAnnouncement } from "@/components/content-announcement";
 import { ThemeSelector } from "@/components/theme-selector";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { getArtist } from "@/content/repositories/artist.repository";
@@ -54,7 +54,7 @@ function LanguageSelector({ locale, alternates, pathname, label, onNavigate }: {
     </DropdownMenu>
   </div>;
 }
-export function SiteShell({ locale, children, announcement }: { locale: Locale; children: React.ReactNode; announcement?: AnnouncementEvent }) {
+export function SiteShell({ locale, children, announcement }: { locale: Locale; children: React.ReactNode; announcement?: { title: string; description: string; metadata?: string; href: string } }) {
   const t = useTranslations();
   const artist = getArtist(locale);
   const artistName = artist?.name?.[locale] ?? "";
@@ -63,7 +63,7 @@ export function SiteShell({ locale, children, announcement }: { locale: Locale; 
   const labels = {
     home: t("home"), about: t("about"), works: t("works"), galleries: t("galleries"),
     journal: t("journal"), contact: t("contact"), skip: t("skip"),
-    announcementEyebrow: t("announcementEyebrow"), dismissAnnouncement: t("dismissAnnouncement"),
+    dismissAnnouncement: t("dismissAnnouncement"),
     discipline: t("discipline"), close: t("close"), menu: t("menu"), language: t("language"),
     appearance: t("appearance"), primaryNavigation: t("primaryNavigation"),
   };
@@ -93,12 +93,13 @@ export function SiteShell({ locale, children, announcement }: { locale: Locale; 
   return <>
     <a className="skip-link" href="#main-content">{labels.skip}</a>
     {announcement && isHomePage && (
-      <JournalAnnouncement
+      <ContentAnnouncement
         locale={locale}
-        event={announcement}
-        eyebrow={labels.announcementEyebrow}
-        dismissLabel={labels.dismissAnnouncement}
-        href={pagePath(locale, `journal/${announcement.slug}`)}
+        title={announcement.title}
+        description={announcement.description}
+        metadata={announcement.metadata}
+                dismissLabel={labels.dismissAnnouncement}
+        href={announcement.href}
         placement="viewport"
       />
     )}
@@ -110,12 +111,13 @@ export function SiteShell({ locale, children, announcement }: { locale: Locale; 
         <ScrollArea dir={getLocaleDirection(locale)} className="sidebar-scroll-area">
           {navigation()}
           {announcement && !isHomePage && (
-            <JournalAnnouncement
+            <ContentAnnouncement
               locale={locale}
-              event={announcement}
-              eyebrow={labels.announcementEyebrow}
-              dismissLabel={labels.dismissAnnouncement}
-              href={pagePath(locale, `journal/${announcement.slug}`)}
+              title={announcement.title}
+        description={announcement.description}
+        metadata={announcement.metadata}
+                            dismissLabel={labels.dismissAnnouncement}
+              href={announcement.href}
               placement="desktop-sidebar"
             />
           )}
@@ -134,12 +136,13 @@ export function SiteShell({ locale, children, announcement }: { locale: Locale; 
           <ScrollArea dir={getLocaleDirection(locale)} className="mobile-drawer-scroll">
             {navigation(true)}
             {announcement && (
-              <JournalAnnouncement
+              <ContentAnnouncement
                 locale={locale}
-                event={announcement}
-                eyebrow={labels.announcementEyebrow}
-                dismissLabel={labels.dismissAnnouncement}
-                href={pagePath(locale, `journal/${announcement.slug}`)}
+                title={announcement.title}
+        description={announcement.description}
+        metadata={announcement.metadata}
+                                dismissLabel={labels.dismissAnnouncement}
+                href={announcement.href}
                 placement="mobile-sidebar"
                 onNavigate={() => setMobileOpen(false)}
               />
