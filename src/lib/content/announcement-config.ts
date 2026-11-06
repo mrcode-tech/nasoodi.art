@@ -1,4 +1,4 @@
-import type { Locale } from "../../types/locale";
+import { pagePath, type Locale } from "../../types/locale";
 
 export const announcementTypes = ["artwork", "gallery", "journal", "event"] as const;
 export type AnnouncementType = (typeof announcementTypes)[number];
@@ -49,4 +49,12 @@ export function assertAnnouncementConfig(value: unknown): asserts value is Annou
       throw new Error("Announcement configuration: metadata must contain at least one localized value when provided.");
     }
   }
+}
+
+/** Build the canonical localized destination from content type and its localized slug. */
+export function getAnnouncementHref(type: AnnouncementType, localizedSlug: string, locale: Locale): string {
+  const section = type === "artwork" ? "works"
+    : type === "gallery" ? "galleries"
+    : "journal";
+  return pagePath(locale, section + "/" + encodeURIComponent(localizedSlug));
 }
