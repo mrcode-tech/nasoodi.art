@@ -2001,7 +2001,7 @@ test("localized artwork and Journal detail routes resolve canonical locale alter
     const persianAlternate = await page.locator('link[rel="alternate"][hreflang="fa"]').getAttribute("href");
     expect(persianAlternate).toContain("/fa/");
     await page.goto(new URL(persianAlternate!).pathname);
-    await expect(page).toHaveURL(/\\/fa\\/(?:works|journal)\\//);
+  await expect(page).toHaveURL(new RegExp("^/fa/(?:works|journal)/"));
     await expect(page.locator("main h1")).toBeVisible();
   }
 });
