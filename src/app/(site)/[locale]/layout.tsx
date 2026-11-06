@@ -7,7 +7,7 @@ import { ThemeProvider } from "@/components/providers/theme-provider";
 import announcementConfig from "@/content/announcement.json";
 import { assertAnnouncementConfig, getAnnouncementHref } from "@/lib/content/announcement-config";
 import { getLocalizedSlug } from "@/lib/content/paths";
-import { pagePath, isLocale, locales, getLocaleDirection, type Locale } from "@/types/locale";
+import { isLocale, locales, getLocaleDirection, type Locale } from "@/types/locale";
 import { getArtworkById } from "@/content/repositories/artwork.repository";
 import { getGalleryById } from "@/content/repositories/gallery.repository";
 import { getJournalEntryById } from "@/content/repositories/journal.repository";
