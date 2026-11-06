@@ -1,4 +1,4 @@
-import type { Locale } from "@/types/locale";
+import type { Locale } from "../types/locale";
 
 /**
  * Format interface numbers using the locale's expected numeral system.
