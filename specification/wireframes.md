@@ -11,13 +11,13 @@ These are layout contracts, not final visual designs. Final spacing, typography,
 
 ```text
 ┌────────────────────────────────────────────────────────────────────┐
-│ GHAZALE NASOODI      WORKS   ABOUT   CV   CONTACT    فارسی | EN   │
+│ ARTIST_NAME      WORKS   ABOUT   CV   CONTACT    فارسی | EN   │
 ├────────────────────────────────────────────────────────────────────┤
 │                                                                    │
 │                       PRIMARY ARTWORK                              │
 │                  (large, accurate reproduction)                    │
 │                                                                    │
-│ GHAZALE ABDOLAHZADE NASOODI                                       │
+│ ARTIST_NAME                                       │
 │ Oil Painter                                                        │
 │                                                                    │
 │ Explore selected works  →                                          │
@@ -41,12 +41,12 @@ The hero may use one strong painting or a carefully curated editorial compositio
 
 ```text
 ┌──────────────────────────────┐
-│ GHAZALE NASOODI   MENU  FA/EN│
+│ ARTIST_NAME   MENU  FA/EN│
 ├──────────────────────────────┤
 │                              │
 │        PRIMARY ARTWORK       │
 │                              │
-│ GHAZALE NASOODI             │
+│ ARTIST_NAME             │
 │ Oil Painter                  │
 │ Explore works  →             │
 ├──────────────────────────────┤

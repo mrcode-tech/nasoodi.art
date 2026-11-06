@@ -62,7 +62,7 @@ The menu trigger stays unobstructed. The notice sits below it with a clear gap a
 
 ~~~text
 ┌──────────────────────────────────┐
-│ NASOODI                    [MENU]│
+│ ARTIST_NAME                    [MENU]│
 │                                  │
 │ ┌───────────────────────────┐    │
 │ │ UPCOMING EXHIBITION    ×  │    │
