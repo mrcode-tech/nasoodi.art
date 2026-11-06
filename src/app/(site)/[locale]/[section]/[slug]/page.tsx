@@ -14,6 +14,7 @@ import { getGalleryCoverArtwork, primaryImageFor } from "@/lib/content/publicati
 import { getUpcomingJournalEvents, journalCoverImageFor, isSafeJournalHref } from "@/lib/content/journal";
 import { isLocale,pagePath,locales,type Locale } from "@/types/locale";
 import { getLocalizedSlug } from "@/lib/content/paths";
+import { formatLocaleNumber } from "@/lib/locale-number";
 import { getArtworkStructuredData,getGalleryStructuredData,getJournalStructuredData,serializeJsonLd } from "@/lib/seo/structured-data";
 type DetailProps={params:Promise<{locale:string;section:string;slug:string}>;searchParams:Promise<{fromGallery?:string}>};
 export async function generateMetadata({params}:DetailProps):Promise<Metadata>{
@@ -86,7 +87,7 @@ export default async function Detail({params,searchParams}:DetailProps){
  if(section==="works"){const w=getArtworks(locale).find(x=>getLocalizedSlug(x,locale)===slug);if(!w)notFound();const img=primaryImageFor(w);if(!img)notFound();
  const originGallery=typeof query.fromGallery==="string"?getGalleries(locale).find(gallery=>getLocalizedSlug(gallery,locale)===query.fromGallery&&gallery.artworkIds.includes(w.id)):undefined;
  const breadcrumbItems=originGallery?[{label:t("home"),href:pagePath(locale)},{label:t("galleries"),href:pagePath(locale,"galleries")},{label:originGallery.title[locale]??originGallery.slug,href:pagePath(locale,`galleries/${getLocalizedSlug(originGallery,locale)}`)},{label:w.title[locale]??w.slug}]:[{label:t("home"),href:pagePath(locale)},{label:t("selected"),href:pagePath(locale,"works")},{label:w.title[locale]??w.slug}];
- return <><script type="application/ld+json" dangerouslySetInnerHTML={{__html:serializeJsonLd(getArtworkStructuredData(w,locale))}}/><div className="page-content"><SiteBreadcrumbs locale={locale} items={breadcrumbItems}/><article className="artwork-detail"><div className="artwork-detail-image"><Image sizes="(max-width: 600px) 100vw, (max-width: 900px) 90vw, 50vw" src={img.src} alt={img.alt[locale]??""} width={img.width} height={img.height}/></div><div className="artwork-detail-copy"><h1>{w.title[locale]}</h1>{w.medium?.[locale]&&<p>{w.medium[locale]}</p>}{w.year&&<p>{w.year}</p>}{w.description?.[locale]&&<p>{w.description[locale]}</p>}</div></article></div></>;}
+ return <><script type="application/ld+json" dangerouslySetInnerHTML={{__html:serializeJsonLd(getArtworkStructuredData(w,locale))}}/><div className="page-content"><SiteBreadcrumbs locale={locale} items={breadcrumbItems}/><article className="artwork-detail"><div className="artwork-detail-image"><Image sizes="(max-width: 600px) 100vw, (max-width: 900px) 90vw, 50vw" src={img.src} alt={img.alt[locale]??""} width={img.width} height={img.height}/></div><div className="artwork-detail-copy"><h1>{w.title[locale]}</h1>{w.medium?.[locale]&&<p>{w.medium[locale]}</p>}{w.year&&<p>{formatLocaleNumber(w.year,locale)}</p>}{w.description?.[locale]&&<p>{w.description[locale]}</p>}</div></article></div></>;}
  if(section==="galleries"){
   const g=getGalleryBySlug(slug,locale);
   if(!g)notFound();
