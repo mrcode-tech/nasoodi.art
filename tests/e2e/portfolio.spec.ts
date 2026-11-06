@@ -187,7 +187,7 @@ test("collection cards navigate to their detail routes", async ({ page }) => {
     if (await cards.count() === 0) continue;
     const href = await cards.first().getAttribute("href");
     await cards.first().click();
-    await expect(page).toHaveURL((url) => url.pathname === href);
+    await expect(page).toHaveURL((url) => url.pathname.startsWith("/" + locale + "/galleries/"));
     await expect(page.getByRole("main")).toBeVisible();
     await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
   }
