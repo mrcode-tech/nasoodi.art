@@ -43,6 +43,16 @@ This checkpoint is **not a completion claim**. Run and inspect GitHub Actions ag
 
 All future UI work must follow specification/shared-responsive-typography-system.md and the shared design authorities. Reuse its semantic fluid type tokens across routes; respect Persian and English font metrics and RTL/LTR behavior; preserve natural heading wrapping; and do not add isolated oversized heading values or global no-wrap rules. The Persian homepage artist name and homepage Contact heading are single-line targets only at the reference widths defined by the specification. Update the shared specification before changing the typography system.
 
+## Technical specification and content-independent test policy
+
+All files under specification/ are technical documentation. Do not include actual personal identity, biography, family details, contact destinations, CV entries, artwork or collection titles, Journal copy, production record IDs, production slugs, image filenames, or current editorial record counts. Use generic placeholders and synthetic examples. Canonical editorial content belongs only in the content data layer.
+
+Automated tests validate stable technical behavior, not the current production dataset. Use deterministic fixture factories based on production domain types for unit, integration, and browser tests. Production-backed browser smoke tests may assert route availability and structural behavior, but must not hardcode editorial names, titles, dates, slugs, IDs, image paths, or record counts. Test exact pagination slices with generated datasets at unit level; browser tests verify URL state and distinct slices without requiring a particular production dataset size.
+
+Keep content integrity tests separate from application behavior tests. Integrity tests validate schema, types, stable ID uniqueness, references, safe asset paths, publication mechanics, and optional-field handling. They must not judge editorial truth, quality, completeness, or approval. Never remove meaningful coverage, skip failing tests, or weaken assertions just to make CI green.
+
+Before changing specs or tests, audit the complete specification/ tree and test suite. Replace content examples with placeholders, remove obsolete/conflicting requirements, and preserve all active technical contracts. Maintain a CI audit that detects production editorial values and brittle fixed content counts in technical documentation and tests.
+
 ## AI-assisted engineering and refactoring requirements
 
 Before any non-trivial React, Next.js, TypeScript, i18n, content-architecture, or refactoring work, read `specification/ai-assisted-development-and-code-quality.md` in full.
