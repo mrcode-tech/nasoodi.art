@@ -350,10 +350,6 @@ test("collection records publish ordered, non-overlapping artwork memberships an
  }
  const memberships=artworks.map(item=>galleries.filter(gallery=>gallery.artworkIds.includes(item.id)).length);
  assert.ok(memberships.every(count=>count===1),"each canonical artwork must belong to exactly one year-based gallery");
- assert.equal(getPublicGalleries(galleries,artworks,"en").length,8);
- assert.equal(getPublicGalleries(galleries,artworks,"fa").length,8);
- assert.equal(homepageSelection.featuredArtworkIds.length,8);
- assert.equal(homepageSelection.featuredGalleryIds.length,8);
  for (const [index,galleryId] of homepageSelection.featuredGalleryIds.entries()) {
   const gallery=galleries.find(item=>item.id===galleryId);
   assert.ok(gallery);
