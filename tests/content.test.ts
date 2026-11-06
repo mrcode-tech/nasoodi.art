@@ -43,6 +43,8 @@ import {
 } from "../src/lib/seo/structured-data";
 import type { Artwork, Gallery, JournalEntry, CvEntry, CvDocument, ArtistProfile, ContactDetails } from "../src/types/content";
 import { validatePortfolioContent } from "../src/lib/content/validate-portfolio";
+import announcementConfig from "../src/content/announcement.json";
+import { assertAnnouncementConfig, getAnnouncementHref } from "../src/lib/content/announcement-config";
 const work:Artwork={id:"w1",slug:"work-one",title:{en:"Work",fa:"اثر"},images:[{src:"/art/work.jpg",alt:{en:"Painting",fa:"نقاشی"},role:"primary",width:1200,height:900}],rightsConfirmed:true,status:"published"};
 test("artwork stays private until published and rights-cleared",()=>{assert.equal(getPublicArtworks([{...work,status:"needs-review"}],"en").length,0);assert.equal(getPublicArtworks([{...work,rightsConfirmed:false}],"en").length,0);assert.equal(getPublicArtworks([work],"en").length,1);});
 test("artwork requires localized title and primary image alt",()=>{assert.equal(getPublicArtworks([{...work,title:{en:"Work"}}],"fa").length,0);assert.equal(getPublicArtworks([{...work,images:[{...work.images[0],alt:{en:""}}]}],"en").length,0);});
@@ -614,4 +616,48 @@ test("canonical content records satisfy bilingual shape and relationship invaria
   assert.ok(entry.body?.fa?.length, entry.id + " must have a Persian JSON rich-text body");
   assert.ok(entry.coverImage?.rightsConfirmed, entry.id + " must resolve an approved artwork cover");
  }
+});
+
+
+test("announcement configuration validates both activation states and rejects malformed fields", () => {
+  assertAnnouncementConfig(announcementConfig);
+  const base = {
+    active: true,
+    type: "gallery" as const,
+    contentId: "synthetic-gallery",
+    title: { en: "Featured content", fa: "محتوای منتخب" },
+    description: { en: "A short description.", fa: "توضیح کوتاه." },
+  };
+  assert.doesNotThrow(() => assertAnnouncementConfig(base));
+  assert.doesNotThrow(() => assertAnnouncementConfig({ ...base, active: false }));
+  assert.throws(() => assertAnnouncementConfig({ ...base, active: "true" }));
+  assert.throws(() => assertAnnouncementConfig({ ...base, type: "unknown" }));
+  assert.throws(() => assertAnnouncementConfig({ ...base, contentId: " " }));
+  assert.throws(() => assertAnnouncementConfig({ ...base, title: { en: "", fa: "عنوان" } }));
+  assert.throws(() => assertAnnouncementConfig({ ...base, description: { en: "Description" } }));
+  assert.throws(() => assertAnnouncementConfig({ ...base, metadata: {} }));
+});
+
+test("announcement destinations are derived from content type and localized slug", () => {
+  assert.equal(getAnnouncementHref("artwork", "sample-work", "en"), "/en/works/sample-work");
+  assert.equal(getAnnouncementHref("gallery", "sample-gallery", "en"), "/en/galleries/sample-gallery");
+  assert.equal(getAnnouncementHref("journal", "sample-story", "en"), "/en/journal/sample-story");
+  assert.equal(getAnnouncementHref("event", "sample-event", "en"), "/en/journal/sample-event");
+  assert.equal(getAnnouncementHref("artwork", "نمونه اثر", "fa"), "/fa/works/%D9%86%D9%85%D9%88%D9%86%D9%87%20%D8%A7%D8%AB%D8%B1");
+});
+
+test("the active production announcement references a published localized record", () => {
+  assertAnnouncementConfig(announcementConfig);
+  if (!announcementConfig.active) return;
+  for (const locale of ["en", "fa"] as const) {
+    const valid =
+      announcementConfig.type === "artwork"
+        ? getPublicArtworks(artworks, locale).some((item) => item.id === announcementConfig.contentId)
+        : announcementConfig.type === "gallery"
+          ? getPublicGalleries(galleries, artworks, locale).some((item) => item.id === announcementConfig.contentId)
+          : announcementConfig.type === "journal"
+            ? getPublicJournal(journalEntries, locale).some((item) => item.id === announcementConfig.contentId)
+            : getEvents(locale).some((item) => item.id === announcementConfig.contentId);
+    assert.equal(valid, true, "Active announcement must reference published content in every locale.");
+  }
 });
