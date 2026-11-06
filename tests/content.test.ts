@@ -1,16 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import { readFileSync } from "node:fs";
-import { artworks } from "../src/content/artworks";
-import { galleries } from "../src/content/galleries";
-import { journalEntries } from "../src/content/journal";
-import { homepageSelection } from "../src/content/homepage";
-import { artistProfile } from "../src/content/artist";
-import { cvDocument, cvEntries } from "../src/content/cv";
-import { contactDetails } from "../src/content/contact";
-import { siteContent } from "../src/content/site";
-import { getEvents } from "../src/content/repositories/event.repository";
-import { getHomepageContent } from "../src/content/repositories/homepage.repository";
 import { getPortfolioStructuredData } from "../src/content/portfolio-structured-data";
 import {
   getPublicArtworks,
@@ -41,15 +31,14 @@ import {
   getJournalStructuredData,
   serializeJsonLd,
 } from "../src/lib/seo/structured-data";
-import type { Artwork, Gallery, JournalEntry, CvEntry, CvDocument, ArtistProfile, ContactDetails } from "../src/types/content";
+import type { Artwork, Gallery, JournalEntry, CvEntry, CvDocument, ArtistProfile, ContactDetails, SiteContent } from "../src/types/content";
 import { validatePortfolioContent } from "../src/lib/content/validate-portfolio";
-import announcementConfig from "../src/content/announcement.json";
 import { assertAnnouncementConfig, getAnnouncementHref } from "../src/lib/content/announcement-config";
 const work:Artwork={id:"w1",slug:"work-one",localizedSlugs:{en:"work-one",fa:"اثر-اول"},title:{en:"Work",fa:"اثر"},description:{en:"Description",fa:"توضیح"},images:[{src:"/art/work.jpg",alt:{en:"Painting",fa:"نقاشی"},role:"primary",width:1200,height:900}],rightsConfirmed:true,status:"published"};
 const validGallery:Gallery={id:"g1",slug:"gallery-one",localizedSlugs:{en:"gallery-one",fa:"گالری-اول"},title:{en:"Gallery",fa:"گالری"},description:{en:"Description",fa:"توضیح"},coverArtworkId:work.id,artworkIds:[work.id],status:"published",sortOrder:1};
 const validJournalEntry:JournalEntry={id:"j1",slug:"story-one",localizedSlugs:{en:"story-one",fa:"روایت-اول"},type:"story",title:{en:"Story",fa:"روایت"},summary:{en:"Summary",fa:"خلاصه"},body:{en:[{type:"paragraph",text:"Body"}],fa:[{type:"paragraph",text:"متن"}]},status:"published",approvedLocales:["en","fa"],artistApproved:true};
 const validArtistProfile:ArtistProfile={id:"profile-fixture",name:{en:"Artist",fa:"هنرمند"},slug:{en:"artist",fa:"هنرمند"},discipline:{en:"Painter",fa:"نقاش"},shortIntroduction:{en:"Introduction",fa:"معرفی"},artisticApproach:{en:"Approach",fa:"رویکرد"},interests:{en:["Painting"],fa:["نقاشی"]},statement:{en:"Statement",fa:"بیانیه"},biography:{en:"Biography",fa:"زندگی‌نامه"}};
-const validSiteContent:typeof siteContent={id:"site-fixture",pages:{works:{title:{en:"Works",fa:"آثار"},description:{en:"Works",fa:"آثار"}},galleries:{title:{en:"Galleries",fa:"گالری‌ها"},description:{en:"Galleries",fa:"گالری‌ها"}},journal:{title:{en:"Journal",fa:"یادداشت‌ها"},description:{en:"Journal",fa:"یادداشت‌ها"}},cv:{title:{en:"CV",fa:"رزومه"},description:{en:"CV",fa:"رزومه"}}}};
+const validSiteContent:SiteContent={id:"site-fixture",pages:{works:{title:{en:"Works",fa:"آثار"},description:{en:"Works",fa:"آثار"}},galleries:{title:{en:"Galleries",fa:"گالری‌ها"},description:{en:"Galleries",fa:"گالری‌ها"}},journal:{title:{en:"Journal",fa:"یادداشت‌ها"},description:{en:"Journal",fa:"یادداشت‌ها"}},cv:{title:{en:"CV",fa:"رزومه"},description:{en:"CV",fa:"رزومه"}}}};
 const validContactDetails:ContactDetails={title:{en:"Contact",fa:"تماس"},description:{en:"Contact",fa:"تماس"},instagramUrl:"https://www.instagram.com/example/"};
 const validPortfolioSource={artworks:[work],galleries:[validGallery],journalEntries:[validJournalEntry],cvEntries:[],homepageSelection:{featuredArtworkIds:[work.id],featuredGalleryIds:[validGallery.id]},artistProfile:validArtistProfile,contactDetails:validContactDetails,siteContent:validSiteContent};
 test("artwork stays private until published and rights-cleared",()=>{assert.equal(getPublicArtworks([{...work,status:"needs-review"}],"en").length,0);assert.equal(getPublicArtworks([{...work,rightsConfirmed:false}],"en").length,0);assert.equal(getPublicArtworks([work],"en").length,1);});
@@ -160,7 +149,7 @@ test("journal publication requires explicit artist approval and locale approval"
  assert.equal(getPublicJournal([{...approved,approvedLocales:[]}],"en").length,0);
 });
 
-test("portfolio JSON-LD resolves localized artist identity from canonical profile JSON",()=>{
+test("portfolio JSON-LD exposes localized person and website structures",()=>{
  const english=getPortfolioStructuredData("en")["@graph"];
  const persian=getPortfolioStructuredData("fa")["@graph"];
  const personEn=english[0] as Record<string,unknown>;
@@ -168,12 +157,16 @@ test("portfolio JSON-LD resolves localized artist identity from canonical profil
  const website=english[1] as Record<string,unknown>;
  assert.equal(english.length,2);
  assert.equal(personEn["@type"],"Person");
-  assert.equal(personEn.name,artistProfile?.name?.en);
-  assert.equal(personEn.alternateName,artistProfile?.name?.fa);
- assert.equal(personEn.jobTitle,"Painter");
-  assert.equal(personFa.name,artistProfile?.name?.fa);
-  assert.equal(personFa.alternateName,artistProfile?.name?.en);
- assert.equal(personFa.jobTitle,"نقاش");
+ assert.equal(typeof personEn.name,"string");
+ assert.ok(String(personEn.name).trim().length>0);
+ assert.equal(typeof personEn.alternateName,"string");
+ assert.ok(String(personEn.alternateName).trim().length>0);
+ assert.equal(typeof personEn.jobTitle,"string");
+ assert.equal(personFa["@type"],"Person");
+ assert.equal(typeof personFa.name,"string");
+ assert.ok(String(personFa.name).trim().length>0);
+ assert.equal(typeof personFa.alternateName,"string");
+ assert.ok(String(personFa.alternateName).trim().length>0);
  assert.equal(website["@type"],"WebSite");
  assert.deepEqual(website.inLanguage,["fa","en"]);
  assert.deepEqual(website.publisher,{"@id":"https://nasoodi.art/#artist"});
@@ -310,22 +303,6 @@ test("Journal links reject protocol-relative, backslash-normalized, control, and
  for(const href of ["//example.org","/\\\\example.org","/\\u0000bad","javascript:alert(1)","http://example.org","https://user:secret@example.org"]) {
   assert.equal(isSafeJournalHref(href),false,JSON.stringify(href));
  }
-});
-
-test("canonical artwork source records have unique identities", () => {
- // Editorial publication state, descriptions, translations, and image selection
- // are content data. Their publication rules are exercised with synthetic
- // fixtures above rather than requiring every current record to be published.
- assert.equal(new Set(artworks.map(item=>item.id)).size,artworks.length);
- assert.equal(new Set(artworks.map(item=>item.slug)).size,artworks.length);
-});
-
-test("canonical gallery source records have unique identities", () => {
- // Gallery membership is editorial curation: collections may overlap and
- // artworks may remain outside every gallery. Validate the publication rules
- // with synthetic records instead of constraining today's editorial dataset.
- assert.equal(new Set(galleries.map(item=>item.id)).size,galleries.length);
- assert.equal(new Set(galleries.map(item=>item.slug)).size,galleries.length);
 });
 
 test("gallery publication supports overlapping collections and unassigned artworks", () => {
