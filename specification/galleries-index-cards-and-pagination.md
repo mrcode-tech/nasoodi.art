@@ -12,12 +12,12 @@
 
 The main Galleries index must use a **static editorial grid of gallery poster cards with pagination**. It must not use a carousel, horizontal slider, swipe rail, auto-advancing component, or carousel controls.
 
-- The initial page size is **5 gallery cards**.
+- The initial page size is **6 gallery cards**.
 - At the end of the page, show pagination when the published gallery count exceeds the selected page size.
-- Provide a page-size listbox with exactly these options: **5, 10, and 20 items per page**.
+- Provide a page-size listbox with exactly these options: **6, 10, and 20 items per page**.
 - The visitor can change the page size without leaving the Galleries index.
 - The visitor can navigate to a specific page using pagination controls.
-- When there are 5 or fewer published galleries, show the cards without pagination controls; the page-size selector may be hidden because there is no useful page-size choice to make.
+- When there are 6 or fewer published galleries, show the cards without pagination controls; the page-size selector may be hidden because there is no useful page-size choice to make.
 - Preserve the existing homepage carousel exactly as it is. This specification does not authorize changing, replacing, restyling, removing, or reconfiguring the homepage Selected Works carousel.
 - This is a page-specific decision. It does not change the carousel or viewer behavior on the homepage, gallery detail pages, or any other page.
 
@@ -135,7 +135,7 @@ Use a simple CSS grid, not a carousel or JavaScript-driven masonry layout.
 ## 7. Pagination behavior
 
 ### Default behavior
-- Default page size: **5**.
+- Default page size: **6**.
 - Start on page **1** when the visitor opens the index without pagination state.
 - Total pages are calculated from the number of published galleries and the selected page size:
   `totalPages = ceil(publishedGalleryCount / pageSize)`.
@@ -154,13 +154,13 @@ The pagination area should provide:
 - An accessible indication of the current page (for example, `aria-current="page"`).
 - Disabled state for Previous on the first page and Next on the last page.
 - Localized accessible names for previous/next and page navigation.
-- A page-size listbox with exactly three options: `5`, `10`, and `20`.
+- A page-size listbox with exactly three options: `6`, `10`, and `20`.
 
 Do not show controls that appear enabled when no destination page exists. Do not render a long unbounded row of page numbers on narrow screens; use a compact, understandable page window with ellipses.
 
 ### Page-size selection
-- The page-size listbox defaults to 5.
-- Its options are exactly 5, 10, and 20 items per page.
+- The page-size listbox defaults to 6.
+- Its options are exactly 6, 10, and 20 items per page.
 - The selected value is visible and exposed to assistive technology.
 - Changing the page size resets the current page to page 1. This avoids unexpectedly landing beyond the new final page and makes the result predictable.
 - After changing page size, recalculate the total page count and render the correct first slice.
@@ -171,16 +171,16 @@ Do not show controls that appear enabled when no destination page exists. Do not
 ### URL and browser history
 Pagination state should be shareable and resilient to refresh. Use query parameters on the existing localized Galleries route:
 - `page`: one-based page number; omit it for page 1.
-- `pageSize`: selected value `5`, `10`, or `20`; omit it for the default value 5.
+- `pageSize`: selected value `6`, `10`, or `20`; omit it for the default value 6.
 
 Examples:
-- `/fa/galleries` → page 1, 5 per page.
-- `/fa/galleries?page=2` → page 2, 5 per page.
+- `/fa/galleries` → page 1, 6 per page.
+- `/fa/galleries?page=2` → page 2, 6 per page.
 - `/en/galleries?page=1&pageSize=10` → page 1, 10 per page (canonical serialization may omit default page 1).
 
 Requirements:
 - Parse query values defensively. Invalid, non-integer, zero/negative, or unsupported page-size values must not crash rendering.
-- Unsupported `pageSize` falls back to 5.
+- Unsupported `pageSize` falls back to 6.
 - Invalid page falls back to 1.
 - If the requested page exceeds the calculated final page (for example after content changes), normalize to the last valid page; if no published galleries exist, normalize to the empty state.
 - Changing page or page size updates the URL without dropping the locale or unrelated supported query parameters.
@@ -203,12 +203,12 @@ Requirements:
 - Do not show fake posters, example cards, empty pagination controls, page-size selector, or a “0 of 0” control state unless the existing design system explicitly defines it.
 - Keep the route stable and free of runtime errors.
 
-### One through five galleries
+### One through six galleries
 - Show all eligible cards on the first page.
 - Do not show page navigation or page-size selection when only one page exists.
 
-### More than five galleries
-- Show exactly five cards by default on page 1.
+### More than six galleries
+- Show exactly six cards by default on page 1.
 - Show the pagination area and page-size selector at the end of the listing.
 - A selected page size of 10 or 20 shows up to that many cards on each page.
 
@@ -273,7 +273,7 @@ Suggested status text: “Showing 6–10 of 18 galleries” with localized Persi
 
 ## 12. Suggested wireframes
 
-### Desktop — default page size (5)
+### Desktop — default page size (6)
 
 ```text
 ┌──────────────────────────────────────────────────────────────────────┐
@@ -349,7 +349,7 @@ Use the same structure with RTL reading order and Persian labels. The desktop si
 ## 13. Test and acceptance matrix
 
 ### Data and pagination unit tests
-- Page size defaults to 5.
+- Page size defaults to 6.
 - Only 5, 10, and 20 are accepted.
 - Unsupported page size falls back to 5.
 - Missing, malformed, zero, negative, decimal, and non-numeric page values normalize to page 1.
