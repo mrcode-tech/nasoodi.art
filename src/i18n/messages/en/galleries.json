@@ -1,8 +1,8 @@
 {
-  "galleryPage": "Gallery page",
-  "showingGalleries": "Showing {start}–{end} of {total} galleries",
-  "galleriesList": "Galleries",
-  "galleryPagination": "Gallery pagination",
+  "galleryPage": "Collection page",
+  "showingGalleries": "Showing {start}–{end} of {total} collections",
+  "galleriesList": "Collections",
+  "galleryPagination": "Collection pagination",
   "exploreCollection": "Explore collection",
   "carouselRole": "carousel",
   "collectionPosition": "Collection position",
