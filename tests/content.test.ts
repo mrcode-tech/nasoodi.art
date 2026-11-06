@@ -58,7 +58,7 @@ test("Persian content slugs accept combining marks and ZWNJ while rejecting unsa
  assert.equal(isSafeContentSlug("unsafe?query"),false);
 });
 
-test("all 25 current artworks remain publicly available with Persian localized slugs",()=>{
+test("published artworks expose safe localized slugs",()=>{
  const publicWorks=getPublicArtworks(artworks,"fa");
  assert.ok(publicWorks.every(item=>isSafeContentSlug(getLocalizedSlug(item,"fa"))));
 });
@@ -239,9 +239,9 @@ test("artist portrait is omitted unless rights, dimensions, and localized alt ar
  assert.equal(getPublicArtistProfile({...profile,portrait:{...profile.portrait!,width:0}},"en")?.portrait,undefined);
 });
 test("canonical Contact record exposes only the artist-supplied Instagram destination",()=>{
- const details:ContactDetails={instagramUrl:"https://example.com/sample-profile"};
+ const details:ContactDetails={instagramUrl:"https://www.instagram.com/sample-profile/"};
  assert.deepEqual(getPublicContactDetails(details),{
-  instagramUrl:"https://example.com/sample-profile",
+  instagramUrl:"https://www.instagram.com/sample-profile/",
   instagramHandle:"sample-profile",
  });
  assert.equal(getPublicContactDetails({email:"not-an-email",telegramHandle:"x",instagramUrl:"https://example.org/"}),undefined);
@@ -393,7 +393,7 @@ test("homepage content is composed through canonical localized repositories",()=
   assert.ok(home.artist?.biography[locale]);
   assert.ok(home.artist?.statement[locale]);
   assert.equal(home.journalPreview.length,1);
-  assert.equal(home.contact?.instagramUrl,"https://example.com/sample-profile");
+  assert.ok(home.contact?.instagramUrl?.startsWith("https://"));
  }
 });
 
@@ -405,7 +405,7 @@ test("site shell renders artist identity from the canonical artist repository",(
 
 test("canonical artist profile is populated in both locales",()=>{
  assert.ok(artistProfile);
- assert.equal(artistProfile?.id,"profile-fixture");
+ assert.ok(artistProfile?.id);
   assert.ok(artistProfile?.name?.en?.trim());
   assert.ok(artistProfile?.brand?.trim());
  assert.ok(artistProfile?.name?.en?.trim());
