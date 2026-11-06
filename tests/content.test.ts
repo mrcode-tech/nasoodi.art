@@ -273,7 +273,8 @@ test("the five owner-approved gallery assets are represented by five unique publ
   assert.equal(item.status,"published");
   assert.equal(item.rightsConfirmed,true);
   assert.equal(item.images.length,1);
-  assert.equal(item.images[0].src,`/images/approved-artwork-${index+1}.jpg`);
+  const expectedImagePaths = ["/images/artworks/artwork-quiet-place.jpg", "/images/artworks/artwork-shape-of-remembering.jpg", "/images/artworks/artwork-where-light-rests.jpg", "/images/artworks/artwork-garden-small-moments.jpg", "/images/artworks/artwork-blue-hour-within.jpg"];
+  assert.equal(item.images[0].src, expectedImagePaths[index]);
   assert.equal(item.images[0].role,"primary");
   assert.ok(item.images[0].width>0 && item.images[0].height>0);
   for (const locale of ["en","fa"] as const) {
