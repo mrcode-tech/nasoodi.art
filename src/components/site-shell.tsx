@@ -31,7 +31,7 @@ function LanguageSelector({ locale, alternates, pathname, label, onNavigate }: {
       const value = current.get(key);
       if (!value) continue;
       if (key === "category" && !["exhibition", "event", "studio-update", "story"].includes(value)) continue;
-      if (key === "page" && (!/^[1-9]\\d*$/.test(value) || value === "1")) continue;
+      if (key === "page" && (!/^[1-9]\d*$/.test(value) || value === "1")) continue;
       if (key === "pageSize" && !["10", "20"].includes(value)) continue;
       query.set(key, value);
     }
