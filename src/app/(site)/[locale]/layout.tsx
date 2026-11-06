@@ -33,6 +33,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   };
 }
 type ResolvedAnnouncement = {
+  id: string;
   title: string;
   description: string;
   metadata?: string;
@@ -72,6 +73,7 @@ function resolveAnnouncement(locale: Locale): ResolvedAnnouncement | undefined {
   }
 
   return {
+    id: announcementConfig.type + ":" + announcementConfig.contentId,
     title: announcementConfig.title[locale],
     description: announcementConfig.description[locale],
     ...(announcementConfig.metadata?.[locale] ? { metadata: announcementConfig.metadata[locale] } : {}),
