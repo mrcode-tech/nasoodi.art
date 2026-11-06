@@ -72,6 +72,7 @@ export type JournalEntry = {
 export type ArtistProfile = {
   id?: string;
   name?: Localized;
+  brand?: string;
   slug?: Localized;
   discipline?: Localized;
   shortIntroduction?: Localized;

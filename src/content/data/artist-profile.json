@@ -1,7 +1,7 @@
 {
   "id": "artist-profile",
   "name": {
-    "en": "Ghazaleh Abdolahzade Nasoodi",
+    "en": "Ghazale Abdolahzade Nasoodi",
     "fa": "غزاله عبداله زاده نسودی"
   },
   "slug": {
@@ -21,7 +21,7 @@
     "fa": "نقاشی رنگ‌روغن به تصویر فرصت می‌دهد تا به‌تدریج شکل بگیرد. رنگ، فرم و نور در برخورد لایه‌ها با یکدیگر می‌توانند رابطه‌های تازه‌ای پیدا کنند و ردّ تصمیم‌های پیشین را بر سطح اثر باقی بگذارند. این نقاشی‌ها به نوعی تماشای آرام‌تر دعوت می‌کنند؛ به دیدن گذارها، مکث‌ها و جزئیاتی که با فرصت‌دادن به نگاه آشکار می‌شوند. هر اثر فضایی برای مواجهه‌ای شخصی باقی می‌گذارد و به یک برداشت واحد محدود نمی‌شود."
   },
   "biography": {
-    "en": "Ghazaleh Abdolahzade Nasoodi is an oil painter. This portfolio brings together a selection of her paintings and the collections in which they are presented. It offers visitors a place to encounter each work individually, follow connections between works, and spend time with the visual details that emerge through close observation.",
+    "en": "Ghazale Abdolahzade Nasoodi is an oil painter. This portfolio brings together a selection of her paintings and the collections in which they are presented. It offers visitors a place to encounter each work individually, follow connections between works, and spend time with the visual details that emerge through close observation.",
     "fa": "غزاله عبداله زاده نسودی نقاش رنگ‌روغن است. این پورتفولیو گزیده‌ای از نقاشی‌های او و مجموعه‌هایی را که آثار در قالب آن‌ها ارائه شده‌اند در کنار هم قرار می‌دهد. این فضا فرصتی فراهم می‌کند تا مخاطب هر اثر را به‌تنهایی ببیند، ارتباط میان آثار را دنبال کند و برای جزئیات بصری‌ای که در تماشای دقیق آشکار می‌شوند وقت بگذارد."
   },
   "artisticApproach": {
@@ -39,5 +39,6 @@
       "ترکیب‌بندی و ریتم بصری",
       "خاطره و برداشت شخصی"
     ]
-  }
+  },
+  "brand": "Nasoodi.art"
 }

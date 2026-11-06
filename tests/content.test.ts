@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
+import { readFileSync } from "node:fs";
 import { artworks } from "../src/content/artworks";
 import { galleries } from "../src/content/galleries";
 import { journalEntries } from "../src/content/journal";
@@ -122,11 +123,11 @@ test("portfolio JSON-LD resolves localized artist identity from canonical profil
  const website=english[1] as Record<string,unknown>;
  assert.equal(english.length,2);
  assert.equal(personEn["@type"],"Person");
- assert.equal(personEn.name,"Ghazaleh Abdolahzade Nasoodi");
+ assert.equal(personEn.name,"Ghazale Abdolahzade Nasoodi");
  assert.equal(personEn.alternateName,"غزاله عبداله زاده نسودی");
  assert.equal(personEn.jobTitle,"Oil painter");
  assert.equal(personFa.name,"غزاله عبداله زاده نسودی");
- assert.equal(personFa.alternateName,"Ghazaleh Abdolahzade Nasoodi");
+ assert.equal(personFa.alternateName,"Ghazale Abdolahzade Nasoodi");
  assert.equal(personFa.jobTitle,"نقاش رنگ‌روغن");
  assert.equal(website["@type"],"WebSite");
  assert.deepEqual(website.inLanguage,["fa","en"]);
@@ -350,9 +351,18 @@ test("homepage content is composed through canonical localized repositories",()=
  }
 });
 
+test("site shell renders artist identity from the canonical artist repository",()=>{
+ const source=readFileSync("src/components/site-shell.tsx","utf8");
+ assert.match(source,/getArtist\\(locale\\)/);
+ assert.match(source,/artistBrand/);
+ assert.doesNotMatch(source,/Ghazale|Abdolahzade Nasoodi|Nasoodi\\.art/);
+});
+
 test("canonical artist profile is populated in both locales",()=>{
  assert.ok(artistProfile);
  assert.equal(artistProfile?.id,"artist-profile");
+ assert.equal(artistProfile?.name?.en,"Ghazale Abdolahzade Nasoodi");
+ assert.equal(artistProfile?.brand,"Nasoodi.art");
  assert.ok(artistProfile?.name?.en?.trim());
  assert.ok(artistProfile?.name?.fa?.trim());
  assert.ok(artistProfile?.biography.en?.trim());
