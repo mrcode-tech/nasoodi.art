@@ -1,100 +1,195 @@
 [
   {
-    "id": "gallery-quiet-intervals",
-    "slug": "quiet-intervals",
+    "id": "gallery-figures-in-red",
+    "slug": "figures-in-red",
     "localizedSlugs": {
-      "en": "quiet-intervals",
-      "fa": "quiet-intervals"
+      "en": "figures-in-red",
+      "fa": "پیکره‌ها-در-سرخی"
     },
     "title": {
-      "en": "Quiet Intervals",
-      "fa": "فاصله‌های آرام"
+      "en": "Figures in Red",
+      "fa": "پیکره‌ها در سرخی"
     },
     "description": {
-      "en": "A considered sequence of works for an unhurried encounter with stillness, reflection, and the spaces between moments.",
-      "fa": "چیدمانی برای مواجهه‌ای بی‌شتاب با سکون، تأمل و فاصله‌هایی که میان لحظه‌ها شکل می‌گیرند."
+      "en": "This collection brings together two figurative paintings from 1388 and 1392, linked by the striking presence of a solitary woman, pale clothing, and a broad red ground. In both works, the figure is set against an expansive field of color, allowing posture, gesture, and surrounding emptiness to carry the composition. The contrast creates a quietly dramatic study of presence, distance, and introspection.",
+      "fa": "این مجموعه دو نقاشی پیکره‌محور از سال‌های ۱۳۸۸ و ۱۳۹۲ را کنار هم قرار می‌دهد؛ آثاری که با حضور زنی تنها، پوشش روشن و گستره‌ای سرخ به یکدیگر پیوند می‌خورند. در هر دو اثر، پیکره در برابر سطحی وسیع از رنگ قرار گرفته و حالت بدن، حرکت دست‌ها و فضای خالی پیرامون نقش مهمی در ترکیب‌بندی دارند. تقابل رنگ و سکون، فضایی تأمل‌برانگیز و اندکی نمایشی می‌سازد."
     },
-    "coverArtworkId": "artwork-quiet-place",
+    "coverArtworkId": "artwork-1388-1",
     "artworkIds": [
-      "artwork-quiet-place",
-      "artwork-where-light-rests",
-      "artwork-garden-small-moments"
+      "artwork-1388-1",
+      "artwork-1392-1"
     ],
     "status": "published",
     "sortOrder": 1
   },
   {
-    "id": "gallery-color-conversation",
-    "slug": "color-in-conversation",
+    "id": "gallery-at-the-windows-edge",
+    "slug": "at-the-windows-edge",
     "localizedSlugs": {
-      "en": "color-in-conversation",
-      "fa": "color-in-conversation"
+      "en": "at-the-windows-edge",
+      "fa": "کنار-پنجره"
     },
     "title": {
-      "en": "Color in Conversation",
-      "fa": "گفت‌وگوی رنگ‌ها"
+      "en": "At the Window's Edge",
+      "fa": "کنار پنجره"
     },
     "description": {
-      "en": "A visual route through selected works, inviting attention to the mood and relationships that emerge when paintings are viewed together.",
-      "fa": "مسیر دیداری‌ای میان چند اثر منتخب که با کنار هم دیدن آن‌ها می‌توان به حال‌وهوا و رابطه‌های تازه میان نقاشی‌ها توجه کرد."
+      "en": "A sequence of quiet figurative scenes from 1392 follows a woman seated near a window and turned toward the world beyond the room. Soft light, muted colors, and glimpses of the surrounding rooftops establish a gentle tension between interior stillness and the life outside. The paintings invite a slower kind of looking, where posture and direction of gaze become as expressive as the setting itself.",
+      "fa": "این مجموعه سه صحنه پیکره‌محور از سال ۱۳۹۲ را گرد هم می‌آورد که در آن‌ها حضور زن و نسبت او با فضای پیرامون اهمیت دارد. نشستن، رو به پنجره بودن و نگاه به بیرون، لحظه‌هایی میان خلوت درون و جهان بیرونی می‌سازند. رنگ‌های ملایم، روشنایی پراکنده و نشانه‌هایی از بام‌ها و فضای شهری، حال‌وهوایی آرام و درون‌نگر به این آثار می‌بخشند."
     },
-    "coverArtworkId": "artwork-where-light-rests",
+    "coverArtworkId": "artwork-1392-2",
     "artworkIds": [
-      "artwork-where-light-rests",
-      "artwork-shape-of-remembering",
-      "artwork-blue-hour-within"
+      "artwork-1392-2",
+      "artwork-1392-3",
+      "artwork-1392-4"
     ],
     "status": "published",
     "sortOrder": 2
   },
   {
-    "id": "gallery-fragments-memory",
-    "slug": "fragments-of-memory",
+    "id": "gallery-the-space-of-a-pause",
+    "slug": "the-space-of-a-pause",
     "localizedSlugs": {
-      "en": "fragments-of-memory",
-      "fa": "fragments-of-memory"
+      "en": "the-space-of-a-pause",
+      "fa": "فضای-یک-مکث"
     },
     "title": {
-      "en": "Fragments of Memory",
-      "fa": "پاره‌های خاطره"
+      "en": "The Space of a Pause",
+      "fa": "فضای یک مکث"
     },
     "description": {
-      "en": "A small collection arranged around recollection, personal association, and the poetry of details.",
-      "fa": "مجموعه‌ای کوچک با محوریت یادآوری، تداعی‌های شخصی و شاعرانگی جزئیات."
+      "en": "Works from 1393 and 1395 are brought together through their attention to intervals, balance, and the space surrounding a subject. Rather than relying on a fixed narrative, these compositions leave room for the viewer to notice how forms meet, recede, and settle. Their measured arrangements and restrained atmosphere make the act of looking itself the central experience.",
+      "fa": "آثاری از سال‌های ۱۳۹۳ و ۱۳۹۵ در این مجموعه کنار هم قرار گرفته‌اند؛ آثاری که به فاصله، تعادل و فضای پیرامون عناصر توجه دارند. ترکیب‌بندی‌ها به روایت مشخصی محدود نمی‌شوند و فرصتی برای دیدن رابطه‌ی میان فرم‌ها، عقب‌نشینی آن‌ها و سکونی که در فضا شکل می‌گیرد فراهم می‌کنند. نظم سنجیده و حال‌وهوای کنترل‌شده‌ی این نقاشی‌ها، خودِ تجربه‌ی تماشا را در مرکز قرار می‌دهد."
     },
-    "coverArtworkId": "artwork-shape-of-remembering",
+    "coverArtworkId": "artwork-1393-1",
     "artworkIds": [
-      "artwork-shape-of-remembering",
-      "artwork-garden-small-moments",
-      "artwork-blue-hour-within"
+      "artwork-1393-1",
+      "artwork-1393-2",
+      "artwork-1395-1"
     ],
     "status": "published",
     "sortOrder": 3
   },
   {
-    "id": "gallery-selected-works",
-    "slug": "selected-works",
+    "id": "gallery-forms-of-stillness",
+    "slug": "forms-of-stillness",
     "localizedSlugs": {
-      "en": "selected-works",
-      "fa": "selected-works"
+      "en": "forms-of-stillness",
+      "fa": "صورت‌های-سکون"
     },
     "title": {
-      "en": "Selected Works",
-      "fa": "گزیده آثار"
+      "en": "Forms of Stillness",
+      "fa": "صورت‌های سکون"
     },
     "description": {
-      "en": "Five paintings brought together as an introduction to this selection of the artist’s work.",
-      "fa": "پنج نقاشی در کنار هم؛ آشنایی‌ای کوتاه با این گزیده از آثار هنرمند."
+      "en": "Three paintings from 1398 explore stillness as something shaped through thought, rhythm, and the arrangement of forms. A passing impression is allowed to settle; a quiet composition becomes a place to linger; and balance gives stillness a visible structure. Seen together, the works suggest that quiet is not an absence of movement, but a subtle rhythm held within the image.",
+      "fa": "سه نقاشی از سال ۱۳۹۸ در این مجموعه، سکون را از خلال اندیشه، ریتم و چیدمان فرم‌ها بررسی می‌کنند. دریافت‌هایی گذرا مجال ماندن پیدا می‌کنند و ترکیب‌بندی آرام به فضایی برای مکث و تماشا بدل می‌شود. در کنار هم، این آثار نشان می‌دهند که سکون لزوماً به معنای نبود حرکت نیست؛ بلکه می‌تواند ریتمی ظریف باشد که در ساختار تصویر حضور دارد."
     },
-    "coverArtworkId": "artwork-quiet-place",
+    "coverArtworkId": "artwork-1398-1",
     "artworkIds": [
-      "artwork-quiet-place",
-      "artwork-shape-of-remembering",
-      "artwork-where-light-rests",
-      "artwork-garden-small-moments",
-      "artwork-blue-hour-within"
+      "artwork-1398-1",
+      "artwork-1398-2",
+      "artwork-1398-3"
     ],
     "status": "published",
     "sortOrder": 4
+  },
+  {
+    "id": "gallery-the-afterlife-of-light",
+    "slug": "the-afterlife-of-light",
+    "localizedSlugs": {
+      "en": "the-afterlife-of-light",
+      "fa": "ماندگاری-روشنایی"
+    },
+    "title": {
+      "en": "The Afterlife of Light",
+      "fa": "ماندگاری روشنایی"
+    },
+    "description": {
+      "en": "This group of paintings from 1398 considers the way light, color, and inward-looking spaces preserve an impression. Subtle transitions give atmosphere to the image, while the idea of an inner landscape turns attention from outward description toward personal response. Color is treated not simply as surface, but as a carrier of mood and memory that continues after the moment has passed.",
+      "fa": "این گروه از نقاشی‌های سال ۱۳۹۸ به چگونگی ماندگاری یک دریافت در روشنایی، رنگ و فضاهای درون‌نگر می‌پردازد. گذارهای ظریف به تصویر حال‌وهوا می‌بخشند و مفهوم چشم‌انداز درونی، نگاه را از توصیف بیرونی به سوی تجربه‌ی شخصی می‌برد. رنگ در این آثار تنها سطحی دیداری نیست؛ حامل حالتی عاطفی و خاطره‌ای است که پس از گذشت لحظه نیز باقی می‌ماند."
+    },
+    "coverArtworkId": "artwork-1398-4",
+    "artworkIds": [
+      "artwork-1398-4",
+      "artwork-1398-5",
+      "artwork-1398-6"
+    ],
+    "status": "published",
+    "sortOrder": 5
+  },
+  {
+    "id": "gallery-what-remains",
+    "slug": "what-remains",
+    "localizedSlugs": {
+      "en": "what-remains",
+      "fa": "آنچه-باقی-می‌ماند"
+    },
+    "title": {
+      "en": "What Remains",
+      "fa": "آنچه باقی می‌ماند"
+    },
+    "description": {
+      "en": "Paintings from 1398 and 1399 meet around the traces left by a moment: a pause, a fragment of presence, or an impression that continues after an experience has passed. Their open-ended character resists a single reading. Instead, each image offers details and atmospheres that can be revisited, allowing memory and personal association to become part of the viewing experience.",
+      "fa": "نقاشی‌هایی از سال‌های ۱۳۹۸ و ۱۳۹۹ در این مجموعه حول ردّی گرد آمده‌اند که از یک لحظه باقی می‌ماند؛ مکثی کوتاه، تکه‌ای از حضور یا دریافتی که پس از پایان تجربه ادامه پیدا می‌کند. گشودگی این آثار آن‌ها را به یک برداشت محدود نمی‌سازد. هر تصویر جزئیات و فضایی برای بازگشت دوباره پیش می‌گذارد تا خاطره و تداعی شخصی نیز بخشی از تجربه‌ی تماشا شوند."
+    },
+    "coverArtworkId": "artwork-1398-7",
+    "artworkIds": [
+      "artwork-1398-7",
+      "artwork-1398-8",
+      "artwork-1399-1"
+    ],
+    "status": "published",
+    "sortOrder": 6
+  },
+  {
+    "id": "gallery-a-quiet-shift",
+    "slug": "a-quiet-shift",
+    "localizedSlugs": {
+      "en": "a-quiet-shift",
+      "fa": "دگرگونی-آرام"
+    },
+    "title": {
+      "en": "A Quiet Shift",
+      "fa": "دگرگونی آرام"
+    },
+    "description": {
+      "en": "Spanning 1401 and 1403, these four works bring together a sense of visual renewal with images that remain deliberately open and contemplative. Rhythm and balance sit alongside ambiguity, seasonal change, and the invitation to look beyond a first impression. The collection marks a gentle shift in the selected works while retaining their shared interest in atmosphere and the unspoken.",
+      "fa": "چهار اثر از سال‌های ۱۴۰۱ و ۱۴۰۳ در این مجموعه، حسی از تازگی بصری را با تصاویری گشوده و تأمل‌برانگیز پیوند می‌دهند. ریتم و تعادل در کنار ابهام، تغییر فصل و دعوت به عبور از دریافت نخستین قرار می‌گیرند. این مجموعه دگرگونی آرامی را در میان آثار منتخب نشان می‌دهد، بی‌آنکه توجه مشترک آن‌ها به فضا، حال‌وهوا و ناگفته‌ها را کنار بگذارد."
+    },
+    "coverArtworkId": "artwork-1401-1",
+    "artworkIds": [
+      "artwork-1401-1",
+      "artwork-1401-2",
+      "artwork-1403-1",
+      "artwork-1403-2"
+    ],
+    "status": "published",
+    "sortOrder": 7
+  },
+  {
+    "id": "gallery-paths-through-light",
+    "slug": "paths-through-light",
+    "localizedSlugs": {
+      "en": "paths-through-light",
+      "fa": "مسیرهایی-در-روشنایی"
+    },
+    "title": {
+      "en": "Paths Through Light",
+      "fa": "مسیرهایی در روشنایی"
+    },
+    "description": {
+      "en": "The most recent works in this selection, from 1403, move between the idea of return, the passage of light, and the experience of moving through a place. A wooded scene introduces a more tangible landscape, while the other titles suggest journeys and changing impressions. Together, the paintings leave the collection open-ended: a place may be revisited, but it is never seen in quite the same way.",
+      "fa": "آثار سال ۱۴۰۳ در این مجموعه میان مفهوم بازگشت، گذر نور و تجربه‌ی عبور از یک مکان حرکت می‌کنند. منظره‌ی جنگلی، چشم‌اندازی ملموس‌تر به مجموعه می‌آورد و دیگر آثار به مسیر، تغییر و دریافت‌های گذرا اشاره دارند. در کنار هم، این نقاشی‌ها روایتی گشوده می‌سازند: می‌توان به مکانی بازگشت، اما آن مکان هر بار با نگاهی تازه دیده می‌شود."
+    },
+    "coverArtworkId": "artwork-1403-3",
+    "artworkIds": [
+      "artwork-1403-3",
+      "artwork-1403-4",
+      "artwork-1403-5",
+      "artwork-1403-6"
+    ],
+    "status": "published",
+    "sortOrder": 8
   }
 ]
