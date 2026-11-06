@@ -85,7 +85,7 @@ html[lang=fa] .journal-card h2{font-family:"IranianSerifRegular",Tahoma,serif;li
 /* Gallery discovery uses the canonical approved cover artwork record. */
 .gallery-cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(1.5rem,3vw,3rem)}
 .gallery-card{display:flex;min-width:0;flex-direction:column;gap:1rem}
-.gallery-card>img{display:block;width:100%;height:auto;max-height:34rem;object-fit:contain;background:var(--surface)}
+.gallery-card>img{display:block;width:100%;height:auto;max-height:34rem;object-fit:contain;background:var(--paper)}
 .gallery-card-copy{display:flex;flex-direction:column;gap:.45rem}
 .gallery-card-copy strong{font:400 clamp(1.25rem,2.2vw,1.8rem)/1.35 Georgia,"Times New Roman",serif}
 html[lang=fa] .gallery-card-copy strong{font-family:"IranianSerifRegular",Tahoma,serif;line-height:1.65}
@@ -755,7 +755,7 @@ html[lang=fa] .journal-preview-item h3{font-family:"IranianSerifRegular",Tahoma,
 .journal-preview-item a:hover{text-decoration:underline;text-decoration-color:var(--mauve)}
 .journal-preview-item.has-cover{display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);align-items:start;gap:clamp(1.25rem,2.5vw,2rem)}
 .journal-preview-copy{min-width:0}
-.journal-cover-image{display:block;width:100%;height:auto;max-height:22rem;object-fit:contain;object-position:center;background:var(--surface)}
+.journal-cover-image{display:block;width:100%;height:auto;max-height:22rem;object-fit:contain;object-position:center;background:var(--paper)}
 .journal-card.has-cover{display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);align-items:start;gap:clamp(1.25rem,2.5vw,2rem)}
 .journal-card-copy{display:flex;min-width:0;flex-direction:column;align-items:flex-start}
 .journal-detail-cover{display:flex;max-width:58rem;max-height:36rem;align-items:flex-start;margin:2rem 0 2.5rem}
@@ -771,7 +771,7 @@ html[lang=fa] .journal-preview-item h3{font-family:"IranianSerifRegular",Tahoma,
 .gallery-index-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(2rem,4vw,3.75rem) clamp(1.25rem,2.8vw,2.5rem)}
 .gallery-index-card{min-width:0}
 .gallery-index-card-link{display:flex;min-width:0;height:100%;flex-direction:column;gap:1rem;color:inherit;text-decoration:none}
-.gallery-index-image-frame{display:flex;min-width:0;aspect-ratio:4/5;align-items:center;justify-content:center;overflow:hidden;background:var(--surface)}
+.gallery-index-image-frame{display:flex;min-width:0;aspect-ratio:4/5;align-items:center;justify-content:center;overflow:hidden;background:var(--paper)}
 .gallery-index-image-frame img{display:block;width:100%;height:100%;object-fit:contain;object-position:center}
 .gallery-index-card-copy{display:flex;flex-direction:column;gap:.55rem}
 .gallery-index-card-copy strong{font:400 clamp(1.25rem,2vw,1.7rem)/1.35 Georgia,"Times New Roman",serif}
@@ -1604,7 +1604,7 @@ html[lang="fa"] .artwork-viewer-info h2 {
   flex: 0 0 auto;
   object-fit: contain;
   object-position: center;
-  background: var(--surface);
+  background: var(--paper);
 }
 .home-page .collection-carousel .gallery-card-copy {
   flex: 1;
