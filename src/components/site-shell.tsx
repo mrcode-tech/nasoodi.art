@@ -99,11 +99,12 @@ export function SiteShell({ locale, children, announcement }: { locale: Locale; 
         title={announcement.title}
         description={announcement.description}
         metadata={announcement.metadata}
-                dismissLabel={labels.dismissAnnouncement}
+        dismissLabel={labels.dismissAnnouncement}
         href={announcement.href}
         placement="viewport"
       />
     )}
+
     <Sidebar className="desktop-sidebar" dir={getLocaleDirection(locale)} aria-label={artistBrand}>
       <SidebarHeader><Link className="artist-wordmark" href={pagePath(locale)} aria-label={labels.home}>
         <span className="wordmark-name" dir="ltr">{artistGivenName}</span><span className="wordmark-surname" dir="ltr">{artistFamilyNames.join(" ")}</span><span className="wordmark-role" dir="auto">{labels.discipline}</span>
@@ -116,13 +117,14 @@ export function SiteShell({ locale, children, announcement }: { locale: Locale; 
               locale={locale}
               id={announcement.id}
               title={announcement.title}
-        description={announcement.description}
-        metadata={announcement.metadata}
-                            dismissLabel={labels.dismissAnnouncement}
+              description={announcement.description}
+              metadata={announcement.metadata}
+              dismissLabel={labels.dismissAnnouncement}
               href={announcement.href}
               placement="desktop-sidebar"
             />
           )}
+
           <div className="sidebar-flex-spacer" aria-hidden="true" />
           <div className="sidebar-bottom" dir="ltr"><span>{artistBrand} · © {new Date().getFullYear()}</span></div>
         </ScrollArea>
@@ -142,14 +144,15 @@ export function SiteShell({ locale, children, announcement }: { locale: Locale; 
                 locale={locale}
                 id={announcement.id}
                 title={announcement.title}
-        description={announcement.description}
-        metadata={announcement.metadata}
-                                dismissLabel={labels.dismissAnnouncement}
+                description={announcement.description}
+                metadata={announcement.metadata}
+                dismissLabel={labels.dismissAnnouncement}
                 href={announcement.href}
                 placement="mobile-sidebar"
                 onNavigate={() => setMobileOpen(false)}
               />
             )}
+
             <div className="drawer-flex-spacer" aria-hidden="true" />
             <div className="drawer-bottom">
               <div className="drawer-settings" dir={getLocaleDirection(locale)}>
