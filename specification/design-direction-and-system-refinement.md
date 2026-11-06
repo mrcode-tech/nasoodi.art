@@ -228,7 +228,7 @@ For Journal imagery, use only an entry's optional approved cover image when its 
 The implementation authority for all typography roles, Persian/English token values, script-specific line-height, natural wrapping, and responsive acceptance criteria is [shared-responsive-typography-system.md](./shared-responsive-typography-system.md). This refinement supersedes the original large display/page/section ranges in Section 4.
 
 - Use the shared semantic tokens across every route and reusable component; do not tune page headings independently.
-- The Persian homepage artist name (غزاله عبداله زاده نسودی) and homepage Contact heading (بیایید گفت‌وگویی را آغاز کنیم.) are single-line targets at the reference widths defined by the shared specification.
+- The Persian homepage artist name (ARTIST_NAME_FA) and homepage Contact heading (CONTACT_HEADING) are single-line targets at the reference widths defined by the shared specification.
 - These two targets do not create a global no-wrap rule. Preserve natural, readable wrapping at narrower widths and for all other headings.
 - Persian and English share the same hierarchy but use script-appropriate token values and line-height.
 - Typography must remain unchanged between Light and Dark themes and must not compete with artwork.

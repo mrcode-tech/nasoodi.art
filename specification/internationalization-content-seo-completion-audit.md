@@ -9,7 +9,7 @@
 The application uses Next.js App Router, next-intl, English/Persian localized routes, server-rendered content, canonical JSON records, focused repositories, localized metadata, sitemap/robots routes, and Playwright coverage.
 
 Canonical content is stored in:
-- `artist-profile.json`
+- `PROFILE_DATA_SOURCE`
 - `cv.json`
 - `contact.json`
 - `artworks.json`
@@ -26,7 +26,7 @@ Journal articles and exhibition/event entries share one Journal collection. The 
 - Do not add editorial verification, factuality, provenance, artist-approval, or completeness gates that hide content.
 - Do not require editorial status/verification flags for CV, Contact, exhibitions, awards, publications, or Journal entries.
 - Do not create parallel preview, sample, fictional, verified/unverified, temporary/permanent, or environment-specific content stores.
-- Current Contact methods are `g.nasoodi@gmail.com`, `@nasoodi`, and `@ghazalenasoodi`.
+- Current Contact methods are `CONTACT_EMAIL`, `CONTACT_HANDLE`, and `CONTACT_PROFILE`.
 - CV content currently contains 16 localized records spanning education, exhibitions, publications, awards, and ongoing practice. The CV download route uses the canonical CV data.
 - Technical safeguards remain appropriate for safe URLs, asset paths, route handling, type compatibility, and graceful optional fields. They must not make editorial judgments.
 

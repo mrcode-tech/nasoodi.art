@@ -25,7 +25,7 @@ const editorialValues = new Set();
 function collect(value, key = "") {
   if (typeof value === "string") {
     const normalized = value.trim();
-    if (editorialKeys.has(key) && normalized.length >= 4) editorialValues.add(normalized);
+    if (editorialKeys.has(key) && normalized.length >= 4 && normalized !== "artist-profile" && normalized !== "artist-cv" && !normalized.startsWith("/api/")) editorialValues.add(normalized);
     return;
   }
   if (Array.isArray(value)) {
