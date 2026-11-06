@@ -25,6 +25,49 @@ test("localized routes expose the correct document language and main landmark", 
   }
 });
 
+for (const route of ["/fa", "/fa/contact"] as const) {
+  for (const viewport of [{ width: 1280, height: 800 }, { width: 390, height: 844 }]) {
+    test("Persian contact values align to the physical left edge on " + route + " at " + viewport.width + "px", async ({ page }) => {
+      await page.setViewportSize(viewport);
+      await page.goto(route);
+      const section = page.locator(".contact-experience");
+      const methods = section.locator(".contact-methods");
+      const links = methods.locator(".contact-method a");
+      if (await links.count() === 0) {
+        test.skip(true, "No public contact methods are configured.");
+        return;
+      }
+
+      const alignment = await section.locator(".contact-details").evaluate((details) => {
+        const detailRect = details.getBoundingClientRect();
+        const rows = Array.from(details.querySelectorAll(".contact-method"));
+        return rows.map((row) => {
+          const link = row.querySelector("a");
+          const label = row.querySelector(".contact-method-label");
+          const linkRect = link?.getBoundingClientRect();
+          const labelRect = label?.getBoundingClientRect();
+          return {
+            valueLeftOffset: linkRect ? Math.abs(linkRect.left - detailRect.left) : Number.POSITIVE_INFINITY,
+            labelRightOffset: labelRect ? Math.abs(labelRect.right - detailRect.right) : Number.POSITIVE_INFINITY,
+            stackedBelowLabel: Boolean(linkRect && labelRect && linkRect.top >= labelRect.bottom - 1),
+            top: linkRect?.top ?? 0,
+          };
+        });
+      });
+
+      expect(alignment.length).toBeGreaterThan(0);
+      for (const row of alignment) {
+        expect(row.valueLeftOffset).toBeLessThanOrEqual(1);
+        expect(row.labelRightOffset).toBeLessThanOrEqual(1);
+        expect(row.stackedBelowLabel).toBe(true);
+      }
+      expect(alignment.map((row) => row.top)).toEqual(
+        [...alignment.map((row) => row.top)].sort((a, b) => a - b)
+      );
+    });
+  }
+}
+
 test("desktop navigation exposes the current route and navigates between sections", async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 800 });
   await page.goto("/en/works");

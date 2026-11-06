@@ -1947,3 +1947,19 @@ html[lang="fa"] .artwork-viewer-info h2 {
     margin-block-start: .45rem;
   }
 }
+
+
+/* Persian contact values are Latin-script identifiers: keep their physical
+   alignment on the left edge, matching the English contact composition. */
+html[lang="fa"] .contact-methods,
+html[lang="fa"] .contact-method {
+  direction: ltr;
+}
+html[lang="fa"] .contact-method {
+  align-items: flex-start;
+}
+html[lang="fa"] .contact-method-label {
+  width: 100%;
+  direction: rtl;
+  text-align: right;
+}
