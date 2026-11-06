@@ -636,6 +636,7 @@ test("announcement configuration validates both activation states and rejects ma
   assert.throws(() => assertAnnouncementConfig({ ...base, title: { en: "", fa: "عنوان" } }));
   assert.throws(() => assertAnnouncementConfig({ ...base, description: { en: "Description" } }));
   assert.throws(() => assertAnnouncementConfig({ ...base, metadata: {} }));
+  assert.throws(() => assertAnnouncementConfig({ ...base, href: "/en/galleries/example" }));
 });
 
 test("announcement destinations are derived from content type and localized slug", () => {
