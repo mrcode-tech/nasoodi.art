@@ -342,8 +342,8 @@ test("CV publication accepts synthetic localized entries and optional periods",(
 
 test("homepage Journal preview is composed from supplied synthetic entries",()=>{
  const entries=[validJournalEntry,{...validJournalEntry,id:"newer",slug:"newer",publishedAt:"2026-11-01T10:00:00Z"}];
- assert.equal(getHomepageJournalPreview(entries).length,1);
- assert.equal(getHomepageJournalPreview(entries)[0].id,"newer");
+ assert.equal(getHomepageJournalPreview(entries,"en").length,1);
+ assert.equal(getHomepageJournalPreview(entries,"en")[0].id,"newer");
 });
 
 test("site shell renders artist identity from the canonical artist repository",()=>{
