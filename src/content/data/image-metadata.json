@@ -9,33 +9,33 @@
     },
     "/images/artworks/artwork-blue-hour-within.jpg": {
       "format": "jpeg",
-      "width": 4032,
-      "height": 3024,
-      "aspectRatio": 1.333333
+      "width": 3000,
+      "height": 4000,
+      "aspectRatio": 0.75
     },
     "/images/artworks/artwork-garden-small-moments.jpg": {
       "format": "jpeg",
-      "width": 4032,
-      "height": 3024,
-      "aspectRatio": 1.333333
+      "width": 3000,
+      "height": 4000,
+      "aspectRatio": 0.75
     },
     "/images/artworks/artwork-quiet-place.jpg": {
       "format": "jpeg",
-      "width": 4032,
-      "height": 3024,
-      "aspectRatio": 1.333333
+      "width": 3000,
+      "height": 4000,
+      "aspectRatio": 0.75
     },
     "/images/artworks/artwork-shape-of-remembering.jpg": {
       "format": "jpeg",
-      "width": 4032,
-      "height": 3024,
-      "aspectRatio": 1.333333
+      "width": 3000,
+      "height": 4000,
+      "aspectRatio": 0.75
     },
     "/images/artworks/artwork-where-light-rests.jpg": {
       "format": "jpeg",
-      "width": 4032,
-      "height": 3024,
-      "aspectRatio": 1.333333
+      "width": 3000,
+      "height": 4000,
+      "aspectRatio": 0.75
     }
   }
 }
