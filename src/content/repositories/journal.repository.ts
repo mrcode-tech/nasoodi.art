@@ -12,5 +12,5 @@ export function getJournalEntryById(id: string, locale: Locale) {
 }
 
 export function getJournalEntryBySlug(slug: string, locale: Locale) {
-  return getJournalEntries(locale).find((entry) => matchesLocalizedSlug(entry, locale, slug));
+  return getJournalEntries(locale).find((entry) => matchesLocalizedSlug(entry, locale, slug) || entry.slug === slug);
 }
