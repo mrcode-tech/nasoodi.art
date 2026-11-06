@@ -1,4 +1,4 @@
-import imageMetadata from "@/content/data/image-metadata.json";
+import imageMetadata from "../content/data/image-metadata.json";
 
 export type ImageMetadataRecord = {
   format: "jpeg" | "png" | "webp";

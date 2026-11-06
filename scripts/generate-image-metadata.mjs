@@ -100,7 +100,6 @@ const imageFiles = await walk(imageRoot);
 const images = {};
 for (const absolute of imageFiles) {
   const bytes = await readFile(absolute);
-  const extension = extname(absolute).toLowerCase();
   const info = jpegDimensions(bytes) ?? pngDimensions(bytes) ?? webpDimensions(bytes);
   if (!info || !Number.isSafeInteger(info.width) || !Number.isSafeInteger(info.height) || info.width < 1 || info.height < 1) {
     throw new Error("Unsupported, corrupt, or unreadable image: " + relative(root, absolute));
