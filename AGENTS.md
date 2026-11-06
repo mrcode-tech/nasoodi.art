@@ -137,9 +137,12 @@ A task is not complete merely because code was written or the build passes. Comp
 - A documentation-only task must not modify application source, dependencies, routes, or CI. A later implementation task must follow the component, responsive, RTL, accessibility, visual QA, and test requirements in the new experience specification.
 
 
-## Journal announcement sticker vector asset and CI contract
+## Journal announcement sticker vector asset contract
 
-For the Journal/sticker implementation, read specification/journal-announcement-sticker-visual-design.md and follow it as the visual asset authority. The paper sticker must be authored directly as editable SVG paths/strokes. Do not use image generation, screenshot tracing, raster painting, or image-processing tools. GitHub Actions converts the checked-in SVG into a transparent PNG review artifact and validates its dimensions/alpha channel. Keep event text and controls in accessible localized HTML. Do not check in a generated PNG or treat the visual study as owner-approved until the owner reviews it.
+- The canonical Journal sticker is a hand-authored SVG stored directly at `public/images/journal/journal-announcement-sticker.svg` and served by the website as SVG.
+- Keep the SVG as the only maintained sticker asset. Do not add a PNG conversion pipeline, Python renderer, generated PNG, visual-review artifact upload, or raster runtime derivative.
+- CI must verify that the canonical SVG file exists and is non-empty. Browser tests should verify that the sticker asset loads in the relevant Journal/announcement UI. SVG visual refinement is reviewed through the actual website screenshots, not a generated PNG artifact.
+- Keep event text and controls in accessible localized HTML; the SVG contains decorative paths only.
 
 ## Public image storage and generated metadata
 
