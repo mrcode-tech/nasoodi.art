@@ -118,7 +118,7 @@ test.describe("Configured content announcement responsive behavior", () => {
       await page.setViewportSize({ width: 1280, height: 900 });
       await page.goto("/" + item.locale);
       await page.locator('[data-placement="viewport"] [data-part="link"]').click();
-      await expect(page).toHaveURL(new RegExp(expectedHref(item.locale).replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + "$"));
+      await expect(page).toHaveURL("http://127.0.0.1:3000" + expectedHref(item.locale));
     });
   }
 });
