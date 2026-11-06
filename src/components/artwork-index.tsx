@@ -13,7 +13,6 @@ import {
   type GalleryPageSize,
 } from "@/lib/gallery-pagination";
 import { formatLocaleNumber } from "@/lib/locale-number";
-import { primaryImageFor } from "@/lib/site";
 import { getLocaleDirection, pagePath, type Locale } from "@/types/locale";
 import type { Artwork } from "@/types/content";
 
@@ -57,7 +56,20 @@ export function ArtworkIndex({ artworks, locale, labels }: Props) {
     <>
       <div className="artwork-grid" role="list" aria-label={locale === "fa" ? "فهرست آثار" : "Works"}>
         {visible.map((artwork) => {
-          const image = primaryImageFor(artwork);
+          const image = artwork.images.find((candidate) =>
+            candidate.role === "primary" &&
+            candidate.src.startsWith("/") &&
+            !candidate.src.startsWith("//") &&
+            !candidate.src.includes(String.fromCharCode(92)) &&
+            !candidate.src.includes("?") &&
+            !candidate.src.includes("#") &&
+            !candidate.src.toLowerCase().includes("%2e") &&
+            !candidate.src.toLowerCase().includes("%2f") &&
+            !candidate.src.toLowerCase().includes("%5c") &&
+            candidate.src.split("/").every((segment) => segment !== "." && segment !== "..") &&
+            candidate.width > 0 &&
+            candidate.height > 0,
+          );
           if (!image) return null;
           return (
             <Link className="artwork-item" role="listitem" key={artwork.id} href={pagePath(locale, `works/${artwork.slug}`)}>
