@@ -18,7 +18,7 @@ const editorialKeys = new Set([
   "body", "text", "heading", "caption", "alt", "altText", "image", "imagePath",
   "primaryImage", "coverArtworkId", "artworkIds", "featuredArtworkIds",
   "featuredGalleryIds", "email", "handle", "url", "value", "filename", "src",
-  "publicationDate", "date", "id", "pdf",
+  "publicationDate", "date", "id", "contentId", "metadata", "pdf",
 ]);
 
 const editorialValues = new Set();
