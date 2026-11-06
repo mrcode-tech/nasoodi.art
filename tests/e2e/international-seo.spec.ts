@@ -43,7 +43,7 @@ test("language switcher preserves Journal category and page-size state", async (
   await page.goto("/en/journal?category=story&pageSize=10");
   await page.locator(".language-trigger").click();
   await page.getByRole("menuitem", { name: /فارسی/ }).click();
-  await expect(page).toHaveURL(/\\/fa\\/journal\\?category=story&pageSize=10$/);
+  await expect(page).toHaveURL(/\/fa\/journal\?category=story&pageSize=10$/);
 });
 
 test("published artwork, gallery, and Journal detail alternates resolve to the same content identity", async ({ page, request }) => {
