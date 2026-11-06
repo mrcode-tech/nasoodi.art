@@ -22,7 +22,7 @@ The hero artwork, featured artwork cards, and gallery covers must be drawn from 
 
 Use the artwork image currently supplied at:
 
-`specification/assets/artwork.JPG`
+`public/images/artist/artist-at-work.jpg`
 
 as the **initial candidate source for the homepage hero painting**. The implementation agent must inspect the actual file before use: verify that it is a finished artwork image, assess orientation/composition/resolution/color profile, and confirm that it is the intended public hero image with artist/site-owner approval. The filename alone is not proof of suitability or rights.
 
@@ -245,7 +245,7 @@ Validation:
 
 ## 11. Acceptance criteria
 
-- The first viewport prominently shows the approved artwork from the configured hero record; initial candidate asset is `specification/assets/artwork.JPG`.
+- The first viewport prominently shows the approved artwork from the configured hero record; initial candidate asset is `public/images/artist/artist-at-work.jpg`.
 - The hero image is the painting itself, not merely a decorative placeholder or hidden layer.
 - The artist identity and a clear path to Works/Galleries are visible without waiting for animation.
 - A Featured Works section appears in the middle portion of the homepage and shows 3–6 approved paintings when available.

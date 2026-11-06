@@ -1,289 +1,68 @@
-# Nasoodi.art — Content and Artwork Model
-
-**Status:** Proposed content contract
-
-This document defines the minimum structured content required to publish a trustworthy artist portfolio. It intentionally separates verified facts from optional or unknown fields.
-
-## 1. Content principles
-
-- Artist-approved content is authoritative.
-- Do not infer artwork titles, dates, dimensions, series, or availability.
-- Missing values remain absent; do not render fake labels such as “2025” or “Oil on canvas” as defaults.
-- English and Persian content are separate editorial values. Do not assume a literal translation is artist-approved.
-- Original image assets and web derivatives must be traceable to their source.
-- Every public image must have an approved usage basis and meaningful alternative text when informative.
-
-## 2. Artist profile
-
-| Field | Required to launch | Notes |
-|---|---:|---|
-| Public English name | Yes | Confirm exact transliteration with artist |
-| Persian name | Yes for Persian experience | Supplied: غزاله عبداله زاده نسودی |
-| Discipline | Yes | Supplied: oil painter |
-| Location | Optional display | “Iran” supplied; no city/address inferred |
-| Short introduction | Yes | Artist-approved, not fabricated |
-| Artist statement | Recommended | First person, distinct from biography |
-| Biography | Recommended | Factual, third person |
-| Portrait/studio image | No | Only if supplied and approved |
-| Instagram URL | Yes if social link displayed | Supplied profile URL |
-| Contact email | Required only if email contact is offered | Must be confirmed |
-| CV/exhibitions | Optional | Publish only verified entries |
-
-## 2.1 Runtime artist profile and contact publication contracts
-
-The current application models the artist profile and public contact destinations separately from artwork and Journal records. Real public contact details require owner approval. Owner-authorized demo-phase exception (2026-11-03): centralized fictional email, Telegram, and Instagram values may be rendered without approval gates on the homepage and localized Contact routes; they are placeholders, not artist facts or verified/monitored channels.
-
-- An artist profile requires a published state, explicit artist approval, approved locale, and non-empty localized statement and factual biography before the About page becomes indexable.
-- An optional portrait is displayed only when its rights are confirmed, its dimensions are positive, and localized alternative text is supplied for the current locale. An invalid optional portrait is omitted without suppressing otherwise valid profile text.
-- Real artist Contact destinations require explicit owner approval and locale approval. During the authorized demo phase, the centralized fictional Contact fixture is rendered without owner/locale approval gates. Email syntax is validated before creating a mailto link; Telegram handles and Instagram URLs are validated, and arbitrary external URLs are rejected. Keep Contact routes noindex and out of the sitemap until real details replace the demo fixture.
-- About remains available with a truthful pending-content message while its content is absent. Contact remains available and noindex; it renders the owner-authorized demo fixture during the demo phase and remains excluded from the sitemap until real contact details replace the fixture.
-- A locale alternate is emitted only when the corresponding profile/contact content is approved in the other locale. Never copy or machine-translate the source-language statement, biography, or contact text.
-
-The implementation contract uses these fields:
-
-```ts
-type ArtistProfile = {
-  statement: LocalizedText;
-  biography: LocalizedText;
-  portrait?: {
-    src: string;
-    alt: LocalizedText;
-    width: number;
-    height: number;
-    rightsConfirmed: boolean;
-  };
-  status: PublicationStatus;
-  approvedLocales: Array<"fa" | "en">;
-  artistApproved: boolean;
-};
-
-type ContactDetails = {
-  email?: string;
-  telegramHandle?: string;
-  instagramUrl?: string;
-};
-
-// Demo-phase fixtures are owner-authorized and are not gated by publication approvals.
-```
-
-## 3. Artwork record
-
-A work may be published with only the fields that are known and approved. Suggested conceptual shape:
-
-```ts
-type LocalizedText = {
-  fa?: string;
-  en?: string;
-};
-
-type ArtworkAvailability =
-  | "available"
-  | "sold"
-  | "reserved"
-  | "not-for-sale"
-  | "undisclosed";
-
-type ArtworkImage = {
-  src: string;
-  alt: LocalizedText;
-  role: "primary" | "detail" | "installation";
-  width: number;
-  height: number;
-  credit?: string;
-};
-
-type Artwork = {
-  slug: string;
-  title: LocalizedText;
-  year?: number;
-  medium?: LocalizedText;
-  dimensions?: {
-    height: number;
-    width: number;
-    depth?: number;
-    unit: "cm" | "mm" | "in";
-  };
-  seriesSlug?: string;
-  description?: LocalizedText;
-  availability?: ArtworkAvailability;
-  images: ArtworkImage[];
-  featured?: boolean;
-  sortOrder?: number;
-  rightsConfirmed: boolean;
-};
-```
-
-This is a conceptual contract, not a requirement to adopt this exact TypeScript shape. Implementation must validate records and avoid exposing internal rights notes.
-
-### Artwork validation rules
-
-- `slug` must be unique, stable, URL-safe, and not derived from an unapproved title.
-- At least one primary image is required for a public artwork.
-- The primary image must have a meaningful localized alt text or an explicitly reviewed equivalent.
-- Dimensions must be positive and use one declared unit.
-- Year must be a valid year and must be artist-confirmed.
-- Medium must describe the actual work; “oil painting” at artist level does not prove every work's substrate or exact medium.
-- `rightsConfirmed` must be true before publication.
-- An availability label is shown only when the artist wants it public and can keep it current.
-- A sold work may remain in the archive if the artist approves.
-- Never show a price field until pricing and currency policy are agreed.
-
-## 4. Series record
-
-```ts
-type ArtworkSeries = {
-  slug: string;
-  title: LocalizedText;
-  introduction?: LocalizedText;
-  coverArtworkSlug?: string;
-  artworkSlugs: string[];
-  yearRange?: {
-    start: number;
-    end?: number;
-  };
-  sortOrder?: number;
-};
-```
-
-Use series only when the artist recognizes a meaningful body of work. Do not create artificial categories solely to fill a navigation menu.
-
-## 5. CV entries
-
-Suggested categories:
-
-- Solo exhibitions
-- Group exhibitions
-- Education
-- Awards and grants
-- Residencies
-- Publications and press
-- Collections
-
-Each entry should include a date/year, title, organizer/venue, location, category, and optional source/reference. Include only fields that are known. Sort reverse chronologically. Do not create a CV page with invented entries.
-
-## 6. Image asset workflow
-
-1. Receive original source file and source/ownership confirmation.
-2. Record artist, artwork slug, original filename, source dimensions, and usage approval.
-3. Preserve an untouched master outside the generated web derivatives.
-4. Create responsive derivatives; retain a high-quality detail source if approved.
-5. Inspect crop, color, contrast, sharpness, and texture against the original.
-6. Write localized alt text describing visible content; do not infer emotional meaning or symbolism.
-7. Approve the final image and caption with the artist.
-8. Publish and verify on mobile, tablet, and desktop.
-
-Recommended capture practices for physical paintings:
-
-- Photograph straight-on to avoid perspective distortion.
-- Use even, neutral lighting and a consistent white balance.
-- Avoid glare, reflections, strong shadows, and color casts.
-- Include a clean full-work image; add close-up details only when useful.
-- Do not use a social-media screenshot as the master when the original file is available.
+# Nasoodi.art — Content Model
 
-## 7. Alt text guidance
+**Owner decision, 2026-11-05:** Content is editorial data. Do not impose factual verification, artist-approval, provenance, or content-validation gates before displaying records supplied or authorized by the owner. The owner wants the current editable content to populate the site and will revise the JSON after launch.
 
-Alt text should describe the visual content accurately and briefly. It should not be keyword stuffing, a full artist statement, or an interpretation presented as fact.
+## 1. Canonical content sources
 
-Examples below are format examples only, not descriptions of Ghazaleh's actual work:
+Use one canonical JSON source for each content domain:
 
-- English: “Oil painting showing a seated figure beside a window, with warm ochre and muted blue tones.”
-- Persian: «نقاشی رنگ‌روغن از پیکره‌ای نشسته کنار پنجره با طیف‌های اخرایی و آبی ملایم.»
+| Domain | Source |
+|---|---|
+| Artist profile, biography, statement, About | `src/content/data/artist-profile.json` |
+| CV, education, activities, exhibitions, awards, publications | `src/content/data/cv.json` |
+| Contact details | `src/content/data/contact.json` |
+| Artworks | `src/content/data/artworks.json` |
+| Galleries | `src/content/data/galleries.json` |
+| Journal articles, events, exhibitions and news | `src/content/data/journal/index.json` |
+| Site metadata | `src/content/data/site.json` |
+| Homepage selections | `src/content/data/homepage-selection.json` |
 
-For decorative interface imagery, use empty alt text. For a complex artwork, the visible caption and surrounding description may provide additional context.
+Do not create parallel verified/unverified, approved/pending, sample/real, preview/production, temporary/permanent, or environment-specific content stores. The homepage, About, CV, Contact, gallery, and Journal views must read the canonical records.
 
-## 8. Bilingual editorial rules
+## 2. Content fields and localization
 
-- Keep a Persian and English value for page titles, descriptions, artwork titles, series titles, and meaningful captions when available.
-- Do not publish a blank or machine-generated translation as if it were approved.
-- Preserve the artist's chosen spelling of her name across title tags, page headings, social links, and structured data.
-- Use Persian numerals only if the artist prefers them; be consistent across the Persian experience.
-- Keep dimensions and units unambiguous.
-- Isolate Latin URLs, email addresses, and English names within RTL text to prevent bidirectional display errors.
+- Keep stable record IDs.
+- Store English and Persian editorial copy in the same record using `en` and `fa` localized values.
+- Store UI labels and interface messages in `src/i18n/messages/{en,fa}/`.
+- Keep shared facts such as dates, dimensions, medium, ordering, and image paths in structured fields.
+- Use structured JSON blocks for long-form Journal content.
+- Keep content separate from React components and application logic.
+- Missing optional fields may simply be omitted. Do not create artificial placeholder values to satisfy a content rule.
 
-## 9. Editorial states
+## 3. Artist profile and About
 
-Recommended internal workflow states:
+The homepage biography and About page use the same artist-profile record. The record may contain the artist's name, biography, statement, discipline, and portrait reference. Do not maintain a second About fixture or environment-specific provider.
 
-- `draft` — incomplete, not public.
-- `needs-artist-review` — content or image awaiting confirmation.
-- `approved` — artist approved public presentation.
-- `published` — publicly available.
-- `archived` — removed from primary selection but retained if approved.
+## 4. CV and activities
 
-Only approved content may be published. The first implementation may represent these states through repository review rather than a CMS workflow.
+The CV is one editable collection. It can contain education, training, professional activities, solo/group exhibitions, publications, awards, collections, workshops, and other relevant activities. Display the entries currently present in the canonical JSON. Do not suppress entries because they lack a separate verification, approval, or provenance flag. The owner may edit or remove entries directly in JSON.
 
+The CV page and About CV preview use the same CV repository/source. The downloadable PDF is generated from or served using the same canonical CV data/document configured in that record.
 
-## 10. Curated gallery record
+## 5. Contact
 
-A Gallery is a named, localized collection of published artwork. It is distinct from an artist-defined series, exhibition, or venue. One artwork may belong to multiple galleries without duplicating its canonical record.
+Use the single Contact record for the homepage Contact section and dedicated Contact page. Current owner-provided methods are:
+- Email: `g.nasoodi@gmail.com`
+- Telegram: `@nasoodi`
+- Instagram: `@ghazalenasoodi`
 
-```ts
-type GalleryStatus = "draft" | "needs-artist-review" | "approved" | "published" | "archived";
+Do not hide these methods behind approval-state or verification flags. Render email as a `mailto:` link and Telegram as `https://t.me/nasoodi`.
 
-type Gallery = {
-  id: string;
-  slug: string;
-  title: LocalizedText;
-  description: LocalizedText;
-  coverArtworkId: string;
-  artworkIds: string[]; // curated order; no duplicates
-  sortOrder: number;
-  featuredOnHome?: boolean;
-  status: GalleryStatus;
-  seo?: { title?: LocalizedText; description?: LocalizedText };
-};
+## 6. Artwork, galleries, Journal and events
 
-type HomepageSelection = {
-  heroArtworkId: string;
-  featuredArtworkIds: string[];
-  featuredGalleryIds: string[];
-};
-```
+- Artwork records describe the artwork and point to repository assets.
+- Galleries reference artwork IDs rather than duplicating artwork records.
+- Journal is the unified editorial stream for articles, studio notes, exhibitions, events, and news, including events involving other artists.
+- The event repository is a filtered view of Journal records, not a second data store.
+- The homepage Journal preview shows one newest eligible item; the full Journal page uses pagination.
+- Keep existing visual presentation, route structure, and localized content behavior.
 
-This is a conceptual contract; reconcile field names with the repository's existing types before implementation. Use one source of truth for artwork-gallery membership and preserve per-gallery order. Do not embed duplicate artwork records in galleries.
+## 7. Technical integrity (not editorial approval)
 
-### Gallery publication validation
+Application code may retain technical checks needed to prevent runtime errors or unsafe behavior, such as TypeScript shape checks, safe URL/path handling, route collision handling, and correct rendering of optional fields. These checks must not judge whether an artist fact is true, whether an entry is verified, whether the artist has approved it, or whether editorial content is sufficiently complete to be shown.
 
-- IDs and slugs are unique and stable.
-- A published gallery has approved localized title and short description for each exposed locale.
-- Its cover artwork belongs to the gallery and is itself published, approved, and rights-cleared.
-- It contains at least one valid published artwork.
-- Every artwork reference resolves; no duplicate IDs occur within one gallery.
-- The public page, sitemap, and metadata exclude draft, review, archived, and empty galleries.
-- A gallery's removal or archival never deletes its artworks or original assets.
+Do not add editorial validation rules, verification flags, factuality checks, approval gates, or data-quality thresholds as prerequisites for rendering, indexing, or showing CV/Contact/Journal content. A missing optional value should be omitted gracefully rather than blocking the record.
 
-### Homepage selection validation
+## 8. Editing workflow
 
-- Hero artwork, featured artwork, and featured gallery selections use canonical IDs, never filenames or array indexes.
-- Every selected item must be published and rights-approved.
-- Featured order is explicit and deterministic.
-- A hero artwork should not repeat in Featured Works unless the editorial configuration explicitly permits it.
-- A featured gallery must have a valid cover and at least one published artwork.
-
-### Gallery editorial fields
-
-Gallery title and description are separate approved Persian and English values. The description should be concise (normally one to three sentences), accurate, and written or approved by the artist. Do not invent titles, descriptions, themes, chronology, or artwork groupings from filenames or visual guesses.
-
-## 7. Journal entries and events
-
-The unified Journal content model is specified in [journal-and-events.md](./journal-and-events.md). It defines shared editorial fields, localized article content, publication states, and structured event details.
-
-At the conceptual level, Journal supports exhibition announcements, events, studio updates, and stories. Event records include confirmed date/time and time-zone context, attendance mode, optional venue/location and registration details. Publication approval and locale completeness are required before public visibility.
-
-Do not duplicate artwork or gallery records inside Journal entries. Use stable references to canonical artwork/gallery records. Journal publication status is separate from an event's time-derived state: a past event may remain published as an archive entry.
-
-The Journal specification is authoritative for its detailed schema, validation, route, homepage, navigation, SEO, and acceptance requirements.
-## 8. Design-system implications
-
-The content model must support editorially composed pages without forcing every record into identical card geometry. Presentation components must derive image ratio, optional metadata, locale availability, and publication state from validated content rather than inserting placeholders.
-
-Use the shared design contract in design-engineering-skills.md and design-direction-and-system-refinement.md. Keep canonical content records separate from their visual presentation. Artwork, Gallery, Journal, and Event records may share reusable primitives, but their hierarchy and page composition must remain distinct.
-
-## Artwork image source-path validation
-
-Artwork image records reference same-origin public assets using root-relative paths. External absolute URLs, protocol-relative URLs, backslash paths, query/fragment-bearing sources, control characters, and encoded or literal traversal/separator segments are rejected before an image can qualify as the public primary artwork image. This keeps the portfolio's image pipeline tied to repository-controlled, approved masters/derivatives rather than arbitrary remote hosts. Rights and artist approval remain separate mandatory publication gates.
-
-
-## Public identity and route integrity
-
-Before publication, artwork, gallery, and Journal records must have a non-empty stable ID and a single-segment Unicode-letter/number slug (hyphen-separated). Public records with duplicate IDs or duplicate slugs in the same locale are excluded rather than allowing ambiguous routes or silently selecting one record. CV entries likewise require unique non-empty IDs. This validation runs after publication, rights, and locale-completeness checks, so drafts do not reserve public identities.
+To change site content, edit the corresponding canonical JSON file. No React component change should be needed for ordinary content edits. Preserve the current IDs and structure when updating existing entries. Run the normal application and regression tests to ensure the site still builds and renders; tests must not encode editorial approval or factual verification requirements.

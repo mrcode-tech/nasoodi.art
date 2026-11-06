@@ -2,10 +2,15 @@
 
 import Image from "next/image";
 import { useCallback, useEffect, useMemo, useState, useSyncExternalStore } from "react";
+import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious, CarouselStatus } from "@/components/ui/carousel";
-import { pagePath, primaryImageFor, type Artwork, type Locale } from "@/lib/site";
+import { getLocalizedSlug } from "@/lib/content/paths";
+import { formatLocaleNumber } from "@/lib/locale-number";
+import { primaryImageFor } from "@/lib/content/publication";
+import { pagePath, getLocaleDirection, type Locale } from "@/types/locale";
+import type { Artwork } from "@/types/content";
 
 type Props = { artworks: Artwork[]; locale: Locale; context: "home" | `gallery:${string}`; };
 const subscribeToLocation = (onChange: () => void) => {
@@ -23,11 +28,19 @@ export function ArtworkExperience({ artworks, locale, context }: Props) {
     return params.get("viewerContext") === context ? params.get("artwork") : null;
   }, [locationSearch, context]);
   const [failedImages, setFailedImages] = useState<string[]>([]);
-  const labels = locale === "fa"
-    ? { close: "بستن نمایشگر", previous: "اثر قبلی", next: "اثر بعدی", unavailable: "نمایش تصویر ممکن نیست", position: "از", detail: "مشاهده صفحه اثر", carousel: "آثار هنری", artworkPosition: "موقعیت اثر" }
-    : { close: "Close artwork viewer", previous: "Previous artwork", next: "Next artwork", unavailable: "The artwork image is unavailable", position: "of", detail: "View artwork page", carousel: "Selected artworks", artworkPosition: "Artwork position" };
+  const t = useTranslations();
+  const labels = {
+    close: t("viewerClose"),
+    previous: t("viewerPrevious"),
+    next: t("viewerNext"),
+    unavailable: t("viewerUnavailable"),
+    position: t("viewerPosition"),
+    detail: t("viewerDetail"),
+    carousel: t("viewerCarousel"),
+    artworkPosition: t("artworkPosition"),
+  };
   const sequence = useMemo(() => artworks.filter((work) => primaryImageFor(work) && work.title[locale]?.trim()), [artworks, locale]);
-  const activeIndex = sequence.findIndex((work) => work.slug === activeSlug);
+  const activeIndex = sequence.findIndex((work) => getLocalizedSlug(work, locale) === activeSlug);
   const activeArtwork = activeIndex >= 0 ? sequence[activeIndex] : undefined;
   const activeImage = activeArtwork ? primaryImageFor(activeArtwork) : undefined;
 
@@ -50,16 +63,16 @@ export function ArtworkExperience({ artworks, locale, context }: Props) {
   }, []);
   const move = useCallback((offset: number) => {
     const next = sequence[activeIndex + offset];
-    if (next) writeViewerUrl(next.slug, "replace");
-  }, [activeIndex, sequence, writeViewerUrl]);
+    if (next) writeViewerUrl(getLocalizedSlug(next, locale), "replace");
+  }, [activeIndex, sequence, writeViewerUrl, locale]);
 
   useEffect(() => {
     if (!activeArtwork) return;
     const onKeyDown = (event: KeyboardEvent) => {
       const target = event.target;
       if (target instanceof HTMLElement && target.closest("input, textarea, select, [contenteditable='true']")) return;
-      if (event.key === "ArrowRight") { event.preventDefault(); move(locale === "fa" ? -1 : 1); }
-      else if (event.key === "ArrowLeft") { event.preventDefault(); move(locale === "fa" ? 1 : -1); }
+      if (event.key === "ArrowRight") { event.preventDefault(); move(getLocaleDirection(locale) === "rtl" ? -1 : 1); }
+      else if (event.key === "ArrowLeft") { event.preventDefault(); move(getLocaleDirection(locale) === "rtl" ? 1 : -1); }
     };
     document.addEventListener("keydown", onKeyDown);
     return () => document.removeEventListener("keydown", onKeyDown);
@@ -71,12 +84,12 @@ export function ArtworkExperience({ artworks, locale, context }: Props) {
     if (!image) return null;
     return (
       <button className="artwork-item artwork-experience-card" key={work.id} type="button" aria-haspopup="dialog"
-        aria-label={work.title[locale]} onClick={() => openArtwork(work.slug)}>
+        aria-label={work.title[locale]} onClick={() => openArtwork(getLocalizedSlug(work, locale))}>
         <span className="artwork-media">
-          {failedImages.includes(work.slug)
+          {failedImages.includes(getLocalizedSlug(work, locale))
             ? <span className="artwork-image-fallback" role="img" aria-label={labels.unavailable}>{labels.unavailable}</span>
             : <Image sizes="(max-width: 600px) 84vw, (max-width: 900px) 48vw, 32vw" src={image.src} alt={image.alt[locale] ?? ""}
-                width={image.width} height={image.height} onError={() => setImageFailed(work.slug)} />}
+                width={image.width} height={image.height} onError={() => setImageFailed(getLocalizedSlug(work, locale))} />}
         </span>
         <span className="artwork-experience-caption">{work.title[locale]}</span>
       </button>
@@ -88,12 +101,12 @@ export function ArtworkExperience({ artworks, locale, context }: Props) {
       {sequence.length === 1 ? <div className="artwork-experience-static">{renderArtwork(sequence[0])}</div> :
         sequence.length > 1 ? (
           <div className="artwork-experience">
-            <Carousel dir={locale === "fa" ? "rtl" : "ltr"} label={labels.carousel} roleDescription={locale === "fa" ? "گالری آثار" : "carousel"} opts={{ slidesToScroll: 1 }} className="artwork-carousel">
+            <Carousel dir={getLocaleDirection(locale)} label={labels.carousel} roleDescription={t("artworkCarouselRole")} opts={{ slidesToScroll: 1 }} className="artwork-carousel">
               <CarouselContent>
-                {sequence.map((work, index) => <CarouselItem key={work.id} aria-label={`${index + 1} ${labels.position} ${sequence.length}`}>{renderArtwork(work)}</CarouselItem>)}
+                {sequence.map((work, index) => <CarouselItem key={work.id} aria-label={`${formatLocaleNumber(index + 1, locale)} ${labels.position} ${formatLocaleNumber(sequence.length, locale)}`}>{renderArtwork(work)}</CarouselItem>)}
               </CarouselContent>
               <div className="carousel-footer">
-                <CarouselStatus label={labels.artworkPosition} />
+                <CarouselStatus label={labels.artworkPosition} locale={locale} />
                 <div className="carousel-controls">
                   <CarouselPrevious label={labels.previous} />
                   <CarouselNext label={labels.next} />
@@ -107,26 +120,26 @@ export function ArtworkExperience({ artworks, locale, context }: Props) {
         {activeArtwork && activeImage && (
           <DialogContent className="artwork-viewer-content" {...(activeArtwork.description?.[locale]?.trim() ? {} : { "aria-describedby": undefined })}>
             <div className="artwork-viewer-topbar">
-              <span className="artwork-viewer-status" aria-live="polite">{activeIndex + 1} {labels.position} {sequence.length}</span>
+              <span className="artwork-viewer-status" aria-live="polite">{formatLocaleNumber(activeIndex + 1, locale)} {labels.position} {formatLocaleNumber(sequence.length, locale)}</span>
               <DialogClose asChild><Button className="artwork-viewer-close" variant="ghost" aria-label={labels.close}>×</Button></DialogClose>
             </div>
             <div className="artwork-viewer-layout">
               <figure className="artwork-viewer-figure">
-                {failedImages.includes(activeArtwork.slug)
+                {failedImages.includes(getLocalizedSlug(activeArtwork, locale))
                   ? <span className="artwork-image-fallback" role="img" aria-label={labels.unavailable}>{labels.unavailable}</span>
                   : <Image src={activeImage.src} alt={activeImage.alt[locale] ?? ""} width={activeImage.width} height={activeImage.height}
-                      sizes="(max-width: 800px) 100vw, 68vw" priority onError={() => setImageFailed(activeArtwork.slug)} />}
+                      sizes="(max-width: 800px) 100vw, 68vw" priority onError={() => setImageFailed(getLocalizedSlug(activeArtwork, locale))} />}
               </figure>
               <section className="artwork-viewer-info" aria-label={activeArtwork.title[locale]}>
                 <DialogTitle aria-live="polite" aria-atomic="true">{activeArtwork.title[locale]}</DialogTitle>
                 {activeArtwork.description?.[locale]?.trim() && <DialogDescription className="artwork-viewer-description">{activeArtwork.description[locale]}</DialogDescription>}
                 {(activeArtwork.year || activeArtwork.medium?.[locale]?.trim()) && (
-                  <p className="artwork-viewer-metadata">{activeArtwork.year && <span>{activeArtwork.year}</span>}{activeArtwork.medium?.[locale]?.trim() && <span>{activeArtwork.medium[locale]}</span>}</p>
+                  <p className="artwork-viewer-metadata">{activeArtwork.year && <span>{formatLocaleNumber(activeArtwork.year, locale)}</span>}{activeArtwork.medium?.[locale]?.trim() && <span>{activeArtwork.medium[locale]}</span>}</p>
                 )}
                 <div className="artwork-viewer-controls">
-                  <Button variant="outline" size="sm" onClick={() => move(-1)} disabled={activeIndex <= 0} aria-label={labels.previous}>{locale === "fa" ? "→" : "←"}</Button>
-                  <Button variant="outline" size="sm" onClick={() => move(1)} disabled={activeIndex >= sequence.length - 1} aria-label={labels.next}>{locale === "fa" ? "←" : "→"}</Button>
-                  <Button asChild variant="ghost" size="sm"><a href={pagePath(locale, `works/${activeArtwork.slug}`) + (context.startsWith("gallery:") ? `?fromGallery=${encodeURIComponent(context.slice(8))}` : "")}>{labels.detail}</a></Button>
+                  <Button variant="outline" size="sm" onClick={() => move(-1)} disabled={activeIndex <= 0} aria-label={labels.previous}>{getLocaleDirection(locale) === "rtl" ? "→" : "←"}</Button>
+                  <Button variant="outline" size="sm" onClick={() => move(1)} disabled={activeIndex >= sequence.length - 1} aria-label={labels.next}>{getLocaleDirection(locale) === "rtl" ? "←" : "→"}</Button>
+                  <Button asChild variant="ghost" size="sm"><a href={pagePath(locale, `works/${getLocalizedSlug(activeArtwork, locale)}`) + (context.startsWith("gallery:") ? `?fromGallery=${encodeURIComponent(context.slice(8))}` : "")}>{labels.detail}</a></Button>
                 </div>
               </section>
             </div>

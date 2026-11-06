@@ -1,0 +1,44 @@
+{
+  "id": "artist-profile",
+  "name": {
+    "en": "Ghazaleh Abdolahzade Nasoodi",
+    "fa": "غزاله عبداله‌زاده نسودی"
+  },
+  "slug": {
+    "en": "ghazale-abdolahzade-nasoodi",
+    "fa": "غزاله-عبداله-زاده-نسودی"
+  },
+  "discipline": {
+    "en": "Painter",
+    "fa": "نقاش"
+  },
+  "shortIntroduction": {
+    "en": "A portfolio of oil paintings shaped by colour, composition, and the experience of looking closely.",
+    "fa": "مجموعه‌ای از نقاشی‌های رنگ‌روغن با تأکید بر رنگ، ترکیب‌بندی و تجربه‌ی تماشای دقیق."
+  },
+  "statement": {
+    "en": "Oil painting gives an image time to emerge. Colour, form, and light can change their relationships as one layer meets another, leaving traces of earlier decisions on the surface. These paintings invite a slower kind of attention: to notice transitions, pauses, and the details that become visible when looking is given room. Each work leaves space for a personal encounter rather than prescribing a single interpretation.",
+    "fa": "نقاشی رنگ‌روغن به تصویر فرصت می‌دهد تا به‌تدریج شکل بگیرد. رنگ، فرم و نور در برخورد لایه‌ها با یکدیگر می‌توانند رابطه‌های تازه‌ای پیدا کنند و ردّ تصمیم‌های پیشین را بر سطح اثر باقی بگذارند. این نقاشی‌ها به نوعی تماشای آرام‌تر دعوت می‌کنند؛ به دیدن گذارها، مکث‌ها و جزئیاتی که با فرصت‌دادن به نگاه آشکار می‌شوند. هر اثر فضایی برای مواجهه‌ای شخصی باقی می‌گذارد و به یک برداشت واحد محدود نمی‌شود."
+  },
+  "biography": {
+    "en": "Ghazaleh Abdolahzade Nasoodi is a painter and art instructor with an M.A. in Painting from Alzahra University. She is a member of the Iranian Painters Association and the Institute for the Development of Contemporary Visual Arts. She has authored research articles and participated in more than ten group exhibitions.",
+    "fa": "غزاله عبداله‌زاده نسودی، نقاش و مدرس هنر و دانش‌آموخته کارشناسی ارشد نقاشی از دانشگاه الزهراست. او عضو انجمن نقاشان ایران و مؤسسه توسعه هنری است، مقالات پژوهشی در حوزه هنر نوشته و در بیش از ده نمایشگاه گروهی شرکت داشته است."
+  },
+  "artisticApproach": {
+    "en": "The editorial presentation gives attention to the material character of oil painting, the relationships between colours, and the way a composition changes through sustained looking.",
+    "fa": "در ارائه‌ی آثار، به ویژگی مادی نقاشی رنگ‌روغن، رابطه‌ی میان رنگ‌ها و دگرگونی دریافت ما از یک ترکیب‌بندی در جریان تماشای پیوسته توجه شده است."
+  },
+  "interests": {
+    "en": [
+      "Colour and atmosphere",
+      "Composition and visual rhythm",
+      "Memory and personal interpretation"
+    ],
+    "fa": [
+      "رنگ و فضا",
+      "ترکیب‌بندی و ریتم بصری",
+      "خاطره و برداشت شخصی"
+    ]
+  },
+  "brand": "Nasoodi.art"
+}

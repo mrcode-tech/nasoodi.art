@@ -1,0 +1,45 @@
+{
+  "id": "site-editorial-metadata",
+  "pages": {
+    "works": {
+      "title": {
+        "en": "Selected Works",
+        "fa": "گزیده آثار"
+      },
+      "description": {
+        "en": "Explore a selection of oil paintings, with localized artwork details and original image references.",
+        "fa": "گزیده‌ای از نقاشی‌های رنگ‌روغن را همراه با جزئیات هر اثر و تصاویر اصلی آن‌ها ببینید."
+      }
+    },
+    "galleries": {
+      "title": {
+        "en": "Painting Collections",
+        "fa": "مجموعه‌های نقاشی"
+      },
+      "description": {
+        "en": "Explore curated collections of oil paintings and the visual relationships between individual works.",
+        "fa": "مجموعه‌های منتخب نقاشی رنگ‌روغن و پیوندهای بصری میان آثار را دنبال کنید."
+      }
+    },
+    "journal": {
+      "title": {
+        "en": "Journal",
+        "fa": "یادداشت‌ها"
+      },
+      "description": {
+        "en": "Studio notes, articles, exhibitions, and events related to the artist's painting practice.",
+        "fa": "یادداشت‌های آتلیه، مقاله‌ها، نمایشگاه‌ها و رویدادهای مرتبط با فعالیت هنری."
+      }
+    },
+    "cv": {
+      "title": {
+        "en": "Artist CV",
+        "fa": "رزومه هنری"
+      },
+      "description": {
+        "en": "A structured overview of the artist's professional practice and selected career information.",
+        "fa": "مروری ساختاریافته بر فعالیت هنری و اطلاعات حرفه‌ای هنرمند."
+      }
+    }
+  }
+}

@@ -1,11 +1,98 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { aboutPreviewFixture } from "../src/lib/about-preview-fixtures";
-import { artworks,galleries,journalEntries,homepageSelection,getPublicArtworks,getPublicGalleries,isSafeLocalImagePath,isSafeContentSlug,getPublicJournal,getPublicCvEntries,getPublicCvDocument,getPublicArtistProfile,getPublicContactDetails,getUpcomingJournalEvents,getUpcomingJournalEvent,getArtworkStructuredData,getGalleryStructuredData,getJournalStructuredData,serializeJsonLd,getHomepageFeaturedArtworks,getGalleryCoverArtwork,getJournalEntriesForCategory,getHomepageJournalPreview,journalCoverImageFor,isSafeJournalHref,portfolioStructuredData,type Artwork,type Gallery,type JournalEntry,type CvEntry,type CvDocument,type ArtistProfile,type ContactDetails, hasExplicitTimeZone } from "../src/lib/site";
+import { readFileSync } from "node:fs";
+import { artworks } from "../src/content/artworks";
+import { galleries } from "../src/content/galleries";
+import { journalEntries } from "../src/content/journal";
+import { homepageSelection } from "../src/content/homepage";
+import { artistProfile } from "../src/content/artist";
+import { cvDocument, cvEntries } from "../src/content/cv";
+import { contactDetails } from "../src/content/contact";
+import { siteContent } from "../src/content/site";
+import { getEvents } from "../src/content/repositories/event.repository";
+import { getHomepageContent } from "../src/content/repositories/homepage.repository";
+import { getPortfolioStructuredData } from "../src/content/portfolio-structured-data";
+import {
+  getPublicArtworks,
+  getPublicGalleries,
+  getGalleryCoverArtwork,
+  getPublicCvEntries,
+  getPublicCvDocument,
+  getPublicArtistProfile,
+  getPublicContactDetails,
+  getHomepageFeaturedArtworks,
+} from "../src/lib/content/publication";
+import {
+  isSafeJournalHref,
+  getPublicJournal,
+  getUpcomingJournalEvents,
+  getUpcomingJournalEvent,
+  getJournalEntriesForCategory,
+  getHomepageJournalPreview,
+  journalCoverImageFor,
+  hasExplicitTimeZone,
+} from "../src/lib/content/journal";
+import { getLocalizedSlug, isSafeLocalImagePath, isSafeContentSlug, matchesLocalizedSlug } from "../src/lib/content/paths";
+import { hasEquivalentContentSet } from "../src/lib/content/identity";
+import { alternatePathFor } from "../src/lib/routing/alternate-path";
+import {
+  getArtworkStructuredData,
+  getGalleryStructuredData,
+  getJournalStructuredData,
+  serializeJsonLd,
+} from "../src/lib/seo/structured-data";
+import type { Artwork, Gallery, JournalEntry, CvEntry, CvDocument, ArtistProfile, ContactDetails } from "../src/types/content";
+import { validatePortfolioContent } from "../src/lib/content/validate-portfolio";
 const work:Artwork={id:"w1",slug:"work-one",title:{en:"Work",fa:"اثر"},images:[{src:"/art/work.jpg",alt:{en:"Painting",fa:"نقاشی"},role:"primary",width:1200,height:900}],rightsConfirmed:true,status:"published"};
 test("artwork stays private until published and rights-cleared",()=>{assert.equal(getPublicArtworks([{...work,status:"needs-review"}],"en").length,0);assert.equal(getPublicArtworks([{...work,rightsConfirmed:false}],"en").length,0);assert.equal(getPublicArtworks([work],"en").length,1);});
 test("artwork requires localized title and primary image alt",()=>{assert.equal(getPublicArtworks([{...work,title:{en:"Work"}}],"fa").length,0);assert.equal(getPublicArtworks([{...work,images:[{...work.images[0],alt:{en:""}}]}],"en").length,0);});
-test("gallery requires unique published artwork members and member cover",()=>{const g:Gallery={id:"g1",slug:"gallery",title:{en:"Gallery",fa:"گالری"},description:{en:"Description",fa:"توضیح"},coverArtworkId:"w1",artworkIds:["w1"],status:"published",sortOrder:1};assert.equal(getPublicGalleries([g],[work],"en").length,1);assert.equal(getPublicGalleries([g],[],"en").length,0);assert.equal(getPublicGalleries([{...g,artworkIds:["w1","w1"]}],[work],"en").length,0);assert.equal(getPublicGalleries([{...g,coverArtworkId:"x"}],[work],"en").length,0);});
+
+test("Persian content slugs accept combining marks and ZWNJ while rejecting unsafe separators",()=>{
+ assert.equal(isSafeContentSlug("لحظه‌ای-کنار-پنجره"),true);
+ assert.equal(isSafeContentSlug("آرامشِ-نگریستن"),true);
+ assert.equal(isSafeContentSlug("فاصله‌ی-میان"),true);
+ assert.equal(isSafeContentSlug("safe--slug"),false);
+ assert.equal(isSafeContentSlug("-unsafe"),false);
+ assert.equal(isSafeContentSlug("unsafe-"),false);
+ assert.equal(isSafeContentSlug("unsafe/segment"),false);
+ assert.equal(isSafeContentSlug("unsafe?query"),false);
+});
+
+test("all 25 current artworks remain publicly available with Persian localized slugs",()=>{
+ const publicWorks=getPublicArtworks(artworks,"fa");
+ assert.equal(publicWorks.length,25);
+ assert.ok(publicWorks.every(item=>isSafeContentSlug(getLocalizedSlug(item,"fa"))));
+ assert.equal(publicWorks.find(item=>item.id==="artwork-1392-2")?.localizedSlugs?.fa,"لحظه‌ای-کنار-پنجره");
+ assert.equal(publicWorks.find(item=>item.id==="artwork-1392-3")?.localizedSlugs?.fa,"آرامشِ-نگریستن");
+});
+test("artwork and gallery archives are ordered newest year first, then newest editorial order",()=>{
+ const orderedWorks=getPublicArtworks(artworks,"en");
+ assert.equal(orderedWorks[0].year,1403);
+ assert.equal(orderedWorks[0].sortOrder,25);
+ assert.equal(orderedWorks.at(-1)?.year,1388);
+ for(let index=1;index<orderedWorks.length;index++){
+  const previous=orderedWorks[index-1];
+  const current=orderedWorks[index];
+  assert.ok((previous.year??0)>(current.year??0) || ((previous.year??0)===(current.year??0) && (previous.sortOrder??0)>=(current.sortOrder??0)));
+ }
+ const orderedGalleries=getPublicGalleries(galleries,artworks,"en");
+ assert.equal(artworks.find(item=>item.id===orderedGalleries[0].coverArtworkId)?.year,1403);
+ assert.equal(artworks.find(item=>item.id===orderedGalleries.at(-1)?.coverArtworkId)?.year,1388);
+ for(let index=1;index<orderedGalleries.length;index++){
+  const previousYear=artworks.find(item=>item.id===orderedGalleries[index-1].coverArtworkId)?.year??0;
+  const currentYear=artworks.find(item=>item.id===orderedGalleries[index].coverArtworkId)?.year??0;
+  assert.ok(previousYear>=currentYear);
+ }
+});
+
+test("localized artwork route matching accepts percent-encoded and canonically equivalent Persian slugs",()=>{
+ const record={slug:"a-moment-by-the-window",localizedSlugs:{en:"a-moment-by-the-window",fa:"لحظه‌ای-کنار-پنجره"}};
+ assert.equal(matchesLocalizedSlug(record,"fa","لحظه‌ای-کنار-پنجره"),true);
+ assert.equal(matchesLocalizedSlug(record,"fa",encodeURIComponent("لحظه‌ای-کنار-پنجره")),true);
+ assert.equal(matchesLocalizedSlug(record,"fa","لحظهٔ‌ای-کنار-پنجره"),false);
+});
+
+test("gallery requires unique published artwork members and member cover",()=>{const g:Gallery={id:"g1",slug:"gallery",title:{en:"Gallery",fa:"گالری"},description:{en:"Description",fa:"توضیح"},coverArtworkId:work.id,artworkIds:[work.id],status:"published",sortOrder:1};assert.equal(getPublicGalleries([g],[work],"en").length,1);assert.equal(getPublicGalleries([g],[],"en").length,0);assert.equal(getPublicGalleries([{...g,artworkIds:["w1","w1"]}],[work],"en").length,0);assert.equal(getPublicGalleries([{...g,coverArtworkId:"x"}],[work],"en").length,0);});
 test("journal only exposes published entries with localized title and summary",()=>{const j:JournalEntry={id:"j1",slug:"story",type:"story",title:{en:"Story",fa:"داستان"},summary:{en:"Summary",fa:"خلاصه"},status:"published",approvedLocales:["en","fa"],artistApproved:true};assert.equal(getPublicJournal([j],"en").length,1);assert.equal(getPublicJournal([{...j,status:"draft"}],"en").length,0);assert.equal(getPublicJournal([j],"fa").length,1);});
 
 test("event entries require a valid time zone and occurrence time",()=>{
@@ -19,11 +106,20 @@ test("event entries require a valid time zone and occurrence time",()=>{
  assert.equal(getPublicJournal([{...valid,event:{...valid.event!,timeZone:"Not/AZone"}}],"en").length,0);
  assert.equal(getPublicJournal([{...valid,event:{...valid.event!,startsAt:"2026-11-12T18:00:00"}}],"en").length,0);
 });
-test("CV entries require explicit verification and localized titles",()=>{
- const entry:CvEntry={id:"cv1",category:"group-exhibition",title:{en:"Group exhibition",fa:"نمایشگاه گروهی"},year:2024,verified:true,status:"published"};
+test("event repository filters published Journal entries by event and exhibition type without requiring seeded events",()=>{
+ const published=getPublicJournal(journalEntries,"en");
+ const expected=published.filter((entry)=>entry.type==="event"||entry.type==="exhibition").map((entry)=>entry.id);
+ const events=getEvents("en");
+ assert.deepEqual(events.map((entry)=>entry.id),expected);
+ assert.ok(events.every((entry)=>entry.body?.en?.length));
+});
+
+test("CV entries resolve from localized editorial content without verification flags",()=>{
+ const entry:CvEntry={id:"cv1",category:"group-exhibition",title:{en:"Group exhibition",fa:"نمایشگاه گروهی"},year:2024,status:"published"};
  assert.equal(getPublicCvEntries([entry],"en").length,1);
- assert.equal(getPublicCvEntries([{...entry,verified:false}],"en").length,0);
+ assert.equal(getPublicCvEntries([{...entry,status:"draft"}],"en").length,0);
  assert.equal(getPublicCvEntries([{...entry,title:{en:"Group exhibition"}}],"fa").length,0);
+ assert.equal(getPublicCvEntries([{id:"cv2",category:"other",title:{en:"Painting"},period:{en:"Current practice"},status:"published"}],"en").length,1);
 });
 test("homepage featured selection is explicit, ordered, unique, and publication-gated",()=>{
  const selection={featuredArtworkIds:["w1","w1","hidden"],featuredGalleryIds:[]};
@@ -66,28 +162,33 @@ test("journal publication requires explicit artist approval and locale approval"
  assert.equal(getPublicJournal([{...approved,approvedLocales:[]}],"en").length,0);
 });
 
-test("portfolio JSON-LD describes only confirmed artist and website facts",()=>{
- const graph=portfolioStructuredData["@graph"];
- const person=graph[0] as Record<string,unknown>;
- const website=graph[1] as Record<string,unknown>;
- assert.equal(graph.length,2);
- assert.equal(person["@type"],"Person");
- assert.equal(person.name,"Ghazaleh Abdolahzade Nasoodi");
- assert.equal(person.alternateName,"غزاله عبداله زاده نسودی");
- assert.equal(person.jobTitle,"Oil painter");
+test("portfolio JSON-LD resolves localized artist identity from canonical profile JSON",()=>{
+ const english=getPortfolioStructuredData("en")["@graph"];
+ const persian=getPortfolioStructuredData("fa")["@graph"];
+ const personEn=english[0] as Record<string,unknown>;
+ const personFa=persian[0] as Record<string,unknown>;
+ const website=english[1] as Record<string,unknown>;
+ assert.equal(english.length,2);
+ assert.equal(personEn["@type"],"Person");
+ assert.equal(personEn.name,"Ghazaleh Abdolahzade Nasoodi");
+ assert.equal(personEn.alternateName,"غزاله عبداله‌زاده نسودی");
+ assert.equal(personEn.jobTitle,"Painter");
+ assert.equal(personFa.name,"غزاله عبداله‌زاده نسودی");
+ assert.equal(personFa.alternateName,"Ghazaleh Abdolahzade Nasoodi");
+ assert.equal(personFa.jobTitle,"نقاش");
  assert.equal(website["@type"],"WebSite");
  assert.deepEqual(website.inLanguage,["fa","en"]);
  assert.deepEqual(website.publisher,{"@id":"https://nasoodi.art/#artist"});
- assert.equal("sameAs" in person,false);
+ assert.equal("sameAs" in personEn,false);
 });
 
 test("locale switching preserves available localized sections and falls back for unavailable content", async () => {
- const { alternatePathFor } = await import("../src/lib/site");
  assert.equal(alternatePathFor("/fa", "fa"), "/en");
  assert.equal(alternatePathFor("/fa/about", "fa"), "/en/about");
  assert.equal(alternatePathFor("/fa/works", "fa"), "/en/works");
  assert.equal(alternatePathFor("/fa/works/not-published", "fa"), "/en");
  assert.equal(alternatePathFor("/fa/journal/not-published", "fa"), "/en");
+ assert.equal(alternatePathFor("/en/works/a-first-light", "en"), "/fa/works/نخستین-روشنایی");
 });
 
 test("homepage upcoming events are future-dated, locale-approved, and ordered by occurrence",()=>{
@@ -127,33 +228,26 @@ test("JSON-LD serialization escapes HTML-sensitive opening brackets",()=>{
  assert.equal(serialized.includes(String.fromCharCode(92)+"u003c/script>"),true);
 });
 
-test("artist profile requires published artist approval and complete localized statement and biography",()=>{
- const profile:ArtistProfile={statement:{en:"Statement",fa:"بیانیه"},biography:{en:"Biography",fa:"زندگی‌نامه"},status:"published",approvedLocales:["en","fa"],artistApproved:true};
+test("artist profile resolves from localized canonical identity, statement, and biography",()=>{
+ const profile:ArtistProfile={id:"artist-profile",name:{en:"Artist",fa:"هنرمند"},statement:{en:"Statement",fa:"بیانیه"},biography:{en:"Biography",fa:"زندگی‌نامه"}};
  assert.equal(getPublicArtistProfile(profile,"en")?.statement.en,"Statement");
- assert.equal(getPublicArtistProfile({...profile,artistApproved:false},"en"),undefined);
  assert.equal(getPublicArtistProfile({...profile,biography:{en:"Biography"}},"fa"),undefined);
- assert.equal(getPublicArtistProfile({...profile,status:"draft"},"en"),undefined);
+ assert.equal(getPublicArtistProfile({...profile,name:{en:"Artist"}},"fa"),undefined);
 });
 test("artist portrait is omitted unless rights, dimensions, and localized alt are valid",()=>{
- const profile:ArtistProfile={statement:{en:"Statement"},biography:{en:"Biography"},status:"published",approvedLocales:["en"],artistApproved:true,portrait:{src:"/artist.jpg",alt:{en:"Artist in studio"},width:800,height:1000,rightsConfirmed:true}};
+ const profile:ArtistProfile={id:"artist-profile",name:{en:"Artist"},statement:{en:"Statement"},biography:{en:"Biography"},portrait:{src:"/artist.jpg",alt:{en:"Artist in studio"},width:800,height:1000,rightsConfirmed:true}};
  assert.equal(getPublicArtistProfile(profile,"en")?.portrait?.src,"/artist.jpg");
  assert.equal(getPublicArtistProfile({...profile,portrait:{...profile.portrait!,rightsConfirmed:false}},"en")?.portrait,undefined);
  assert.equal(getPublicArtistProfile({...profile,portrait:{...profile.portrait!,width:0}},"en")?.portrait,undefined);
 });
-test("demo contact destinations render without approval gates and validate each method independently",()=>{
- const details:ContactDetails={email:"hello@example.com",telegramHandle:"nasoodi_contact_demo",instagramUrl:"https://www.instagram.com/nasoodi.demo/"};
- assert.equal(getPublicContactDetails(details)?.email,"hello@example.com");
- assert.equal(getPublicContactDetails(details)?.telegramUrl,"https://t.me/nasoodi_contact_demo");
- assert.equal(getPublicContactDetails(details)?.instagramHandle,"nasoodi.demo");
- assert.deepEqual(getPublicContactDetails({email:"artist@example.org"}),{email:"artist@example.org"});
- assert.deepEqual(getPublicContactDetails({telegramHandle:"artist_contact"}),{telegramHandle:"artist_contact",telegramUrl:"https://t.me/artist_contact"});
- assert.equal(getPublicContactDetails({...details,telegramHandle:"bad handle",instagramUrl:"http://evil.example/profile",email:undefined}),undefined);
- assert.equal(getPublicContactDetails({...details,instagramUrl:"https://example.org",email:undefined,telegramHandle:undefined}),undefined);
- assert.equal(getPublicContactDetails({...details,instagramUrl:"https://www.instagram.com/p/123/",email:undefined,telegramHandle:undefined}),undefined);
- assert.equal(getPublicContactDetails({...details,email:"not-an-email",instagramUrl:undefined,telegramHandle:undefined}),undefined);
- assert.equal(getPublicContactDetails(undefined),undefined);
+test("canonical Contact record exposes only the artist-supplied Instagram destination",()=>{
+ const details:ContactDetails={instagramUrl:"https://www.instagram.com/ghazalenasoodi/"};
+ assert.deepEqual(getPublicContactDetails(details),{
+  instagramUrl:"https://www.instagram.com/ghazalenasoodi/",
+  instagramHandle:"ghazalenasoodi",
+ });
+ assert.equal(getPublicContactDetails({email:"not-an-email",telegramHandle:"x",instagramUrl:"https://example.org/"}),undefined);
 });
-
 test("Journal Article structured data uses only localized visible editorial fields",()=>{
  const entry:JournalEntry={id:"story",slug:"story",type:"story",title:{en:"A story",fa:"روایت"},summary:{en:"A short summary",fa:"خلاصه"},status:"published",approvedLocales:["en","fa"],artistApproved:true,publishedAt:"2026-10-20T10:00:00Z"};
  const schema=getJournalStructuredData(entry,"en","https://nasoodi.art/en/journal/story");
@@ -208,7 +302,7 @@ test("published route records reject unsafe slugs and duplicate public identitie
  assert.equal(getPublicGalleries([gallery,{...gallery,id:"g2"}],[work],"en").length,0);
  const story:JournalEntry={id:"j1",slug:"story",type:"story",title:{en:"Story"},summary:{en:"Summary"},status:"published",approvedLocales:["en"],artistApproved:true};
  assert.equal(getPublicJournal([story,{...story,id:"j2"}],"en").length,0);
- const cv:CvEntry={id:"cv1",category:"education",title:{en:"Education"},year:2020,verified:true,status:"published"};
+ const cv:CvEntry={id:"cv1",category:"education",title:{en:"Education"},year:2020,status:"published"};
  assert.equal(getPublicCvEntries([cv,cv],"en").length,0);
 });
 
@@ -220,16 +314,17 @@ test("Journal links reject protocol-relative, backslash-normalized, control, and
  }
 });
 
-test("the five owner-approved gallery assets are represented by five unique published artwork records", () => {
- assert.equal(artworks.length,5);
- assert.equal(new Set(artworks.map(item=>item.id)).size,5);
- assert.equal(new Set(artworks.map(item=>item.slug)).size,5);
- for (const [index,item] of artworks.entries()) {
+test("all canonical artworks have unique published identities, localized editorial fields, and valid primary images", () => {
+ assert.equal(artworks.length,25);
+ assert.equal(new Set(artworks.map(item=>item.id)).size,artworks.length);
+ assert.equal(new Set(artworks.map(item=>item.slug)).size,artworks.length);
+ assert.equal(new Set(artworks.map(item=>item.images[0]?.src)).size,artworks.length);
+ for (const item of artworks) {
   assert.equal(item.status,"published");
   assert.equal(item.rightsConfirmed,true);
   assert.equal(item.images.length,1);
-  assert.equal(item.images[0].src,`/images/approved-artwork-${index+1}.jpg`);
   assert.equal(item.images[0].role,"primary");
+  assert.equal(isSafeLocalImagePath(item.images[0].src),true);
   assert.ok(item.images[0].width>0 && item.images[0].height>0);
   for (const locale of ["en","fa"] as const) {
    assert.ok(item.title[locale]?.trim());
@@ -237,29 +332,37 @@ test("the five owner-approved gallery assets are represented by five unique publ
    assert.ok(item.images[0].alt[locale]?.trim());
   }
  }
- assert.deepEqual(getPublicArtworks(artworks,"en").map(item=>item.id),artworks.map(item=>item.id));
- assert.deepEqual(getPublicArtworks(artworks,"fa").map(item=>item.id),artworks.map(item=>item.id));
+ for (const locale of ["en","fa"] as const) {
+  const publishedIds=new Set(getPublicArtworks(artworks,locale).map(item=>item.id));
+  assert.equal(publishedIds.size,artworks.length);
+  assert.ok(artworks.every((item)=>publishedIds.has(item.id)));
+ }
 });
 
-test("four curated collections publish valid ordered memberships with shared artwork identities", () => {
- assert.equal(galleries.length,4);
- assert.equal(new Set(galleries.map(item=>item.id)).size,4);
- assert.equal(new Set(galleries.map(item=>item.slug)).size,4);
+test("eight year-based galleries publish ordered, non-overlapping artwork memberships and first-artwork covers", () => {
+ assert.equal(galleries.length,8);
+ assert.equal(new Set(galleries.map(item=>item.id)).size,galleries.length);
+ assert.equal(new Set(galleries.map(item=>item.slug)).size,galleries.length);
  for (const gallery of galleries) {
   assert.equal(gallery.status,"published");
   assert.ok(gallery.title.en?.trim() && gallery.title.fa?.trim());
   assert.ok(gallery.description.en?.trim() && gallery.description.fa?.trim());
-  assert.ok(gallery.artworkIds.length>=3);
-  assert.ok(gallery.artworkIds.includes(gallery.coverArtworkId));
+  assert.ok(gallery.artworkIds.length>0);
+  assert.equal(gallery.coverArtworkId,gallery.artworkIds[0]);
   assert.ok(gallery.artworkIds.every(id=>artworks.some(item=>item.id===id)));
   assert.equal(new Set(gallery.artworkIds).size,gallery.artworkIds.length);
  }
  const memberships=artworks.map(item=>galleries.filter(gallery=>gallery.artworkIds.includes(item.id)).length);
- assert.ok(memberships.every(count=>count>=2),"each canonical artwork should be reused across multiple collections");
- assert.equal(getPublicGalleries(galleries,artworks,"en").length,4);
- assert.equal(getPublicGalleries(galleries,artworks,"fa").length,4);
- assert.deepEqual(homepageSelection.featuredArtworkIds,artworks.map(item=>item.id));
- assert.equal(homepageSelection.featuredGalleryIds.length,4);
+ assert.ok(memberships.every(count=>count===1),"each canonical artwork must belong to exactly one year-based gallery");
+ assert.equal(getPublicGalleries(galleries,artworks,"en").length,8);
+ assert.equal(getPublicGalleries(galleries,artworks,"fa").length,8);
+ assert.equal(homepageSelection.featuredArtworkIds.length,8);
+ assert.equal(homepageSelection.featuredGalleryIds.length,8);
+ for (const [index,galleryId] of homepageSelection.featuredGalleryIds.entries()) {
+  const gallery=galleries.find(item=>item.id===galleryId);
+  assert.ok(gallery);
+  assert.equal(homepageSelection.featuredArtworkIds[index],gallery.artworkIds[0]);
+ }
 });
 
 test("homepage Journal preview selects only the newest published entry across article and event types", () => {
@@ -281,15 +384,49 @@ test("CV PDF publication requires an approved published same-origin PDF and safe
  assert.equal(getPublicCvDocument(undefined),undefined);
 });
 
-test("long About preview fixtures are bilingual, clearly sample-only, and include CV layout rows",()=>{
- assert.ok(aboutPreviewFixture.biography.en.length>700);
- assert.ok(aboutPreviewFixture.biography.en.split(/\s+/).length>=250);
- assert.ok(aboutPreviewFixture.biography.fa.length>500);
- assert.equal(aboutPreviewFixture.cv.length,16);
- assert.notEqual(aboutPreviewFixture.statement.en,aboutPreviewFixture.biography.en);
- assert.ok(aboutPreviewFixture.statement.en.split(/\s+/).length>=150 && aboutPreviewFixture.statement.en.split(/\s+/).length<=220);
- assert.ok(aboutPreviewFixture.statement.en.includes("invented editorial sample"));
- assert.deepEqual(new Set(aboutPreviewFixture.cv.map(entry=>entry.category)),new Set(["education","exhibition","publication","award","practice"]));
+test("canonical CV record contains localized editable entries",()=>{
+ assert.ok(cvEntries.length>0);
+ for(const entry of cvEntries){
+  assert.ok(entry.id);
+  assert.ok(entry.title.en?.trim());
+  assert.ok(entry.title.fa?.trim());
+  assert.ok(entry.period?.en?.trim() || entry.year);
+  assert.ok(entry.period?.fa?.trim() || entry.year);
+ }
+});
+
+test("homepage content is composed through canonical localized repositories",()=>{
+ for(const locale of ["en","fa"] as const){
+  const home=getHomepageContent(locale);
+  assert.ok(home.artist?.biography[locale]);
+  assert.ok(home.artist?.statement[locale]);
+  assert.equal(home.artworks.length,25);
+  assert.equal(home.galleries.length,8);
+  assert.equal(home.journalPreview.length,1);
+  assert.equal(home.contact?.instagramUrl,"https://www.instagram.com/ghazalenasoodi/");
+ }
+});
+
+test("site shell renders artist identity from the canonical artist repository",()=>{
+ const source=readFileSync("src/components/site-shell.tsx","utf8");
+ assert.ok(source.includes("getArtist(locale)"));
+ assert.match(source,/artistBrand/);
+ assert.ok(!source.includes("Ghazale"));
+ assert.ok(!source.includes("Abdolahzade Nasoodi"));
+ assert.ok(!source.includes("Nasoodi.art"));
+});
+
+test("canonical artist profile is populated in both locales",()=>{
+ assert.ok(artistProfile);
+ assert.equal(artistProfile?.id,"artist-profile");
+ assert.equal(artistProfile?.name?.en,"Ghazaleh Abdolahzade Nasoodi");
+ assert.equal(artistProfile?.brand,"Nasoodi.art");
+ assert.ok(artistProfile?.name?.en?.trim());
+ assert.ok(artistProfile?.name?.fa?.trim());
+ assert.ok(artistProfile?.biography.en?.trim());
+ assert.ok(artistProfile?.biography.fa?.trim());
+ assert.ok(artistProfile?.statement.en?.trim());
+ assert.ok(artistProfile?.statement.fa?.trim());
 });
 
 test("upcoming Journal event selection excludes ongoing events and uses stable tie-breakers", () => {
@@ -329,7 +466,7 @@ test("Journal cover images require a safe local path, explicit rights, dimension
 });
 
 
-test("published Journal entries use localized, dimensioned, rights-cleared temporary gallery-image placeholders",()=>{
+test("published Journal entries use localized, dimensioned, rights-cleared canonical artwork covers",()=>{
  for(const locale of ["en","fa"] as const){
   const entries=getPublicJournal(journalEntries,locale);
   assert.equal(entries.length,8);
@@ -339,11 +476,160 @@ test("published Journal entries use localized, dimensioned, rights-cleared tempo
    assert.equal(cover.rightsConfirmed,true);
    assert.equal(isSafeLocalImagePath(cover.src),true);
    assert.ok(cover.width>0&&cover.height>0);
-   assert.match(cover.alt[locale] ?? "",locale==="en"?/Temporary Journal image placeholder/:/تصویر موقت/);
+   const artwork=artworks.find(item=>item.images.some(image=>image.src===cover.src));
+   assert.ok(cover.alt[locale]?.trim());
+   assert.doesNotMatch(cover.alt[locale] ?? "",/temporary|placeholder|موقت/iu);
   }
  }
  const withoutCover={...journalEntries[0],coverImage:undefined};
  assert.equal(journalCoverImageFor(withoutCover,"en"),undefined);
  const unapprovedCover={...journalEntries[0],coverImage:{...journalEntries[0].coverImage!,rightsConfirmed:false}};
  assert.equal(journalCoverImageFor(unapprovedCover,"en"),undefined);
+});
+
+
+test("localized content slugs are validated and unique independently per locale",()=>{
+ const localizedWork:Artwork={...work,localizedSlugs:{en:"spring-garden",fa:"bagh-bahar"}};
+ assert.equal(getLocalizedSlug(localizedWork,"en"),"spring-garden");
+ assert.equal(getLocalizedSlug(localizedWork,"fa"),"bagh-bahar");
+ assert.equal(getPublicArtworks([localizedWork],"en").length,1);
+ assert.equal(getPublicArtworks([localizedWork],"fa").length,1);
+ const duplicateEnglish:Artwork={...localizedWork,id:"w2",localizedSlugs:{en:"spring-garden",fa:"bagh-bahar-second"}};
+ assert.equal(getPublicArtworks([localizedWork,duplicateEnglish],"en").length,0);
+ assert.equal(getPublicArtworks([localizedWork,duplicateEnglish],"fa").length,2);
+
+ const gallery:Gallery={id:"g1",slug:"legacy-gallery",localizedSlugs:{en:"quiet-intervals",fa:"faslehaye-aram"},title:{en:"Gallery",fa:"گالری"},description:{en:"Description",fa:"توضیح"},coverArtworkId:"w1",artworkIds:["w1"],status:"published",sortOrder:1};
+ assert.equal(getPublicGalleries([gallery],[work],"en").length,1);
+ assert.equal(getLocalizedSlug(gallery,"fa"),"faslehaye-aram");
+
+ const journal:JournalEntry={id:"j1",slug:"legacy-story",localizedSlugs:{en:"studio-notes",fa:"yaddasht-haye-ateliye"},type:"story",title:{en:"Story",fa:"داستان"},summary:{en:"Summary",fa:"خلاصه"},status:"published",approvedLocales:["en","fa"],artistApproved:true};
+ assert.equal(getPublicJournal([journal],"en").length,1);
+ assert.equal(getLocalizedSlug(journal,"fa"),"yaddasht-haye-ateliye");
+});
+
+
+test("a missing localized slug never falls back to another locale and fails content validation",()=>{
+ const localized={...artworks[0],localizedSlugs:{en:"english-only"}};
+ assert.equal(getLocalizedSlug(localized,"en"),"english-only");
+ assert.equal(getLocalizedSlug(localized,"fa"),"");
+ const issues=validatePortfolioContent({
+  artworks:[localized],galleries,journalEntries,cvEntries,homepageSelection,artistProfile,cvDocument,contactDetails,siteContent,
+ });
+ assert.ok(issues.some(issue=>issue.path.endsWith(".localizedSlugs.fa")));
+});
+
+test("localized slugs are unique per locale and alternate links follow stable content ids",async()=>{
+ const localizedWork:Artwork={...artworks[0],id:"localized-route-work",slug:"legacy-work",localizedSlugs:{en:"english-work",fa:"persian-work"}};
+ const localizedGallery:Gallery={id:"localized-route-gallery",slug:"legacy-gallery",localizedSlugs:{en:"english-gallery",fa:"persian-gallery"},title:{en:"Gallery",fa:"گالری"},description:{en:"Description",fa:"توضیح"},coverArtworkId:localizedWork.id,artworkIds:[localizedWork.id],status:"published",sortOrder:99};
+ const localizedJournal:JournalEntry={id:"localized-route-journal",slug:"legacy-journal",localizedSlugs:{en:"english-journal",fa:"persian-journal"},type:"story",title:{en:"Story",fa:"داستان"},summary:{en:"Summary",fa:"خلاصه"},status:"published",approvedLocales:["en","fa"],artistApproved:true};
+ const duplicateGallery:Gallery={...localizedGallery,id:"localized-route-gallery-duplicate",localizedSlugs:{en:"english-gallery",fa:"another-persian-gallery"}};
+ const duplicateJournal:JournalEntry={...localizedJournal,id:"localized-route-journal-duplicate",localizedSlugs:{en:"english-journal",fa:"another-persian-journal"}};
+ artworks.push(localizedWork);
+ galleries.push(localizedGallery);
+ journalEntries.push(localizedJournal);
+ try {
+  assert.equal(getPublicGalleries([localizedGallery,duplicateGallery],[localizedWork],"en").length,0);
+  assert.equal(getPublicGalleries([localizedGallery,duplicateGallery],[localizedWork],"fa").length,2);
+  assert.equal(getPublicJournal([localizedJournal,duplicateJournal],"en").length,0);
+  assert.equal(getPublicJournal([localizedJournal,duplicateJournal],"fa").length,2);
+  assert.equal(alternatePathFor("/en/works/english-work","en"),"/fa/works/persian-work");
+  assert.equal(alternatePathFor("/en/galleries/english-gallery","en"),"/fa/galleries/persian-gallery");
+  assert.equal(alternatePathFor("/en/journal/english-journal","en"),"/fa/journal/persian-journal");
+ } finally {
+  artworks.pop();
+  galleries.pop();
+  journalEntries.pop();
+ }
+});
+
+test("published Journal records require a complete localized JSON body",()=>{
+ const entry=journalEntries[0];
+ const issues=validatePortfolioContent({
+  artworks,galleries,journalEntries:[{...entry,body:{en:entry.body?.en}}],
+  cvEntries,homepageSelection,artistProfile,cvDocument,contactDetails,siteContent,
+ });
+ assert.ok(issues.some((issue)=>issue.path.endsWith(".body.fa")));
+});
+
+test("canonical portfolio registry passes cross-record validation", () => {
+ const issues = validatePortfolioContent({
+  artworks,
+  galleries,
+  journalEntries,
+  cvEntries,
+  homepageSelection,
+  artistProfile,
+  cvDocument,
+  contactDetails,
+  siteContent,
+ });
+ assert.deepEqual(issues, []);
+});
+
+test("portfolio validation reports duplicate routes and broken content relationships", () => {
+ const duplicateArtwork = { ...artworks[0], slug: "different-fallback-slug" };
+ const brokenGallery = { ...galleries[0], artworkIds: ["missing-artwork"], coverArtworkId: "missing-artwork" };
+ const issues = validatePortfolioContent({
+  artworks: [...artworks, duplicateArtwork],
+  galleries: [brokenGallery],
+  journalEntries,
+  cvEntries: [],
+  homepageSelection: { ...homepageSelection, featuredArtworkIds: [...homepageSelection.featuredArtworkIds, "missing-artwork"] },
+  artistProfile,
+  cvDocument,
+  contactDetails,
+  siteContent,
+ });
+ assert.ok(issues.some((issue) => issue.path.endsWith(".id") && issue.message.includes("Duplicate artworks ID")));
+ assert.ok(issues.some((issue) => issue.path.includes("artworkIds") && issue.message.includes("Unknown artwork ID")));
+ assert.ok(issues.some((issue) => issue.path.includes("featuredArtworkIds") && issue.message.includes("Unknown content ID")));
+});
+
+test("archive hreflang requires the same published content identities in both locales", () => {
+ assert.equal(hasEquivalentContentSet([{id:"a"},{id:"b"}],[{id:"b"},{id:"a"}]),true);
+ assert.equal(hasEquivalentContentSet([{id:"a"},{id:"b"}],[{id:"a"}]),false);
+ assert.equal(hasEquivalentContentSet([{id:"a"},{id:"b"}],[{id:"a"},{id:"c"}]),false);
+ assert.equal(hasEquivalentContentSet([{id:"a"},{id:"a"}],[{id:"a"},{id:"a"}]),false);
+ assert.equal(hasEquivalentContentSet([],[]),false);
+});
+
+test("CV identifiers are validated independently from URL slugs", () => {
+ const cvEntry: CvEntry = {
+  id: "cv_entry_01",
+  category: "education",
+  title: { en: "Fine Arts" },
+  year: 2020,
+  
+  status: "draft",
+ };
+ const issues = validatePortfolioContent({
+  artworks,
+  galleries,
+  journalEntries,
+  cvEntries: [cvEntry],
+  homepageSelection,
+  artistProfile,
+  cvDocument,
+  contactDetails,
+  siteContent,
+ });
+ assert.deepEqual(issues, []);
+});
+
+
+test("canonical JSON records preserve the current bilingual artwork, gallery, and Journal inventory", () => {
+ assert.equal(artworks.length,25);
+ assert.equal(galleries.length,8);
+ assert.equal(journalEntries.length,8);
+ const first=journalEntries.find((entry)=>entry.id==="journal-first-light-1388");
+ assert.ok(first?.body?.en && first.body.fa);
+ assert.equal(first.title.en,"First Light: A Beginning in Paint");
+ assert.equal(first.body.en[0].type,"paragraph");
+ assert.ok(first.body.en[0].type==="paragraph" && first.body.en[0].text.includes("A beginning does not always announce itself"));
+ assert.ok(first.body.fa[0].type==="paragraph" && first.body.fa[0].text.includes("آغاز یک مسیر"));
+ for (const entry of journalEntries) {
+  assert.ok(entry.body?.en?.length, entry.id + " must have an English JSON rich-text body");
+  assert.ok(entry.body?.fa?.length, entry.id + " must have a Persian JSON rich-text body");
+  assert.ok(entry.coverImage?.rightsConfirmed, entry.id + " must resolve an approved artwork cover");
+ }
 });

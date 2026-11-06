@@ -20,7 +20,7 @@ Deliver:
 4. Accessible archive pagination with a default of 5 entries per page and page-size choices of 5, 10, and 20.
 5. A fixed, dismissible, locale-aware exhibition announcement sticker that independently selects the nearest eligible upcoming event.
 6. An SVG decorative paper asset authored or refined during this implementation.
-7. A transparent PNG rendered from that SVG by GitHub Actions for owner review.
+7. The canonical SVG served directly by the website; no raster derivative is required.
 8. Automated tests, completed CI evidence, and inspected English/Persian responsive screenshots.
 
 The overall product direction is approved in principle. The exact sticker silhouette, torn edge, tape detail, sizing, and final localized microcopy remain subject to owner review. Do not represent a successful build or SVG render as visual approval.
@@ -71,7 +71,7 @@ Discover:
 - Shared sidebar, mobile drawer, locale switcher, shell geometry, breakpoints, safe-area handling, z-index tokens, and skip link.
 - Existing button/link/icon/typography primitives, shadcn components, CSS tokens, and RTL utilities.
 - Existing preference/session persistence utility and current dismissal conventions.
-- Existing tests, Playwright setup, screenshot artifacts, CI renderer, and GitHub Actions workflow.
+- Existing tests, Playwright setup, screenshot artifacts, and GitHub Actions workflow.
 
 Produce a short evidence-based gap matrix: requirement, current implementation evidence, status (implemented/partial/missing/conflicting/unverified), proposed minimal change, and tests needed.
 
@@ -88,7 +88,7 @@ Do not silently weaken product rules to fit an existing implementation. If an un
 
 **Do this during the early implementation phase. Do not leave SVG creation until the end.**
 
-The existing `specification/assets/journal-announcement-sticker.svg` is a hand-authored design study and starting point. Inspect it, then refine its vector paths or replace its artwork with a better-authored SVG that satisfies the visual-design contract. Merely copying the existing study without assessment does not satisfy this task.
+The existing `public/images/journal/journal-announcement-sticker.svg` is a hand-authored design study and starting point. Inspect it, then refine its vector paths or replace its artwork with a better-authored SVG that satisfies the visual-design contract. Merely copying the existing study without assessment does not satisfy this task.
 
 ### SVG requirements
 
@@ -111,38 +111,16 @@ The existing `specification/assets/journal-announcement-sticker.svg` is a hand-a
 
 ### Asset source of truth
 
-- Keep `specification/assets/journal-announcement-sticker.svg` as the canonical editable source unless repository discovery reveals a stronger existing asset convention; document any deliberate path change.
+- Keep `public/images/journal/journal-announcement-sticker.svg` as the canonical editable source unless repository discovery reveals a stronger existing asset convention; document any deliberate path change.
 - If a runtime asset copy is necessary, define a deterministic source/copy strategy or use the source directly. Avoid multiple independently editable SVG copies.
-- Do not add a generated PNG to the application bundle before owner approval.
+- Do not generate or add a PNG derivative; serve the canonical SVG directly.
 
-## 6. Phase 2 — GitHub Actions SVG-to-PNG review pipeline
+## 6. SVG asset and CI validation
 
-GitHub Actions **must** convert the checked-in SVG into a transparent PNG review artifact during this implementation. This requirement applies even if the live application ultimately uses the SVG directly and never ships a PNG.
-
-Reuse and improve the existing:
-- `scripts/render-journal-sticker.py`
-- `.github/workflows/ci.yml`
-
-Expected baseline unless the visual-design contract is deliberately updated:
-- SVG viewBox: `0 0 420 280`.
-- Review render: 1260 × 840 pixels (3×).
-- PNG: RGBA with a real alpha channel.
-- Background outside the paper silhouette: transparent.
-- Output path: `artifacts/journal-announcement-sticker.png`.
-
-CI validation must check:
-- Source SVG exists and parses.
-- Valid explicit viewBox and expected aspect ratio/dimensions.
-- No baked SVG text or embedded raster images.
-- PNG is generated from the checked-in source in the same workflow run.
-- Exact output dimensions and RGBA mode.
-- Alpha channel contains transparent canvas pixels and visible/opaque paper pixels.
-- Rendered image is not empty.
-- Failure of any required validation fails the CI job.
-
-Upload the PNG as a clearly named GitHub Actions artifact with the visual-QA outputs. Inspect the actual artifact at intended display size and at 2×/3× review scale. A successful script exit alone is not visual inspection.
-
-The PNG is a review artifact, not the editable source. Do not commit it or promote it to a production asset until the owner has reviewed and approved the visual treatment. Report the workflow URL, run conclusion, tested commit SHA, artifact name, and artifact availability.
+- Keep `public/images/journal/journal-announcement-sticker.svg` as the canonical, editable source and serve it directly in the website.
+- Do not add a Python renderer, CairoSVG/Pillow dependencies, PNG generation, or sticker-specific artifact upload steps.
+- CI verifies that the canonical SVG exists and is non-empty. The browser suite verifies that the relevant UI loads and renders the SVG.
+- Review visual refinements using actual English/Persian responsive website screenshots. Keep text and controls in localized HTML, not inside the SVG.
 
 ## 7. Phase 3 — Canonical event eligibility and selection
 
@@ -342,7 +320,7 @@ Run/inspect GitHub Actions when authorized and available:
 - Wait for completion; queued/in-progress is not a pass.
 - Inspect every relevant job and logs.
 - Confirm SVG renderer/validation passed.
-- Confirm the PNG artifact was uploaded and can be retrieved.
+- Confirm the rendered website screenshots was uploaded and can be retrieved.
 - Fix actual failures and rerun.
 
 Capture actual browser screenshots for:
@@ -355,12 +333,12 @@ Capture actual browser screenshots for:
 - Archive and event detail.
 - Keyboard focus state where practical.
 
-Inspect the screenshots and PNG artifact. Record viewport, locale, state, artifact location, and findings. A screenshot that has not been opened/inspected is not visual verification.
+Inspect the screenshots and rendered website screenshots. Record viewport, locale, state, artifact location, and findings. A screenshot that has not been opened/inspected is not visual verification.
 
 ## 13. Phase 9 — Owner review and handoff
 
 Present:
-- The CI-generated PNG artifact.
+- The rendered website screenshots artifact.
 - Sticker close-up and actual display-size screenshots.
 - English/Persian desktop/tablet/mobile screenshots.
 - Any alternative vector treatment if the current torn-edge/tape design needs comparison.
@@ -368,7 +346,7 @@ Present:
 
 The owner may request vector-path refinements. Apply requested changes directly to the SVG source and rerun CI; do not edit the PNG manually.
 
-Do not call the visual treatment final or artist-approved until the owner explicitly approves it. Do not commit the generated PNG before approval.
+Do not call the visual treatment final or artist-approved until the owner explicitly approves it. Do not generate or commit a PNG derivative.
 
 ## 14. Definition of done
 
@@ -377,7 +355,7 @@ The task is complete only when:
 - Canonical Journal content and event data are reused without duplication.
 - Homepage newest-two preview and independent nearest-upcoming sticker rules are both verified.
 - SVG artwork has been authored/refined during implementation.
-- GitHub Actions renders and validates the transparent PNG review artifact.
+- GitHub Actions renders and validates the transparent rendered website screenshots.
 - Sticker behavior, dismissal, LTR/RTL, responsive placement, and accessibility are implemented.
 - Required tests, lint, typecheck, and production build pass.
 - The completed CI run matches the final tested feature SHA and its logs are inspected.
@@ -391,7 +369,7 @@ The task is complete only when:
 2. Requirement-by-requirement implementation status.
 3. Files created/modified.
 4. SVG authoring changes and canonical source path.
-5. Renderer validation and CI-generated PNG artifact link.
+5. Renderer validation and rendered website screenshots artifact link.
 6. Test commands and exact pass/fail results.
 7. GitHub Actions run URL, conclusion, and tested SHA.
 8. Visual QA locales, viewports, states, and artifact references.

@@ -1,3 +1,35 @@
+# CURRENT IMPLEMENTATION TASK — Unified JSON Content, Internationalization, and SEO
+
+**Repository:** `mrcode-tech/nasoodi.art`  
+**Working branch:** `feature` only  
+**Task:** Complete the owner-provided unified JSON content, About/CV, next-intl, route architecture, and international SEO implementation prompt.  
+**Audit:** `specification/internationalization-content-seo-completion-audit.md`
+
+## Explicit owner authorization — feature branch only
+
+The owner has authorized the AI agent to make code and documentation changes, create commits, push updates, and run GitHub Actions on the existing `feature` branch. This authorization is active; do not pause for another commit/push confirmation. Work only on `feature`, preserve unrelated work, and use normal non-destructive commits. Do not create or switch branches, force-push, rewrite history, merge into `stage` or `main`, deploy, publish, or change external services. Those actions are outside this authorization and require separate explicit approval.
+
+## Current architecture decisions — 2026-11-05
+
+- Editorial content is canonical localized JSON. UI translations remain in `src/i18n/messages/{en,fa}/`.
+- Journal article bodies are structured localized rich-text arrays inside `src/content/data/journal/index.json`; Markdown body files and the generation pipeline are obsolete and must not be reintroduced.
+- The artist identity, biography, statement, and profile copy live in `src/content/data/artist-profile.json`. Homepage and About consume the same artist repository.
+- CV entries and the optional PDF reference live in one `src/content/data/cv.json` record. CV entries do not use a separate `verified` flag. Do not invent education, awards, exhibitions, qualifications, or dates.
+- Contact title, description, and owner-supplied contact destinations live in `src/content/data/contact.json`. Never add invented email addresses or social handles.
+- `src/content/data/site.json` owns localized archive metadata for Works, Galleries, Journal, and CV.
+- Preserve artwork IDs, original asset paths, gallery membership/order, existing routes, design tokens, responsive behavior, and RTL/LTR behavior.
+- No separate preview/sample/fictional/verified content providers, production suppression, or fixture fallback. All environments use the same canonical JSON records.
+- Keep content resolution in repositories/adapters, validation in domain utilities, and presentation in route/component layers. Components must not import editorial JSON directly.
+- The latest task-specific completion audit is the source for remaining gaps and risk; update it with verified findings as work progresses.
+
+## Implementation checkpoint
+
+The current implementation increment is on `feature`: all eight Journal bodies are localized JSON rich-text; About uses the same artist repository as homepage and CV uses one CV repository; homepage and artwork/gallery/Journal detail routes resolve through focused repositories; sitemap, section metadata, and global Person structured data use those repositories; localized slugs are required and missing locale slugs no longer fall back; Journal cover alt text reuses canonical artwork alt text; the AST i18n audit scans app/components/lib and distinguishes semantic ARIA role descriptors from UI copy; Galleries and Journal pagination are under Suspense for Next.js 16 static rendering. See the current completion audit for exact SHA, CI evidence, remaining validation gaps, and owner-content approvals.
+
+This checkpoint is **not a completion claim**. Run and inspect GitHub Actions against the final tested SHA, fix any failures, complete the remaining route/i18n/SEO/documentation work, and report exact evidence. Do not merge, deploy, or publish.
+
+---
+
 # NEXT IMPLEMENTATION TASK — SITE-WIDE BREADCRUMBS, EDITORIAL SPACING, AND CONTACT EXPERIENCE
 
 **Priority:** Next implementation task on the existing feature branch.  
@@ -5,9 +37,25 @@
 **Branch:** `feature` only  
 **Complete implementation prompt:** `specification/site-wide-navigation-spacing-and-contact-implementation-prompt.md`
 
+**Implementation checkpoint — 2026-11-05:** The current cross-site refinement is implemented on `feature`. Shared breadcrumb current-page semantics, the homepage-to-Contact destination, semantic spacing tokens, scoped editorial justification, compact narrow-screen Journal controls, and bilingual desktop/mobile Contact navigation are covered by regression tests. GitHub Actions [run #889](https://github.com/mrcode-tech/nasoodi.art/actions/runs/41993382170) passed against commit `01c00996c60313088e06478df4cca7aea47d3569`: lint, i18n audit, TypeScript, content tests, production build, asset audit, SVG validation, 135 Playwright tests, and production smoke test. Rendered English/Persian homepage, Contact, and Journal archive screenshots were inspected from the CI artifact. See the task-specific specification for detailed evidence and remaining owner/publication gates.
+
 ## Global typography guardrail — 2026-11-03
 
 All future UI work must follow specification/shared-responsive-typography-system.md and the shared design authorities. Reuse its semantic fluid type tokens across routes; respect Persian and English font metrics and RTL/LTR behavior; preserve natural heading wrapping; and do not add isolated oversized heading values or global no-wrap rules. The Persian homepage artist name and homepage Contact heading are single-line targets only at the reference widths defined by the specification. Update the shared specification before changing the typography system.
+
+## AI-assisted engineering and refactoring requirements
+
+Before any non-trivial React, Next.js, TypeScript, i18n, content-architecture, or refactoring work, read `specification/ai-assisted-development-and-code-quality.md` in full.
+
+Use the selected skills according to that contract:
+- Vercel React Best Practices for React/Next.js implementation, review, and refactoring.
+- Frontend Convention Skills (`react-architecture`) when component boundaries, folder organization, or separation of concerns are in scope.
+- Patterns and Refactoring for non-trivial, test-backed, behavior-preserving restructuring.
+- i18n for Next.js as an advisory checklist for translation and multilingual SEO work.
+
+Invoke the relevant skill if it is installed and available to the active coding agent. Otherwise read its linked `SKILL.md` and apply relevant guidance manually. Never claim a skill was installed or invoked without verifying it. Do not install, update, or execute third-party skills automatically. Official documentation matching the installed Next.js version, this repository's actual `/en` and `/fa` route contract, root `AGENTS.md`, and approved specifications take precedence over third-party examples. In particular, do not copy the i18n skill's default-locale URL or middleware conventions without a compatibility decision.
+
+Refactoring must be incremental and behavior-preserving: establish existing behavior, protect it with tests, make one coherent structural change at a time, and verify focused tests plus the broader relevant checks. Prefer simple code over speculative abstractions. Do not combine unrelated feature work, dependency upgrades, or formatting churn with a refactor.
 
 Implement the cross-site refinement as one coherent experience:
 
@@ -16,7 +64,7 @@ Implement the cross-site refinement as one coherent experience:
 3. Minimal one-line Journal page-size and pagination controls on common mobile widths.
 4. One-line desktop sidebar copyright in English and Persian.
 5. Consistent justified long-form editorial text that uses the available content width without harming mobile readability or Persian shaping.
-6. A homepage Contact section and dedicated bilingual Contact page, using the centralized owner-authorized fictional demo contact details. Render them normally in both locales without approval/confirmation gates; keep the routes noindex until real details replace the fixtures.
+6. A homepage Contact section and dedicated bilingual Contact page, using only the canonical owner-supplied Contact JSON. Generate localized metadata and sitemap eligibility from that same record.
 
 Before coding, read in full:
 - `AGENTS.md`
@@ -34,11 +82,11 @@ Before coding, read in full:
 
 Inspect the current implementation and route hierarchy before editing. Do not assume a breadcrumb parent based only on browser history. Test direct entry, refresh, contextual artwork navigation, and fallback paths. Reuse the installed shadcn primitives and shared navigation architecture. Apply spacing changes through shared tokens/layout primitives before page-specific overrides. Preserve the quiet editorial gallery identity and all approved artwork/content.
 
-**Contact demo-data authorization (owner-confirmed 2026-11-03):** the site is in a demo phase and the owner explicitly authorizes fictional email and social destinations. Render the centralized fictional Contact fixture normally on the homepage and both localized Contact pages. Do not require owner approval, locale approval, confirmation flags, environment variables, or production-mode conditions to show the values. Do not add a visible disclaimer or claim demo accounts are real, verified, or monitored. Keep Contact routes noindex and excluded from the sitemap while these fictional values are in use. Replace the fixture with real owner-supplied details or remove the methods before public launch. Preserve the actual artist Instagram identity @ghazalenasoodi outside the demo Contact fixture.
+**Contact content rule — 2026-11-05:** the canonical Contact JSON contains only owner-supplied public destinations and localized Contact metadata. Do not add invented email addresses, Telegram handles, or social profiles. The current configured destination is the artist's supplied Instagram identity @ghazalenasoodi. Contact indexability and sitemap eligibility follow the canonical localized title/description and valid owner-supplied destination.
 
 Run the complete relevant test suite and CI, inspect actual logs and final tested SHA, and capture/inspect English and Persian desktop/tablet/mobile screenshots. Verify breadcrumb clickability, RTL reading and keyboard order, no overflow, spacing, text measure, Journal controls, copyright fit, and Contact navigation/content.
 
-Work only on the existing `feature` branch. Preserve unrelated work. Do not merge to `stage` or `main`, deploy, publish, change external services, or commit/push without the required separate authorization.
+Work only on the existing `feature` branch. The owner has authorized commits and pushes to this branch; no further confirmation is required. Preserve unrelated work. Do not merge to `stage` or `main`, deploy, publish, change external services, or push any other branch.
 
 ---
 
@@ -77,7 +125,7 @@ Before coding, read in full:
 
 The proposal is approved in principle and implementation may proceed. The initial hand-authored torn-edge SVG study is a candidate, not final approval. Review the CI-generated PNG and responsive screenshots with the owner; refine the vector paths directly if requested. Build the functional experience and prepare visual comparisons. The CI-generated PNG is a review artifact, not a final approved asset; do not commit it or declare the visual variant final until the owner selects it. Inspect the real shell, locale-aware sidebar/menu geometry, Journal data model, routes, existing pagination, assets, and CI before coding.
 
-Use `specification/journal-announcement-implementation-prompt.md` as the complete task brief and `specification/journal-announcement-agent-instructions.md` as the concise execution checklist. Preserve all repository safety rules in `AGENTS.md`: work on the existing feature branch, preserve unrelated changes, do not merge to stage/main, do not deploy, and do not push or commit without the required separate authorization. Run the repository's actual tests and CI, inspect logs, and capture reviewed English/Persian desktop/tablet/mobile screenshots before reporting completion.
+Use `specification/journal-announcement-implementation-prompt.md` as the complete task brief and `specification/journal-announcement-agent-instructions.md` as the concise execution checklist. Preserve all repository safety rules in `AGENTS.md`: work on the existing feature branch, preserve unrelated changes, commit and push to `feature` after verification, do not merge to stage/main, and do not deploy or publish. Run the repository's actual tests and CI, inspect logs, and capture reviewed English/Persian desktop/tablet/mobile screenshots before reporting completion.
 
 ---
 
@@ -147,9 +195,9 @@ Also inspect any existing About, artist-profile, CV, hero, sidebar, locale, and 
 - Do not create, switch, reset, rename, or delete branches.
 - Preserve unrelated and uncommitted user work. Never overwrite unrelated changes.
 - Do not merge into `stage` or `main`.
-- Do not push to an unauthorized destination.
+- Push only to the owner-authorized existing `feature` branch; pushes to every other branch are unauthorized.
 - Do not deploy, publish, change DNS, alter Vercel settings, modify secrets, or change external services.
-- Do not commit until implementation, relevant tests, build, and verification are complete. If no commit is explicitly requested, leave changes uncommitted and report that.
+- The owner has explicitly requested and authorized commits and pushes to `feature`. Commit after implementation, relevant tests, build, and verification are complete; leave changes uncommitted only if the owner later revokes this authorization.
 - Do not use force push or destructive Git commands.
 - Do not change the branch's existing history or rewrite commits.
 
@@ -177,12 +225,14 @@ If the actual code conflicts with the specification, inspect the source and rele
 
 ## 5. Content and asset integrity — hard gate
 
-- Use only artist/site-owner-approved material for public production content, except for the explicitly owner-authorized fictional Contact fixture used during this demo phase.
-- Demo Contact exception: the centralized fictional email, Telegram, and Instagram values must render on the homepage and localized Contact pages without approval, confirmation, or environment/production-mode gates. Do not add a visible disclaimer or claim the accounts are real, verified, monitored, or artist-approved. Keep Contact routes noindex and out of the sitemap until real owner-supplied values replace the fixture; preserve the actual artist Instagram identity outside the demo fixture.
-- Explicit owner-authorized exception for this feature-branch design task: use clearly labelled fictional bilingual biography, artist statement, and CV data to populate the existing About page for visual review. Keep it non-approved, noindex, and disabled in production runtime; replace it before any release merge. Do not create a preview route or query parameter.
+- Use canonical localized JSON for all editable editorial content in every environment; do not maintain separate preview/sample providers or production suppression.
+- Homepage and About use the same artist profile. CV entries and an optional real PDF reference use one CV JSON record. Journal bodies are localized JSON rich-text blocks.
+- Write initial descriptive editorial content as the site's normal data, but never invent factual education, exhibitions, awards, qualifications, institutions, venues, dates, or contact methods. Keep unsupported factual CV categories empty until owner-supplied information is available.
+- Contact destinations must be owner-supplied and stored in the canonical Contact JSON. Do not invent email addresses or social handles.
+- Do not create synthetic CV PDFs; preserve the download mechanism for an actual owner-supplied PDF.
 - Never present fictional biography, education, exhibitions, awards, publications, dates, venues, or qualifications as verified or artist-approved facts.
 - Do not machine-translate and publish unreviewed biography or interface copy as approved Persian/English content.
-- Do not create a synthetic CV PDF for public or artist-approved content. The explicitly authorized feature-branch sample PDF is the sole exception: derive it from the same labelled fixture records shown on the About page, mark it fictional, and disable its route in production runtime.
+- Do not create synthetic CV PDFs; use the download mechanism only when an actual owner-supplied PDF exists.
 - Verify the exact PDF file, public-download permission, readability, and metadata before exposing its link.
 - Verify image identity, dimensions, rights, and intended use before adding it to About.
 - Preserve all artwork/photo fidelity and existing image-treatment restrictions.
@@ -220,7 +270,7 @@ If the actual code conflicts with the specification, inspect the source and rele
 - Render the full localized biography from the canonical source.
 - Keep statement and biography distinct if both are present.
 - Place the CV section after the biography and before the global footer.
-- Reuse the existing CV content model and display verified entries only.
+- Reuse the canonical CV JSON record and display only owner-supplied factual entries; do not add a separate verification flag.
 - Add the PDF download action only for a real, valid, approved public PDF.
 - Use a safe local public asset path and descriptive filename.
 - If the PDF is missing/unapproved/invalid, omit the link and report the blocker. Never render a broken link.
@@ -364,3 +414,38 @@ Do not report completion until:
 8. Known issues or follow-up work.
 9. Explicit confirmation that no unauthorized merge/deploy/publish occurred.
 
+
+
+## Architecture contracts — SEO, i18n, and editable content (2026-11-04)
+
+Before any future SEO, localization, or content-refactoring implementation, read these documents in full:
+
+- `specification/international-seo-and-search-discovery-architecture.md`
+- `specification/internationalization-and-ui-translation-architecture.md`
+- `specification/content-architecture-and-data-separation.md`
+- `specification/seo-and-discovery.md`
+- `specification/localization-and-editorial-governance.md`
+- `specification/content-model.md`
+- `specification/artwork-imaging-and-asset-pipeline.md`
+- `specification/accessibility-performance-security.md`
+- `specification/testing-qa-and-release.md`
+
+The owner requires three separate but coordinated concerns:
+1. SEO and multilingual search discovery.
+2. UI internationalization through a centralized i18n library (evaluate/adopt next-intl after compatibility audit), with no scattered Persian/English literals or conditional copy in components.
+3. Editable artist/portfolio content separated from UI messages, domain types, general utilities, and application logic. Artist profile, artwork, galleries, Journal, events, CV, and contact data belong in a clear content layer; generic utilities must not be content databases.
+
+Treat content as data, types as contracts, utilities/services as behavior, and components as presentation. Adding an artwork/gallery/Journal record should not require editing page or carousel components. Use stable content identity across locales and explicit localized slug mapping. Preserve editorial approval, asset rights, route behavior, ordering, and canonical Contact JSON metadata/sitemap eligibility.
+
+The proposed file-based content layout is a starting point only. First inspect the actual repository, including current util.ts/utils.ts and JSX data, classify each value, and map existing behavior. Use JSON for all editable editorial content, including long-form biography, artist statement, Journal bodies, and event descriptions. Markdown is not an editorial source format for this project. Keep TypeScript for types, schemas, repositories, validation, and logic. Do not adopt a CMS or database without a demonstrated requirement. Migrate incrementally with route/content/metadata parity tests; never perform a blind wholesale rewrite.
+
+For SEO research, the owner mentioned the community AgriciDaniel/claude-seo skill: https://github.com/AgriciDaniel/claude-seo. It may inform audit workflow, but is not a project dependency or authority. Inspect and pin/review its SKILL.md before using it. Validate claims against primary Google Search Central, Next.js, Schema.org, and web.dev documentation and actual production-rendered output. Do not install the full plugin, connect Search Console/analytics, use paid API extensions, or change production without explicit authorization.
+
+These architecture documents are specifications, not authorization to begin this work automatically. The current task at the top of this file remains the active implementation task unless the owner explicitly changes priority. Work on `feature` only; commits and pushes to `feature` are authorized. Do not merge, deploy, or publish without separate authorization.
+
+
+## Unified JSON implementation update — 2026-11-05
+
+The current implementation contract is `specification/internationalization-content-seo-completion-audit.md`. Canonical JSON content is documented in `specification/content-architecture-and-data-separation.md`; edit those records rather than adding JSX copy, Markdown body files, preview fixtures, or parallel sample/verified providers. The homepage composition, About, CV, detail routes, sitemap, metadata, and global structured data use content repositories. Explicit localized slugs are required for every published route record. Keep factual CV and event history limited to owner-supplied information.
+
+When a production build fails because a Client Component uses `useSearchParams`, retain a narrowly scoped Suspense boundary around that component in its Server Component route. Do not suppress the build check or convert the entire route to client rendering.

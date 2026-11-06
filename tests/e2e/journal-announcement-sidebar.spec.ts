@@ -29,3 +29,32 @@ test("desktop announcement close control has no circular button treatment", asyn
   await expect(close).toHaveCSS("border-radius", "0px");
   await expect(close).toHaveCSS("background-color", "rgba(0, 0, 0, 0)");
 });
+
+for (const locale of ["en", "fa"] as const) {
+  test(`mobile ${locale} language and appearance selectors share the same trigger design`, async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto(`/${locale}/journal`);
+    await page.getByRole("button", { name: locale === "en" ? "Open navigation" : "باز کردن راهبری" }).click();
+
+    const drawer = page.locator(".mobile-drawer");
+    const language = drawer.locator(".language-trigger");
+    const appearance = drawer.locator(".theme-trigger:not(.language-trigger)");
+    await expect(language).toBeVisible();
+    await expect(appearance).toBeVisible();
+    await expect(language.locator(".language-code-icon")).toHaveText(locale.toUpperCase());
+    await expect(language.locator(".selector-chevron")).toHaveCount(1);
+    await expect(appearance.locator(".selector-chevron")).toHaveCount(1);
+
+    const languageBox = await language.evaluate((node) => {
+      const style = getComputedStyle(node);
+      const rect = node.getBoundingClientRect();
+      return { width: rect.width, height: rect.height, padding: style.padding, gap: style.gap };
+    });
+    const appearanceBox = await appearance.evaluate((node) => {
+      const style = getComputedStyle(node);
+      const rect = node.getBoundingClientRect();
+      return { width: rect.width, height: rect.height, padding: style.padding, gap: style.gap };
+    });
+    expect(languageBox).toEqual(appearanceBox);
+  });
+}

@@ -1,0 +1,11 @@
+{
+  "viewerClose": "Close artwork viewer",
+  "viewerPrevious": "Previous artwork",
+  "viewerNext": "Next artwork",
+  "viewerUnavailable": "The artwork image is unavailable",
+  "viewerPosition": "of",
+  "viewerDetail": "View artwork page",
+  "viewerCarousel": "Selected artworks",
+  "artworkPosition": "Artwork position",
+  "artworkCarouselRole": "artwork carousel"
+}

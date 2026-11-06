@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
@@ -12,16 +13,21 @@ import {
   resolveGalleryPagination,
   type GalleryPageSize,
 } from "@/lib/gallery-pagination";
-import { getGalleryCoverArtwork, pagePath, type Artwork, type Gallery, type Locale } from "@/lib/site";
+import { getGalleryCoverArtwork } from "@/lib/content/publication";
+import { getLocalizedSlug } from "@/lib/content/paths";
+import { formatLocaleNumber } from "@/lib/locale-number";
+import { pagePath, getLocaleDirection, type Locale } from "@/types/locale";
+import type { Artwork, Gallery } from "@/types/content";
 
 type Props = {
   galleries: Gallery[];
   artworks: Artwork[];
   locale: Locale;
-  labels: { itemsPerPage: string; previous: string; next: string; page: string; showing: string };
+  labels: { itemsPerPage: string; previous: string; next: string; page: string };
 };
 
 export function GalleryIndex({ galleries, artworks, locale, labels }: Props) {
+  const t = useTranslations();
   const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -36,10 +42,11 @@ export function GalleryIndex({ galleries, artworks, locale, labels }: Props) {
   }, [pathname, queryString, router, state.page, state.pageSize]);
 
   const visible = paginateItems(galleries, state);
-  const range = state.totalItems === 0 ? "" : labels.showing
-    .replace("{start}", String(state.startIndex + 1))
-    .replace("{end}", String(state.endIndex))
-    .replace("{total}", String(state.totalItems));
+  const range = state.totalItems === 0 ? "" : t("showingGalleries", {
+    start: formatLocaleNumber(state.startIndex + 1, locale),
+    end: formatLocaleNumber(state.endIndex, locale),
+    total: formatLocaleNumber(state.totalItems, locale),
+  });
 
   const navigate = (nextPage: number, nextSize: GalleryPageSize = state.pageSize) => {
     router.push(galleryPaginationHref(pathname, queryString, nextPage, nextSize), { scroll: false });
@@ -48,13 +55,13 @@ export function GalleryIndex({ galleries, artworks, locale, labels }: Props) {
   return (
     <>
       {galleries.length === 0 ? null : (
-        <div className="gallery-index-grid" role="list" aria-label={locale === "fa" ? "گالری‌ها" : "Galleries"}>
+        <div className="gallery-index-grid" role="list" aria-label={t("galleriesList")}>
           {visible.map((gallery) => {
             const cover = getGalleryCoverArtwork(gallery, artworks, locale);
             if (!cover) return null;
             return (
               <article className="gallery-index-card" role="listitem" key={gallery.id}>
-                <Link className="gallery-index-card-link" href={pagePath(locale, "galleries/" + gallery.slug)}>
+                <Link className="gallery-index-card-link" href={pagePath(locale, "galleries/" + getLocalizedSlug(gallery, locale))}>
                   <span className="gallery-index-image-frame">
                     <Image src={cover.image.src} alt={cover.image.alt[locale] ?? ""} width={cover.image.width} height={cover.image.height}
                       sizes="(max-width: 600px) 100vw, (max-width: 900px) 50vw, 33vw" />
@@ -70,23 +77,23 @@ export function GalleryIndex({ galleries, artworks, locale, labels }: Props) {
         </div>
       )}
       {state.totalPages > 1 && (
-        <section className="gallery-pagination" aria-label={locale === "fa" ? "صفحه‌بندی گالری‌ها" : "Gallery pagination"}>
+        <section className="gallery-pagination" aria-label={t("galleryPagination")}>
           <p className="gallery-results-status" role="status" aria-live="polite">{range}</p>
-          <div className="gallery-pagination-controls" dir={locale === "fa" ? "rtl" : "ltr"}>
+          <div className="gallery-pagination-controls" dir={getLocaleDirection(locale)}>
             <label className="gallery-page-size">
               <span>{labels.itemsPerPage}</span>
               <select value={state.pageSize} onChange={(event) => navigate(1, Number(event.target.value) as GalleryPageSize)}>
-                {GALLERY_PAGE_SIZES.map((size) => <option key={size} value={size}>{size}</option>)}
+                {GALLERY_PAGE_SIZES.map((size) => <option key={size} value={size}>{formatLocaleNumber(size, locale)}</option>)}
               </select>
             </label>
             <nav className="gallery-page-nav" aria-label={labels.page}>
-              <button type="button" onClick={() => navigate(state.page - 1)} disabled={state.page <= 1} aria-label={labels.previous}>{locale === "fa" ? "→" : "←"}</button>
+              <button type="button" onClick={() => navigate(state.page - 1)} disabled={state.page <= 1} aria-label={labels.previous}>{getLocaleDirection(locale) === "rtl" ? "→" : "←"}</button>
               {getCompactPageNumbers(state.page, state.totalPages).map((item, index) =>
                 item === "ellipsis" ? <span className="gallery-page-ellipsis" key={"ellipsis-" + index} aria-hidden="true">…</span> :
-                <button type="button" key={item} onClick={() => navigate(item)} aria-label={labels.page + " " + item}
-                  aria-current={item === state.page ? "page" : undefined} className={item === state.page ? "is-current" : undefined}>{item}</button>,
+                <button type="button" key={item} onClick={() => navigate(item)} aria-label={labels.page + " " + formatLocaleNumber(item, locale)}
+                  aria-current={item === state.page ? "page" : undefined} className={item === state.page ? "is-current" : undefined}>{formatLocaleNumber(item, locale)}</button>,
               )}
-              <button type="button" onClick={() => navigate(state.page + 1)} disabled={state.page >= state.totalPages} aria-label={labels.next}>{locale === "fa" ? "←" : "→"}</button>
+              <button type="button" onClick={() => navigate(state.page + 1)} disabled={state.page >= state.totalPages} aria-label={labels.next}>{getLocaleDirection(locale) === "rtl" ? "←" : "→"}</button>
             </nav>
           </div>
         </section>

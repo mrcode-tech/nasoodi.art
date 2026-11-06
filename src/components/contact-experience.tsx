@@ -1,4 +1,7 @@
-import { copyFor, type Locale, type PublicContactDetails } from "@/lib/site";
+import Link from "next/link";
+import { useTranslations } from "next-intl";
+import { getLocaleDirection, pagePath, type Locale } from "@/types/locale";
+import type { PublicContactDetails } from "@/lib/content/publication";
 
 type ContactExperienceProps = {
   locale: Locale;
@@ -7,7 +10,7 @@ type ContactExperienceProps = {
 };
 
 export function ContactExperience({ locale, details, variant }: ContactExperienceProps) {
-  const t = copyFor(locale);
+  const t = useTranslations();
   const titleId = variant === "home" ? "homepage-contact-title" : "contact-page-title";
   const Heading = variant === "home" ? "h2" : "h1";
   const hasMethods = Boolean(details && (details.email || details.instagramUrl || details.telegramUrl));
@@ -16,28 +19,28 @@ export function ContactExperience({ locale, details, variant }: ContactExperienc
     <section
       className={"contact-experience contact-experience-" + variant + (variant === "home" ? " homepage-contact" : "")}
       aria-labelledby={titleId}
-      dir={locale === "fa" ? "rtl" : "ltr"}
+      dir={getLocaleDirection(locale)}
     >
       <div className="contact-composition">
         <div className="contact-introduction">
-          <p className="eyebrow">{t.contact}</p>
+          <p className="eyebrow">{t("contact")}</p>
           <Heading className={"contact-title contact-title-" + variant} id={titleId}>
-            {t.contactHeading}
+            {t("contactHeading")}
           </Heading>
-          <p className="contact-intro">{t.contactIntro}</p>
+          <p className="contact-intro">{t("contactIntro")}</p>
         </div>
         <div className="contact-details">
           {hasMethods ? (
-            <ul className="contact-methods" aria-label={t.contact}>
+            <ul className="contact-methods" aria-label={t("contact")}>
               {details?.email && (
                 <li className="contact-method">
-                  <span className="contact-method-label">{t.email}</span>
+                  <span className="contact-method-label">{t("email")}</span>
                   <a href={"mailto:" + details.email} dir="ltr">{details.email}</a>
                 </li>
               )}
               {details?.instagramUrl && details.instagramHandle && (
                 <li className="contact-method">
-                  <span className="contact-method-label">{t.instagram}</span>
+                  <span className="contact-method-label">{t("instagram")}</span>
                   <a href={details.instagramUrl} target="_blank" rel="noopener noreferrer" dir="ltr">
                     @{details.instagramHandle}
                   </a>
@@ -45,7 +48,7 @@ export function ContactExperience({ locale, details, variant }: ContactExperienc
               )}
               {details?.telegramUrl && details.telegramHandle && (
                 <li className="contact-method">
-                  <span className="contact-method-label">{t.telegram}</span>
+                  <span className="contact-method-label">{t("telegram")}</span>
                   <a href={details.telegramUrl} target="_blank" rel="noopener noreferrer" dir="ltr">
                     @{details.telegramHandle}
                   </a>
@@ -53,10 +56,17 @@ export function ContactExperience({ locale, details, variant }: ContactExperienc
               )}
             </ul>
           ) : (
-            <p className="contact-pending" role="status">{t.contactPending}</p>
+            <p className="contact-pending" role="status">{t("contactPending")}</p>
           )}
         </div>
       </div>
+      {variant === "home" && (
+        <div className="contact-page-link-wrap">
+          <Link className="text-link contact-page-link" href={pagePath(locale, "contact")}>
+            {t("contact")} <span aria-hidden="true">↗</span>
+          </Link>
+        </div>
+      )}
     </section>
   );
 }

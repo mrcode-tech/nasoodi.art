@@ -1,0 +1,387 @@
+{
+  "id": "artist-cv",
+  "entries": [
+    {
+      "id": "edu-ma-painting",
+      "category": "education",
+      "period": {
+        "en": "2015",
+        "fa": "۱۳۹۴"
+      },
+      "title": {
+        "en": "M.A. in Painting",
+        "fa": "کارشناسی ارشد نقاشی"
+      },
+      "organization": {
+        "en": "Alzahra University",
+        "fa": "دانشگاه الزهرا"
+      },
+      "location": {
+        "en": "Tehran, Iran",
+        "fa": "تهران، ایران"
+      },
+      "status": "published",
+      "sortOrder": 1
+    },
+    {
+      "id": "edu-ba-painting",
+      "category": "education",
+      "period": {
+        "en": "2011",
+        "fa": "۱۳۹۰"
+      },
+      "title": {
+        "en": "B.A. in Painting",
+        "fa": "کارشناسی نقاشی"
+      },
+      "organization": {
+        "en": "University of Science and Culture",
+        "fa": "دانشگاه علم و فرهنگ"
+      },
+      "location": {
+        "en": "Tehran, Iran",
+        "fa": "تهران، ایران"
+      },
+      "status": "published",
+      "sortOrder": 2
+    },
+    {
+      "id": "membership-iranian-painters",
+      "category": "membership",
+      "period": {
+        "en": "Current",
+        "fa": "اکنون"
+      },
+      "title": {
+        "en": "Member",
+        "fa": "عضو"
+      },
+      "organization": {
+        "en": "Iranian Painters Association",
+        "fa": "انجمن نقاشان ایران"
+      },
+      "status": "published",
+      "sortOrder": 1
+    },
+    {
+      "id": "membership-visual-arts",
+      "category": "membership",
+      "period": {
+        "en": "Current",
+        "fa": "اکنون"
+      },
+      "title": {
+        "en": "Member",
+        "fa": "عضو"
+      },
+      "organization": {
+        "en": "Institute for the Development of Contemporary Visual Arts",
+        "fa": "مؤسسه توسعه هنری"
+      },
+      "status": "published",
+      "sortOrder": 2
+    },
+    {
+      "id": "teaching-soore",
+      "category": "teaching",
+      "period": {
+        "en": "2016–2022",
+        "fa": "۱۳۹۵ تا ۱۴۰۱"
+      },
+      "title": {
+        "en": "Lecturer",
+        "fa": "مدرس"
+      },
+      "organization": {
+        "en": "Soore University",
+        "fa": "دانشگاه سوره"
+      },
+      "location": {
+        "en": "Tehran, Iran",
+        "fa": "تهران، ایران"
+      },
+      "status": "published",
+      "sortOrder": 1
+    },
+    {
+      "id": "teaching-private",
+      "category": "teaching",
+      "period": {
+        "en": "2013–present",
+        "fa": "از ۱۳۹۲ تاکنون"
+      },
+      "title": {
+        "en": "Painting and Drawing Instructor",
+        "fa": "آموزش نقاشی و طراحی"
+      },
+      "organization": {
+        "en": "Private and institute-based instruction",
+        "fa": "به‌صورت خصوصی و در آموزشگاه‌ها"
+      },
+      "status": "published",
+      "sortOrder": 2
+    },
+    {
+      "id": "publication-qajar-reliefs",
+      "category": "publication",
+      "period": {
+        "en": "Summer 2023",
+        "fa": "تابستان ۱۴۰۲"
+      },
+      "title": {
+        "en": "Investigating the Influence of Fath-Ali Shah Qajar Reliefs on the Sassanid Period",
+        "fa": "تأثیرپذیری نقش‌برجسته‌های دوره فتحعلی‌شاه قاجار از دوره ساسانی"
+      },
+      "organization": {
+        "en": "Visual Arts Studies Journal, University of Sistan and Baluchestan",
+        "fa": "فصلنامه علمی‌تخصصی مطالعات هنرهای تجسمی، دانشگاه سیستان و بلوچستان"
+      },
+      "status": "published",
+      "sortOrder": 1
+    },
+    {
+      "id": "publication-nima-petgar",
+      "category": "publication",
+      "period": {
+        "en": "May 2016",
+        "fa": "اردیبهشت ۱۳۹۵"
+      },
+      "title": {
+        "en": "My Teacher: Nima Petgar",
+        "fa": "استادم: نیما پتگر"
+      },
+      "organization": {
+        "en": "Tandis Biweekly Magazine, Special Issue No. 324",
+        "fa": "دوهفته‌نامه تندیس، ویژه‌نامه شماره ۳۲۴"
+      },
+      "status": "published",
+      "sortOrder": 2
+    },
+    {
+      "id": "exhibition-in-silence-1404",
+      "category": "group-exhibition",
+      "period": {
+        "en": "2025",
+        "fa": "۱۴۰۴"
+      },
+      "title": {
+        "en": "In Silence",
+        "fa": "در سکوت"
+      },
+      "organization": {
+        "en": "Azad Art Gallery",
+        "fa": "گالری طراحان آزاد"
+      },
+      "location": {
+        "en": "Tehran, Iran",
+        "fa": "تهران، ایران"
+      },
+      "status": "published",
+      "sortOrder": 1
+    },
+    {
+      "id": "exhibition-grand-prize-3",
+      "category": "group-exhibition",
+      "period": {
+        "en": "2025",
+        "fa": "۱۴۰۴"
+      },
+      "title": {
+        "en": "The Third Grand Prize of Iran Contemporary Painting",
+        "fa": "سومین رویداد جایزه بزرگ نقاشی معاصر ایران"
+      },
+      "organization": {
+        "en": "Competition",
+        "fa": "مسابقه"
+      },
+      "status": "published",
+      "sortOrder": 2
+    },
+    {
+      "id": "exhibition-97-03",
+      "category": "group-exhibition",
+      "period": {
+        "en": "2024",
+        "fa": "۱۴۰۳"
+      },
+      "title": {
+        "en": "Ninety Seven – Zero Three",
+        "fa": "نود و هفت – صفر سه"
+      },
+      "organization": {
+        "en": "Iranian Painters Association — Members’ Exhibition",
+        "fa": "نمایش آثار اعضای پیوسته انجمن هنرمندان نقاش ایران"
+      },
+      "status": "published",
+      "sortOrder": 3
+    },
+    {
+      "id": "exhibition-grand-prize-2",
+      "category": "group-exhibition",
+      "period": {
+        "en": "2024",
+        "fa": "۱۴۰۲"
+      },
+      "title": {
+        "en": "The Second Grand Prize of Iran Contemporary Painting",
+        "fa": "دومین رویداد جایزه بزرگ نقاشی معاصر ایران"
+      },
+      "organization": {
+        "en": "Competition",
+        "fa": "مسابقه"
+      },
+      "status": "published",
+      "sortOrder": 4
+    },
+    {
+      "id": "exhibition-in-quarantine",
+      "category": "group-exhibition",
+      "period": {
+        "en": "2020",
+        "fa": "۱۳۹۹"
+      },
+      "title": {
+        "en": "In Quarantine",
+        "fa": "در قرنطینه"
+      },
+      "organization": {
+        "en": "Elahe and Sheiss Gallery — Online Exhibition; Award Recipient",
+        "fa": "گالری الهی و شیث — نمایشگاه مجازی؛ برنده جایزه فراخوان"
+      },
+      "status": "published",
+      "sortOrder": 5
+    },
+    {
+      "id": "exhibition-the-silence",
+      "category": "group-exhibition",
+      "period": {
+        "en": "2019",
+        "fa": "۱۳۹۸"
+      },
+      "title": {
+        "en": "The Silence",
+        "fa": "سکوت"
+      },
+      "organization": {
+        "en": "Sheiss Gallery",
+        "fa": "گالری شیث"
+      },
+      "status": "published",
+      "sortOrder": 6
+    },
+    {
+      "id": "exhibition-infinity",
+      "category": "group-exhibition",
+      "period": {
+        "en": "2019",
+        "fa": "۱۳۹۸"
+      },
+      "title": {
+        "en": "Infinity",
+        "fa": "بیکران"
+      },
+      "organization": {
+        "en": "Haft Samar Gallery",
+        "fa": "گالری هفت ثمر"
+      },
+      "status": "published",
+      "sortOrder": 7
+    },
+    {
+      "id": "exhibition-amin",
+      "category": "group-exhibition",
+      "period": {
+        "en": "2016",
+        "fa": "۱۳۹۵"
+      },
+      "title": {
+        "en": "Group Exhibition",
+        "fa": "نمایشگاه گروهی"
+      },
+      "organization": {
+        "en": "Amin Gallery",
+        "fa": "گالری امین"
+      },
+      "status": "published",
+      "sortOrder": 8
+    },
+    {
+      "id": "exhibition-heat-minus-37",
+      "category": "group-exhibition",
+      "period": {
+        "en": "2015",
+        "fa": "۱۳۹۴"
+      },
+      "title": {
+        "en": "Heat of Minus 37 Degrees",
+        "fa": "گرمای منفی ۳۷ درجه"
+      },
+      "organization": {
+        "en": "Tree Art Gallery",
+        "fa": "گالری درخت"
+      },
+      "status": "published",
+      "sortOrder": 9
+    },
+    {
+      "id": "exhibition-that-other-that",
+      "category": "group-exhibition",
+      "period": {
+        "en": "2014",
+        "fa": "۱۳۹۳"
+      },
+      "title": {
+        "en": "That Other That",
+        "fa": "آن دیگر آن"
+      },
+      "organization": {
+        "en": "Iranian Artists Forum",
+        "fa": "خانه هنرمندان ایران"
+      },
+      "status": "published",
+      "sortOrder": 10
+    },
+    {
+      "id": "exhibition-haft-samar-2014",
+      "category": "group-exhibition",
+      "period": {
+        "en": "2014",
+        "fa": "۱۳۹۳"
+      },
+      "title": {
+        "en": "Group Exhibition",
+        "fa": "نمایشگاه گروهی"
+      },
+      "organization": {
+        "en": "Haft Samar Gallery",
+        "fa": "گالری هفت ثمر"
+      },
+      "status": "published",
+      "sortOrder": 11
+    },
+    {
+      "id": "exhibition-mind-variations",
+      "category": "group-exhibition",
+      "period": {
+        "en": "2014",
+        "fa": "۱۳۹۳"
+      },
+      "title": {
+        "en": "Mind Variations",
+        "fa": "واریاسیون ذهنی"
+      },
+      "organization": {
+        "en": "Negah Gallery",
+        "fa": "گالری نگاه"
+      },
+      "status": "published",
+      "sortOrder": 12
+    }
+  ],
+  "document": {
+    "src": "/api/cv.pdf",
+    "fileName": "ghazaleh-abdolahzade-nasoodi-cv.pdf",
+    "artistApproved": true,
+    "status": "published"
+  }
+}

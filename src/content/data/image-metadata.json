@@ -1,0 +1,167 @@
+{
+  "schemaVersion": 1,
+  "images": {
+    "/images/artist/artist-at-work.jpg": {
+      "format": "jpeg",
+      "width": 1824,
+      "height": 2608,
+      "aspectRatio": 0.699387
+    },
+    "/images/artist/artist-portrait.jpg": {
+      "format": "jpeg",
+      "width": 2508,
+      "height": 3660,
+      "aspectRatio": 0.685246
+    },
+    "/images/artworks/1388-1.jpg": {
+      "format": "jpeg",
+      "width": 1884,
+      "height": 2698,
+      "aspectRatio": 0.698295
+    },
+    "/images/artworks/1392-1.jpg": {
+      "format": "jpeg",
+      "width": 850,
+      "height": 612,
+      "aspectRatio": 1.388889
+    },
+    "/images/artworks/1392-2.jpg": {
+      "format": "jpeg",
+      "width": 2088,
+      "height": 3104,
+      "aspectRatio": 0.67268
+    },
+    "/images/artworks/1392-3.jpg": {
+      "format": "jpeg",
+      "width": 2089,
+      "height": 2516,
+      "aspectRatio": 0.830286
+    },
+    "/images/artworks/1392-4.jpg": {
+      "format": "jpeg",
+      "width": 1746,
+      "height": 2652,
+      "aspectRatio": 0.658371
+    },
+    "/images/artworks/1393-1.jpg": {
+      "format": "jpeg",
+      "width": 2562,
+      "height": 1956,
+      "aspectRatio": 1.309816
+    },
+    "/images/artworks/1393-2.jpg": {
+      "format": "jpeg",
+      "width": 2224,
+      "height": 2944,
+      "aspectRatio": 0.755435
+    },
+    "/images/artworks/1395-1.jpg": {
+      "format": "jpeg",
+      "width": 2037,
+      "height": 2458,
+      "aspectRatio": 0.828723
+    },
+    "/images/artworks/1398-1.jpg": {
+      "format": "jpeg",
+      "width": 3413,
+      "height": 2067,
+      "aspectRatio": 1.651185
+    },
+    "/images/artworks/1398-2.jpg": {
+      "format": "jpeg",
+      "width": 3383,
+      "height": 1339,
+      "aspectRatio": 2.526512
+    },
+    "/images/artworks/1398-3.jpg": {
+      "format": "jpeg",
+      "width": 2912,
+      "height": 2044,
+      "aspectRatio": 1.424658
+    },
+    "/images/artworks/1398-4.jpg": {
+      "format": "jpeg",
+      "width": 2968,
+      "height": 2073,
+      "aspectRatio": 1.431741
+    },
+    "/images/artworks/1398-5.jpg": {
+      "format": "jpeg",
+      "width": 2446,
+      "height": 1728,
+      "aspectRatio": 1.415509
+    },
+    "/images/artworks/1398-6.jpg": {
+      "format": "jpeg",
+      "width": 3125,
+      "height": 1891,
+      "aspectRatio": 1.652565
+    },
+    "/images/artworks/1398-7.jpg": {
+      "format": "jpeg",
+      "width": 2532,
+      "height": 1780,
+      "aspectRatio": 1.422472
+    },
+    "/images/artworks/1398-8.jpg": {
+      "format": "jpeg",
+      "width": 2983,
+      "height": 2046,
+      "aspectRatio": 1.457967
+    },
+    "/images/artworks/1399-1.jpg": {
+      "format": "jpeg",
+      "width": 2599,
+      "height": 2592,
+      "aspectRatio": 1.002701
+    },
+    "/images/artworks/1401-1.jpg": {
+      "format": "jpeg",
+      "width": 1000,
+      "height": 672,
+      "aspectRatio": 1.488095
+    },
+    "/images/artworks/1401-2.jpg": {
+      "format": "jpeg",
+      "width": 1000,
+      "height": 830,
+      "aspectRatio": 1.204819
+    },
+    "/images/artworks/1403-1.jpg": {
+      "format": "jpeg",
+      "width": 2660,
+      "height": 2258,
+      "aspectRatio": 1.178034
+    },
+    "/images/artworks/1403-2.jpg": {
+      "format": "jpeg",
+      "width": 2625,
+      "height": 1792,
+      "aspectRatio": 1.464844
+    },
+    "/images/artworks/1403-3.jpg": {
+      "format": "jpeg",
+      "width": 2651,
+      "height": 2044,
+      "aspectRatio": 1.296967
+    },
+    "/images/artworks/1403-4.jpg": {
+      "format": "jpeg",
+      "width": 850,
+      "height": 568,
+      "aspectRatio": 1.496479
+    },
+    "/images/artworks/1403-5.jpg": {
+      "format": "jpeg",
+      "width": 600,
+      "height": 810,
+      "aspectRatio": 0.740741
+    },
+    "/images/artworks/1403-6.jpg": {
+      "format": "jpeg",
+      "width": 2535,
+      "height": 3252,
+      "aspectRatio": 0.77952
+    }
+  }
+}

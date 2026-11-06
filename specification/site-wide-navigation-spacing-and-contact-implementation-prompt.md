@@ -342,3 +342,31 @@ Report:
 - Visual QA viewports/locales and artifact references.
 - Any unresolved blockers.
 - Explicit confirmation that no unauthorized merge, deployment, or publication occurred.
+
+
+## 16. Implementation and verification checkpoint — 2026-11-05
+
+**Status:** Implemented and CI-verified on `feature`. No merge, deployment, or public release was performed.
+
+### Implementation decisions
+
+- The shared `SiteBreadcrumbs` continues to compose the repository's shared `@/components/ui/breadcrumb` primitive. The current page is exposed on the current-page element with `aria-current="page"`; ancestor links remain normal localized Next.js links.
+- The homepage Contact composition now includes a restrained text link to the dedicated localized Contact route. The same centralized typed demo fixture continues to feed both surfaces.
+- A semantic spacing scale (`--space-compact`, `--space-standard`, `--space-spacious`, and `--space-editorial-break`) now governs key shared editorial boundaries.
+- The broad `.page-content p:not(.eyebrow)` justification rule was removed. Justification is restricted to long-form/editorial prose and excludes Journal event-date metadata; narrow mobile layouts return to start alignment for comfortable reading.
+- Journal pagination keeps the page-size control and a compact previous/current/next sequence on one row at 320px where possible. At 320px and below, non-current numbered buttons and ellipses are visually suppressed while page state remains available in the URL and previous/next controls remain operable. Controls retain approximately 40px targets.
+- Existing desktop copyright layout and its one-line behavior are preserved; regression coverage checks widths 901, 1024, 1280, and 1440px in both locales.
+
+### Regression and visual evidence
+
+- Contact journeys are tested in English and Persian through desktop sidebar, mobile drawer, homepage Contact link, direct localized route, and refresh. Both routes retain existing noindex/sitemap exclusion and centralized demo destination validation.
+- Breadcrumb tests cover localized ancestor links, current-page semantics, Journal detail direct load/refresh, and artwork detail with a verified collection origin plus invalid-context fallback.
+- Journal pagination tests cover 320, 360, 375, 390, and 430px in both locales, no horizontal page overflow, row alignment, and visible touch-target geometry.
+- GitHub Actions [run #889](https://github.com/mrcode-tech/nasoodi.art/actions/runs/41993382170) completed successfully against commit `01c00996c60313088e06478df4cca7aea47d3569`. All workflow steps passed: sticker SVG render/validation, ESLint, bilingual message audit, TypeScript, content publication tests, production build, asset inventory, Playwright browser/responsive tests (**135 passed**), artifact uploads, and production-server smoke test.
+- CI artifact: `nasoodi-visual-qa-01c00996c60313088e06478df4cca7aea47d3569` (artifact ID `13399296324`). Inspected screenshots include English/Persian desktop homepage and Contact pages, Persian mobile Contact, and English/Persian mobile Journal archives. The artifact also retains broader responsive, theme, navigation, carousel, and Journal evidence.
+
+### Remaining gates
+
+- The fictional Contact fixture intentionally remains demo data. Replace it with owner-supplied real destinations and re-evaluate Contact indexability before public launch.
+- Automated browser checks and inspected screenshots do not substitute for assistive-technology review on real devices or artist approval of public-facing content and assets.
+- No stage/main merge, deployment, DNS/Vercel setting change, or publication occurred.

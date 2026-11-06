@@ -1,0 +1,12 @@
+{
+  "galleryPage": "Gallery page",
+  "showingGalleries": "Showing {start}–{end} of {total} galleries",
+  "galleriesList": "Galleries",
+  "galleryPagination": "Gallery pagination",
+  "exploreCollection": "Explore collection",
+  "carouselRole": "carousel",
+  "collectionPosition": "Collection position",
+  "previousCollection": "Previous collection",
+  "nextCollection": "Next collection",
+  "of": "of"
+}

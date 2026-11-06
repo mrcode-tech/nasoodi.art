@@ -1,54 +1,26 @@
-# Localization, Translation, and Editorial Governance
+# Localization and Editorial Content
 
-**Status:** Proposed content operations contract  
-**Locales:** Persian (fa) and English (en)
+## Canonical localized content
 
-## Editorial authority
-The artist is authoritative for her name, artwork titles, artist statement, biography, series, professional history, image selection, and real public contact details. Distinguish verified facts, artist-authored text, approved translation, editorial draft, and development-only placeholder. Only approved factual artist content may be indexed. Owner-authorized demo-phase exception (2026-11-03): fictional email/social Contact destinations may be rendered on the homepage and Contact routes without approval gates, but Contact routes must remain noindex and outside the sitemap until replaced with real details. AI may assist with proofreading or translation drafts, but artist/human review is required before publication.
+Editorial content is stored in the canonical JSON records under `src/content/data/`. English and Persian values belong to the same record. Interface labels remain in next-intl message resources.
 
 ## Locale behavior
-- Persian documents use lang=fa and dir=rtl; English documents use lang=en and dir=ltr.
-- Use CSS logical properties.
-- Never mirror paintings, photographs, artist cutouts, or studio scenes.
-- Adapt only directional interface symbols when meaning requires it.
-- Isolate Latin names, URLs, email addresses, and dimensions in RTL content.
-- Use a Persian-capable font with correct shaping; never apply faux letter spacing to connected script.
-- Confirm numeral policy and use locale-aware dates/numbers without changing underlying facts.
 
-## Translation parity
-Each content item may have separate fa and en values. Missing translation remains missing; do not display blank or unreviewed machine translation. Language switcher links to the equivalent translation when available; otherwise use a clear locale-home fallback. Never connect unrelated artwork pages. Emit hreflang only for genuine reciprocal approved translations. Confirm preferred English transliteration and use consistently.
+- English pages render LTR; Persian pages render RTL.
+- Use the existing locale routing and next-intl infrastructure.
+- Preserve the meaning of the content in both languages.
+- If an optional localized value is absent, omit that value or section gracefully. Do not block the whole record or silently substitute unrelated text.
 
-## Editorial states
-1. draft — private work in progress.
-2. needs-review — factual, linguistic, visual, or rights review required.
-3. approved — artist/authorized owner approved public presentation.
-4. published — publicly available.
-5. archived — intentionally unpublished or superseded.
+## Editorial editing
 
-Changes to image, crop, title, description, date, dimensions, availability, or translation return the item to review. Keep internal approvals and notes private.
+The owner controls the content and may revise the JSON records at any time. Current entries are intended to populate the website as its initial editable content. Do not require a separate artist approval, verification, factuality, provenance, or editorial status flag before displaying them.
 
-## Writing standards
-Use calm, precise, personal editorial language. Avoid generic art-world clichés and unsupported claims such as internationally acclaimed. Keep the artist statement first-person and biography third-person factual. Do not infer symbolism, influences, themes, education, or intent. Maintain consistent punctuation, capitalization, date format, units, and transliteration. No keyword stuffing or unconfirmed contact, sales, commission, or availability claims.
+Do not create parallel approved/unapproved, verified/unverified, sample/real, preview/production, or temporary/permanent copies of editorial content. Do not hide CV, Contact, exhibition, activity, or Journal records based on such flags.
 
-## Page-by-page approval
-- Home: name, discipline, intro, hero image, selected works.
-- Works: image rights, stable slug, title or approved untitled treatment, alt text.
-- Artwork: verified metadata only; enquiry only if configured.
-- About: separate approved statement and biography.
-- CV: sourced, verified entries; omit empty categories.
-- Contact: use owner-approved real destinations for public launch. During the authorized demo phase, use the centralized fictional Contact fixture without approval-state gating; keep the route noindex and outside the sitemap. Never imply demo accounts are real, verified, or monitored.
+## Writing and translation quality
 
-## Review checklist
-Review artist facts/spelling, Persian grammar and punctuation, English grammar/transliteration, artwork identity and metadata, image rights/crop, alt text, SEO metadata, social preview, and responsive layouts. Record reviewer, date, and approval scope. If rights or facts are disputed, unpublish until resolved.
+Use clear, natural English and Persian. Preserve artist names, dates, titles, and proper nouns consistently. Persian copy must be natural Persian, with correct punctuation and RTL behavior. UI text is translated in message resources; editorial text is localized in content JSON.
 
-## Decisions required
-Preferred public English name, primary locale at /, approved translations, statement and biography, artwork titles/metadata/order, public asset permissions, CV scope, contact method, form/sales/commission policy, and press-kit decision.
-## Design-engineering alignment
+## Technical boundaries
 
-Bilingual design is a first-class visual requirement under design-engineering-skills.md and design-direction-and-system-refinement.md.
-
-- Persian and English must share the same brand identity and hierarchy while allowing script-specific typography, line-height, wrapping, and spacing.
-- Never mechanically mirror artwork, photography, or the physical-left sidebar to simulate RTL.
-- Review mixed-script names, URLs, dates, numerals, punctuation, and long titles in rendered pages.
-- Do not force identical line breaks or component dimensions across locales when natural script metrics differ.
-- Translated labels and editorial content require approval; visual polish must not conceal missing or unapproved translations.
+Automated checks may test message-key parity, type compatibility, route safety, URL safety, and correct rendering. They must not attempt to decide whether an artist fact is true or whether the owner has approved a piece of editorial content.

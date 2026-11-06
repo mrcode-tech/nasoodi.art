@@ -1,0 +1,410 @@
+[
+  {
+    "id": "journal-first-light-1388",
+    "slug": "first-light-a-beginning-in-paint",
+    "localizedSlugs": {
+      "en": "first-light-a-beginning-in-paint",
+      "fa": "نخستین-روشنایی-آغاز-یک-مسیر"
+    },
+    "type": "story",
+    "title": {
+      "en": "First Light: A Beginning in Paint",
+      "fa": "نخستین روشنایی: آغازی در نقاشی"
+    },
+    "summary": {
+      "en": "A look at the painting from 1388, where atmosphere and presence offer a quiet point of departure for the artist’s visual journey.",
+      "fa": "نگاهی به نقاشی سال ۱۳۸۸؛ اثری که با فضا و حضور، نقطه‌ای آرام برای آغاز مسیر تصویری هنرمند فراهم می‌کند."
+    },
+    "status": "published",
+    "publishedAt": "2009-06-14T09:00:00+00:00",
+    "approvedLocales": [
+      "en",
+      "fa"
+    ],
+    "artistApproved": true,
+    "coverArtworkId": "artwork-1388-1",
+    "coverAlt": {
+      "en": "Oil painting A First Light, the first work in the 1388 gallery",
+      "fa": "تابلوی رنگ‌روغن «نخستین روشنایی»، نخستین اثر در مجموعه سال ۱۳۸۸"
+    },
+    "body": {
+      "en": [
+        {
+          "type": "paragraph",
+          "text": "A beginning does not always announce itself with a dramatic gesture. In this painting, atmosphere and presence offer a quieter introduction: an invitation to spend time with the image before deciding what it might mean."
+        },
+        {
+          "type": "paragraph",
+          "text": "The work stands alone in the 1388 gallery. Its place at the beginning of this chronology is not a claim that everything was already resolved, but an opportunity to notice the first traces of a visual language that would continue to develop."
+        }
+      ],
+      "fa": [
+        {
+          "type": "paragraph",
+          "text": "آغاز یک مسیر همیشه با حرکتی پررنگ و ناگهانی همراه نیست. در این نقاشی، فضا و حضور مقدمه‌ای آرام‌تر می‌سازند؛ دعوتی برای ماندن در برابر تصویر، پیش از آنکه بخواهیم معنای آن را تعیین کنیم."
+        },
+        {
+          "type": "paragraph",
+          "text": "این اثر به‌تنهایی در مجموعه سال ۱۳۸۸ قرار گرفته است. جایگاه آن در ابتدای مرور زمانی آثار به معنای کامل‌بودن همه‌چیز از همان ابتدا نیست؛ فرصتی است برای دیدن نشانه‌های نخستین زبانی تصویری که در ادامه گسترش پیدا می‌کند."
+        }
+      ]
+    }
+  },
+  {
+    "id": "journal-figures-interior-light-1392",
+    "slug": "figures-and-interior-light",
+    "localizedSlugs": {
+      "en": "figures-and-interior-light",
+      "fa": "پیکره‌ها-و-روشنایی-درون"
+    },
+    "type": "story",
+    "title": {
+      "en": "Figures and Interior Light",
+      "fa": "پیکره‌ها و روشنایی درون"
+    },
+    "summary": {
+      "en": "Four paintings from 1392 consider the human figure in relation to interior space, windows, gaze, and changing light.",
+      "fa": "چهار نقاشی سال ۱۳۹۲ رابطه پیکره انسانی با فضای درونی، پنجره، نگاه و تغییرات نور را بررسی می‌کنند."
+    },
+    "status": "published",
+    "publishedAt": "2013-11-08T09:00:00+00:00",
+    "approvedLocales": [
+      "en",
+      "fa"
+    ],
+    "artistApproved": true,
+    "coverArtworkId": "artwork-1392-1",
+    "coverAlt": {
+      "en": "Oil painting The Weight of Silence, the first work in the 1392 gallery",
+      "fa": "تابلوی رنگ‌روغن «سنگینی سکوت»، نخستین اثر در مجموعه سال ۱۳۹۲"
+    },
+    "body": {
+      "en": [
+        {
+          "type": "paragraph",
+          "text": "The paintings gathered in this gallery return to the human figure and the spaces that hold it. A solitary presence, a window, or a turn toward the light can become the centre of a scene without requiring a fully told story."
+        },
+        {
+          "type": "paragraph",
+          "text": "Across the four works, contrast and restraint sit side by side. The first painting, The Weight of Silence, introduces this exchange through the tension between a still figure and a broad red ground. The remaining works extend the conversation through quieter encounters with looking and interior space."
+        }
+      ],
+      "fa": [
+        {
+          "type": "paragraph",
+          "text": "نقاشی‌های این مجموعه بار دیگر به پیکره انسانی و فضاهایی بازمی‌گردند که آن را دربرمی‌گیرند. حضوری تنها، پنجره‌ای یا چرخشی به‌سوی نور می‌تواند مرکز یک صحنه باشد، بی‌آنکه به روایتی کاملاً تعریف‌شده نیاز داشته باشد."
+        },
+        {
+          "type": "paragraph",
+          "text": "در میان چهار اثر، تضاد و خویشتن‌داری در کنار یکدیگر قرار می‌گیرند. نقاشی نخست، «سنگینی سکوت»، این گفت‌وگو را از طریق تنش میان پیکره‌ای ساکن و گستره‌ای سرخ‌رنگ آغاز می‌کند. آثار دیگر این مسیر را با مواجهه‌هایی آرام‌تر با نگاه و فضای درونی ادامه می‌دهند."
+        }
+      ]
+    }
+  },
+  {
+    "id": "journal-held-space-1393",
+    "slug": "the-held-space-and-a-moment-of-looking",
+    "localizedSlugs": {
+      "en": "the-held-space-and-a-moment-of-looking",
+      "fa": "فضای-درنگ-و-لحظه-تماشا"
+    },
+    "type": "story",
+    "title": {
+      "en": "The Held Space: A Moment of Looking",
+      "fa": "فضای درنگ: لحظه‌ای برای تماشا"
+    },
+    "summary": {
+      "en": "Two paintings from 1393 explore how presence, emptiness, and composition can hold a moment open.",
+      "fa": "دو نقاشی سال ۱۳۹۳ نشان می‌دهند که حضور، فضای خالی و ترکیب‌بندی چگونه می‌توانند لحظه‌ای را گشوده نگه دارند."
+    },
+    "status": "published",
+    "publishedAt": "2014-08-19T09:00:00+00:00",
+    "approvedLocales": [
+      "en",
+      "fa"
+    ],
+    "artistApproved": true,
+    "coverArtworkId": "artwork-1393-1",
+    "coverAlt": {
+      "en": "Oil painting A Held Moment, the first work in the 1393 gallery",
+      "fa": "تابلوی رنگ‌روغن «لحظه‌ای درنگ‌کرده»، نخستین اثر در مجموعه سال ۱۳۹۳"
+    },
+    "body": {
+      "en": [
+        {
+          "type": "paragraph",
+          "text": "Some paintings seem to ask the viewer to slow down. In the two works from 1393, the arrangement of forms and the space around them create a measured rhythm, allowing the image to remain open rather than resolve into a single reading."
+        },
+        {
+          "type": "paragraph",
+          "text": "A Held Moment begins this small collection with an attention to balance and duration. Its companion, The Space Between, continues the inquiry by giving surrounding space an importance equal to the forms themselves. Together, they make room for the viewer’s own pace and interpretation."
+        }
+      ],
+      "fa": [
+        {
+          "type": "paragraph",
+          "text": "بعضی نقاشی‌ها از بیننده می‌خواهند آهسته‌تر نگاه کند. در دو اثر سال ۱۳۹۳، چیدمان فرم‌ها و فضای پیرامون آن‌ها ریتمی سنجیده می‌سازد و اجازه می‌دهد تصویر به‌جای رسیدن به برداشتی قطعی، گشوده باقی بماند."
+        },
+        {
+          "type": "paragraph",
+          "text": "«لحظه‌ای درنگ‌کرده» این مجموعه کوچک را با توجه به تعادل و امتداد زمان آغاز می‌کند. اثر همراه آن، «فاصله‌ی میان»، این جست‌وجو را ادامه می‌دهد و برای فضای پیرامون اهمیتی هم‌سنگ خود فرم‌ها قائل می‌شود. این دو نقاشی برای ریتم و تفسیر شخصی بیننده جا باز می‌کنند."
+        }
+      ]
+    }
+  },
+  {
+    "id": "journal-quiet-interval-1395",
+    "slug": "a-quiet-interval-between-forms",
+    "localizedSlugs": {
+      "en": "a-quiet-interval-between-forms",
+      "fa": "فاصله‌ای-آرام-میان-فرم‌ها"
+    },
+    "type": "story",
+    "title": {
+      "en": "A Quiet Interval Between Forms",
+      "fa": "فاصله‌ای آرام میان فرم‌ها"
+    },
+    "summary": {
+      "en": "A closer reflection on the single painting from 1395 and the pauses, subtle relationships, and atmosphere within it.",
+      "fa": "تأملی نزدیک‌تر بر نقاشی سال ۱۳۹۵ و مکث‌ها، رابطه‌های ظریف و فضایی که در آن شکل گرفته است."
+    },
+    "status": "published",
+    "publishedAt": "2016-12-03T09:00:00+00:00",
+    "approvedLocales": [
+      "en",
+      "fa"
+    ],
+    "artistApproved": true,
+    "coverArtworkId": "artwork-1395-1",
+    "coverAlt": {
+      "en": "Oil painting A Quiet Interval, the sole work in the 1395 gallery",
+      "fa": "تابلوی رنگ‌روغن «فاصله‌ای آرام»، تنها اثر در مجموعه سال ۱۳۹۵"
+    },
+    "body": {
+      "en": [
+        {
+          "type": "paragraph",
+          "text": "A quiet interval can be felt as much as it can be seen. This painting from 1395 draws attention to the pauses between forms and to the subtle relationships that emerge when no single element demands the entire frame."
+        },
+        {
+          "type": "paragraph",
+          "text": "Presented as its own gallery, the work is given room for an unhurried encounter. Rather than surrounding it with paintings from another year, the collection keeps its chronology clear and lets the atmosphere of this individual image remain in focus."
+        }
+      ],
+      "fa": [
+        {
+          "type": "paragraph",
+          "text": "فاصله‌ای آرام را می‌توان همان‌قدر که دید، احساس کرد. این نقاشی از سال ۱۳۹۵ توجه را به مکث‌های میان فرم‌ها و رابطه‌های ظریفی جلب می‌کند که وقتی هیچ عنصری تمام قاب را به خود اختصاص نمی‌دهد، پدیدار می‌شوند."
+        },
+        {
+          "type": "paragraph",
+          "text": "این اثر در مجموعه‌ای مستقل قرار گرفته تا فرصتی برای مواجهه‌ای بی‌شتاب داشته باشد. به‌جای قرارگرفتن در کنار نقاشی‌های سالی دیگر، جایگاه زمانی آن روشن باقی می‌ماند و حال‌وهوای همین تصویر منفرد در مرکز توجه قرار می‌گیرد."
+        }
+      ]
+    }
+  },
+  {
+    "id": "journal-impressions-remain-1398",
+    "slug": "impressions-that-remain-after-a-day",
+    "localizedSlugs": {
+      "en": "impressions-that-remain-after-a-day",
+      "fa": "دریافت‌هایی-که-پس-از-یک-روز-می‌مانند"
+    },
+    "type": "story",
+    "title": {
+      "en": "Impressions That Remain After a Day",
+      "fa": "دریافت‌هایی که پس از یک روز می‌مانند"
+    },
+    "summary": {
+      "en": "Beginning with Traces of a Day, this note follows the themes of memory, fleeting thought, stillness, and colour across the 1398 works.",
+      "fa": "این یادداشت با «ردهای یک روز» آغاز می‌شود و مضمون‌های خاطره، اندیشه گذرا، سکون و رنگ را در آثار سال ۱۳۹۸ دنبال می‌کند."
+    },
+    "status": "published",
+    "publishedAt": "2019-09-22T09:00:00+00:00",
+    "approvedLocales": [
+      "en",
+      "fa"
+    ],
+    "artistApproved": true,
+    "coverArtworkId": "artwork-1398-1",
+    "coverAlt": {
+      "en": "Oil painting Traces of a Day, the first work in the 1398 gallery",
+      "fa": "تابلوی رنگ‌روغن «ردهای یک روز»، نخستین اثر در مجموعه سال ۱۳۹۸"
+    },
+    "body": {
+      "en": [
+        {
+          "type": "paragraph",
+          "text": "An ordinary day rarely stays in memory as a complete sequence. What remains may be a colour, a passing thought, a pause, or a small shift in light. Traces of a Day offers an entry into this territory of partial impressions."
+        },
+        {
+          "type": "paragraph",
+          "text": "The eight paintings from 1398 gather around these lingering experiences. Their titles move through memory, stillness, inward landscapes, and the memory of colour. Seen together, they form a sustained chapter in which atmosphere and presence connect distinct images without making them identical."
+        }
+      ],
+      "fa": [
+        {
+          "type": "paragraph",
+          "text": "یک روز معمولی به‌ندرت به شکل روایتی کامل در خاطره باقی می‌ماند. آنچه می‌ماند شاید رنگی باشد، اندیشه‌ای گذرا، مکثی کوتاه یا تغییری کوچک در نور. «ردهای یک روز» راهی برای ورود به همین قلمرو دریافت‌های پراکنده فراهم می‌کند."
+        },
+        {
+          "type": "paragraph",
+          "text": "هشت نقاشی سال ۱۳۹۸ پیرامون چنین تجربه‌های ماندگاری گرد آمده‌اند. عنوان‌های آن‌ها از خاطره و سکون تا چشم‌اندازهای درونی و خاطره رنگ امتداد پیدا می‌کنند. این آثار در کنار هم فصلی پیوسته می‌سازند که در آن فضا و حضور، تصاویر متفاوت را به هم پیوند می‌دهند، بی‌آنکه آن‌ها را یکسان کنند."
+        }
+      ]
+    }
+  },
+  {
+    "id": "journal-after-the-moment-1399",
+    "slug": "after-the-moment-what-remains",
+    "localizedSlugs": {
+      "en": "after-the-moment-what-remains",
+      "fa": "پس-از-لحظه-آنچه-باقی-می‌ماند"
+    },
+    "type": "story",
+    "title": {
+      "en": "After the Moment: What Remains",
+      "fa": "پس از لحظه: آنچه باقی می‌ماند"
+    },
+    "summary": {
+      "en": "A reflection on the single published painting from 1399 and the mood or memory that can outlast an instant.",
+      "fa": "تأملی بر تنها نقاشی منتشرشده از سال ۱۳۹۹ و حال‌وهوا یا خاطره‌ای که می‌تواند از خود یک لحظه ماندگارتر باشد."
+    },
+    "status": "published",
+    "publishedAt": "2020-11-11T09:00:00+00:00",
+    "approvedLocales": [
+      "en",
+      "fa"
+    ],
+    "artistApproved": true,
+    "coverArtworkId": "artwork-1399-1",
+    "coverAlt": {
+      "en": "Oil painting After the Moment, the sole work in the 1399 gallery",
+      "fa": "تابلوی رنگ‌روغن «پس از لحظه»، تنها اثر در مجموعه سال ۱۳۹۹"
+    },
+    "body": {
+      "en": [
+        {
+          "type": "paragraph",
+          "text": "An instant passes, but its impression may remain. A mood, a fragment of memory, or a change in the way a place is remembered can continue long after the event itself has ended."
+        },
+        {
+          "type": "paragraph",
+          "text": "The 1399 gallery gives this idea a focused setting through one painting. Its place in the chronology is kept distinct, allowing the viewer to spend time with the work without suggesting that it belongs to a different year or a larger group."
+        }
+      ],
+      "fa": [
+        {
+          "type": "paragraph",
+          "text": "یک لحظه می‌گذرد، اما اثر آن ممکن است باقی بماند. حال‌وهوا، تکه‌ای از خاطره یا تغییری در شیوه به‌یادآوردن یک مکان می‌تواند مدت‌ها پس از پایان خود رویداد ادامه پیدا کند."
+        },
+        {
+          "type": "paragraph",
+          "text": "مجموعه سال ۱۳۹۹ این ایده را از طریق یک نقاشی در فضایی متمرکز پیش می‌کشد. جایگاه اثر در مرور زمانی آثار مستقل باقی می‌ماند و به بیننده امکان می‌دهد بدون پیوند دادن آن به سال یا گروهی دیگر، با آن وقت بگذراند."
+        }
+      ]
+    }
+  },
+  {
+    "id": "journal-new-rhythm-1401",
+    "slug": "a-new-rhythm-in-the-image",
+    "localizedSlugs": {
+      "en": "a-new-rhythm-in-the-image",
+      "fa": "ریتمی-تازه-در-تصویر"
+    },
+    "type": "story",
+    "title": {
+      "en": "A New Rhythm in the Image",
+      "fa": "ریتمی تازه در تصویر"
+    },
+    "summary": {
+      "en": "Two paintings from 1401 consider balance, visual structure, ambiguity, and the space left for personal interpretation.",
+      "fa": "دو نقاشی سال ۱۴۰۱ به تعادل، ساختار بصری، ابهام و فضایی می‌پردازند که برای برداشت شخصی باقی می‌ماند."
+    },
+    "status": "published",
+    "publishedAt": "2022-07-16T09:00:00+00:00",
+    "approvedLocales": [
+      "en",
+      "fa"
+    ],
+    "artistApproved": true,
+    "coverArtworkId": "artwork-1401-1",
+    "coverAlt": {
+      "en": "Oil painting A New Rhythm, the first work in the 1401 gallery",
+      "fa": "تابلوی رنگ‌روغن «ریتمی تازه»، نخستین اثر در مجموعه سال ۱۴۰۱"
+    },
+    "body": {
+      "en": [
+        {
+          "type": "paragraph",
+          "text": "Rhythm in a painting is not limited to repeated shapes or visible movement. It can emerge through balance, intervals, and the way the eye travels from one part of the composition to another."
+        },
+        {
+          "type": "paragraph",
+          "text": "The two works from 1401 approach this idea from complementary directions. A New Rhythm attends to balance and the development of a visual language, while The Unspoken leaves its meaning open. Together, they invite a slower reading rather than a single explanation."
+        }
+      ],
+      "fa": [
+        {
+          "type": "paragraph",
+          "text": "ریتم در یک نقاشی تنها به تکرار شکل‌ها یا حرکت آشکار محدود نمی‌شود. این ریتم می‌تواند از تعادل، فاصله‌ها و مسیری شکل بگیرد که نگاه در بخش‌های مختلف ترکیب‌بندی طی می‌کند."
+        },
+        {
+          "type": "paragraph",
+          "text": "دو اثر سال ۱۴۰۱ از دو مسیر مکمل به این ایده نزدیک می‌شوند. «ریتمی تازه» به تعادل و گسترش زبان تصویری توجه دارد و «ناگفته» معنای خود را گشوده باقی می‌گذارد. این دو نقاشی به‌جای یک توضیح قطعی، خوانشی آهسته‌تر را پیشنهاد می‌کنند."
+        }
+      ]
+    }
+  },
+  {
+    "id": "journal-season-of-light-1403",
+    "slug": "a-season-of-light-and-renewal",
+    "localizedSlugs": {
+      "en": "a-season-of-light-and-renewal",
+      "fa": "فصلی-از-روشنایی-و-تازگی"
+    },
+    "type": "story",
+    "title": {
+      "en": "A Season of Light and Renewal",
+      "fa": "فصلی از روشنایی و تازگی"
+    },
+    "summary": {
+      "en": "Beginning with A New Season, this note explores renewal, transience, return, and the experience of looking across the six works from 1403.",
+      "fa": "این یادداشت با «فصلی تازه» آغاز می‌شود و تازگی، گذرایی، بازگشت و تجربه دیدن را در شش اثر سال ۱۴۰۳ دنبال می‌کند."
+    },
+    "status": "published",
+    "publishedAt": "2024-10-05T09:00:00+00:00",
+    "approvedLocales": [
+      "en",
+      "fa"
+    ],
+    "artistApproved": true,
+    "coverArtworkId": "artwork-1403-1",
+    "coverAlt": {
+      "en": "Oil painting A New Season, the first work in the 1403 gallery",
+      "fa": "تابلوی رنگ‌روغن «فصلی تازه»، نخستین اثر در مجموعه سال ۱۴۰۳"
+    },
+    "body": {
+      "en": [
+        {
+          "type": "paragraph",
+          "text": "A new season can be understood as a change in the way we look as much as a change in the world around us. The first painting in this gallery, A New Season, opens a recent chapter shaped by mood, form, and the experience of seeing."
+        },
+        {
+          "type": "paragraph",
+          "text": "The six works from 1403 move through renewal, passing impressions, return, and quiet observation. Their subjects are varied, from open-ended encounters to a woodland scene, yet atmosphere and the passage of time provide a thread between them. This gallery keeps the year's works together while allowing each image its own character."
+        }
+      ],
+      "fa": [
+        {
+          "type": "paragraph",
+          "text": "فصل تازه را می‌توان نه‌فقط تغییری در جهان پیرامون، بلکه تغییری در شیوه نگاه‌کردن دانست. نخستین نقاشی این مجموعه، «فصلی تازه»، فصلی جدید از مسیر آثار را می‌گشاید که با حال‌وهوا، فرم و تجربه دیدن شکل گرفته است."
+        },
+        {
+          "type": "paragraph",
+          "text": "شش اثر سال ۱۴۰۳ از تازگی و دریافت‌های گذرا تا بازگشت و مشاهده آرام حرکت می‌کنند. موضوع آن‌ها متنوع است؛ از مواجهه‌های گشوده تا منظره‌ای جنگلی. بااین‌حال، فضا و گذر زمان رشته‌ای میان آن‌ها ایجاد می‌کند. این مجموعه آثار سال را کنار هم نگه می‌دارد و در عین حال به هر تصویر شخصیت مستقل خودش را می‌دهد."
+        }
+      ]
+    }
+  }
+]

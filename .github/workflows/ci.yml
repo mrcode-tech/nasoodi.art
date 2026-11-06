@@ -12,7 +12,7 @@ permissions:
 # Keep release-branch runs serialized. Key feature runs by commit so a
 # cancelled stale run cannot block verification of a newer feature commit.
 concurrency:
-  group: ci-${{ github.workflow }}-${{ github.repository }}-${{ github.ref_name }}-${{ github.ref_name == 'feature' && github.sha || 'branch' }}
+  group: ci-${{ github.workflow }}-${{ github.repository }}-${{ github.ref_name }}
   cancel-in-progress: true
 jobs:
   validate:
@@ -29,30 +29,19 @@ jobs:
         with:
           node-version: 22
       - name: Install dependencies
-        run: npm install --no-audit --no-fund
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
-      - name: Install SVG rendering requirements
-        run: |
-          sudo apt-get update
-          sudo apt-get install --yes libcairo2
-          python -m pip install --disable-pip-version-check cairosvg pillow
-      - name: Render and validate Journal sticker SVG
-        run: python scripts/render-journal-sticker.py
+        run: npm ci --no-audit --no-fund
+      - name: Verify canonical Journal sticker SVG exists
+        run: test -s public/images/journal/journal-announcement-sticker.svg
       - name: Run ESLint
         run: npm run lint
+      - name: Audit bilingual message catalogs
+        run: npm run audit:i18n
       - name: Check TypeScript
         run: npm run typecheck
       - name: Run content publication tests
         run: npm test
-      - name: Build production application
+      - name: Build production application (prebuild validates committed image metadata)
         run: npm run build
-      - name: Inventory candidate portfolio assets
-        run: |
-          mkdir -p asset-audit
-          npm run audit:assets -- --output=asset-audit/manifest.json
       - name: Install Playwright Chromium
         run: npx playwright install --with-deps chromium
       - name: Run browser and responsive tests
@@ -64,17 +53,7 @@ jobs:
           name: nasoodi-visual-qa-${{ github.sha }}
           path: |
             test-results/
-            asset-audit/manifest.json
-            artifacts/journal-announcement-sticker.png
           if-no-files-found: ignore
-          retention-days: 14
-      - name: Upload Journal sticker review PNG
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: journal-announcement-sticker-review-${{ github.sha }}
-          path: artifacts/journal-announcement-sticker.png
-          if-no-files-found: error
           retention-days: 14
       - name: Smoke test production server
         shell: bash

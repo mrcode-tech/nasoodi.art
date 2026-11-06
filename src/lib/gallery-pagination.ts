@@ -1,4 +1,4 @@
-export const GALLERY_PAGE_SIZES = [5, 10, 20] as const;
+export const GALLERY_PAGE_SIZES = [6, 10, 20] as const;
 export type GalleryPageSize = (typeof GALLERY_PAGE_SIZES)[number];
 
 export type GalleryPaginationState = {
@@ -24,7 +24,7 @@ export function resolveGalleryPagination(
   const pageSizeValue = parsePositiveInteger(rawPageSize);
   const pageSize = GALLERY_PAGE_SIZES.includes(pageSizeValue as GalleryPageSize)
     ? pageSizeValue as GalleryPageSize
-    : 5;
+    : 6;
   const safeTotal = Number.isSafeInteger(totalItems) && totalItems > 0 ? totalItems : 0;
   const totalPages = Math.ceil(safeTotal / pageSize);
   const requestedPage = parsePositiveInteger(rawPage) ?? 1;
@@ -53,7 +53,7 @@ export function galleryPaginationHref(
   const query = new URLSearchParams(currentQuery);
   if (page <= 1) query.delete("page");
   else query.set("page", String(page));
-  if (pageSize === 5) query.delete("pageSize");
+  if (pageSize === 6) query.delete("pageSize");
   else query.set("pageSize", String(pageSize));
   const serialized = query.toString();
   return serialized ? `${pathname}?${serialized}` : pathname;

@@ -6,7 +6,7 @@
 - Application routes and layouts live under `src/app/`.
 - Use strict TypeScript and prefer server components unless client-side interactivity is required.
 - Keep dependencies minimal and use stable releases.
-- The website is the bilingual Persian/English portfolio of oil painter Ghazaleh Abdolahzade Nasoodi. Finished artworks are the primary content; the interface must frame the work rather than compete with it.
+- The website is the bilingual Persian/English portfolio of oil painter Ghazale Abdolahzade Nasoodi. Finished artworks are the primary content; the interface must frame the work rather than compete with it.
 
 ## Mandatory specification-first workflow
 
@@ -32,7 +32,7 @@ Before planning, designing, implementing, or refactoring any user-facing page, c
    - `specification/testing-qa-and-release.md`
    - `specification/implementation-roadmap.md`
 5. Inspect the actual implementation, existing design tokens, shared components, route conventions, dependencies, and relevant image assets before deciding whether to reuse, extend, replace, or add anything.
-6. If a requirement is ambiguous, contradictory, unsupported by repository evidence, or depends on artist approval, record the issue and ask for clarification rather than inventing a decision.
+6. If a requirement is ambiguous, contradictory, or unsupported by repository evidence, record the issue and ask for clarification rather than inventing a decision. Do not ask for editorial verification or approval as a prerequisite for rendering canonical JSON content.
 
 For the artist About/CV and homepage hero biography/mobile-order task, also read the task-specific execution prompt in root `agent.md` and the full `specification/artist-about-page-and-mobile-hero.md` contract.
 
@@ -43,8 +43,8 @@ Do not start implementation based only on a prompt summary or this file. Read th
 - `specification/design-engineering-skills.md` defines the mandatory design workflow, purposeful interaction and motion decisions, component craft, responsive behavior, and visual QA. Its principles are adapted from Emil Kowalski's design-engineering/animation approach and Impeccable's frontend design refinement approach; do not claim the upstream tools are installed or executed unless that is verified.
 - `specification/design-direction-and-system-refinement.md` defines the shared creative direction, semantic palette, typography roles, spacing, image composition, navigation, motion language, and page-level composition contracts.
 - Specialized page specifications remain authoritative for the unique content, structure, and behavior of their named feature, but must conform to the shared design authorities.
-- Preserve factual/editorial constraints, artwork fidelity, accessibility, and privacy requirements when resolving visual conflicts. Do not silently choose between conflicting documents. Identify the conflict, update the relevant specification through the approved workflow, and keep the index/related documents consistent.
-- Treat proposals as proposals until verified or approved. Distinguish proposed, implemented, tested, visually verified, artist-approved, and published states.
+- Preserve artwork fidelity, accessibility, privacy, and the owner's requested content behavior when resolving visual conflicts. Do not silently choose between conflicting documents. Identify the conflict, update the relevant specification, and keep the index/related documents consistent.
+- Distinguish implementation and test evidence from visual review, but do not impose editorial verification or artist-approval gates on canonical JSON content.
 
 ## Mandatory visual and interaction principles
 
@@ -54,8 +54,8 @@ Do not start implementation based only on a prompt summary or this file. Read th
 - Use semantic color and typography tokens. Verify real foreground/background combinations against WCAG 2.2 AA. Confirm font licensing, Persian shaping, Latin rendering, weights, and responsive wrapping before treating a font choice as final.
 - Finished paintings are the primary visual content. Preserve original color, brush texture, aspect ratio, orientation, and signature. Do not crop, filter, recolor, mirror, distort, overlay, or AI-enhance artwork unless the artist explicitly approves the exact treatment. Never use generated or stock paintings as portfolio content.
 - The homepage primary hero must be an artist-approved finished painting. Studio/process photography is supporting material and must not replace or be misrepresented as finished artwork.
-- Explicit initial-Hero exception: the site owner selected `specification/assets/artwork.JPG` for the feature-branch Hero. It is a studio/process photograph, not a finished painting; describe it factually, do not register it as artwork, and retain the rights/artist-approval release gate. An approved finished painting remains the preferred production Hero when selected.
-- Do not invent artwork titles, dates, dimensions, medium, descriptions, gallery groupings, biography, CV entries, exhibitions, awards, prices, availability, translations, or rights/approval claims for public artist content. Owner-authorized demo exception (2026-11-03): fictional Contact email and social destinations may be centralized in the canonical Contact fixture and rendered on the homepage and localized Contact pages without approval or confirmation gates. These are placeholders, not real artist contact channels; never claim they are verified or monitored. Keep Contact routes noindex and out of the sitemap while fictional values are present, and replace/remove the fixture before public launch. Preserve the actual artist Instagram identity @ghazalenasoodi outside the demo fixture. The separate About/CV fixture exception remains limited to clearly labelled fictional design-review content, noindex and excluded from publication metadata. Omit unknown non-demo facts and request owner confirmation for real content.
+- Explicit initial-Hero exception: the site owner selected `public/images/artist/artist-at-work.jpg` for the feature-branch Hero. It is a studio/process photograph, not a finished painting; describe it factually, do not register it as artwork, and retain the rights/artist-approval release gate. An approved finished painting remains the preferred production Hero when selected.
+- Use the canonical JSON content as the owner-authorized initial website content. The owner may edit it after launch. Do not add editorial verification, factuality, provenance, artist-approval, completeness, or status gates that hide content from the site. Do not require fields such as `isVerified`, `artistApproved`, `verificationStatus`, `isFictional`, `isPlaceholder`, or `contentSource`. Do not maintain parallel sample, preview, verified/unverified, or environment-specific content stores. About and CV use the same canonical JSON records in every environment; UI translations remain in next-intl message resources. Display the owner-provided Contact methods `g.nasoodi@gmail.com`, `@nasoodi`, and `@ghazalenasoodi`.
 - Persian must use correct RTL behavior and English correct LTR behavior. The physical-left sidebar remains left in both locales where the navigation specification requires it; do not mirror artwork or decorative assets as a shortcut.
 - Design and test real content states: long Persian and English titles, missing optional metadata, empty archives, no upcoming events, one or many works, unusual image ratios, loading, error, and unavailable states.
 
@@ -80,7 +80,7 @@ Do not start implementation based only on a prompt summary or this file. Read th
 
 ## Content, localization, privacy, and SEO
 
-- Treat artist/site-owner approval as mandatory for public-facing artwork selection, imagery, copy, translations, metadata, gallery membership, and factual claims.
+- Use the canonical editorial records as supplied by the owner. Do not gate rendering or indexing on editorial approval/verification fields. Preserve technical asset-path and safe-link protections.
 - Keep Persian and English content semantically equivalent where translations are approved; do not assume literal machine translation is publishable.
 - Follow the content model and editorial governance. Keep Journal as the unified editorial section; do not add a separate top-level Events section unless the owner changes the specification.
 - Follow the artwork asset pipeline and document source, rights, approval, master, and derivative relationships.
@@ -91,10 +91,10 @@ Do not start implementation based only on a prompt summary or this file. Read th
 ## Engineering and repository workflow
 
 - Inspect the current branch, worktree, latest commit, package scripts, route structure, and CI workflows before changing code. Preserve unrelated work.
-- Keep work on the existing `feature` branch unless the owner explicitly authorizes a different branch.
-- Do not create, switch, reset, or delete branches unless explicitly authorized.
-- Do not merge to `main`, push to an unauthorized destination, or deploy without separate explicit authorization.
-- Do not commit until implementation, relevant tests, and verification are complete, unless the owner explicitly requests an earlier checkpoint.
+- The owner has explicitly authorized the AI agent to edit, commit, and push changes to the existing `feature` branch. This is standing authorization for this repository task; no additional confirmation is required for commits or pushes to `feature`.
+- Work only on the existing `feature` branch. Do not create, switch, reset, rename, or delete branches.
+- Do not merge to `stage` or `main`, push to any branch other than `feature`, deploy, publish, or change external services. Those actions remain unauthorized and require separate explicit approval.
+- Preserve unrelated work. Complete the relevant tests and verification before committing; push only the resulting commits to `feature`.
 - Prefer focused, maintainable changes and strict TypeScript. Keep dependencies minimal and use stable releases.
 - Update relevant specifications when implementation reveals a reusable design decision or when approved behavior changes. Keep `specification/README.md`, wireframes, roadmap, and related contracts consistent.
 
@@ -132,11 +132,23 @@ A task is not complete merely because code was written or the build passes. Comp
 - The single artwork-led homepage Hero remains static; do not convert it into a carousel. The responsive carousel redesign applies to Selected Works and collection discovery/presentation.
 - Use the shadcn Carousel composition documented by the new experience contract. Preserve the repository's existing Radix-backed shadcn component foundation; do not migrate to Base UI or introduce a second primitive family solely for this component. Inspect current package versions and install only the minimum Embla dependency required by the official shadcn implementation.
 - Artwork carousels are user-controlled, never autoplay, never crop artwork, and must remain fully keyboard/touch accessible. Responsive item count is based on the actual content container (including sidebar width), not a fixed slide count or raw viewport width alone.
-- Preserve the unified Journal's existing editorial/post-style design. The homepage preview shows at most the two newest published Journal entries across article and event types; Explore Journal links to the full archive. Do not place Journal entries in artwork carousels or add a separate Events top-level route.
+- Preserve the unified Journal's existing editorial/post-style design. The homepage preview shows the single newest eligible published Journal entry across article and event types; Explore Journal links to the full archive. Do not place Journal entries in artwork carousels or add a separate Events top-level route.
 - Use the canonical artwork and collection records in `approved-artwork-content-inventory.md`; never use sample/stock/generated artwork or duplicate artwork records.
 - A documentation-only task must not modify application source, dependencies, routes, or CI. A later implementation task must follow the component, responsive, RTL, accessibility, visual QA, and test requirements in the new experience specification.
 
 
-## Journal announcement sticker vector asset and CI contract
+## Journal announcement sticker vector asset contract
 
-For the Journal/sticker implementation, read specification/journal-announcement-sticker-visual-design.md and follow it as the visual asset authority. The paper sticker must be authored directly as editable SVG paths/strokes. Do not use image generation, screenshot tracing, raster painting, or image-processing tools. GitHub Actions converts the checked-in SVG into a transparent PNG review artifact and validates its dimensions/alpha channel. Keep event text and controls in accessible localized HTML. Do not check in a generated PNG or treat the visual study as owner-approved until the owner reviews it.
+- The canonical Journal sticker is a hand-authored SVG stored directly at `public/images/journal/journal-announcement-sticker.svg` and served by the website as SVG.
+- Keep the SVG as the only maintained sticker asset. Do not add a PNG conversion pipeline, Python renderer, generated PNG, visual-review artifact upload, or raster runtime derivative.
+- CI must verify that the canonical SVG file exists and is non-empty. Browser tests should verify that the sticker asset loads in the relevant Journal/announcement UI. SVG visual refinement is reviewed through the actual website screenshots, not a generated PNG artifact.
+- Keep event text and controls in accessible localized HTML; the SVG contains decorative paths only.
+
+## Public image storage and generated metadata
+
+- Keep publishable website images directly under `public/images/`, grouped by purpose: `artworks/`, `artist/`, `exhibitions/`, `journal/`, and `decorative/`.
+- Store each physical image once. Galleries, homepage selections, and Journal entries should reference canonical artwork/content IDs rather than duplicate image files.
+- `npm run dev` runs `predev`, which generates `src/content/data/image-metadata.json` from raster files in `public/images/`. The generator supports JPEG/JPG, PNG, and WebP and records actual format, width, height, and aspect ratio.
+- Commit generated metadata together with added, replaced, or removed image files. `prebuild` and CI run the generator in check-only mode; they must never rewrite committed metadata.
+- Use `npm run images:generate` after changing images while the dev server is already running. Use `npm run images:check` to verify the committed manifest without modifying it.
+- Do not restore the old portfolio audit or asset-copy scripts. The metadata generator never copies or transforms images and does not make rights/approval decisions.
