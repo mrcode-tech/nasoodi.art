@@ -39,7 +39,7 @@ Implement the approved Journal event experience described by the proposal, wiref
 - Use approved translations only.
 - Treat public/images/journal/journal-announcement-sticker.svg as the editable source of truth. Do not use image generation, screenshot tracing, raster painting, or image processing.
 - Do not create a PNG derivative or a sticker-rendering pipeline. CI verifies that the SVG exists and is non-empty; browser tests verify it renders.
-- Do not commit a generated PNG or copy it into the application bundle before owner review. If SVG/CSS is sufficient for production, retain the vector and omit the raster runtime asset.
+- Do not generate, commit, or bundle a PNG derivative. The canonical SVG is used directly.
 - Reuse project components, semantic tokens, shadcn-style controls, and existing utilities.
 - Avoid unnecessary dependencies, tracking, or new personal-data collection.
 - Follow the repository's SEO, accessibility, privacy, performance, and content-governance contracts.
