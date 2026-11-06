@@ -1965,5 +1965,4 @@ test("Persian artwork and homepage Journal links use native localized slugs and 
   await journalLink.click();
   await expect(page).toHaveURL(new RegExp("/fa/journal/"));
   await expect(page.locator("main h1")).toBeVisible();
-  await expect(page.locator("main h1")).toBeVisible();
 });
