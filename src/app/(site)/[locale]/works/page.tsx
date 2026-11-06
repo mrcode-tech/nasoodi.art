@@ -18,7 +18,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function WorksPage({ params, searchParams }: Props) {
-  const [{ locale }, query] = await Promise.all([params, searchParams]);
+  const [{ locale }] = await Promise.all([params, searchParams]);
   if (!isLocale(locale)) notFound();
 
   setRequestLocale(locale);
