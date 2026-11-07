@@ -98,23 +98,23 @@ export function SiteShell({ locale, children, announcement }: { locale: Locale; 
       <SidebarContent>
         <ScrollArea dir={getLocaleDirection(locale)} className="sidebar-scroll-area">
           {navigation()}
-          {announcement && (
-            <ContentAnnouncement
-              locale={locale}
-              id={announcement.id}
-              title={announcement.title}
-              description={announcement.description}
-              metadata={announcement.metadata}
-              dismissLabel={labels.dismissAnnouncement}
-              href={announcement.href}
-              placement="desktop-sidebar"
-            />
-          )}
           <div className="sidebar-flex-spacer" aria-hidden="true" />
           <div className="sidebar-bottom" dir="ltr"><span>{artistBrand} · © {new Date().getFullYear()}</span></div>
         </ScrollArea>
       </SidebarContent>
     </Sidebar>
+    {announcement && (
+      <ContentAnnouncement
+        locale={locale}
+        id={announcement.id}
+        title={announcement.title}
+        description={announcement.description}
+        metadata={announcement.metadata}
+        dismissLabel={labels.dismissAnnouncement}
+        href={announcement.href}
+        placement="desktop-sidebar"
+      />
+    )}
     <header className={`mobile-header mobile-header-${locale}`} data-locale={locale}>
       <Link className="mobile-wordmark" dir="ltr" href={pagePath(locale)}>{artistBrand.split(".")[0]}<span>{artistBrand.includes(".") ? "." + artistBrand.split(".").slice(1).join(".") : ""}</span></Link>
       <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>

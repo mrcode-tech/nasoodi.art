@@ -117,19 +117,22 @@
 }
 
 .desktopSidebarContainer {
-  /* Match the mobile drawer's usable announcement width (23rem drawer
-     minus its 1.5rem side paddings), rather than the narrower sidebar column. */
+  /* Float above the desktop sidebar without consuming sidebar layout space. */
+  position: fixed;
+  z-index: 22;
+  inset-block-end: 7.25rem;
+  inset-inline-start: 0;
   width: min(20rem, calc(100vw - 2rem));
   max-width: none;
   min-height: 7rem;
-  margin-block: 0.7rem 0.6rem;
-  margin-inline: -2rem;
+  margin: 0;
 }
 
 .desktopSidebarContainer .link {
   gap: 0.2rem;
   padding-block: 1.5rem 1rem;
-  padding-inline: 1.3rem 3.2rem;
+  /* Keep the title and description clear of the close control. */
+  padding-inline: 1.3rem 4.2rem;
 }
 
 .desktopSidebarContainer .eyebrow { font-size: 0.6rem; letter-spacing: 0.035em; }
@@ -151,8 +154,16 @@
 }
 
 .desktopSidebarContainer .dismiss {
-  inset-block-start: 0.6rem;
-  inset-inline-end: 1.1rem;
+  /* Keep the dismiss control visibly inside the paper, in the free corner
+     of the wider desktop sticker just as it is in the mobile sticker. */
+  display: inline-flex !important;
+  visibility: visible;
+  opacity: 1;
+  pointer-events: auto;
+  z-index: 3;
+  inset-block-start: 0.35rem;
+  inset-inline-end: 0.55rem;
+  color: var(--ink);
 }
 
 
