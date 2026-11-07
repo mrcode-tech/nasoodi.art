@@ -11,17 +11,17 @@
       "fa": "پشت-دیوارها"
     },
     "description": {
-      "en": "Beyond the walls we see lies a world of untold stories, hidden emotions, and silent memories. This collection of six artworks explores the invisible boundaries between the inner and outer worlds, where fragments of identity, personal experiences, and unspoken feelings quietly take shape.",
-      "fa": "فراتر از دیوارهایی که می‌بینیم، جهانی از روایت‌های ناگفته، احساسات پنهان و خاطرات خاموش جریان دارد. این مجموعه شامل شش اثر هنری است که به کاوش در مرزهای نادیدنی میان جهان درون و بیرون می‌پردازد؛ جایی که تکه‌هایی از هویت، تجربه‌های شخصی و احساسات بیان‌نشده به‌آرامی شکل می‌گیرند."
+      "en": "Beyond the people we see lies a world of untold stories, hidden emotions, and silent memories. This collection of six artworks explores the invisible boundaries between the inner and outer worlds, where fragments of identity, personal experiences, and unspoken feelings quietly take shape.",
+      "fa": "فراتر از انسان هایی که می‌بینیم، جهانی از روایت‌های ناگفته، احساسات پنهان و خاطرات خاموش جریان دارد. این مجموعه شامل شش اثر هنری است که به کاوش در مرزهای نادیدنی میان جهان درون و بیرون می‌پردازد؛ جایی که تکه‌هایی از هویت، تجربه‌های شخصی و احساسات بیان‌نشده به‌آرامی شکل می‌گیرند."
     },
     "coverArtworkId": "artwork-1392-1",
     "artworkIds": [
-      "artwork-1392-1",
+      "artwork-1393-2",
       "artwork-1392-2",
       "artwork-1392-3",
       "artwork-1392-4",
       "artwork-1393-1",
-      "artwork-1393-2"
+      "artwork-1392-1"
 
     ],
     "status": "published",
@@ -44,7 +44,7 @@
     },
     "coverArtworkId": "artwork-1398-1",
     "artworkIds": [
-      "artwork-1398-1",
+      "artwork-1401-1",
       "artwork-1398-2",
       "artwork-1398-3",
       "artwork-1398-4",
@@ -52,7 +52,7 @@
       "artwork-1398-6",
       "artwork-1398-7",
       "artwork-1398-8",
-      "artwork-1401-1"
+      "artwork-1398-1"
     ],
     "status": "published",
     "sortOrder": 2
@@ -74,12 +74,12 @@
     },
     "coverArtworkId": "artwork-1403-1",
     "artworkIds": [
-      "artwork-1403-1",
-      "artwork-1403-2",
       "artwork-1403-3",
+      "artwork-1403-2",
       "artwork-1403-4",
       "artwork-1403-5",
-      "artwork-1403-6"
+      "artwork-1403-6",
+      "artwork-1403-1"
     ],
     "status": "published",
     "sortOrder": 3
