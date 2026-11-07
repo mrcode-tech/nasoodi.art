@@ -47,9 +47,9 @@ export default async function AboutPage({ params }: Props) {
         <p className="artist-discipline">{profile.discipline?.[locale] ?? t("discipline")}</p>
       </header>
       <div className="profile-content">
-        {profile.shortIntroduction?.[locale] && (
+        {/* {profile.shortIntroduction?.[locale] && (
           <p className="about-short-introduction">{profile.shortIntroduction[locale]}</p>
-        )}
+        )} */}
         <div className="about-portrait-statement">
           <div className="artist-portrait-frame">
             <Image

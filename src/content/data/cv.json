@@ -172,10 +172,6 @@
         "en": "Azad Art Gallery",
         "fa": "گالری طراحان آزاد"
       },
-      "location": {
-        "en": "Tehran, Iran",
-        "fa": "تهران، ایران"
-      },
       "status": "published",
       "sortOrder": 5
     },
@@ -191,8 +187,8 @@
         "fa": "سومین رویداد جایزه بزرگ نقاشی معاصر ایران"
       },
       "organization": {
-        "en": "Competition",
-        "fa": "مسابقه"
+        "en": "Iranian Artists Forum",
+        "fa": "خانه هنرمندان ایران"
       },
       "status": "published",
       "sortOrder": 6
@@ -227,8 +223,8 @@
         "fa": "دومین رویداد جایزه بزرگ نقاشی معاصر ایران"
       },
       "organization": {
-        "en": "Competition",
-        "fa": "مسابقه"
+        "en": "Iranian Artists Forum",
+        "fa": "خانه هنرمندان ایران"
       },
       "status": "published",
       "sortOrder": 8

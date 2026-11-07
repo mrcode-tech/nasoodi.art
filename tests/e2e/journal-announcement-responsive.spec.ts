@@ -82,25 +82,30 @@ test.describe("Configured content announcement responsive behavior", () => {
       { width: 1280, height: 800 },
     ]) {
       for (const section of ["about", "contact", "works", "galleries", "journal"] as const) {
-        test("desktop sticker keeps homepage geometry on " + section + " in " + item.locale + " at " + viewport.width + "px", async ({ page }) => {
+        test("desktop inner-page sidebar sticker is visible and localized on " + section + " in " + item.locale + " at " + viewport.width + "px", async ({ page }) => {
           await page.setViewportSize(viewport);
-          await page.goto("/" + item.locale);
-
-          const homeSticker = page.locator('[data-placement="viewport"]');
-          await expect(homeSticker).toBeVisible();
-          const homeBox = await homeSticker.boundingBox();
-          expect(homeBox).not.toBeNull();
-
           await page.goto("/" + item.locale + "/" + section);
-          const sectionSticker = page.locator('[data-placement="viewport"]');
-          await expect(sectionSticker).toBeVisible();
-          const sectionBox = await sectionSticker.boundingBox();
-          expect(sectionBox).not.toBeNull();
 
-          expect(sectionBox!.x).toBeCloseTo(homeBox!.x, 1);
-          expect(sectionBox!.y).toBeCloseTo(homeBox!.y, 1);
-          expect(sectionBox!.width).toBeCloseTo(homeBox!.width, 1);
-          expect(sectionBox!.height).toBeCloseTo(homeBox!.height, 1);
+          const viewportSticker = page.locator('[data-placement="viewport"]');
+          await expect(viewportSticker).toHaveCount(0);
+
+          const sidebar = page.locator(".desktop-sidebar");
+          const sticker = sidebar.locator('[data-placement="desktop-sidebar"]');
+          await expect(sticker).toBeVisible();
+          await expect(sticker.locator('[data-part="title"]')).toHaveText(config.title[item.locale]);
+          await expect(sticker.locator('[data-part="description"]')).toHaveText(config.description[item.locale]);
+          if (config.metadata?.[item.locale]) {
+            await expect(sticker.locator('[data-part="metadata"]')).toHaveText(config.metadata[item.locale]!);
+          } else {
+            await expect(sticker.locator('[data-part="metadata"]')).toHaveCount(0);
+          }
+          await expect(sticker.locator('[data-part="link"]')).toHaveAttribute("href", expectedHref(item.locale));
+          await expect(sticker.getByRole("button", { name: item.dismissLabel })).toBeVisible();
+
+          const box = await sticker.boundingBox();
+          expect(box).not.toBeNull();
+          expect(box!.width).toBeGreaterThanOrEqual(160);
+          expect(box!.height).toBeGreaterThanOrEqual(100);
         });
       }
     }
