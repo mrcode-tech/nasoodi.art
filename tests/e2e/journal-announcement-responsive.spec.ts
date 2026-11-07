@@ -56,8 +56,7 @@ test.describe("Configured content announcement responsive behavior", () => {
         await page.setViewportSize(viewport);
         await page.goto("/" + item.locale);
 
-        const sidebar = page.locator(".desktop-sidebar");
-        const sticker = sidebar.locator('[data-placement="desktop-sidebar"]');
+        const sticker = page.locator('[data-placement="desktop-sidebar"]');
         await expect(sticker).toBeVisible();
         await expect(sticker.locator('[data-part="title"]')).toHaveText(config.title[item.locale]);
         await expect(sticker.locator('[data-part="description"]')).toHaveText(config.description[item.locale]);
@@ -87,9 +86,8 @@ test.describe("Configured content announcement responsive behavior", () => {
           await page.setViewportSize(viewport);
           await page.goto("/" + item.locale + "/" + section);
 
-          const sidebar = page.locator(".desktop-sidebar");
           await expect(page.locator('[data-placement="viewport"]')).toHaveCount(0);
-          const sticker = sidebar.locator('[data-placement="desktop-sidebar"]');
+          const sticker = page.locator('[data-placement="desktop-sidebar"]');
           await expect(sticker).toBeVisible();
           await expect(sticker.locator('[data-part="title"]')).toHaveText(config.title[item.locale]);
           await expect(sticker.locator('[data-part="description"]')).toHaveText(config.description[item.locale]);
@@ -130,7 +128,7 @@ test.describe("Configured content announcement responsive behavior", () => {
     test("sticker link navigates to the configured destination in " + item.locale, async ({ page }) => {
       await page.setViewportSize({ width: 1280, height: 900 });
       await page.goto("/" + item.locale);
-      await page.locator('.desktop-sidebar [data-placement="desktop-sidebar"] [data-part="link"]').click();
+      await page.locator('[data-placement="desktop-sidebar"] [data-part="link"]').click();
       await expect(page).toHaveURL("http://127.0.0.1:3000" + expectedHref(item.locale));
     });
   }
