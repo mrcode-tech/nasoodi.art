@@ -1,53 +1,69 @@
 [
-  {
-    "id": "journal-season-of-light-1403",
-    "slug": "a-season-of-light-and-renewal",
-    "localizedSlugs": {
-      "en": "a-season-of-light-and-renewal",
-      "fa": "فصلی-از-روشنایی-و-تازگی"
-    },
-    "type": "story",
-    "title": {
-      "en": "A Season of Light and Renewal",
-      "fa": "فصلی از روشنایی و تازگی"
-    },
-    "summary": {
-      "en": "Beginning with A New Season, this note explores renewal, transience, return, and the experience of looking across the six works from 1403.",
-      "fa": "این یادداشت با «فصلی تازه» آغاز می‌شود و تازگی، گذرایی، بازگشت و تجربه دیدن را در شش اثر سال ۱۴۰۳ دنبال می‌کند."
-    },
-    "status": "published",
-    "publishedAt": "2024-10-05T09:00:00+00:00",
-    "approvedLocales": [
-      "en",
-      "fa"
+{
+  "id": "journal-website-launch",
+  "slug": "official-website-launch",
+  "localizedSlugs": {
+    "en": "official-website-launch",
+    "fa": "آغاز-به-کار-وب‌سایت"
+  },
+  "type": "story",
+  "title": {
+    "en": "My Official Website Is Now Online",
+    "fa": "آغاز به کار وب‌سایت رسمی"
+  },
+  "summary": {
+    "en": "A personal space bringing together a selection of my paintings, collections, and artistic journey.",
+    "fa": "فضایی شخصی برای نمایش بخشی از آثار، مجموعه‌ها و روایت مسیر هنری من."
+  },
+  "status": "published",
+  "publishedAt": "2026-11-07T09:00:00+00:00",
+  "approvedLocales": [
+    "en",
+    "fa"
+  ],
+  "artistApproved": true,
+  "coverArtworkId": "artwork-1403-5",
+  "coverAlt": {
+    "en": "Oil painting selected as the cover artwork for the launch announcement of the artist's personal website",
+    "fa": "تابلوی رنگ‌روغن انتخاب‌شده به‌عنوان تصویر اصلی یادداشت آغاز به کار وب‌سایت شخصی هنرمند"
+  },
+  "body": {
+    "en": [
+      {
+        "type": "paragraph",
+        "text": "Each painting tells a story of a world shaped by my thoughts and perspective — a world emerging from experiences, reflections, and emotions that sometimes extend beyond words."
+      },
+      {
+        "type": "paragraph",
+        "text": "A selection of these works is now brought together on my personal website, a space to explore my paintings, discover different collections, and learn more about my artistic journey."
+      },
+      {
+        "type": "paragraph",
+        "text": "The website has been created to provide a dedicated space for presenting my work and making it more accessible to those interested in my artistic practice. I hope this space offers an opportunity to become more familiar with my work and to connect more closely with my artistic world."
+      },
+      {
+        "type": "paragraph",
+        "text": "Thank you for your time, interest, and continued support."
+      }
     ],
-    "artistApproved": true,
-    "coverArtworkId": "artwork-1403-5",
-    "coverAlt": {
-      "en": "Oil painting A New Season, the first work in the 1403 gallery",
-      "fa": "تابلوی رنگ‌روغن «فصلی تازه»، نخستین اثر در مجموعه سال ۱۴۰۳"
-    },
-    "body": {
-      "en": [
-        {
-          "type": "paragraph",
-          "text": "A new season can be understood as a change in the way we look as much as a change in the world around us. The first painting in this gallery, A New Season, opens a recent chapter shaped by mood, form, and the experience of seeing."
-        },
-        {
-          "type": "paragraph",
-          "text": "The six works from 1403 move through renewal, passing impressions, return, and quiet observation. Their subjects are varied, from open-ended encounters to a woodland scene, yet atmosphere and the passage of time provide a thread between them. This gallery keeps the year's works together while allowing each image its own character."
-        }
-      ],
-      "fa": [
-        {
-          "type": "paragraph",
-          "text": "فصل تازه را می‌توان نه‌فقط تغییری در جهان پیرامون، بلکه تغییری در شیوه نگاه‌کردن دانست. نخستین نقاشی این مجموعه، «فصلی تازه»، فصلی جدید از مسیر آثار را می‌گشاید که با حال‌وهوا، فرم و تجربه دیدن شکل گرفته است."
-        },
-        {
-          "type": "paragraph",
-          "text": "شش اثر سال ۱۴۰۳ از تازگی و دریافت‌های گذرا تا بازگشت و مشاهده آرام حرکت می‌کنند. موضوع آن‌ها متنوع است؛ از مواجهه‌های گشوده تا منظره‌ای جنگلی. بااین‌حال، فضا و گذر زمان رشته‌ای میان آن‌ها ایجاد می‌کند. این مجموعه آثار سال را کنار هم نگه می‌دارد و در عین حال به هر تصویر شخصیت مستقل خودش را می‌دهد."
-        }
-      ]
-    }
+    "fa": [
+      {
+        "type": "paragraph",
+        "text": "هر نقاشی، روایتی است از جهانی که در ذهن و نگاه من شکل می‌گیرد؛ جهانی برخاسته از تجربه‌ها، تأملات و احساساتی که گاه فراتر از کلمات بیان می‌شوند."
+      },
+      {
+        "type": "paragraph",
+        "text": "اکنون بخشی از این جهان در قالب وب‌سایت شخصی من گرد هم آمده است؛ فضایی برای نمایش آثار، مرور مجموعه‌ها و آشنایی بیشتر با مسیر هنری‌ام."
+      },
+      {
+        "type": "paragraph",
+        "text": "این وب‌سایت با هدف فراهم آوردن بستری برای ارائه و دسترسی آسان‌تر به آثارم راه‌اندازی شده است. امیدوارم این فضا فرصتی برای آشنایی بیشتر مخاطبان با آثارم و ارتباط نزدیک‌تر با دنیای هنری من فراهم کند."
+      },
+      {
+        "type": "paragraph",
+        "text": "از همراهی و توجه شما سپاسگزارم."
+      }
+    ]
   }
+}
 ]
