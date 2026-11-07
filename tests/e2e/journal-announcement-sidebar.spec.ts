@@ -74,7 +74,7 @@ test.describe("Configured announcement in navigation", () => {
 
   test("desktop sidebar places the announcement after navigation and before the flexible spacer", async ({ page }) => {
     await page.setViewportSize({ width: 1440, height: 960 });
-    await page.goto("/en");
+    await page.goto("/en/journal");
     const sidebar = page.locator(".desktop-sidebar");
     const sticker = sidebar.locator('[data-placement="desktop-sidebar"]');
     await expect(sticker).toBeVisible();
