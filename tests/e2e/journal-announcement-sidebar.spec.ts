@@ -74,7 +74,7 @@ test.describe("Configured announcement in navigation", () => {
 
   test("desktop sidebar places the announcement after navigation and before the flexible spacer", async ({ page }) => {
     await page.setViewportSize({ width: 1440, height: 960 });
-    await page.goto("/en/journal");
+    await page.goto("/en");
     const sidebar = page.locator(".desktop-sidebar");
     const sticker = sidebar.locator('[data-placement="desktop-sidebar"]');
     await expect(sticker).toBeVisible();
@@ -95,7 +95,7 @@ test.describe("Configured announcement in navigation", () => {
   test("desktop announcement close control has no circular button treatment", async ({ page }) => {
     await page.setViewportSize({ width: 1440, height: 960 });
     await page.goto("/en");
-    const close = page.locator('[data-placement="viewport"]').getByRole("button", { name: "Dismiss announcement" });
+    const close = page.locator('.desktop-sidebar [data-placement="desktop-sidebar"]').getByRole("button", { name: "Dismiss announcement" });
     await expect(close).toBeVisible();
     await expect(close).toHaveCSS("border-radius", "0px");
     await expect(close).toHaveCSS("background-color", "rgba(0, 0, 0, 0)");

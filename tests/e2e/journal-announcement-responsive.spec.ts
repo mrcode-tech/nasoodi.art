@@ -56,7 +56,8 @@ test.describe("Configured content announcement responsive behavior", () => {
         await page.setViewportSize(viewport);
         await page.goto("/" + item.locale);
 
-        const sticker = page.locator('[data-placement="viewport"]');
+        const sidebar = page.locator(".desktop-sidebar");
+        const sticker = sidebar.locator('[data-placement="desktop-sidebar"]');
         await expect(sticker).toBeVisible();
         await expect(sticker.locator('[data-part="title"]')).toHaveText(config.title[item.locale]);
         await expect(sticker.locator('[data-part="description"]')).toHaveText(config.description[item.locale]);
@@ -70,9 +71,9 @@ test.describe("Configured content announcement responsive behavior", () => {
 
         const box = await sticker.boundingBox();
         expect(box).not.toBeNull();
-        expect(box!.width).toBeGreaterThanOrEqual(200);
-        if (item.locale === "en") expect(box!.x).toBe(0);
-        else expect(box!.x + box!.width).toBe(viewport.width);
+        expect(box!.width).toBeGreaterThanOrEqual(160);
+        expect(box!.height).toBeLessThanOrEqual(180);
+        await expect(page.locator('[data-placement="viewport"]')).toHaveCount(0);
       });
     }
 
@@ -86,10 +87,8 @@ test.describe("Configured content announcement responsive behavior", () => {
           await page.setViewportSize(viewport);
           await page.goto("/" + item.locale + "/" + section);
 
-          const viewportSticker = page.locator('[data-placement="viewport"]');
-          await expect(viewportSticker).toHaveCount(0);
-
           const sidebar = page.locator(".desktop-sidebar");
+          await expect(page.locator('[data-placement="viewport"]')).toHaveCount(0);
           const sticker = sidebar.locator('[data-placement="desktop-sidebar"]');
           await expect(sticker).toBeVisible();
           await expect(sticker.locator('[data-part="title"]')).toHaveText(config.title[item.locale]);
@@ -105,7 +104,7 @@ test.describe("Configured content announcement responsive behavior", () => {
           const box = await sticker.boundingBox();
           expect(box).not.toBeNull();
           expect(box!.width).toBeGreaterThanOrEqual(160);
-          expect(box!.height).toBeGreaterThanOrEqual(100);
+          expect(box!.height).toBeLessThanOrEqual(180);
         });
       }
     }
@@ -131,7 +130,7 @@ test.describe("Configured content announcement responsive behavior", () => {
     test("sticker link navigates to the configured destination in " + item.locale, async ({ page }) => {
       await page.setViewportSize({ width: 1280, height: 900 });
       await page.goto("/" + item.locale);
-      await page.locator('[data-placement="viewport"] [data-part="link"]').click();
+      await page.locator('.desktop-sidebar [data-placement="desktop-sidebar"] [data-part="link"]').click();
       await expect(page).toHaveURL("http://127.0.0.1:3000" + expectedHref(item.locale));
     });
   }
