@@ -117,10 +117,13 @@
 }
 
 .desktopSidebarContainer {
-  width: 100%;
-  max-width: 100%;
+  /* Match the mobile drawer's usable announcement width (23rem drawer
+     minus its 1.5rem side paddings), rather than the narrower sidebar column. */
+  width: min(20rem, calc(100vw - 2rem));
+  max-width: none;
   min-height: 7rem;
   margin-block: 0.7rem 0.6rem;
+  margin-inline: -2rem;
 }
 
 .desktopSidebarContainer .link {
