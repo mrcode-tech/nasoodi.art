@@ -88,7 +88,6 @@ export function SiteShell({ locale, children, announcement }: { locale: Locale; 
       return <SidebarMenuItem key={key}><SidebarMenuButton><Link className="nav-link" dir={getLocaleDirection(locale)} href={href} aria-current={active ? "page" : undefined} onClick={() => insideSheet && setMobileOpen(false)}>{label}</Link></SidebarMenuButton></SidebarMenuItem>;
     })}</SidebarMenu>
   </nav>;
-  const isHomePage = pathname === pagePath(locale);
 
   return <>
     <a className="skip-link" href="#main-content">{labels.skip}</a>
