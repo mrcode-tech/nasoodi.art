@@ -72,10 +72,9 @@ test.describe("Configured announcement in navigation", () => {
     });
   }
 
-  test("desktop sidebar places the announcement after navigation and before the flexible spacer", async ({ page }) => {
+  test("desktop announcement overlays the sidebar without joining its document flow", async ({ page }) => {
     await page.setViewportSize({ width: 1440, height: 960 });
     await page.goto("/en");
-    const sidebar = page.locator(".desktop-sidebar");
     const sticker = page.locator('[data-placement="desktop-sidebar"]');
     await expect(sticker).toBeVisible();
     await expect(sticker).toHaveAttribute("aria-label", config.metadata?.en || config.title.en);
