@@ -88,23 +88,9 @@ export function SiteShell({ locale, children, announcement }: { locale: Locale; 
       return <SidebarMenuItem key={key}><SidebarMenuButton><Link className="nav-link" dir={getLocaleDirection(locale)} href={href} aria-current={active ? "page" : undefined} onClick={() => insideSheet && setMobileOpen(false)}>{label}</Link></SidebarMenuButton></SidebarMenuItem>;
     })}</SidebarMenu>
   </nav>;
-  const isHomePage = pathname === pagePath(locale);
 
   return <>
     <a className="skip-link" href="#main-content">{labels.skip}</a>
-    {announcement && isHomePage && (
-      <ContentAnnouncement
-        locale={locale}
-        id={announcement.id}
-        title={announcement.title}
-        description={announcement.description}
-        metadata={announcement.metadata}
-        dismissLabel={labels.dismissAnnouncement}
-        href={announcement.href}
-        placement="viewport"
-      />
-    )}
-
     <Sidebar className="desktop-sidebar" dir={getLocaleDirection(locale)} aria-label={artistBrand}>
       <SidebarHeader><Link className="artist-wordmark" href={pagePath(locale)} aria-label={labels.home}>
         <span className="wordmark-name" dir="ltr">{artistGivenName}</span><span className="wordmark-surname" dir="ltr">{artistFamilyNames.join(" ")}</span><span className="wordmark-role" dir="auto">{labels.discipline}</span>
@@ -112,7 +98,7 @@ export function SiteShell({ locale, children, announcement }: { locale: Locale; 
       <SidebarContent>
         <ScrollArea dir={getLocaleDirection(locale)} className="sidebar-scroll-area">
           {navigation()}
-          {announcement && !isHomePage && (
+          {announcement && (
             <ContentAnnouncement
               locale={locale}
               id={announcement.id}
