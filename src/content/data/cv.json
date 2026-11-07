@@ -177,7 +177,7 @@
         "fa": "تهران، ایران"
       },
       "status": "published",
-      "sortOrder": 1
+      "sortOrder": 5
     },
     {
       "id": "exhibition-grand-prize-3",
@@ -195,7 +195,7 @@
         "fa": "مسابقه"
       },
       "status": "published",
-      "sortOrder": 2
+      "sortOrder": 6
     },
     {
       "id": "exhibition-97-03",
@@ -213,7 +213,7 @@
         "fa": "نمایش آثار اعضای پیوسته انجمن هنرمندان نقاش ایران"
       },
       "status": "published",
-      "sortOrder": 3
+      "sortOrder": 7
     },
     {
       "id": "exhibition-grand-prize-2",
@@ -231,7 +231,7 @@
         "fa": "مسابقه"
       },
       "status": "published",
-      "sortOrder": 4
+      "sortOrder": 8
     },
     {
       "id": "exhibition-in-quarantine",
@@ -249,7 +249,7 @@
         "fa": "گالری الهی و شیث — نمایشگاه مجازی؛ برنده جایزه فراخوان"
       },
       "status": "published",
-      "sortOrder": 5
+      "sortOrder": 9
     },
     {
       "id": "exhibition-the-silence",
@@ -267,7 +267,7 @@
         "fa": "گالری شیث"
       },
       "status": "published",
-      "sortOrder": 6
+      "sortOrder": 10
     },
     {
       "id": "exhibition-infinity",
@@ -285,7 +285,7 @@
         "fa": "گالری هفت ثمر"
       },
       "status": "published",
-      "sortOrder": 7
+      "sortOrder": 11
     },
     {
       "id": "exhibition-amin",
@@ -303,7 +303,7 @@
         "fa": "گالری امین"
       },
       "status": "published",
-      "sortOrder": 8
+      "sortOrder": 12
     },
     {
       "id": "exhibition-heat-minus-37",
@@ -321,7 +321,7 @@
         "fa": "گالری درخت"
       },
       "status": "published",
-      "sortOrder": 9
+      "sortOrder": 13
     },
     {
       "id": "exhibition-that-other-that",
@@ -339,7 +339,7 @@
         "fa": "خانه هنرمندان ایران"
       },
       "status": "published",
-      "sortOrder": 10
+      "sortOrder": 14
     },
     {
       "id": "exhibition-haft-samar-2014",
@@ -357,7 +357,7 @@
         "fa": "گالری هفت ثمر"
       },
       "status": "published",
-      "sortOrder": 11
+      "sortOrder": 15
     },
     {
       "id": "exhibition-mind-variations",
@@ -375,7 +375,79 @@
         "fa": "گالری نگاه"
       },
       "status": "published",
-      "sortOrder": 12
+      "sortOrder": 16
+    },
+    {
+      "id": "exhibition-second-week-iranian-painters-1405",
+      "category": "group-exhibition",
+      "period": {
+        "en": "2026",
+        "fa": "۱۴۰۵"
+      },
+      "title": {
+        "en": "2nd A Week with Association of Iranian Painters",
+        "fa": "دومین یک هفته با انجمن نقاش ایران"
+      },
+      "organization": {
+        "en": "Iranian Artists Forum",
+        "fa": "خانه هنرمندان ایران"
+      },
+      "status": "published",
+      "sortOrder": 1
+    },
+    {
+      "id": "exhibition-saye-roshan-1404",
+      "category": "group-exhibition",
+      "period": {
+        "en": "2026",
+        "fa": "۱۴۰۴"
+      },
+      "title": {
+        "en": "Saye Roshan",
+        "fa": "سایه روشن"
+      },
+      "organization": {
+        "en": "Javid Gallery",
+        "fa": "گالری جاوید"
+      },
+      "status": "published",
+      "sortOrder": 2
+    },
+    {
+      "id": "exhibition-khor-art-initiative-2025",
+      "category": "group-exhibition",
+      "period": {
+        "en": "2025",
+        "fa": "۱۴۰۴"
+      },
+      "title": {
+        "en": "Khor Art Initiative 2025",
+        "fa": "پروژه هنری خور"
+      },
+      "organization": {
+        "en": "Saradipour Gallery",
+        "fa": "گالری سرادیپور"
+      },
+      "status": "published",
+      "sortOrder": 3
+    },
+    {
+      "id": "exhibition-first-week-iranian-painters-1404",
+      "category": "group-exhibition",
+      "period": {
+        "en": "2025",
+        "fa": "۱۴۰۴"
+      },
+      "title": {
+        "en": "1st A Week with Association of Iranian Painters",
+        "fa": "اولین یک هفته با انجمن نقاش ایران"
+      },
+      "organization": {
+        "en": "Iranian Artists Forum",
+        "fa": "خانه هنرمندان ایران"
+      },
+      "status": "published",
+      "sortOrder": 4
     }
   ],
   "document": {
