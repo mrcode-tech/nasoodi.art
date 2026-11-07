@@ -76,26 +76,34 @@ test.describe("Configured content announcement responsive behavior", () => {
       });
     }
 
-    test("desktop sidebar sticker fits its navigation column in " + item.locale, async ({ page }) => {
-      await page.setViewportSize({ width: 1024, height: 768 });
-      await page.goto("/" + item.locale + "/works");
+    for (const viewport of [
+      { width: 1920, height: 1080 },
+      { width: 1440, height: 900 },
+      { width: 1280, height: 800 },
+    ]) {
+      for (const section of ["about", "contact", "works", "galleries", "journal"] as const) {
+        test("desktop sticker keeps homepage geometry on " + section + " in " + item.locale + " at " + viewport.width + "px", async ({ page }) => {
+          await page.setViewportSize(viewport);
+          await page.goto("/" + item.locale);
 
-      const sidebar = page.locator(".desktop-sidebar");
-      const sticker = sidebar.locator('[data-placement="desktop-sidebar"]');
-      await expect(sidebar).toBeVisible();
-      await expect(sticker).toBeVisible();
-      await expect(sticker.locator('[data-part="title"]')).toHaveText(config.title[item.locale]);
-      await expect(sticker.locator('[data-part="description"]')).toHaveText(config.description[item.locale]);
-      await expect(sticker.locator('[data-part="link"]')).toHaveAttribute("href", expectedHref(item.locale));
+          const homeSticker = page.locator('[data-placement="viewport"]');
+          await expect(homeSticker).toBeVisible();
+          const homeBox = await homeSticker.boundingBox();
+          expect(homeBox).not.toBeNull();
 
-      const sidebarBox = await sidebar.boundingBox();
-      const stickerBox = await sticker.boundingBox();
-      expect(sidebarBox).not.toBeNull();
-      expect(stickerBox).not.toBeNull();
-      expect(stickerBox!.width).toBeGreaterThanOrEqual(140);
-      expect(stickerBox!.x).toBeGreaterThanOrEqual(sidebarBox!.x);
-      expect(stickerBox!.x + stickerBox!.width).toBeLessThanOrEqual(sidebarBox!.x + sidebarBox!.width);
-    });
+          await page.goto("/" + item.locale + "/" + section);
+          const sectionSticker = page.locator('[data-placement="viewport"]');
+          await expect(sectionSticker).toBeVisible();
+          const sectionBox = await sectionSticker.boundingBox();
+          expect(sectionBox).not.toBeNull();
+
+          expect(sectionBox!.x).toBeCloseTo(homeBox!.x, 1);
+          expect(sectionBox!.y).toBeCloseTo(homeBox!.y, 1);
+          expect(sectionBox!.width).toBeCloseTo(homeBox!.width, 1);
+          expect(sectionBox!.height).toBeCloseTo(homeBox!.height, 1);
+        });
+      }
+    }
 
     test("mobile drawer sticker is visible, localized, dismissible, and navigates in " + item.locale, async ({ page }) => {
       await page.setViewportSize({ width: 390, height: 844 });
