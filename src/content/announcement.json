@@ -1,17 +1,17 @@
 {
   "active": true,
-  "type": "gallery",
-  "contentId": "gallery-the-desolate",
+  "type": "journal",
+  "contentId": "journal-website-launch",
   "title": {
-    "en": "The Desolate",
-    "fa": "برهوت"
+    "en": "My Official Website Is Now Online",
+    "fa": "آغاز به کار وب‌سایت رسمی"
   },
   "description": {
-    "en": "Where silence stretches to the distant horizon and traces of life dissolve into emptiness",
-    "fa": "جایی که سکوت تا دوردست افق امتداد می‌یابد و ردّ زندگی در خلأ محو می‌شود"
+    "en": "A new space bringing together a selection of my paintings and collections.",
+    "fa": "فضایی تازه برای نمایش بخشی از آثار و مجموعه‌های نقاشی من."
   },
   "metadata": {
-    "en": "Featured Gallery",
-    "fa": "گالری منتخب"
+    "en": "Latest Journal",
+    "fa": "تازه‌ترین یادداشت"
   }
 }
