@@ -117,10 +117,10 @@
 }
 
 .desktopSidebarContainer {
-  /* Float above the desktop sidebar without consuming sidebar layout space. */
+  /* Float above the sidebar footer, without consuming sidebar layout space. */
   position: fixed;
   z-index: 22;
-  inset-block-end: 7.25rem;
+  inset-block-end: 3.5rem;
   inset-inline-start: 0;
   width: min(20rem, calc(100vw - 2rem));
   max-width: none;
