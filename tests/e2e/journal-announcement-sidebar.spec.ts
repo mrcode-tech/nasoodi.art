@@ -72,30 +72,26 @@ test.describe("Configured announcement in navigation", () => {
     });
   }
 
-  test("desktop sidebar places the announcement after navigation and before the flexible spacer", async ({ page }) => {
+  test("desktop announcement overlays the sidebar without joining its document flow", async ({ page }) => {
     await page.setViewportSize({ width: 1440, height: 960 });
     await page.goto("/en");
-    const sidebar = page.locator(".desktop-sidebar");
-    const sticker = sidebar.locator('[data-placement="desktop-sidebar"]');
+    const sticker = page.locator('[data-placement="desktop-sidebar"]');
     await expect(sticker).toBeVisible();
     await expect(sticker).toHaveAttribute("aria-label", config.metadata?.en || config.title.en);
     await expect(sticker.getByRole("link")).toHaveAttribute("href", expectedHref("en"));
     await expect(sticker.locator('[data-part="title"]')).toHaveText(config.title.en);
-    const order = await sidebar.evaluate((node) => {
-      const navigation = node.querySelector("nav");
-      const announcement = node.querySelector('[data-placement="desktop-sidebar"]');
-      const spacer = node.querySelector(".sidebar-flex-spacer");
-      return Boolean(navigation && announcement && spacer &&
-        (navigation.compareDocumentPosition(announcement) & Node.DOCUMENT_POSITION_FOLLOWING) &&
-        (announcement.compareDocumentPosition(spacer) & Node.DOCUMENT_POSITION_FOLLOWING));
+    const overlayPlacement = await sticker.evaluate((node) => {
+      const sidebarNode = document.querySelector(".desktop-sidebar");
+      const style = getComputedStyle(node);
+      return Boolean(sidebarNode && !sidebarNode.contains(node) && style.position === "fixed");
     });
-    expect(order).toBe(true);
+    expect(overlayPlacement).toBe(true);
   });
 
   test("desktop announcement close control has no circular button treatment", async ({ page }) => {
     await page.setViewportSize({ width: 1440, height: 960 });
     await page.goto("/en");
-    const close = page.locator('.desktop-sidebar [data-placement="desktop-sidebar"]').getByRole("button", { name: "Dismiss announcement" });
+    const close = page.locator('[data-placement="desktop-sidebar"]').getByRole("button", { name: "Dismiss announcement" });
     await expect(close).toBeVisible();
     await expect(close).toHaveCSS("border-radius", "0px");
     await expect(close).toHaveCSS("background-color", "rgba(0, 0, 0, 0)");
