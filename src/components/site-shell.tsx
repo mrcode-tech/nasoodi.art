@@ -92,7 +92,7 @@ export function SiteShell({ locale, children, announcement }: { locale: Locale; 
 
   return <>
     <a className="skip-link" href="#main-content">{labels.skip}</a>
-    {announcement && (
+    {announcement && isHomePage && (
       <ContentAnnouncement
         locale={locale}
         id={announcement.id}
@@ -112,7 +112,7 @@ export function SiteShell({ locale, children, announcement }: { locale: Locale; 
       <SidebarContent>
         <ScrollArea dir={getLocaleDirection(locale)} className="sidebar-scroll-area">
           {navigation()}
-          {announcement && (
+          {announcement && !isHomePage && (
             <ContentAnnouncement
               locale={locale}
               id={announcement.id}
