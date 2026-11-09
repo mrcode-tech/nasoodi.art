@@ -89,7 +89,7 @@ test("event entries require a valid time zone and occurrence time",()=>{
  assert.equal(hasExplicitTimeZone("2026-11-12T18:00:00"),false);
  assert.equal(hasExplicitTimeZone("2026-11-12T18:00:00+01:00"),true);
  assert.equal(hasExplicitTimeZone("2026-11-12T17:00:00Z"),true);
- const valid:JournalEntry={...base,event:{startsAt:"2026-11-12T18:00:00+01:00",timeZone:"Europe/Berlin",venue:{en:"Studio",fa:"آتلیه"}}};
+ const valid:JournalEntry={...base,event:{startsAt:"2026-11-12T18:00:00+01:00",timeZone:"Europe/Berlin",venue:{en:"Sample venue",fa:"محل نمونه"},address:{en:"1 Example Street, Berlin, Germany",fa:"خیابان نمونه ۱، برلین، آلمان"},attendanceMode:"in-person"}};
  assert.equal(getPublicJournal([valid],"en").length,1);
  assert.equal(getPublicJournal([{...valid,event:{...valid.event!,timeZone:"Not/AZone"}}],"en").length,0);
  assert.equal(getPublicJournal([{...valid,event:{...valid.event!,startsAt:"2026-11-12T18:00:00"}}],"en").length,0);
@@ -185,7 +185,7 @@ test("homepage upcoming events are future-dated, locale-approved, and ordered by
  const event=(id:string,startsAt:string):JournalEntry=>({
   id,slug:id,type:"event",title:{en:id,fa:id},summary:{en:"Summary",fa:"خلاصه"},
   status:"published",approvedLocales:["en","fa"],artistApproved:true,
-  event:{startsAt,timeZone:"Europe/Berlin",venue:{en:"Studio",fa:"آتلیه"}}
+  event:{startsAt,timeZone:"Europe/Berlin",venue:{en:"Sample venue",fa:"محل نمونه"},address:{en:"1 Example Street, Berlin, Germany",fa:"خیابان نمونه ۱، برلین، آلمان"},attendanceMode:"in-person"}
  });
  const now=new Date("2026-10-30T12:00:00Z");
  const items=[
@@ -321,7 +321,7 @@ test("gallery publication supports overlapping collections and unassigned artwor
 });
 
 test("homepage Journal preview selects only the newest published entry across article and event types", () => {
- const entry=(id:string,type:JournalEntry["type"],publishedAt:string):JournalEntry=>({id,slug:id,type,title:{en:id,fa:id},summary:{en:"Summary",fa:"خلاصه"},status:"published",approvedLocales:["en","fa"],artistApproved:true,publishedAt,...(type==="event"?{event:{startsAt:"2026-11-12T18:00:00+01:00",timeZone:"Europe/Berlin",venue:{en:"Studio",fa:"آتلیه"}}}:{})});
+ const entry=(id:string,type:JournalEntry["type"],publishedAt:string):JournalEntry=>({id,slug:id,type,title:{en:id,fa:id},summary:{en:"Summary",fa:"خلاصه"},status:"published",approvedLocales:["en","fa"],artistApproved:true,publishedAt,...(type==="event"?{event:{startsAt:"2026-11-12T18:00:00+01:00",timeZone:"Europe/Berlin",venue:{en:"Sample venue",fa:"محل نمونه"},address:{en:"1 Example Street, Berlin, Germany",fa:"خیابان نمونه ۱، برلین، آلمان"},attendanceMode:"in-person" as const}}:{})});
  const items=[entry("old-story","story","2026-10-01T10:00:00Z"),entry("new-event","event","2026-10-29T10:00:00Z"),entry("middle-exhibition","exhibition","2026-10-15T10:00:00Z"),entry("newest-story","story","2026-10-30T10:00:00Z"),entry("local-later-date","story","2026-10-30T00:30:00+02:00"),entry("later-instant","exhibition","2026-10-29T23:00:00Z"),{...entry("draft","story","2026-10-31T10:00:00Z"),status:"draft" as const}];
  assert.deepEqual(getHomepageJournalPreview(items,"en").map(item=>item.id),["newest-story"]);
  assert.deepEqual(getHomepageJournalPreview(items,"fa").map(item=>item.id),["newest-story"]);
@@ -368,7 +368,7 @@ test("upcoming Journal event selection excludes ongoing events and uses stable t
  const makeEvent=(id:string,startsAt:string,endsAt?:string,type:JournalEntry["type"]="event"):JournalEntry=>({
   id,slug:id,type,title:{en:id,fa:id},summary:{en:"Summary",fa:"خلاصه"},status:"published",
   approvedLocales:["en","fa"],artistApproved:true,
-  event:{startsAt,timeZone:"Europe/London",venue:{en:"Gallery",fa:"گالری"},...(endsAt?{endsAt}:{})}
+  event:{startsAt,timeZone:"Europe/London",venue:{en:"Sample gallery",fa:"گالری نمونه"},address:{en:"2 Example Road, London, United Kingdom",fa:"خیابان نمونه ۲، لندن، بریتانیا"},attendanceMode:"in-person",...(endsAt?{endsAt}:{})}
  });
  const items=[
   makeEvent("ongoing","2026-11-01T10:00:00Z","2026-11-01T14:00:00Z"),
@@ -460,8 +460,8 @@ test("event publication requires an explicit event category, attendance mode, an
  assert.ok(missingAddress.some(issue=>issue.path.endsWith(".event.address.fa")));
  const complete:JournalEntry={...base,event:{...base.event!,address:{en:"1 Example Street, Berlin, Germany",fa:"خیابان نمونه ۱، برلین، آلمان"}}};
  assert.deepEqual(validatePortfolioContent({...validPortfolioSource,journalEntries:[complete]}),[]);
- const misplaced=validatePortfolioContent({...validPortfolioSource,journalEntries:[{...complete,type:"exhibition"}]});
- assert.ok(misplaced.some(issue=>issue.path.endsWith(".event")));
+ const exhibitionWithOpening:JournalEntry={...complete,type:"exhibition"};
+ assert.deepEqual(validatePortfolioContent({...validPortfolioSource,journalEntries:[exhibitionWithOpening]}),[]);
 });
 
 test("synthetic portfolio registry passes cross-record validation",()=>{
