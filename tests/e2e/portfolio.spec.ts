@@ -388,7 +388,7 @@ for (const viewportWidth of [320, 360, 390, 430] as const) {
 
 
 for (const locale of locales) {
-  test(locale + " artwork detail returns to the originating Works archive page and page size", async ({ page }) => {
+  test(locale + " artwork detail returns to the originating Works archive page and page size", async ({ page }, testInfo) => {
     await page.setViewportSize({ width: 1280, height: 800 });
     await page.goto("/" + locale + "/works?page=2&pageSize=10");
     const cards = archiveItemLinks(page, "works");
@@ -403,6 +403,7 @@ for (const locale of locales) {
     await cards.first().click();
     const backLink = page.getByRole("link", { name: locale === "fa" ? "بازگشت به آثار" : "Back to Artworks" });
     await expect(backLink).toBeVisible();
+    await page.screenshot({ path: testInfo.outputPath("artwork-detail-return-desktop-light.png"), fullPage: true });
     await expect(backLink).toHaveAttribute("href", "/" + locale + "/works?page=2&pageSize=10");
 
     await page.reload();
@@ -425,7 +426,7 @@ for (const locale of locales) {
     await expect(page.locator(".artwork-pagination select")).toHaveValue("10");
   });
 
-  test(locale + " artwork detail uses a safe Works fallback for direct and invalid return context", async ({ page }) => {
+  test(locale + " artwork detail uses a safe Works fallback for direct and invalid return context", async ({ page }, testInfo) => {
     await page.goto("/" + locale + "/works");
     const cards = archiveItemLinks(page, "works");
     if (await cards.count() === 0) {
@@ -450,6 +451,8 @@ for (const locale of locales) {
       document: document.documentElement.scrollWidth,
     }));
     expect(dimensions.document).toBeLessThanOrEqual(dimensions.viewport);
+    await page.evaluate(() => document.documentElement.classList.add("dark"));
+    await page.screenshot({ path: testInfo.outputPath("artwork-detail-return-mobile-dark.png"), fullPage: true });
 
     const canonical = page.locator('link[rel="canonical"]');
     await expect(canonical).toHaveAttribute("href", new RegExp("/" + locale + "/works/"));
