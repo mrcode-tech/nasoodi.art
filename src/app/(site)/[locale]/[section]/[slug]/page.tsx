@@ -17,7 +17,7 @@ import { getLocalizedSlug, matchesLocalizedSlug } from "@/lib/content/paths";
 import { formatLocaleNumber } from "@/lib/locale-number";
 import { resolveArtworkReturnHref } from "@/lib/artwork-return-navigation";
 import { getArtworkStructuredData,getGalleryStructuredData,getJournalStructuredData,serializeJsonLd } from "@/lib/seo/structured-data";
-type DetailProps={params:Promise<{locale:string;section:string;slug:string}>;searchParams:Promise<{fromGallery?:string|string[];returnTo?:string|string[]}>};
+type DetailProps={params:Promise<{locale:string;section:string;slug:string}>;searchParams:Promise<{fromGallery?:string;returnTo?:string|string[]}>};
 export async function generateMetadata({params}:DetailProps):Promise<Metadata>{
  const {locale,section,slug}=await params;
  if(!isLocale(locale))return {};
