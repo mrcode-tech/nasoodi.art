@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Analytics } from "@vercel/analytics/next";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages, setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
@@ -94,5 +95,6 @@ export default async function LocaleLayout({ children, params }: { children: Rea
   return <html lang={locale} dir={getLocaleDirection(locale)} suppressHydrationWarning><body><NextIntlClientProvider locale={locale} messages={messages}><ThemeProvider>
     <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeJsonLd(getPortfolioStructuredData(locale)) }} />
     <SiteShell locale={locale} announcement={announcement}>{children}</SiteShell>
+    <Analytics />
   </ThemeProvider></NextIntlClientProvider></body></html>;
 }
