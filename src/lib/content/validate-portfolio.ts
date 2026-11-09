@@ -183,9 +183,6 @@ export function validatePortfolioContent(source: PortfolioContentSource): Conten
         }
       }
     }
-    if (entry.event && entry.type !== "event") {
-      issues.push({ path: path + ".event", message: "Only Journal entries categorized as event may contain event details." });
-    }
     if (entry.type === "event" && !entry.event) {
       issues.push({ path: path + ".event", message: "An event entry requires explicit event details." });
     }
