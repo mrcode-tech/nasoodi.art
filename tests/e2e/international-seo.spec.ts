@@ -44,8 +44,10 @@ test("published detail routes expose reciprocal localized alternates", async ({ 
     expect(englishPath).toMatch(new RegExp("^/en/" + section + "/[^/?]+"));
     expect((await request.get(englishPath!)).status()).toBe(200);
 
+    const englishCanonical = "https://nasoodi.art" + new URL(englishPath!, "https://nasoodi.art").pathname;
     await page.goto(englishPath!);
-    await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", "https://nasoodi.art" + englishPath);
+    await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", englishCanonical);
+    await expect(page.locator('link[rel="canonical"]')).not.toHaveAttribute("href", /returnTo=/);
     const persianAlternate = await page.locator('link[rel="alternate"][hreflang="fa"]').getAttribute("href");
     expect(persianAlternate).toMatch(new RegExp("^https://nasoodi\\.art/fa/" + section + "/"));
     const persianPath = new URL(persianAlternate!).pathname;
@@ -54,7 +56,7 @@ test("published detail routes expose reciprocal localized alternates", async ({ 
     await page.goto(persianPath);
     await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", persianAlternate!);
     await expect(page.locator('link[rel="alternate"][hreflang="en"]'))
-      .toHaveAttribute("href", "https://nasoodi.art" + englishPath);
+      .toHaveAttribute("href", englishCanonical);
   }
 });
 
