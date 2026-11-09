@@ -385,3 +385,74 @@ for (const viewportWidth of [320, 360, 390, 430] as const) {
     }
   });
 }
+
+
+for (const locale of locales) {
+  test(locale + " artwork detail returns to the originating Works archive page and page size", async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 800 });
+    await page.goto("/" + locale + "/works?page=2&pageSize=10");
+    const cards = archiveItemLinks(page, "works");
+    if (await page.locator(".artwork-pagination select").count() === 0 ||
+        await page.locator(".artwork-pagination select").inputValue() !== "10" ||
+        new URL(page.url()).searchParams.get("page") !== "2") {
+      test.skip(true, "The current Works archive does not contain enough published records for page 2 at page size 10.");
+      return;
+    }
+
+    const firstArchiveItem = await cards.first().getAttribute("href");
+    await cards.first().click();
+    const backLink = page.getByRole("link", { name: locale === "fa" ? "بازگشت به آثار" : "Back to Artworks" });
+    await expect(backLink).toBeVisible();
+    await expect(backLink).toHaveAttribute("href", "/" + locale + "/works?page=2&pageSize=10");
+
+    await page.reload();
+    await expect(backLink).toHaveAttribute("href", "/" + locale + "/works?page=2&pageSize=10");
+    const detailPath = new URL(page.url()).pathname;
+    await backLink.click();
+    const isRestoredArchive = (url: URL) =>
+      url.pathname === "/" + locale + "/works" &&
+      url.searchParams.get("page") === "2" &&
+      url.searchParams.get("pageSize") === "10";
+    await expect(page).toHaveURL(isRestoredArchive);
+    await expect(page.locator(".artwork-pagination select")).toHaveValue("10");
+    await expect(cards.first()).toHaveAttribute("href", firstArchiveItem ?? "");
+
+    await page.goBack();
+    await expect(page).toHaveURL((url) => url.pathname === detailPath);
+    await expect(backLink).toHaveAttribute("href", "/" + locale + "/works?page=2&pageSize=10");
+    await page.goForward();
+    await expect(page).toHaveURL(isRestoredArchive);
+    await expect(page.locator(".artwork-pagination select")).toHaveValue("10");
+  });
+
+  test(locale + " artwork detail uses a safe Works fallback for direct and invalid return context", async ({ page }) => {
+    await page.goto("/" + locale + "/works");
+    const cards = archiveItemLinks(page, "works");
+    if (await cards.count() === 0) {
+      test.skip(true, "The Works archive currently has no published artwork route to use for this route smoke test.");
+      return;
+    }
+
+    const detailHref = await cards.first().getAttribute("href");
+    if (!detailHref) throw new Error("A published artwork card must expose its detail href.");
+    const detailPath = new URL(detailHref, page.url()).pathname;
+
+    await page.goto(detailPath);
+    const backLink = page.getByRole("link", { name: locale === "fa" ? "بازگشت به آثار" : "Back to Artworks" });
+    await expect(backLink).toHaveAttribute("href", "/" + locale + "/works");
+
+    await page.goto(detailPath + "?returnTo=" + encodeURIComponent("https://example.invalid/"));
+    await expect(backLink).toHaveAttribute("href", "/" + locale + "/works");
+
+    await page.setViewportSize({ width: 390, height: 844 });
+    const dimensions = await page.evaluate(() => ({
+      viewport: document.documentElement.clientWidth,
+      document: document.documentElement.scrollWidth,
+    }));
+    expect(dimensions.document).toBeLessThanOrEqual(dimensions.viewport);
+
+    const canonical = page.locator('link[rel="canonical"]');
+    await expect(canonical).toHaveAttribute("href", new RegExp("/" + locale + "/works/"));
+    await expect(canonical).not.toHaveAttribute("href", /returnTo=/);
+  });
+}
