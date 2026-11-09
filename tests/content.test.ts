@@ -247,15 +247,21 @@ test("Journal Article structured data uses only localized visible editorial fiel
  assert.equal(schema.datePublished,"2026-10-20T10:00:00Z");
  assert.deepEqual(schema.author,{"@id":"https://nasoodi.art/#artist"});
 });
-test("Journal Event structured data includes confirmed dates, attendance mode, and venue only",()=>{
- const entry:JournalEntry={id:"event",slug:"event",type:"event",title:{en:"Opening",fa:"افتتاحیه"},summary:{en:"Opening night",fa:"شب افتتاحیه"},status:"published",approvedLocales:["en","fa"],artistApproved:true,event:{startsAt:"2026-11-12T18:00:00+01:00",endsAt:"2026-11-12T21:00:00+01:00",timeZone:"Europe/Berlin",venue:{en:"Studio",fa:"آتلیه"},attendanceMode:"hybrid"}};
- const schema=getJournalStructuredData(entry,"en","https://nasoodi.art/en/journal/event");
+test("Journal Event structured data requires genuine event type and complete physical and virtual venue details",()=>{
+ const entry:JournalEntry={id:"event-fixture",slug:"event-fixture",type:"event",title:{en:"Synthetic event",fa:"رویداد نمونه"},summary:{en:"Synthetic event summary",fa:"خلاصه رویداد نمونه"},status:"published",approvedLocales:["en","fa"],artistApproved:true,event:{startsAt:"2026-11-12T18:00:00+01:00",endsAt:"2026-11-12T21:00:00+01:00",timeZone:"Europe/Berlin",venue:{en:"Sample venue",fa:"محل نمونه"},address:{en:"1 Example Street, Berlin, Germany",fa:"خیابان نمونه ۱، برلین، آلمان"},onlineUrl:"https://example.org/live",attendanceMode:"hybrid"}};
+ const schema=getJournalStructuredData(entry,"en","https://nasoodi.art/en/journal/event-fixture");
  assert.equal(schema["@type"],"Event");
  assert.equal(schema.startDate,"2026-11-12T18:00:00+01:00");
  assert.equal(schema.endDate,"2026-11-12T21:00:00+01:00");
  assert.equal(schema.eventAttendanceMode,"https://schema.org/MixedEventAttendanceMode");
- assert.deepEqual(schema.location,{"@type":"Place",name:"Studio"});
+ assert.deepEqual(schema.location,{"@type":"Place",name:"Sample venue",address:{"@type":"PostalAddress",streetAddress:"1 Example Street, Berlin, Germany"}});
+ assert.deepEqual(schema.virtualLocation,{"@type":"VirtualLocation",url:"https://example.org/live"});
  assert.equal("offers" in schema,false);
+
+ const incomplete={...entry,event:{...entry.event!,address:undefined}};
+ assert.equal(getJournalStructuredData(incomplete,"en","https://nasoodi.art/en/journal/event-fixture")["@type"],"Article");
+ const articleWithEventData={...entry,type:"exhibition" as const};
+ assert.equal(getJournalStructuredData(articleWithEventData,"en","https://nasoodi.art/en/journal/event-fixture")["@type"],"Article");
 });
 
 test("gallery structured data lists only its published localized artworks in editorial order",()=>{
@@ -445,6 +451,17 @@ test("portfolio validation requires complete localized Journal bodies for publis
  const entry:JournalEntry={...validJournalEntry,body:{en:validJournalEntry.body?.en}};
  const issues=validatePortfolioContent({...validPortfolioSource,journalEntries:[entry]});
  assert.ok(issues.some(issue=>issue.path.endsWith(".body.fa")));
+});
+
+test("event publication requires an explicit event category, attendance mode, and complete location",()=>{
+ const base:JournalEntry={...validJournalEntry,id:"event-fixture",slug:"event-fixture",type:"event",event:{startsAt:"2026-11-12T18:00:00+01:00",timeZone:"Europe/Berlin",venue:{en:"Sample venue",fa:"محل نمونه"},attendanceMode:"in-person"}};
+ const missingAddress=validatePortfolioContent({...validPortfolioSource,journalEntries:[base]});
+ assert.ok(missingAddress.some(issue=>issue.path.endsWith(".event.address.en")));
+ assert.ok(missingAddress.some(issue=>issue.path.endsWith(".event.address.fa")));
+ const complete:JournalEntry={...base,event:{...base.event!,address:{en:"1 Example Street, Berlin, Germany",fa:"خیابان نمونه ۱، برلین، آلمان"}}};
+ assert.deepEqual(validatePortfolioContent({...validPortfolioSource,journalEntries:[complete]}),[]);
+ const misplaced=validatePortfolioContent({...validPortfolioSource,journalEntries:[{...complete,type:"exhibition"}]});
+ assert.ok(misplaced.some(issue=>issue.path.endsWith(".event")));
 });
 
 test("synthetic portfolio registry passes cross-record validation",()=>{
