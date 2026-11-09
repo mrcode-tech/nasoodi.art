@@ -13,6 +13,7 @@ import {
   type GalleryPageSize,
 } from "@/lib/gallery-pagination";
 import { formatLocaleNumber } from "@/lib/locale-number";
+import { buildArtworkReturnHref } from "@/lib/artwork-return-navigation";
 import { getLocalizedSlug } from "@/lib/content/paths";
 import { getLocaleDirection, pagePath, type Locale } from "@/types/locale";
 import type { Artwork } from "@/types/content";
@@ -41,6 +42,7 @@ export function ArtworkIndex({ artworks, locale, labels }: Props) {
   }, [pathname, queryString, router, state.page, state.pageSize]);
 
   const visible = paginateItems(artworks, state);
+  const returnTo = buildArtworkReturnHref(locale, state.page, state.pageSize);
   const showing = locale === "fa"
     ? "نمایش {start} تا {end} از {total} اثر"
     : "Showing {start}–{end} of {total} artworks";
@@ -73,7 +75,7 @@ export function ArtworkIndex({ artworks, locale, labels }: Props) {
           );
           if (!image) return null;
           return (
-            <Link className="artwork-item" role="listitem" key={artwork.id} href={pagePath(locale, `works/${getLocalizedSlug(artwork, locale)}`)}>
+            <Link className="artwork-item" role="listitem" key={artwork.id} href={`${pagePath(locale, `works/${getLocalizedSlug(artwork, locale)}`)}?returnTo=${encodeURIComponent(returnTo)}`}>
               <Image sizes="(max-width: 600px) 100vw, (max-width: 900px) 90vw, 50vw"
                 src={image.src} alt={image.alt[locale] ?? ""} width={image.width} height={image.height} />
               <span>{artwork.title[locale]}</span>

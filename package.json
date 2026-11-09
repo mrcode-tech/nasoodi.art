@@ -9,7 +9,7 @@
     "start": "next start",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
-    "test": "tsc --resolveJsonModule --module commonjs --target es2022 --moduleResolution node --strict --esModuleInterop --skipLibCheck --outDir .test-build tests/content.test.ts tests/gallery-pagination.test.ts tests/seo.test.ts src/lib/gallery-pagination.ts src/lib/locale-number.ts && node --test .test-build/tests/content.test.js .test-build/tests/gallery-pagination.test.js .test-build/tests/seo.test.js",
+    "test": "tsc --resolveJsonModule --module commonjs --target es2022 --moduleResolution node --strict --esModuleInterop --skipLibCheck --outDir .test-build tests/content.test.ts tests/gallery-pagination.test.ts tests/artwork-return-navigation.test.ts tests/seo.test.ts src/lib/gallery-pagination.ts src/lib/artwork-return-navigation.ts src/lib/locale-number.ts && node --test .test-build/tests/content.test.js .test-build/tests/gallery-pagination.test.js .test-build/tests/artwork-return-navigation.test.js .test-build/tests/seo.test.js",
     "test:e2e": "playwright test",
     "prebuild": "npm run images:check",
     "audit:i18n": "node scripts/audit-i18n-messages.mjs",

@@ -38,6 +38,8 @@ This directory documents application architecture, interface behavior, design sy
 - Artwork discovery and responsive carousels: artwork-discovery-carousel-and-editorial-experience.md
 - Gallery index and pagination: galleries-index-cards-and-pagination.md
 - Gallery collections and artwork detail: gallery-collections-and-artwork-detail.md
+- Artwork detail return navigation proposal: artwork-detail-return-navigation.md
+- Artwork detail return navigation implementation prompt: artwork-detail-return-navigation-implementation-prompt.md
 - About and CV layout: artist-about-page-and-mobile-hero.md
 - Journal and events: journal-and-events.md
 - Configurable content announcement sticker: journal-announcement-specification.md
@@ -71,4 +73,4 @@ The most specific active technical specification governs its domain. Shared arch
 
 ## Change and release boundaries
 
-Work only on the explicitly authorized branch. Inspect repository state before editing, keep changes focused, run relevant checks and the complete CI workflow, and report exact commit and CI evidence. CI completion does not authorize merging, deployment, or publication.
+Work only on the explicitly authorized branch. Inspect repository state before editing, keep changes focused, run relevant checks and the complete CI workflow, and report exact commit and CI evidence. CI completion does not authorize merging or deployment.
