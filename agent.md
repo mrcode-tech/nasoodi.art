@@ -309,7 +309,7 @@ Use a single-column mobile flow. The two actions must never separate the image f
 - Do not index pending/unapproved biography.
 - Reserve image dimensions to avoid layout shift.
 - Do not preload the CV PDF; it should be fetched on visitor activation.
-- Do not introduce analytics or third-party requests.
+- Do not introduce analytics or third-party requests without explicit specification and owner approval. Vercel Web Analytics (`@vercel/analytics`) is explicitly owner-approved for the current feature-branch implementation.
 
 ## 9. Required automated tests
 
