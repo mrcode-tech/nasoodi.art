@@ -183,6 +183,12 @@ export function validatePortfolioContent(source: PortfolioContentSource): Conten
         }
       }
     }
+    if (entry.event && entry.type !== "event") {
+      issues.push({ path: path + ".event", message: "Only Journal entries categorized as event may contain event details." });
+    }
+    if (entry.type === "event" && !entry.event) {
+      issues.push({ path: path + ".event", message: "An event entry requires explicit event details." });
+    }
     if (entry.event) {
       const event = entry.event;
       if (!isValidExplicitDate(event.startsAt)) issues.push({ path: path + ".event.startsAt", message: "Event start must include an explicit UTC offset or Z." });
@@ -193,6 +199,20 @@ export function validatePortfolioContent(source: PortfolioContentSource): Conten
       else {
         try { new Intl.DateTimeFormat("en", { timeZone: event.timeZone }); }
         catch { issues.push({ path: path + ".event.timeZone", message: "Invalid IANA time zone " + event.timeZone + "." }); }
+      }
+      if (!event.attendanceMode) {
+        issues.push({ path: path + ".event.attendanceMode", message: "An explicit attendance mode is required for events." });
+      }
+      if (event.attendanceMode === "in-person" || event.attendanceMode === "hybrid") {
+        for (const locale of locales) {
+          if (!event.venue?.[locale]?.trim()) issues.push({ path: path + ".event.venue." + locale, message: "In-person events require a localized venue name." });
+          if (!event.address?.[locale]?.trim()) issues.push({ path: path + ".event.address." + locale, message: "In-person events require a localized full venue address." });
+        }
+      }
+      if (event.attendanceMode === "online" || event.attendanceMode === "hybrid") {
+        if (!event.onlineUrl || !/^https:\/\//i.test(event.onlineUrl) || !isSafeJournalHref(event.onlineUrl)) {
+          issues.push({ path: path + ".event.onlineUrl", message: "Online events require a safe HTTPS virtual venue URL." });
+        }
       }
       if (event.registrationUrl && !isSafeJournalHref(event.registrationUrl)) {
         issues.push({ path: path + ".event.registrationUrl", message: "Registration links must use HTTPS or a same-origin path." });
