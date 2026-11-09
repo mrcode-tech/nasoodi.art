@@ -37,7 +37,11 @@ export type JournalEvent = {
   endsAt?: string;
   timeZone: string;
   venue?: Localized;
+  /** Full venue address, required for in-person and hybrid event publication. */
+  address?: Localized;
   attendanceMode?: "in-person" | "online" | "hybrid";
+  /** Public URL for the virtual venue, required for online and hybrid events. */
+  onlineUrl?: string;
   registrationUrl?: string;
 };
 export type JournalCategory = "exhibition" | "event" | "studio-update" | "story";

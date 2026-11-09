@@ -89,7 +89,7 @@ test("event entries require a valid time zone and occurrence time",()=>{
  assert.equal(hasExplicitTimeZone("2026-11-12T18:00:00"),false);
  assert.equal(hasExplicitTimeZone("2026-11-12T18:00:00+01:00"),true);
  assert.equal(hasExplicitTimeZone("2026-11-12T17:00:00Z"),true);
- const valid:JournalEntry={...base,event:{startsAt:"2026-11-12T18:00:00+01:00",timeZone:"Europe/Berlin",venue:{en:"Studio",fa:"آتلیه"}}};
+ const valid:JournalEntry={...base,event:{startsAt:"2026-11-12T18:00:00+01:00",timeZone:"Europe/Berlin",venue:{en:"Sample venue",fa:"محل نمونه"},address:{en:"1 Example Street, Berlin, Germany",fa:"خیابان نمونه ۱، برلین، آلمان"},attendanceMode:"in-person"}};
  assert.equal(getPublicJournal([valid],"en").length,1);
  assert.equal(getPublicJournal([{...valid,event:{...valid.event!,timeZone:"Not/AZone"}}],"en").length,0);
  assert.equal(getPublicJournal([{...valid,event:{...valid.event!,startsAt:"2026-11-12T18:00:00"}}],"en").length,0);
@@ -185,7 +185,7 @@ test("homepage upcoming events are future-dated, locale-approved, and ordered by
  const event=(id:string,startsAt:string):JournalEntry=>({
   id,slug:id,type:"event",title:{en:id,fa:id},summary:{en:"Summary",fa:"خلاصه"},
   status:"published",approvedLocales:["en","fa"],artistApproved:true,
-  event:{startsAt,timeZone:"Europe/Berlin",venue:{en:"Studio",fa:"آتلیه"}}
+  event:{startsAt,timeZone:"Europe/Berlin",venue:{en:"Sample venue",fa:"محل نمونه"},address:{en:"1 Example Street, Berlin, Germany",fa:"خیابان نمونه ۱، برلین، آلمان"},attendanceMode:"in-person"}
  });
  const now=new Date("2026-10-30T12:00:00Z");
  const items=[
@@ -247,15 +247,21 @@ test("Journal Article structured data uses only localized visible editorial fiel
  assert.equal(schema.datePublished,"2026-10-20T10:00:00Z");
  assert.deepEqual(schema.author,{"@id":"https://nasoodi.art/#artist"});
 });
-test("Journal Event structured data includes confirmed dates, attendance mode, and venue only",()=>{
- const entry:JournalEntry={id:"event",slug:"event",type:"event",title:{en:"Opening",fa:"افتتاحیه"},summary:{en:"Opening night",fa:"شب افتتاحیه"},status:"published",approvedLocales:["en","fa"],artistApproved:true,event:{startsAt:"2026-11-12T18:00:00+01:00",endsAt:"2026-11-12T21:00:00+01:00",timeZone:"Europe/Berlin",venue:{en:"Studio",fa:"آتلیه"},attendanceMode:"hybrid"}};
- const schema=getJournalStructuredData(entry,"en","https://nasoodi.art/en/journal/event");
+test("Journal Event structured data requires genuine event type and complete physical and virtual venue details",()=>{
+ const entry:JournalEntry={id:"event-fixture",slug:"event-fixture",type:"event",title:{en:"Synthetic event",fa:"رویداد نمونه"},summary:{en:"Synthetic event summary",fa:"خلاصه رویداد نمونه"},status:"published",approvedLocales:["en","fa"],artistApproved:true,event:{startsAt:"2026-11-12T18:00:00+01:00",endsAt:"2026-11-12T21:00:00+01:00",timeZone:"Europe/Berlin",venue:{en:"Sample venue",fa:"محل نمونه"},address:{en:"1 Example Street, Berlin, Germany",fa:"خیابان نمونه ۱، برلین، آلمان"},onlineUrl:"https://example.org/live",attendanceMode:"hybrid"}};
+ const schema=getJournalStructuredData(entry,"en","https://nasoodi.art/en/journal/event-fixture");
  assert.equal(schema["@type"],"Event");
  assert.equal(schema.startDate,"2026-11-12T18:00:00+01:00");
  assert.equal(schema.endDate,"2026-11-12T21:00:00+01:00");
  assert.equal(schema.eventAttendanceMode,"https://schema.org/MixedEventAttendanceMode");
- assert.deepEqual(schema.location,{"@type":"Place",name:"Studio"});
+ assert.deepEqual(schema.location,{"@type":"Place",name:"Sample venue",address:{"@type":"PostalAddress",streetAddress:"1 Example Street, Berlin, Germany"}});
+ assert.deepEqual(schema.virtualLocation,{"@type":"VirtualLocation",url:"https://example.org/live"});
  assert.equal("offers" in schema,false);
+
+ const incomplete={...entry,event:{...entry.event!,address:undefined}};
+ assert.equal(getJournalStructuredData(incomplete,"en","https://nasoodi.art/en/journal/event-fixture")["@type"],"Article");
+ const articleWithEventData={...entry,type:"exhibition" as const};
+ assert.equal(getJournalStructuredData(articleWithEventData,"en","https://nasoodi.art/en/journal/event-fixture")["@type"],"Article");
 });
 
 test("gallery structured data lists only its published localized artworks in editorial order",()=>{
@@ -315,7 +321,7 @@ test("gallery publication supports overlapping collections and unassigned artwor
 });
 
 test("homepage Journal preview selects only the newest published entry across article and event types", () => {
- const entry=(id:string,type:JournalEntry["type"],publishedAt:string):JournalEntry=>({id,slug:id,type,title:{en:id,fa:id},summary:{en:"Summary",fa:"خلاصه"},status:"published",approvedLocales:["en","fa"],artistApproved:true,publishedAt,...(type==="event"?{event:{startsAt:"2026-11-12T18:00:00+01:00",timeZone:"Europe/Berlin",venue:{en:"Studio",fa:"آتلیه"}}}:{})});
+ const entry=(id:string,type:JournalEntry["type"],publishedAt:string):JournalEntry=>({id,slug:id,type,title:{en:id,fa:id},summary:{en:"Summary",fa:"خلاصه"},status:"published",approvedLocales:["en","fa"],artistApproved:true,publishedAt,...(type==="event"?{event:{startsAt:"2026-11-12T18:00:00+01:00",timeZone:"Europe/Berlin",venue:{en:"Sample venue",fa:"محل نمونه"},address:{en:"1 Example Street, Berlin, Germany",fa:"خیابان نمونه ۱، برلین، آلمان"},attendanceMode:"in-person" as const}}:{})});
  const items=[entry("old-story","story","2026-10-01T10:00:00Z"),entry("new-event","event","2026-10-29T10:00:00Z"),entry("middle-exhibition","exhibition","2026-10-15T10:00:00Z"),entry("newest-story","story","2026-10-30T10:00:00Z"),entry("local-later-date","story","2026-10-30T00:30:00+02:00"),entry("later-instant","exhibition","2026-10-29T23:00:00Z"),{...entry("draft","story","2026-10-31T10:00:00Z"),status:"draft" as const}];
  assert.deepEqual(getHomepageJournalPreview(items,"en").map(item=>item.id),["newest-story"]);
  assert.deepEqual(getHomepageJournalPreview(items,"fa").map(item=>item.id),["newest-story"]);
@@ -362,7 +368,7 @@ test("upcoming Journal event selection excludes ongoing events and uses stable t
  const makeEvent=(id:string,startsAt:string,endsAt?:string,type:JournalEntry["type"]="event"):JournalEntry=>({
   id,slug:id,type,title:{en:id,fa:id},summary:{en:"Summary",fa:"خلاصه"},status:"published",
   approvedLocales:["en","fa"],artistApproved:true,
-  event:{startsAt,timeZone:"Europe/London",venue:{en:"Gallery",fa:"گالری"},...(endsAt?{endsAt}:{})}
+  event:{startsAt,timeZone:"Europe/London",venue:{en:"Sample gallery",fa:"گالری نمونه"},address:{en:"2 Example Road, London, United Kingdom",fa:"خیابان نمونه ۲، لندن، بریتانیا"},attendanceMode:"in-person",...(endsAt?{endsAt}:{})}
  });
  const items=[
   makeEvent("ongoing","2026-11-01T10:00:00Z","2026-11-01T14:00:00Z"),
@@ -445,6 +451,17 @@ test("portfolio validation requires complete localized Journal bodies for publis
  const entry:JournalEntry={...validJournalEntry,body:{en:validJournalEntry.body?.en}};
  const issues=validatePortfolioContent({...validPortfolioSource,journalEntries:[entry]});
  assert.ok(issues.some(issue=>issue.path.endsWith(".body.fa")));
+});
+
+test("event publication requires an explicit event category, attendance mode, and complete location",()=>{
+ const base:JournalEntry={...validJournalEntry,id:"event-fixture",slug:"event-fixture",type:"event",event:{startsAt:"2026-11-12T18:00:00+01:00",timeZone:"Europe/Berlin",venue:{en:"Sample venue",fa:"محل نمونه"},attendanceMode:"in-person"}};
+ const missingAddress=validatePortfolioContent({...validPortfolioSource,journalEntries:[base]});
+ assert.ok(missingAddress.some(issue=>issue.path.endsWith(".event.address.en")));
+ assert.ok(missingAddress.some(issue=>issue.path.endsWith(".event.address.fa")));
+ const complete:JournalEntry={...base,event:{...base.event!,address:{en:"1 Example Street, Berlin, Germany",fa:"خیابان نمونه ۱، برلین، آلمان"}}};
+ assert.deepEqual(validatePortfolioContent({...validPortfolioSource,journalEntries:[complete]}),[]);
+ const exhibitionWithOpening:JournalEntry={...complete,type:"exhibition"};
+ assert.deepEqual(validatePortfolioContent({...validPortfolioSource,journalEntries:[exhibitionWithOpening]}),[]);
 });
 
 test("synthetic portfolio registry passes cross-record validation",()=>{

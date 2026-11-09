@@ -73,24 +73,42 @@ export function getJournalStructuredData(
     inLanguage: locale,
   };
 
-  if (entry.event) {
-    const attendanceModes = {
-      "in-person": "https://schema.org/OfflineEventAttendanceMode",
-      online: "https://schema.org/OnlineEventAttendanceMode",
-      hybrid: "https://schema.org/MixedEventAttendanceMode",
-    } as const;
+  const event = entry.type === "event" ? entry.event : undefined;
+  const attendanceModes = {
+    "in-person": "https://schema.org/OfflineEventAttendanceMode",
+    online: "https://schema.org/OnlineEventAttendanceMode",
+    hybrid: "https://schema.org/MixedEventAttendanceMode",
+  } as const;
+  const hasPhysicalLocation = Boolean(event?.venue?.[locale]?.trim() && event.address?.[locale]?.trim());
+  const hasVirtualLocation = Boolean(event?.onlineUrl && /^https:\/\//i.test(event.onlineUrl));
 
+  // Do not emit Event JSON-LD for article/exhibition records or incomplete event details.
+  // A real event needs an explicit attendance mode and the corresponding venue details.
+  const hasCompleteEventLocation = event?.attendanceMode === "in-person"
+    ? hasPhysicalLocation
+    : event?.attendanceMode === "online"
+      ? hasVirtualLocation
+      : event?.attendanceMode === "hybrid"
+        ? hasPhysicalLocation && hasVirtualLocation
+        : false;
+
+  if (event && hasCompleteEventLocation) {
     return {
       ...common,
       "@type": "Event",
-      startDate: entry.event.startsAt,
-      ...(entry.event.endsAt ? { endDate: entry.event.endsAt } : {}),
-      ...(entry.event.attendanceMode
-        ? { eventAttendanceMode: attendanceModes[entry.event.attendanceMode] }
-        : {}),
-      ...(entry.event.venue?.[locale]
-        ? { location: { "@type": "Place", name: entry.event.venue[locale] } }
-        : {}),
+      startDate: event.startsAt,
+      ...(event.endsAt ? { endDate: event.endsAt } : {}),
+      eventAttendanceMode: attendanceModes[event.attendanceMode!],
+      ...(hasPhysicalLocation ? {
+        location: {
+          "@type": "Place",
+          name: event.venue![locale],
+          address: { "@type": "PostalAddress", streetAddress: event.address![locale] },
+        },
+      } : {}),
+      ...(hasVirtualLocation ? {
+        virtualLocation: { "@type": "VirtualLocation", url: event.onlineUrl },
+      } : {}),
     };
   }
 

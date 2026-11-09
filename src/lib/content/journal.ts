@@ -1,5 +1,5 @@
 import type { Locale } from "../../types/locale";
-import type { JournalCategory, JournalEntry } from "../../types/content";
+import type { JournalCategory, JournalEntry, JournalEvent } from "../../types/content";
 import { getLocalizedSlug, isSafeContentSlug, isSafeLocalImagePath } from "./paths";
 
 export function isSafeJournalHref(href: string): boolean {
@@ -43,6 +43,26 @@ export function hasExplicitTimeZone(value: string): boolean {
   return /(?:Z|[+-]\d{2}:\d{2})$/i.test(value) && Number.isFinite(Date.parse(value));
 }
 
+/** True only when the event has enough locale-specific, verified venue data to be published. */
+export function hasPublishableJournalEventDetails(event: JournalEvent, locale: Locale): boolean {
+  if (!hasExplicitTimeZone(event.startsAt) || !event.timeZone) return false;
+  try {
+    new Intl.DateTimeFormat(locale, { timeZone: event.timeZone });
+  } catch {
+    return false;
+  }
+  if (event.endsAt && (!hasExplicitTimeZone(event.endsAt) || Date.parse(event.endsAt) < Date.parse(event.startsAt))) return false;
+  if (event.registrationUrl && !isSafeJournalHref(event.registrationUrl)) return false;
+
+  const hasPhysicalLocation = Boolean(event.venue?.[locale]?.trim() && event.address?.[locale]?.trim());
+  const hasVirtualLocation = Boolean(event.onlineUrl && /^https:\/\//i.test(event.onlineUrl) && isSafeJournalHref(event.onlineUrl));
+
+  if (event.attendanceMode === "in-person") return hasPhysicalLocation;
+  if (event.attendanceMode === "online") return hasVirtualLocation;
+  if (event.attendanceMode === "hybrid") return hasPhysicalLocation && hasVirtualLocation;
+  return false;
+}
+
 function keepUniqueBy<T>(items: readonly T[], keyOf: (item: T) => string): T[] {
   const counts = new Map<string, number>();
   for (const item of items) {
@@ -68,27 +88,7 @@ export function getPublicJournal(items: readonly JournalEntry[], locale: Locale)
     ) return false;
 
     if (entry.type === "event" && !entry.event) return false;
-    if (!entry.event) return true;
-
-    const event = entry.event;
-    if (
-      !hasExplicitTimeZone(event.startsAt) ||
-      !event.timeZone ||
-      (!event.venue?.[locale]?.trim() && !event.attendanceMode)
-    ) return false;
-
-    try {
-      new Intl.DateTimeFormat(locale, { timeZone: event.timeZone });
-    } catch {
-      return false;
-    }
-
-    if (
-      event.endsAt &&
-      (!hasExplicitTimeZone(event.endsAt) || Date.parse(event.endsAt) < Date.parse(event.startsAt))
-    ) return false;
-
-    if (event.registrationUrl && !isSafeJournalHref(event.registrationUrl)) return false;
+    if (entry.event && !hasPublishableJournalEventDetails(entry.event, locale)) return false;
     return true;
   });
 
