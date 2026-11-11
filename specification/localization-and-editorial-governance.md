@@ -2,7 +2,7 @@
 
 ## Canonical localized content
 
-Editorial content is stored in the canonical JSON records under `src/content/data/`. English and Persian values belong to the same record. Interface labels remain in next-intl message resources.
+Editorial content is stored in the canonical JSON records under `src/content/data/`. English and Persian values belong to the same record. The artist's canonical identity remains in `artist-profile.json`; its locale-specific alternate-name inventory is maintained in the profile-owned `artist-name-aliases.json` child dataset. Interface labels remain in next-intl message resources.
 
 ## Locale behavior
 
@@ -19,7 +19,7 @@ Do not create parallel approved/unapproved, verified/unverified, sample/real, pr
 
 ## Writing and translation quality
 
-Use clear, natural English and Persian. Preserve artist names, dates, titles, and proper nouns consistently. Persian copy must be natural Persian, with correct punctuation and RTL behavior. UI text is translated in message resources; editorial text is localized in content JSON.
+Use clear, natural English and Persian. Preserve artist names, dates, titles, and proper nouns consistently. Persian copy must be natural Persian, with correct punctuation and RTL behavior. Maintain spelling/transliteration variants only in the dedicated artist alias inventory; do not duplicate them in UI messages or visible copy. UI text is translated in message resources; editorial text is localized in content JSON.
 
 ## Technical boundaries
 
