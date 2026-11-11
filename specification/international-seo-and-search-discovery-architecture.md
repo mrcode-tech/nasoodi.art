@@ -57,7 +57,7 @@ Artwork is primary content. Provide meaningful localized alt text for informativ
 
 Use JSON-LD to describe visible content using values present in canonical JSON; do not require verification flags. Candidate types include Person, WebSite, WebPage, VisualArtwork, CollectionPage, ItemList, Article, Event, and BreadcrumbList.
 
-Use stable entity identifiers and consistent creator/author references. Never invent awards, address, organization, reviews, ratings, prices, offers, availability, dates, venues, or affiliations. Avoid duplicate/conflicting graphs and serialize safely. Validate JSON-LD syntax and Google eligibility separately; valid markup does not guarantee rich results.
+Use stable entity identifiers and consistent creator/author references. The Person entity's canonical localized name comes from the artist profile; any `alternateName` values must come from the curated profile-owned inventory at `src/content/data/artist-name-aliases.json`, resolved through the artist repository. Include only a small reviewed set of complete-name variants; exclude partial queries, component-only variants, exploratory spellings, and generated permutations. Never invent awards, address, organization, reviews, ratings, prices, offers, availability, dates, venues, or affiliations. Avoid duplicate/conflicting graphs and serialize safely. Validate JSON-LD syntax and Google eligibility separately; valid markup does not guarantee rich results.
 
 ## 8. Sitemap, robots, and crawl paths
 
@@ -67,7 +67,7 @@ robots.txt must reference the canonical sitemap and must not block resources req
 
 ## 9. Persian and English search quality
 
-Treat both languages as independent editorial experiences, not machine-translated copies. Set document language and direction correctly (fa/RTL, en/LTR). Write natural localized titles, descriptions, headings, artwork descriptions, and alt text. Research Persian search intent independently; do not mechanically translate English keyword lists. Handle Persian/Arabic character variants consistently without altering names or source facts. Use locale-aware dates and numbers. Avoid keyword stuffing.
+Treat both languages as independent editorial experiences, not machine-translated copies. Set document language and direction correctly (fa/RTL, en/LTR). Write natural localized titles, descriptions, headings, artwork descriptions, and alt text. Research Persian search intent independently; do not mechanically translate English keyword lists. Handle Persian/Arabic character variants consistently without altering names or source facts. Use the curated artist alias inventory as editorial input for identity resolution, not as a keyword list to publish verbatim. Use locale-aware dates and numbers. Avoid keyword stuffing.
 
 ## 10. Social sharing, performance, and accessibility
 
