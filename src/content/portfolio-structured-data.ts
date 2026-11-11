@@ -1,15 +1,65 @@
 import { getArtist } from "./repositories/artist.repository";
-import type { Locale } from "../types/locale";
+import { getCv } from "./repositories/cv.repository";
+import { getContact } from "./repositories/contact.repository";
+import { getArtworks } from "./repositories/artwork.repository";
+import type { ArtistProfile, CvEntry } from "../types/content";
+import { locales, type Locale, otherLocale, pagePath } from "../types/locale";
 
-export function getPortfolioStructuredData(locale: Locale) {
-  const profile = getArtist(locale);
-  const alternateLocale: Locale = locale === "en" ? "fa" : "en";
-  const name = profile?.name?.[locale];
-  const alternateName = profile?.name?.[alternateLocale];
-  const jobTitle = profile?.discipline?.[locale];
-  if (!name || !alternateName || !jobTitle) {
+type PortfolioStructuredDataInput = {
+  profile: ArtistProfile;
+  cvEntries: readonly CvEntry[];
+  locale: Locale;
+  officialProfiles?: readonly (string | undefined)[];
+  artworkMedia?: readonly string[];
+};
+
+function uniqueNonEmpty(values: readonly (string | undefined)[]): string[] {
+  return [...new Set(values.map((value) => value?.trim()).filter((value): value is string => Boolean(value)))];
+}
+
+/**
+ * Pure structured-data mapper. It consumes only canonical, already-public
+ * profile/CV/contact/artwork values; it never creates editorial content.
+ */
+export function createPortfolioStructuredData({
+  profile,
+  cvEntries,
+  locale,
+  officialProfiles = [],
+  artworkMedia = [],
+}: PortfolioStructuredDataInput) {
+  const alternateLocale = otherLocale(locale);
+  const name = profile.name?.[locale];
+  const alternateCanonicalName = profile.name?.[alternateLocale];
+  const jobTitle = profile.discipline?.[locale];
+
+  if (!name || !alternateCanonicalName || !jobTitle) {
     throw new Error("Canonical artist identity must be complete in every supported locale before rendering structured data.");
   }
+
+  const curatedAliases = (profile.nameAliases?.[locale]?.completeName ?? [])
+    .filter((alias) => alias.confidence === "core" || alias.confidence === "supported")
+    .map((alias) => alias.value)
+    .filter((alias) => alias !== name && alias !== alternateCanonicalName)
+    .slice(0, 6);
+
+  const alternateNames = uniqueNonEmpty([alternateCanonicalName, ...curatedAliases]);
+  const education = uniqueNonEmpty(cvEntries
+    .filter((entry) => entry.category === "education")
+    .map((entry) => entry.organization?.[locale]))
+    .map((organization) => ({ "@type": "EducationalOrganization", name: organization }));
+  const memberships = uniqueNonEmpty(cvEntries
+    .filter((entry) => entry.category === "membership")
+    .map((entry) => entry.organization?.[locale]))
+    .map((organization) => ({ "@type": "Organization", name: organization }));
+  const teachingRoles = uniqueNonEmpty(cvEntries
+    .filter((entry) => entry.category === "teaching")
+    .map((entry) => entry.title[locale]));
+  const knowsAbout = uniqueNonEmpty([
+    ...(profile.interests?.[locale] ?? []),
+    ...artworkMedia,
+  ]);
+  const sameAs = uniqueNonEmpty([...officialProfiles]);
 
   return {
     "@context": "https://schema.org",
@@ -18,18 +68,44 @@ export function getPortfolioStructuredData(locale: Locale) {
         "@type": "Person",
         "@id": "https://nasoodi.art/#artist",
         name,
-        alternateName,
-        jobTitle,
-        url: "https://nasoodi.art/",
+        alternateName: alternateNames,
+        jobTitle: uniqueNonEmpty([jobTitle, ...teachingRoles]),
+        description: profile.biography[locale],
+        url: "https://nasoodi.art" + pagePath(locale, "about"),
+        ...(profile.portrait?.src ? { image: new URL(profile.portrait.src, "https://nasoodi.art").toString() } : {}),
+        ...(knowsAbout.length ? { knowsAbout } : {}),
+        ...(education.length ? { alumniOf: education } : {}),
+        ...(memberships.length ? { memberOf: memberships } : {}),
+        ...(sameAs.length ? { sameAs } : {}),
       },
       {
         "@type": "WebSite",
         "@id": "https://nasoodi.art/#website",
         name: "Nasoodi.art",
         url: "https://nasoodi.art/",
-        inLanguage: ["fa", "en"],
+        inLanguage: [...locales],
         publisher: { "@id": "https://nasoodi.art/#artist" },
       },
     ],
   } as const;
+}
+
+export function getPortfolioStructuredData(locale: Locale) {
+  const profile = getArtist(locale);
+  if (!profile) {
+    throw new Error("A published artist profile is required before rendering portfolio structured data.");
+  }
+
+  const cvEntries = getCv(locale).entries;
+  const contact = getContact(locale)?.details;
+  const officialProfiles = [contact?.instagramUrl, contact?.telegramUrl];
+  const artworkMedia = getArtworks(locale).flatMap((artwork) => artwork.medium?.[locale] ? [artwork.medium[locale]] : []);
+
+  return createPortfolioStructuredData({
+    profile,
+    cvEntries,
+    locale,
+    officialProfiles,
+    artworkMedia,
+  });
 }

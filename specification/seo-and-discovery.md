@@ -23,7 +23,7 @@ Every indexable route needs a unique accurate title and description, canonical U
 Evaluate Schema.org Person for the artist, WebSite for the portfolio, and VisualArtwork for individual artwork pages. Use Organization only if a real organization is represented. Include only confirmed facts that match visible page content. Do not create fake Offer, price, review, rating, address, Event, gallery, or affiliation data. Structured data does not guarantee rich results. Validate JSON-LD syntax and avoid duplicate conflicting schemas.
 
 ## International SEO
-Persian pages use lang=fa and dir=rtl; English pages use lang=en and dir=ltr. Use reciprocal hreflang only for genuine approved translations. Give each locale its correct canonical. Do not redirect crawlers or visitors solely by inferred location. The language switcher should open the equivalent page when available and otherwise use a clear locale-home fallback. Keep the artist's approved English transliteration consistent.
+Persian pages use lang=fa and dir=rtl; English pages use lang=en and dir=ltr. Use reciprocal hreflang only for genuine approved translations. Give each locale its correct canonical. Do not redirect crawlers or visitors solely by inferred location. The language switcher should open the equivalent page when available and otherwise use a clear locale-home fallback. Keep the artist's approved English transliteration consistent. Maintain defensible alternate spellings in the profile-owned `src/content/data/artist-name-aliases.json` inventory; do not publish a raw alias or partial-query list as page copy.
 
 ## Technical discovery
 - XML sitemap includes canonical, public, indexable URLs only.
@@ -84,3 +84,35 @@ The Contact page may be indexed only when the canonical localized title and desc
 ## Canonical repository boundary — 2026-11-05
 
 The homepage uses `getHomepageContent`; About uses `getAbout` and `getCv`; artwork/gallery/Journal detail pages use focused repositories; sitemap uses the same repositories as page rendering; and global Person structured data resolves through `getArtist`. Avoid importing JSON adapters directly into route or presentation modules. Localized detail alternates match stable IDs and then use the target record's explicit localized slug.
+
+## Semantic topic coverage for About and CV
+
+Name-based discovery should be complemented by accurate subject-based and professional-context content. The About page and CV should naturally cover the artist's real discipline, medium, techniques, education, teaching, memberships, publications, exhibitions, and other documented professional activities.
+
+Relevant vocabulary may include painter, oil painter, oil painting, contemporary painting, contemporary Iranian art, Iranian visual artist, figurative painting, painting instructor, art educator, colour, composition, and visual expression, with natural Persian equivalents such as نقاش، نقاش رنگ‌روغن، نقاشی رنگ‌روغن، نقاش معاصر، هنر معاصر ایران، هنرمند تجسمی ایرانی، نقاشی فیگوراتیو، مدرس نقاشی، رنگ و ترکیب‌بندی.
+
+Institution and organization searches should be served by the actual CV entries. Use the canonical bilingual names for documented education and memberships (for example, Alzahra University and University of Science and Culture) in visible CV content; do not create a keyword paragraph that merely lists institutions.
+
+The artist has confirmed that she studied under Nima Petgar (نیما پتگر). The About biography and/or relevant CV training entry may state this in natural English and Persian, using the accurate relationship wording “studied under Nima Petgar” / «نزد نیما پتگر آموخته است». Do not invent a degree, institution, course, date, or formal mentorship program. This teacher relationship is visible biographical content, not an institution or membership: do not place Nima Petgar in alumniOf, memberOf, or sameAs, and do not use unrelated structured-data properties to imply the relationship.
+
+The global Person graph may expose jobTitle, knowsAbout, alumniOf, and memberOf only when each property is semantically correct and supported by visible canonical content. Do not use sameAs for keywords or named entities without an official profile URL. Do not emit meta keywords, hidden text, speculative affiliations, or keyword-stuffed descriptions. Search terms are editorial guidance; they are not an additional content source or a guarantee of ranking.
+
+
+## SEO-only implementation guardrails — 2026-11-12
+
+The repository-ready implementation prompt is maintained in specification/technical-seo-implementation-prompt.md. It is the task contract for technical SEO work that must preserve the existing website.
+
+For an SEO-only task:
+
+- Treat all canonical editorial records and locale message files as read-only inputs.
+- Do not modify artist identity, spelling, biography, statement, CV, artwork, gallery, journal, event, announcement, or Contact content.
+- Do not add visible copy, headings, keyword lists, hidden text, or new editorial sections.
+- Do not change routes, localized slugs, layouts, styles, navigation, responsive behavior, localization, or application interactions.
+- Generate metadata and structured data only from existing public canonical repository values.
+- Omit unsupported properties rather than inventing or inferring facts.
+- Keep code changes limited to technical SEO modules, technical SEO tests, and specifications.
+- Require a before/after diff audit proving that canonical editorial JSON and translation messages are unchanged.
+
+The subject and professional-context vocabulary described above is guidance for evaluating existing content and metadata relevance. It is not permission to rewrite About/CV content during an SEO-only implementation. Any editorial additions require a separate explicit content-editing request.
+
+The Person graph may expose curated complete-name aliases, official public profile URLs, documented professional roles, published educational organizations, published memberships, and genuine areas of practice only when the corresponding values already exist in public canonical repositories. Do not encode a teacher-student relationship through an unrelated Schema.org property.

@@ -10,7 +10,8 @@ This directory separates owner-editable editorial JSON from TypeScript domain co
 - `data/galleries.json`: gallery metadata, cover artwork IDs, ordered artwork membership, and publication state.
 - `data/journal/index.json`: Journal identity, localized metadata, complete localized rich-text bodies, event details, and cover-artwork relationships. Each entry contains its English and Persian body as structured JSON blocks.
 - `data/homepage-selection.json`: homepage featured content IDs and ordering.
-- `data/artist-profile.json`: the single localized artist profile, including biography, statement, identity, and profile copy.
+- `data/artist-profile.json`: the single localized artist profile, including biography, statement, canonical identity, and profile copy.
+- `data/artist-name-aliases.json`: the curated English/Persian spelling and transliteration inventory owned by the artist profile. It is loaded by `artist.ts` and exposed through the artist repository; it is not a second artist identity record.
 - `data/cv.json`: the single CV record, containing ordered entries and the optional downloadable document reference.
 - `data/contact.json`: the single Contact configuration. Only owner-supplied contact destinations may be published; do not invent addresses or handles.
 - `announcement.json`: the single optional announcement configuration. Its `active` flag controls visibility; `type` and `contentId` reference one published content record, and localized destinations are derived by the application.
@@ -39,7 +40,7 @@ Edit the canonical JSON file for the domain you are changing. Keep the existing 
 
 ### Artist profile and About
 
-Edit `data/artist-profile.json`. The homepage biography and About page read this same record.
+Edit `data/artist-profile.json`. The homepage biography and About page read this same record. Maintain alternate spellings in `data/artist-name-aliases.json`; that companion inventory is attached by `artist.ts` and resolved with the same artist profile through the artist repository. Do not copy aliases into UI message files, page components, metadata constants, or a second profile record.
 
 ```json
 {
@@ -52,7 +53,7 @@ Edit `data/artist-profile.json`. The homepage biography and About page read this
 }
 ```
 
-Keep factual details accurate and owner-supplied. The current record also supports discipline, artistic approach, interests, and an optional portrait.
+Keep factual details accurate and owner-supplied. The current record also supports discipline, artistic approach, interests, and an optional portrait. The alias inventory groups given-name, middle-name, family-name, complete-name, and partial-search forms by locale, with confidence and variant classifications. Partial queries and exploratory forms are editorial/search-maintenance data, not visible keyword copy.
 
 ### CV
 
