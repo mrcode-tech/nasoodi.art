@@ -103,7 +103,7 @@ test("Person and WebSite structured data use only canonical and curated public f
     },
   } as unknown as ArtistProfile;
 
-  const cvEntries = [
+  const cvEntries: CvEntry[] = [
     {
       id: "education-test", category: "education", title: { en: "M.A. in Painting", fa: "کارشناسی ارشد نقاشی" },
       organization: { en: "Example University", fa: "دانشگاه نمونه" }, status: "published",
@@ -116,7 +116,7 @@ test("Person and WebSite structured data use only canonical and curated public f
       id: "teaching-test", category: "teaching", title: { en: "Painting Instructor", fa: "مدرس نقاشی" },
       organization: { en: "Example Studio", fa: "آتلیه نمونه" }, status: "published",
     },
-  ] as CvEntry[];
+  ];
 
   const data = createPortfolioStructuredData({
     profile,
