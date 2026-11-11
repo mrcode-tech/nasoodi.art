@@ -73,9 +73,24 @@ export type JournalEntry = {
   artistApproved: boolean;
   event?: JournalEvent;
 };
+export type ArtistNameAlias = {
+  value: string;
+  kind: "transliteration" | "orthographic" | "spacing" | "hyphenation" | "complete-name";
+  confidence: "core" | "supported" | "exploratory";
+  note?: string;
+};
+export type ArtistNameAliasLocale = {
+  given: ArtistNameAlias[];
+  middle: ArtistNameAlias[];
+  family: ArtistNameAlias[];
+  completeName: ArtistNameAlias[];
+  partialSearchQueries: string[];
+};
+export type ArtistNameAliasInventory = Record<Locale, ArtistNameAliasLocale>;
 export type ArtistProfile = {
   id?: string;
   name?: Localized;
+  nameAliases?: ArtistNameAliasInventory;
   brand?: string;
   slug?: Localized;
   discipline?: Localized;
