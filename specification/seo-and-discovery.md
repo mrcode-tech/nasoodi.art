@@ -115,4 +115,4 @@ For an SEO-only task:
 
 The subject and professional-context vocabulary described above is guidance for evaluating existing content and metadata relevance. It is not permission to rewrite About/CV content during an SEO-only implementation. Any editorial additions require a separate explicit content-editing request.
 
-The Person graph may expose curated complete-name aliases, official public profile URLs, documented professional roles, published educational organizations, published memberships, and genuine areas of practice only when the corresponding values already exist in public canonical repositories. Do not encode the Nima Petgar teacher-student relationship through an unrelated Schema.org property.
+The Person graph may expose curated complete-name aliases, official public profile URLs, documented professional roles, published educational organizations, published memberships, and genuine areas of practice only when the corresponding values already exist in public canonical repositories. Do not encode a teacher-student relationship through an unrelated Schema.org property.
