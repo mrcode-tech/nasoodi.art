@@ -84,3 +84,13 @@ The Contact page may be indexed only when the canonical localized title and desc
 ## Canonical repository boundary — 2026-11-05
 
 The homepage uses `getHomepageContent`; About uses `getAbout` and `getCv`; artwork/gallery/Journal detail pages use focused repositories; sitemap uses the same repositories as page rendering; and global Person structured data resolves through `getArtist`. Avoid importing JSON adapters directly into route or presentation modules. Localized detail alternates match stable IDs and then use the target record's explicit localized slug.
+
+## Semantic topic coverage for About and CV
+
+Name-based discovery should be complemented by accurate subject-based and professional-context content. The About page and CV should naturally cover the artist's real discipline, medium, techniques, education, teaching, memberships, publications, exhibitions, and other documented professional activities.
+
+Relevant vocabulary may include painter, oil painter, oil painting, contemporary painting, contemporary Iranian art, Iranian visual artist, figurative painting, painting instructor, art educator, colour, composition, and visual expression, with natural Persian equivalents such as نقاش، نقاش رنگ‌روغن، نقاشی رنگ‌روغن، نقاش معاصر، هنر معاصر ایران، هنرمند تجسمی ایرانی، نقاشی فیگوراتیو، مدرس نقاشی، رنگ و ترکیب‌بندی.
+
+Institution and organization searches should be served by the actual CV entries. Use the canonical bilingual names for documented education and memberships (for example, Alzahra University and University of Science and Culture) in visible CV content; do not create a keyword paragraph that merely lists institutions. Add a named artist/teacher association only when the exact relationship is confirmed and explained accurately in visible content. In particular, do not imply a connection to Nima Petgar without confirmation of the relationship.
+
+The global Person graph may expose jobTitle, knowsAbout, alumniOf, and memberOf only when each property is semantically correct and supported by visible canonical content. Do not use sameAs for keywords or named entities without an official profile URL. Do not emit meta keywords, hidden text, speculative affiliations, or keyword-stuffed descriptions. Search terms are editorial guidance; they are not an additional content source or a guarantee of ranking.
