@@ -155,18 +155,20 @@ test("portfolio JSON-LD exposes localized person and website structures",()=>{
  const personEn=english[0] as Record<string,unknown>;
  const personFa=persian[0] as Record<string,unknown>;
  const website=english[1] as Record<string,unknown>;
+ const hasNonEmptyTextValues=(value:unknown):boolean=>
+  typeof value==="string"
+   ? value.trim().length>0
+   : Array.isArray(value)&&value.length>0&&value.every(item=>typeof item==="string"&&item.trim().length>0);
  assert.equal(english.length,2);
  assert.equal(personEn["@type"],"Person");
  assert.equal(typeof personEn.name,"string");
  assert.ok(String(personEn.name).trim().length>0);
- assert.equal(typeof personEn.alternateName,"string");
- assert.ok(String(personEn.alternateName).trim().length>0);
- assert.equal(typeof personEn.jobTitle,"string");
+ assert.equal(hasNonEmptyTextValues(personEn.alternateName),true);
+ assert.equal(hasNonEmptyTextValues(personEn.jobTitle),true);
  assert.equal(personFa["@type"],"Person");
  assert.equal(typeof personFa.name,"string");
  assert.ok(String(personFa.name).trim().length>0);
- assert.equal(typeof personFa.alternateName,"string");
- assert.ok(String(personFa.alternateName).trim().length>0);
+ assert.equal(hasNonEmptyTextValues(personFa.alternateName),true);
  assert.equal(website["@type"],"WebSite");
  assert.deepEqual(website.inLanguage,["fa","en"]);
  assert.deepEqual(website.publisher,{"@id":"https://nasoodi.art/#artist"});
