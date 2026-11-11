@@ -172,7 +172,8 @@ test("portfolio JSON-LD exposes localized person and website structures",()=>{
  assert.equal(website["@type"],"WebSite");
  assert.deepEqual(website.inLanguage,["fa","en"]);
  assert.deepEqual(website.publisher,{"@id":"https://nasoodi.art/#artist"});
- assert.equal("sameAs" in personEn,false);
+ assert.ok(Array.isArray(personEn.sameAs));
+ assert.ok((personEn.sameAs as unknown[]).every((value)=>typeof value==="string"&&/^https:\/\//.test(value)));
 });
 
 test("locale switching resolves synthetic localized routes and falls back for unavailable content",async()=>{
