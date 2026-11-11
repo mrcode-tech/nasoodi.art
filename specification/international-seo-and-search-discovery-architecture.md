@@ -83,7 +83,7 @@ Do not add analytics, tracking pixels, session replay, or third-party collection
 
 ## 12. Automated verification
 
-Add tests for unique localized metadata; canonical URLs; reciprocal hreflang only for real translations; no alternates to 404/noindex/redirected/unpublished routes; correct lang/dir; sitemap eligibility; robots policy; Contact demo noindex; JSON-LD syntax and content parity; real 404 behavior; internal links; artwork alt text/dimensions; and production-rendered HTML/status.
+Add tests for unique localized metadata; canonical URLs; reciprocal hreflang only for real translations; no alternates to 404/noindex/redirected/unpublished routes; correct lang/dir; sitemap eligibility; robots policy; Contact destination eligibility; JSON-LD syntax and content parity; real 404 behavior; internal links; artwork alt text/dimensions; and production-rendered HTML/status.
 
 Use synthetic fixtures. Never publish fictional artist facts for tests.
 
@@ -100,7 +100,7 @@ Prioritize by impact, confidence, effort, and dependency. Recheck both locales a
 3. Centralize metadata, canonical, and hreflang generation.
 4. Verify sitemap, robots, HTTP statuses, and indexability gates.
 5. Validate artwork/image SEO and structured data.
-6. Improve internal links and approved page content.
+6. Improve crawlable internal discovery only where it does not change visible content or UI; editorial changes require separate owner authorization.
 7. Add CI checks and production-build verification.
 8. Configure monitoring only after launch authorization.
 
@@ -112,7 +112,7 @@ Prioritize by impact, confidence, effort, and dependency. Recheck both locales a
 - [ ] Hreflang is reciprocal and limited to true published translations.
 - [ ] Sitemap contains only canonical eligible URLs.
 - [ ] robots.txt does not block required rendering resources.
-- [ ] Demo Contact routes remain noindex and outside sitemap.
+- [ ] Contact routes are indexable only when localized metadata is complete and an owner-supplied public contact destination exists; otherwise they are noindex and excluded from the sitemap.
 - [ ] Structured data matches the content rendered on the page.
 - [ ] Missing content returns correct status and is not indexed.
 - [ ] English and Persian production HTML are tested.
@@ -216,3 +216,14 @@ Do not invent Person properties or infer relationships from co-occurrence. Struc
 - [ ] Person JSON-LD uses only semantically correct properties backed by visible canonical content.
 - [ ] Named teacher/influence relationships are omitted until explicitly confirmed.
 - [ ] English and Persian search intent is reviewed independently; literal translation is not assumed to reflect local query behavior.
+
+
+## 19. SEO-only implementation and content-preservation contract — 2026-11-12
+
+For technical SEO tasks that explicitly prohibit website/content changes, follow specification/technical-seo-implementation-prompt.md.
+
+The prompt establishes a strict read-only boundary for canonical editorial JSON and translation messages. SEO implementation may consume existing repository values, but must not edit, translate, normalize, reorder, or supplement them. Visible page content, artist identity, UI, routes, responsive behavior, and application logic must remain unchanged.
+
+The complete Git diff must be audited against the pre-implementation baseline. Changes are limited to technical SEO modules, tests, and specifications. If a requested SEO property cannot be populated from existing public canonical data, omit it and report the limitation. Do not invent structured-data properties or use an unrelated Schema.org relationship to imply a fact.
+
+Contact indexability is conditional on complete localized canonical metadata and at least one valid owner-supplied public contact destination in that locale. The same eligibility decision must be applied to page metadata and sitemap inclusion; there is no blanket demo-phase noindex rule.
