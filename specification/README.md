@@ -23,6 +23,7 @@ This directory documents application architecture, interface behavior, design sy
 ### Routing, localization, and discovery
 - Internationalization and UI translation architecture: internationalization-and-ui-translation-architecture.md
 - International SEO and search discovery architecture: international-seo-and-search-discovery-architecture.md
+- Artist name variants and search identity: artist-name-variants-and-search-identity.md
 - SEO and discovery: seo-and-discovery.md
 
 ### Design system and interaction
