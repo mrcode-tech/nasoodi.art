@@ -565,8 +565,9 @@ Do not add a term solely because it has search volume. It must describe the arti
 
 ### Named teachers and artistic influences
 
-A named teacher or artist may be included only when the artist confirms the exact relationship and the About/CV copy describes it accurately (such as formal education, a workshop, mentorship, or an explicitly attributed influence). Do not imply a relationship with Nima Petgar or another artist based only on a search association or name similarity. Do not add a name to knowsAbout, alumniOf, memberOf, sameAs, or metadata as a substitute for factual editorial context.
+The artist has confirmed that she studied under Nima Petgar (نیما پتگر). This relationship may be stated in the artist biography and, where the CV has an appropriate training/education entry, represented there as well. Use natural, factual wording such as “studied under Nima Petgar” / «نزد نیما پتگر آموخته است» in the corresponding locale.
 
+Do not infer or add an institution, degree, course title, date, or formal mentorship program unless separately confirmed. Keep the teacher relationship distinct from university education, memberships, and institutional affiliations. Do not place Nima Petgar in knowsAbout, alumniOf, memberOf, or sameAs as a substitute for describing the actual teacher-student relationship in visible content. Structured data must use a property whose semantics genuinely represent that relationship; otherwise leave the relationship in the visible biography/CV text.
 ### Search and rendering requirements
 
 - Relevant English and Persian terms must appear in visible, server-rendered text.
