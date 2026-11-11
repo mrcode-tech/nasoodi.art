@@ -45,16 +45,14 @@ The canonical identity is authoritative. An alias is a recognized alternate writ
 
 ## 4. Canonical identity and editorial source of truth
 
-The existing artist profile record remains the single source of truth for the artist's canonical identity and biography. Before implementation, inspect the current content schema and repository adapters.
+The existing artist profile record remains the single source of truth for the artist's canonical identity and biography. The curated alternate-name inventory is maintained in `src/content/data/artist-name-aliases.json` as a narrowly scoped child dataset owned by that profile. `src/content/artist.ts` attaches the inventory to the typed profile, and `src/content/repositories/artist.repository.ts` remains the application access boundary.
 
-The alias inventory must be stored with the canonical artist identity in the existing artist profile data model, or in a narrowly scoped child structure owned and resolved by that same artist repository if the current schema cannot represent it cleanly.
-
-Do not introduce a second independent artist identity record. Do not let route components, metadata helpers, JSON-LD components, or tests read the editorial JSON directly.
+Do not introduce a second independent artist identity record. The alias file does not own canonical display names, biography, routes, or profile metadata; those remain in `artist-profile.json`. Do not let route components, metadata helpers, JSON-LD components, or tests read the editorial JSON directly.
 
 Required conceptual fields:
 
-- Canonical display name for each supported locale.
-- Optional curated aliases grouped by locale and name component.
+- Canonical display name for each supported locale, held in `artist-profile.json`.
+- Curated aliases grouped by locale and name component, held in `artist-name-aliases.json`.
 - Optional complete-name aliases when the full form is a known, owner-approved variant.
 - Optional alias classification and editorial notes for maintenance; these must not be rendered publicly by default.
 
@@ -131,9 +129,9 @@ Do not generate complete names by blindly combining every given-name, middle-nam
 
 ### 5.4 Complete-name coverage
 
-Complete-name aliases should be explicitly curated from plausible combinations that are known or strongly supported by real usage. Include common order and spacing differences only if they are observed or linguistically defensible.
+The production inventory is maintained in `src/content/data/artist-name-aliases.json`. Complete-name entries are explicitly curated from plausible combinations that are known or strongly supported by owner knowledge or observed usage. Common spacing and transliteration differences are represented only when linguistically defensible.
 
-Also support discovery by partial name components through the search-normalization and matching layer. A partial query does not need to become a complete-name alias.
+The inventory also records likely partial search queries separately from aliases. A partial query is not a complete identity and must not be emitted as a complete-name alias or `schema.org/alternateName` value. Do not create complete names by multiplying every component variant.
 
 ### 5.5 Confidence tiers
 
@@ -236,8 +234,9 @@ Search engines may understand transliteration and spelling variants without expl
 
 ## 8. Content architecture and implementation boundaries
 
-- Canonical identity and aliases are editorial data owned by the artist profile content model.
-- The artist repository is the only application boundary that resolves this data.
+- Canonical identity is editorial data in `src/content/data/artist-profile.json`.
+- Alternate-name variants and partial search patterns are editorial data in `src/content/data/artist-name-aliases.json`, a child dataset owned by the profile.
+- `src/content/artist.ts` attaches the typed inventory; the artist repository is the only application boundary that resolves the combined profile.
 - Structured-data generation consumes the repository result, not raw JSON.
 - Route components do not import artist JSON directly.
 - UI translation messages do not contain identity aliases.
@@ -342,7 +341,7 @@ Do not combine this work with a redesign, route migration, broad SEO rewrite, an
 ## 13. Acceptance criteria
 
 - [ ] Canonical English and Persian display names remain unchanged.
-- [ ] Actual identity and alias values exist only in canonical editorial data, not technical specifications or tests.
+- [ ] Actual identity and alias values exist only in canonical editorial data (`artist-profile.json` and its `artist-name-aliases.json` child dataset), not technical specifications or tests.
 - [ ] Aliases are curated and owner-approved, not generated from every possible permutation.
 - [ ] Alias data is resolved through the existing artist repository.
 - [ ] No second artist identity source is introduced.
