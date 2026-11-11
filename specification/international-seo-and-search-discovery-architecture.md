@@ -159,3 +159,57 @@ Rendered production HTML is the acceptance source for title, description, canoni
 The sitemap resolves Works, Galleries, Journal, CV, About, and Contact through focused content repositories rather than importing raw JSON adapters. Section metadata and the global Person/WebSite graph also resolve the canonical artist/artwork repositories. Detail-route alternate URLs are found by stable entity ID and then use the target locale's explicit slug. Do not emit an alternate link when the target locale lacks the corresponding published record.
 
 Production acceptance checks actual localized HTML: document `lang`/`dir`, unique title/description, self canonical, reciprocal hreflang, Open Graph/Twitter metadata, robots, sitemap URLs, structured data, and visible server-rendered editorial content. Unit tests of metadata helpers alone are not rendered-HTML evidence.
+
+## 18. Artistic subject and professional-context discovery
+
+About and CV content should make the artist discoverable not only by name, but also by the actual artistic practice, medium, professional role, education, and documented art-world context. This is a semantic-content requirement, not a request to publish a detached keyword list.
+
+### 18.1 Artistic practice and medium vocabulary
+
+Where supported by the artist's visible work and approved biography, use natural English and Persian wording for relevant concepts such as:
+
+- Painter / نقاش
+- Oil painter / نقاش رنگ‌روغن
+- Oil painting / نقاشی رنگ‌روغن
+- Contemporary painter / نقاش معاصر
+- Contemporary Iranian art / هنر معاصر ایران
+- Iranian visual artist / هنرمند تجسمی ایرانی
+- Figurative painting / نقاشی فیگوراتیو
+- Contemporary painting / نقاشی معاصر
+- Painting instructor or art educator / مدرس نقاشی یا مدرس هنر
+- Colour, composition, visual rhythm, and artistic practice / رنگ، ترکیب‌بندی، ریتم بصری و شیوهٔ هنری
+
+Use only the terms that accurately describe the published works and the artist's own professional practice. Do not force every term into every page, metadata field, artwork alt text, or heading.
+
+### 18.2 Education, institutions, and professional associations
+
+Education and professional-context searches should be supported by the actual localized CV entries and biography. Relevant query patterns include institution name + degree, institution name + painting, painting degree + artist, and professional association + artist. Institution names (including Alzahra University and University of Science and Culture) must be written consistently in English and Persian and must be sourced from the canonical CV/profile records. Do not add institution names to metadata or structured data when the corresponding education or affiliation is absent from visible content.
+
+Professional memberships, teaching roles, publications, exhibitions, and art organizations follow the same rule: describe them in the visible About/CV content first, then expose only the same facts through metadata or structured data where the Schema.org property is appropriate.
+
+### 18.3 Named artists, teachers, and influence relationships
+
+A named artist or teacher may be a useful search association only when the relationship is factual and explicitly documented (for example, formal study, a workshop, mentorship, or a clearly attributed artistic influence). A name alone is not evidence of a relationship. Do not add Nima Petgar or any other named artist to visible copy, knowsAbout, sameAs, alumniOf, affiliation, or keyword metadata unless the exact relationship and wording have been confirmed by the artist/owner and are represented accurately in the canonical content.
+
+### 18.4 Structured-data mapping
+
+Use only properties supported by the actual content and schema semantics:
+
+- jobTitle for a documented professional role.
+- knowsAbout for genuine areas of practice or expertise, not a dump of target search phrases.
+- alumniOf for documented educational institutions.
+- memberOf for documented memberships.
+- worksFor or affiliation only when the real relationship matches the property's meaning; do not use them as generic organization keywords.
+- sameAs only for official identity/profile URLs, never for names or search terms.
+
+Do not invent Person properties or infer relationships from co-occurrence. Structured data must agree with visible About/CV content and canonical editorial records.
+
+### 18.5 Acceptance checks
+
+- [ ] About explains the actual medium, artistic practice, and professional role in natural bilingual prose.
+- [ ] CV education and membership entries use consistent institution/organization names in both locales.
+- [ ] Relevant terms are present in visible, crawlable HTML rather than hidden keyword blocks.
+- [ ] Metadata describes the page naturally and does not become a comma-separated keyword list.
+- [ ] Person JSON-LD uses only semantically correct properties backed by visible canonical content.
+- [ ] Named teacher/influence relationships are omitted until explicitly confirmed.
+- [ ] English and Persian search intent is reviewed independently; literal translation is not assumed to reflect local query behavior.
