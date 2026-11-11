@@ -10,7 +10,7 @@ Use one canonical source per domain. Domain records are stored under src/content
 
 | Domain | Technical responsibility |
 |---|---|
-| Profile | Localized profile fields consumed by homepage and profile routes |
+| Profile | Localized profile fields consumed by homepage and profile routes, with a profile-owned alternate-name inventory |
 | CV | Structured, optionally categorized entries and optional document reference |
 | Contact | Configurable contact labels, values, and safe destinations |
 | Artwork | Stable identity, localized fields, asset references, dimensions, and publication state |
@@ -24,7 +24,7 @@ Do not create parallel demo, preview, fictional, temporary, verified, or product
 ## 3. Localization and identity
 
 - Stable record IDs are independent of localized titles and slugs.
-- Localized editorial fields are stored with their owning record.
+- Localized editorial fields are stored with their owning record. The artist's canonical names remain in the profile record; curated alternate spellings live in its profile-owned alias dataset and are resolved through the same artist repository.
 - UI labels and interface messages belong in src/i18n/messages/{en,fa}/.
 - Shared technical facts such as dates, dimensions, ordering, asset references, and publication state remain structured fields.
 - Route resolution uses stable record identity and the requested locale's localized slug.
