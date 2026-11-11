@@ -9,7 +9,7 @@ type PortfolioStructuredDataInput = {
   profile: ArtistProfile;
   cvEntries: readonly CvEntry[];
   locale: Locale;
-  officialProfiles?: readonly string[];
+  officialProfiles?: readonly (string | undefined)[];
   artworkMedia?: readonly string[];
 };
 
