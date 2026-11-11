@@ -44,7 +44,7 @@ Do not upgrade dependencies or perform unrelated cleanup.
 
 Use the existing artist profile and curated name-alias inventory. Preserve the canonical English and Persian names exactly. Never promote exploratory aliases, partial search queries, or generated permutations into public identity claims.
 
-Use the confirmed Nima Petgar (نیما پتگر) study relationship only where an existing visible canonical content record already states it. This task does not authorize adding that relationship to the biography or CV. Do not represent a teacher-student relationship as alumniOf, memberOf, or sameAs.
+Do not add, infer, or expose a teacher-student relationship unless it is already present in public canonical content. This task does not authorize adding such a relationship to the biography or CV. Do not represent a teacher-student relationship as alumniOf, memberOf, or sameAs.
 
 ## 3. Mandatory repository audit
 
