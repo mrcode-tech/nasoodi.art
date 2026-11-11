@@ -189,8 +189,11 @@ Professional memberships, teaching roles, publications, exhibitions, and art org
 
 ### 18.3 Named artists, teachers, and influence relationships
 
-A named artist or teacher may be a useful search association only when the relationship is factual and explicitly documented (for example, formal study, a workshop, mentorship, or a clearly attributed artistic influence). A name alone is not evidence of a relationship. Do not add Nima Petgar or any other named artist to visible copy, knowsAbout, sameAs, alumniOf, affiliation, or keyword metadata unless the exact relationship and wording have been confirmed by the artist/owner and are represented accurately in the canonical content.
+The artist has confirmed that she studied under Nima Petgar (نیما پتگر). This is an established biographical relationship and may be described in the About biography and/or the relevant CV/training entry in both English and Persian. Use precise wording such as “studied under Nima Petgar” / «نزد نیما پتگر آموخته است»; do not embellish it into a degree, institutional affiliation, formal mentorship program, or dated course unless those details are separately confirmed.
 
+Use the name consistently in English and Persian: Nima Petgar / نیما پتگر. This association is relevant to natural searches combining the artist's name with Nima Petgar, نیما پتگر, painting education, and artistic training. It should appear as meaningful visible editorial content, not as a hidden keyword or a fabricated CV credential.
+
+Do not encode a teacher-student relationship using unrelated structured-data properties. In particular, Nima Petgar is not the artist's alumniOf institution, sameAs identity, or memberOf organization. Only add a structured-data relationship if a suitable Schema.org property is verified and its semantics accurately express the documented relationship.
 ### 18.4 Structured-data mapping
 
 Use only properties supported by the actual content and schema semantics:
