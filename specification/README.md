@@ -25,6 +25,7 @@ This directory documents application architecture, interface behavior, design sy
 - International SEO and search discovery architecture: international-seo-and-search-discovery-architecture.md
 - Artist name variants and search identity: artist-name-variants-and-search-identity.md
 - SEO and discovery: seo-and-discovery.md
+- Technical SEO implementation prompt and strict content-preservation contract: technical-seo-implementation-prompt.md
 
 ### Design system and interaction
 - Site-wide design system: site-wide-design-system-and-section-specification.md
