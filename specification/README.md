@@ -61,6 +61,7 @@ This directory documents application architecture, interface behavior, design sy
 - The default locale is Persian.
 - Stable content IDs are independent of localized slugs.
 - Canonical content is stored under src/content/data/.
+- The artist's canonical profile is `src/content/data/artist-profile.json`; its curated alternate-name inventory is `src/content/data/artist-name-aliases.json`, owned and exposed by the same artist content adapter.
 - UI translations are stored under src/i18n/messages/{en,fa}/.
 - Components consume repository-layer data rather than importing editorial JSON directly.
 - Pagination defaults to 6 and supports 10 and 20.
