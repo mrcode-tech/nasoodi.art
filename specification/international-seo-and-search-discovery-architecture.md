@@ -214,7 +214,7 @@ Do not invent Person properties or infer relationships from co-occurrence. Struc
 - [ ] Relevant terms are present in visible, crawlable HTML rather than hidden keyword blocks.
 - [ ] Metadata describes the page naturally and does not become a comma-separated keyword list.
 - [ ] Person JSON-LD uses only semantically correct properties backed by visible canonical content.
-- [ ] Named teacher/influence relationships are omitted until explicitly confirmed.
+- [ ] Teacher/influence relationships are used only when owner-confirmed and present in canonical public content; they are never encoded through unrelated Schema.org properties.
 - [ ] English and Persian search intent is reviewed independently; literal translation is not assumed to reflect local query behavior.
 
 
