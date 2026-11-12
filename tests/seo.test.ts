@@ -3,6 +3,7 @@ import test from "node:test";
 import { createLocalizedMetadata } from "../src/lib/seo/metadata";
 import { createPortfolioStructuredData } from "../src/content/portfolio-structured-data";
 import type { ArtistProfile, CvEntry } from "../src/types/content";
+import artistNameAliases from "../src/content/data/artist-name-aliases.json";
 import { defaultLocale, locales, localeDirections, localeNames, localeOpenGraphTags, pagePath } from "../src/types/locale";
 
 test("locale metadata is complete in one authoritative registry", () => {
@@ -91,14 +92,14 @@ test("Person and WebSite structured data use only canonical and curated public f
       en: {
         given: [], middle: [], family: [], partialSearchQueries: [],
         completeName: [
-          { value: "Example Artist", kind: "complete-name", confidence: "core" },
-          { value: "Example Painter", kind: "complete-name", confidence: "supported" },
-          { value: "Unverified Example", kind: "complete-name", confidence: "exploratory" },
+          { value: "Example Artist", kind: "complete-name", confidence: "core", structuredDataPriority: 1 },
+          { value: "Example Painter", kind: "complete-name", confidence: "supported", structuredDataPriority: 2 },
+          { value: "Unverified Example", kind: "complete-name", confidence: "exploratory", structuredDataPriority: 0 },
         ],
       },
       fa: {
-        given: [], middle: [], family: [], partialSearchQueries: [],
-        completeName: [{ value: "هنرمند نمونه", kind: "complete-name", confidence: "core" }],
+        given: [], middle: [], family: [], partialSearchQueries: ["Example Partial"],
+        completeName: [{ value: "هنرمند نمونه", kind: "complete-name", confidence: "core", structuredDataPriority: 1 }],
       },
     },
   } as unknown as ArtistProfile;
@@ -159,4 +160,101 @@ test("Person structured data omits unsupported optional relationships", () => {
   assert.equal("memberOf" in person, false);
   assert.equal("sameAs" in person, false);
   assert.equal("knowsAbout" in person, false);
+});
+
+
+test("production alias inventory keeps partial queries separate from complete names", () => {
+  const names = artistNameAliases.en.completeName.map((alias) => alias.value);
+  assert.ok(names.includes("Ghazale Nasoudi"));
+  assert.ok(names.includes("Ghazale Abdolahzade Nasoodi"));
+  assert.ok(names.includes("Ghazaleh Abdolahzade Nasoodi"));
+  assert.ok(names.includes("Ghazale Abdolahzade Nasoudi"));
+  assert.ok(names.includes("Ghazaleh Abdolahzade Nasoudi"));
+  assert.ok(names.includes("Ghazaleh Abdollahzade Nasoudi"));
+  assert.ok(names.includes("Ghazale Abdollahzade Nasoudi"));
+  assert.ok(names.includes("Ghazaleh Abdollahzade Nasoodi"));
+  assert.ok(names.includes("Ghazale Abdollahzade Nasoodi"));
+  assert.ok(artistNameAliases.en.partialSearchQueries.includes("Ghazaleh Nasoodi"));
+  assert.ok(!artistNameAliases.en.partialSearchQueries.includes("Ghazale Nasoudi"));
+  assert.equal(artistNameAliases.en.completeName.find((alias) => alias.value === "Ghazaleh Abdollahzade Nasoudi")?.structuredDataPriority, 9);
+  assert.equal(artistNameAliases.en.completeName.find((alias) => alias.value === "Ghazale Abdollahzade Nasoudi")?.structuredDataPriority, 8);
+  assert.equal(artistNameAliases.en.completeName.find((alias) => alias.value === "Ghazaleh Abdollahzade Nasoodi")?.structuredDataPriority, 7);
+  assert.equal(artistNameAliases.en.completeName.find((alias) => alias.value === "Ghazale Abdollahzade Nasoodi")?.structuredDataPriority, 6);
+});
+
+test("structured data publishes prioritized aliases deterministically without a fixed limit", () => {
+  const aliases = Array.from({ length: 8 }, (_, index) => ({
+    value: "Synthetic Alias " + (index + 1),
+    kind: "complete-name" as const,
+    confidence: "supported" as const,
+    structuredDataPriority: index < 7 ? index + 1 : 7
+  }));
+  const profile = {
+    name: { en: "Synthetic Canonical", fa: "نام معیار" },
+    discipline: { en: "Painter", fa: "نقاش" },
+    biography: { en: "Synthetic biography.", fa: "زندگی‌نامه آزمایشی." },
+    statement: { en: "Synthetic statement.", fa: "بیانیه آزمایشی." },
+    nameAliases: {
+      en: {
+        given: [], middle: [], family: [], partialSearchQueries: ["Synthetic Partial Query"],
+        completeName: [
+          ...aliases,
+          { value: "SYNTHETIC CANONICAL", kind: "complete-name" as const, confidence: "core" as const, structuredDataPriority: 0 },
+          { value: " synthetic alias 1 ", kind: "complete-name" as const, confidence: "supported" as const, structuredDataPriority: 9 },
+          { value: "Unprioritized Alias", kind: "complete-name" as const, confidence: "supported" as const },
+          { value: "Exploratory Alias", kind: "complete-name" as const, confidence: "exploratory" as const, structuredDataPriority: 0 }
+        ]
+      },
+      fa: { given: [], middle: [], family: [], partialSearchQueries: [], completeName: [] }
+    }
+  } as unknown as ArtistProfile;
+  const build = (completeName: NonNullable<ArtistProfile["nameAliases"]>["en"]["completeName"]) =>
+    createPortfolioStructuredData({
+      profile: {
+        ...profile,
+        nameAliases: {
+          ...(profile.nameAliases ?? {}),
+          en: { ...(profile.nameAliases?.en ?? { given: [], middle: [], family: [], partialSearchQueries: [], completeName: [] }), completeName }
+        }
+      } as unknown as ArtistProfile,
+      cvEntries: [],
+      locale: "en"
+    })["@graph"][0].alternateName;
+
+  const expected = ["نام معیار", ...aliases.map((alias) => alias.value)];
+  const completeNames = profile.nameAliases?.en.completeName ?? [];
+  assert.deepEqual(build(completeNames), expected);
+  assert.deepEqual(build([...completeNames].reverse()), expected);
+});
+
+test("Persian and English structured data preserve canonical identity and locale-specific aliases", () => {
+  const profile = {
+    name: { en: "Synthetic Canonical", fa: "نام معیار" },
+    discipline: { en: "Painter", fa: "نقاش" },
+    biography: { en: "Synthetic biography.", fa: "زندگی‌نامه آزمایشی." },
+    statement: { en: "Synthetic statement.", fa: "بیانیه آزمایشی." },
+    nameAliases: {
+      en: {
+        given: [], middle: [], family: [], partialSearchQueries: [],
+        completeName: [{ value: "Synthetic English Alias", kind: "complete-name", confidence: "supported", structuredDataPriority: 1 }]
+      },
+      fa: {
+        given: [], middle: [], family: [], partialSearchQueries: [],
+        completeName: [
+          { value: "نام جایگزین", kind: "complete-name", confidence: "supported", structuredDataPriority: 1 },
+          { value: "نام‌جایگزین", kind: "complete-name", confidence: "supported", structuredDataPriority: 2 }
+        ]
+      }
+    }
+  } as unknown as ArtistProfile;
+  const build = (locale: "en" | "fa") =>
+    createPortfolioStructuredData({ profile, cvEntries: [], locale })["@graph"][0];
+
+  const en = build("en");
+  const fa = build("fa");
+  assert.equal(en.name, "Synthetic Canonical");
+  assert.deepEqual(en.alternateName, ["نام معیار", "Synthetic English Alias"]);
+  assert.equal(fa.name, "نام معیار");
+  assert.deepEqual(fa.alternateName, ["Synthetic Canonical", "نام جایگزین"]);
+  assert.doesNotThrow(() => JSON.parse(JSON.stringify({ en, fa })));
 });
