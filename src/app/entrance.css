@@ -221,6 +221,32 @@ body.entrance-document-body {
   .entrance-language-links {
     margin-top: 1.25rem;
   }
+
+  /* When mobile content physically overlaps the artwork, switch to the
+     same readable overlay treatment used by the desktop entrance. */
+  .entrance-page[data-entrance-overlay="true"] .entrance-copy h1 {
+    color: #eae4d9;
+  }
+
+  .entrance-page[data-entrance-overlay="true"] .entrance-welcome {
+    color: #b9b5ae;
+  }
+
+  .entrance-page[data-entrance-overlay="true"] .entrance-language-links a {
+    position: relative;
+    isolation: isolate;
+    border-color: color-mix(in srgb, var(--border) 82%, transparent);
+    background: color-mix(in srgb, var(--paper) 88%, transparent);
+    color: var(--ink);
+    box-shadow: 0 .35rem 1.1rem rgb(20 18 16 / 12%);
+    -webkit-backdrop-filter: blur(14px) saturate(125%);
+    backdrop-filter: blur(14px) saturate(125%);
+  }
+
+  .entrance-page[data-entrance-overlay="true"] .entrance-language-links a:hover {
+    background: color-mix(in srgb, var(--paper) 96%, transparent);
+    box-shadow: 0 .4rem 1.25rem rgb(20 18 16 / 16%);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

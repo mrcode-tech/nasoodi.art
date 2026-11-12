@@ -7,6 +7,7 @@ import { primaryImageFor } from "@/lib/content/publication";
 import { getPortfolioStructuredData } from "@/content/portfolio-structured-data";
 import { serializeJsonLd } from "@/lib/seo/structured-data";
 import { getTranslations } from "next-intl/server";
+import { EntranceOverlayColorObserver } from "@/components/entrance-overlay-color-observer";
 
 const siteOrigin = "https://nasoodi.art";
 
@@ -47,6 +48,7 @@ export default async function RootPage() {
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeJsonLd(getPortfolioStructuredData("en")) }} />
       <main className="entrance-page">
+        <EntranceOverlayColorObserver />
         <div className="entrance-content">
           {image && (
             <div className="entrance-artwork-frame" style={{ "--entrance-artwork-ratio": `${image.width} / ${image.height}` } as React.CSSProperties}>

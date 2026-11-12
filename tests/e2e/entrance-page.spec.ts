@@ -283,3 +283,47 @@ test("desktop entrance overlay stays anchored inside the artwork at different zo
   }
   await page.evaluate(() => { document.documentElement.style.zoom = ""; });
 });
+
+test("mobile entrance uses overlay colors only while copy and controls overlap the artwork", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/");
+
+  const styles = () => page.evaluate(() => {
+    const heading = getComputedStyle(document.querySelector(".entrance-copy h1")!);
+    const welcome = getComputedStyle(document.querySelector(".entrance-welcome")!);
+    const button = getComputedStyle(document.querySelector(".entrance-language-links a")!);
+    return {
+      overlay: document.querySelector(".entrance-page")!.hasAttribute("data-entrance-overlay"),
+      heading: heading.color,
+      welcome: welcome.color,
+      buttonColor: button.color,
+      buttonBackground: button.backgroundColor,
+      buttonBackdrop: button.backdropFilter,
+    };
+  });
+
+  const themeStyles = await styles();
+  expect(themeStyles.overlay).toBe(false);
+  expect(themeStyles.heading).not.toBe("rgb(234, 228, 217)");
+  expect(themeStyles.welcome).not.toBe("rgb(185, 181, 174)");
+  expect(themeStyles.buttonBackdrop).toBe("none");
+
+  await page.locator(".entrance-copy").evaluate((node) => {
+    (node as HTMLElement).style.transform = "translateY(-180px)";
+  });
+  await page.evaluate(() => window.dispatchEvent(new Event("resize")));
+  await expect.poll(async () => (await styles()).overlay).toBe(true);
+
+  const overlayStyles = await styles();
+  expect(overlayStyles.heading).toBe("rgb(234, 228, 217)");
+  expect(overlayStyles.welcome).toBe("rgb(185, 181, 174)");
+  expect(overlayStyles.buttonBackdrop).not.toBe("none");
+  expect(overlayStyles.buttonBackground).not.toBe("rgba(0, 0, 0, 0)");
+
+  await page.locator(".entrance-copy").evaluate((node) => {
+    (node as HTMLElement).style.transform = "";
+  });
+  await page.evaluate(() => window.dispatchEvent(new Event("resize")));
+  await expect.poll(async () => (await styles()).overlay).toBe(false);
+  expect((await styles()).heading).toBe(themeStyles.heading);
+});
