@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { ArrowUpRightIcon } from "@/components/ui/arrow-up-right-icon";
 import { useTranslations } from "next-intl";
 import { getLocaleDirection, pagePath, type Locale } from "@/types/locale";
 import type { PublicContactDetails } from "@/lib/content/publication";
@@ -63,7 +64,7 @@ export function ContactExperience({ locale, details, variant }: ContactExperienc
       {variant === "home" && (
         <div className="contact-page-link-wrap">
           <Link className="text-link contact-page-link" href={pagePath(locale, "contact")}>
-            {t("contact")} <span aria-hidden="true">↗</span>
+            {t("contact")} <ArrowUpRightIcon />
           </Link>
         </div>
       )}

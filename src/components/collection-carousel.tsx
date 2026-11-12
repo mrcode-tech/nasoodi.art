@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
+import { ArrowUpRightIcon } from "@/components/ui/arrow-up-right-icon";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious, CarouselStatus } from "@/components/ui/carousel";
 import { getGalleryCoverArtwork } from "@/lib/content/publication";
 import { getLocalizedSlug } from "@/lib/content/paths";
@@ -21,7 +22,7 @@ function CollectionLink({ gallery, artworks, locale }: { gallery: Gallery; artwo
       <span className="gallery-card-copy">
         <strong>{gallery.title[locale]}</strong>
         <span>{gallery.description[locale]}</span>
-        <span className="gallery-card-action">{t("exploreCollection")} ↗</span>
+        <span className="gallery-card-action">{t("exploreCollection")} <ArrowUpRightIcon /></span>
       </span>
     </Link>
   );
