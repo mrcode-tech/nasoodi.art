@@ -201,12 +201,14 @@
       {
         "value": "Ghazale Abdollahzade Nasoodi",
         "kind": "complete-name",
-        "confidence": "supported"
+        "confidence": "supported",
+        "structuredDataPriority": 6
       },
       {
         "value": "Ghazaleh Abdollahzade Nasoodi",
         "kind": "complete-name",
-        "confidence": "supported"
+        "confidence": "supported",
+        "structuredDataPriority": 7
       },
       {
         "value": "Ghazale Abdollahzadeh Nasoodi",
@@ -255,6 +257,18 @@
         "kind": "complete-name",
         "confidence": "supported",
         "structuredDataPriority": 4
+      },
+      {
+        "value": "Ghazale Abdollahzade Nasoudi",
+        "kind": "complete-name",
+        "confidence": "supported",
+        "structuredDataPriority": 8
+      },
+      {
+        "value": "Ghazaleh Abdollahzade Nasoudi",
+        "kind": "complete-name",
+        "confidence": "supported",
+        "structuredDataPriority": 9
       }
     ],
     "partialSearchQueries": [
