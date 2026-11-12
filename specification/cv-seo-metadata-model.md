@@ -95,7 +95,7 @@ Illustrative structure:
     }
   },
   "cvRecords": {
-    "publication-nima-petgar": {
+    "publication-record-example": {
       "entityIds": ["person-nima-petgar"],
       "searchTerms": {
         "en": ["Nima Petgar publication"],
@@ -185,7 +185,7 @@ Examples:
 - A university named in an education record may be classified as an `educational-institution` and mapped to that education record.
 - An association named in a membership record may be classified as a `professional-association` and mapped to that membership record.
 - A publisher named in a publication record may be classified as a `publisher` and mapped to that publication record.
-- Nima Petgar / نیما پتگر may be mapped only to the existing `publication-nima-petgar` record. Its publication title must not be reinterpreted as proof of a teacher-student relationship.
+- Nima Petgar / نیما پتگر may be mapped only to the canonical publication CV record whose title names him. That publication mention must not be reinterpreted as proof of an employment, educational, mentorship, or teacher-student relationship.
 
 Never map a university to a publication or membership record merely because the artist attended or belonged to it elsewhere. Use the record that actually documents the entity.
 
