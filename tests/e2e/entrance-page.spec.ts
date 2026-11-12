@@ -103,6 +103,39 @@ test("mobile entrance separates the artwork from a centered two-line artist name
   expect(belowImage.backdropFilter).toBe("none");
 });
 
+test("desktop entrance displays the complete artwork inside an even page margin", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/");
+  const geometry = await page.evaluate(() => {
+    const pageBox = document.querySelector(".entrance-page")!.getBoundingClientRect();
+    const frame = document.querySelector(".entrance-artwork-frame")!.getBoundingClientRect();
+    const image = document.querySelector(".entrance-artwork") as HTMLImageElement;
+    const imageBox = image.getBoundingClientRect();
+    const style = getComputedStyle(image);
+    return {
+      naturalRatio: image.naturalWidth / image.naturalHeight,
+      renderedRatio: imageBox.width / imageBox.height,
+      imageInsideFrame:
+        imageBox.left >= frame.left - 1 &&
+        imageBox.right <= frame.right + 1 &&
+        imageBox.top >= frame.top - 1 &&
+        imageBox.bottom <= frame.bottom + 1,
+      frameInsidePage:
+        frame.left > pageBox.left &&
+        frame.right < pageBox.right &&
+        frame.top > pageBox.top &&
+        frame.bottom < pageBox.bottom,
+      objectFit: style.objectFit,
+      frameOverflow: getComputedStyle(document.querySelector(".entrance-artwork-frame")!).overflow,
+    };
+  });
+  expect(geometry.objectFit).toBe("contain");
+  expect(geometry.renderedRatio).toBeCloseTo(geometry.naturalRatio, 3);
+  expect(geometry.imageInsideFrame).toBe(true);
+  expect(geometry.frameInsidePage).toBe(true);
+  expect(geometry.frameOverflow).toBe("visible");
+});
+
 test("entrance switches layouts only at the viewport width breakpoint", async ({ page }) => {
   await page.setViewportSize({ width: 480, height: 900 });
   await page.goto("/");
