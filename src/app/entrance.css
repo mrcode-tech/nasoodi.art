@@ -187,7 +187,16 @@ body.entrance-document-body {
   }
 
   .entrance-copy {
+    position: static;
+    inset: auto;
+    width: min(100%, 42rem);
     margin-top: .65rem;
+    transform: none;
+  }
+
+  .entrance-language-links {
+    position: static;
+    margin-top: 1.25rem;
   }
 
   .entrance-copy h1 {
@@ -210,16 +219,11 @@ body.entrance-document-body {
   }
 }
 
-@media (max-height: 640px) {
+@media (min-width: 481px) and (max-height: 640px) {
   .entrance-content {
     gap: .45rem;
-  }
-
-  @media (min-width: 481px) {
-    .entrance-content {
-      width: fit-content;
-      max-width: 100%;
-    }
+    width: fit-content;
+    max-width: 100%;
   }
 
   .entrance-artwork-frame {
@@ -227,11 +231,7 @@ body.entrance-document-body {
     min-height: 0;
   }
 
-  @media (min-width: 481px) {
-    .entrance-artwork {
-      max-height: min(38dvh, 25rem);
-    }
-  }
+  /* Keep the artwork's 64svh sizing rule intact across browser zoom levels. */
 
   .entrance-copy h1 {
     font-size: clamp(1.5rem, 6.5vw, 1.9rem);
@@ -255,20 +255,22 @@ body.entrance-document-body {
 }
 
 
-/* Keep language choices legible when they overlap the entrance artwork.
-   The theme-aware translucent paper surface preserves the image while
-   softening its detail directly behind each label. */
-.entrance-language-links a {
-  position: relative;
-  isolation: isolate;
-  border-color: color-mix(in srgb, var(--border) 82%, transparent);
-  background: color-mix(in srgb, var(--paper) 88%, transparent);
-  box-shadow: 0 .35rem 1.1rem rgb(20 18 16 / 12%);
-  -webkit-backdrop-filter: blur(14px) saturate(125%);
-  backdrop-filter: blur(14px) saturate(125%);
-}
+/* The translucent paper treatment is desktop-only, where language choices
+   intentionally overlay the artwork. Mobile keeps its original solid,
+   below-image button treatment. */
+@media (min-width: 481px) {
+  .entrance-language-links a {
+    position: relative;
+    isolation: isolate;
+    border-color: color-mix(in srgb, var(--border) 82%, transparent);
+    background: color-mix(in srgb, var(--paper) 88%, transparent);
+    box-shadow: 0 .35rem 1.1rem rgb(20 18 16 / 12%);
+    -webkit-backdrop-filter: blur(14px) saturate(125%);
+    backdrop-filter: blur(14px) saturate(125%);
+  }
 
-.entrance-language-links a:hover {
-  background: color-mix(in srgb, var(--paper) 96%, transparent);
-  box-shadow: 0 .4rem 1.25rem rgb(20 18 16 / 16%);
+  .entrance-language-links a:hover {
+    background: color-mix(in srgb, var(--paper) 96%, transparent);
+    box-shadow: 0 .4rem 1.25rem rgb(20 18 16 / 16%);
+  }
 }
