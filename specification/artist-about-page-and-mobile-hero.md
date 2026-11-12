@@ -563,15 +563,16 @@ Do not add a term solely because it has search volume. It must describe the arti
 - Use the biography to summarize the most relevant documented professional context; leave detailed chronology to the CV.
 - Do not add an organization or institution to Person JSON-LD unless the visible CV/profile documents the corresponding relationship and the chosen property accurately describes it.
 
-### Named teachers and artistic influences
+### CV publication name: metadata-only search context
 
-The artist has confirmed that she studied under Nima Petgar (نیما پتگر). This relationship may be stated in the artist biography and, where the CV has an appropriate training/education entry, represented there as well. Use natural, factual wording such as “studied under Nima Petgar” / «نزد نیما پتگر آموخته است» in the corresponding locale.
+Nima Petgar (نیما پتگر) appears only in the existing CV publication record “My Teacher: Nima Petgar” / «استادم: نیما پتگر». Preserve that record as a publication. Do not add the name or a teacher-student claim to the About biography, artist statement, education, training, or any other visible website content.
 
-Do not infer or add an institution, degree, course title, date, or formal mentorship program unless separately confirmed. Keep the teacher relationship distinct from university education, memberships, and institutional affiliations. Do not place Nima Petgar in knowsAbout, alumniOf, memberOf, or sameAs as a substitute for describing the actual teacher-student relationship in visible content. Structured data must use a property whose semantics genuinely represent that relationship; otherwise leave the relationship in the visible biography/CV text.
+Any additional search context belongs only in the dedicated SEO metadata JSON source and may be consumed only by CV page metadata. It must describe the existing publication accurately and must not imply teaching, mentorship, employment, or institutional affiliation. Do not add Nima Petgar to Person JSON-LD or the artist-name alias inventory.
 ### Search and rendering requirements
 
-- Relevant English and Persian terms must appear in visible, server-rendered text.
+- Relevant artistic-practice and professional terms must appear in visible, server-rendered text only when already supported by approved content.
 - Keep the artist statement distinct from factual biography and CV chronology.
+- Nima Petgar / نیما پتگر remains limited to the existing CV publication record and CV-specific SEO metadata; no biography, training, education, or other visible content is added for SEO.
 - Use natural localized phrasing; do not mechanically translate keyword lists.
 - Page title and description remain concise summaries, not keyword inventories.
 - Use jobTitle, knowsAbout, alumniOf, and memberOf only when supported by the canonical records and semantically appropriate.
