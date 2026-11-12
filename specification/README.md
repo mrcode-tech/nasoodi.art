@@ -36,6 +36,8 @@ This directory documents application architecture, interface behavior, design sy
 - Accessibility, performance, and security: accessibility-performance-security.md
 
 ### Page and component behavior
+- Entrance page product and technical specification: entrance-page-specification.md
+- Entrance page implementation prompt: entrance-page-implementation-prompt.md
 - Homepage artwork hero and featured content: homepage-artwork-hero-and-featured-works.md
 - Artwork discovery and responsive carousels: artwork-discovery-carousel-and-editorial-experience.md
 - Gallery index and pagination: galleries-index-cards-and-pagination.md
