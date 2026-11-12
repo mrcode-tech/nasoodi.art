@@ -1742,7 +1742,7 @@ html[lang="fa"] .artwork-viewer-info h2 {
   display: grid;
   direction: inherit;
   grid-template-areas: "copy image";
-  grid-template-columns: minmax(0, .95fr) minmax(0, 1.05fr);
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, .85fr);
   align-items: center;
   gap: clamp(1.5rem, 4vw, 4rem);
 }
@@ -1779,6 +1779,16 @@ html[lang="fa"] .artwork-viewer-info h2 {
   flex-wrap: wrap;
   gap: .65rem;
   margin-top: 1.25rem;
+}
+@media (min-width: 901px) {
+  .home-page .hero-actions {
+    flex-wrap: nowrap;
+    align-items: center;
+  }
+  .home-page .hero-actions > .ui-button {
+    flex: 0 0 auto;
+    white-space: nowrap;
+  }
 }
 .about-page .about-heading {
   margin-bottom: clamp(1.5rem, 3vw, 2.5rem);
@@ -2158,16 +2168,17 @@ html[lang="fa"] .contact-method-label {
     width: 100%;
     flex-direction: row;
     align-items: center;
-    justify-content: flex-start;
-    gap: clamp(.75rem, 4vw, 1.5rem);
+    justify-content: space-between;
+    gap: 0;
     margin-top: .65rem;
   }
   .homepage-contact-links > li {
     width: auto;
+    flex: 1 1 0;
   }
   .homepage-contact-link {
     display: flex;
-    width: 2.75rem;
+    width: 100%;
     min-width: 2.75rem;
     min-height: 2.75rem;
     align-items: center;
