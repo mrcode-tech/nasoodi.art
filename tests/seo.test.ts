@@ -200,11 +200,14 @@ test("structured data publishes prioritized aliases deterministically without a 
       fa: { given: [], middle: [], family: [], partialSearchQueries: [], completeName: [] }
     }
   } as unknown as ArtistProfile;
-  const build = (completeName: typeof profile.nameAliases.en.completeName) =>
+  const build = (completeName: NonNullable<ArtistProfile["nameAliases"]>["en"]["completeName"]) =>
     createPortfolioStructuredData({
       profile: {
         ...profile,
-        nameAliases: { ...profile.nameAliases, en: { ...profile.nameAliases.en, completeName } }
+        nameAliases: {
+          ...(profile.nameAliases ?? {}),
+          en: { ...(profile.nameAliases?.en ?? { given: [], middle: [], family: [], partialSearchQueries: [], completeName: [] }), completeName }
+        }
       } as unknown as ArtistProfile,
       cvEntries: [],
       locale: "en"
