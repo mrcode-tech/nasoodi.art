@@ -58,7 +58,9 @@ export function createPortfolioStructuredData({
       Number.isInteger(alias.structuredDataPriority) && (alias.structuredDataPriority ?? 0) > 0)
     .sort((left, right) =>
       (left.structuredDataPriority ?? Number.MAX_SAFE_INTEGER) - (right.structuredDataPriority ?? Number.MAX_SAFE_INTEGER) ||
-      normalizeNameKey(left.value).localeCompare(normalizeNameKey(right.value)))
+      (normalizeNameKey(left.value) < normalizeNameKey(right.value) ? -1 :
+        normalizeNameKey(left.value) > normalizeNameKey(right.value) ? 1 :
+        left.value < right.value ? -1 : left.value > right.value ? 1 : 0))
     .map((alias) => alias.value);
 
   // Keep the other locale canonical spelling as an identity link; additional aliases are explicitly prioritized and locale-specific.
