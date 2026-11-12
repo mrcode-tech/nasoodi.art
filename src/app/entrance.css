@@ -119,13 +119,14 @@ body.entrance-document-body {
    changes scale the image and its overlay as one composition. */
 @media (min-width: 481px) {
   .entrance-content {
-    width: min(100%, 76rem);
+    position: relative;
+    width: min(100%, calc(min(64svh, 48rem) * var(--entrance-artwork-ratio)));
     gap: 0;
   }
 
   .entrance-artwork-frame {
     position: relative;
-    width: min(100%, calc(64svh * var(--entrance-artwork-ratio)));
+    width: 100%;
     height: auto;
     min-height: 0;
     aspect-ratio: var(--entrance-artwork-ratio);
@@ -210,6 +211,12 @@ body.entrance-document-body {
 @media (max-height: 640px) {
   .entrance-content {
     gap: .45rem;
+  }
+
+  @media (min-width: 481px) {
+    .entrance-content {
+      width: min(100%, calc(38dvh * var(--entrance-artwork-ratio)));
+    }
   }
 
   .entrance-artwork-frame {
