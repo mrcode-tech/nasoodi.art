@@ -83,6 +83,26 @@ test("mobile entrance separates the artwork from a centered two-line artist name
   expect(layout.secondLineTop).toBeGreaterThan(layout.firstLineTop);
   expect(Math.abs(layout.firstLineCenter - layout.headingCenter)).toBeLessThanOrEqual(1);
   expect(Math.abs(layout.secondLineCenter - layout.headingCenter)).toBeLessThanOrEqual(1);
+
+  const belowImage = await page.evaluate(() => {
+    const image = document.querySelector(".entrance-artwork")!.getBoundingClientRect();
+    const copy = document.querySelector(".entrance-copy")!.getBoundingClientRect();
+    const buttons = document.querySelector(".entrance-language-links")!.getBoundingClientRect();
+    const link = document.querySelector(".entrance-language-links a")!;
+    const style = getComputedStyle(link);
+    return {
+      copyBelowImage: copy.top > image.bottom,
+      buttonsBelowImage: buttons.top > image.bottom,
+      buttonsBelowWelcome: buttons.top > document.querySelector(".entrance-welcome")!.getBoundingClientRect().bottom,
+      backdropFilter: style.backdropFilter,
+      webkitBackdropFilter: style.webkitBackdropFilter,
+    };
+  });
+  expect(belowImage.copyBelowImage).toBe(true);
+  expect(belowImage.buttonsBelowImage).toBe(true);
+  expect(belowImage.buttonsBelowWelcome).toBe(true);
+  expect(belowImage.backdropFilter).toBe("none");
+  expect(belowImage.webkitBackdropFilter).toBe("none");
 });
 
 test("artwork is unfiltered in light and dark themes", async ({ page }) => {
