@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { ArrowUpRightIcon } from "@/components/ui/arrow-up-right-icon";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { createLocalizedMetadata } from "@/lib/seo/metadata";
 import { ArtworkExperience } from "@/components/artwork-experience";
@@ -122,14 +123,14 @@ export default async function Detail({params,searchParams}:DetailProps){
       {event.endsAt&&<p>{t("eventEnds")}: <time dateTime={event.endsAt}>{dateLabel(event.endsAt,event.timeZone)}</time></p>}
       {event.venue?.[locale]&&<p>{t("eventVenue")}: {event.venue[locale]}</p>}
       {event.attendanceMode&&<p>{t("attendanceMode")}: {event.attendanceMode==="in-person"?t("inPerson"):event.attendanceMode==="online"?t("online"):t("hybrid")}</p>}
-      {registrationStillRelevant&&<a className="text-link" href={event.registrationUrl!} rel="noopener noreferrer" target="_blank">{t("registration")} ↗</a>}
+      {registrationStillRelevant&&<a className="text-link" href={event.registrationUrl!} rel="noopener noreferrer" target="_blank">{t("registration")} <ArrowUpRightIcon /></a>}
     </section>}
     {entry.body?.[locale]&&<div className="prose">{entry.body[locale].map((block,index)=>{
       if(block.type==="paragraph")return <p key={index}>{block.text}</p>;
       if(block.type==="heading")return block.level===2?<h2 key={index}>{block.text}</h2>:<h3 key={index}>{block.text}</h3>;
       if(block.type==="list"){const items=block.items.map((item,i)=><li key={i}>{item}</li>);return block.ordered?<ol key={index}>{items}</ol>:<ul key={index}>{items}</ul>;}
       if(block.type==="quote")return <blockquote key={index}><p>{block.text}</p>{block.attribution&&<cite>{block.attribution}</cite>}</blockquote>;
-      if(block.type==="link"&&isSafeJournalHref(block.href)){const external=block.href.startsWith("https://");return <p key={index}><a href={block.href} {...(external?{target:"_blank",rel:"noopener noreferrer"}:{})}>{block.text} ↗</a></p>;}
+      if(block.type==="link"&&isSafeJournalHref(block.href)){const external=block.href.startsWith("https://");return <p key={index}><a href={block.href} {...(external?{target:"_blank",rel:"noopener noreferrer"}:{})}>{block.text} <ArrowUpRightIcon /></a></p>;}
       return null;
     })}</div>}
     {relatedEntries.length>0&&<nav className="journal-more" aria-label={t("moreFromJournal")}><h2>{t("moreFromJournal")}</h2><ul>{relatedEntries.map(item=><li key={item.id}><Link href={pagePath(locale,`journal/${getLocalizedSlug(item,locale)}`)}>{item.title[locale]}</Link></li>)}</ul></nav>}

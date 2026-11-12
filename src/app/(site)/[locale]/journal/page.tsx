@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { ArrowUpRightIcon } from "@/components/ui/arrow-up-right-icon";
 import { Suspense } from "react";
 import Link from "next/link";
 import { SiteBreadcrumbs } from "@/components/site-breadcrumbs";
@@ -45,7 +46,7 @@ export default async function JournalPage({params,searchParams}:PropsWithSearch)
      <div className="journal-card-meta"><span>{filters.find(([, ,value])=>value===(entry.type))?.[1]}</span>{entry.publishedAt&&Number.isFinite(Date.parse(entry.publishedAt))&&<time dateTime={entry.publishedAt}>{t("published")}: {dateLabel(entry.publishedAt)}</time>}</div>
      <h2><Link href={pagePath(locale,`journal/${getLocalizedSlug(entry,locale)}`)}>{entry.title[locale]}</Link></h2><p>{entry.summary[locale]}</p>
      {entry.type==="event"&&entry.event&&<><p className="journal-event-date"><time dateTime={entry.event.startsAt}>{dateLabel(entry.event.startsAt,entry.event.timeZone,true)}</time> <span dir="ltr">{entry.event.timeZone}</span></p>{entry.event.venue?.[locale]&&<p className="journal-event-date">{entry.event.venue[locale]}</p>}</>}
-     <Link className="text-link" href={pagePath(locale,`journal/${getLocalizedSlug(entry,locale)}`)}>{t("readMore")} ↗</Link>
+     <Link className="text-link" href={pagePath(locale,`journal/${getLocalizedSlug(entry,locale)}`)}>{t("readMore")} <ArrowUpRightIcon /></Link>
     </div>
    </article>;
   })}</div>}{visibleEntries.length>0&&<Suspense fallback={null}><JournalPagination totalItems={visibleEntries.length} locale={locale} labels={{itemsPerPage:t("itemsPerPage"),previous:t("previousPage"),next:t("nextPage"),page:t("journalPage"),showing:t.raw("showingJournal")}} /></Suspense>}</div>;

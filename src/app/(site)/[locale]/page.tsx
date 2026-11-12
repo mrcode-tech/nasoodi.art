@@ -3,6 +3,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getTranslations, setRequestLocale } from "next-intl/server";
+import { ArrowUpRightIcon } from "@/components/ui/arrow-up-right-icon";
 import { ArtworkExperience } from "@/components/artwork-experience";
 import { ArtistHeroCarousel } from "@/components/artist-hero-carousel";
 import { BiographyDisclosure } from "@/components/biography-disclosure";
@@ -89,7 +90,7 @@ export default async function Home({ params }: Props) {
       <section className="editorial-section" aria-labelledby="featured-works">
         <div className="section-heading">
           <div><p className="eyebrow">{t("portfolio")}</p><h2 id="featured-works">{t("selected")}</h2></div>
-          <Link className="text-link" href={pagePath(locale, "works")}>{t("exploreCollections")} ↗</Link>
+          <Link className="text-link" href={pagePath(locale, "works")}>{t("exploreCollections")} <ArrowUpRightIcon /></Link>
         </div>
         {works.length === 0 ? <p className="empty-note">{t("emptyWorks")}</p> : <ArtworkExperience artworks={works.slice(0, 6)} locale={locale} context="home" />}
       </section>
@@ -97,7 +98,7 @@ export default async function Home({ params }: Props) {
       <section className="editorial-section" aria-labelledby="featured-galleries">
         <div className="section-heading">
           <div><p className="eyebrow">{t("discover")}</p><h2 id="featured-galleries">{t("galleries")}</h2></div>
-          <Link className="text-link" href={pagePath(locale, "galleries")}>{t("discover")} ↗</Link>
+          <Link className="text-link" href={pagePath(locale, "galleries")}>{t("discover")} <ArrowUpRightIcon /></Link>
         </div>
         {sets.length === 0 ? <p className="empty-note">{t("emptyGalleries")}</p> : <CollectionCarousel galleries={sets} artworks={home.artworks} locale={locale} label={t("galleries")} />}
       </section>
@@ -106,7 +107,7 @@ export default async function Home({ params }: Props) {
         <section className="editorial-section" aria-labelledby="latest-journal">
           <div className="section-heading">
             <div><p className="eyebrow">{t("latest")}</p><h2 id="latest-journal">{t("journal")}</h2></div>
-            <Link className="text-link" href={pagePath(locale, "journal")}>{t("exploreJournal")} ↗</Link>
+            <Link className="text-link" href={pagePath(locale, "journal")}>{t("exploreJournal")} <ArrowUpRightIcon /></Link>
           </div>
           <div className="journal-preview-list">
             {journal.map((entry) => {
@@ -129,7 +130,7 @@ export default async function Home({ params }: Props) {
                     )}
                     <h3><Link href={pagePath(locale, `journal/${getLocalizedSlug(entry, locale)}`)}>{entry.title[locale]}</Link></h3>
                     <p>{entry.summary[locale]}</p>
-                    <Link className="text-link" href={pagePath(locale, `journal/${getLocalizedSlug(entry, locale)}`)}>{t("readMore")} ↗</Link>
+                    <Link className="text-link" href={pagePath(locale, `journal/${getLocalizedSlug(entry, locale)}`)}>{t("readMore")} <ArrowUpRightIcon /></Link>
                   </div>
                 </article>
               );
