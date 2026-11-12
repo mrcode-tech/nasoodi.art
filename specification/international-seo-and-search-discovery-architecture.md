@@ -57,7 +57,7 @@ Artwork is primary content. Provide meaningful localized alt text for informativ
 
 Use JSON-LD to describe visible content using values present in canonical JSON; do not require verification flags. Candidate types include Person, WebSite, WebPage, VisualArtwork, CollectionPage, ItemList, Article, Event, and BreadcrumbList.
 
-Use stable entity identifiers and consistent creator/author references. Never invent awards, address, organization, reviews, ratings, prices, offers, availability, dates, venues, or affiliations. Avoid duplicate/conflicting graphs and serialize safely. Validate JSON-LD syntax and Google eligibility separately; valid markup does not guarantee rich results.
+Use stable entity identifiers and consistent creator/author references. The Person entity's canonical localized name comes from the artist profile; any `alternateName` values must come from the curated profile-owned inventory at `src/content/data/artist-name-aliases.json`, resolved through the artist repository. Include only a small reviewed set of complete-name variants; exclude partial queries, component-only variants, exploratory spellings, and generated permutations. Never invent awards, address, organization, reviews, ratings, prices, offers, availability, dates, venues, or affiliations. Avoid duplicate/conflicting graphs and serialize safely. Validate JSON-LD syntax and Google eligibility separately; valid markup does not guarantee rich results.
 
 ## 8. Sitemap, robots, and crawl paths
 
@@ -67,7 +67,7 @@ robots.txt must reference the canonical sitemap and must not block resources req
 
 ## 9. Persian and English search quality
 
-Treat both languages as independent editorial experiences, not machine-translated copies. Set document language and direction correctly (fa/RTL, en/LTR). Write natural localized titles, descriptions, headings, artwork descriptions, and alt text. Research Persian search intent independently; do not mechanically translate English keyword lists. Handle Persian/Arabic character variants consistently without altering names or source facts. Use locale-aware dates and numbers. Avoid keyword stuffing.
+Treat both languages as independent editorial experiences, not machine-translated copies. Set document language and direction correctly (fa/RTL, en/LTR). Write natural localized titles, descriptions, headings, artwork descriptions, and alt text. Research Persian search intent independently; do not mechanically translate English keyword lists. Handle Persian/Arabic character variants consistently without altering names or source facts. Use the curated artist alias inventory as editorial input for identity resolution, not as a keyword list to publish verbatim. Use locale-aware dates and numbers. Avoid keyword stuffing.
 
 ## 10. Social sharing, performance, and accessibility
 
@@ -83,7 +83,7 @@ Do not add analytics, tracking pixels, session replay, or third-party collection
 
 ## 12. Automated verification
 
-Add tests for unique localized metadata; canonical URLs; reciprocal hreflang only for real translations; no alternates to 404/noindex/redirected/unpublished routes; correct lang/dir; sitemap eligibility; robots policy; Contact demo noindex; JSON-LD syntax and content parity; real 404 behavior; internal links; artwork alt text/dimensions; and production-rendered HTML/status.
+Add tests for unique localized metadata; canonical URLs; reciprocal hreflang only for real translations; no alternates to 404/noindex/redirected/unpublished routes; correct lang/dir; sitemap eligibility; robots policy; Contact destination eligibility; JSON-LD syntax and content parity; real 404 behavior; internal links; artwork alt text/dimensions; and production-rendered HTML/status.
 
 Use synthetic fixtures. Never publish fictional artist facts for tests.
 
@@ -100,7 +100,7 @@ Prioritize by impact, confidence, effort, and dependency. Recheck both locales a
 3. Centralize metadata, canonical, and hreflang generation.
 4. Verify sitemap, robots, HTTP statuses, and indexability gates.
 5. Validate artwork/image SEO and structured data.
-6. Improve internal links and approved page content.
+6. Improve crawlable internal discovery only where it does not change visible content or UI; editorial changes require separate owner authorization.
 7. Add CI checks and production-build verification.
 8. Configure monitoring only after launch authorization.
 
@@ -112,7 +112,7 @@ Prioritize by impact, confidence, effort, and dependency. Recheck both locales a
 - [ ] Hreflang is reciprocal and limited to true published translations.
 - [ ] Sitemap contains only canonical eligible URLs.
 - [ ] robots.txt does not block required rendering resources.
-- [ ] Demo Contact routes remain noindex and outside sitemap.
+- [ ] Contact routes are indexable only when localized metadata is complete and an owner-supplied public contact destination exists; otherwise they are noindex and excluded from the sitemap.
 - [ ] Structured data matches the content rendered on the page.
 - [ ] Missing content returns correct status and is not indexed.
 - [ ] English and Persian production HTML are tested.
@@ -159,3 +159,71 @@ Rendered production HTML is the acceptance source for title, description, canoni
 The sitemap resolves Works, Galleries, Journal, CV, About, and Contact through focused content repositories rather than importing raw JSON adapters. Section metadata and the global Person/WebSite graph also resolve the canonical artist/artwork repositories. Detail-route alternate URLs are found by stable entity ID and then use the target locale's explicit slug. Do not emit an alternate link when the target locale lacks the corresponding published record.
 
 Production acceptance checks actual localized HTML: document `lang`/`dir`, unique title/description, self canonical, reciprocal hreflang, Open Graph/Twitter metadata, robots, sitemap URLs, structured data, and visible server-rendered editorial content. Unit tests of metadata helpers alone are not rendered-HTML evidence.
+
+## 18. Artistic subject and professional-context discovery
+
+About and CV content should make the artist discoverable not only by name, but also by the actual artistic practice, medium, professional role, education, and documented art-world context. This is a semantic-content requirement, not a request to publish a detached keyword list.
+
+### 18.1 Artistic practice and medium vocabulary
+
+Where supported by the artist's visible work and approved biography, use natural English and Persian wording for relevant concepts such as:
+
+- Painter / نقاش
+- Oil painter / نقاش رنگ‌روغن
+- Oil painting / نقاشی رنگ‌روغن
+- Contemporary painter / نقاش معاصر
+- Contemporary Iranian art / هنر معاصر ایران
+- Iranian visual artist / هنرمند تجسمی ایرانی
+- Figurative painting / نقاشی فیگوراتیو
+- Contemporary painting / نقاشی معاصر
+- Painting instructor or art educator / مدرس نقاشی یا مدرس هنر
+- Colour, composition, visual rhythm, and artistic practice / رنگ، ترکیب‌بندی، ریتم بصری و شیوهٔ هنری
+
+Use only the terms that accurately describe the published works and the artist's own professional practice. Do not force every term into every page, metadata field, artwork alt text, or heading.
+
+### 18.2 Education, institutions, and professional associations
+
+Education and professional-context searches should be supported by the actual localized CV entries and biography. Relevant query patterns include institution name + degree, institution name + painting, painting degree + artist, and professional association + artist. Institution names (including Alzahra University and University of Science and Culture) must be written consistently in English and Persian and must be sourced from the canonical CV/profile records. Do not add institution names to metadata or structured data when the corresponding education or affiliation is absent from visible content.
+
+Professional memberships, teaching roles, publications, exhibitions, and art organizations follow the same rule: describe them in the visible About/CV content first, then expose only the same facts through metadata or structured data where the Schema.org property is appropriate.
+
+### 18.3 Metadata-only discovery for a name in an existing CV publication
+
+Nima Petgar (نیما پتگر) is present in the canonical CV only as part of the existing publication record “My Teacher: Nima Petgar” / «استادم: نیما پتگر». Preserve that record as a publication. Do not reinterpret its title as evidence of a teacher-student relationship, and do not add Nima Petgar to the artist biography, statement, education, training, memberships, affiliations, or any other visible website content.
+
+If additional search context is required, maintain the English and Persian name only in a dedicated SEO metadata JSON source (for example, src/content/data/seo.json) under a CV-specific metadata field such as cv.searchContext. Resolve it only through the CV metadata generation path. Use it to produce an accurate, natural CV page title or description that refers to the existing publication record; do not emit a detached keyword list, hidden text, or a meta keywords tag. The metadata must not imply that Nima Petgar taught, mentored, employed, or was institutionally affiliated with the artist.
+
+Do not add Nima Petgar to the artist-name alias inventory or the Person JSON-LD graph (alternateName, sameAs, knowsAbout, alumniOf, or memberOf). Do not create a new Schema.org relationship. The only public-content occurrence remains the existing CV publication record.
+### 18.4 Structured-data mapping
+
+Use only properties supported by the actual content and schema semantics:
+
+- jobTitle for a documented professional role.
+- knowsAbout for genuine areas of practice or expertise, not a dump of target search phrases.
+- alumniOf for documented educational institutions.
+- memberOf for documented memberships.
+- worksFor or affiliation only when the real relationship matches the property's meaning; do not use them as generic organization keywords.
+- sameAs only for official identity/profile URLs, never for names or search terms.
+
+Do not invent Person properties or infer relationships from co-occurrence. Structured data must agree with visible About/CV content and canonical editorial records.
+
+### 18.5 Acceptance checks
+
+- [ ] About explains the actual medium, artistic practice, and professional role in natural bilingual prose.
+- [ ] CV education and membership entries use consistent institution/organization names in both locales.
+- [ ] Relevant terms are present in visible, crawlable HTML rather than hidden keyword blocks.
+- [ ] Metadata describes the page naturally and does not become a comma-separated keyword list.
+- [ ] Person JSON-LD uses only semantically correct properties backed by visible canonical content.
+- [ ] Nima Petgar / نیما پتگر is used only as CV-specific SEO metadata context grounded in the existing publication record; it is not added to biography, training, education, other visible content, or Person JSON-LD.
+- [ ] English and Persian search intent is reviewed independently; literal translation is not assumed to reflect local query behavior.
+
+
+## 19. SEO-only implementation and content-preservation contract — 2026-11-12
+
+For technical SEO tasks that explicitly prohibit website/content changes, follow specification/technical-seo-implementation-prompt.md.
+
+The prompt establishes a strict read-only boundary for canonical editorial JSON and translation messages. SEO implementation may consume existing repository values, but must not edit, translate, normalize, reorder, or supplement them. Visible page content, artist identity, UI, routes, responsive behavior, and application logic must remain unchanged.
+
+The complete Git diff must be audited against the pre-implementation baseline. Changes are limited to technical SEO modules, tests, and specifications. If a requested SEO property cannot be populated from existing public canonical data, omit it and report the limitation. Do not invent structured-data properties or use an unrelated Schema.org relationship to imply a fact.
+
+Contact indexability is conditional on complete localized canonical metadata and at least one valid owner-supplied public contact destination in that locale. The same eligibility decision must be applied to page metadata and sitemap inclusion; there is no blanket demo-phase noindex rule.

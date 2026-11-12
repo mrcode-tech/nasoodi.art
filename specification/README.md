@@ -23,7 +23,9 @@ This directory documents application architecture, interface behavior, design sy
 ### Routing, localization, and discovery
 - Internationalization and UI translation architecture: internationalization-and-ui-translation-architecture.md
 - International SEO and search discovery architecture: international-seo-and-search-discovery-architecture.md
+- Artist name variants and search identity: artist-name-variants-and-search-identity.md
 - SEO and discovery: seo-and-discovery.md
+- Technical SEO implementation prompt and strict content-preservation contract: technical-seo-implementation-prompt.md
 
 ### Design system and interaction
 - Site-wide design system: site-wide-design-system-and-section-specification.md
@@ -60,6 +62,7 @@ This directory documents application architecture, interface behavior, design sy
 - The default locale is Persian.
 - Stable content IDs are independent of localized slugs.
 - Canonical content is stored under src/content/data/.
+- The artist's canonical profile is `src/content/data/artist-profile.json`; its curated alternate-name inventory is `src/content/data/artist-name-aliases.json`, owned and exposed by the same artist content adapter.
 - UI translations are stored under src/i18n/messages/{en,fa}/.
 - Components consume repository-layer data rather than importing editorial JSON directly.
 - Pagination defaults to 6 and supports 10 and 20.

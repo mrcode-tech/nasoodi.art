@@ -6,13 +6,21 @@ name: Nasoodi.art CI
 on:
   push:
     branches: [feature, stage, main]
+    # Editorial/technical documentation has its own lightweight policy check.
+    # Keep the expensive build and browser suite for application, test, and
+    # workflow changes.
+    paths-ignore:
+      - "specification/**"
+      - "docs/**"
+      - "*.md"
+      - "**/*.md"
   workflow_dispatch:
 permissions:
   contents: read
-# Keep release-branch runs serialized. Key feature runs by commit so a
-# cancelled stale run cannot block verification of a newer feature commit.
+# One active run per branch; newer pushes supersede obsolete queued/running
+# runs. This avoids spending CI time validating intermediate feature commits.
 concurrency:
-  group: ci-${{ github.workflow }}-${{ github.repository }}-${{ github.ref_name }}
+  group: ci-${{ github.workflow }}-${{ github.repository }}-${{ github.ref }}
   cancel-in-progress: true
 jobs:
   validate:

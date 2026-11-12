@@ -537,3 +537,44 @@ The site owner explicitly authorized temporary fictional About-page content on t
 - Replace the fixture with artist-authored and artist-approved material before any release merge or deployment.
 
 The current canonical JSON profile is the site's initial editable content; no separate preview fixture or approval-state provider is used.
+
+## 19. Search discoverability of artistic practice and CV context
+
+The About page and CV should help visitors and search engines understand the artist's actual work and professional context, not only identify the artist by name. Preserve the existing editorial design: incorporate relevant terms into meaningful biography, statement, education, membership, and teaching content rather than adding a visible or hidden keyword list.
+
+### Artistic subject vocabulary
+
+Where factually accurate and natural in the artist-approved English and Persian copy, cover concepts such as:
+
+- Painter / نقاش
+- Oil painter and oil painting / نقاش رنگ‌روغن و نقاشی رنگ‌روغن
+- Contemporary painter and contemporary painting / نقاش معاصر و نقاشی معاصر
+- Contemporary Iranian art and Iranian visual artist / هنر معاصر ایران و هنرمند تجسمی ایرانی
+- Figurative painting / نقاشی فیگوراتیو
+- Painting instructor and art educator / مدرس نقاشی و مدرس هنر
+- Colour, composition, visual rhythm, and artistic practice / رنگ، ترکیب‌بندی، ریتم بصری و شیوهٔ هنری
+
+Do not add a term solely because it has search volume. It must describe the artist's practice or the actual portfolio.
+
+### Education and professional context
+
+- Keep university names, degree names, graduation years, memberships, teaching positions, publications, exhibitions, and awards in the canonical CV records.
+- Use each institution's consistent bilingual name in the visible CV entry. Relevant institution + degree and institution + painting combinations should be discoverable through those ordinary entries, not a separate keyword block.
+- Use the biography to summarize the most relevant documented professional context; leave detailed chronology to the CV.
+- Do not add an organization or institution to Person JSON-LD unless the visible CV/profile documents the corresponding relationship and the chosen property accurately describes it.
+
+### CV publication name: metadata-only search context
+
+Nima Petgar (نیما پتگر) appears only in the existing CV publication record “My Teacher: Nima Petgar” / «استادم: نیما پتگر». Preserve that record as a publication. Do not add the name or a teacher-student claim to the About biography, artist statement, education, training, or any other visible website content.
+
+Any additional search context belongs only in the dedicated SEO metadata JSON source and may be consumed only by CV page metadata. It must describe the existing publication accurately and must not imply teaching, mentorship, employment, or institutional affiliation. Do not add Nima Petgar to Person JSON-LD or the artist-name alias inventory.
+### Search and rendering requirements
+
+- Relevant artistic-practice and professional terms must appear in visible, server-rendered text only when already supported by approved content.
+- Keep the artist statement distinct from factual biography and CV chronology.
+- Nima Petgar / نیما پتگر remains limited to the existing CV publication record and CV-specific SEO metadata; no biography, training, education, or other visible content is added for SEO.
+- Use natural localized phrasing; do not mechanically translate keyword lists.
+- Page title and description remain concise summaries, not keyword inventories.
+- Use jobTitle, knowsAbout, alumniOf, and memberOf only when supported by the canonical records and semantically appropriate.
+- Do not add a meta keywords tag, hidden keyword text, duplicate SEO pages, or unsupported claims.
+- Test rendered HTML in both locales to confirm that the useful content is crawlable without requiring client-side interaction.

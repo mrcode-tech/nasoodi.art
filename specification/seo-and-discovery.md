@@ -23,7 +23,7 @@ Every indexable route needs a unique accurate title and description, canonical U
 Evaluate Schema.org Person for the artist, WebSite for the portfolio, and VisualArtwork for individual artwork pages. Use Organization only if a real organization is represented. Include only confirmed facts that match visible page content. Do not create fake Offer, price, review, rating, address, Event, gallery, or affiliation data. Structured data does not guarantee rich results. Validate JSON-LD syntax and avoid duplicate conflicting schemas.
 
 ## International SEO
-Persian pages use lang=fa and dir=rtl; English pages use lang=en and dir=ltr. Use reciprocal hreflang only for genuine approved translations. Give each locale its correct canonical. Do not redirect crawlers or visitors solely by inferred location. The language switcher should open the equivalent page when available and otherwise use a clear locale-home fallback. Keep the artist's approved English transliteration consistent.
+Persian pages use lang=fa and dir=rtl; English pages use lang=en and dir=ltr. Use reciprocal hreflang only for genuine approved translations. Give each locale its correct canonical. Do not redirect crawlers or visitors solely by inferred location. The language switcher should open the equivalent page when available and otherwise use a clear locale-home fallback. Keep the artist's approved English transliteration consistent. Maintain defensible alternate spellings in the profile-owned `src/content/data/artist-name-aliases.json` inventory; do not publish a raw alias or partial-query list as page copy.
 
 ## Technical discovery
 - XML sitemap includes canonical, public, indexable URLs only.
@@ -84,3 +84,35 @@ The Contact page may be indexed only when the canonical localized title and desc
 ## Canonical repository boundary — 2026-11-05
 
 The homepage uses `getHomepageContent`; About uses `getAbout` and `getCv`; artwork/gallery/Journal detail pages use focused repositories; sitemap uses the same repositories as page rendering; and global Person structured data resolves through `getArtist`. Avoid importing JSON adapters directly into route or presentation modules. Localized detail alternates match stable IDs and then use the target record's explicit localized slug.
+
+## Semantic topic coverage for About and CV
+
+Name-based discovery should be complemented by accurate subject-based and professional-context content. The About page and CV should naturally cover the artist's real discipline, medium, techniques, education, teaching, memberships, publications, exhibitions, and other documented professional activities.
+
+Relevant vocabulary may include painter, oil painter, oil painting, contemporary painting, contemporary Iranian art, Iranian visual artist, figurative painting, painting instructor, art educator, colour, composition, and visual expression, with natural Persian equivalents such as نقاش، نقاش رنگ‌روغن، نقاشی رنگ‌روغن، نقاش معاصر، هنر معاصر ایران، هنرمند تجسمی ایرانی، نقاشی فیگوراتیو، مدرس نقاشی، رنگ و ترکیب‌بندی.
+
+Institution and organization searches should be served by the actual CV entries. Use the canonical bilingual names for documented education and memberships (for example, Alzahra University and University of Science and Culture) in visible CV content; do not create a keyword paragraph that merely lists institutions.
+
+Nima Petgar (نیما پتگر) appears in the canonical CV only as part of the existing publication record “My Teacher: Nima Petgar” / «استادم: نیما پتگر». Keep it as a publication record; do not turn its title into a teacher-student claim or add the name to biography, statement, education, training, memberships, affiliations, or other visible website content.
+
+If the name is needed as an SEO signal, store the bilingual term in a dedicated SEO metadata JSON source (for example, src/content/data/seo.json) under a CV-specific field such as cv.searchContext. Consume it only when generating CV page metadata, and use it to describe the existing publication naturally in the localized CV title or description. Do not use a detached keyword list, hidden text, or a meta keywords tag. Do not imply that Nima Petgar taught, mentored, employed, or was institutionally affiliated with the artist. Do not add the name to the artist-name alias inventory or Person JSON-LD.
+
+
+## SEO-only implementation guardrails — 2026-11-12
+
+The repository-ready implementation prompt is maintained in specification/technical-seo-implementation-prompt.md. It is the task contract for technical SEO work that must preserve the existing website.
+
+For an SEO-only task:
+
+- Treat all canonical editorial records and locale message files as read-only inputs.
+- Do not modify artist identity, spelling, biography, statement, CV, artwork, gallery, journal, event, announcement, or Contact content.
+- Do not add visible copy, headings, keyword lists, hidden text, or new editorial sections.
+- Do not change routes, localized slugs, layouts, styles, navigation, responsive behavior, localization, or application interactions.
+- Generate metadata and structured data only from existing public canonical repository values.
+- Omit unsupported properties rather than inventing or inferring facts.
+- Keep code changes limited to technical SEO modules, technical SEO tests, and specifications.
+- Require a before/after diff audit proving that canonical editorial JSON and translation messages are unchanged.
+
+The subject and professional-context vocabulary described above is guidance for evaluating existing content and metadata relevance. It is not permission to rewrite About/CV content during an SEO-only implementation. Any editorial additions require a separate explicit content-editing request.
+
+The Person graph may expose curated complete-name aliases, official public profile URLs, documented professional roles, published educational organizations, published memberships, and genuine areas of practice only when the corresponding values already exist in public canonical repositories. Nima Petgar / نیما پتگر is not an artist alias or Person relationship; keep the name limited to CV-specific SEO metadata grounded in the existing publication record.
