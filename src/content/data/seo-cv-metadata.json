@@ -8,15 +8,21 @@
         "fa": "دانشگاه الزهرا"
       },
       "alternateNames": {
-        "en": [],
+        "en": [
+          "Al-Zahra University"
+        ],
         "fa": []
       },
       "searchTerms": {
         "en": [
-          "Alzahra University Tehran"
+          "painting university",
+          "art education",
+          "Tehran university"
         ],
         "fa": [
-          "دانشگاه الزهرا تهران"
+          "دانشگاه نقاشی",
+          "آموزش هنر",
+          "دانشگاه تهران"
         ]
       }
     },
@@ -27,15 +33,21 @@
         "fa": "دانشگاه علم و فرهنگ"
       },
       "alternateNames": {
-        "en": [],
+        "en": [
+          "University of Science & Culture"
+        ],
         "fa": []
       },
       "searchTerms": {
         "en": [
-          "University of Science and Culture Tehran"
+          "painting degree",
+          "fine arts education",
+          "Tehran university"
         ],
         "fa": [
-          "دانشگاه علم و فرهنگ تهران"
+          "مدرک نقاشی",
+          "تحصیلات هنر",
+          "دانشگاه تهران"
         ]
       }
     },
@@ -46,17 +58,23 @@
         "fa": "انجمن نقاشان ایران"
       },
       "alternateNames": {
-        "en": [],
-        "fa": []
+        "en": [
+          "Association of Iranian Painters"
+        ],
+        "fa": [
+          "انجمن هنرمندان نقاش ایران"
+        ]
       },
       "searchTerms": {
         "en": [
-          "Association of Iranian Painters",
-          "Iranian Painters Association membership"
+          "Iranian painters",
+          "artists association",
+          "professional membership"
         ],
         "fa": [
-          "انجمن هنرمندان نقاش ایران",
-          "عضویت انجمن نقاشان ایران"
+          "نقاشان ایران",
+          "انجمن هنری",
+          "عضویت حرفه‌ای"
         ]
       }
     },
@@ -72,10 +90,12 @@
       },
       "searchTerms": {
         "en": [
-          "Institute for Development of Contemporary Visual Arts membership"
+          "contemporary visual arts",
+          "visual arts institute"
         ],
         "fa": [
-          "عضویت مؤسسه توسعه هنری"
+          "هنرهای تجسمی معاصر",
+          "مؤسسه هنرهای تجسمی"
         ]
       }
     },
@@ -91,10 +111,14 @@
       },
       "searchTerms": {
         "en": [
-          "Soore University Tehran"
+          "art lecturer",
+          "painting instruction",
+          "university teaching"
         ],
         "fa": [
-          "دانشگاه سوره تهران"
+          "مدرس هنر",
+          "آموزش نقاشی",
+          "تدریس دانشگاهی"
         ]
       }
     },
@@ -105,17 +129,23 @@
         "fa": "فصلنامه علمی‌تخصصی مطالعات هنرهای تجسمی، دانشگاه سیستان و بلوچستان"
       },
       "alternateNames": {
-        "en": [],
-        "fa": []
+        "en": [
+          "Visual Arts Studies"
+        ],
+        "fa": [
+          "مطالعات هنرهای تجسمی"
+        ]
       },
       "searchTerms": {
         "en": [
-          "Visual Arts Studies academic journal",
-          "University of Sistan and Baluchestan visual arts journal"
+          "visual arts journal",
+          "art studies journal",
+          "academic publication"
         ],
         "fa": [
-          "فصلنامه مطالعات هنرهای تجسمی",
-          "فصلنامه هنرهای تجسمی دانشگاه سیستان و بلوچستان"
+          "فصلنامه هنرهای تجسمی",
+          "نشریه مطالعات هنر",
+          "مقاله علمی هنر"
         ]
       }
     },
@@ -131,12 +161,16 @@
       },
       "searchTerms": {
         "en": [
-          "Fath-Ali Shah Qajar reliefs and Sassanid art",
-          "Qajar reliefs influenced by Sassanid period"
+          "Qajar reliefs",
+          "Fath-Ali Shah",
+          "Sassanid art",
+          "Iranian art history"
         ],
         "fa": [
-          "نقش‌برجسته‌های فتحعلی‌شاه قاجار و هنر ساسانی",
-          "تأثیر هنر ساسانی بر نقش‌برجسته‌های قاجار"
+          "نقش‌برجسته قاجار",
+          "فتحعلی‌شاه",
+          "هنر ساسانی",
+          "تاریخ هنر ایران"
         ]
       }
     },
@@ -152,12 +186,12 @@
       },
       "searchTerms": {
         "en": [
-          "Nima Petgar article",
-          "Nima Petgar in Tandis magazine"
+          "Nima Petgar",
+          "Tandis publication"
         ],
         "fa": [
-          "مقاله نیما پتگر",
-          "نیما پتگر در مجله تندیس"
+          "نیما پتگر",
+          "مطلب تندیس"
         ]
       }
     },
@@ -168,17 +202,23 @@
         "fa": "دوهفته‌نامه تندیس"
       },
       "alternateNames": {
-        "en": [],
-        "fa": []
+        "en": [
+          "Tandis"
+        ],
+        "fa": [
+          "تندیس"
+        ]
       },
       "searchTerms": {
         "en": [
           "Tandis magazine",
-          "Tandis art magazine"
+          "Iranian art magazine",
+          "art periodical"
         ],
         "fa": [
           "مجله تندیس",
-          "نشریه هنری تندیس"
+          "نشریه هنری",
+          "دوهفته‌نامه هنری"
         ]
       }
     },
@@ -194,12 +234,14 @@
       },
       "searchTerms": {
         "en": [
-          "My Teacher Nima Petgar article",
-          "My Teacher: Nima Petgar publication"
+          "My Teacher Nima Petgar",
+          "Tandis article",
+          "2016 publication"
         ],
         "fa": [
-          "مقاله استادم نیما پتگر",
-          "نوشته استادم نیما پتگر"
+          "استادم نیما پتگر",
+          "مقاله تندیس",
+          "انتشار ۱۳۹۵"
         ]
       }
     },
@@ -215,12 +257,12 @@
       },
       "searchTerms": {
         "en": [
-          "Azad Art Gallery Tehran",
-          "Azad Designers Gallery"
+          "Azad Art Gallery",
+          "Tehran art gallery"
         ],
         "fa": [
-          "گالری آزاد تهران",
-          "گالری طراحان آزاد تهران"
+          "گالری طراحان آزاد",
+          "گالری هنر تهران"
         ]
       }
     },
@@ -231,16 +273,19 @@
         "fa": "خانه هنرمندان ایران"
       },
       "alternateNames": {
-        "en": [],
+        "en": [
+          "Iranian Artists' House"
+        ],
         "fa": []
       },
       "searchTerms": {
         "en": [
-          "Iran Artists Forum",
-          "Iranian Artists House"
+          "Iranian Artists Forum",
+          "Iranian artists venue"
         ],
         "fa": [
-          "خانه هنرمندان ایران تهران"
+          "خانه هنرمندان ایران",
+          "انجمن هنرمندان"
         ]
       }
     },
@@ -256,12 +301,12 @@
       },
       "searchTerms": {
         "en": [
-          "Ninety Seven to Zero Three exhibition",
-          "97–03 group exhibition"
+          "Ninety Seven Zero Three",
+          "97–03 exhibition"
         ],
         "fa": [
-          "نمایشگاه ۹۷ تا ۰۳",
-          "نمایشگاه نود و هفت تا صفر سه"
+          "نود و هفت صفر سه",
+          "نمایشگاه ۹۷ تا ۰۳"
         ]
       }
     },
@@ -277,12 +322,12 @@
       },
       "searchTerms": {
         "en": [
-          "Iranian Painters Association members exhibition",
-          "Association of Iranian Painters members show"
+          "painters association exhibition",
+          "Iranian painters show"
         ],
         "fa": [
-          "نمایشگاه اعضای انجمن نقاشان ایران",
-          "نمایش آثار اعضای پیوسته انجمن هنرمندان نقاش ایران"
+          "نمایشگاه انجمن نقاشان",
+          "نمایش آثار نقاشان"
         ]
       }
     },
@@ -298,12 +343,14 @@
       },
       "searchTerms": {
         "en": [
-          "Second Grand Prize of Iranian Contemporary Painting",
-          "Iran Contemporary Painting Grand Prize second edition"
+          "Iran contemporary painting",
+          "Second Grand Prize",
+          "contemporary art award"
         ],
         "fa": [
-          "دومین جایزه بزرگ نقاشی معاصر ایران",
-          "رویداد دوم جایزه بزرگ نقاشی معاصر"
+          "جایزه بزرگ نقاشی",
+          "نقاشی معاصر ایران",
+          "دومین رویداد"
         ]
       }
     },
@@ -319,12 +366,14 @@
       },
       "searchTerms": {
         "en": [
-          "Third Grand Prize of Iranian Contemporary Painting",
-          "Iran Contemporary Painting Grand Prize third edition"
+          "Iran contemporary painting",
+          "Third Grand Prize",
+          "contemporary art award"
         ],
         "fa": [
-          "سومین جایزه بزرگ نقاشی معاصر ایران",
-          "رویداد سوم جایزه بزرگ نقاشی معاصر"
+          "جایزه بزرگ نقاشی",
+          "نقاشی معاصر ایران",
+          "سومین رویداد"
         ]
       }
     },
@@ -340,11 +389,12 @@
       },
       "searchTerms": {
         "en": [
-          "Elahe and Sheiss Gallery online exhibition"
+          "Elahe and Sheiss Gallery",
+          "online art exhibition"
         ],
         "fa": [
           "گالری الهی و شیث",
-          "نمایشگاه مجازی گالری الهی و شیث"
+          "نمایشگاه آنلاین هنر"
         ]
       }
     },
@@ -360,10 +410,12 @@
       },
       "searchTerms": {
         "en": [
-          "Sheiss Art Gallery"
+          "Sheiss Gallery",
+          "Tehran art gallery"
         ],
         "fa": [
-          "گالری شیث تهران"
+          "گالری شیث",
+          "گالری هنر تهران"
         ]
       }
     },
@@ -375,15 +427,18 @@
       },
       "alternateNames": {
         "en": [],
-        "fa": []
+        "fa": [
+          "گالری هفت‌ثمر"
+        ]
       },
       "searchTerms": {
         "en": [
-          "Haft Samar Art Gallery"
+          "Haft Samar Gallery",
+          "Tehran art gallery"
         ],
         "fa": [
-          "گالری هفت‌ثمر",
-          "گالری هفت ثمر تهران"
+          "گالری هفت ثمر",
+          "گالری هفت‌ثمر"
         ]
       }
     },
@@ -399,10 +454,12 @@
       },
       "searchTerms": {
         "en": [
-          "Amin Art Gallery"
+          "Amin Gallery",
+          "Tehran art gallery"
         ],
         "fa": [
-          "گالری امین تهران"
+          "گالری امین",
+          "گالری هنر تهران"
         ]
       }
     },
@@ -418,10 +475,12 @@
       },
       "searchTerms": {
         "en": [
-          "Tree Art Gallery exhibition venue"
+          "Tree Art Gallery",
+          "Tehran art gallery"
         ],
         "fa": [
-          "گالری درخت تهران"
+          "گالری درخت",
+          "گالری هنر تهران"
         ]
       }
     },
@@ -437,10 +496,12 @@
       },
       "searchTerms": {
         "en": [
-          "That Other That group exhibition"
+          "That Other That",
+          "group art exhibition"
         ],
         "fa": [
-          "نمایشگاه آن دیگر آن"
+          "آن دیگر آن",
+          "نمایشگاه گروهی"
         ]
       }
     },
@@ -456,11 +517,12 @@
       },
       "searchTerms": {
         "en": [
-          "Mind Variations art exhibition"
+          "Mind Variations",
+          "art exhibition"
         ],
         "fa": [
-          "نمایشگاه واریاسیون ذهنی",
-          "واریاسیون‌های ذهنی"
+          "واریاسیون ذهنی",
+          "نمایشگاه هنر"
         ]
       }
     },
@@ -476,10 +538,12 @@
       },
       "searchTerms": {
         "en": [
-          "Negah Art Gallery"
+          "Negah Gallery",
+          "Tehran art gallery"
         ],
         "fa": [
-          "گالری نگاه تهران"
+          "گالری نگاه",
+          "گالری هنر تهران"
         ]
       }
     },
@@ -495,12 +559,13 @@
       },
       "searchTerms": {
         "en": [
-          "Heat of −37 Degrees exhibition",
-          "Minus 37 Degrees art exhibition"
+          "Heat of Minus 37",
+          "Minus 37 Degrees",
+          "art exhibition"
         ],
         "fa": [
-          "نمایشگاه گرمای منفی ۳۷ درجه",
-          "گرمای ۳۷- درجه"
+          "گرمای منفی ۳۷ درجه",
+          "نمایشگاه گرمای منفی ۳۷"
         ]
       }
     },
@@ -516,10 +581,12 @@
       },
       "searchTerms": {
         "en": [
-          "The Silence group exhibition"
+          "The Silence",
+          "group art exhibition"
         ],
         "fa": [
-          "نمایشگاه سکوت"
+          "سکوت",
+          "نمایشگاه گروهی"
         ]
       }
     },
@@ -531,15 +598,19 @@
       },
       "alternateNames": {
         "en": [],
-        "fa": []
+        "fa": [
+          "بی‌کران"
+        ]
       },
       "searchTerms": {
         "en": [
-          "Infinity group art exhibition"
+          "Infinity",
+          "group art exhibition"
         ],
         "fa": [
-          "نمایشگاه بیکران",
-          "نمایشگاه بی‌کران"
+          "بیکران",
+          "بی‌کران",
+          "نمایشگاه گروهی"
         ]
       }
     },
@@ -555,10 +626,12 @@
       },
       "searchTerms": {
         "en": [
-          "Javid Art Gallery"
+          "Javid Gallery",
+          "Tehran art gallery"
         ],
         "fa": [
-          "گالری جاوید تهران"
+          "گالری جاوید",
+          "گالری هنر تهران"
         ]
       }
     },
@@ -570,15 +643,19 @@
       },
       "alternateNames": {
         "en": [],
-        "fa": []
+        "fa": [
+          "سایه‌روشن"
+        ]
       },
       "searchTerms": {
         "en": [
-          "Light and Shadow group exhibition"
+          "Light and Shadow",
+          "art exhibition"
         ],
         "fa": [
-          "نمایشگاه سایه‌روشن",
-          "نمایشگاه سایه روشن"
+          "سایه روشن",
+          "سایه‌روشن",
+          "نمایشگاه هنر"
         ]
       }
     },
@@ -594,12 +671,14 @@
       },
       "searchTerms": {
         "en": [
-          "Khor Art Initiative 2025 exhibition",
-          "Khor contemporary art project"
+          "Khor Art Initiative",
+          "Khor art project",
+          "2025 art project"
         ],
         "fa": [
-          "پروژه هنری خور ۱۴۰۴",
-          "رویداد هنری خور"
+          "پروژه هنری خور",
+          "رویداد هنری خور",
+          "پروژه هنر معاصر"
         ]
       }
     },
@@ -615,10 +694,12 @@
       },
       "searchTerms": {
         "en": [
-          "Saradipour Art Gallery"
+          "Saradipour Gallery",
+          "Tehran art gallery"
         ],
         "fa": [
-          "گالری سرادیپور تهران"
+          "گالری سرادیپور",
+          "گالری هنر تهران"
         ]
       }
     },
@@ -634,12 +715,12 @@
       },
       "searchTerms": {
         "en": [
-          "First A Week with Association of Iranian Painters",
-          "Iranian Painters Association first A Week"
+          "A Week with Iranian Painters",
+          "painters association exhibition"
         ],
         "fa": [
-          "اولین هفته با انجمن هنرمندان نقاش ایران",
-          "هفته اول انجمن نقاشان ایران"
+          "یک هفته با انجمن نقاشان",
+          "نمایشگاه انجمن نقاشان"
         ]
       }
     },
@@ -655,12 +736,12 @@
       },
       "searchTerms": {
         "en": [
-          "Second A Week with Association of Iranian Painters",
-          "Iranian Painters Association second A Week"
+          "A Week with Iranian Painters",
+          "painters association exhibition"
         ],
         "fa": [
-          "دومین هفته با انجمن هنرمندان نقاش ایران",
-          "هفته دوم انجمن نقاشان ایران"
+          "یک هفته با انجمن نقاشان",
+          "نمایشگاه انجمن نقاشان"
         ]
       }
     },
@@ -676,10 +757,12 @@
       },
       "searchTerms": {
         "en": [
-          "In Silence group exhibition"
+          "In Silence",
+          "group art exhibition"
         ],
         "fa": [
-          "نمایشگاه در سکوت"
+          "در سکوت",
+          "نمایشگاه گروهی"
         ]
       }
     }
@@ -691,12 +774,14 @@
       ],
       "searchTerms": {
         "en": [
-          "painting master's degree",
-          "M.A. painting education at Alzahra University"
+          "M.A. painting",
+          "master's painting degree",
+          "Alzahra University"
         ],
         "fa": [
-          "کارشناسی ارشد رشته نقاشی",
-          "تحصیلات کارشناسی ارشد نقاشی دانشگاه الزهرا"
+          "کارشناسی ارشد نقاشی",
+          "مدرک کارشناسی ارشد",
+          "دانشگاه الزهرا"
         ]
       },
       "descriptionContext": {
@@ -711,12 +796,14 @@
       ],
       "searchTerms": {
         "en": [
-          "bachelor's degree in painting",
-          "B.A. painting education at University of Science and Culture"
+          "B.A. painting",
+          "bachelor's painting degree",
+          "University of Science and Culture"
         ],
         "fa": [
-          "کارشناسی رشته نقاشی",
-          "تحصیلات کارشناسی نقاشی دانشگاه علم و فرهنگ"
+          "کارشناسی نقاشی",
+          "مدرک کارشناسی",
+          "دانشگاه علم و فرهنگ"
         ]
       },
       "descriptionContext": {
@@ -731,11 +818,12 @@
       ],
       "searchTerms": {
         "en": [
-          "membership in Iranian Painters Association"
+          "Iranian Painters Association",
+          "artists association membership"
         ],
         "fa": [
-          "عضویت در انجمن نقاشان ایران",
-          "عضو انجمن هنرمندان نقاش ایران"
+          "انجمن نقاشان ایران",
+          "عضویت انجمن نقاشان"
         ]
       },
       "descriptionContext": {
@@ -750,10 +838,12 @@
       ],
       "searchTerms": {
         "en": [
-          "membership in Institute for the Development of Contemporary Visual Arts"
+          "contemporary visual arts",
+          "visual arts membership"
         ],
         "fa": [
-          "عضویت در مؤسسه توسعه هنری"
+          "هنرهای تجسمی معاصر",
+          "عضویت مؤسسه هنری"
         ]
       },
       "descriptionContext": {
@@ -768,12 +858,14 @@
       ],
       "searchTerms": {
         "en": [
-          "Soore University painting lecturer",
-          "university art lecturer in Tehran"
+          "Soore University",
+          "painting lecturer",
+          "university art teaching"
         ],
         "fa": [
-          "مدرس نقاشی دانشگاه سوره",
-          "سابقه تدریس دانشگاهی هنر در تهران"
+          "دانشگاه سوره",
+          "مدرس نقاشی",
+          "تدریس دانشگاهی هنر"
         ]
       },
       "descriptionContext": {
@@ -789,12 +881,16 @@
       ],
       "searchTerms": {
         "en": [
-          "2023 article on Qajar reliefs and Sassanid influence",
-          "Fath-Ali Shah Qajar reliefs research article"
+          "Qajar reliefs",
+          "Sassanid art",
+          "Fath-Ali Shah",
+          "2023 art research"
         ],
         "fa": [
-          "مقاله سال ۱۴۰۲ درباره نقش‌برجسته‌های قاجار و دوره ساسانی",
-          "پژوهش تأثیر هنر ساسانی بر نقش‌برجسته‌های فتحعلی‌شاه"
+          "نقش‌برجسته قاجار",
+          "هنر ساسانی",
+          "فتحعلی‌شاه",
+          "پژوهش هنر ۱۴۰۲"
         ]
       },
       "descriptionContext": {
@@ -811,12 +907,14 @@
       ],
       "searchTerms": {
         "en": [
-          "2016 Tandis magazine publication",
-          "Nima Petgar publication in Tandis special issue 324"
+          "Nima Petgar",
+          "Tandis magazine",
+          "2016 publication"
         ],
         "fa": [
-          "مطلب نیما پتگر در تندیس سال ۱۳۹۵",
-          "استادم نیما پتگر ویژه‌نامه شماره ۳۲۴ تندیس"
+          "نیما پتگر",
+          "مجله تندیس",
+          "انتشار ۱۳۹۵"
         ]
       },
       "descriptionContext": {
@@ -832,12 +930,14 @@
       ],
       "searchTerms": {
         "en": [
-          "In Silence exhibition 2025",
-          "2025 group exhibition at Azad Art Gallery"
+          "In Silence exhibition",
+          "2025 group exhibition",
+          "Azad Art Gallery"
         ],
         "fa": [
-          "نمایشگاه در سکوت سال ۱۴۰۴",
-          "نمایشگاه گروهی ۱۴۰۴ گالری طراحان آزاد"
+          "نمایشگاه در سکوت",
+          "نمایشگاه گروهی ۱۴۰۴",
+          "گالری طراحان آزاد"
         ]
       },
       "descriptionContext": {
@@ -853,12 +953,14 @@
       ],
       "searchTerms": {
         "en": [
-          "2025 Third Grand Prize of Iran Contemporary Painting",
-          "Iran Contemporary Painting award exhibition 2025"
+          "Third Grand Prize",
+          "Iran contemporary painting",
+          "2025 art award"
         ],
         "fa": [
-          "سومین جایزه بزرگ نقاشی معاصر ایران ۱۴۰۴",
-          "رویداد نقاشی معاصر خانه هنرمندان ایران ۱۴۰۴"
+          "سومین جایزه بزرگ",
+          "نقاشی معاصر ایران",
+          "جایزه نقاشی ۱۴۰۴"
         ]
       },
       "descriptionContext": {
@@ -874,12 +976,14 @@
       ],
       "searchTerms": {
         "en": [
-          "Ninety Seven Zero Three exhibition 2024",
-          "Iranian Painters Association members exhibition 2024"
+          "Ninety Seven Zero Three",
+          "2024 group exhibition",
+          "Iranian painters"
         ],
         "fa": [
-          "نمایشگاه نود و هفت صفر سه سال ۱۴۰۳",
-          "نمایشگاه اعضای انجمن نقاشان ایران ۱۴۰۳"
+          "نود و هفت صفر سه",
+          "نمایشگاه گروهی ۱۴۰۳",
+          "نقاشان ایران"
         ]
       },
       "descriptionContext": {
@@ -895,12 +999,14 @@
       ],
       "searchTerms": {
         "en": [
-          "2024 Second Grand Prize of Iran Contemporary Painting",
-          "Iran Contemporary Painting award exhibition 2024"
+          "Second Grand Prize",
+          "Iran contemporary painting",
+          "2024 art award"
         ],
         "fa": [
-          "دومین جایزه بزرگ نقاشی معاصر ایران",
-          "رویداد نقاشی معاصر خانه هنرمندان ایران"
+          "دومین جایزه بزرگ",
+          "نقاشی معاصر ایران",
+          "جایزه نقاشی ۱۴۰۳"
         ]
       },
       "descriptionContext": {
@@ -915,12 +1021,14 @@
       ],
       "searchTerms": {
         "en": [
-          "In Quarantine online group exhibition 2020",
-          "In Quarantine award-recognized exhibition"
+          "In Quarantine",
+          "2020 online exhibition",
+          "group art exhibition"
         ],
         "fa": [
-          "نمایشگاه مجازی در قرنطینه سال ۱۳۹۹",
-          "نمایشگاه در قرنطینه با اشاره به دریافت جایزه"
+          "در قرنطینه",
+          "نمایشگاه مجازی ۱۳۹۹",
+          "نمایشگاه گروهی"
         ]
       },
       "descriptionContext": {
@@ -936,12 +1044,14 @@
       ],
       "searchTerms": {
         "en": [
-          "The Silence exhibition 2019",
-          "2019 group exhibition at Sheiss Gallery"
+          "The Silence exhibition",
+          "2019 group exhibition",
+          "Sheiss Gallery"
         ],
         "fa": [
-          "نمایشگاه سکوت سال ۱۳۹۸",
-          "نمایشگاه گروهی گالری شیث"
+          "نمایشگاه سکوت",
+          "نمایشگاه گروهی ۱۳۹۸",
+          "گالری شیث"
         ]
       },
       "descriptionContext": {
@@ -957,12 +1067,14 @@
       ],
       "searchTerms": {
         "en": [
-          "Infinity exhibition 2019",
-          "2019 group exhibition at Haft Samar Gallery"
+          "Infinity exhibition",
+          "2019 group exhibition",
+          "Haft Samar Gallery"
         ],
         "fa": [
-          "نمایشگاه بیکران سال ۱۳۹۸",
-          "نمایشگاه گروهی گالری هفت ثمر"
+          "نمایشگاه بیکران",
+          "نمایشگاه گروهی ۱۳۹۸",
+          "گالری هفت ثمر"
         ]
       },
       "descriptionContext": {
@@ -977,10 +1089,12 @@
       ],
       "searchTerms": {
         "en": [
-          "Amin Gallery group exhibition 2016"
+          "Amin Gallery",
+          "2016 group exhibition"
         ],
         "fa": [
-          "نمایشگاه گروهی گالری امین سال ۱۳۹۵"
+          "گالری امین",
+          "نمایشگاه گروهی ۱۳۹۵"
         ]
       },
       "descriptionContext": {
@@ -996,12 +1110,14 @@
       ],
       "searchTerms": {
         "en": [
-          "Heat of Minus 37 Degrees exhibition 2015",
-          "2015 exhibition at Tree Art Gallery"
+          "Heat of Minus 37",
+          "2015 art exhibition",
+          "Tree Art Gallery"
         ],
         "fa": [
-          "نمایشگاه گرمای منفی ۳۷ درجه سال ۱۳۹۴",
-          "نمایشگاه سال ۱۳۹۴ گالری درخت"
+          "گرمای منفی ۳۷ درجه",
+          "نمایشگاه ۱۳۹۴",
+          "گالری درخت"
         ]
       },
       "descriptionContext": {
@@ -1017,12 +1133,14 @@
       ],
       "searchTerms": {
         "en": [
-          "That Other That exhibition 2014",
-          "2014 group exhibition at Iranian Artists Forum"
+          "That Other That",
+          "2014 group exhibition",
+          "Iranian Artists Forum"
         ],
         "fa": [
-          "نمایشگاه آن دیگر آن سال ۱۳۹۳",
-          "نمایشگاه گروهی خانه هنرمندان ایران ۱۳۹۳"
+          "آن دیگر آن",
+          "نمایشگاه گروهی ۱۳۹۳",
+          "خانه هنرمندان ایران"
         ]
       },
       "descriptionContext": {
@@ -1037,10 +1155,12 @@
       ],
       "searchTerms": {
         "en": [
-          "Haft Samar Gallery group exhibition 2014"
+          "Haft Samar Gallery",
+          "2014 group exhibition"
         ],
         "fa": [
-          "نمایشگاه گروهی گالری هفت ثمر سال ۱۳۹۳"
+          "گالری هفت ثمر",
+          "نمایشگاه گروهی ۱۳۹۳"
         ]
       },
       "descriptionContext": {
@@ -1056,12 +1176,14 @@
       ],
       "searchTerms": {
         "en": [
-          "Mind Variations exhibition 2014",
-          "2014 exhibition at Negah Gallery"
+          "Mind Variations",
+          "2014 art exhibition",
+          "Negah Gallery"
         ],
         "fa": [
-          "نمایشگاه واریاسیون ذهنی سال ۱۳۹۳",
-          "نمایشگاه سال ۱۳۹۳ گالری نگاه"
+          "واریاسیون ذهنی",
+          "نمایشگاه ۱۳۹۳",
+          "گالری نگاه"
         ]
       },
       "descriptionContext": {
@@ -1077,12 +1199,14 @@
       ],
       "searchTerms": {
         "en": [
-          "Second A Week with Association of Iranian Painters 2026",
-          "2026 Iranian Painters Association exhibition"
+          "A Week with Iranian Painters",
+          "2026 group exhibition",
+          "Iranian painters"
         ],
         "fa": [
-          "دومین یک هفته با انجمن هنرمندان نقاش ایران ۱۴۰۵",
-          "نمایشگاه انجمن نقاشان ایران سال ۱۴۰۵"
+          "یک هفته با انجمن نقاشان",
+          "نمایشگاه گروهی ۱۴۰۵",
+          "نقاشان ایران"
         ]
       },
       "descriptionContext": {
@@ -1098,12 +1222,14 @@
       ],
       "searchTerms": {
         "en": [
-          "Light and Shadow exhibition 2026",
-          "2026 exhibition at Javid Gallery"
+          "Light and Shadow",
+          "2026 art exhibition",
+          "Javid Gallery"
         ],
         "fa": [
-          "نمایشگاه سایه روشن ۱۴۰۴",
-          "نمایشگاه گالری جاوید سال ۱۴۰۴"
+          "سایه روشن",
+          "نمایشگاه ۱۴۰۴",
+          "گالری جاوید"
         ]
       },
       "descriptionContext": {
@@ -1119,12 +1245,14 @@
       ],
       "searchTerms": {
         "en": [
-          "Khor Art Initiative exhibition 2025",
-          "2025 exhibition at Saradipour Gallery"
+          "Khor Art Initiative",
+          "2025 art project",
+          "Saradipour Gallery"
         ],
         "fa": [
-          "پروژه هنری خور سال ۱۴۰۴",
-          "نمایشگاه گالری سرادیپور ۱۴۰۴"
+          "پروژه هنری خور",
+          "رویداد هنری ۱۴۰۴",
+          "گالری سرادیپور"
         ]
       },
       "descriptionContext": {
@@ -1140,12 +1268,14 @@
       ],
       "searchTerms": {
         "en": [
-          "First A Week with Association of Iranian Painters 2025",
-          "2025 Iranian Painters Association exhibition"
+          "A Week with Iranian Painters",
+          "2025 group exhibition",
+          "Iranian painters"
         ],
         "fa": [
-          "اولین یک هفته با انجمن هنرمندان نقاش ایران ۱۴۰۴",
-          "نمایشگاه انجمن نقاشان ایران سال ۱۴۰۴"
+          "یک هفته با انجمن نقاشان",
+          "نمایشگاه گروهی ۱۴۰۴",
+          "نقاشان ایران"
         ]
       },
       "descriptionContext": {
@@ -1158,12 +1288,14 @@
       "entityIds": [],
       "searchTerms": {
         "en": [
-          "private painting and drawing instruction",
-          "painting and drawing instructor"
+          "private painting lessons",
+          "drawing instruction",
+          "painting teacher"
         ],
         "fa": [
-          "آموزش خصوصی نقاشی و طراحی",
-          "مدرس نقاشی و طراحی در آموزشگاه"
+          "آموزش خصوصی نقاشی",
+          "آموزش طراحی",
+          "مدرس نقاشی"
         ]
       },
       "descriptionContext": {
