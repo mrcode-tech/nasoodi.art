@@ -114,6 +114,40 @@ body.entrance-document-body {
   outline-offset: 4px;
 }
 
+/* Desktop entrance typography sits over the darker lower area of the artwork.
+   Fixed light text colors keep it legible in both site themes; language buttons
+   remain in normal flow and retain their existing theme-aware styling. */
+@media (min-width: 481px) {
+  .entrance-content {
+    position: relative;
+  }
+
+  .entrance-copy {
+    display: contents;
+  }
+
+  .entrance-copy h1,
+  .entrance-welcome {
+    position: absolute;
+    left: 50%;
+    width: min(90%, 42rem);
+    transform: translateX(-50%);
+    text-align: center;
+    z-index: 1;
+  }
+
+  .entrance-copy h1 {
+    top: calc(min(64svh, 48rem) - 8.25rem);
+    color: #eae4d9;
+  }
+
+  .entrance-welcome {
+    top: calc(min(64svh, 48rem) - 4.1rem);
+    margin: 0;
+    color: #b9b5ae;
+  }
+}
+
 @media (max-width: 480px) {
   .entrance-page {
     padding: max(.65rem, env(safe-area-inset-top)) 1rem max(.65rem, env(safe-area-inset-bottom));
