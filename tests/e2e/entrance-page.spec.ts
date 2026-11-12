@@ -33,14 +33,19 @@ for (const viewport of [
   { width: 430, height: 932 }, { width: 768, height: 1024 }, { width: 1024, height: 768 },
   { width: 1280, height: 800 }, { width: 1440, height: 900 }, { width: 1920, height: 1080 },
 ]) {
-  test(`entrance has no horizontal overflow at ${viewport.width}x${viewport.height}`, async ({ page }) => {
+  test(`entrance has no overflow at ${viewport.width}x${viewport.height}`, async ({ page }) => {
     await page.setViewportSize(viewport);
     await page.goto("/");
     const sizes = await page.evaluate(() => ({
-      scroll: document.documentElement.scrollWidth,
-      client: document.documentElement.clientWidth,
+      scrollWidth: document.documentElement.scrollWidth,
+      clientWidth: document.documentElement.clientWidth,
+      scrollHeight: document.documentElement.scrollHeight,
+      clientHeight: document.documentElement.clientHeight,
     }));
-    expect(sizes.scroll).toBeLessThanOrEqual(sizes.client);
+    expect(sizes.scrollWidth).toBeLessThanOrEqual(sizes.clientWidth);
+    if (viewport.width <= 430) {
+      expect(sizes.scrollHeight).toBeLessThanOrEqual(sizes.clientHeight);
+    }
     await expect(page.locator(".entrance-language-links")).toBeVisible();
   });
 }
