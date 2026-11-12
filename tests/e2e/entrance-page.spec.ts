@@ -133,7 +133,7 @@ test("desktop entrance displays the complete artwork inside an even page margin"
   expect(geometry.renderedRatio).toBeCloseTo(geometry.naturalRatio, 2);
   expect(geometry.imageInsideFrame).toBe(true);
   expect(geometry.frameInsidePage).toBe(true);
-  expect(geometry.frameOverflow).toBe("visible");
+  expect(geometry.frameOverflow).toBe("hidden");
 });
 
 test("entrance switches layouts only at the viewport width breakpoint", async ({ page }) => {
