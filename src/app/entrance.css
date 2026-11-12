@@ -132,8 +132,17 @@ body.entrance-document-body {
     flex: 0 1 auto;
   }
 
+  .entrance-copy {
+    margin-top: .65rem;
+  }
+
   .entrance-copy h1 {
     font-size: clamp(1.65rem, 7vw, 2.1rem);
+  }
+
+  .entrance-name-first,
+  .entrance-name-rest {
+    display: block;
   }
 
   .entrance-welcome {
