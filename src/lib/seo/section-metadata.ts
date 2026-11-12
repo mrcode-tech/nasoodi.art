@@ -3,6 +3,7 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { createLocalizedMetadata } from "@/lib/seo/metadata";
 import { getArtist } from "@/content/repositories/artist.repository";
 import { getCv } from "@/content/repositories/cv.repository";
+import { getCvSeoDescription } from "@/content/repositories/cv-seo-metadata.repository";
 import { getContact } from "@/content/repositories/contact.repository";
 import { getArtworks } from "@/content/repositories/artwork.repository";
 import { getGalleries } from "@/content/repositories/gallery.repository";
@@ -44,7 +45,7 @@ export async function getSectionMetadata(section: Section, locale: Locale): Prom
  const description=section==="works"?getSitePageMetadata("works",locale).description:
   section==="galleries"?getSitePageMetadata("galleries",locale).description:
   section==="journal"?getSitePageMetadata("journal",locale).description:
-  section==="cv"?getSitePageMetadata("cv",locale).description:
+  section==="cv"?getCvSeoDescription(locale,getSitePageMetadata("cv",locale).description):
   section==="about"?profile?.shortIntroduction?.[locale]??profile?.statement[locale]:
   section==="contact"?contact?.description:undefined;
  const firstWork=works[0];
