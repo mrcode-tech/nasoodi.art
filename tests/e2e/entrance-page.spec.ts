@@ -94,6 +94,33 @@ test("artwork is unfiltered in light and dark themes", async ({ page }) => {
   await expect(page.locator(".entrance-page")).toHaveCSS("background-color", "rgb(16, 26, 43)");
 });
 
+
+test("desktop entrance artwork keeps a consistent physical size across browser zoom levels", async ({ page }) => {
+  const physicalViewport = { width: 1440, height: 700 };
+  const zoomLevels = [80, 90, 100, 110];
+  const renderedHeights: number[] = [];
+
+  for (const zoom of zoomLevels) {
+    await page.setViewportSize({
+      width: Math.round(physicalViewport.width / (zoom / 100)),
+      height: Math.round(physicalViewport.height / (zoom / 100)),
+    });
+    await page.goto("/");
+    const image = page.locator(".entrance-artwork");
+    await expect(image).toBeVisible();
+    const cssHeight = await image.evaluate((node: HTMLImageElement) => node.getBoundingClientRect().height);
+    renderedHeights.push(cssHeight * (zoom / 100));
+  }
+
+  const referenceHeight = renderedHeights[2];
+  for (let index = 0; index < renderedHeights.length; index += 1) {
+    expect(
+      Math.abs(renderedHeights[index] - referenceHeight),
+      `physical artwork height at ${zoomLevels[index]}% zoom`,
+    ).toBeLessThanOrEqual(2);
+  }
+});
+
 test("root metadata declares canonical and x-default URLs", async ({ page }) => {
   await page.goto("/");
   await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", "https://nasoodi.art");
