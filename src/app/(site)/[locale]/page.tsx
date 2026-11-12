@@ -68,7 +68,7 @@ export default async function Home({ params }: Props) {
           <p className="eyebrow">{t("portfolio")}</p>
           <h1 id="home-title">{profile.name?.[locale] ?? t("artistName")}</h1>
           <section className="home-biography" aria-label={t("biography")}>
-            <BiographyDisclosure biography={biography} readMoreLabel={t("readMore")} showLessLabel={t("showLess")} lines={4} />
+            <BiographyDisclosure biography={biography} readMoreLabel={t("readMore")} showLessLabel={t("showLess")} lines={4} alwaysShowToggle={locale === "fa"} />
           </section>
           {(hasFeaturedGalleries || hasSelectedWorks) && (
             <div className="hero-actions">
