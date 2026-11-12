@@ -114,37 +114,54 @@ body.entrance-document-body {
   outline-offset: 4px;
 }
 
-/* Desktop entrance typography sits over the darker lower area of the artwork.
-   Fixed light text colors keep it legible in both site themes; language buttons
-   remain in normal flow and retain their existing theme-aware styling. */
+/* Keep all desktop entrance content anchored to the rendered artwork itself.
+   The artwork frame preserves the source image ratio, so zoom and viewport
+   changes scale the image and its overlay as one composition. */
 @media (min-width: 481px) {
   .entrance-content {
+    width: min(100%, 76rem);
+    gap: 0;
+  }
+
+  .entrance-artwork-frame {
     position: relative;
+    width: min(100%, calc(64svh * var(--entrance-artwork-ratio)));
+    height: auto;
+    min-height: 0;
+    aspect-ratio: var(--entrance-artwork-ratio);
+    overflow: hidden;
+  }
+
+  .entrance-artwork {
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    max-height: none;
+    object-fit: contain;
   }
 
   .entrance-copy {
-    position: static;
-  }
-
-  .entrance-copy h1,
-  .entrance-welcome {
     position: absolute;
-    left: 50%;
-    width: min(90%, 42rem);
-    transform: translateX(-50%);
-    text-align: center;
     z-index: 1;
+    inset-inline: 5%;
+    bottom: 5%;
+    width: auto;
+    margin: 0;
+    transform: none;
+    text-align: center;
   }
 
   .entrance-copy h1 {
-    top: calc(min(64svh, 48rem) - 8.25rem);
     color: #eae4d9;
   }
 
   .entrance-welcome {
-    top: calc(min(64svh, 48rem) - 4.1rem);
-    margin: 0;
+    margin: .4rem 0 0;
     color: #b9b5ae;
+  }
+
+  .entrance-language-links {
+    margin-top: 1.1rem;
   }
 }
 
