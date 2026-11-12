@@ -42,9 +42,9 @@ The two data sources have separate responsibilities:
 | Source | Responsibility |
 |---|---|
 | `src/content/data/cv.json` | Canonical visible CV records and their factual fields |
-| `src/content/data/seo-cv-metadata.json` | SEO-only entity names, alternate spellings, search terms, and CV-record associations |
+| `src/content/data/seo-cv-metadata.json` | SEO-only entity names, bilingual search terms, and CV-record associations |
 
-The SEO metadata file must be maintained independently of application code. Do not hardcode entity names, aliases, search phrases, or CV-specific exceptions in TypeScript/TSX.
+The SEO metadata file must be maintained independently of application code. Do not hardcode entity names, search phrases, or CV-specific exceptions in TypeScript/TSX.
 
 The canonical CV repository remains responsible for loading and localizing CV records. A dedicated SEO metadata repository/adapter is responsible for loading and validating this file. Route and presentation components must not import either JSON file directly.
 
@@ -52,7 +52,7 @@ The canonical CV repository remains responsible for loading and localizing CV re
 
 Use a two-level model:
 
-- **Entities:** reusable named entities with a stable ID, entity type, localized canonical names, optional alternate names, and optional search terms.
+- **Entities:** reusable named entities with a stable ID, entity type, localized canonical names, and required bilingual search terms.
 - **CV record mappings:** associations from stable canonical CV record IDs to entity IDs, plus optional localized SEO-only context.
 
 This avoids duplicating the same university/person name across multiple CV records and allows one entity to be referenced by several records.
@@ -61,7 +61,7 @@ This avoids duplicating the same university/person name across multiple CV recor
 
 The JSON document must contain:
 
-- `schemaVersion`: integer version of this data contract.
+- `schemaVersion`: integer version of this data contract (currently `2`; version 2 removes the redundant alternate-name field).
 - `entities`: dictionary keyed by stable entity ID.
 - `cvRecords`: dictionary keyed by the exact stable ID of a canonical CV record.
 
@@ -69,17 +69,13 @@ Illustrative structure:
 
 ```json
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "entities": {
     "person-nima-petgar": {
       "type": "person",
       "name": {
         "en": "Nima Petgar",
         "fa": "نیما پتگر"
-      },
-      "alternateNames": {
-        "en": [],
-        "fa": []
       },
       "searchTerms": {
         "en": ["Nima Petgar"],
@@ -91,10 +87,6 @@ Illustrative structure:
       "name": {
         "en": "University of Science and Culture",
         "fa": "دانشگاه علم و فرهنگ"
-      },
-      "alternateNames": {
-        "en": [],
-        "fa": []
       },
       "searchTerms": {
         "en": ["University of Science and Culture"],
@@ -158,17 +150,16 @@ Each entity supports:
 
 - `type`: required entity classification.
 - `name.en` and `name.fa`: localized canonical names. A locale may be omitted only when no reliable name is available; do not translate or transliterate proper names automatically.
-- `alternateNames.en` and `alternateNames.fa`: optional reviewed spelling variants for that entity only.
-- `searchTerms.en` and `searchTerms.fa`: optional relevant search phrases, not automatically emitted as page copy or meta keywords.
+- `searchTerms.en` and `searchTerms.fa`: required, non-empty, locale-specific arrays of concise search phrases. Include defensible name variants, common spellings, and relevant topical queries here; do not maintain a separate alias field. These terms are SEO inputs, not page copy or meta keywords.
 
-Use complete names and defensible variants. Do not generate spelling permutations, partial names, unrelated translations, or speculative aliases. Preserve the source's correct spelling and diacritics.
+Keep canonical names in `name.en` and `name.fa`. Put useful, defensible name variants and relevant query phrases in the corresponding `searchTerms` arrays. Keep phrases concise (normally 1–4 words; allow longer only for established titles or proper names). Do not generate speculative spelling permutations, unrelated translations, or sentence-like keyword strings. Preserve correct spelling and Persian orthography.
 
 ### 4.4 CV record mapping fields
 
 Each mapping is keyed by an exact canonical CV record ID and supports:
 
 - `entityIds`: required array of references to entities in the top-level registry.
-- `searchTerms`: optional localized SEO-only terms specific to this CV record.
+- `searchTerms`: required bilingual SEO-only terms specific to this CV record, with non-empty `en` and `fa` arrays.
 - `descriptionContext`: optional localized, human-reviewed metadata-only context. It must be narrowly grounded in the referenced CV record and must not assert a stronger relationship than that record supports.
 - `priority`: optional non-negative integer used only to choose among eligible records when composing a concise CV page description. Higher values indicate editorial priority, not factual importance.
 
@@ -276,8 +267,8 @@ Required validation:
 - Supported `schemaVersion`.
 - Unique entity IDs and valid entity types.
 - Non-empty canonical names for each populated locale.
-- Correct locale keys (`en`, `fa`) and string-array shapes.
-- No empty strings, whitespace-only values, or duplicate values after normalization.
+- Correct locale keys (`en`, `fa`) and non-empty string arrays for entity and CV-record `searchTerms`.
+- No empty strings, whitespace-only values, sentence-like search terms, or duplicate values after locale-aware normalization.
 - Every `cvRecords` key resolves to an existing canonical CV record.
 - Every `entityIds` reference resolves to an existing entity.
 - No duplicate entity references within one mapping.
