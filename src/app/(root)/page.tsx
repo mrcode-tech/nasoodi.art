@@ -6,6 +6,7 @@ import { getEntranceArtwork } from "@/content/repositories/site.repository";
 import { primaryImageFor } from "@/lib/content/publication";
 import { getPortfolioStructuredData } from "@/content/portfolio-structured-data";
 import { serializeJsonLd } from "@/lib/seo/structured-data";
+import { getTranslations } from "next-intl/server";
 
 const siteOrigin = "https://nasoodi.art";
 
@@ -33,10 +34,11 @@ export function generateMetadata(): Metadata {
   };
 }
 
-export default function RootPage() {
+export default async function RootPage() {
   const artist = getArtist("en");
   const artwork = getEntranceArtwork("en");
   const image = artwork ? primaryImageFor(artwork) : undefined;
+  const t = await getTranslations({ locale: "en" });
   if (!artist?.name?.en) throw new Error("A published English artist profile is required for the entrance page.");
 
   return (
@@ -51,12 +53,12 @@ export default function RootPage() {
                 sizes="(max-width: 640px) 94vw, (max-width: 1200px) 90vw, 1100px" priority />
             </div>
           )}
-          <section className="entrance-copy" aria-label="Artist introduction">
+          <section className="entrance-copy" aria-label={t("entranceIntroduction")}>
             <h1>{artist.name.en}</h1>
-            <p>Welcome to the artistic world of {artist.name.en}. Discover paintings, stories, and artistic expressions.</p>
-            <nav className="entrance-language-links" aria-label="Choose language">
-              <Link href="/en">Enter</Link>
-              <Link href="/fa" lang="fa" dir="rtl">ورود</Link>
+            <p>{t("entranceWelcome", { artistName: artist.name.en })}</p>
+            <nav className="entrance-language-links" aria-label={t("chooseLanguage")}>
+              <Link href="/en">{t("enterEnglish")}</Link>
+              <Link href="/fa" lang="fa" dir="rtl">{t("enterPersian")}</Link>
             </nav>
           </section>
         </div>
