@@ -13,12 +13,12 @@ const base = "https://nasoodi.art";
 const localizedUrl = (locale: Locale, path = "") => base + "/" + locale + (path ? "/" + path : "");
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const entries: MetadataRoute.Sitemap = [];
-  const add = (locale: Locale, path: string, alternatePaths: Partial<Record<Locale, string>> = {}) => {
+  const entries: MetadataRoute.Sitemap = [{ url: base + "/", alternates: { languages: { "x-default": base + "/", en: localizedUrl("en"), fa: localizedUrl("fa") } } }];
+  const add = (locale: Locale, path: string, alternatePaths: (Partial<Record<Locale, string>> & { "x-default"?: string }) = {}) => {
     const url = localizedUrl(locale, path);
     const languages = Object.fromEntries([
       [locale, url],
-      ...Object.entries(alternatePaths).map(([target, targetPath]) => [target, localizedUrl(target as Locale, targetPath)]),
+      ...Object.entries(alternatePaths).map(([target, targetPath]) => [target, target === "x-default" ? base + "/" : localizedUrl(target as Locale, targetPath)]),
     ]);
     entries.push({
       url,
@@ -28,7 +28,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   for (const locale of locales) {
     const targets = locales.filter((target) => target !== locale);
-    const homeAlternates = Object.fromEntries(targets.map((target) => [target, ""])) as Partial<Record<Locale, string>>;
+    const homeAlternates = { ...Object.fromEntries(targets.map((target) => [target, ""])), "x-default": "/" } as Partial<Record<Locale, string>> & { "x-default": string };
     add(locale, "", homeAlternates);
 
     const works = getArtworks(locale);
