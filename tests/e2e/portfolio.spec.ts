@@ -91,12 +91,15 @@ for (const locale of locales) {
       await expect(link.locator("svg")).toBeVisible();
       await expect(link.locator(".homepage-contact-identifier")).toBeVisible();
     }
-    const rows = await links.evaluateAll((items) => items.map((item) => {
-      const rect = item.getBoundingClientRect();
-      return { top: rect.top, left: rect.left, right: rect.right };
+    const layout = await links.evaluateAll((items) => ({
+      viewportWidth: document.documentElement.clientWidth,
+      rows: items.map((item) => {
+        const rect = item.getBoundingClientRect();
+        return { top: rect.top, left: rect.left, right: rect.right };
+      }),
     }));
-    expect(rows.every((row) => Math.abs(row.top - rows[0].top) <= 1)).toBe(true);
-    expect(rows.every((row) => row.left >= 0 && row.right <= document.documentElement.clientWidth)).toBe(true);
+    expect(layout.rows.every((row) => Math.abs(row.top - layout.rows[0].top) <= 1)).toBe(true);
+    expect(layout.rows.every((row) => row.left >= 0 && row.right <= layout.viewportWidth)).toBe(true);
   });
 
   test("dedicated " + locale + " Contact page keeps its detailed presentation", async ({ page }) => {
