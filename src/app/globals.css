@@ -540,13 +540,20 @@ html[lang="fa"] .mobile-drawer[dir="rtl"] .nav-link {
 
   .drawer-copyright {
     display: flex;
-    flex-direction: column;
-    gap: .3rem;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: .35rem;
     margin-top: 1.25rem;
     padding-top: .5rem;
     color: var(--muted);
     font-size: .72rem;
     line-height: 1.5;
+    white-space: nowrap;
+  }
+
+  .drawer-copyright > span {
+    flex: 0 0 auto;
   }
 }
 
