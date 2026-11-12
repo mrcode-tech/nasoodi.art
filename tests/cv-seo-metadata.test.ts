@@ -92,7 +92,7 @@ test("rejects duplicate normalized terms, duplicate references, and invalid prio
 
 test("rejects unknown CV and entity references and ungrounded entity associations", () => {
   const unknownRecord = valid();
-  unknownRecord.cvRecords["missing-record"] = unknownRecord.cvRecords["education-example"];
+  Object.assign(unknownRecord.cvRecords, { "missing-record": unknownRecord.cvRecords["education-example"] });
   assert.throws(() => validateCvSeoMetadata(unknownRecord, [entry()]), /unknown, unpublished/);
   const unknownEntity = valid();
   unknownEntity.cvRecords["education-example"].entityIds = ["missing-entity"];
