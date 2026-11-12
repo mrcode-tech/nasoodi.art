@@ -1742,7 +1742,7 @@ html[lang="fa"] .artwork-viewer-info h2 {
   display: grid;
   direction: inherit;
   grid-template-areas: "copy image";
-  grid-template-columns: minmax(0, .95fr) minmax(0, 1.05fr);
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, .85fr);
   align-items: center;
   gap: clamp(1.5rem, 4vw, 4rem);
 }
@@ -1776,9 +1776,14 @@ html[lang="fa"] .artwork-viewer-info h2 {
 }
 .home-page .hero-actions {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
+  align-items: center;
   gap: .65rem;
   margin-top: 1.25rem;
+}
+.home-page .hero-actions > .ui-button {
+  flex: 0 0 auto;
+  white-space: nowrap;
 }
 .about-page .about-heading {
   margin-bottom: clamp(1.5rem, 3vw, 2.5rem);
