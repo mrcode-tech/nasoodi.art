@@ -18,7 +18,7 @@ function uniqueNonEmpty(values: readonly (string | undefined)[]): string[] {
 }
 
 function normalizeNameKey(value: string): string {
-  return value.normalize("NFKC").replace(/[\\u200c\\s]+/g, " ").replace(/\\u064a/g, "\\u06cc").replace(/\\u0643/g, "\\u06a9").trim().toLowerCase();
+  return value.normalize("NFKC").replace(/[\u200c\s]+/g, " ").replace(/\u064a/g, "\u06cc").replace(/\u0643/g, "\u06a9").trim().toLowerCase();
 }
 
 function uniqueNameValues(values: readonly (string | undefined)[], excluded: readonly string[] = []): string[] {
@@ -55,7 +55,7 @@ export function createPortfolioStructuredData({
   const curatedAliases = (profile.nameAliases?.[locale]?.completeName ?? [])
     .filter((alias) => alias.kind === "complete-name" &&
       (alias.confidence === "core" || alias.confidence === "supported") &&
-      Number.isInteger(alias.structuredDataPriority) && (alias.structuredDataPriority ?? -1) >= 0)
+      Number.isInteger(alias.structuredDataPriority) && (alias.structuredDataPriority ?? 0) > 0)
     .sort((left, right) =>
       (left.structuredDataPriority ?? Number.MAX_SAFE_INTEGER) - (right.structuredDataPriority ?? Number.MAX_SAFE_INTEGER) ||
       normalizeNameKey(left.value).localeCompare(normalizeNameKey(right.value)))
