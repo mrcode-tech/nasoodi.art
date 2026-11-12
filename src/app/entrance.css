@@ -114,6 +114,57 @@ body.entrance-document-body {
   outline-offset: 4px;
 }
 
+/* Keep all desktop entrance content anchored to the rendered artwork itself.
+   The artwork frame preserves the source image ratio, so zoom and viewport
+   changes scale the image and its overlay as one composition. */
+@media (min-width: 481px) {
+  .entrance-content {
+    width: min(100%, 76rem);
+    gap: 0;
+  }
+
+  .entrance-artwork-frame {
+    position: relative;
+    width: min(100%, calc(64svh * var(--entrance-artwork-ratio)));
+    height: auto;
+    min-height: 0;
+    aspect-ratio: var(--entrance-artwork-ratio);
+    overflow: hidden;
+  }
+
+  .entrance-artwork {
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    max-height: none;
+    object-fit: contain;
+  }
+
+  .entrance-copy {
+    position: absolute;
+    z-index: 1;
+    inset-inline: 5%;
+    bottom: 5%;
+    width: auto;
+    margin: 0;
+    transform: none;
+    text-align: center;
+  }
+
+  .entrance-copy h1 {
+    color: #eae4d9;
+  }
+
+  .entrance-welcome {
+    margin: .4rem 0 0;
+    color: #b9b5ae;
+  }
+
+  .entrance-language-links {
+    margin-top: 1.1rem;
+  }
+}
+
 @media (max-width: 480px) {
   .entrance-page {
     padding: max(.65rem, env(safe-area-inset-top)) 1rem max(.65rem, env(safe-area-inset-bottom));
