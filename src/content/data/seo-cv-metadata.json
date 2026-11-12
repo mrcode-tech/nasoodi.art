@@ -1,0 +1,857 @@
+{
+  "schemaVersion": 1,
+  "entities": {
+    "institution-alzahra-university": {
+      "type": "educational-institution",
+      "name": {
+        "en": "Alzahra University",
+        "fa": "دانشگاه الزهرا"
+      },
+      "alternateNames": {
+        "en": [],
+        "fa": []
+      },
+      "searchTerms": {
+        "en": [],
+        "fa": []
+      }
+    },
+    "institution-university-of-science-and-culture": {
+      "type": "educational-institution",
+      "name": {
+        "en": "University of Science and Culture",
+        "fa": "دانشگاه علم و فرهنگ"
+      },
+      "alternateNames": {
+        "en": [],
+        "fa": []
+      },
+      "searchTerms": {
+        "en": [],
+        "fa": []
+      }
+    },
+    "association-iranian-painters": {
+      "type": "professional-association",
+      "name": {
+        "en": "Iranian Painters Association",
+        "fa": "انجمن نقاشان ایران"
+      },
+      "alternateNames": {
+        "en": [],
+        "fa": []
+      },
+      "searchTerms": {
+        "en": [],
+        "fa": []
+      }
+    },
+    "organization-institute-development-contemporary-visual-arts": {
+      "type": "organization",
+      "name": {
+        "en": "Institute for the Development of Contemporary Visual Arts",
+        "fa": "مؤسسه توسعه هنری"
+      },
+      "alternateNames": {
+        "en": [],
+        "fa": []
+      },
+      "searchTerms": {
+        "en": [],
+        "fa": []
+      }
+    },
+    "institution-soore-university": {
+      "type": "educational-institution",
+      "name": {
+        "en": "Soore University",
+        "fa": "دانشگاه سوره"
+      },
+      "alternateNames": {
+        "en": [],
+        "fa": []
+      },
+      "searchTerms": {
+        "en": [],
+        "fa": []
+      }
+    },
+    "journal-visual-arts-studies": {
+      "type": "publication",
+      "name": {
+        "en": "Visual Arts Studies Journal, University of Sistan and Baluchestan",
+        "fa": "فصلنامه علمی‌تخصصی مطالعات هنرهای تجسمی، دانشگاه سیستان و بلوچستان"
+      },
+      "alternateNames": {
+        "en": [],
+        "fa": []
+      },
+      "searchTerms": {
+        "en": [],
+        "fa": []
+      }
+    },
+    "publication-qajar-reliefs": {
+      "type": "publication",
+      "name": {
+        "en": "Investigating the Influence of Fath-Ali Shah Qajar Reliefs on the Sassanid Period",
+        "fa": "تأثیرپذیری نقش‌برجسته‌های دوره فتحعلی‌شاه قاجار از دوره ساسانی"
+      },
+      "alternateNames": {
+        "en": [],
+        "fa": []
+      },
+      "searchTerms": {
+        "en": [],
+        "fa": []
+      }
+    },
+    "person-nima-petgar": {
+      "type": "person",
+      "name": {
+        "en": "Nima Petgar",
+        "fa": "نیما پتگر"
+      },
+      "alternateNames": {
+        "en": [],
+        "fa": []
+      },
+      "searchTerms": {
+        "en": [],
+        "fa": []
+      }
+    },
+    "publisher-tandis": {
+      "type": "publisher",
+      "name": {
+        "en": "Tandis Biweekly Magazine",
+        "fa": "دوهفته‌نامه تندیس"
+      },
+      "alternateNames": {
+        "en": [],
+        "fa": []
+      },
+      "searchTerms": {
+        "en": [],
+        "fa": []
+      }
+    },
+    "publication-my-teacher-nima-petgar": {
+      "type": "publication",
+      "name": {
+        "en": "My Teacher: Nima Petgar",
+        "fa": "استادم: نیما پتگر"
+      },
+      "alternateNames": {
+        "en": [],
+        "fa": []
+      },
+      "searchTerms": {
+        "en": [],
+        "fa": []
+      }
+    },
+    "gallery-azad-art": {
+      "type": "gallery",
+      "name": {
+        "en": "Azad Art Gallery",
+        "fa": "گالری طراحان آزاد"
+      },
+      "alternateNames": {
+        "en": [],
+        "fa": []
+      },
+      "searchTerms": {
+        "en": [],
+        "fa": []
+      }
+    },
+    "organization-iranian-artists-forum": {
+      "type": "organization",
+      "name": {
+        "en": "Iranian Artists Forum",
+        "fa": "خانه هنرمندان ایران"
+      },
+      "alternateNames": {
+        "en": [],
+        "fa": []
+      },
+      "searchTerms": {
+        "en": [],
+        "fa": []
+      }
+    },
+    "exhibition-ninety-seven-zero-three": {
+      "type": "other",
+      "name": {
+        "en": "Ninety Seven – Zero Three",
+        "fa": "نود و هفت – صفر سه"
+      },
+      "alternateNames": {
+        "en": [],
+        "fa": []
+      },
+      "searchTerms": {
+        "en": [],
+        "fa": []
+      }
+    },
+    "organization-iranian-painters-members-exhibition": {
+      "type": "organization",
+      "name": {
+        "en": "Iranian Painters Association — Members’ Exhibition",
+        "fa": "نمایش آثار اعضای پیوسته انجمن هنرمندان نقاش ایران"
+      },
+      "alternateNames": {
+        "en": [],
+        "fa": []
+      },
+      "searchTerms": {
+        "en": [],
+        "fa": []
+      }
+    },
+    "exhibition-second-grand-prize": {
+      "type": "other",
+      "name": {
+        "en": "The Second Grand Prize of Iran Contemporary Painting",
+        "fa": "دومین رویداد جایزه بزرگ نقاشی معاصر ایران"
+      },
+      "alternateNames": {
+        "en": [],
+        "fa": []
+      },
+      "searchTerms": {
+        "en": [],
+        "fa": []
+      }
+    },
+    "exhibition-third-grand-prize": {
+      "type": "other",
+      "name": {
+        "en": "The Third Grand Prize of Iran Contemporary Painting",
+        "fa": "سومین رویداد جایزه بزرگ نقاشی معاصر ایران"
+      },
+      "alternateNames": {
+        "en": [],
+        "fa": []
+      },
+      "searchTerms": {
+        "en": [],
+        "fa": []
+      }
+    },
+    "gallery-elahe-sheiss": {
+      "type": "gallery",
+      "name": {
+        "en": "Elahe and Sheiss Gallery — Online Exhibition; Award Recipient",
+        "fa": "گالری الهی و شیث — نمایشگاه مجازی؛ برنده جایزه فراخوان"
+      },
+      "alternateNames": {
+        "en": [],
+        "fa": []
+      },
+      "searchTerms": {
+        "en": [],
+        "fa": []
+      }
+    },
+    "gallery-sheiss": {
+      "type": "gallery",
+      "name": {
+        "en": "Sheiss Gallery",
+        "fa": "گالری شیث"
+      },
+      "alternateNames": {
+        "en": [],
+        "fa": []
+      },
+      "searchTerms": {
+        "en": [],
+        "fa": []
+      }
+    },
+    "gallery-haft-samar": {
+      "type": "gallery",
+      "name": {
+        "en": "Haft Samar Gallery",
+        "fa": "گالری هفت ثمر"
+      },
+      "alternateNames": {
+        "en": [],
+        "fa": []
+      },
+      "searchTerms": {
+        "en": [],
+        "fa": []
+      }
+    },
+    "gallery-amin": {
+      "type": "gallery",
+      "name": {
+        "en": "Amin Gallery",
+        "fa": "گالری امین"
+      },
+      "alternateNames": {
+        "en": [],
+        "fa": []
+      },
+      "searchTerms": {
+        "en": [],
+        "fa": []
+      }
+    },
+    "gallery-tree-art": {
+      "type": "gallery",
+      "name": {
+        "en": "Tree Art Gallery",
+        "fa": "گالری درخت"
+      },
+      "alternateNames": {
+        "en": [],
+        "fa": []
+      },
+      "searchTerms": {
+        "en": [],
+        "fa": []
+      }
+    },
+    "exhibition-that-other-that": {
+      "type": "other",
+      "name": {
+        "en": "That Other That",
+        "fa": "آن دیگر آن"
+      },
+      "alternateNames": {
+        "en": [],
+        "fa": []
+      },
+      "searchTerms": {
+        "en": [],
+        "fa": []
+      }
+    },
+    "exhibition-mind-variations": {
+      "type": "other",
+      "name": {
+        "en": "Mind Variations",
+        "fa": "واریاسیون ذهنی"
+      },
+      "alternateNames": {
+        "en": [],
+        "fa": []
+      },
+      "searchTerms": {
+        "en": [],
+        "fa": []
+      }
+    },
+    "gallery-negah": {
+      "type": "gallery",
+      "name": {
+        "en": "Negah Gallery",
+        "fa": "گالری نگاه"
+      },
+      "alternateNames": {
+        "en": [],
+        "fa": []
+      },
+      "searchTerms": {
+        "en": [],
+        "fa": []
+      }
+    },
+    "exhibition-heat-minus-37": {
+      "type": "other",
+      "name": {
+        "en": "Heat of Minus 37 Degrees",
+        "fa": "گرمای منفی ۳۷ درجه"
+      },
+      "alternateNames": {
+        "en": [],
+        "fa": []
+      },
+      "searchTerms": {
+        "en": [],
+        "fa": []
+      }
+    },
+    "exhibition-the-silence": {
+      "type": "other",
+      "name": {
+        "en": "The Silence",
+        "fa": "سکوت"
+      },
+      "alternateNames": {
+        "en": [],
+        "fa": []
+      },
+      "searchTerms": {
+        "en": [],
+        "fa": []
+      }
+    },
+    "exhibition-infinity": {
+      "type": "other",
+      "name": {
+        "en": "Infinity",
+        "fa": "بیکران"
+      },
+      "alternateNames": {
+        "en": [],
+        "fa": []
+      },
+      "searchTerms": {
+        "en": [],
+        "fa": []
+      }
+    },
+    "exhibition-group-show": {
+      "type": "other",
+      "name": {
+        "en": "Group Exhibition",
+        "fa": "نمایشگاه گروهی"
+      },
+      "alternateNames": {
+        "en": [],
+        "fa": []
+      },
+      "searchTerms": {
+        "en": [],
+        "fa": []
+      }
+    },
+    "gallery-javid": {
+      "type": "gallery",
+      "name": {
+        "en": "Javid Gallery",
+        "fa": "گالری جاوید"
+      },
+      "alternateNames": {
+        "en": [],
+        "fa": []
+      },
+      "searchTerms": {
+        "en": [],
+        "fa": []
+      }
+    },
+    "exhibition-light-and-shadow": {
+      "type": "other",
+      "name": {
+        "en": "Light and Shadow",
+        "fa": "سایه روشن"
+      },
+      "alternateNames": {
+        "en": [],
+        "fa": []
+      },
+      "searchTerms": {
+        "en": [],
+        "fa": []
+      }
+    },
+    "exhibition-khor-art-initiative": {
+      "type": "other",
+      "name": {
+        "en": "Khor Art Initiative 2025",
+        "fa": "پروژه هنری خور"
+      },
+      "alternateNames": {
+        "en": [],
+        "fa": []
+      },
+      "searchTerms": {
+        "en": [],
+        "fa": []
+      }
+    },
+    "gallery-saradipour": {
+      "type": "gallery",
+      "name": {
+        "en": "Saradipour Gallery",
+        "fa": "گالری سرادیپور"
+      },
+      "alternateNames": {
+        "en": [],
+        "fa": []
+      },
+      "searchTerms": {
+        "en": [],
+        "fa": []
+      }
+    },
+    "exhibition-first-week-iranian-painters": {
+      "type": "other",
+      "name": {
+        "en": "1st A Week with Association of Iranian Painters",
+        "fa": "اولین یک هفته با انجمن هنرمندان نقاش ایران"
+      },
+      "alternateNames": {
+        "en": [],
+        "fa": []
+      },
+      "searchTerms": {
+        "en": [],
+        "fa": []
+      }
+    },
+    "exhibition-second-week-iranian-painters": {
+      "type": "other",
+      "name": {
+        "en": "2nd A Week with Association of Iranian Painters",
+        "fa": "دومین یک هفته با انجمن هنرمندان نقاش ایران"
+      },
+      "alternateNames": {
+        "en": [],
+        "fa": []
+      },
+      "searchTerms": {
+        "en": [],
+        "fa": []
+      }
+    }
+  },
+  "cvRecords": {
+    "edu-ma-painting": {
+      "entityIds": [
+        "institution-alzahra-university"
+      ],
+      "searchTerms": {
+        "en": [],
+        "fa": []
+      },
+      "descriptionContext": {
+        "en": "The CV documents a Master of Arts in Painting from Alzahra University.",
+        "fa": "در سوابق تحصیلی، کارشناسی ارشد نقاشی از دانشگاه الزهرا ثبت شده است."
+      },
+      "priority": 95
+    },
+    "edu-ba-painting": {
+      "entityIds": [
+        "institution-university-of-science-and-culture"
+      ],
+      "searchTerms": {
+        "en": [],
+        "fa": []
+      },
+      "descriptionContext": {
+        "en": "The CV documents a Bachelor of Arts in Painting from the University of Science and Culture.",
+        "fa": "در سوابق تحصیلی، کارشناسی نقاشی از دانشگاه علم و فرهنگ ثبت شده است."
+      },
+      "priority": 90
+    },
+    "membership-iranian-painters": {
+      "entityIds": [
+        "association-iranian-painters"
+      ],
+      "searchTerms": {
+        "en": [],
+        "fa": []
+      },
+      "descriptionContext": {
+        "en": "The CV lists membership in the Iranian Painters Association.",
+        "fa": "عضویت در انجمن نقاشان ایران در سوابق حرفه‌ای ثبت شده است."
+      },
+      "priority": 75
+    },
+    "membership-visual-arts": {
+      "entityIds": [
+        "organization-institute-development-contemporary-visual-arts"
+      ],
+      "searchTerms": {
+        "en": [],
+        "fa": []
+      },
+      "descriptionContext": {
+        "en": "The CV lists membership in the Institute for the Development of Contemporary Visual Arts.",
+        "fa": "عضویت در مؤسسه توسعه هنری در سوابق حرفه‌ای ثبت شده است."
+      },
+      "priority": 70
+    },
+    "teaching-soore": {
+      "entityIds": [
+        "institution-soore-university"
+      ],
+      "searchTerms": {
+        "en": [],
+        "fa": []
+      },
+      "descriptionContext": {
+        "en": "The CV records a lecturer position at Soore University from 2016 to 2022.",
+        "fa": "در سوابق تدریس، فعالیت به‌عنوان مدرس در دانشگاه سوره از سال ۱۳۹۵ تا ۱۴۰۱ ثبت شده است."
+      },
+      "priority": 80
+    },
+    "publication-qajar-reliefs": {
+      "entityIds": [
+        "publication-qajar-reliefs",
+        "journal-visual-arts-studies"
+      ],
+      "searchTerms": {
+        "en": [],
+        "fa": []
+      },
+      "descriptionContext": {
+        "en": "The CV lists an article on the influence of Fath-Ali Shah Qajar reliefs on the Sassanid period in Visual Arts Studies Journal.",
+        "fa": "در سوابق انتشار، مقاله‌ای درباره تأثیرپذیری نقش‌برجسته‌های دوره فتحعلی‌شاه قاجار از دوره ساسانی در فصلنامه مطالعات هنرهای تجسمی ثبت شده است."
+      },
+      "priority": 85
+    },
+    "publication-nima-petgar": {
+      "entityIds": [
+        "person-nima-petgar",
+        "publisher-tandis",
+        "publication-my-teacher-nima-petgar"
+      ],
+      "searchTerms": {
+        "en": [],
+        "fa": []
+      },
+      "descriptionContext": {
+        "en": "The CV lists the publication “My Teacher: Nima Petgar” in Tandis Biweekly Magazine, Special Issue No. 324.",
+        "fa": "در سوابق انتشار، عنوان «استادم: نیما پتگر» در دوهفته‌نامه تندیس، ویژه‌نامه شماره ۳۲۴ ثبت شده است."
+      },
+      "priority": 100
+    },
+    "exhibition-in-silence-1404": {
+      "entityIds": [
+        "exhibition-the-silence",
+        "gallery-azad-art"
+      ],
+      "searchTerms": {
+        "en": [],
+        "fa": []
+      },
+      "descriptionContext": {
+        "en": "The CV lists the group exhibition “In Silence” at Azad Art Gallery.",
+        "fa": "نمایشگاه گروهی «در سکوت» در گالری طراحان آزاد در سوابق نمایشگاهی ثبت شده است."
+      },
+      "priority": 65
+    },
+    "exhibition-grand-prize-3": {
+      "entityIds": [
+        "exhibition-third-grand-prize",
+        "organization-iranian-artists-forum"
+      ],
+      "searchTerms": {
+        "en": [],
+        "fa": []
+      },
+      "descriptionContext": {
+        "en": "The CV lists the Third Grand Prize of Iran Contemporary Painting at the Iranian Artists Forum.",
+        "fa": "سومین رویداد جایزه بزرگ نقاشی معاصر ایران در خانه هنرمندان ایران در سوابق نمایشگاهی ثبت شده است."
+      },
+      "priority": 65
+    },
+    "exhibition-97-03": {
+      "entityIds": [
+        "exhibition-ninety-seven-zero-three",
+        "organization-iranian-painters-members-exhibition"
+      ],
+      "searchTerms": {
+        "en": [],
+        "fa": []
+      },
+      "descriptionContext": {
+        "en": "The CV lists the group exhibition “Ninety Seven – Zero Three” in the Iranian Painters Association members’ exhibition.",
+        "fa": "نمایشگاه گروهی «نود و هفت – صفر سه» در سوابق نمایش آثار اعضای پیوسته انجمن هنرمندان نقاش ایران ثبت شده است."
+      },
+      "priority": 55
+    },
+    "exhibition-grand-prize-2": {
+      "entityIds": [
+        "exhibition-second-grand-prize",
+        "organization-iranian-artists-forum"
+      ],
+      "searchTerms": {
+        "en": [],
+        "fa": []
+      },
+      "descriptionContext": {
+        "en": "The CV lists the Second Grand Prize of Iran Contemporary Painting at the Iranian Artists Forum.",
+        "fa": "دومین رویداد جایزه بزرگ نقاشی معاصر ایران در خانه هنرمندان ایران در سوابق نمایشگاهی ثبت شده است."
+      },
+      "priority": 65
+    },
+    "exhibition-in-quarantine": {
+      "entityIds": [
+        "gallery-elahe-sheiss"
+      ],
+      "searchTerms": {
+        "en": [],
+        "fa": []
+      },
+      "descriptionContext": {
+        "en": "The CV lists “In Quarantine,” an online exhibition entry noting an award, associated with Elahe and Sheiss Gallery.",
+        "fa": "نمایشگاه مجازی «در قرنطینه» با اشاره به دریافت جایزه در سوابق و در ارتباط با گالری الهی و شیث ثبت شده است."
+      },
+      "priority": 55
+    },
+    "exhibition-the-silence": {
+      "entityIds": [
+        "exhibition-the-silence",
+        "gallery-sheiss"
+      ],
+      "searchTerms": {
+        "en": [],
+        "fa": []
+      },
+      "descriptionContext": {
+        "en": "The CV lists the group exhibition “The Silence” at Sheiss Gallery.",
+        "fa": "نمایشگاه گروهی «سکوت» در گالری شیث در سوابق نمایشگاهی ثبت شده است."
+      },
+      "priority": 55
+    },
+    "exhibition-infinity": {
+      "entityIds": [
+        "exhibition-infinity",
+        "gallery-haft-samar"
+      ],
+      "searchTerms": {
+        "en": [],
+        "fa": []
+      },
+      "descriptionContext": {
+        "en": "The CV lists the group exhibition “Infinity” at Haft Samar Gallery.",
+        "fa": "نمایشگاه گروهی «بیکران» در گالری هفت ثمر در سوابق نمایشگاهی ثبت شده است."
+      },
+      "priority": 55
+    },
+    "exhibition-amin": {
+      "entityIds": [
+        "exhibition-group-show",
+        "gallery-amin"
+      ],
+      "searchTerms": {
+        "en": [],
+        "fa": []
+      },
+      "descriptionContext": {
+        "en": "The CV lists a group exhibition at Amin Gallery.",
+        "fa": "یک نمایشگاه گروهی در گالری امین در سوابق نمایشگاهی ثبت شده است."
+      },
+      "priority": 45
+    },
+    "exhibition-heat-minus-37": {
+      "entityIds": [
+        "exhibition-heat-minus-37",
+        "gallery-tree-art"
+      ],
+      "searchTerms": {
+        "en": [],
+        "fa": []
+      },
+      "descriptionContext": {
+        "en": "The CV lists “Heat of Minus 37 Degrees” at Tree Art Gallery.",
+        "fa": "نمایشگاه «گرمای منفی ۳۷ درجه» در گالری درخت در سوابق نمایشگاهی ثبت شده است."
+      },
+      "priority": 45
+    },
+    "exhibition-that-other-that": {
+      "entityIds": [
+        "exhibition-that-other-that",
+        "organization-iranian-artists-forum"
+      ],
+      "searchTerms": {
+        "en": [],
+        "fa": []
+      },
+      "descriptionContext": {
+        "en": "The CV lists the group exhibition “That Other That” at the Iranian Artists Forum.",
+        "fa": "نمایشگاه گروهی «آن دیگر آن» در خانه هنرمندان ایران در سوابق نمایشگاهی ثبت شده است."
+      },
+      "priority": 45
+    },
+    "exhibition-haft-samar-2014": {
+      "entityIds": [
+        "exhibition-group-show",
+        "gallery-haft-samar"
+      ],
+      "searchTerms": {
+        "en": [],
+        "fa": []
+      },
+      "descriptionContext": {
+        "en": "The CV lists a group exhibition at Haft Samar Gallery.",
+        "fa": "یک نمایشگاه گروهی در گالری هفت ثمر در سوابق نمایشگاهی ثبت شده است."
+      },
+      "priority": 45
+    },
+    "exhibition-mind-variations": {
+      "entityIds": [
+        "exhibition-mind-variations",
+        "gallery-negah"
+      ],
+      "searchTerms": {
+        "en": [],
+        "fa": []
+      },
+      "descriptionContext": {
+        "en": "The CV lists “Mind Variations” at Negah Gallery.",
+        "fa": "نمایشگاه «واریاسیون ذهنی» در گالری نگاه در سوابق نمایشگاهی ثبت شده است."
+      },
+      "priority": 45
+    },
+    "exhibition-second-week-iranian-painters-1405": {
+      "entityIds": [
+        "exhibition-second-week-iranian-painters",
+        "organization-iranian-artists-forum"
+      ],
+      "searchTerms": {
+        "en": [],
+        "fa": []
+      },
+      "descriptionContext": {
+        "en": "The CV lists the second A Week with Association of Iranian Painters at the Iranian Artists Forum.",
+        "fa": "دومین یک هفته با انجمن هنرمندان نقاش ایران در خانه هنرمندان ایران در سوابق نمایشگاهی ثبت شده است."
+      },
+      "priority": 70
+    },
+    "exhibition-saye-roshan-1404": {
+      "entityIds": [
+        "exhibition-light-and-shadow",
+        "gallery-javid"
+      ],
+      "searchTerms": {
+        "en": [],
+        "fa": []
+      },
+      "descriptionContext": {
+        "en": "The CV lists “Light and Shadow” at Javid Gallery.",
+        "fa": "نمایشگاه «سایه روشن» در گالری جاوید در سوابق نمایشگاهی ثبت شده است."
+      },
+      "priority": 55
+    },
+    "exhibition-khor-art-initiative-2025": {
+      "entityIds": [
+        "exhibition-khor-art-initiative",
+        "gallery-saradipour"
+      ],
+      "searchTerms": {
+        "en": [],
+        "fa": []
+      },
+      "descriptionContext": {
+        "en": "The CV lists Khor Art Initiative 2025 at Saradipour Gallery.",
+        "fa": "پروژه هنری خور ۲۰۲۵ در گالری سرادیپور در سوابق نمایشگاهی ثبت شده است."
+      },
+      "priority": 55
+    },
+    "exhibition-first-week-iranian-painters-1404": {
+      "entityIds": [
+        "exhibition-first-week-iranian-painters",
+        "organization-iranian-artists-forum"
+      ],
+      "searchTerms": {
+        "en": [],
+        "fa": []
+      },
+      "descriptionContext": {
+        "en": "The CV lists the first A Week with Association of Iranian Painters at the Iranian Artists Forum.",
+        "fa": "اولین یک هفته با انجمن هنرمندان نقاش ایران در خانه هنرمندان ایران در سوابق نمایشگاهی ثبت شده است."
+      },
+      "priority": 65
+    }
+  }
+}
