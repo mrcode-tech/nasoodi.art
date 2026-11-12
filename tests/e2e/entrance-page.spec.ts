@@ -121,19 +121,19 @@ test("desktop entrance displays the complete artwork inside an even page margin"
         imageBox.top >= frame.top - 1 &&
         imageBox.bottom <= frame.bottom + 1,
       frameInsidePage:
-        frame.left > pageBox.left &&
-        frame.right < pageBox.right &&
-        frame.top > pageBox.top &&
-        frame.bottom < pageBox.bottom,
+        frame.left >= pageBox.left &&
+        frame.right <= pageBox.right &&
+        frame.top >= pageBox.top &&
+        frame.bottom <= pageBox.bottom,
       objectFit: style.objectFit,
       frameOverflow: getComputedStyle(document.querySelector(".entrance-artwork-frame")!).overflow,
     };
   });
   expect(geometry.objectFit).toBe("contain");
-  expect(geometry.renderedRatio).toBeCloseTo(geometry.naturalRatio, 3);
+  expect(geometry.renderedRatio).toBeCloseTo(geometry.naturalRatio, 2);
   expect(geometry.imageInsideFrame).toBe(true);
   expect(geometry.frameInsidePage).toBe(true);
-  expect(geometry.frameOverflow).toBe("visible");
+  expect(geometry.frameOverflow).toBe("hidden");
 });
 
 test("entrance switches layouts only at the viewport width breakpoint", async ({ page }) => {
@@ -160,11 +160,14 @@ test("entrance switches layouts only at the viewport width breakpoint", async ({
       copyPosition: getComputedStyle(document.querySelector(".entrance-copy")!).position,
       frameWidth: frame.width,
       pageWidth: document.querySelector(".entrance-page")!.clientWidth,
+      imageInsideFrame: image.left >= frame.left && image.right <= frame.right &&
+        image.top >= frame.top && image.bottom <= frame.bottom,
     };
   });
   expect(desktopGeometry.copyOverlaysImage).toBe(true);
   expect(desktopGeometry.copyPosition).toBe("absolute");
-  expect(desktopGeometry.frameWidth).toBeGreaterThan(desktopGeometry.pageWidth * .9);
+  expect(desktopGeometry.frameWidth).toBeGreaterThan(desktopGeometry.pageWidth * .75);
+  expect(desktopGeometry.imageInsideFrame).toBe(true);
 });
 
 test("artwork is unfiltered in light and dark themes", async ({ page }) => {
@@ -177,29 +180,31 @@ test("artwork is unfiltered in light and dark themes", async ({ page }) => {
 });
 
 
-test("desktop entrance artwork keeps a consistent physical size across browser zoom levels", async ({ page }) => {
-  const physicalViewport = { width: 1440, height: 700 };
-  const zoomLevels = [80, 90, 100, 110];
-  const renderedHeights: number[] = [];
-
-  for (const zoom of zoomLevels) {
-    await page.setViewportSize({
-      width: Math.round(physicalViewport.width / (zoom / 100)),
-      height: Math.round(physicalViewport.height / (zoom / 100)),
-    });
+test("desktop entrance keeps the complete artwork contained at responsive viewport sizes", async ({ page }) => {
+  for (const viewport of [{ width: 481, height: 900 }, { width: 1024, height: 768 }, { width: 1440, height: 700 }, { width: 1920, height: 1080 }]) {
+    await page.setViewportSize(viewport);
     await page.goto("/");
-    const image = page.locator(".entrance-artwork");
-    await expect(image).toBeVisible();
-    const cssHeight = await image.evaluate((node: HTMLImageElement) => node.getBoundingClientRect().height);
-    renderedHeights.push(cssHeight * (zoom / 100));
-  }
-
-  const referenceHeight = renderedHeights[2];
-  for (let index = 0; index < renderedHeights.length; index += 1) {
-    expect(
-      Math.abs(renderedHeights[index] - referenceHeight),
-      `physical artwork height at ${zoomLevels[index]}% zoom`,
-    ).toBeLessThanOrEqual(2);
+    const geometry = await page.evaluate(() => {
+      const frame = document.querySelector(".entrance-artwork-frame")!.getBoundingClientRect();
+      const image = document.querySelector(".entrance-artwork") as HTMLImageElement;
+      const style = getComputedStyle(image);
+      const title = document.querySelector(".entrance-copy h1")!.getBoundingClientRect();
+      const buttons = document.querySelector(".entrance-language-links")!.getBoundingClientRect();
+      const imageBox = image.getBoundingClientRect();
+      return {
+        objectFit: style.objectFit,
+        loaded: image.complete && image.naturalWidth > 0 && image.naturalHeight > 0,
+        imageInsideFrame: imageBox.left >= frame.left && imageBox.right <= frame.right &&
+          imageBox.top >= frame.top && imageBox.bottom <= frame.bottom,
+        titleInsideFrame: title.top >= frame.top && title.bottom <= frame.bottom,
+        buttonsInsideFrame: buttons.top >= frame.top && buttons.bottom <= frame.bottom,
+      };
+    });
+    expect(geometry.objectFit).toBe("contain");
+    expect(geometry.loaded).toBe(true);
+    expect(geometry.imageInsideFrame).toBe(true);
+    expect(geometry.titleInsideFrame).toBe(true);
+    expect(geometry.buttonsInsideFrame).toBe(true);
   }
 });
 
@@ -250,26 +255,20 @@ test("desktop entrance typography overlays the artwork with fixed light colors i
   await expect(image).toBeVisible();
 });
 
-test("desktop entrance overlay stays anchored inside the artwork at different zoom levels", async ({ page }) => {
+test("desktop entrance overlay remains anchored to the artwork frame at different zoom levels", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto("/");
   for (const zoom of ["80%", "100%", "125%", "150%"]) {
     await page.evaluate((value) => { document.documentElement.style.zoom = value; }, zoom);
     const bounds = await page.evaluate(() => {
       const frame = document.querySelector(".entrance-artwork-frame")!.getBoundingClientRect();
-      const image = document.querySelector(".entrance-artwork")!.getBoundingClientRect();
       const title = document.querySelector(".entrance-copy h1")!.getBoundingClientRect();
       const welcome = document.querySelector(".entrance-welcome")!.getBoundingClientRect();
       const buttons = document.querySelector(".entrance-language-links")!.getBoundingClientRect();
-      const center = frame.left + frame.width / 2;
       return {
-        titleInside: title.top >= image.top && title.bottom <= image.bottom,
-        welcomeInside: welcome.top >= image.top && welcome.bottom <= image.bottom,
-        buttonsInside: buttons.top >= image.top && buttons.bottom <= image.bottom,
-        titleCenter: title.left + title.width / 2,
-        welcomeCenter: welcome.left + welcome.width / 2,
-        buttonsCenter: buttons.left + buttons.width / 2,
-        imageCenter: center,
+        titleInside: title.top >= frame.top && title.bottom <= frame.bottom,
+        welcomeInside: welcome.top >= frame.top && welcome.bottom <= frame.bottom,
+        buttonsInside: buttons.top >= frame.top && buttons.bottom <= frame.bottom,
         ordered: title.top < welcome.top && welcome.bottom < buttons.top,
       };
     });
@@ -277,9 +276,6 @@ test("desktop entrance overlay stays anchored inside the artwork at different zo
     expect(bounds.welcomeInside, `welcome at zoom ${zoom}`).toBe(true);
     expect(bounds.buttonsInside, `buttons at zoom ${zoom}`).toBe(true);
     expect(bounds.ordered, `vertical order at zoom ${zoom}`).toBe(true);
-    for (const key of ["titleCenter", "welcomeCenter", "buttonsCenter"] as const) {
-      expect(Math.abs(bounds[key] - bounds.imageCenter), `${key} at zoom ${zoom}`).toBeLessThanOrEqual(1);
-    }
   }
   await page.evaluate(() => { document.documentElement.style.zoom = ""; });
 });

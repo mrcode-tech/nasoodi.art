@@ -17,7 +17,7 @@ body.entrance-document-body {
   align-items: center;
   justify-content: center;
   overflow: clip;
-  padding: clamp(1rem, 1.8vw, 3rem);
+  padding: clamp(1.5rem, 3vw, 3.25rem);
   background: var(--paper);
   color: var(--ink);
 }
@@ -25,43 +25,71 @@ body.entrance-document-body {
 .entrance-content {
   display: flex;
   width: min(100%, 76rem);
+  height: 100%;
+  min-height: 0;
   flex-direction: column;
   align-items: center;
-  gap: clamp(1.35rem, 3vh, 2rem);
+  justify-content: center;
   margin-inline: auto;
 }
 
-.entrance-artwork-frame {
+.entrance-stage {
   display: grid;
   width: 100%;
-  height: min(64svh, 48rem);
-  min-height: 13rem;
+  height: 100%;
+  min-height: 0;
   place-items: center;
+}
+
+/* The frame owns both the artwork and its overlay. Its dimensions are driven
+   by the image's intrinsic ratio, so copy placement cannot drift away from it. */
+.entrance-artwork-frame {
+  position: relative;
+  display: inline-flex;
+  box-sizing: border-box;
+  width: fit-content;
+  height: fit-content;
+  max-width: 100%;
+  max-height: 100%;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  padding: clamp(.65rem, 1.2vw, 1.1rem);
+  border: 1px solid color-mix(in srgb, var(--ink) 12%, transparent);
+  border-radius: 2px;
+  background: color-mix(in srgb, var(--paper) 94%, var(--ink));
+  box-shadow: 0 1.25rem 3.5rem rgb(25 22 18 / 13%), 0 .2rem .65rem rgb(25 22 18 / 7%);
 }
 
 .entrance-artwork {
   display: block;
   width: auto;
   height: auto;
-  max-width: 100%;
-  max-height: 100%;
+  max-width: min(calc(100vw - 8rem), 1100px);
+  max-height: calc(100dvh - 9rem);
   object-fit: contain;
   object-position: center;
 }
 
 .entrance-copy {
+  position: absolute;
+  z-index: 1;
+  inset-inline: 5%;
+  bottom: 5%;
   display: flex;
-  width: min(100%, 42rem);
+  width: auto;
   flex-direction: column;
   align-items: center;
+  margin: 0;
   text-align: center;
 }
 
 .entrance-copy h1 {
+  max-width: 100%;
   margin: 0;
-  color: var(--ink);
+  color: #eae4d9;
   font-family: Georgia, "Times New Roman", serif;
-  font-size: var(--type-display, clamp(1.875rem, 3.1vw, 2.75rem));
+  font-size: clamp(1.65rem, 3.1vw, 2.75rem);
   font-weight: 400;
   letter-spacing: -.035em;
   line-height: 1.2;
@@ -69,8 +97,8 @@ body.entrance-document-body {
 }
 
 .entrance-welcome {
-  margin: .45rem 0 0;
-  color: var(--muted-foreground);
+  margin: .4rem 0 0;
+  color: #b9b5ae;
   font-size: .95rem;
   line-height: 1.5;
   letter-spacing: .01em;
@@ -82,7 +110,7 @@ body.entrance-document-body {
   align-items: center;
   justify-content: center;
   gap: .75rem;
-  margin-top: 1.75rem;
+  margin-top: 1.1rem;
 }
 
 .entrance-language-links a {
@@ -92,11 +120,15 @@ body.entrance-document-body {
   flex: 1 1 0;
   align-items: center;
   justify-content: center;
-  border: 1px solid var(--border);
+  border: 1px solid color-mix(in srgb, var(--border) 82%, transparent);
   border-radius: .25rem;
+  background: color-mix(in srgb, var(--paper) 88%, transparent);
   color: var(--ink);
   font-size: .9rem;
-  transition: background-color 150ms ease, border-color 150ms ease;
+  box-shadow: 0 .35rem 1.1rem rgb(20 18 16 / 12%);
+  -webkit-backdrop-filter: blur(14px) saturate(125%);
+  backdrop-filter: blur(14px) saturate(125%);
+  transition: background-color 150ms ease, border-color 150ms ease, box-shadow 150ms ease;
 }
 
 .entrance-language-links a[lang=fa] {
@@ -106,7 +138,8 @@ body.entrance-document-body {
 
 .entrance-language-links a:hover {
   border-color: var(--mauve);
-  background: var(--interactive-surface);
+  background: color-mix(in srgb, var(--paper) 96%, transparent);
+  box-shadow: 0 .4rem 1.25rem rgb(20 18 16 / 16%);
 }
 
 .entrance-language-links a:focus-visible {
@@ -114,97 +147,44 @@ body.entrance-document-body {
   outline-offset: 4px;
 }
 
-/* Desktop is selected by available viewport width, not device type.
-   The artwork fills the padded viewport frame and scales as one composition. */
-@media (min-width: 481px) {
-  .entrance-content {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    max-width: none;
-    gap: 0;
-    margin-inline: auto;
-  }
-
-  .entrance-artwork-frame {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    min-height: 0;
-    flex: 1 1 auto;
-    aspect-ratio: auto;
-    overflow: visible;
-    place-items: center;
-  }
-
-  .entrance-artwork {
-    display: block;
-    width: auto;
-    height: auto;
-    max-width: 100%;
-    max-height: 100%;
-    object-fit: contain;
-    object-position: center;
-  }
-
-  .entrance-copy {
-    position: absolute;
-    z-index: 1;
-    inset-inline: 5%;
-    bottom: 5%;
-    width: auto;
-    margin: 0;
-    transform: none;
-    text-align: center;
-  }
-
-  .entrance-copy h1 {
-    color: #eae4d9;
-  }
-
-  .entrance-welcome {
-    margin: .4rem 0 0;
-    color: #b9b5ae;
-  }
-
-  .entrance-language-links {
-    margin-top: 1.1rem;
-  }
-}
-
+/* Keep the desktop composition active from a 480 CSS-pixel layout viewport.
+   A classic scrollbar can reduce the layout viewport by one or more pixels
+   relative to Playwright's outer viewport size. */
 @media (max-width: 480px) {
   .entrance-page {
     padding: max(.65rem, env(safe-area-inset-top)) 1rem max(.65rem, env(safe-area-inset-bottom));
   }
 
   .entrance-content {
-    height: 100%;
-    min-height: 0;
+    width: 100%;
+    gap: clamp(1rem, 2dvh, 1.25rem);
     justify-content: center;
-    gap: clamp(.5rem, 1.4dvh, .8rem);
   }
 
+  .entrance-stage,
   .entrance-artwork-frame {
-    height: min(44dvh, 28rem);
-    min-height: 0;
-    flex: 0 1 auto;
+    display: contents;
+  }
+
+  .entrance-artwork {
+    width: auto;
+    height: auto;
+    max-width: 100%;
+    max-height: 44dvh;
+    align-self: center;
   }
 
   .entrance-copy {
     position: static;
     inset: auto;
     width: min(100%, 42rem);
-    margin-top: .65rem;
-    transform: none;
-  }
-
-  .entrance-language-links {
-    position: static;
-    margin-top: 1.25rem;
+    margin: 0;
   }
 
   .entrance-copy h1 {
+    color: var(--ink);
     font-size: clamp(1.65rem, 7vw, 2.1rem);
+    line-height: 1.2;
   }
 
   .entrance-name-first,
@@ -214,16 +194,25 @@ body.entrance-document-body {
 
   .entrance-welcome {
     margin-top: .2rem;
+    color: var(--muted-foreground);
     font-size: .85rem;
     line-height: 1.35;
   }
 
   .entrance-language-links {
+    width: min(100%, 19rem);
     margin-top: 1.25rem;
   }
 
-  /* When mobile content physically overlaps the artwork, switch to the
-     same readable overlay treatment used by the desktop entrance. */
+  .entrance-language-links a {
+    background: var(--paper);
+    color: var(--ink);
+    box-shadow: none;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+
+  /* Keep the overlay palette only when mobile copy is moved over the image. */
   .entrance-page[data-entrance-overlay="true"] .entrance-copy h1 {
     color: #eae4d9;
   }
@@ -233,45 +222,16 @@ body.entrance-document-body {
   }
 
   .entrance-page[data-entrance-overlay="true"] .entrance-language-links a {
-    position: relative;
-    isolation: isolate;
     border-color: color-mix(in srgb, var(--border) 82%, transparent);
     background: color-mix(in srgb, var(--paper) 88%, transparent);
-    color: var(--ink);
     box-shadow: 0 .35rem 1.1rem rgb(20 18 16 / 12%);
     -webkit-backdrop-filter: blur(14px) saturate(125%);
     backdrop-filter: blur(14px) saturate(125%);
-  }
-
-  .entrance-page[data-entrance-overlay="true"] .entrance-language-links a:hover {
-    background: color-mix(in srgb, var(--paper) 96%, transparent);
-    box-shadow: 0 .4rem 1.25rem rgb(20 18 16 / 16%);
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .entrance-language-links a {
     transition: none;
-  }
-}
-
-
-/* The translucent paper treatment is desktop-only, where language choices
-   intentionally overlay the artwork. Mobile keeps its original solid,
-   below-image button treatment. */
-@media (min-width: 481px) {
-  .entrance-language-links a {
-    position: relative;
-    isolation: isolate;
-    border-color: color-mix(in srgb, var(--border) 82%, transparent);
-    background: color-mix(in srgb, var(--paper) 88%, transparent);
-    box-shadow: 0 .35rem 1.1rem rgb(20 18 16 / 12%);
-    -webkit-backdrop-filter: blur(14px) saturate(125%);
-    backdrop-filter: blur(14px) saturate(125%);
-  }
-
-  .entrance-language-links a:hover {
-    background: color-mix(in srgb, var(--paper) 96%, transparent);
-    box-shadow: 0 .4rem 1.25rem rgb(20 18 16 / 16%);
   }
 }
