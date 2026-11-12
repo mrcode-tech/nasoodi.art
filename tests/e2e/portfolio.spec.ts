@@ -28,9 +28,149 @@ test("localized routes expose the correct document language and main landmark", 
   }
 });
 
-for (const route of ["/fa", "/fa/contact"] as const) {
+for (const viewport of [
+  { width: 320, height: 568 },
+  { width: 360, height: 800 },
+  { width: 390, height: 844 },
+  { width: 430, height: 932 },
+]) {
+  for (const locale of locales) {
+    test("homepage contact footer is icon-only and fits " + locale + " at " + viewport.width + "px", async ({ page }) => {
+      await page.setViewportSize(viewport);
+      await page.goto("/" + locale);
+      const footer = page.locator(".homepage-contact-footer");
+      await expect(footer).toBeVisible();
+      await expect(footer.getByRole("heading", {
+        name: locale === "fa" ? "ارتباط با من" : "Get in Touch",
+      })).toBeVisible();
+      const links = footer.locator(".homepage-contact-link");
+      await expect(links).toHaveCount(3);
+      for (const [index, label] of [
+        locale === "fa" ? "ارسال ایمیل" : "Send an email",
+        locale === "fa" ? "ارتباط در تلگرام" : "Contact on Telegram",
+        locale === "fa" ? "مشاهده صفحه اینستاگرام" : "Visit Instagram profile",
+      ].entries()) {
+        await expect(links.nth(index)).toHaveAttribute("aria-label", label);
+        await expect(links.nth(index).locator("svg")).toBeVisible();
+        await expect(links.nth(index).locator(".homepage-contact-identifier")).toBeHidden();
+      }
+      const layout = await footer.evaluate((element) => {
+        const items = Array.from(element.querySelectorAll(".homepage-contact-link"));
+        const row = element.querySelector(".homepage-contact-links")?.getBoundingClientRect();
+        const boxes = items.map((item) => {
+          const rect = item.getBoundingClientRect();
+          return {
+            left: rect.left,
+            right: rect.right,
+            top: rect.top,
+            width: rect.width,
+            height: rect.height,
+            center: rect.left + rect.width / 2,
+          };
+        });
+        const heading = element.querySelector("h2")?.getBoundingClientRect();
+        const reference = document.querySelector(".editorial-section .section-heading")?.getBoundingClientRect();
+        const rtl = getComputedStyle(element).direction === "rtl";
+        return {
+          viewport: document.documentElement.clientWidth,
+          document: document.documentElement.scrollWidth,
+          footerHeight: element.getBoundingClientRect().height,
+          headingStart: heading ? (rtl ? heading.right : heading.left) : -1,
+          referenceStart: reference ? (rtl ? reference.right : reference.left) : -2,
+          rowLeft: row?.left ?? -1,
+          rowWidth: row?.width ?? 0,
+          boxes,
+        };
+      });
+      expect(layout.document).toBeLessThanOrEqual(layout.viewport);
+      expect(Math.abs(layout.headingStart - layout.referenceStart)).toBeLessThanOrEqual(1);
+      expect(layout.boxes.map((box) => box.top).every((top) => Math.abs(top - layout.boxes[0].top) <= 1)).toBe(true);
+      const expectedCenters = [
+        layout.rowLeft + layout.rowWidth / 6,
+        layout.rowLeft + layout.rowWidth / 2,
+        layout.rowLeft + (layout.rowWidth * 5) / 6,
+      ];
+      for (const [index, box] of layout.boxes.entries()) {
+        expect(Math.abs(box.center - expectedCenters[index])).toBeLessThanOrEqual(2);
+      }
+      for (const box of layout.boxes) {
+        expect(box.width).toBeGreaterThanOrEqual(44);
+        expect(box.height).toBeGreaterThanOrEqual(44);
+        expect(box.left).toBeGreaterThanOrEqual(0);
+        expect(box.right).toBeLessThanOrEqual(layout.viewport);
+      }
+      expect(layout.footerHeight).toBeLessThanOrEqual(160);
+    });
+  }
+}
+
+for (const locale of locales) {
+  test("desktop " + locale + " homepage contact footer aligns with the editorial grid and uses consistent icon-first rows", async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 800 });
+    await page.goto("/" + locale);
+    const footer = page.locator(".homepage-contact-footer");
+    const heading = footer.getByRole("heading", { name: locale === "fa" ? "ارتباط با من" : "Get in Touch" });
+    const links = footer.locator(".homepage-contact-link");
+    await expect(heading).toBeVisible();
+    await expect(links).toHaveCount(3);
+    for (const link of await links.all()) {
+      await expect(link.locator("svg")).toBeVisible();
+      await expect(link.locator(".homepage-contact-identifier")).toBeVisible();
+    }
+    const layout = await footer.evaluate((element) => {
+      const heading = element.querySelector("h2");
+      const items = Array.from(element.querySelectorAll(".homepage-contact-link"));
+      const rows = items.map((item) => {
+        const iconRect = item.querySelector("svg")?.getBoundingClientRect();
+        const identifierRect = item.querySelector(".homepage-contact-identifier")?.getBoundingClientRect();
+        return {
+          top: item.getBoundingClientRect().top,
+          direction: getComputedStyle(item).direction,
+          textAlign: getComputedStyle(item).textAlign,
+          iconLeft: iconRect?.left ?? -1,
+          iconRight: iconRect?.right ?? -1,
+          identifierLeft: identifierRect?.left ?? -1,
+          identifierRight: identifierRect?.right ?? -1,
+        };
+      });
+      const headingRect = heading?.getBoundingClientRect();
+      const referenceRect = document.querySelector(".editorial-section .section-heading")?.getBoundingClientRect();
+      const rtl = getComputedStyle(element).direction === "rtl";
+      return {
+        rtl,
+        headingAlign: heading ? getComputedStyle(heading).textAlign : "",
+        headingStart: headingRect ? (rtl ? headingRect.right : headingRect.left) : -1,
+        referenceStart: referenceRect ? (rtl ? referenceRect.right : referenceRect.left) : -2,
+        rows,
+      };
+    });
+    expect(layout.headingAlign).toBe("start");
+    expect(Math.abs(layout.headingStart - layout.referenceStart)).toBeLessThanOrEqual(1);
+    expect(layout.rows[1].top).toBeGreaterThan(layout.rows[0].top);
+    expect(layout.rows[2].top).toBeGreaterThan(layout.rows[1].top);
+    expect(layout.rtl).toBe(locale === "fa");
+    expect(layout.rows.every((row) => row.direction === "ltr" && row.textAlign === "left")).toBe(true);
+    expect(layout.rows.every((row) => Math.abs(row.iconLeft - layout.rows[0].iconLeft) <= 1)).toBe(true);
+    expect(layout.rows.every((row) => Math.abs(row.identifierLeft - layout.rows[0].identifierLeft) <= 1)).toBe(true);
+    expect(layout.rows.every((row) => Math.abs((row.identifierLeft - row.iconRight) - 12) <= 1)).toBe(true);
+  });
+
+  test("dedicated " + locale + " Contact page keeps its detailed presentation", async ({ page }) => {
+    await page.goto("/" + locale + "/contact");
+    const section = page.locator(".contact-experience-page");
+    await expect(section).toBeVisible();
+    await expect(section.getByRole("heading", {
+      name: locale === "fa" ? "بیایید گفت‌وگویی را آغاز کنیم." : "Let's start a conversation.",
+    })).toBeVisible();
+    await expect(section.locator(".contact-intro")).toBeVisible();
+    await expect(section.locator(".contact-methods .contact-method")).toHaveCount(3);
+    await expect(section.locator(".homepage-contact-footer")).toHaveCount(0);
+  });
+}
+
+for (const route of ["/fa/contact"] as const) {
   for (const viewport of [{ width: 1280, height: 800 }, { width: 390, height: 844 }]) {
-    test("Persian contact values align to the physical left edge on " + route + " at " + viewport.width + "px", async ({ page }) => {
+    test("Persian dedicated Contact values align to the physical left edge at " + viewport.width + "px", async ({ page }) => {
       await page.setViewportSize(viewport);
       await page.goto(route);
       const section = page.locator(".contact-experience");
@@ -69,6 +209,30 @@ for (const route of ["/fa", "/fa/contact"] as const) {
       );
     });
   }
+}
+
+for (const locale of locales) {
+  test(locale + " homepage hero actions stay on one row on desktop", async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 800 });
+    await page.goto("/" + locale);
+    const actions = page.locator(".home-page .hero-actions");
+    await expect(actions).toBeVisible();
+    const layout = await actions.evaluate((element) => {
+      const buttons = Array.from(element.querySelectorAll(":scope > .ui-button"));
+      const boxes = buttons.map((button) => {
+        const rect = button.getBoundingClientRect();
+        return { top: rect.top, left: rect.left, right: rect.right };
+      });
+      const rect = element.getBoundingClientRect();
+      return { boxes, left: rect.left, right: rect.right, width: rect.width };
+    });
+    expect(layout.boxes).toHaveLength(2);
+    expect(Math.abs(layout.boxes[0].top - layout.boxes[1].top)).toBeLessThanOrEqual(1);
+    for (const button of layout.boxes) {
+      expect(button.left).toBeGreaterThanOrEqual(layout.left - 1);
+      expect(button.right).toBeLessThanOrEqual(layout.right + 1);
+    }
+  });
 }
 
 test("desktop navigation exposes the current route and navigates between sections", async ({ page }) => {
