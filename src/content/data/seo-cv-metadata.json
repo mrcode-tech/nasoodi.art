@@ -406,21 +406,6 @@
         "fa": []
       }
     },
-    "exhibition-group-show": {
-      "type": "other",
-      "name": {
-        "en": "Group Exhibition",
-        "fa": "نمایشگاه گروهی"
-      },
-      "alternateNames": {
-        "en": [],
-        "fa": []
-      },
-      "searchTerms": {
-        "en": [],
-        "fa": []
-      }
-    },
     "gallery-javid": {
       "type": "gallery",
       "name": {
@@ -501,6 +486,21 @@
       "name": {
         "en": "2nd A Week with Association of Iranian Painters",
         "fa": "دومین یک هفته با انجمن هنرمندان نقاش ایران"
+      },
+      "alternateNames": {
+        "en": [],
+        "fa": []
+      },
+      "searchTerms": {
+        "en": [],
+        "fa": []
+      }
+    },
+    "exhibition-in-silence": {
+      "type": "other",
+      "name": {
+        "en": "In Silence",
+        "fa": "در سکوت"
       },
       "alternateNames": {
         "en": [],
@@ -616,7 +616,7 @@
     },
     "exhibition-in-silence-1404": {
       "entityIds": [
-        "exhibition-the-silence",
+        "exhibition-in-silence",
         "gallery-azad-art"
       ],
       "searchTerms": {
@@ -720,7 +720,6 @@
     },
     "exhibition-amin": {
       "entityIds": [
-        "exhibition-group-show",
         "gallery-amin"
       ],
       "searchTerms": {
@@ -765,7 +764,6 @@
     },
     "exhibition-haft-samar-2014": {
       "entityIds": [
-        "exhibition-group-show",
         "gallery-haft-samar"
       ],
       "searchTerms": {
