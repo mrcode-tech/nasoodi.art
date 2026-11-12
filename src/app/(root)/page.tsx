@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import type { Metadata } from "next";
 import { getArtist } from "@/content/repositories/artist.repository";
 import { getEntranceArtwork } from "@/content/repositories/site.repository";
@@ -54,8 +55,8 @@ export default function RootPage() {
             <h1>{artist.name.en}</h1>
             <p>Welcome to the artistic world of {artist.name.en}. Discover paintings, stories, and artistic expressions.</p>
             <nav className="entrance-language-links" aria-label="Choose language">
-              <a href="/en">Enter</a>
-              <a href="/fa" lang="fa" dir="rtl">ورود</a>
+              <Link href="/en">Enter</Link>
+              <Link href="/fa" lang="fa" dir="rtl">ورود</Link>
             </nav>
           </section>
         </div>
