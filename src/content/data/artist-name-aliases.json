@@ -346,20 +346,19 @@
       {
         "value": "غزاله عبداله‌زاده نسودی",
         "kind": "complete-name",
-        "confidence": "core",
-        "structuredDataPriority": 2
+        "confidence": "core"
       },
       {
         "value": "غزاله عبدالهزاده نسودی",
         "kind": "complete-name",
         "confidence": "core",
-        "structuredDataPriority": 3
+        "structuredDataPriority": 2
       },
       {
         "value": "غزاله عبد الله زاده نسودی",
         "kind": "complete-name",
         "confidence": "supported",
-        "structuredDataPriority": 4
+        "structuredDataPriority": 3
       },
       {
         "value": "غزاله عبد الله‌زاده نسودی",
@@ -375,13 +374,13 @@
         "value": "غزاله عبدالله‌زاده نسودی",
         "kind": "complete-name",
         "confidence": "supported",
-        "structuredDataPriority": 5
+        "structuredDataPriority": 4
       },
       {
         "value": "غزاله عبداللهزاده نسودی",
         "kind": "complete-name",
         "confidence": "supported",
-        "structuredDataPriority": 6
+        "structuredDataPriority": 5
       },
       {
         "value": "غزاله عبد اللهزاده نسودی",
