@@ -150,3 +150,40 @@ for (const locale of ["en", "fa"] as const) {
     expect(languageBox).toEqual(appearanceBox);
   });
 }
+
+for (const locale of ["en", "fa"] as const) {
+  test("mobile " + locale + " drawer keeps the brand and copyright year on one line", async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto("/" + locale + "/journal");
+    await page.getByRole("button", { name: locale === "en" ? "Open navigation" : "باز کردن راهبری" }).click();
+
+    const drawer = page.locator(".mobile-drawer");
+    const copyright = drawer.locator(".drawer-copyright");
+    const brand = copyright.locator("span").nth(0);
+    const year = copyright.locator("span").nth(1);
+    await expect(copyright).toBeVisible();
+    await expect(brand).toHaveText(/nasoodi\.art/i);
+    await expect(year).toHaveText(/©\s*\d{4}/);
+
+    const layout = await copyright.evaluate((node) => {
+      const brandNode = node.children[0] as HTMLElement;
+      const yearNode = node.children[1] as HTMLElement;
+      const brandRect = brandNode.getBoundingClientRect();
+      const yearRect = yearNode.getBoundingClientRect();
+      const style = getComputedStyle(node);
+      return {
+        direction: style.flexDirection,
+        wrapping: style.flexWrap,
+        sameLine: Math.abs(brandRect.top - yearRect.top) < 1,
+        withinDrawer: yearRect.right <= node.getBoundingClientRect().right + 1,
+      };
+    });
+
+    expect(layout).toEqual({
+      direction: "row",
+      wrapping: "nowrap",
+      sameLine: true,
+      withinDrawer: true,
+    });
+  });
+}
