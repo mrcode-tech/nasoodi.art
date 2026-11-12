@@ -119,13 +119,16 @@ body.entrance-document-body {
    changes scale the image and its overlay as one composition. */
 @media (min-width: 481px) {
   .entrance-content {
-    width: min(100%, 76rem);
+    position: relative;
+    width: fit-content;
+    max-width: 100%;
     gap: 0;
   }
 
   .entrance-artwork-frame {
     position: relative;
-    width: min(100%, calc(64svh * var(--entrance-artwork-ratio)));
+    width: fit-content;
+    max-width: 100%;
     height: auto;
     min-height: 0;
     aspect-ratio: var(--entrance-artwork-ratio);
@@ -133,10 +136,10 @@ body.entrance-document-body {
   }
 
   .entrance-artwork {
-    width: 100%;
-    height: 100%;
-    max-width: none;
-    max-height: none;
+    width: auto;
+    height: auto;
+    max-width: 100%;
+    max-height: min(64svh, 48rem);
     object-fit: contain;
   }
 
@@ -212,9 +215,22 @@ body.entrance-document-body {
     gap: .45rem;
   }
 
+  @media (min-width: 481px) {
+    .entrance-content {
+      width: fit-content;
+      max-width: 100%;
+    }
+  }
+
   .entrance-artwork-frame {
-    height: min(38dvh, 25rem);
+    height: auto;
     min-height: 0;
+  }
+
+  @media (min-width: 481px) {
+    .entrance-artwork {
+      max-height: min(38dvh, 25rem);
+    }
   }
 
   .entrance-copy h1 {
