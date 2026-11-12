@@ -77,6 +77,8 @@ export type ArtistNameAlias = {
   value: string;
   kind: "transliteration" | "orthographic" | "spacing" | "hyphenation" | "complete-name";
   confidence: "core" | "supported" | "exploratory";
+  /** Explicit publication order for reviewed complete-name JSON-LD aliases; lower values come first. */
+  structuredDataPriority?: number;
   note?: string;
 };
 export type ArtistNameAliasLocale = {
