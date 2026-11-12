@@ -20,6 +20,21 @@ test("localized routes expose canonical metadata and reciprocal language alterna
         .toHaveAttribute("href", "https://nasoodi.art/" + alternateLocale + "/" + section);
       await expect(page.locator('meta[name="description"]')).toHaveAttribute("content", /.+/);
       await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", /index/);
+      if (section === "cv") {
+        const title = await page.title();
+        const description = await page.locator('meta[name="description"]').getAttribute("content");
+        expect(description).toBeTruthy();
+        await expect(page.locator('meta[property="og:title"]')).toHaveAttribute("content", title);
+        await expect(page.locator('meta[property="og:description"]')).toHaveAttribute("content", description!);
+        await expect(page.locator('meta[name="twitter:title"]')).toHaveAttribute("content", title);
+        await expect(page.locator('meta[name="twitter:description"]')).toHaveAttribute("content", description!);
+        await expect(page.locator('meta[name="keywords"]')).toHaveCount(0);
+        await expect(page.locator('meta[name="description"]')).toHaveCount(1);
+        await expect(page.locator('meta[property="og:description"]')).toHaveCount(1);
+        await expect(page.locator('meta[name="twitter:description"]')).toHaveCount(1);
+        if (locale === "fa") expect(description).toMatch(/[\u0600-\u06FF]/);
+        else expect(description).not.toMatch(/[\u0600-\u06FF]/);
+      }
     }
   }
 });
