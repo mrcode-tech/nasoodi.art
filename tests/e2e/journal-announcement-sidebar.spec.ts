@@ -163,7 +163,7 @@ for (const locale of ["en", "fa"] as const) {
     const year = copyright.locator("span").nth(1);
     await expect(copyright).toBeVisible();
     await expect(brand).toHaveText("nasoodi.art");
-    await expect(year).toHaveText(/©\\s*\\d{4}/);
+    await expect(year).toHaveText(/©\s*\d{4}/);
 
     const layout = await copyright.evaluate((node) => {
       const brandNode = node.children[0] as HTMLElement;
