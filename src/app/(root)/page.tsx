@@ -51,30 +51,21 @@ export default async function RootPage() {
         <EntranceOverlayColorObserver />
         <div className="entrance-content">
           <div className="entrance-stage">
-            <div className="entrance-artwork-frame">
-              {image && (
-                <Image
-                  className="entrance-artwork"
-                  src={image.src}
-                  alt={image.alt.en ?? artwork?.title.en ?? artist.name.en}
-                  width={image.width}
-                  height={image.height}
-                  sizes="(max-width: 480px) 94vw, (max-width: 1200px) 90vw, 1100px"
-                  priority
-                />
-              )}
-              <section className="entrance-copy" aria-label={t("entranceIntroduction")}>
-                <h1>
-                  <span className="entrance-name-first">{entranceFirstName}</span>
-                  <span className="entrance-name-rest">{remainingName.join(" ")}</span>
-                </h1>
-                <p className="entrance-welcome">{t("welcomeMessage")}</p>
-                <nav className="entrance-language-links" aria-label={t("chooseLanguage")}>
-                  <Link href="/en">{t("enterEnglish")}</Link>
-                  <Link href="/fa" lang="fa" dir="rtl">{t("enterPersian")}</Link>
-                </nav>
-              </section>
-            </div>
+          {image && (
+                <div className="entrance-artwork-frame">
+                  <Image className="entrance-artwork" src={image.src} alt={image.alt.en ?? artwork?.title.en ?? artist.name.en}
+                    width={image.width} height={image.height}
+                    sizes="(max-width: 640px) 94vw, (max-width: 1200px) 90vw, 1100px" priority />
+                </div>
+          )}
+            <section className="entrance-copy" aria-label={t("entranceIntroduction")}>
+            <h1><span className="entrance-name-first">{entranceFirstName}</span><span className="entrance-name-rest">{remainingName.join(" ")}</span></h1>
+            <p className="entrance-welcome">{t("welcomeMessage")}</p>
+            <nav className="entrance-language-links" aria-label={t("chooseLanguage")}>
+              <Link href="/en">{t("enterEnglish")}</Link>
+              <Link href="/fa" lang="fa" dir="rtl">{t("enterPersian")}</Link>
+            </nav>
+            </section>
           </div>
         </div>
       </main>

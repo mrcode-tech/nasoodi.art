@@ -65,8 +65,8 @@ body.entrance-document-body {
   display: block;
   width: auto;
   height: auto;
-  max-width: min(calc(100vw - 6rem), 1100px);
-  max-height: calc(100dvh - 6rem);
+  max-width: min(calc(100vw - 8rem), 1100px);
+  max-height: calc(100dvh - 9rem);
   object-fit: contain;
   object-position: center;
 }
