@@ -2074,19 +2074,19 @@ html[lang="fa"] .contact-method-label {
 }
 
 
-/* Homepage-only contact signature: quiet, unboxed, and aligned with the page canvas. */
+/* Homepage-only contact signature: shares the editorial content grid and page canvas. */
 .homepage-contact-footer {
   width: 100%;
   min-width: 0;
   margin-top: clamp(2rem, 4vw, 3.5rem);
-  padding: clamp(1.5rem, 3vw, 2.25rem) clamp(1rem, 4vw, 3rem);
+  padding: clamp(1.5rem, 3vw, 2.25rem) 0 0;
   background: transparent;
   color: var(--ink);
 }
 .homepage-contact-footer-inner {
   width: 100%;
-  max-width: 62rem;
-  margin-inline: auto;
+  max-width: none;
+  margin: 0;
 }
 .homepage-contact-footer h2 {
   margin: 0;
@@ -2100,22 +2100,22 @@ html[lang="fa"] .contact-method-label {
   display: flex;
   width: min(100%, 38rem);
   flex-direction: column;
-  align-items: stretch;
+  align-items: flex-start;
   gap: .2rem;
   margin: 1rem 0 0;
   padding: 0;
   list-style: none;
 }
 .homepage-contact-links > li {
-  width: 100%;
+  width: auto;
   min-width: 0;
 }
 .homepage-contact-link {
   display: grid;
-  width: 100%;
+  width: auto;
   min-width: 0;
   min-height: 2.75rem;
-  grid-template-columns: 1.5rem minmax(0, 1fr);
+  grid-template-columns: 1.5rem max-content;
   align-items: center;
   justify-content: start;
   column-gap: .75rem;
@@ -2150,13 +2150,13 @@ html[lang="fa"] .contact-method-label {
 @media (max-width: 900px) {
   .homepage-contact-footer {
     margin-top: 1.75rem;
-    padding: 1.25rem 1rem 1.35rem;
+    padding: 1.25rem 0 1.35rem;
   }
   .homepage-contact-links {
-    width: auto;
+    width: 100%;
     flex-direction: row;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     gap: clamp(.75rem, 4vw, 1.5rem);
     margin-top: .65rem;
   }
