@@ -28,7 +28,7 @@ export function generateMetadata(): Metadata {
     robots: { index: true, follow: true },
     openGraph: {
       type: "website", title, description, url: siteOrigin + "/", siteName: "Nasoodi.art", locale: "en_US",
-      ...(image ? { images: [{ url: image.src, width: image.width, height: image.height, alt: image.alt.en }] } : {}),
+      ...(image ? { images: [{ url: image.src, width: image.width, height: image.height, alt: image.alt.en ?? artwork?.title.en ?? artist?.name?.en ?? "Artwork" }] } : {}),
     },
     twitter: { card: image ? "summary_large_image" : "summary", title, description, ...(image ? { images: [image.src] } : {}) },
   };
@@ -48,7 +48,7 @@ export default async function RootPage() {
         <div className="entrance-content">
           {image && (
             <div className="entrance-artwork-frame">
-              <Image className="entrance-artwork" src={image.src} alt={image.alt.en}
+              <Image className="entrance-artwork" src={image.src} alt={image.alt.en ?? artwork?.title.en ?? artist.name.en}
                 width={image.width} height={image.height}
                 sizes="(max-width: 640px) 94vw, (max-width: 1200px) 90vw, 1100px" priority />
             </div>
