@@ -55,7 +55,6 @@ export default async function RootPage() {
           )}
           <section className="entrance-copy" aria-label={t("entranceIntroduction")}>
             <h1>{artist.name.en}</h1>
-            <p>{t("entranceWelcome", { artistName: artist.name.en })}</p>
             <nav className="entrance-language-links" aria-label={t("chooseLanguage")}>
               <Link href="/en">{t("enterEnglish")}</Link>
               <Link href="/fa" lang="fa" dir="rtl">{t("enterPersian")}</Link>

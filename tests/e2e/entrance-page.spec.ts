@@ -11,6 +11,8 @@ test("root entrance presents its selected published artwork and language links",
   await expect(page.locator("html")).toHaveAttribute("lang", "en");
   await expect(page.locator("html")).toHaveAttribute("dir", "ltr");
   await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
+  await expect(page.locator(".entrance-copy p")).toHaveCount(0);
+  await expect(page.getByText("Discover paintings, stories, and artistic expressions.", { exact: false })).toHaveCount(0);
   const links = page.getByRole("navigation", { name: "Choose language" }).getByRole("link");
   await expect(links).toHaveCount(2);
   await expect(links.nth(0)).toHaveText("Enter");
@@ -41,10 +43,15 @@ for (const viewport of [
       clientWidth: document.documentElement.clientWidth,
       scrollHeight: document.documentElement.scrollHeight,
       clientHeight: document.documentElement.clientHeight,
+      bodyScrollHeight: document.body.scrollHeight,
+      viewportHeight: window.innerHeight,
+      entranceBottom: document.querySelector(".entrance-page")?.getBoundingClientRect().bottom ?? 0,
     }));
     expect(sizes.scrollWidth).toBeLessThanOrEqual(sizes.clientWidth);
     if (viewport.width <= 430) {
       expect(sizes.scrollHeight).toBeLessThanOrEqual(sizes.clientHeight);
+      expect(sizes.bodyScrollHeight).toBeLessThanOrEqual(sizes.viewportHeight);
+      expect(sizes.entranceBottom).toBeLessThanOrEqual(sizes.viewportHeight);
     }
     await expect(page.locator(".entrance-language-links")).toBeVisible();
   });
