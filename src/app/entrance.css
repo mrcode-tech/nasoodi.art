@@ -147,7 +147,10 @@ body.entrance-document-body {
   outline-offset: 4px;
 }
 
-@media (max-width: 480px) {
+/* Keep the desktop composition active from a 480 CSS-pixel layout viewport.
+   A classic scrollbar can reduce the layout viewport by one or more pixels
+   relative to Playwright's outer viewport size. */
+@media (max-width: 479px) {
   .entrance-page {
     padding: max(.65rem, env(safe-area-inset-top)) 1rem max(.65rem, env(safe-area-inset-bottom));
   }
