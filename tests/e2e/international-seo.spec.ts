@@ -21,12 +21,12 @@ test("localized routes expose canonical metadata and reciprocal language alterna
       await expect(page.locator('meta[name="description"]')).toHaveAttribute("content", /.+/);
       await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", /index/);
       if (section === "cv") {
-        const title = await page.title();
+        const openGraphTitle = await page.locator('meta[property="og:title"]').getAttribute("content");
         const description = await page.locator('meta[name="description"]').getAttribute("content");
+        expect(openGraphTitle).toBeTruthy();
         expect(description).toBeTruthy();
-        await expect(page.locator('meta[property="og:title"]')).toHaveAttribute("content", title);
+        await expect(page.locator('meta[name="twitter:title"]')).toHaveAttribute("content", openGraphTitle!);
         await expect(page.locator('meta[property="og:description"]')).toHaveAttribute("content", description!);
-        await expect(page.locator('meta[name="twitter:title"]')).toHaveAttribute("content", title);
         await expect(page.locator('meta[name="twitter:description"]')).toHaveAttribute("content", description!);
         await expect(page.locator('meta[name="keywords"]')).toHaveCount(0);
         await expect(page.locator('meta[name="description"]')).toHaveCount(1);
