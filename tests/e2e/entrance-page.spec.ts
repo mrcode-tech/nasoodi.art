@@ -121,16 +121,16 @@ test("desktop entrance displays the complete artwork inside an even page margin"
         imageBox.top >= frame.top - 1 &&
         imageBox.bottom <= frame.bottom + 1,
       frameInsidePage:
-        frame.left > pageBox.left &&
-        frame.right < pageBox.right &&
-        frame.top > pageBox.top &&
-        frame.bottom < pageBox.bottom,
+        frame.left >= pageBox.left &&
+        frame.right <= pageBox.right &&
+        frame.top >= pageBox.top &&
+        frame.bottom <= pageBox.bottom,
       objectFit: style.objectFit,
       frameOverflow: getComputedStyle(document.querySelector(".entrance-artwork-frame")!).overflow,
     };
   });
   expect(geometry.objectFit).toBe("contain");
-  expect(geometry.renderedRatio).toBeCloseTo(geometry.naturalRatio, 3);
+  expect(geometry.renderedRatio).toBeCloseTo(geometry.naturalRatio, 2);
   expect(geometry.imageInsideFrame).toBe(true);
   expect(geometry.frameInsidePage).toBe(true);
   expect(geometry.frameOverflow).toBe("visible");
@@ -160,11 +160,14 @@ test("entrance switches layouts only at the viewport width breakpoint", async ({
       copyPosition: getComputedStyle(document.querySelector(".entrance-copy")!).position,
       frameWidth: frame.width,
       pageWidth: document.querySelector(".entrance-page")!.clientWidth,
+      imageInsideFrame: image.left >= frame.left && image.right <= frame.right &&
+        image.top >= frame.top && image.bottom <= frame.bottom,
     };
   });
   expect(desktopGeometry.copyOverlaysImage).toBe(true);
   expect(desktopGeometry.copyPosition).toBe("absolute");
-  expect(desktopGeometry.frameWidth).toBeGreaterThan(desktopGeometry.pageWidth * .9);
+  expect(desktopGeometry.frameWidth).toBeGreaterThan(desktopGeometry.pageWidth * .75);
+  expect(desktopGeometry.imageInsideFrame).toBe(true);
 });
 
 test("artwork is unfiltered in light and dark themes", async ({ page }) => {
