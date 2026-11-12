@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import { cvEntries } from "../src/content/cv";
+import seoMetadata from "../src/content/data/seo-cv-metadata.json";
 import {
   CvSeoMetadataValidationError,
   getCvSeoDescription,
@@ -66,7 +67,7 @@ test("rejects unsupported schema versions, unexpected fields, and malformed loca
 
 test("requires both localized names and non-empty bilingual search terms", () => {
   const missingFa = valid();
-  delete (missingFa.entities["institution-example"].name as Record<string, unknown>).fa;
+  (missingFa.entities["institution-example"].name as Record<string, unknown>).fa = undefined;
   assert.throws(() => validateCvSeoMetadata(missingFa, [entry()]), /name.fa/);
   const emptyTerms = valid();
   emptyTerms.entities["institution-example"].searchTerms.fa = [];
@@ -110,7 +111,7 @@ test("preserves Persian ZWNJ spelling distinctions while normalizing Arabic lett
 
 test("validates the complete current dataset against canonical public CV records", () => {
   assert.doesNotThrow(() => validateCvSeoMetadata(
-    require("../src/content/data/seo-cv-metadata.json"),
+    seoMetadata,
     cvEntries.filter((item) => item.status === "published"),
   ));
 });

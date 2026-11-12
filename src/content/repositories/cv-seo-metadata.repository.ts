@@ -1,5 +1,3 @@
-import "server-only";
-
 import seoMetadata from "../data/seo-cv-metadata.json";
 import { getCv } from "./cv.repository";
 import type { CvEntry } from "../../types/content";
