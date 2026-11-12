@@ -179,7 +179,7 @@ test("structured data publishes prioritized aliases deterministically without a 
     value: "Synthetic Alias " + (index + 1),
     kind: "complete-name" as const,
     confidence: "supported" as const,
-    structuredDataPriority: index + 1
+    structuredDataPriority: index < 7 ? index + 1 : 7
   }));
   const profile = {
     name: { en: "Synthetic Canonical", fa: "نام معیار" },
@@ -228,7 +228,10 @@ test("Persian and English structured data preserve canonical identity and locale
       },
       fa: {
         given: [], middle: [], family: [], partialSearchQueries: [],
-        completeName: [{ value: "نام جایگزین", kind: "complete-name", confidence: "supported", structuredDataPriority: 1 }]
+        completeName: [
+          { value: "نام جایگزین", kind: "complete-name", confidence: "supported", structuredDataPriority: 1 },
+          { value: "نام‌جایگزین", kind: "complete-name", confidence: "supported", structuredDataPriority: 2 }
+        ]
       }
     }
   } as unknown as ArtistProfile;
