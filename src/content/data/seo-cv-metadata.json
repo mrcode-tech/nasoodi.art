@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "entities": {
     "institution-alzahra-university": {
       "type": "educational-institution",
@@ -7,17 +7,12 @@
         "en": "Alzahra University",
         "fa": "دانشگاه الزهرا"
       },
-      "alternateNames": {
-        "en": [
-          "Al-Zahra University"
-        ],
-        "fa": []
-      },
       "searchTerms": {
         "en": [
           "painting university",
           "art education",
-          "Tehran university"
+          "Tehran university",
+          "Al-Zahra University"
         ],
         "fa": [
           "دانشگاه نقاشی",
@@ -32,17 +27,12 @@
         "en": "University of Science and Culture",
         "fa": "دانشگاه علم و فرهنگ"
       },
-      "alternateNames": {
-        "en": [
-          "University of Science & Culture"
-        ],
-        "fa": []
-      },
       "searchTerms": {
         "en": [
           "painting degree",
           "fine arts education",
-          "Tehran university"
+          "Tehran university",
+          "University of Science & Culture"
         ],
         "fa": [
           "مدرک نقاشی",
@@ -57,24 +47,18 @@
         "en": "Iranian Painters Association",
         "fa": "انجمن نقاشان ایران"
       },
-      "alternateNames": {
-        "en": [
-          "Association of Iranian Painters"
-        ],
-        "fa": [
-          "انجمن هنرمندان نقاش ایران"
-        ]
-      },
       "searchTerms": {
         "en": [
           "Iranian painters",
           "artists association",
-          "professional membership"
+          "professional membership",
+          "Association of Iranian Painters"
         ],
         "fa": [
           "نقاشان ایران",
           "انجمن هنری",
-          "عضویت حرفه‌ای"
+          "عضویت حرفه‌ای",
+          "انجمن هنرمندان نقاش ایران"
         ]
       }
     },
@@ -83,10 +67,6 @@
       "name": {
         "en": "Institute for the Development of Contemporary Visual Arts",
         "fa": "مؤسسه توسعه هنری"
-      },
-      "alternateNames": {
-        "en": [],
-        "fa": []
       },
       "searchTerms": {
         "en": [
@@ -104,10 +84,6 @@
       "name": {
         "en": "Soore University",
         "fa": "دانشگاه سوره"
-      },
-      "alternateNames": {
-        "en": [],
-        "fa": []
       },
       "searchTerms": {
         "en": [
@@ -128,24 +104,18 @@
         "en": "Visual Arts Studies Journal, University of Sistan and Baluchestan",
         "fa": "فصلنامه علمی‌تخصصی مطالعات هنرهای تجسمی، دانشگاه سیستان و بلوچستان"
       },
-      "alternateNames": {
-        "en": [
-          "Visual Arts Studies"
-        ],
-        "fa": [
-          "مطالعات هنرهای تجسمی"
-        ]
-      },
       "searchTerms": {
         "en": [
           "visual arts journal",
           "art studies journal",
-          "academic publication"
+          "academic publication",
+          "Visual Arts Studies"
         ],
         "fa": [
           "فصلنامه هنرهای تجسمی",
           "نشریه مطالعات هنر",
-          "مقاله علمی هنر"
+          "مقاله علمی هنر",
+          "مطالعات هنرهای تجسمی"
         ]
       }
     },
@@ -154,10 +124,6 @@
       "name": {
         "en": "Investigating the Influence of Fath-Ali Shah Qajar Reliefs on the Sassanid Period",
         "fa": "تأثیرپذیری نقش‌برجسته‌های دوره فتحعلی‌شاه قاجار از دوره ساسانی"
-      },
-      "alternateNames": {
-        "en": [],
-        "fa": []
       },
       "searchTerms": {
         "en": [
@@ -180,10 +146,6 @@
         "en": "Nima Petgar",
         "fa": "نیما پتگر"
       },
-      "alternateNames": {
-        "en": [],
-        "fa": []
-      },
       "searchTerms": {
         "en": [
           "Nima Petgar",
@@ -201,24 +163,18 @@
         "en": "Tandis Biweekly Magazine",
         "fa": "دوهفته‌نامه تندیس"
       },
-      "alternateNames": {
-        "en": [
-          "Tandis"
-        ],
-        "fa": [
-          "تندیس"
-        ]
-      },
       "searchTerms": {
         "en": [
           "Tandis magazine",
           "Iranian art magazine",
-          "art periodical"
+          "art periodical",
+          "Tandis"
         ],
         "fa": [
           "مجله تندیس",
           "نشریه هنری",
-          "دوهفته‌نامه هنری"
+          "دوهفته‌نامه هنری",
+          "تندیس"
         ]
       }
     },
@@ -227,10 +183,6 @@
       "name": {
         "en": "My Teacher: Nima Petgar",
         "fa": "استادم: نیما پتگر"
-      },
-      "alternateNames": {
-        "en": [],
-        "fa": []
       },
       "searchTerms": {
         "en": [
@@ -251,10 +203,6 @@
         "en": "Azad Art Gallery",
         "fa": "گالری طراحان آزاد"
       },
-      "alternateNames": {
-        "en": [],
-        "fa": []
-      },
       "searchTerms": {
         "en": [
           "Azad Art Gallery",
@@ -272,16 +220,11 @@
         "en": "Iranian Artists Forum",
         "fa": "خانه هنرمندان ایران"
       },
-      "alternateNames": {
-        "en": [
-          "Iranian Artists' House"
-        ],
-        "fa": []
-      },
       "searchTerms": {
         "en": [
           "Iranian Artists Forum",
-          "Iranian artists venue"
+          "Iranian artists venue",
+          "Iranian Artists' House"
         ],
         "fa": [
           "خانه هنرمندان ایران",
@@ -294,10 +237,6 @@
       "name": {
         "en": "Ninety Seven – Zero Three",
         "fa": "نود و هفت – صفر سه"
-      },
-      "alternateNames": {
-        "en": [],
-        "fa": []
       },
       "searchTerms": {
         "en": [
@@ -316,10 +255,6 @@
         "en": "Iranian Painters Association — Members’ Exhibition",
         "fa": "نمایش آثار اعضای پیوسته انجمن هنرمندان نقاش ایران"
       },
-      "alternateNames": {
-        "en": [],
-        "fa": []
-      },
       "searchTerms": {
         "en": [
           "painters association exhibition",
@@ -336,10 +271,6 @@
       "name": {
         "en": "The Second Grand Prize of Iran Contemporary Painting",
         "fa": "دومین رویداد جایزه بزرگ نقاشی معاصر ایران"
-      },
-      "alternateNames": {
-        "en": [],
-        "fa": []
       },
       "searchTerms": {
         "en": [
@@ -360,10 +291,6 @@
         "en": "The Third Grand Prize of Iran Contemporary Painting",
         "fa": "سومین رویداد جایزه بزرگ نقاشی معاصر ایران"
       },
-      "alternateNames": {
-        "en": [],
-        "fa": []
-      },
       "searchTerms": {
         "en": [
           "Iran contemporary painting",
@@ -383,10 +310,6 @@
         "en": "Elahe and Sheiss Gallery — Online Exhibition; Award Recipient",
         "fa": "گالری الهی و شیث — نمایشگاه مجازی؛ برنده جایزه فراخوان"
       },
-      "alternateNames": {
-        "en": [],
-        "fa": []
-      },
       "searchTerms": {
         "en": [
           "Elahe and Sheiss Gallery",
@@ -403,10 +326,6 @@
       "name": {
         "en": "Sheiss Gallery",
         "fa": "گالری شیث"
-      },
-      "alternateNames": {
-        "en": [],
-        "fa": []
       },
       "searchTerms": {
         "en": [
@@ -425,12 +344,6 @@
         "en": "Haft Samar Gallery",
         "fa": "گالری هفت ثمر"
       },
-      "alternateNames": {
-        "en": [],
-        "fa": [
-          "گالری هفت‌ثمر"
-        ]
-      },
       "searchTerms": {
         "en": [
           "Haft Samar Gallery",
@@ -447,10 +360,6 @@
       "name": {
         "en": "Amin Gallery",
         "fa": "گالری امین"
-      },
-      "alternateNames": {
-        "en": [],
-        "fa": []
       },
       "searchTerms": {
         "en": [
@@ -469,10 +378,6 @@
         "en": "Tree Art Gallery",
         "fa": "گالری درخت"
       },
-      "alternateNames": {
-        "en": [],
-        "fa": []
-      },
       "searchTerms": {
         "en": [
           "Tree Art Gallery",
@@ -489,10 +394,6 @@
       "name": {
         "en": "That Other That",
         "fa": "آن دیگر آن"
-      },
-      "alternateNames": {
-        "en": [],
-        "fa": []
       },
       "searchTerms": {
         "en": [
@@ -511,10 +412,6 @@
         "en": "Mind Variations",
         "fa": "واریاسیون ذهنی"
       },
-      "alternateNames": {
-        "en": [],
-        "fa": []
-      },
       "searchTerms": {
         "en": [
           "Mind Variations",
@@ -532,10 +429,6 @@
         "en": "Negah Gallery",
         "fa": "گالری نگاه"
       },
-      "alternateNames": {
-        "en": [],
-        "fa": []
-      },
       "searchTerms": {
         "en": [
           "Negah Gallery",
@@ -552,10 +445,6 @@
       "name": {
         "en": "Heat of Minus 37 Degrees",
         "fa": "گرمای منفی ۳۷ درجه"
-      },
-      "alternateNames": {
-        "en": [],
-        "fa": []
       },
       "searchTerms": {
         "en": [
@@ -575,10 +464,6 @@
         "en": "The Silence",
         "fa": "سکوت"
       },
-      "alternateNames": {
-        "en": [],
-        "fa": []
-      },
       "searchTerms": {
         "en": [
           "The Silence",
@@ -595,12 +480,6 @@
       "name": {
         "en": "Infinity",
         "fa": "بیکران"
-      },
-      "alternateNames": {
-        "en": [],
-        "fa": [
-          "بی‌کران"
-        ]
       },
       "searchTerms": {
         "en": [
@@ -620,10 +499,6 @@
         "en": "Javid Gallery",
         "fa": "گالری جاوید"
       },
-      "alternateNames": {
-        "en": [],
-        "fa": []
-      },
       "searchTerms": {
         "en": [
           "Javid Gallery",
@@ -640,12 +515,6 @@
       "name": {
         "en": "Light and Shadow",
         "fa": "سایه روشن"
-      },
-      "alternateNames": {
-        "en": [],
-        "fa": [
-          "سایه‌روشن"
-        ]
       },
       "searchTerms": {
         "en": [
@@ -664,10 +533,6 @@
       "name": {
         "en": "Khor Art Initiative 2025",
         "fa": "پروژه هنری خور"
-      },
-      "alternateNames": {
-        "en": [],
-        "fa": []
       },
       "searchTerms": {
         "en": [
@@ -688,10 +553,6 @@
         "en": "Saradipour Gallery",
         "fa": "گالری سرادیپور"
       },
-      "alternateNames": {
-        "en": [],
-        "fa": []
-      },
       "searchTerms": {
         "en": [
           "Saradipour Gallery",
@@ -708,10 +569,6 @@
       "name": {
         "en": "1st A Week with Association of Iranian Painters",
         "fa": "اولین یک هفته با انجمن هنرمندان نقاش ایران"
-      },
-      "alternateNames": {
-        "en": [],
-        "fa": []
       },
       "searchTerms": {
         "en": [
@@ -730,10 +587,6 @@
         "en": "2nd A Week with Association of Iranian Painters",
         "fa": "دومین یک هفته با انجمن هنرمندان نقاش ایران"
       },
-      "alternateNames": {
-        "en": [],
-        "fa": []
-      },
       "searchTerms": {
         "en": [
           "A Week with Iranian Painters",
@@ -750,10 +603,6 @@
       "name": {
         "en": "In Silence",
         "fa": "در سکوت"
-      },
-      "alternateNames": {
-        "en": [],
-        "fa": []
       },
       "searchTerms": {
         "en": [
