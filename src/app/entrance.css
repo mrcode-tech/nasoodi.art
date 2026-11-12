@@ -6,7 +6,7 @@ body.entrance-document-body{width:100%;height:100%;min-height:0;overflow:hidden}
 .entrance-artwork{display:block;width:auto;height:auto;max-width:100%;max-height:100%;object-fit:contain;object-position:center}
 .entrance-copy{display:flex;width:min(100%,42rem);flex-direction:column;align-items:center;text-align:center}
 .entrance-copy h1{margin:0;color:var(--ink);font-family:Georgia,"Times New Roman",serif;font-size:var(--type-display,clamp(1.875rem,3.1vw,2.75rem));font-weight:400;letter-spacing:-.035em;line-height:1.2;text-wrap:balance}
-.entrance-language-links{display:flex;width:min(100%,19rem);align-items:center;justify-content:center;gap:.75rem;margin-top:1.25rem}
+.entrance-welcome{margin:.45rem 0 0;color:var(--muted-foreground);font-size:.95rem;line-height:1.5;letter-spacing:.01em}\n.entrance-language-links{display:flex;width:min(100%,19rem);align-items:center;justify-content:center;gap:.75rem;margin-top:1.25rem}
 .entrance-language-links a{display:inline-flex;min-width:8rem;min-height:2.85rem;flex:1 1 0;align-items:center;justify-content:center;border:1px solid var(--border);border-radius:.25rem;color:var(--ink);font-size:.9rem;transition:background-color 150ms ease,border-color 150ms ease}
 .entrance-language-links a[lang=fa]{font-family:"IranianSerifRegular",Tahoma,serif;font-size:1rem}
 .entrance-language-links a:hover{border-color:var(--mauve);background:var(--interactive-surface)}
@@ -16,12 +16,12 @@ body.entrance-document-body{width:100%;height:100%;min-height:0;overflow:hidden}
  .entrance-content{height:100%;min-height:0;justify-content:center;gap:clamp(.5rem,1.4dvh,.8rem)}
  .entrance-artwork-frame{height:min(44dvh,28rem);min-height:0;flex:0 1 auto}
  .entrance-copy h1{font-size:clamp(1.65rem,7vw,2.1rem)}
- .entrance-language-links{margin-top:.55rem}
+ .entrance-welcome{margin-top:.2rem;font-size:.85rem;line-height:1.35}\n .entrance-language-links{margin-top:.45rem}
 }
 @media(max-height:640px){
  .entrance-content{gap:.45rem}
  .entrance-artwork-frame{height:min(38dvh,25rem);min-height:0}
  .entrance-copy h1{font-size:clamp(1.5rem,6.5vw,1.9rem)}
- .entrance-language-links{margin-top:.4rem}
+ .entrance-welcome{margin-top:.15rem;font-size:.8rem;line-height:1.3}\n .entrance-language-links{margin-top:.3rem}
 }
 @media(prefers-reduced-motion:reduce){.entrance-language-links a{transition:none}}
