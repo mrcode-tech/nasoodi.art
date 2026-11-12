@@ -850,6 +850,18 @@
         "fa": "اولین یک هفته با انجمن هنرمندان نقاش ایران در خانه هنرمندان ایران در سوابق نمایشگاهی ثبت شده است."
       },
       "priority": 65
+    },
+    "teaching-private": {
+      "entityIds": [],
+      "searchTerms": {
+        "en": [],
+        "fa": []
+      },
+      "descriptionContext": {
+        "en": "The CV records ongoing painting and drawing instruction provided privately and through institutes.",
+        "fa": "در سوابق تدریس، آموزش نقاشی و طراحی به‌صورت خصوصی و در آموزشگاه‌ها از سال ۱۳۹۲ تاکنون ثبت شده است."
+      },
+      "priority": 50
     }
   }
 }
