@@ -81,25 +81,55 @@ for (const viewport of [
 }
 
 for (const locale of locales) {
-  test("desktop " + locale + " homepage contact footer displays all three identifiers in one row", async ({ page }) => {
+  test("desktop " + locale + " homepage contact footer displays three aligned contact rows", async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 800 });
     await page.goto("/" + locale);
     const footer = page.locator(".homepage-contact-footer");
+    const heading = footer.getByRole("heading", { name: locale === "fa" ? "ارتباط با من" : "Get in Touch" });
     const links = footer.locator(".homepage-contact-link");
+    await expect(heading).toBeVisible();
     await expect(links).toHaveCount(3);
     for (const link of await links.all()) {
       await expect(link.locator("svg")).toBeVisible();
       await expect(link.locator(".homepage-contact-identifier")).toBeVisible();
     }
-    const layout = await links.evaluateAll((items) => ({
-      viewportWidth: document.documentElement.clientWidth,
-      rows: items.map((item) => {
-        const rect = item.getBoundingClientRect();
-        return { top: rect.top, left: rect.left, right: rect.right };
-      }),
-    }));
-    expect(layout.rows.every((row) => Math.abs(row.top - layout.rows[0].top) <= 1)).toBe(true);
-    expect(layout.rows.every((row) => row.left >= 0 && row.right <= layout.viewportWidth)).toBe(true);
+    const layout = await footer.evaluate((element) => {
+      const heading = element.querySelector("h2");
+      const items = Array.from(element.querySelectorAll(".homepage-contact-link"));
+      const rows = items.map((item) => {
+        const icon = item.querySelector("svg");
+        const identifier = item.querySelector(".homepage-contact-identifier");
+        const linkRect = item.getBoundingClientRect();
+        const iconRect = icon?.getBoundingClientRect();
+        const identifierRect = identifier?.getBoundingClientRect();
+        return {
+          top: linkRect.top,
+          left: linkRect.left,
+          right: linkRect.right,
+          iconLeft: iconRect?.left ?? -1,
+          iconRight: iconRect?.right ?? -1,
+          identifierLeft: identifierRect?.left ?? -1,
+          identifierRight: identifierRect?.right ?? -1,
+        };
+      });
+      return {
+        direction: getComputedStyle(element).direction,
+        headingAlign: heading ? getComputedStyle(heading).textAlign : "",
+        rows,
+      };
+    });
+    expect(layout.headingAlign).toBe("start");
+    expect(layout.rows[1].top).toBeGreaterThan(layout.rows[0].top);
+    expect(layout.rows[2].top).toBeGreaterThan(layout.rows[1].top);
+    if (locale === "fa") {
+      expect(layout.direction).toBe("rtl");
+      expect(layout.rows.every((row) => Math.abs(row.iconRight - layout.rows[0].iconRight) <= 1)).toBe(true);
+      expect(layout.rows.every((row) => Math.abs(row.identifierRight - layout.rows[0].identifierRight) <= 1)).toBe(true);
+    } else {
+      expect(layout.direction).toBe("ltr");
+      expect(layout.rows.every((row) => Math.abs(row.iconLeft - layout.rows[0].iconLeft) <= 1)).toBe(true);
+      expect(layout.rows.every((row) => Math.abs(row.identifierLeft - layout.rows[0].identifierLeft) <= 1)).toBe(true);
+    }
   });
 
   test("dedicated " + locale + " Contact page keeps its detailed presentation", async ({ page }) => {

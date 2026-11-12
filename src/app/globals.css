@@ -2074,13 +2074,13 @@ html[lang="fa"] .contact-method-label {
 }
 
 
-/* Homepage-only contact signature: a quiet, theme-aware editorial footer. */
+/* Homepage-only contact signature: quiet, unboxed, and aligned with the page canvas. */
 .homepage-contact-footer {
   width: 100%;
   min-width: 0;
   margin-top: clamp(2rem, 4vw, 3.5rem);
   padding: clamp(1.5rem, 3vw, 2.25rem) clamp(1rem, 4vw, 3rem);
-  background: var(--surface);
+  background: transparent;
   color: var(--ink);
 }
 .homepage-contact-footer-inner {
@@ -2094,28 +2094,36 @@ html[lang="fa"] .contact-method-label {
   font-size: clamp(1.15rem, 1.6vw, 1.35rem);
   font-weight: 600;
   line-height: 1.5;
-  text-align: center;
+  text-align: start;
 }
 .homepage-contact-links {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  align-items: center;
-  gap: clamp(.5rem, 2vw, 1.5rem);
+  display: flex;
+  width: min(100%, 38rem);
+  flex-direction: column;
+  align-items: stretch;
+  gap: .2rem;
   margin: 1rem 0 0;
   padding: 0;
   list-style: none;
 }
+.homepage-contact-links > li {
+  width: 100%;
+  min-width: 0;
+}
 .homepage-contact-link {
-  display: flex;
+  display: grid;
+  width: 100%;
   min-width: 0;
   min-height: 2.75rem;
+  grid-template-columns: 1.5rem minmax(0, 1fr);
   align-items: center;
-  justify-content: center;
-  gap: .6rem;
-  padding: .25rem .35rem;
+  justify-content: start;
+  column-gap: .75rem;
+  padding: .35rem 0;
   color: var(--muted);
   font-size: .88rem;
   line-height: 1.5;
+  text-align: start;
   text-decoration: none;
   transition: color 150ms ease, opacity 150ms ease;
 }
@@ -2145,14 +2153,23 @@ html[lang="fa"] .contact-method-label {
     padding: 1.25rem 1rem 1.35rem;
   }
   .homepage-contact-links {
+    width: auto;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
     gap: clamp(.75rem, 4vw, 1.5rem);
     margin-top: .65rem;
   }
+  .homepage-contact-links > li {
+    width: auto;
+  }
   .homepage-contact-link {
+    display: flex;
     width: 2.75rem;
     min-width: 2.75rem;
     min-height: 2.75rem;
-    justify-self: center;
+    align-items: center;
+    justify-content: center;
     padding: 0;
   }
   .homepage-contact-identifier {
