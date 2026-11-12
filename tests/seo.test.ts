@@ -170,8 +170,16 @@ test("production alias inventory keeps partial queries separate from complete na
   assert.ok(names.includes("Ghazaleh Abdolahzade Nasoodi"));
   assert.ok(names.includes("Ghazale Abdolahzade Nasoudi"));
   assert.ok(names.includes("Ghazaleh Abdolahzade Nasoudi"));
+  assert.ok(names.includes("Ghazaleh Abdollahzade Nasoudi"));
+  assert.ok(names.includes("Ghazale Abdollahzade Nasoudi"));
+  assert.ok(names.includes("Ghazaleh Abdollahzade Nasoodi"));
+  assert.ok(names.includes("Ghazale Abdollahzade Nasoodi"));
   assert.ok(artistNameAliases.en.partialSearchQueries.includes("Ghazaleh Nasoodi"));
   assert.ok(!artistNameAliases.en.partialSearchQueries.includes("Ghazale Nasoudi"));
+  assert.equal(artistNameAliases.en.completeName.find((alias) => alias.value === "Ghazaleh Abdollahzade Nasoudi")?.structuredDataPriority, 9);
+  assert.equal(artistNameAliases.en.completeName.find((alias) => alias.value === "Ghazale Abdollahzade Nasoudi")?.structuredDataPriority, 8);
+  assert.equal(artistNameAliases.en.completeName.find((alias) => alias.value === "Ghazaleh Abdollahzade Nasoodi")?.structuredDataPriority, 7);
+  assert.equal(artistNameAliases.en.completeName.find((alias) => alias.value === "Ghazale Abdollahzade Nasoodi")?.structuredDataPriority, 6);
 });
 
 test("structured data publishes prioritized aliases deterministically without a fixed limit", () => {
@@ -214,8 +222,9 @@ test("structured data publishes prioritized aliases deterministically without a 
     })["@graph"][0].alternateName;
 
   const expected = ["نام معیار", ...aliases.map((alias) => alias.value)];
-  assert.deepEqual(build(profile.nameAliases.en.completeName), expected);
-  assert.deepEqual(build([...profile.nameAliases.en.completeName].reverse()), expected);
+  const completeNames = profile.nameAliases?.en.completeName ?? [];
+  assert.deepEqual(build(completeNames), expected);
+  assert.deepEqual(build([...completeNames].reverse()), expected);
 });
 
 test("Persian and English structured data preserve canonical identity and locale-specific aliases", () => {
