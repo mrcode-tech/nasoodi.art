@@ -227,11 +227,8 @@ body.entrance-document-body {
     min-height: 0;
   }
 
-  @media (min-width: 481px) {
-    .entrance-artwork {
-      max-height: min(38dvh, 25rem);
-    }
-  }
+  /* Do not apply a second image-size reduction on short CSS viewports.
+     Browser zoom can cross this breakpoint even when the physical screen is unchanged. */
 
   .entrance-copy h1 {
     font-size: clamp(1.5rem, 6.5vw, 1.9rem);
