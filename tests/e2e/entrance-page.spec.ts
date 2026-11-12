@@ -58,6 +58,33 @@ for (const viewport of [
   });
 }
 
+test("mobile entrance separates the artwork from a centered two-line artist name", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/");
+  const firstLine = page.locator(".entrance-name-first");
+  const secondLine = page.locator(".entrance-name-rest");
+  await expect(firstLine).toBeVisible();
+  await expect(secondLine).toBeVisible();
+  const layout = await page.evaluate(() => {
+    const image = document.querySelector(".entrance-artwork")!.getBoundingClientRect();
+    const first = document.querySelector(".entrance-name-first")!.getBoundingClientRect();
+    const second = document.querySelector(".entrance-name-rest")!.getBoundingClientRect();
+    const heading = document.querySelector(".entrance-copy h1")!.getBoundingClientRect();
+    return {
+      imageToNameGap: first.top - image.bottom,
+      firstLineCenter: first.left + first.width / 2,
+      secondLineCenter: second.left + second.width / 2,
+      headingCenter: heading.left + heading.width / 2,
+      firstLineTop: first.top,
+      secondLineTop: second.top,
+    };
+  });
+  expect(layout.imageToNameGap).toBeGreaterThanOrEqual(16);
+  expect(layout.secondLineTop).toBeGreaterThan(layout.firstLineTop);
+  expect(Math.abs(layout.firstLineCenter - layout.headingCenter)).toBeLessThanOrEqual(1);
+  expect(Math.abs(layout.secondLineCenter - layout.headingCenter)).toBeLessThanOrEqual(1);
+});
+
 test("artwork is unfiltered in light and dark themes", async ({ page }) => {
   await page.goto("/");
   const image = page.locator(".entrance-artwork");
