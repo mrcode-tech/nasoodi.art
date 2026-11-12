@@ -187,13 +187,13 @@ Education and professional-context searches should be supported by the actual lo
 
 Professional memberships, teaching roles, publications, exhibitions, and art organizations follow the same rule: describe them in the visible About/CV content first, then expose only the same facts through metadata or structured data where the Schema.org property is appropriate.
 
-### 18.3 Named artists, teachers, and influence relationships
+### 18.3 Metadata-only discovery for a name in an existing CV publication
 
-The artist has confirmed that she studied under Nima Petgar (نیما پتگر). This is an established biographical relationship and may be described in the About biography and/or the relevant CV/training entry in both English and Persian. Use precise wording such as “studied under Nima Petgar” / «نزد نیما پتگر آموخته است»; do not embellish it into a degree, institutional affiliation, formal mentorship program, or dated course unless those details are separately confirmed.
+Nima Petgar (نیما پتگر) is present in the canonical CV only as part of the existing publication record “My Teacher: Nima Petgar” / «استادم: نیما پتگر». Preserve that record as a publication. Do not reinterpret its title as evidence of a teacher-student relationship, and do not add Nima Petgar to the artist biography, statement, education, training, memberships, affiliations, or any other visible website content.
 
-Use the name consistently in English and Persian: Nima Petgar / نیما پتگر. This association is relevant to natural searches combining the artist's name with Nima Petgar, نیما پتگر, painting education, and artistic training. It should appear as meaningful visible editorial content, not as a hidden keyword or a fabricated CV credential.
+If additional search context is required, maintain the English and Persian name only in a dedicated SEO metadata JSON source (for example, src/content/data/seo.json) under a CV-specific metadata field such as cv.searchContext. Resolve it only through the CV metadata generation path. Use it to produce an accurate, natural CV page title or description that refers to the existing publication record; do not emit a detached keyword list, hidden text, or a meta keywords tag. The metadata must not imply that Nima Petgar taught, mentored, employed, or was institutionally affiliated with the artist.
 
-Do not encode a teacher-student relationship using unrelated structured-data properties. In particular, Nima Petgar is not the artist's alumniOf institution, sameAs identity, or memberOf organization. Only add a structured-data relationship if a suitable Schema.org property is verified and its semantics accurately express the documented relationship.
+Do not add Nima Petgar to the artist-name alias inventory or the Person JSON-LD graph (alternateName, sameAs, knowsAbout, alumniOf, or memberOf). Do not create a new Schema.org relationship. The only public-content occurrence remains the existing CV publication record.
 ### 18.4 Structured-data mapping
 
 Use only properties supported by the actual content and schema semantics:
@@ -214,7 +214,7 @@ Do not invent Person properties or infer relationships from co-occurrence. Struc
 - [ ] Relevant terms are present in visible, crawlable HTML rather than hidden keyword blocks.
 - [ ] Metadata describes the page naturally and does not become a comma-separated keyword list.
 - [ ] Person JSON-LD uses only semantically correct properties backed by visible canonical content.
-- [ ] Teacher/influence relationships are used only when owner-confirmed and present in canonical public content; they are never encoded through unrelated Schema.org properties.
+- [ ] Nima Petgar / نیما پتگر is used only as CV-specific SEO metadata context grounded in the existing publication record; it is not added to biography, training, education, other visible content, or Person JSON-LD.
 - [ ] English and Persian search intent is reviewed independently; literal translation is not assumed to reflect local query behavior.
 
 
