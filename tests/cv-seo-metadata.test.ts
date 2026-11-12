@@ -4,6 +4,7 @@ import { cvEntries } from "../src/content/cv";
 import seoMetadata from "../src/content/data/seo-cv-metadata.json";
 import {
   CvSeoMetadataValidationError,
+  composeCvSeoDescription,
   getCvSeoDescription,
   validateCvSeoMetadata,
 } from "../src/content/repositories/cv-seo-metadata.repository";
@@ -130,4 +131,73 @@ test("unmapped synthetic CV entries do not affect canonical metadata fallback", 
   const synthetic = [entry({ id: "unmapped-example" })];
   assert.equal(synthetic[0].id, "unmapped-example");
   assert.equal(getCvSeoDescription("en", "Canonical description." ).startsWith("Canonical description."), true);
+});
+
+test("selects higher-priority context deterministically and never falls back across locales", () => {
+  const education = entry();
+  const teaching: CvEntry = {
+    id: "teaching-example",
+    category: "teaching",
+    title: { en: "Painting Instructor", fa: "مدرس نقاشی" },
+    organization: { en: "Example Studio", fa: "آتلیه نمونه" },
+    period: { en: "2018–present", fa: "۱۳۹۷ تاکنون" },
+    status: "published",
+  };
+  const source = {
+    schemaVersion: 2,
+    entities: {},
+    cvRecords: {
+      "education-example": {
+        entityIds: [],
+        searchTerms: { en: ["painting degree"], fa: ["مدرک نقاشی"] },
+        descriptionContext: { en: "Education context." },
+        priority: 20,
+      },
+      "teaching-example": {
+        entityIds: [],
+        searchTerms: { en: ["painting instruction"], fa: ["آموزش نقاشی"] },
+        descriptionContext: { en: "Teaching context.", fa: "زمینه تدریس." },
+        priority: 10,
+      },
+    },
+  };
+  assert.equal(
+    composeCvSeoDescription("en", "Baseline.", source, [education, teaching]),
+    "Baseline. Education context.",
+  );
+  assert.equal(
+    composeCvSeoDescription("fa", "توضیح پایه.", source, [education, teaching]),
+    "توضیح پایه. زمینه تدریس.",
+  );
+});
+
+test("equal-priority contexts use stable CV record ID ordering", () => {
+  const first = entry({ id: "a-record" });
+  const second = entry({
+    id: "b-record",
+    title: { en: "B.A. in Painting", fa: "کارشناسی نقاشی" },
+    organization: { en: "Example University", fa: "دانشگاه نمونه" },
+  });
+  const source = {
+    schemaVersion: 2,
+    entities: {},
+    cvRecords: {
+      "b-record": {
+        entityIds: [],
+        searchTerms: { en: ["painting"], fa: ["نقاشی"] },
+        descriptionContext: { en: "Second record context." },
+        priority: 5,
+      },
+      "a-record": {
+        entityIds: [],
+        searchTerms: { en: ["painting"], fa: ["نقاشی"] },
+        descriptionContext: { en: "First record context." },
+        priority: 5,
+      },
+    },
+  };
+  assert.equal(
+    composeCvSeoDescription("en", "Baseline.", source, [first, second]),
+    "Baseline. First record context.",
+  );
 });

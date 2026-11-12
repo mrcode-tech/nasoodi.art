@@ -207,18 +207,19 @@ function relevanceScore(mapping: CvSeoMapping, entry: CvEntry, locale: Locale): 
   }, 0);
 }
 
-/**
- * Returns an enriched CV description or the unchanged canonical baseline.
- * Invalid/unavailable SEO data is deliberately non-fatal for public page rendering.
- */
-export function getCvSeoDescription(locale: Locale, baseline: string): string {
+/** Composes a localized description from validated metadata and canonical public records. */
+export function composeCvSeoDescription(
+  locale: Locale,
+  baseline: string,
+  source: unknown,
+  canonicalEntries: readonly CvEntry[],
+): string {
   try {
-    const entries = getCv(locale).entries;
-    const document = validateCvSeoMetadata(seoMetadata, entries);
-    const byId = new Map(entries.map((entry) => [entry.id, entry]));
+    const document = validateCvSeoMetadata(source, canonicalEntries);
+    const byId = new Map(canonicalEntries.map((entry) => [entry.id, entry]));
     const candidates = Object.entries(document.cvRecords)
       .map(([id, mapping]) => ({ id, mapping, entry: byId.get(id) }))
-      .filter((item): item is typeof item & { entry: CvEntry } =>
+      .filter((item): item is { id: string; mapping: CvSeoMapping; entry: CvEntry } =>
         Boolean(item.entry && item.mapping.descriptionContext?.[locale]?.trim()),
       )
       .sort((a, b) =>
@@ -229,6 +230,18 @@ export function getCvSeoDescription(locale: Locale, baseline: string): string {
     const context = candidates[0]?.mapping.descriptionContext?.[locale];
     if (!context) return baseline;
     return baseline.trim() ? baseline.trim() + " " + context : context;
+  } catch {
+    return baseline;
+  }
+}
+
+/**
+ * Returns an enriched CV description or the unchanged canonical baseline.
+ * Invalid/unavailable SEO data is deliberately non-fatal for public page rendering.
+ */
+export function getCvSeoDescription(locale: Locale, baseline: string): string {
+  try {
+    return composeCvSeoDescription(locale, baseline, seoMetadata, getCv(locale).entries);
   } catch (error) {
     if (process.env.NODE_ENV !== "production") {
       console.error("[cv-seo-metadata] Enrichment omitted; canonical metadata retained.", error);
