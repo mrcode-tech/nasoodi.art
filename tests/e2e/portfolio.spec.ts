@@ -28,9 +28,96 @@ test("localized routes expose the correct document language and main landmark", 
   }
 });
 
-for (const route of ["/fa", "/fa/contact"] as const) {
+for (const viewport of [
+  { width: 320, height: 568 },
+  { width: 360, height: 800 },
+  { width: 390, height: 844 },
+  { width: 430, height: 932 },
+]) {
+  for (const locale of locales) {
+    test("homepage contact footer is icon-only and fits " + locale + " at " + viewport.width + "px", async ({ page }) => {
+      await page.setViewportSize(viewport);
+      await page.goto("/" + locale);
+      const footer = page.locator(".homepage-contact-footer");
+      await expect(footer).toBeVisible();
+      await expect(footer.getByRole("heading", {
+        name: locale === "fa" ? "ارتباط با من" : "Get in Touch",
+      })).toBeVisible();
+      const links = footer.locator(".homepage-contact-link");
+      await expect(links).toHaveCount(3);
+      for (const [index, label] of [
+        locale === "fa" ? "ارسال ایمیل" : "Send an email",
+        locale === "fa" ? "ارتباط در تلگرام" : "Contact on Telegram",
+        locale === "fa" ? "مشاهده صفحه اینستاگرام" : "Visit Instagram profile",
+      ].entries()) {
+        await expect(links.nth(index)).toHaveAttribute("aria-label", label);
+        await expect(links.nth(index).locator("svg")).toBeVisible();
+        await expect(links.nth(index).locator(".homepage-contact-identifier")).toBeHidden();
+      }
+      const layout = await footer.evaluate((element) => {
+        const items = Array.from(element.querySelectorAll(".homepage-contact-link"));
+        const boxes = items.map((item) => {
+          const rect = item.getBoundingClientRect();
+          return { left: rect.left, right: rect.right, top: rect.top, width: rect.width, height: rect.height };
+        });
+        return {
+          viewport: document.documentElement.clientWidth,
+          document: document.documentElement.scrollWidth,
+          footerHeight: element.getBoundingClientRect().height,
+          boxes,
+        };
+      });
+      expect(layout.document).toBeLessThanOrEqual(layout.viewport);
+      expect(layout.boxes.map((box) => box.top).every((top) => Math.abs(top - layout.boxes[0].top) <= 1)).toBe(true);
+      for (const box of layout.boxes) {
+        expect(box.width).toBeGreaterThanOrEqual(44);
+        expect(box.height).toBeGreaterThanOrEqual(44);
+        expect(box.left).toBeGreaterThanOrEqual(0);
+        expect(box.right).toBeLessThanOrEqual(layout.viewport);
+      }
+      expect(layout.footerHeight).toBeLessThanOrEqual(160);
+    });
+  }
+}
+
+for (const locale of locales) {
+  test("desktop " + locale + " homepage contact footer displays all three identifiers in one row", async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 800 });
+    await page.goto("/" + locale);
+    const footer = page.locator(".homepage-contact-footer");
+    const links = footer.locator(".homepage-contact-link");
+    await expect(links).toHaveCount(3);
+    for (const link of await links.all()) {
+      await expect(link.locator("svg")).toBeVisible();
+      await expect(link.locator(".homepage-contact-identifier")).toBeVisible();
+    }
+    const layout = await links.evaluateAll((items) => ({
+      viewportWidth: document.documentElement.clientWidth,
+      rows: items.map((item) => {
+        const rect = item.getBoundingClientRect();
+        return { top: rect.top, left: rect.left, right: rect.right };
+      }),
+    }));
+    expect(layout.rows.every((row) => Math.abs(row.top - layout.rows[0].top) <= 1)).toBe(true);
+    expect(layout.rows.every((row) => row.left >= 0 && row.right <= layout.viewportWidth)).toBe(true);
+  });
+
+  test("dedicated " + locale + " Contact page keeps its detailed presentation", async ({ page }) => {
+    await page.goto("/" + locale + "/contact");
+    const section = page.locator(".contact-experience-page");
+    await expect(section).toBeVisible();
+    await expect(section.getByRole("heading", {
+      name: locale === "fa" ? "بیایید گفت‌وگویی را آغاز کنیم." : "Let's start a conversation.",
+    })).toBeVisible();
+    await expect(section.locator(".contact-intro")).toBeVisible();
+    await expect(section.locator(".contact-methods .contact-method")).toHaveCount(3);
+    await expect(section.locator(".homepage-contact-footer")).toHaveCount(0);
+  });
+}
+
+for (const route of ["/fa/contact"] as const) {
   for (const viewport of [{ width: 1280, height: 800 }, { width: 390, height: 844 }]) {
-    test("Persian contact values align to the physical left edge on " + route + " at " + viewport.width + "px", async ({ page }) => {
+    test("Persian dedicated Contact values align to the physical left edge at " + viewport.width + "px", async ({ page }) => {
       await page.setViewportSize(viewport);
       await page.goto(route);
       const section = page.locator(".contact-experience");
