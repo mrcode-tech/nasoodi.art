@@ -61,7 +61,7 @@ This avoids duplicating the same university/person name across multiple CV recor
 
 The JSON document must contain:
 
-- `schemaVersion`: integer version of this data contract (currently `2`; version 2 removes the redundant alternate-name field).
+- `schemaVersion`: integer version of this data contract. The current version is `2`; it uses bilingual `searchTerms` and has no separate `alternateNames` field.
 - `entities`: dictionary keyed by stable entity ID.
 - `cvRecords`: dictionary keyed by the exact stable ID of a canonical CV record.
 
@@ -98,24 +98,24 @@ Illustrative structure:
     "publication-nima-petgar": {
       "entityIds": ["person-nima-petgar"],
       "searchTerms": {
-        "en": [],
-        "fa": []
+        "en": ["Nima Petgar publication"],
+        "fa": ["انتشار نیما پتگر"]
       },
       "descriptionContext": {
-        "en": "A publication record mentioning Nima Petgar.",
-        "fa": "یک مدخل انتشار که در عنوان آن به نیما پتگر اشاره شده است."
+        "en": "The publication title mentions Nima Petgar.",
+        "fa": "عنوان این مدخل انتشار به نیما پتگر اشاره می‌کند."
       },
       "priority": 100
     },
-    "CV_EDUCATION_RECORD_ID": {
+    "example-education-record": {
       "entityIds": ["institution-university-of-science-and-culture"],
       "searchTerms": {
-        "en": [],
-        "fa": []
+        "en": ["University of Science and Culture degree"],
+        "fa": ["مدرک دانشگاه علم و فرهنگ"]
       },
       "descriptionContext": {
-        "en": "Education record naming the University of Science and Culture.",
-        "fa": "مدخل تحصیلی مرتبط با دانشگاه علم و فرهنگ."
+        "en": "An illustrative education record naming the University of Science and Culture.",
+        "fa": "نمونه‌ای از مدخل تحصیلی که دانشگاه علم و فرهنگ را نام می‌برد."
       },
       "priority": 80
     }
@@ -123,7 +123,7 @@ Illustrative structure:
 }
 ```
 
-The example is illustrative. During implementation, use only CV record IDs that actually exist in the current canonical CV data. Do not create the example placeholder ID as a real mapping.
+The example illustrates the JSON shape only. `example-education-record` is a synthetic example ID, not a production CV record ID. Production mappings must use exact IDs that exist in the canonical CV data; synthetic IDs belong only in isolated schema/test fixtures.
 
 ### 4.2 Entity types
 
@@ -149,21 +149,21 @@ New values may be introduced without changing the JSON shape. Type values classi
 Each entity supports:
 
 - `type`: required entity classification.
-- `name.en` and `name.fa`: localized canonical names. A locale may be omitted only when no reliable name is available; do not translate or transliterate proper names automatically.
-- `searchTerms.en` and `searchTerms.fa`: required, non-empty, locale-specific arrays of concise search phrases. Include defensible name variants, common spellings, and relevant topical queries here; do not maintain a separate alias field. These terms are SEO inputs, not page copy or meta keywords.
+- `name.en` and `name.fa`: required, non-empty localized canonical names. Both locale keys must be present for every entity in this version of the model. Do not translate or transliterate proper names automatically; use the established name for each locale.
+- `searchTerms.en` and `searchTerms.fa`: required, non-empty, locale-specific arrays of concise search phrases. Both locale keys must be present. Include defensible name variants, common spellings, and relevant topical queries here; do not maintain a separate alias field. These terms are SEO metadata inputs, not page copy or meta keywords.
 
-Keep canonical names in `name.en` and `name.fa`. Put useful, defensible name variants and relevant query phrases in the corresponding `searchTerms` arrays. Keep phrases concise (normally 1–4 words; allow longer only for established titles or proper names). Do not generate speculative spelling permutations, unrelated translations, or sentence-like keyword strings. Preserve correct spelling and Persian orthography.
+Keep canonical names in `name.en` and `name.fa`. Put useful, defensible name variants and relevant query phrases in the corresponding `searchTerms` arrays. Search terms are relevance signals for CV SEO enrichment and editorial selection of natural metadata wording; they must not be emitted as a keyword list, hidden text, or a `meta keywords` tag. Do not blindly concatenate them into titles or descriptions. Keep phrases concise (normally 1–4 words; allow longer only for established titles or proper names). Do not generate speculative spelling permutations, unrelated translations, or sentence-like keyword strings. Preserve correct spelling and Persian orthography.
 
 ### 4.4 CV record mapping fields
 
 Each mapping is keyed by an exact canonical CV record ID and supports:
 
 - `entityIds`: required array of references to entities in the top-level registry.
-- `searchTerms`: required bilingual SEO-only terms specific to this CV record, with non-empty `en` and `fa` arrays.
+- `searchTerms`: required bilingual SEO-only terms specific to this CV record, with non-empty `en` and `fa` arrays. Both locale keys must be present; terms are relevance signals, not visible content or a list to append verbatim to metadata.
 - `descriptionContext`: optional localized, human-reviewed metadata-only context. It must be narrowly grounded in the referenced CV record and must not assert a stronger relationship than that record supports.
 - `priority`: optional non-negative integer used only to choose among eligible records when composing a concise CV page description. Higher values indicate editorial priority, not factual importance.
 
-A mapping may reference more than one entity. An entity may be referenced by multiple CV records. A CV record may have no mapping. Do not add an entity merely because it is generally associated with the artist; the association must be grounded in that specific CV record.
+A mapping may reference more than one entity. An entity may be referenced by multiple CV records. `entityIds` may be an empty array when the CV record has useful SEO search context but no separately reusable named entity; otherwise, each listed ID must resolve to an entity. A CV record may have no mapping. Do not add an entity merely because it is generally associated with the artist; the association must be grounded in that specific CV record.
 
 Do not add fields for visible labels, body descriptions, UI titles, slugs, page routes, or content publication state. Those remain owned by the canonical CV and routing systems.
 
@@ -196,6 +196,7 @@ The CV page metadata generator may combine:
 1. Existing localized CV page title/description from the canonical site metadata.
 2. Existing localized canonical CV record fields.
 3. Eligible SEO-only entity names and optional `descriptionContext` values from this file.
+4. Bilingual `searchTerms` as relevance signals when curating or composing natural metadata wording; never as a raw keyword list.
 
 The generator must:
 
@@ -266,11 +267,12 @@ Required validation:
 
 - Supported `schemaVersion`.
 - Unique entity IDs and valid entity types.
-- Non-empty canonical names for each populated locale.
-- Correct locale keys (`en`, `fa`) and non-empty string arrays for entity and CV-record `searchTerms`.
+- Both `name.en` and `name.fa` must be present and non-empty for every entity.
+- Entity and CV-record `searchTerms` must each contain exactly the supported locale keys (`en`, `fa`), with non-empty arrays of non-empty strings.
+- `descriptionContext`, when present, may contain only reviewed supported locale values; it need not be present for both locales.
 - No empty strings, whitespace-only values, sentence-like search terms, or duplicate values after locale-aware normalization.
 - Every `cvRecords` key resolves to an existing canonical CV record.
-- Every `entityIds` reference resolves to an existing entity.
+- Every `entityIds` reference resolves to an existing entity; an empty `entityIds` array is valid.
 - No duplicate entity references within one mapping.
 - `priority` is a non-negative integer when present.
 - Every mapping is grounded in the referenced CV record.
