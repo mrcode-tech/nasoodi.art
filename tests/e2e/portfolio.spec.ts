@@ -56,9 +56,17 @@ for (const viewport of [
       }
       const layout = await footer.evaluate((element) => {
         const items = Array.from(element.querySelectorAll(".homepage-contact-link"));
+        const row = element.querySelector(".homepage-contact-links")?.getBoundingClientRect();
         const boxes = items.map((item) => {
           const rect = item.getBoundingClientRect();
-          return { left: rect.left, right: rect.right, top: rect.top, width: rect.width, height: rect.height };
+          return {
+            left: rect.left,
+            right: rect.right,
+            top: rect.top,
+            width: rect.width,
+            height: rect.height,
+            center: rect.left + rect.width / 2,
+          };
         });
         const heading = element.querySelector("h2")?.getBoundingClientRect();
         const reference = document.querySelector(".editorial-section .section-heading")?.getBoundingClientRect();
@@ -69,12 +77,22 @@ for (const viewport of [
           footerHeight: element.getBoundingClientRect().height,
           headingStart: heading ? (rtl ? heading.right : heading.left) : -1,
           referenceStart: reference ? (rtl ? reference.right : reference.left) : -2,
+          rowLeft: row?.left ?? -1,
+          rowWidth: row?.width ?? 0,
           boxes,
         };
       });
       expect(layout.document).toBeLessThanOrEqual(layout.viewport);
       expect(Math.abs(layout.headingStart - layout.referenceStart)).toBeLessThanOrEqual(1);
       expect(layout.boxes.map((box) => box.top).every((top) => Math.abs(top - layout.boxes[0].top) <= 1)).toBe(true);
+      const expectedCenters = [
+        layout.rowLeft + layout.rowWidth / 6,
+        layout.rowLeft + layout.rowWidth / 2,
+        layout.rowLeft + (layout.rowWidth * 5) / 6,
+      ];
+      for (const [index, box] of layout.boxes.entries()) {
+        expect(Math.abs(box.center - expectedCenters[index])).toBeLessThanOrEqual(2);
+      }
       for (const box of layout.boxes) {
         expect(box.width).toBeGreaterThanOrEqual(44);
         expect(box.height).toBeGreaterThanOrEqual(44);
