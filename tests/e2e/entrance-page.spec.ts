@@ -99,3 +99,44 @@ test("root metadata declares canonical and x-default URLs", async ({ page }) => 
   await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", "https://nasoodi.art");
   await expect(page.locator('link[rel="alternate"][hreflang="x-default"]')).toHaveAttribute("href", "https://nasoodi.art");
 });
+test("desktop entrance typography overlays the artwork with fixed light colors in both themes", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/");
+  const heading = page.locator(".entrance-copy h1");
+  const welcome = page.locator(".entrance-welcome");
+  const image = page.locator(".entrance-artwork");
+  const links = page.locator(".entrance-language-links");
+  const lightButtonStyles = await links.evaluate((node) => {
+    const first = getComputedStyle(node.querySelector("a")!);
+    return { color: first.color, backgroundColor: first.backgroundColor, borderColor: first.borderColor };
+  });
+  const lightTextStyles = await page.evaluate(() => ({
+    heading: getComputedStyle(document.querySelector(".entrance-copy h1")!).color,
+    welcome: getComputedStyle(document.querySelector(".entrance-welcome")!).color,
+  }));
+  const geometry = await page.evaluate(() => {
+    const frame = document.querySelector(".entrance-artwork-frame")!.getBoundingClientRect();
+    const title = document.querySelector(".entrance-copy h1")!.getBoundingClientRect();
+    const intro = document.querySelector(".entrance-welcome")!.getBoundingClientRect();
+    return {
+      titleWithinImageHeight: title.top >= frame.top && title.bottom <= frame.bottom,
+      welcomeWithinImageHeight: intro.top >= frame.top && intro.bottom <= frame.bottom,
+      titleCenter: title.left + title.width / 2,
+      frameCenter: frame.left + frame.width / 2,
+      welcomeBelowTitle: intro.top >= title.bottom,
+    };
+  });
+  expect(geometry.titleWithinImageHeight).toBe(true);
+  expect(geometry.welcomeWithinImageHeight).toBe(true);
+  expect(geometry.welcomeBelowTitle).toBe(true);
+  expect(Math.abs(geometry.titleCenter - geometry.frameCenter)).toBeLessThanOrEqual(1);
+  await page.locator("html").evaluate((node) => node.classList.add("dark"));
+  await expect(heading).toHaveCSS("color", lightTextStyles.heading);
+  await expect(welcome).toHaveCSS("color", lightTextStyles.welcome);
+  const darkButtonStyles = await links.evaluate((node) => {
+    const first = getComputedStyle(node.querySelector("a")!);
+    return { color: first.color, backgroundColor: first.backgroundColor, borderColor: first.borderColor };
+  });
+  expect(darkButtonStyles).not.toEqual(lightButtonStyles);
+  await expect(image).toBeVisible();
+});
