@@ -36,6 +36,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       locales.filter((target) => target !== locale).map((target) => [target, pagePath(target)]),
     ) as Partial<Record<Locale, string>>,
     indexable: true,
+    xDefaultPath: "/",
     images: ["/images/artist/artist-at-work.jpg"],
   });
 }

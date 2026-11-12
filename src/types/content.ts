@@ -141,6 +141,7 @@ export type HomepageSelection = {
 
 export type SiteContent = {
   id: string;
+  entranceArtworkId?: string;
   pages: Record<"works" | "galleries" | "journal" | "cv", {
     title: Record<Locale, string>;
     description: Record<Locale, string>;

@@ -1,0 +1,15 @@
+.entrance-page{display:flex;min-height:100vh;min-height:100svh;align-items:center;justify-content:center;padding:clamp(1.25rem,3.5vw,3rem);background:var(--paper);color:var(--ink)}
+.entrance-content{display:flex;width:min(100%,76rem);flex-direction:column;align-items:center;gap:clamp(1.35rem,3vh,2rem);margin-inline:auto}
+.entrance-artwork-frame{display:grid;width:100%;height:min(64svh,48rem);min-height:13rem;place-items:center}
+.entrance-artwork{display:block;width:auto;height:auto;max-width:100%;max-height:100%;object-fit:contain;object-position:center}
+.entrance-copy{display:flex;width:min(100%,42rem);flex-direction:column;align-items:center;text-align:center}
+.entrance-copy h1{margin:0;color:var(--ink);font-family:Georgia,"Times New Roman",serif;font-size:var(--type-display,clamp(1.875rem,3.1vw,2.75rem));font-weight:400;letter-spacing:-.035em;line-height:1.2;text-wrap:balance}
+.entrance-copy p{max-width:38rem;margin:.65rem 0 0;color:var(--muted);font-size:var(--type-body,1rem);line-height:1.8;text-wrap:pretty}
+.entrance-language-links{display:flex;width:min(100%,19rem);align-items:center;justify-content:center;gap:.75rem;margin-top:1.25rem}
+.entrance-language-links a{display:inline-flex;min-width:8rem;min-height:2.85rem;flex:1 1 0;align-items:center;justify-content:center;border:1px solid var(--border);border-radius:.25rem;color:var(--ink);font-size:.9rem;transition:background-color 150ms ease,border-color 150ms ease}
+.entrance-language-links a[lang=fa]{font-family:"IranianSerifRegular",Tahoma,serif;font-size:1rem}
+.entrance-language-links a:hover{border-color:var(--mauve);background:var(--interactive-surface)}
+.entrance-language-links a:focus-visible{outline:2px solid var(--ring-color);outline-offset:4px}
+@media(max-width:480px){.entrance-page{align-items:flex-start;padding:max(1rem,env(safe-area-inset-top)) 1rem max(1.5rem,env(safe-area-inset-bottom))}.entrance-content{gap:1.25rem}.entrance-artwork-frame{height:min(54svh,28rem);min-height:12rem}.entrance-copy h1{font-size:clamp(1.7rem,7vw,2.2rem)}.entrance-copy p{margin-top:.5rem;font-size:.95rem}.entrance-language-links{margin-top:1rem}}
+@media(max-height:640px){.entrance-page{align-items:flex-start}.entrance-artwork-frame{height:min(52svh,25rem);min-height:10rem}}
+@media(prefers-reduced-motion:reduce){.entrance-language-links a{transition:none}}

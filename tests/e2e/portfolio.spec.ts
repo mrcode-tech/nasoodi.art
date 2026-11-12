@@ -4,11 +4,14 @@ import { archiveItemLinks, archivePagination } from "./helpers/archive";
 const locales = ["en", "fa"] as const;
 const sections = ["works", "galleries", "journal", "about", "contact", "cv"] as const;
 
-test("root route redirects to the default locale", async ({ page }) => {
+test("root route renders the language-selection entrance without redirecting", async ({ page }) => {
   await page.goto("/");
-  await expect(page).toHaveURL((url) => url.pathname === "/fa");
-  await expect(page.locator("html")).toHaveAttribute("lang", "fa");
-  await expect(page.locator("html")).toHaveAttribute("dir", "rtl");
+  await expect(page).toHaveURL((url) => url.pathname === "/");
+  await expect(page.locator("html")).toHaveAttribute("lang", "en");
+  await expect(page.locator("html")).toHaveAttribute("dir", "ltr");
+  await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
+  await expect(page.getByRole("link", { name: "Enter", exact: true })).toHaveAttribute("href", "/en");
+  await expect(page.getByRole("link", { name: "ورود", exact: true })).toHaveAttribute("href", "/fa");
 });
 
 test("localized routes expose the correct document language and main landmark", async ({ page, request }) => {

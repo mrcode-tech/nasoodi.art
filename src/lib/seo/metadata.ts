@@ -9,6 +9,7 @@ export type LocalizedMetadataInput = {
   title: string;
   description?: string;
   alternatePaths?: Partial<Record<Locale, string>>;
+  xDefaultPath?: string;
   indexable: boolean;
   openGraphType?: "website" | "article";
   images?: readonly string[];
@@ -34,8 +35,8 @@ export function createLocalizedMetadata(input: LocalizedMetadataInput): Metadata
     ...(description ? { description } : {}),
     alternates: {
       canonical,
-      ...(alternateEntries.length
-        ? { languages: { [input.locale]: canonical, ...alternateUrls } }
+      ...(alternateEntries.length || input.xDefaultPath
+        ? { languages: { [input.locale]: canonical, ...alternateUrls, ...(input.xDefaultPath ? { "x-default": new URL(input.xDefaultPath, siteOrigin).toString() } : {}) } }
         : {}),
     },
     robots: { index: input.indexable, follow: true },
