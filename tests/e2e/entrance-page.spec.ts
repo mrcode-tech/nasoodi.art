@@ -103,6 +103,37 @@ test("mobile entrance separates the artwork from a centered two-line artist name
   expect(belowImage.backdropFilter).toBe("none");
 });
 
+test("entrance switches layouts only at the viewport width breakpoint", async ({ page }) => {
+  await page.setViewportSize({ width: 480, height: 900 });
+  await page.goto("/");
+  const mobileGeometry = await page.evaluate(() => {
+    const image = document.querySelector(".entrance-artwork")!.getBoundingClientRect();
+    const copy = document.querySelector(".entrance-copy")!.getBoundingClientRect();
+    return {
+      copyBelowImage: copy.top >= image.bottom,
+      copyPosition: getComputedStyle(document.querySelector(".entrance-copy")!).position,
+    };
+  });
+  expect(mobileGeometry.copyBelowImage).toBe(true);
+  expect(mobileGeometry.copyPosition).toBe("static");
+
+  await page.setViewportSize({ width: 481, height: 900 });
+  const desktopGeometry = await page.evaluate(() => {
+    const image = document.querySelector(".entrance-artwork")!.getBoundingClientRect();
+    const copy = document.querySelector(".entrance-copy")!.getBoundingClientRect();
+    const frame = document.querySelector(".entrance-artwork-frame")!.getBoundingClientRect();
+    return {
+      copyOverlaysImage: copy.top >= image.top && copy.bottom <= image.bottom,
+      copyPosition: getComputedStyle(document.querySelector(".entrance-copy")!).position,
+      frameWidth: frame.width,
+      pageWidth: document.querySelector(".entrance-page")!.clientWidth,
+    };
+  });
+  expect(desktopGeometry.copyOverlaysImage).toBe(true);
+  expect(desktopGeometry.copyPosition).toBe("absolute");
+  expect(desktopGeometry.frameWidth).toBeGreaterThan(desktopGeometry.pageWidth * .9);
+});
+
 test("artwork is unfiltered in light and dark themes", async ({ page }) => {
   await page.goto("/");
   const image = page.locator(".entrance-artwork");
