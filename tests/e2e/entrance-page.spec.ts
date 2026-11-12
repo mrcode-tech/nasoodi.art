@@ -83,6 +83,24 @@ test("mobile entrance separates the artwork from a centered two-line artist name
   expect(layout.secondLineTop).toBeGreaterThan(layout.firstLineTop);
   expect(Math.abs(layout.firstLineCenter - layout.headingCenter)).toBeLessThanOrEqual(1);
   expect(Math.abs(layout.secondLineCenter - layout.headingCenter)).toBeLessThanOrEqual(1);
+
+  const belowImage = await page.evaluate(() => {
+    const image = document.querySelector(".entrance-artwork")!.getBoundingClientRect();
+    const copy = document.querySelector(".entrance-copy")!.getBoundingClientRect();
+    const buttons = document.querySelector(".entrance-language-links")!.getBoundingClientRect();
+    const link = document.querySelector(".entrance-language-links a")!;
+    const style = getComputedStyle(link);
+    return {
+      copyBelowImage: copy.top > image.bottom,
+      buttonsBelowImage: buttons.top > image.bottom,
+      buttonsBelowWelcome: buttons.top > document.querySelector(".entrance-welcome")!.getBoundingClientRect().bottom,
+      backdropFilter: style.backdropFilter,
+    };
+  });
+  expect(belowImage.copyBelowImage).toBe(true);
+  expect(belowImage.buttonsBelowImage).toBe(true);
+  expect(belowImage.buttonsBelowWelcome).toBe(true);
+  expect(belowImage.backdropFilter).toBe("none");
 });
 
 test("artwork is unfiltered in light and dark themes", async ({ page }) => {
@@ -92,6 +110,33 @@ test("artwork is unfiltered in light and dark themes", async ({ page }) => {
   await page.locator("html").evaluate((node) => node.classList.add("dark"));
   await expect(image).toHaveCSS("filter", "none");
   await expect(page.locator(".entrance-page")).toHaveCSS("background-color", "rgb(16, 26, 43)");
+});
+
+
+test("desktop entrance artwork keeps a consistent physical size across browser zoom levels", async ({ page }) => {
+  const physicalViewport = { width: 1440, height: 700 };
+  const zoomLevels = [80, 90, 100, 110];
+  const renderedHeights: number[] = [];
+
+  for (const zoom of zoomLevels) {
+    await page.setViewportSize({
+      width: Math.round(physicalViewport.width / (zoom / 100)),
+      height: Math.round(physicalViewport.height / (zoom / 100)),
+    });
+    await page.goto("/");
+    const image = page.locator(".entrance-artwork");
+    await expect(image).toBeVisible();
+    const cssHeight = await image.evaluate((node: HTMLImageElement) => node.getBoundingClientRect().height);
+    renderedHeights.push(cssHeight * (zoom / 100));
+  }
+
+  const referenceHeight = renderedHeights[2];
+  for (let index = 0; index < renderedHeights.length; index += 1) {
+    expect(
+      Math.abs(renderedHeights[index] - referenceHeight),
+      `physical artwork height at ${zoomLevels[index]}% zoom`,
+    ).toBeLessThanOrEqual(2);
+  }
 });
 
 test("root metadata declares canonical and x-default URLs", async ({ page }) => {
