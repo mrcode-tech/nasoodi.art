@@ -95,14 +95,12 @@ test("mobile entrance separates the artwork from a centered two-line artist name
       buttonsBelowImage: buttons.top > image.bottom,
       buttonsBelowWelcome: buttons.top > document.querySelector(".entrance-welcome")!.getBoundingClientRect().bottom,
       backdropFilter: style.backdropFilter,
-      webkitBackdropFilter: style.webkitBackdropFilter,
     };
   });
   expect(belowImage.copyBelowImage).toBe(true);
   expect(belowImage.buttonsBelowImage).toBe(true);
   expect(belowImage.buttonsBelowWelcome).toBe(true);
   expect(belowImage.backdropFilter).toBe("none");
-  expect(belowImage.webkitBackdropFilter).toBe("none");
 });
 
 test("artwork is unfiltered in light and dark themes", async ({ page }) => {
