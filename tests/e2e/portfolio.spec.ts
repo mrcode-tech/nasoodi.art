@@ -211,6 +211,30 @@ for (const route of ["/fa/contact"] as const) {
   }
 }
 
+for (const locale of locales) {
+  test(locale + " homepage hero actions stay on one row on desktop", async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 800 });
+    await page.goto("/" + locale);
+    const actions = page.locator(".home-page .hero-actions");
+    await expect(actions).toBeVisible();
+    const layout = await actions.evaluate((element) => {
+      const buttons = Array.from(element.querySelectorAll(":scope > .ui-button"));
+      const boxes = buttons.map((button) => {
+        const rect = button.getBoundingClientRect();
+        return { top: rect.top, left: rect.left, right: rect.right };
+      });
+      const rect = element.getBoundingClientRect();
+      return { boxes, left: rect.left, right: rect.right, width: rect.width };
+    });
+    expect(layout.boxes).toHaveLength(2);
+    expect(Math.abs(layout.boxes[0].top - layout.boxes[1].top)).toBeLessThanOrEqual(1);
+    for (const button of layout.boxes) {
+      expect(button.left).toBeGreaterThanOrEqual(layout.left - 1);
+      expect(button.right).toBeLessThanOrEqual(layout.right + 1);
+    }
+  });
+}
+
 test("desktop navigation exposes the current route and navigates between sections", async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 800 });
   await page.goto("/en/works");
