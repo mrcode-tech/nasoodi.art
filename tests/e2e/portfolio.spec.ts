@@ -107,6 +107,8 @@ for (const locale of locales) {
         const identifierRect = item.querySelector(".homepage-contact-identifier")?.getBoundingClientRect();
         return {
           top: item.getBoundingClientRect().top,
+          direction: getComputedStyle(item).direction,
+          textAlign: getComputedStyle(item).textAlign,
           iconLeft: iconRect?.left ?? -1,
           iconRight: iconRect?.right ?? -1,
           identifierLeft: identifierRect?.left ?? -1,
@@ -128,17 +130,11 @@ for (const locale of locales) {
     expect(Math.abs(layout.headingStart - layout.referenceStart)).toBeLessThanOrEqual(1);
     expect(layout.rows[1].top).toBeGreaterThan(layout.rows[0].top);
     expect(layout.rows[2].top).toBeGreaterThan(layout.rows[1].top);
-    if (locale === "fa") {
-      expect(layout.rtl).toBe(true);
-      expect(layout.rows.every((row) => Math.abs(row.iconRight - layout.rows[0].iconRight) <= 1)).toBe(true);
-      expect(layout.rows.every((row) => Math.abs(row.identifierRight - layout.rows[0].identifierRight) <= 1)).toBe(true);
-      expect(layout.rows.every((row) => Math.abs((row.iconLeft - row.identifierRight) - 12) <= 1)).toBe(true);
-    } else {
-      expect(layout.rtl).toBe(false);
-      expect(layout.rows.every((row) => Math.abs(row.iconLeft - layout.rows[0].iconLeft) <= 1)).toBe(true);
-      expect(layout.rows.every((row) => Math.abs(row.identifierLeft - layout.rows[0].identifierLeft) <= 1)).toBe(true);
-      expect(layout.rows.every((row) => Math.abs((row.identifierLeft - row.iconRight) - 12) <= 1)).toBe(true);
-    }
+    expect(layout.rtl).toBe(locale === "fa");
+    expect(layout.rows.every((row) => row.direction === "ltr" && row.textAlign === "left")).toBe(true);
+    expect(layout.rows.every((row) => Math.abs(row.iconLeft - layout.rows[0].iconLeft) <= 1)).toBe(true);
+    expect(layout.rows.every((row) => Math.abs(row.identifierLeft - layout.rows[0].identifierLeft) <= 1)).toBe(true);
+    expect(layout.rows.every((row) => Math.abs((row.identifierLeft - row.iconRight) - 12) <= 1)).toBe(true);
   });
 
   test("dedicated " + locale + " Contact page keeps its detailed presentation", async ({ page }) => {
