@@ -17,6 +17,21 @@ function uniqueNonEmpty(values: readonly (string | undefined)[]): string[] {
   return [...new Set(values.map((value) => value?.trim()).filter((value): value is string => Boolean(value)))];
 }
 
+function normalizeNameKey(value: string): string {
+  return value.normalize("NFKC").replace(/[\u200c\s]+/g, " ").replace(/\u064a/g, "\u06cc").replace(/\u0643/g, "\u06a9").trim().toLowerCase();
+}
+
+function uniqueNameValues(values: readonly (string | undefined)[], excluded: readonly string[] = []): string[] {
+  const seen = new Set(excluded.map(normalizeNameKey));
+  return values.map((value) => value?.trim()).filter((value): value is string => {
+    if (!value) return false;
+    const key = normalizeNameKey(value);
+    if (!key || seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+}
+
 /**
  * Pure structured-data mapper. It consumes only canonical, already-public
  * profile/CV/contact/artwork values; it never creates editorial content.
@@ -38,12 +53,18 @@ export function createPortfolioStructuredData({
   }
 
   const curatedAliases = (profile.nameAliases?.[locale]?.completeName ?? [])
-    .filter((alias) => alias.confidence === "core" || alias.confidence === "supported")
-    .map((alias) => alias.value)
-    .filter((alias) => alias !== name && alias !== alternateCanonicalName)
-    .slice(0, 6);
+    .filter((alias) => alias.kind === "complete-name" &&
+      (alias.confidence === "core" || alias.confidence === "supported") &&
+      Number.isInteger(alias.structuredDataPriority) && (alias.structuredDataPriority ?? 0) > 0)
+    .sort((left, right) =>
+      (left.structuredDataPriority ?? Number.MAX_SAFE_INTEGER) - (right.structuredDataPriority ?? Number.MAX_SAFE_INTEGER) ||
+      (normalizeNameKey(left.value) < normalizeNameKey(right.value) ? -1 :
+        normalizeNameKey(left.value) > normalizeNameKey(right.value) ? 1 :
+        left.value < right.value ? -1 : left.value > right.value ? 1 : 0))
+    .map((alias) => alias.value);
 
-  const alternateNames = uniqueNonEmpty([alternateCanonicalName, ...curatedAliases]);
+  // Keep the other locale canonical spelling as an identity link; additional aliases are explicitly prioritized and locale-specific.
+  const alternateNames = uniqueNameValues([alternateCanonicalName, ...curatedAliases], [name]);
   const education = uniqueNonEmpty(cvEntries
     .filter((entry) => entry.category === "education")
     .map((entry) => entry.organization?.[locale]))
