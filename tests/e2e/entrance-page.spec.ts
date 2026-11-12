@@ -57,5 +57,5 @@ test("artwork is unfiltered in light and dark themes", async ({ page }) => {
 test("root metadata declares canonical and x-default URLs", async ({ page }) => {
   await page.goto("/");
   await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", "https://nasoodi.art");
-  await expect(page.locator('link[rel="alternate"][hreflang="x-default"]')).toHaveAttribute("href", "https://nasoodi.art/");
+  await expect(page.locator('link[rel="alternate"][hreflang="x-default"]')).toHaveAttribute("href", "https://nasoodi.art");
 });
