@@ -60,14 +60,20 @@ for (const viewport of [
           const rect = item.getBoundingClientRect();
           return { left: rect.left, right: rect.right, top: rect.top, width: rect.width, height: rect.height };
         });
+        const heading = element.querySelector("h2")?.getBoundingClientRect();
+        const reference = document.querySelector(".editorial-section .section-heading")?.getBoundingClientRect();
+        const rtl = getComputedStyle(element).direction === "rtl";
         return {
           viewport: document.documentElement.clientWidth,
           document: document.documentElement.scrollWidth,
           footerHeight: element.getBoundingClientRect().height,
+          headingStart: heading ? (rtl ? heading.right : heading.left) : -1,
+          referenceStart: reference ? (rtl ? reference.right : reference.left) : -2,
           boxes,
         };
       });
       expect(layout.document).toBeLessThanOrEqual(layout.viewport);
+      expect(Math.abs(layout.headingStart - layout.referenceStart)).toBeLessThanOrEqual(1);
       expect(layout.boxes.map((box) => box.top).every((top) => Math.abs(top - layout.boxes[0].top) <= 1)).toBe(true);
       for (const box of layout.boxes) {
         expect(box.width).toBeGreaterThanOrEqual(44);
@@ -81,7 +87,7 @@ for (const viewport of [
 }
 
 for (const locale of locales) {
-  test("desktop " + locale + " homepage contact footer displays three aligned contact rows", async ({ page }) => {
+  test("desktop " + locale + " homepage contact footer aligns with the editorial grid and uses consistent icon-first rows", async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 800 });
     await page.goto("/" + locale);
     const footer = page.locator(".homepage-contact-footer");
@@ -97,38 +103,41 @@ for (const locale of locales) {
       const heading = element.querySelector("h2");
       const items = Array.from(element.querySelectorAll(".homepage-contact-link"));
       const rows = items.map((item) => {
-        const icon = item.querySelector("svg");
-        const identifier = item.querySelector(".homepage-contact-identifier");
-        const linkRect = item.getBoundingClientRect();
-        const iconRect = icon?.getBoundingClientRect();
-        const identifierRect = identifier?.getBoundingClientRect();
+        const iconRect = item.querySelector("svg")?.getBoundingClientRect();
+        const identifierRect = item.querySelector(".homepage-contact-identifier")?.getBoundingClientRect();
         return {
-          top: linkRect.top,
-          left: linkRect.left,
-          right: linkRect.right,
+          top: item.getBoundingClientRect().top,
           iconLeft: iconRect?.left ?? -1,
           iconRight: iconRect?.right ?? -1,
           identifierLeft: identifierRect?.left ?? -1,
           identifierRight: identifierRect?.right ?? -1,
         };
       });
+      const headingRect = heading?.getBoundingClientRect();
+      const referenceRect = document.querySelector(".editorial-section .section-heading")?.getBoundingClientRect();
+      const rtl = getComputedStyle(element).direction === "rtl";
       return {
-        direction: getComputedStyle(element).direction,
+        rtl,
         headingAlign: heading ? getComputedStyle(heading).textAlign : "",
+        headingStart: headingRect ? (rtl ? headingRect.right : headingRect.left) : -1,
+        referenceStart: referenceRect ? (rtl ? referenceRect.right : referenceRect.left) : -2,
         rows,
       };
     });
     expect(layout.headingAlign).toBe("start");
+    expect(Math.abs(layout.headingStart - layout.referenceStart)).toBeLessThanOrEqual(1);
     expect(layout.rows[1].top).toBeGreaterThan(layout.rows[0].top);
     expect(layout.rows[2].top).toBeGreaterThan(layout.rows[1].top);
     if (locale === "fa") {
-      expect(layout.direction).toBe("rtl");
+      expect(layout.rtl).toBe(true);
       expect(layout.rows.every((row) => Math.abs(row.iconRight - layout.rows[0].iconRight) <= 1)).toBe(true);
       expect(layout.rows.every((row) => Math.abs(row.identifierRight - layout.rows[0].identifierRight) <= 1)).toBe(true);
+      expect(layout.rows.every((row) => Math.abs((row.iconLeft - row.identifierRight) - 12) <= 1)).toBe(true);
     } else {
-      expect(layout.direction).toBe("ltr");
+      expect(layout.rtl).toBe(false);
       expect(layout.rows.every((row) => Math.abs(row.iconLeft - layout.rows[0].iconLeft) <= 1)).toBe(true);
       expect(layout.rows.every((row) => Math.abs(row.identifierLeft - layout.rows[0].identifierLeft) <= 1)).toBe(true);
+      expect(layout.rows.every((row) => Math.abs((row.identifierLeft - row.iconRight) - 12) <= 1)).toBe(true);
     }
   });
 
