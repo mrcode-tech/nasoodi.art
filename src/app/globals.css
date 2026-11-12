@@ -1776,14 +1776,19 @@ html[lang="fa"] .artwork-viewer-info h2 {
 }
 .home-page .hero-actions {
   display: flex;
-  flex-wrap: nowrap;
-  align-items: center;
+  flex-wrap: wrap;
   gap: .65rem;
   margin-top: 1.25rem;
 }
-.home-page .hero-actions > .ui-button {
-  flex: 0 0 auto;
-  white-space: nowrap;
+@media (min-width: 901px) {
+  .home-page .hero-actions {
+    flex-wrap: nowrap;
+    align-items: center;
+  }
+  .home-page .hero-actions > .ui-button {
+    flex: 0 0 auto;
+    white-space: nowrap;
+  }
 }
 .about-page .about-heading {
   margin-bottom: clamp(1.5rem, 3vw, 2.5rem);
