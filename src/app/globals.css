@@ -2104,6 +2104,7 @@ html[lang="fa"] .contact-method-label {
   gap: .2rem;
   margin: 1rem 0 0;
   padding: 0;
+  direction: ltr;
   list-style: none;
 }
 .homepage-contact-links > li {
@@ -2123,7 +2124,8 @@ html[lang="fa"] .contact-method-label {
   color: var(--muted);
   font-size: .88rem;
   line-height: 1.5;
-  text-align: start;
+  direction: ltr;
+  text-align: left;
   text-decoration: none;
   transition: color 150ms ease, opacity 150ms ease;
 }
