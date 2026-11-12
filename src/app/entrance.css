@@ -177,3 +177,22 @@ body.entrance-document-body {
     transition: none;
   }
 }
+
+
+/* Keep language choices legible when they overlap the entrance artwork.
+   The theme-aware translucent paper surface preserves the image while
+   softening its detail directly behind each label. */
+.entrance-language-links a {
+  position: relative;
+  isolation: isolate;
+  border-color: color-mix(in srgb, var(--border) 82%, transparent);
+  background: color-mix(in srgb, var(--paper) 88%, transparent);
+  box-shadow: 0 .35rem 1.1rem rgb(20 18 16 / 12%);
+  -webkit-backdrop-filter: blur(14px) saturate(125%);
+  backdrop-filter: blur(14px) saturate(125%);
+}
+
+.entrance-language-links a:hover {
+  background: color-mix(in srgb, var(--paper) 96%, transparent);
+  box-shadow: 0 .4rem 1.25rem rgb(20 18 16 / 16%);
+}
