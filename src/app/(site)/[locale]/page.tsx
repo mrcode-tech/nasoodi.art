@@ -7,7 +7,7 @@ import { ArtworkExperience } from "@/components/artwork-experience";
 import { ArtistHeroCarousel } from "@/components/artist-hero-carousel";
 import { BiographyDisclosure } from "@/components/biography-disclosure";
 import { CollectionCarousel } from "@/components/collection-carousel";
-import { ContactExperience } from "@/components/contact-experience";
+import { HomepageContactFooter } from "@/components/homepage-contact-footer";
 import { Button } from "@/components/ui/button";
 import { getHomepageContent } from "@/content/repositories/homepage.repository";
 import { journalCoverImageFor } from "@/lib/content/journal";
@@ -137,7 +137,7 @@ export default async function Home({ params }: Props) {
           </div>
         </section>
       )}
-      <ContactExperience locale={locale} details={home.contact} variant="home" />
+      <HomepageContactFooter locale={locale} details={home.contact} />
     </div>
   );
 }

@@ -2072,3 +2072,95 @@ html[lang="fa"] .contact-method-label {
     justify-content: center;
   }
 }
+
+
+/* Homepage-only contact signature: a quiet, theme-aware editorial footer. */
+.homepage-contact-footer {
+  width: 100%;
+  min-width: 0;
+  margin-top: clamp(2rem, 4vw, 3.5rem);
+  padding: clamp(1.5rem, 3vw, 2.25rem) clamp(1rem, 4vw, 3rem);
+  background: var(--surface);
+  color: var(--ink);
+}
+.homepage-contact-footer-inner {
+  width: 100%;
+  max-width: 62rem;
+  margin-inline: auto;
+}
+.homepage-contact-footer h2 {
+  margin: 0;
+  color: var(--ink);
+  font-size: clamp(1.15rem, 1.6vw, 1.35rem);
+  font-weight: 600;
+  line-height: 1.5;
+  text-align: center;
+}
+.homepage-contact-links {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: center;
+  gap: clamp(.5rem, 2vw, 1.5rem);
+  margin: 1rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+.homepage-contact-link {
+  display: flex;
+  min-width: 0;
+  min-height: 2.75rem;
+  align-items: center;
+  justify-content: center;
+  gap: .6rem;
+  padding: .25rem .35rem;
+  color: var(--muted);
+  font-size: .88rem;
+  line-height: 1.5;
+  text-decoration: none;
+  transition: color 150ms ease, opacity 150ms ease;
+}
+.homepage-contact-link:hover {
+  color: var(--ink);
+}
+.homepage-contact-link:focus-visible {
+  outline: 2px solid var(--ring-color);
+  outline-offset: 2px;
+}
+.homepage-contact-icon {
+  display: block;
+  width: 1.5rem;
+  height: 1.5rem;
+  flex: 0 0 1.5rem;
+}
+.homepage-contact-identifier {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  direction: ltr;
+  unicode-bidi: isolate;
+  text-align: start;
+}
+@media (max-width: 900px) {
+  .homepage-contact-footer {
+    margin-top: 1.75rem;
+    padding: 1.25rem 1rem 1.35rem;
+  }
+  .homepage-contact-links {
+    gap: clamp(.75rem, 4vw, 1.5rem);
+    margin-top: .65rem;
+  }
+  .homepage-contact-link {
+    width: 2.75rem;
+    min-width: 2.75rem;
+    min-height: 2.75rem;
+    justify-self: center;
+    padding: 0;
+  }
+  .homepage-contact-identifier {
+    display: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .homepage-contact-link {
+    transition: none;
+  }
+}
