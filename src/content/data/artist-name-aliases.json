@@ -179,7 +179,8 @@
       {
         "value": "Ghazale Abdolahzade Nasoodi",
         "kind": "complete-name",
-        "confidence": "core"
+        "confidence": "core",
+        "structuredDataPriority": 1
       },
       {
         "value": "Ghazaleh Abdolahzade Nasoodi",
@@ -189,7 +190,8 @@
       {
         "value": "Ghazale Abdolahzadeh Nasoodi",
         "kind": "complete-name",
-        "confidence": "supported"
+        "confidence": "supported",
+        "structuredDataPriority": 5
       },
       {
         "value": "Ghazaleh Abdolahzadeh Nasoodi",
@@ -219,12 +221,14 @@
       {
         "value": "Ghazale Abdolahzade Nasoudi",
         "kind": "complete-name",
-        "confidence": "supported"
+        "confidence": "supported",
+        "structuredDataPriority": 2
       },
       {
         "value": "Ghazaleh Abdolahzade Nasoudi",
         "kind": "complete-name",
-        "confidence": "supported"
+        "confidence": "supported",
+        "structuredDataPriority": 3
       },
       {
         "value": "Ghazale Abdollahzadeh Nasoudi",
@@ -245,10 +249,15 @@
         "value": "Ghazaleh Abdolahzade Nassoodi",
         "kind": "complete-name",
         "confidence": "exploratory"
+      },
+      {
+        "value": "Ghazale Nasoudi",
+        "kind": "complete-name",
+        "confidence": "supported",
+        "structuredDataPriority": 4
       }
     ],
     "partialSearchQueries": [
-      "Ghazale Nasoodi",
       "Ghazaleh Nasoodi",
       "Ghazal Nasoodi",
       "Abdolahzade Nasoodi",
@@ -331,22 +340,26 @@
       {
         "value": "غزاله عبداله زاده نسودی",
         "kind": "complete-name",
-        "confidence": "core"
+        "confidence": "core",
+        "structuredDataPriority": 1
       },
       {
         "value": "غزاله عبداله‌زاده نسودی",
         "kind": "complete-name",
-        "confidence": "core"
+        "confidence": "core",
+        "structuredDataPriority": 2
       },
       {
         "value": "غزاله عبدالهزاده نسودی",
         "kind": "complete-name",
-        "confidence": "core"
+        "confidence": "core",
+        "structuredDataPriority": 3
       },
       {
         "value": "غزاله عبد الله زاده نسودی",
         "kind": "complete-name",
-        "confidence": "supported"
+        "confidence": "supported",
+        "structuredDataPriority": 4
       },
       {
         "value": "غزاله عبد الله‌زاده نسودی",
@@ -361,12 +374,14 @@
       {
         "value": "غزاله عبدالله‌زاده نسودی",
         "kind": "complete-name",
-        "confidence": "supported"
+        "confidence": "supported",
+        "structuredDataPriority": 5
       },
       {
         "value": "غزاله عبداللهزاده نسودی",
         "kind": "complete-name",
-        "confidence": "supported"
+        "confidence": "supported",
+        "structuredDataPriority": 6
       },
       {
         "value": "غزاله عبد اللهزاده نسودی",
@@ -391,9 +406,10 @@
       "supported": "Plausible spelling or transliteration suitable for editorial review and conservative matching.",
       "exploratory": "Uncertain or potentially ambiguous form; do not use for public structured data or assert identity without confirmation."
     },
-    "publicStructuredData": "Use only a small, reviewed set of complete-name aliases with core or supported confidence. Never emit component-only values, partial queries, exploratory variants, or a generated Cartesian product as schema.org alternateName.",
+    "publicStructuredData": "Publish only explicitly prioritized complete-name aliases with core or supported confidence, ordered by ascending structuredDataPriority. Keep the selected set concise and curated. Never emit component-only values, partial queries, exploratory variants, unprioritized complete names, or generated Cartesian products as schema.org alternateName.",
     "normalization": "Case, repeated whitespace, Unicode-equivalent forms, Persian Arabic/Persian kaf and yeh, and ZWNJ/space equivalence should be handled by deterministic comparison logic rather than storing every mechanical permutation.",
     "generation": "Do not generate all possible full-name combinations from component arrays. Complete-name entries are individually curated.",
-    "review": "The artist/site owner controls this inventory. Promote exploratory entries only after owner confirmation or reliable search-query evidence; remove misleading or ambiguous entries."
+    "review": "The artist/site owner controls this inventory. Promote exploratory entries only after owner confirmation or reliable search-query evidence; remove misleading or ambiguous entries.",
+    "priority": "structuredDataPriority is an optional positive integer on individually reviewed complete-name aliases. Lower values are emitted first. Omit it from aliases that should remain internal; never infer priority from array position."
   }
 }
