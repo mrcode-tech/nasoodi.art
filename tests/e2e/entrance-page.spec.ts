@@ -11,7 +11,8 @@ test("root entrance presents its selected published artwork and language links",
   await expect(page.locator("html")).toHaveAttribute("lang", "en");
   await expect(page.locator("html")).toHaveAttribute("dir", "ltr");
   await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
-  await expect(page.locator(".entrance-copy p")).toHaveCount(0);
+  await expect(page.locator(".entrance-welcome")).toHaveText("Welcome to my world of painting.");
+  await expect(page.locator(".entrance-copy h1").locator("..").locator(".entrance-welcome")).toBeVisible();
   await expect(page.getByText("Discover paintings, stories, and artistic expressions.", { exact: false })).toHaveCount(0);
   const links = page.getByRole("navigation", { name: "Choose language" }).getByRole("link");
   await expect(links).toHaveCount(2);
