@@ -65,7 +65,7 @@ export default async function RootPage() {
               <Link href="/en">{t("enterEnglish")}</Link>
               <Link href="/fa" lang="fa" dir="rtl">{t("enterPersian")}</Link>
             </nav>
-            </section
+            </section>
           </div>
         </div>
       </main>
