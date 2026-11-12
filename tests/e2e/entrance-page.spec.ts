@@ -140,3 +140,37 @@ test("desktop entrance typography overlays the artwork with fixed light colors i
   expect(darkButtonStyles).not.toEqual(lightButtonStyles);
   await expect(image).toBeVisible();
 });
+
+test("desktop entrance overlay stays anchored inside the artwork at different zoom levels", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/");
+  for (const zoom of ["80%", "100%", "125%", "150%"]) {
+    await page.evaluate((value) => { document.documentElement.style.zoom = value; }, zoom);
+    const bounds = await page.evaluate(() => {
+      const frame = document.querySelector(".entrance-artwork-frame")!.getBoundingClientRect();
+      const image = document.querySelector(".entrance-artwork")!.getBoundingClientRect();
+      const title = document.querySelector(".entrance-copy h1")!.getBoundingClientRect();
+      const welcome = document.querySelector(".entrance-welcome")!.getBoundingClientRect();
+      const buttons = document.querySelector(".entrance-language-links")!.getBoundingClientRect();
+      const center = frame.left + frame.width / 2;
+      return {
+        titleInside: title.top >= image.top && title.bottom <= image.bottom,
+        welcomeInside: welcome.top >= image.top && welcome.bottom <= image.bottom,
+        buttonsInside: buttons.top >= image.top && buttons.bottom <= image.bottom,
+        titleCenter: title.left + title.width / 2,
+        welcomeCenter: welcome.left + welcome.width / 2,
+        buttonsCenter: buttons.left + buttons.width / 2,
+        imageCenter: center,
+        ordered: title.top < welcome.top && welcome.bottom < buttons.top,
+      };
+    });
+    expect(bounds.titleInside, `heading at zoom ${zoom}`).toBe(true);
+    expect(bounds.welcomeInside, `welcome at zoom ${zoom}`).toBe(true);
+    expect(bounds.buttonsInside, `buttons at zoom ${zoom}`).toBe(true);
+    expect(bounds.ordered, `vertical order at zoom ${zoom}`).toBe(true);
+    for (const key of ["titleCenter", "welcomeCenter", "buttonsCenter"] as const) {
+      expect(Math.abs(bounds[key] - bounds.imageCenter), `${key} at zoom ${zoom}`).toBeLessThanOrEqual(1);
+    }
+  }
+  await page.evaluate(() => { document.documentElement.style.zoom = ""; });
+});
