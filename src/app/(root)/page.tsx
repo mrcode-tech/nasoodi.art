@@ -50,21 +50,23 @@ export default async function RootPage() {
       <main className="entrance-page">
         <EntranceOverlayColorObserver />
         <div className="entrance-content">
+          <div className="entrance-stage">
           {image && (
-            <div className="entrance-artwork-frame" style={{ "--entrance-artwork-ratio": `${image.width} / ${image.height}` } as React.CSSProperties}>
-              <Image className="entrance-artwork" src={image.src} alt={image.alt.en ?? artwork?.title.en ?? artist.name.en}
-                width={image.width} height={image.height}
-                sizes="(max-width: 640px) 94vw, (max-width: 1200px) 90vw, 1100px" priority />
-            </div>
+                <div className="entrance-artwork-frame" style={{ "--entrance-artwork-ratio": `${image.width} / ${image.height}` } as React.CSSProperties}>
+                  <Image className="entrance-artwork" src={image.src} alt={image.alt.en ?? artwork?.title.en ?? artist.name.en}
+                    width={image.width} height={image.height}
+                    sizes="(max-width: 640px) 94vw, (max-width: 1200px) 90vw, 1100px" priority />
+                </div>
           )}
-          <section className="entrance-copy" aria-label={t("entranceIntroduction")}>
+            <section className="entrance-copy" aria-label={t("entranceIntroduction")}>
             <h1><span className="entrance-name-first">{entranceFirstName}</span><span className="entrance-name-rest">{remainingName.join(" ")}</span></h1>
             <p className="entrance-welcome">{t("welcomeMessage")}</p>
             <nav className="entrance-language-links" aria-label={t("chooseLanguage")}>
               <Link href="/en">{t("enterEnglish")}</Link>
               <Link href="/fa" lang="fa" dir="rtl">{t("enterPersian")}</Link>
             </nav>
-          </section>
+            </section
+          </div>
         </div>
       </main>
     </>
