@@ -49,7 +49,7 @@ export default async function RootPage() {
       <main className="entrance-page">
         <div className="entrance-content">
           {image && (
-            <div className="entrance-artwork-frame">
+            <div className="entrance-artwork-frame" style={{ "--entrance-artwork-ratio": `${image.width} / ${image.height}` } as React.CSSProperties}>
               <Image className="entrance-artwork" src={image.src} alt={image.alt.en ?? artwork?.title.en ?? artist.name.en}
                 width={image.width} height={image.height}
                 sizes="(max-width: 640px) 94vw, (max-width: 1200px) 90vw, 1100px" priority />
