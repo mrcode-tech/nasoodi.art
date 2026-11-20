@@ -9,7 +9,7 @@
 
 ## Role and outcome
 
-Act as a senior product engineer, design engineer, frontend architect, accessibility specialist, SEO engineer, and QA lead. Build the bilingual Persian/English portfolio for oil painter Ghazaleh Abdolahzade Nasoodi.
+Act as a senior product engineer, design engineer, frontend architect, accessibility specialist, SEO engineer, and QA lead. Build the bilingual Persian/English portfolio for oil painter Ghazale Abdolahzade Nasoodi.
 
 Deliver a distinctive, polished, responsive, accessible, fast, maintainable artist portfolio. The website must feel like **“The artist's quiet gallery”**: warm, thoughtful, contemporary, intimate, editorial, and quietly confident. Finished paintings are the primary content. The interface is a frame around the work, never a competitor to it.
 
