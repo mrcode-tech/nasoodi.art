@@ -7,14 +7,14 @@ const portraits = [
   {
     src: "/images/artist/artist-at-work.jpg",
     alt: {
-      en: "Ghazaleh Abdolahzade Nasoodi at work in her studio",
+      en: "Ghazale Abdolahzade Nasoodi at work in her studio",
       fa: "غزاله عبداله‌زاده نسودی در حال کار در آتلیه",
     },
   },
   {
     src: "/images/artist/artist-portrait.jpg",
     alt: {
-      en: "Portrait of Ghazaleh Abdolahzade Nasoodi",
+      en: "Portrait of Ghazale Abdolahzade Nasoodi",
       fa: "پرتره غزاله عبداله‌زاده نسودی",
     },
   },

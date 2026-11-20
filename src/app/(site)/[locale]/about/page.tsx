@@ -55,7 +55,7 @@ export default async function AboutPage({ params }: Props) {
             <Image
               className="artist-portrait"
               src="/images/artist/artist-portrait.jpg"
-              alt={locale === "fa" ? "پرتره غزاله عبداله‌زاده نسودی" : "Portrait of Ghazaleh Abdolahzade Nasoodi"}
+              alt={locale === "fa" ? "پرتره غزاله عبداله‌زاده نسودی" : "Portrait of Ghazale Abdolahzade Nasoodi"}
               fill
               sizes="(max-width: 700px) 100vw, (max-width: 1100px) 48vw, 34rem"
             />
