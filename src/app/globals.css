@@ -2116,10 +2116,9 @@ html[lang="fa"] .contact-method-label {
 }
 .homepage-contact-links {
   display: flex;
-  width: min(100%, 38rem);
-  flex-direction: column;
+  flex-direction: row;
   align-items: flex-start;
-  gap: .2rem;
+  gap: 3.2rem;
   margin: 1rem 0 0;
   padding: 0;
   direction: ltr;
