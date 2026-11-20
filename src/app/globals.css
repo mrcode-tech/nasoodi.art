@@ -2202,11 +2202,3 @@ html[lang="fa"] .contact-method-label {
     transition: none;
   }
 }
-
-/* Keep the artist's full name readable: neutralize tight display tracking around spaces. */
-.home-intro.has-hero .home-intro-copy h1 {
-  letter-spacing: 0;
-  word-spacing: 0.06em;
-  overflow-wrap: normal;
-  word-break: normal;
-}

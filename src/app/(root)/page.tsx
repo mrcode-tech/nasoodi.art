@@ -42,7 +42,7 @@ export default async function RootPage() {
   const t = await getTranslations({ locale: "en" });
   if (!artist?.name?.en) throw new Error("A published English artist profile is required for the entrance page.");
   const [firstName, ...remainingName] = artist.name.en.split(" ");
-  const entranceFirstName = firstName === "Ghazaleh" ? "Ghazale" : firstName;
+  const entranceFirstName = firstName;
 
   return (
     <>
