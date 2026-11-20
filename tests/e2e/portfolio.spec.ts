@@ -122,19 +122,18 @@ for (const locale of locales) {
       const items = Array.from(element.querySelectorAll(".homepage-contact-link"));
       const itemsLayout = items.map((item) => {
         const itemRect = item.getBoundingClientRect();
-        const link = item.querySelector(".homepage-contact-link");
-        const linkRect = link?.getBoundingClientRect();
-        const iconRect = link?.querySelector("svg")?.getBoundingClientRect();
-        const identifierRect = link?.querySelector(".homepage-contact-identifier")?.getBoundingClientRect();
+        const linkRect = item.getBoundingClientRect();
+        const iconRect = item.querySelector("svg")?.getBoundingClientRect();
+        const identifierRect = item.querySelector(".homepage-contact-identifier")?.getBoundingClientRect();
         return {
           top: itemRect.top,
           left: itemRect.left,
           right: itemRect.right,
-          direction: link ? getComputedStyle(link).direction : "",
-          textAlign: link ? getComputedStyle(link).textAlign : "",
+          direction: getComputedStyle(item).direction,
+          textAlign: getComputedStyle(item).textAlign,
           iconRight: iconRect?.right ?? -1,
           identifierLeft: identifierRect?.left ?? -1,
-          linkVisible: Boolean(linkRect && linkRect.width > 0 && linkRect.height > 0),
+          linkVisible: linkRect.width > 0 && linkRect.height > 0,
         };
       });
       const headingRect = heading?.getBoundingClientRect();
