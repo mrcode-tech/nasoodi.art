@@ -19,7 +19,9 @@ Provide a reusable contact presentation on the homepage and a dedicated localize
 - The homepage section and dedicated contact route reuse the same shared presentation component.
 - The dedicated route is available under each supported locale.
 - Navigation is available through shared desktop and mobile navigation.
-- Desktop uses the established editorial composition; mobile reflows to a readable single-column layout.
+- The compact homepage contact footer presents its configured contact links in one horizontal row on desktop. Each link places its icon before its LTR identifier, and the links remain separated, visible, and within the content viewport in both locales.
+- The compact homepage contact footer retains its horizontal icon-only link row on mobile; identifiers are visually hidden there while accessible names remain available.
+- The dedicated Contact page keeps its detailed editorial presentation. Its contact methods may use a stacked or restrained responsive arrangement appropriate to the available width; do not apply the homepage footer's compact-row geometry to this page.
 - English uses LTR and Persian uses RTL. Email addresses and other intrinsically LTR values retain correct bidi isolation.
 - Preserve shared typography, spacing, theme tokens, and responsive behavior.
 - Do not introduce a form, phone, address, booking workflow, or service promise without a separate approved technical requirement.

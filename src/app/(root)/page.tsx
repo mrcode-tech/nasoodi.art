@@ -42,7 +42,7 @@ export default async function RootPage() {
   const t = await getTranslations({ locale: "en" });
   if (!artist?.name?.en) throw new Error("A published English artist profile is required for the entrance page.");
   const [firstName, ...remainingName] = artist.name.en.split(" ");
-  const entranceFirstName = firstName === "Ghazaleh" ? "Ghazale" : firstName;
+  const entranceFirstName = firstName;
 
   return (
     <>
@@ -65,7 +65,7 @@ export default async function RootPage() {
               )}
               <section className="entrance-copy" aria-label={t("entranceIntroduction")}>
                 <h1>
-                  <span className="entrance-name-first">{entranceFirstName}</span>
+                  <span className="entrance-name-first">{entranceFirstName}</span>{" "}
                   <span className="entrance-name-rest">{remainingName.join(" ")}</span>
                 </h1>
                 <p className="entrance-welcome">{t("welcomeMessage")}</p>
