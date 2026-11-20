@@ -120,17 +120,21 @@ for (const locale of locales) {
     const layout = await footer.evaluate((element) => {
       const heading = element.querySelector("h2");
       const items = Array.from(element.querySelectorAll(".homepage-contact-link"));
-      const rows = items.map((item) => {
-        const iconRect = item.querySelector("svg")?.getBoundingClientRect();
-        const identifierRect = item.querySelector(".homepage-contact-identifier")?.getBoundingClientRect();
+      const itemsLayout = items.map((item) => {
+        const itemRect = item.getBoundingClientRect();
+        const link = item.querySelector(".homepage-contact-link");
+        const linkRect = link?.getBoundingClientRect();
+        const iconRect = link?.querySelector("svg")?.getBoundingClientRect();
+        const identifierRect = link?.querySelector(".homepage-contact-identifier")?.getBoundingClientRect();
         return {
-          top: item.getBoundingClientRect().top,
-          direction: getComputedStyle(item).direction,
-          textAlign: getComputedStyle(item).textAlign,
-          iconLeft: iconRect?.left ?? -1,
+          top: itemRect.top,
+          left: itemRect.left,
+          right: itemRect.right,
+          direction: link ? getComputedStyle(link).direction : "",
+          textAlign: link ? getComputedStyle(link).textAlign : "",
           iconRight: iconRect?.right ?? -1,
           identifierLeft: identifierRect?.left ?? -1,
-          identifierRight: identifierRect?.right ?? -1,
+          linkVisible: Boolean(linkRect && linkRect.width > 0 && linkRect.height > 0),
         };
       });
       const headingRect = heading?.getBoundingClientRect();
@@ -141,18 +145,24 @@ for (const locale of locales) {
         headingAlign: heading ? getComputedStyle(heading).textAlign : "",
         headingStart: headingRect ? (rtl ? headingRect.right : headingRect.left) : -1,
         referenceStart: referenceRect ? (rtl ? referenceRect.right : referenceRect.left) : -2,
-        rows,
+        viewport: document.documentElement.clientWidth,
+        items: itemsLayout,
       };
     });
     expect(layout.headingAlign).toBe("start");
     expect(Math.abs(layout.headingStart - layout.referenceStart)).toBeLessThanOrEqual(1);
-    expect(layout.rows[1].top).toBeGreaterThan(layout.rows[0].top);
-    expect(layout.rows[2].top).toBeGreaterThan(layout.rows[1].top);
     expect(layout.rtl).toBe(locale === "fa");
-    expect(layout.rows.every((row) => row.direction === "ltr" && row.textAlign === "left")).toBe(true);
-    expect(layout.rows.every((row) => Math.abs(row.iconLeft - layout.rows[0].iconLeft) <= 1)).toBe(true);
-    expect(layout.rows.every((row) => Math.abs(row.identifierLeft - layout.rows[0].identifierLeft) <= 1)).toBe(true);
-    expect(layout.rows.every((row) => Math.abs((row.identifierLeft - row.iconRight) - 12) <= 1)).toBe(true);
+    expect(layout.items).toHaveLength(3);
+    expect(layout.items.every((item) => item.linkVisible)).toBe(true);
+    expect(layout.items.every((item) => item.direction === "ltr" && item.textAlign === "left")).toBe(true);
+    expect(layout.items.every((item) => Math.abs(item.top - layout.items[0].top) <= 1)).toBe(true);
+    for (const [index, item] of layout.items.entries()) {
+      expect(item.left).toBeGreaterThanOrEqual(0);
+      expect(item.right).toBeLessThanOrEqual(layout.viewport);
+      if (index > 0) expect(item.left).toBeGreaterThan(layout.items[index - 1].right);
+      expect(item.identifierLeft).toBeGreaterThan(item.iconRight);
+      expect(Math.abs((item.identifierLeft - item.iconRight) - 12)).toBeLessThanOrEqual(1);
+    }
   });
 
   test("dedicated " + locale + " Contact page keeps its detailed presentation", async ({ page }) => {
